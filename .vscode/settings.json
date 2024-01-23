@@ -1,0 +1,25 @@
+{
+    "extensions.ignoreRecommendations": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "lit-html.tags": [
+        "html",
+        "raw",
+        "template"
+    ],
+    "lit-plugin.strict": true,
+    "lit-plugin.logging": "debug",
+}
