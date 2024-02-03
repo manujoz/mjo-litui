@@ -223,7 +223,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                 width: 100%;
             }
             .container {
-                border-radius: var(--mjo-input-border-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-input-radius, var(--mjo-radius, 5px));
                 border: var(--mjo-input-border, solid var(--mjo-input-border-width, 1px));
                 border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
                 box-shadow: var(--mjo-input-box-shadow, none);
@@ -253,13 +253,13 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
             input {
                 background-color: transparent;
                 border: none;
-                border-radius: var(--mjo-input-radius, var(--mjo-radius, 5px));
                 padding: var(--mjo-input-padding, calc(1em / 2 - 3px)) calc(1em / 2 - 2px) var(--mjo-input-padding, calc(1em / 2 - 4px));
                 font-size: var(--mjo-input-font-size, 1em);
                 font-weight: var(--mjo-input-font-weight, normal);
                 font-family: var(--mjo-input-font-family, inherit);
                 line-height: var(--mjo-input-font-size, 1em);
                 box-sizing: border-box;
+                flex: 1 1 0;
                 width: inherit;
             }
             input:focus {

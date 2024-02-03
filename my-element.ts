@@ -1,7 +1,7 @@
 import { MjoFormSubmitEvent } from "./src/types/mjo-form";
 
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch";
 
 import "./src/mjo-button";
@@ -50,12 +50,36 @@ export class MyElement extends LitElement {
                 <form>
                     <input type="text" name="name" />
                     <mjo-textfield label="Email" name="email"></mjo-textfield>
-                    <mjo-dropdow>
+                    <mjo-dropdow
+                        .html=${this.html}
+                        .css=${css`
+                            .container {
+                                position: relative;
+                                display: grid;
+                                place-content: center;
+                                padding: 10px;
+                            }
+                        `}
+                    >
                         <button type="submit">Submit</button>
                     </mjo-dropdow>
                 </form>
             </div>
         </div>`;
+    }
+
+    @state() html = this.renderHtml(1);
+
+    connectedCallback(): void {
+        super.connectedCallback();
+
+        setTimeout(() => {
+            this.html = this.renderHtml(2);
+        }, 3000);
+    }
+
+    renderHtml(num: number) {
+        return html`<div class="container">hola ${num}</div>`;
     }
 
     #handleSubmit(ev: MjoFormSubmitEvent) {
@@ -81,6 +105,9 @@ export class MyElement extends LitElement {
         .container > div {
             position: relative;
             display: grid;
+        }
+        .white {
+            color: white;
         }
         mjo-textfield,
         mjo-button {
