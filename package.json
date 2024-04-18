@@ -1,6 +1,5 @@
 {
     "name": "mo-litui",
-    "private": true,
     "version": "0.0.1-alpha.7",
     "type": "module",
     "scripts": {
