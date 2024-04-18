@@ -1,0 +1,24 @@
+{
+    "name": "mjo-litui",
+    "version": "0.0.1-alpha.6",
+    "description": "A collection of web components for building user interfaces with LitElement.",
+    "main": "index.js",
+    "type": "module",
+    "keywords": [
+        "web-components",
+        "lit-element",
+        "lit-html",
+        "ui",
+        "components"
+    ],
+    "author": "Manu Overa",
+    "license": "MIT",
+    "homepage": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/manujoz/mo-litui"
+    },
+    "dependencies": {
+        "mjo-icons": "^1.0.6"
+    }
+}
