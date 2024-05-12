@@ -81,11 +81,11 @@ export class MjoButton extends FormMixin(LitElement) {
             }
             button {
                 align-items: center;
-                background-color: var(--mjo-button-bg-primary-color, var(--mjo-primary-color, #1d7fdb));
+                background-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
                 border-radius: var(--mjo-button-radius, var(--mjo-radius, 5px));
-                border: var(--mjo-button-primary-border, solid 1px var(--mjo-button-bg-primary-color, var(--mjo-primary-color, #1d7fdb)));
+                border: var(--mjo-button-primary-border, solid 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb)));
                 box-sizing: border-box;
-                color: var(--mjo-button-primary-fg-color, white);
+                color: var(--mjo-button-primary-foreground-color, var(--mjo-primary-foreground-color, white));
                 cursor: inherit;
                 display: flex;
                 flex-flow: row nowrap;
@@ -102,23 +102,23 @@ export class MjoButton extends FormMixin(LitElement) {
                 width: 100%;
             }
             button:hover {
-                background-color: var(--mjo-button-bg-primary-color-hv, var(--mjo-primary-color-hv, #4e9be4));
-                border: solid 1px var(--mjo-button-bg-primary-color-hv, var(--mjo-primary-color-hv, #4e9be4));
+                background-color: var(--mjo-button-primary-color-hover, var(--mjo-primary-color-hover, #4e9be4));
+                border: solid 1px var(--mjo-button-primary-color-hover, var(--mjo-primary-color-hover, #4e9be4));
             }
             button:focus {
-                outline-color: var(--mjo-button-bg-primary-color, var(--mjo-primary-color, #1d7fdb));
+                outline-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
             }
             button[data-color="secondary"]:focus {
-                outline-color: var(--mjo-button-bg-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                outline-color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
             button[data-color="secondary"] {
-                background-color: var(--mjo-button-bg-secondary-color, var(--mjo-secondary-color, #cc3d74));
-                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-button-bg-secondary-color, var(--mjo-secondary-color, #cc3d74)));
-                color: var(--mjo-button-secondary-fg-color, white);
+                background-color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74)));
+                color: var(--mjo-button-secondary-foreground-color, var(--mjo-secondary-foreground-color, white));
             }
             button[data-color="secondary"]:hover {
-                background-color: var(--mjo-button-bg-secondary-color-hv, var(--mjo-secondary-color-hv, #d86490));
-                border: solid 1px var(--mjo-button-bg-secondary-color-hv, var(--mjo-secondary-color-hv, #d86490));
+                background-color: var(--mjo-button-secondary-color-hover, var(--mjo-secondary-color-hover, #d86490));
+                border: solid 1px var(--mjo-button-secondary-color-hover, var(--mjo-secondary-color-hover, #d86490));
             }
             button[data-variant="ghost"] {
                 background-color: transparent;
@@ -179,9 +179,9 @@ export class MjoButton extends FormMixin(LitElement) {
             :host([disabled]) button,
             :host([loading]) button {
                 cursor: not-allowed;
-                color: var(--mjo-button-disabled-fg-color, #aaaaaa);
-                background-color: var(--mjo-button-disabled-bg-color, #e0e0e0);
-                border: solid 1px var(--mjo-button-disabled-bg-color, #e0e0e0);
+                color: var(--mjo-button-disabled-foreground-color, var(--mjo-disabled-foreground-color, #aaaaaa));
+                background-color: var(--mjo-button-disabled-background-color, var(--mjo-disabled-color, #e0e0e0));
+                border: solid 1px var(--mjo-button-disabled-background-color, var(--mjo-disabled-color, #e0e0e0));
             }
             button[data-size="small"] {
                 padding: 5px 10px;
@@ -219,11 +219,11 @@ export class MjoButton extends FormMixin(LitElement) {
                 left: 0;
                 width: 100%;
                 height: 0.2em;
-                background-color: var(--mjo-button-bg-primary-color, var(--mjo-primary-color, #1d7fdb));
+                background-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
                 animation: loading 1.5s infinite;
             }
             button[data-color="secondary"] .loading {
-                background-color: var(--mjo-button-bg-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                background-color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
             button[data-size="small"] .loading {
                 height: 0.19em;

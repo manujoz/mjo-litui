@@ -179,7 +179,7 @@ export class DropdowContainer extends LitElement {
                 opacity: 0;
                 background-color: var(--mjo-dropdown-background-color, var(--mjo-background-color, white));
                 box-shadow: var(--mjo-dropdown-box-shadow, var(--mjo-box-shadow, 0px 0px 7px rgba(0, 0, 0, 0.5)));
-                border-radius: var(--mjo-dropdown-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-dropdown-radius, var(--mjo-radius-medium, 5px));
                 transform-origin: top center;
                 max-width: calc(100vw - 20px);
                 overflow: hidden;

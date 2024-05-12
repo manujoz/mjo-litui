@@ -71,8 +71,8 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
 
         form: HTMLFormElement | null = null;
 
-        private data?: { name: string; value: string };
-        private listeners = {
+        private dataFormMixin?: { name: string; value: string };
+        private listenersFormMixin = {
             formData: (ev: FormDataEvent) => {
                 this.#onFormdata(ev);
             },
@@ -85,13 +85,13 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
         disconnectedCallback() {
             super.disconnectedCallback();
 
-            this.form?.removeEventListener("formdata", this.listeners.formData);
+            this.form?.removeEventListener("formdata", this.listenersFormMixin.formData);
         }
 
         updateFormData({ name, value }: { name: string; value: string }) {
             if (!name) return;
 
-            this.data = { name, value };
+            this.dataFormMixin = { name, value };
         }
 
         submiForm() {
@@ -104,7 +104,7 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
 
         #getForm() {
             this.form = searchClosestElement(this, "form") as HTMLFormElement | null;
-            this.form?.addEventListener("formdata", this.listeners.formData);
+            this.form?.addEventListener("formdata", this.listenersFormMixin.formData);
 
             const mjoForm = (this.form?.parentNode as ShadowRoot)?.host as MjoForm | null;
             if (mjoForm?.tagName === "MJO-FORM") {
@@ -117,9 +117,9 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
         }
 
         #onFormdata(ev: FormDataEvent) {
-            if (!this.data) return;
+            if (!this.dataFormMixin) return;
 
-            ev.formData.set(this.data.name, this.data.value);
+            ev.formData.set(this.dataFormMixin.name, this.dataFormMixin.value);
         }
     }
 

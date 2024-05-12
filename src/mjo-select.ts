@@ -1,8 +1,7 @@
 import { type OptionSelect } from "./helpers/option-select.js";
-import { type OptionsList } from "./helpers/options-list.js";
 import { type MjoDropdown } from "./mjo-dropdown.js";
 
-import { LitElement, TemplateResult, css, html, nothing } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
@@ -37,18 +36,17 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     @property({ type: String }) helperText?: string;
     @property({ type: Boolean }) selectOnFocus = false;
     @property({ type: Boolean }) clearabled = false;
+    @property({ type: Boolean }) searchable = false;
 
     @state() private isFocused = false;
     @state() private open = false;
     @state() private options: OptionSelect[] = [];
-    @state() private optionsHtml?: TemplateResult<1> = this.#renderOptions();
     @state() private visibleValue: string = "";
     @state() private startOptionImage?: string;
     @state() private endOptionImage?: string;
     @state() private startOptionIcon?: string;
     @state() private endOptionIcon?: string;
 
-    optionsList?: OptionsList;
     dropdownRef = createRef<MjoDropdown>();
     inputRef = createRef<HTMLInputElement>();
     inputVisibleRef = createRef<HTMLInputElement>();
@@ -59,7 +57,13 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 : nothing}
             <mjo-dropdown
                 ${ref(this.dropdownRef)}
-                .html=${this.optionsHtml}
+                .html=${html`<options-list
+                    .options=${this.options}
+                    .mjoSelect=${this}
+                    ?searchable=${this.searchable}
+                    ?open=${this.open}
+                    @optionsblur=${() => this.#handleOptionsBlur()}
+                ></options-list>`}
                 preventScroll
                 behavior="click"
                 fullwidth
@@ -116,12 +120,24 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     connectedCallback() {
         super.connectedCallback();
 
-        this.optionsHtml = this.#renderOptions();
+        this.#setOptions();
         this.#handleOptions();
 
         if (this.autoFocus) {
             this.inputVisibleRef.value?.focus();
         }
+
+        this.updateFormData({ name: this.name || "", value: this.value });
+    }
+
+    protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
+        if (_changedProperties.has("value") && this.value !== this.inputRef.value?.value) {
+            this.setValue(this.value);
+        }
+    }
+
+    focus() {
+        this.inputVisibleRef.value?.focus();
     }
 
     isOpen() {
@@ -140,9 +156,12 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 this.visibleValue = option.text || option.value;
             }
         }
+
+        this.updateFormData({ name: this.name || "", value: this.value });
     }
 
     #handleBlur() {
+        if (this.searchable) return;
         this.dropdownRef.value?.close();
     }
 
@@ -162,6 +181,11 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
         this.isFocused = true;
     }
 
+    #handleOptionsBlur() {
+        this.focus();
+        this.dropdownRef.value?.close();
+    }
+
     async #handleOptions() {
         if (this.options.length === 0) return;
 
@@ -178,6 +202,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 hasSelected = true;
             }
 
+            option.color = this.color;
             option.addEventListener("click", () => {
                 this.setValue(option.value);
             });
@@ -190,15 +215,13 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
         this.setValue(selectedValue || "");
     }
 
-    #renderOptions() {
+    #setOptions() {
         const options = this.querySelectorAll("option-select");
         if (!options.length) {
             throw new Error(`[mjo-select=name=${this.name}]: No options found`);
         }
 
         this.options = Array.from(options) as OptionSelect[];
-
-        return html`<options-list .options=${this.options} .mjoSelect=${this}></options-list>`;
     }
 
     static styles = [
@@ -214,9 +237,11 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
             }
             .container {
                 border-radius: var(--mjo-input-radius, var(--mjo-radius, 5px));
-                border: var(--mjo-input-border, solid var(--mjo-input-border-width, 1px));
+                border: solid 1px;
+                border-style: var(--mjo-input-border-style, solid);
+                border-width: var(--mjo-input-border-width, 1px);
                 border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
-                background-color: var(--mjo-input-background-color, var(--mjo-background-color, #ffffff));
+                background-color: var(--mjo-input-background-color, var(--mjo-background-color-light, #ffffff));
                 box-shadow: var(--mjo-input-box-shadow, none);
                 display: flex;
                 flex-flow: row nowrap;
@@ -234,27 +259,29 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 content: "";
             }
             .container:hover {
-                border: var(--mjo-input-border, solid var(--mjo-input-border-width, 1px));
-                border-color: var(--mjo-input-border-color-hv, var(--mjo-border-color-hv, #ccc));
+                border-style: var(--mjo-input-border-style-hover, solid);
+                border-width: var(--mjo-input-border-width-hover, 1px);
+                border-color: var(--mjo-input-border-color-hover, #cccccc);
             }
             .container[data-focused] {
-                border: var(--mjo-input-border, solid 1px);
+                border-style: var(--mjo-input-border-style-focus, solid);
+                border-width: var(--mjo-input-border-width-focus, 1px);
                 border-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
             }
             .container[data-focused][data-color="secondary"] {
-                border: var(--mjo-input-border, solid 1px);
+                border-style: var(--mjo-input-border-style-focus, solid);
+                border-width: var(--mjo-input-border-width-focus, 1px);
                 border-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
             .container[data-error],
             .container[data-error][data-color="secondary"] {
-                border: var(--mjo-input-border, solid 1px);
-                border-color: var(--mjo-error-color, #d31616);
+                border-color: var(--mjo-color-error, #d31616);
             }
             input {
                 position: relative;
                 background-color: transparent;
                 border: none;
-                padding: var(--mjo-input-padding, calc(1em / 2 - 3px)) calc(1em / 2 - 2px) var(--mjo-input-padding, calc(1em / 2 - 4px));
+                padding: var(--mjo-input-padding, calc(1em / 2 - 3px) calc(1em / 2 - 2px) calc(1em / 2 - 4px));
                 font-size: var(--mjo-input-font-size, 1em);
                 font-weight: var(--mjo-input-font-weight, normal);
                 font-family: var(--mjo-input-font-family, inherit);
@@ -278,11 +305,11 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 display: none !important;
             }
             .container[data-size="small"] input {
-                padding: calc(1em / 2 - 4px) calc(1em / 2);
+                padding: var(--mjo-input-padding-small, calc(1em / 2 - 4px) calc(1em / 2));
                 font-size: 0.8em;
             }
             .container[data-size="large"] input {
-                padding: calc(1em / 2 - 2px) calc(1em / 2 + 3px) calc(1em / 2 - 3px);
+                padding: var(--mjo-input-padding-large, calc(1em / 2 - 2px) calc(1em / 2 + 3px) calc(1em / 2 - 3px));
                 font-size: 1.2em;
             }
             .prefixText {
@@ -291,7 +318,8 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 font-family: var(--mjo-input-font-family, inherit);
                 line-height: var(--mjo-input-font-size, 1em);
                 padding: calc(1em / 2 - 2px);
-                background-color: var(--mjo-input-prefix-text-bg-color, rgba(220, 220, 220, 0.5));
+                background-color: var(--mjo-input-prefix-text-background-color, rgba(220, 220, 220, 0.5));
+                color: var(--mjo-input-prefix-text-color, currentColor);
                 display: grid;
                 place-items: center;
                 transition: color 0.3s;
@@ -318,7 +346,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
             }
             .container[data-error] :not(.optionImage) mjo-icon,
             .container[data-error][data-color="secondary"] :not(.optionImage) mjo-icon {
-                color: var(--mjo-error-color, #d31616);
+                color: var(--mjo-color-error, #d31616);
             }
             .image {
                 position: relative;

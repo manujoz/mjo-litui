@@ -25,7 +25,7 @@ export class InputLabel extends LitElement {
                 text-align: left;
                 font-size: var(--mjo-input-label-font-size, calc(1em * 0.8));
                 font-weight: var(--mjo-input-label-font-weight, normal);
-                color: var(--mjo-input-label-fg-color, currentColor);
+                color: var(--mjo-input-label-color, currentColor);
             }
             .container {
                 position: relative;
@@ -38,7 +38,7 @@ export class InputLabel extends LitElement {
                 color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
             .container[data-error] {
-                color: var(--mjo-error-color, #d81717);
+                color: var(--mjo-color-error, #d81717);
             }
         `,
     ];
