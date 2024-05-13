@@ -38,7 +38,7 @@ export class TextAreaAutoSize {
 
         this.textarea.style.height = "";
 
-        while (scrollHeight > offsetHeight && scrollHeight < (this.maxHeight || 0)) {
+        while (scrollHeight > offsetHeight && scrollHeight <= (this.maxHeight || 0)) {
             this.textarea.rows += 1;
             offsetHeight = this.textarea?.offsetHeight || 0;
             scrollHeight = this.textarea?.scrollHeight || 0;

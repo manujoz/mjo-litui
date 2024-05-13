@@ -52,7 +52,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
             </div>
             <div class="container">
                 <div ${ref(this.rangebarRef)} class="rangebar">
-                    <div class="progress" ${ref(this.progressbarRef)}></div>
+                    <div class="progress" data-color=${this.color} ${ref(this.progressbarRef)}></div>
                 </div>
                 <slider-handle
                     ${ref(this.sliderOneRef)}
@@ -62,6 +62,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                     valuePrefix=${this.valuePrefix}
                     valueSuffix=${this.valueSuffix}
                     size="20"
+                    color=${this.color}
                 ></slider-handle>
                 ${this.isRange
                     ? html`<slider-handle
@@ -72,6 +73,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                           valuePrefix=${this.valuePrefix}
                           valueSuffix=${this.valueSuffix}
                           size="20"
+                          color=${this.color}
                       ></slider-handle>`
                     : nothing}
                 <input ${ref(this.inputRef)} name=${ifDefined(this.name)} type="hidden" .value=${live(this.value)} />
@@ -286,6 +288,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                 position: relative;
                 flex-grow: 0;
                 flex-basis: auto;
+                font-size: var(--mjo-slider-value-font-size, var(--mjo-input-label-font-size, calc(1em * 0.8)));
             }
             .container {
                 position: relative;
@@ -306,8 +309,11 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                 top: 0;
                 left: 0;
                 height: 100%;
-                background-color: var(--mjo-slider-progress-color, var(--mjo-primary-color, #007bff));
+                background-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #007bff));
                 border-radius: inherit;
+            }
+            .progress[data-color="secondary"] {
+                background-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #ff8800));
             }
         `,
     ];

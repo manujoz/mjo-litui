@@ -105,6 +105,8 @@ export class MjoDropdown extends LitElement {
     #close(ev?: Event) {
         if (this.behavior === "click" && ev?.composedPath().includes(this) && Date.now() - this.openTimestamp < 100) return;
 
+        if (!this.isOpen) return;
+
         this.isOpen = false;
         this.dropdown?.close();
         this.openTimestamp = 0;

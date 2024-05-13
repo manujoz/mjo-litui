@@ -10,6 +10,7 @@ export class SliderHandle extends LitElement {
     @property({ type: String }) value = "0";
     @property({ type: String }) valuePrefix = "";
     @property({ type: String }) valueSuffix = "";
+    @property({ type: String }) color: "primary" | "secondary" = "primary";
 
     start: number = 0;
 
@@ -29,10 +30,10 @@ export class SliderHandle extends LitElement {
         return html`
             ${this.tooltip
                 ? html`<div class="tooltip">
-                      <div class="text">${this.valuePrefix}${this.value}${this.valueSuffix}</div>
+                      <div class="text" data-color=${this.color}>${this.valuePrefix}${this.value}${this.valueSuffix}</div>
                   </div>`
                 : nothing}
-            <div class="outter" ?data-pressed=${this.pressed}><div class="inner" ?data-pressed=${this.pressed}></div></div>
+            <div class="outter" ?data-pressed=${this.pressed} data-color=${this.color}><div class="inner" ?data-pressed=${this.pressed}></div></div>
         `;
     }
 
@@ -179,18 +180,25 @@ export class SliderHandle extends LitElement {
                 position: relative;
                 padding: 0.1em 0.5em;
                 font-size: 0.8em;
-                color: white;
-                background-color: var(--mjo-slider-color, var(--mjo-primary-color, #007bff));
-                border-radius: 5px;
-                box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.5);
+                color: var(--mjo-input-primary-foreground-color, var(--mjo-primary-foreground-color, #333333));
+                background-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #007bff));
+                border-radius: var(--mjo-slider-tooltip-radius, var(--mjo-radius-small, 5px));
+                box-shadow: var(--mjo-slider-tooltip-box-shadow, var(--mjo-box-shadow, 0px 0px 3px rgba(0, 0, 0, 0.5)));
             }
             .text::after {
                 position: absolute;
                 border: 5px solid transparent;
                 bottom: -10px;
                 left: calc(50% - 5px);
-                border-top-color: var(--mjo-slider-color, var(--mjo-primary-color, #007bff));
+                border-top-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #007bff));
                 content: "";
+            }
+            .text[data-color="secondary"] {
+                color: var(--mjo-input-secondary-foreground-color, var(--mjo-secondary-foreground-color, #333333));
+                background-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            .text[data-color="secondary"]::after {
+                border-top-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
             .outter {
                 position: absolute;
@@ -202,7 +210,10 @@ export class SliderHandle extends LitElement {
                 cursor: grab;
                 box-sizing: border-box;
                 border: solid 2em var(--mjo-background-color, white);
-                background-color: var(--mjo-slider-color, var(--mjo-primary-color, #007bff));
+                background-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #007bff));
+            }
+            .outter[data-color="secondary"] {
+                background-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
             .outter[data-pressed] {
                 cursor: grabbing;
