@@ -36,6 +36,7 @@ export declare class IFormMixin {
     minlength?: number;
 
     form: HTMLFormElement | null;
+    mjoForm: MjoForm | null;
 
     submiForm(): void;
     updateFormData({ name, value }: { name: string; value: string }): void;
@@ -70,6 +71,7 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
         @property({ type: Number }) minlength?: number;
 
         form: HTMLFormElement | null = null;
+        mjoForm: MjoForm | null = null;
 
         private dataFormMixin?: { name: string; value: string };
         private listenersFormMixin = {
@@ -106,12 +108,12 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
             this.form = searchClosestElement(this, "form") as HTMLFormElement | null;
             this.form?.addEventListener("formdata", this.listenersFormMixin.formData);
 
-            const mjoForm = (this.form?.parentNode as ShadowRoot)?.host as MjoForm | null;
-            if (mjoForm?.tagName === "MJO-FORM") {
+            this.mjoForm = (this.form?.parentNode as ShadowRoot)?.host as MjoForm | null;
+            if (this.mjoForm?.tagName === "MJO-FORM") {
                 if (this.tagName === "MJO-BUTTON" && (this as unknown as MjoButton).type === "submit") {
-                    mjoForm.submitButton = this as unknown as MjoButton;
+                    this.mjoForm.submitButton = this as unknown as MjoButton;
                 } else {
-                    mjoForm.elements.push(this as unknown as MjoFormElements);
+                    this.mjoForm.elements.push(this as unknown as MjoFormElements);
                 }
             }
         }

@@ -185,7 +185,7 @@ export class MjoTable extends LitElement {
             border-collapse: collapse;
             border-spacing: 0;
             background-color: var(--mjo-table-background-color, transparent);
-            color: var(--mjo-table-foreground-color, var(--illoui-foreground-color, #333333));
+            color: var(--mjo-table-foreground-color, var(--mjo-foreground-color, #333333));
             font-size: inherit;
         }
         thead {
@@ -201,7 +201,7 @@ export class MjoTable extends LitElement {
         }
 
         td {
-            color: var(--mjo-table-cell-foreground-color, var(--illoui-foreground-color, #333333));
+            color: var(--mjo-table-cell-foreground-color, var(--mjo-foreground-color, #333333));
         }
 
         tr:nth-child(even) {
@@ -209,14 +209,14 @@ export class MjoTable extends LitElement {
         }
 
         tr:nth-child(even) td {
-            color: var(--mjo-table-cell-even-foreground-color, var(--mjo-table-cell-foreground-color, var(--illoui-foreground-color, #333333)));
+            color: var(--mjo-table-cell-even-foreground-color, var(--mjo-table-cell-foreground-color, var(--mjo-foreground-color, #333333)));
         }
 
         th {
             cursor: pointer;
             user-select: none;
             background-color: var(--mjo-table-header-background-color, var(--illou-primary-color, rgb(235, 195, 23)));
-            color: var(--mjo-table-header-foreground-color, var(--illoui-foreground-color, #333333));
+            color: var(--mjo-table-header-foreground-color, var(--mjo-foreground-color, #333333));
         }
 
         .container-header {
