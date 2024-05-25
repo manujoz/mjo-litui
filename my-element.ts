@@ -10,6 +10,7 @@ import "./src/mjo-avatar.js";
 import "./src/mjo-button.js";
 import "./src/mjo-dropdown.js";
 import "./src/mjo-form.js";
+import "./src/mjo-image.js";
 import "./src/mjo-select.js";
 import "./src/mjo-slider.js";
 import "./src/mjo-textarea.js";
@@ -40,6 +41,9 @@ export class MyElement extends LitElement {
             <mjo-theme theme="light" .config=${theme} scope="global">
                 <p style="color: var(--mjo-primary-color);">Hola mundo</p>
             </mjo-theme>
+            <div style="padding: 20px;">
+                <mjo-image src="asdasdsa"></mjo-image>
+            </div>
             <div style="padding: 20px;">
                 <mjo-avatar size="small" name="Á" bordered nameColoured></mjo-avatar>
             </div>
@@ -130,6 +134,10 @@ export class MyElement extends LitElement {
         mjo-textfield,
         mjo-button {
             vertical-align: middle;
+        }
+        mjo-image {
+            width: 200px;
+            height: 100px;
         }
     `;
 }
