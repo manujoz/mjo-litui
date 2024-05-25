@@ -12,7 +12,7 @@ export class TextAreaAutoSize {
     constructor(textarea: HTMLTextAreaElement, rows: number, maxHeight?: number) {
         this.textarea = textarea;
         this.rows = rows;
-        this.maxHeight = maxHeight;
+        this.maxHeight = maxHeight || 300;
 
         this.textarea.style.maxHeight = `${this.maxHeight}px`;
 

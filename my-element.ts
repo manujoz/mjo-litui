@@ -48,12 +48,12 @@ export class MyElement extends LitElement {
                     <mjo-textfield label="Name" name="name" type="password" selectOnFocus clearabled counter></mjo-textfield>
                     <p>
                         <mjo-select color="secondary" name="select" label="Este es el select">
-                            <option-select startIcon=${AiOutlineSearch} value="">Selecciona...</option-select>
-                            <option-select startIcon=${AiOutlineSearch} value="1">Barcelona</option-select>
-                            <option-select startIcon=${AiOutlineSearch} value="2">Madrid</option-select>
-                            <option-select startIcon=${AiOutlineSearch} value="3">Valencia</option-select>
-                            <option-select startIcon=${AiOutlineSearch} value="4">Sevilla</option-select>
-                            <option-select startIcon=${AiOutlineSearch} value="5">Bilbao</option-select>
+                            <mjo-option startIcon=${AiOutlineSearch} value="">Selecciona...</mjo-option>
+                            <mjo-option startIcon=${AiOutlineSearch} value="1">Barcelona</mjo-option>
+                            <mjo-option startIcon=${AiOutlineSearch} value="2">Madrid</mjo-option>
+                            <mjo-option startIcon=${AiOutlineSearch} value="3">Valencia</mjo-option>
+                            <mjo-option startIcon=${AiOutlineSearch} value="4">Sevilla</mjo-option>
+                            <mjo-option startIcon=${AiOutlineSearch} value="5">Bilbao</mjo-option>
                         </mjo-select>
                     </p>
                     <p>

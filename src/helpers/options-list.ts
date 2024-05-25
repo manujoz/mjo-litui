@@ -1,6 +1,6 @@
 import { type locales } from "../locales/locales.js";
+import { type MjoOption } from "../mjo-option.js";
 import { type MjoSelect } from "../mjo-select";
-import { type OptionSelect } from "./option-select";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -15,7 +15,7 @@ const dictionary = getDictionary(document.querySelector("html")?.lang as keyof t
 
 @customElement("options-list")
 export class OptionsList extends LitElement {
-    @property({ type: Array }) options: OptionSelect[] = [];
+    @property({ type: Array }) options: MjoOption[] = [];
     @property({ type: Object }) mjoSelect: MjoSelect | null = null;
     @property({ type: Boolean }) searchable = false;
     @property({ type: Boolean }) open = false;

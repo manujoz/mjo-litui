@@ -1,5 +1,5 @@
-import { type OptionSelect } from "./helpers/option-select.js";
 import { type MjoDropdown } from "./mjo-dropdown.js";
+import { type MjoOption } from "./mjo-option.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
@@ -12,9 +12,9 @@ import { AiOutlineDown } from "mjo-icons/ai/AiOutlineDown.js";
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 
-import "./helpers/option-select.js";
 import "./helpers/options-list.js";
 import "./mjo-dropdown.js";
+import "./mjo-option.js";
 
 @customElement("mjo-select")
 export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements IInputErrorMixin, IFormMixin {
@@ -40,7 +40,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
 
     @state() private isFocused = false;
     @state() private open = false;
-    @state() private options: OptionSelect[] = [];
+    @state() private options: MjoOption[] = [];
     @state() private visibleValue: string = "";
     @state() private startOptionImage?: string;
     @state() private endOptionImage?: string;
@@ -216,12 +216,12 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     }
 
     #setOptions() {
-        const options = this.querySelectorAll("option-select");
+        const options = this.querySelectorAll("mjo-option");
         if (!options.length) {
             throw new Error(`[mjo-select=name=${this.name}]: No options found`);
         }
 
-        this.options = Array.from(options) as OptionSelect[];
+        this.options = Array.from(options) as MjoOption[];
     }
 
     static styles = [

@@ -1,8 +1,8 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("option-select")
-export class OptionSelect extends LitElement {
+@customElement("mjo-option")
+export class MjoOption extends LitElement {
     @property({ type: String }) value = "";
     @property({ type: String }) text = "";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
@@ -97,6 +97,6 @@ export class OptionSelect extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "option-select": OptionSelect;
+        "mjo-option": MjoOption;
     }
 }
