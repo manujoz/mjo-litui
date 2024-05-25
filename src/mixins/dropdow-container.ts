@@ -1,7 +1,7 @@
+import { type MjoDropdown } from "../mjo-dropdown";
+
 import { LitElement, TemplateResult, css, html, nothing, type CSSResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
-
-import { type MjoDropdown } from "../mjo-dropdown";
 
 import {
     getLeftInCenterPOsition,
@@ -18,7 +18,8 @@ export class DropdowContainer extends LitElement {
     @property({ type: Object }) html?: TemplateResult<1>;
     @property({ type: String }) position: DropdownPositions = "center-bottom";
     @property({ type: Boolean }) preventScroll = false;
-    @property({ type: Number }) width?: number;
+    @property({ type: String }) width?: string;
+    @property({ type: String }) height?: string;
 
     host?: MjoDropdown;
 
@@ -45,6 +46,8 @@ export class DropdowContainer extends LitElement {
 
     connectedCallback(): void {
         super.connectedCallback();
+
+        if (this.height) this.style.maxHeight = this.height;
 
         window.addEventListener("resize", this.#listeners.resize);
     }
@@ -81,7 +84,7 @@ export class DropdowContainer extends LitElement {
         this.style.display = "block";
         this.style.transition = "opacity 0.1s ease-in, transform 0.1s ease-in";
         this.style.transform = "scale(0.7)";
-        if (this.width) this.style.minWidth = `${this.width}px`;
+        if (this.width) this.style.minWidth = this.width;
 
         setTimeout(() => {
             this.updatePosition();
@@ -150,7 +153,7 @@ export class DropdowContainer extends LitElement {
     }
 
     #preventWheel(ev: WheelEvent) {
-        ev.preventDefault();
+        if (ev.target === this) ev.preventDefault();
     }
 
     #getScrollbarElements() {
@@ -179,7 +182,7 @@ export class DropdowContainer extends LitElement {
                 opacity: 0;
                 background-color: var(--mjo-dropdown-background-color, var(--mjo-background-color, white));
                 box-shadow: var(--mjo-dropdown-box-shadow, var(--mjo-box-shadow, 0px 0px 7px rgba(0, 0, 0, 0.5)));
-                border-radius: var(--mjo-dropdown-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-dropdown-radius, var(--mjo-radius-medium, 5px));
                 transform-origin: top center;
                 max-width: calc(100vw - 20px);
                 overflow: hidden;

@@ -5,15 +5,21 @@ import { type DropdowContainer } from "./mixins/dropdow-container";
 
 import "./mixins/dropdow-container.js";
 
+const convertToPx = (value: string | null): string | null => {
+    if (value === null) return value;
+    return isNaN(Number(value)) ? value : `${value}px`;
+};
+
 @customElement("mjo-dropdown")
 export class MjoDropdown extends LitElement {
-    @property({ type: Object }) html?: TemplateResult<1>;
-    @property({ type: Object }) css?: CSSResult;
-    @property({ type: Boolean, reflect: true }) isOpen = false;
-    @property({ type: String }) behavior: "hover" | "click" = "hover";
-    @property({ type: Number }) width?: number;
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: Boolean }) preventScroll = false;
+    @property({ type: Boolean, reflect: true }) isOpen = false;
+    @property({ type: Object }) css?: CSSResult;
+    @property({ type: Object }) html?: TemplateResult<1>;
+    @property({ type: String }) behavior: "hover" | "click" = "hover";
+    @property({ type: String, converter: convertToPx }) width?: string;
+    @property({ type: String, converter: convertToPx }) height?: string;
 
     dropdown?: DropdowContainer | null;
     openTimestamp = 0;
@@ -76,7 +82,8 @@ export class MjoDropdown extends LitElement {
         }
         if (changedProperties.has("width") && this.width !== undefined) {
             if (!this.dropdown) return;
-            this.dropdown.width = this.width;
+
+            this.dropdown.style.display = this.width;
         }
     }
 
@@ -92,7 +99,11 @@ export class MjoDropdown extends LitElement {
         if (this.isOpen) return;
 
         if (this.fullwidth && this.dropdown) {
-            this.dropdown.width = this.offsetWidth;
+            this.dropdown.width = `${this.offsetWidth}px`;
+        }
+
+        if (this.height && this.dropdown) {
+            this.dropdown.height = this.height;
         }
 
         this.isOpen = true;
@@ -104,6 +115,8 @@ export class MjoDropdown extends LitElement {
 
     #close(ev?: Event) {
         if (this.behavior === "click" && ev?.composedPath().includes(this) && Date.now() - this.openTimestamp < 100) return;
+
+        if (!this.isOpen) return;
 
         this.isOpen = false;
         this.dropdown?.close();
@@ -119,9 +132,7 @@ export class MjoDropdown extends LitElement {
         this.dropdown.css = this.css;
         this.dropdown.preventScroll = this.preventScroll;
 
-        if (this.width) {
-            this.dropdown.style.width = `${this.width}px`;
-        }
+        if (this.width) this.dropdown.style.width = this.width;
 
         document.body.appendChild(this.dropdown);
     }

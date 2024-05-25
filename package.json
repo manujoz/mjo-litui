@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp src/dist ./dist",
+        "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp src/dist ./dist && npm publish",
         "preview": "vite preview"
     },
     "dependencies": {

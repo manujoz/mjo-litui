@@ -16,8 +16,18 @@ export class MjoIonic extends LitElement {
                 position: absolute;
                 inset: -1000%;
                 content: "";
-                background-image: conic-gradient(from 90deg at 50% 50%, #e2cbff 0, #393bb2 50%, #e2cbff 100%);
-                background-image: conic-gradient(from 90deg at 50% 50%, #e2cbff 0, #2fec00 50%, #e2cbff 100%);
+                background-image: conic-gradient(
+                    from 90deg at 50% 50%,
+                    var(--mjo-ionic-color-one, #e2cbff) 0,
+                    var(--mjo-ionic-color-two, #393bb2) 50%,
+                    var(--mjo-ionic-color-one, #e2cbff) 100%
+                );
+                background-image: conic-gradient(
+                    from 90deg at 50% 50%,
+                    var(--mjo-ionic-color-one, #e2cbff) 0,
+                    var(--mjo-ionic-color-three, #2fec00) 50%,
+                    var(--mjo-ionic-color-one, #e2cbff) 100%
+                );
                 animation: spin 2s linear infinite;
             }
             @keyframes spin {

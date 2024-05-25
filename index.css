@@ -34,6 +34,7 @@ body {
     min-height: 500vh;
     display: grid;
     place-content: center;
+    background-color: var(--mjo-background-color);
 }
 
 @media (prefers-color-scheme: light) {

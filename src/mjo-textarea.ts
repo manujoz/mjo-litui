@@ -1,23 +1,19 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { live } from "lit/directives/live.js";
 import { createRef, ref } from "lit/directives/ref.js";
-import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
-import { AiFillEye } from "mjo-icons/ai/AiFillEye.js";
-import { AiFillEyeInvisible } from "mjo-icons/ai/AiFillEyeInvisible.js";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { FormMixin, IFormMixin } from "./mixins/form-mixin";
+import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
+import { TextAreaAutoSize } from "./utils/textarea-autosize.js";
 
+import { live } from "lit/directives/live.js";
 import "./helpers/input-counter.js";
 import "./helpers/input-helper-text.js";
 import "./helpers/input-label.js";
 
-import "./mjo-icon.js";
-
-@customElement("mjo-textfield")
-export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) implements IInputErrorMixin, IFormMixin {
+@customElement("mjo-textarea")
+export class MjoTextarea extends InputErrorMixin(FormMixin(LitElement)) implements IInputErrorMixin, IFormMixin {
     @property({ type: String }) autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
     @property({ type: String }) autoComplete?: AutoFillContactField;
     @property({ type: Boolean }) autoFocus = false;
@@ -26,9 +22,9 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
     @property({ type: String }) name?: string;
     @property({ type: String }) placeholder?: string;
     @property({ type: Boolean }) readonly: boolean = false;
-    @property({ type: Number }) step?: number;
-    @property({ type: String }) type: "text" | "password" | "email" | "number" | "tel" | "url" = "text";
     @property({ type: String }) value: string = "";
+    @property({ type: Number }) rows: number = 1;
+    @property({ type: Number }) maxHeight?: number;
     @property({ type: String }) label?: string;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
@@ -36,42 +32,35 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
     @property({ type: String }) endIcon?: string;
     @property({ type: String }) startImage?: string;
     @property({ type: String }) endImage?: string;
-    @property({ type: String }) prefixText?: string;
-    @property({ type: String }) suffixText?: string;
     @property({ type: String }) helperText?: string;
     @property({ type: Boolean }) counter: boolean = false;
     @property({ type: Boolean }) selectOnFocus = false;
-    @property({ type: Boolean }) clearabled = false;
 
     @state() private isFocused = false;
     @state() private valueLength = 0;
 
-    inputRef = createRef<HTMLInputElement>();
-    isPassword = false;
+    inputRef = createRef<HTMLTextAreaElement>();
+    textAreaAutoSize?: TextAreaAutoSize;
 
     render() {
         return html`${this.label
                 ? html`<input-label color=${this.color} label=${this.label} ?focused=${this.isFocused} ?error=${this.error}></input-label>`
                 : nothing}
             <div class="container" data-color=${this.color} ?data-focused=${this.isFocused} data-size=${this.size} ?data-error=${this.error}>
-                ${this.prefixText ? html`<div class="prefixText">${this.prefixText}</div>` : nothing}
                 ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
                 ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
-                <input
+                <textarea
                     ${ref(this.inputRef)}
                     autocapitalize=${ifDefined(this.autoCapitalize)}
                     autocomplete=${ifDefined(this.autoComplete)}
                     ?autofocus=${this.autoFocus}
                     ?disabled=${this.disabled}
                     name=${ifDefined(this.name)}
-                    max=${ifDefined(this.max)}
-                    min=${ifDefined(this.min)}
+                    rows=${this.rows}
                     maxlength=${ifDefined(this.maxlength)}
                     minlength=${ifDefined(this.minlength)}
                     placeholder=${ifDefined(this.placeholder)}
                     ?readonly=${this.readonly}
-                    step=${ifDefined(this.step)}
-                    type=${this.type}
                     .value=${live(this.value)}
                     @focus=${this.#handleFocus}
                     @blur=${this.#handleBlur}
@@ -80,22 +69,9 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                     aria-label=${this.label || this.ariaLabel || nothing}
                     aria-errormessage=${this.errormsg || nothing}
                     aria-required=${ifDefined(this.required)}
-                />
-                ${this.clearabled
-                    ? html`<div class="icon endIcon clearabled" ?data-visible=${this.value.length > 0} @click=${this.#handleClearabled}>
-                          <mjo-icon src=${AiFillCloseCircle}></mjo-icon>
-                      </div>`
-                    : nothing}
-                ${this.endIcon && !this.clearabled && this.type !== "password"
-                    ? html`<div class="icon endIcon"><mjo-icon src=${this.endIcon}></mjo-icon></div>`
-                    : nothing}
+                ></textarea>
+                ${this.endIcon ? html`<div class="icon endIcon"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
                 ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Input image" /></div>` : nothing}
-                ${this.isPassword
-                    ? this.type === "password"
-                        ? html`<div class="icon endIcon passIcon" @click=${this.#handlePassword}><mjo-icon src=${AiFillEye}></mjo-icon></div>`
-                        : html`<div class="icon endIcon passIcon" @click=${this.#handlePassword}><mjo-icon src=${AiFillEyeInvisible}></mjo-icon></div>`
-                    : nothing}
-                ${this.suffixText ? html`<div class="prefixText">${this.suffixText}</div>` : nothing}
             </div>
             <div class="helper">
                 ${this.helperText || this.errormsg || this.successmsg
@@ -119,65 +95,28 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
     connectedCallback(): void {
         super.connectedCallback();
 
-        document.querySelector("input")?.autocomplete;
-
-        if (this.type === "password" && !this.isPassword) {
-            this.isPassword = true;
+        if (this.autoFocus) {
+            this.#handleFocus();
         }
 
         this.updateFormData({ name: this.name || "", value: this.value });
     }
 
-    blur() {
-        this.inputRef.value?.blur();
+    protected firstUpdated(_changedProperties: Map<PropertyKey, unknown>): void {
+        super.firstUpdated(_changedProperties);
+
+        if (this.inputRef.value) {
+            this.textAreaAutoSize = new TextAreaAutoSize(this.inputRef.value, this.rows, this.maxHeight);
+        }
     }
 
-    clear(focus = false) {
-        this.setValue("");
+    disconnectedCallback(): void {
+        super.disconnectedCallback();
 
-        if (focus) this.focus();
+        this.textAreaAutoSize?.destroy();
     }
 
-    focus() {
-        this.inputRef.value?.focus();
-    }
-
-    getError() {
-        return this.errormsg;
-    }
-
-    getForm() {
-        return this.form;
-    }
-
-    getValue() {
-        return this.value;
-    }
-
-    removeError() {
-        this.error = false;
-        this.errormsg = "";
-    }
-
-    setError(errormsg: string) {
-        this.error = true;
-        this.errormsg = errormsg;
-    }
-
-    setValue(value: string) {
-        this.value = value;
-    }
-
-    #handleBlur() {
-        this.isFocused = false;
-    }
-
-    #handleClearabled() {
-        this.value = "";
-        this.valueLength = 0;
-    }
-
-    #handleFocus = () => {
+    #handleFocus() {
         this.isFocused = true;
 
         if (this.selectOnFocus) {
@@ -187,29 +126,22 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
 
         setTimeout(() => {
             if (!this.inputRef.value) return;
-            const oldTyoe = this.inputRef.value.type;
-            this.inputRef.value.type = oldTyoe !== "password" ? "text" : "password";
             this.inputRef.value.setSelectionRange(this.value.length, this.value.length);
-            this.inputRef.value.type = oldTyoe;
         }, 10);
-    };
+    }
 
-    #handleInput = (ev: InputEvent) => {
-        this.value = (ev.currentTarget as HTMLInputElement).value;
+    #handleBlur() {
+        this.isFocused = false;
+    }
+
+    #handleInput(ev: InputEvent) {
+        this.value = (ev.currentTarget as HTMLTextAreaElement).value;
         this.valueLength = this.value.length;
 
         this.updateFormData({ name: this.name || "", value: this.value });
-    };
-
-    #handleKeyup = (ev: KeyboardEvent) => {
-        if (ev.key === "Enter" && this.form) {
-            this.submiForm();
-        }
-    };
-
-    #handlePassword() {
-        this.type = this.type === "password" ? "text" : "password";
     }
+
+    #handleKeyup() {}
 
     static styles = [
         css`
@@ -255,57 +187,35 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
             .container[data-error][data-color="secondary"] {
                 border-color: var(--mjo-color-error, #d31616);
             }
-            input {
+            textarea {
                 background-color: transparent;
                 border: none;
-                padding: var(--mjo-input-padding, calc(1em / 2 - 3px) calc(1em / 2 - 2px) calc(1em / 2 - 4px));
+                padding: var(--mjo-textarea-padding, calc(1em / 2 - 2px) calc(1em / 2 - 2px) calc(1em / 2 - 2px));
                 font-size: var(--mjo-input-font-size, 1em);
                 font-weight: var(--mjo-input-font-weight, normal);
                 font-family: var(--mjo-input-font-family, inherit);
                 line-height: var(--mjo-input-font-size, 1em);
-                color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
                 box-sizing: border-box;
                 flex: 1 1 0;
                 width: inherit;
                 min-width: 0;
+                resize: none;
             }
-            input:focus {
+            textarea:focus {
                 outline: none;
             }
-            input:-webkit-autofill {
+            textarea:-webkit-autofill {
                 box-shadow: 0 0 0px 1000px white inset !important;
                 -webkit-box-shadow: 0 0 0px 1000px white inset !important;
                 -webkit-text-fill-color: var(--mo-input-color, #111111);
             }
-            input::-ms-reveal,
-            input::-ms-clear {
-                display: none !important;
-            }
-            .container[data-size="small"] input {
-                padding: var(--mjo-input-padding-small, calc(1em / 2 - 4px) calc(1em / 2));
+            .container[data-size="small"] textarea {
+                padding: var(--mjo-textarea-padding-small, calc(1em / 2 - 4px) calc(1em / 2));
                 font-size: 0.8em;
             }
-            .container[data-size="large"] input {
-                padding: var(--mjo-input-padding-large, calc(1em / 2 - 2px) calc(1em / 2 + 3px) calc(1em / 2 - 3px));
+            .container[data-size="large"] textarea {
+                padding: var(--mjo-textarea-padding-large, calc(1em / 2 - 2px) calc(1em / 2 + 3px) calc(1em / 2 - 3px));
                 font-size: 1.2em;
-            }
-            .prefixText {
-                position: relative;
-                font-weight: var(--mjo-input-font-weight, normal);
-                font-family: var(--mjo-input-font-family, inherit);
-                line-height: var(--mjo-input-font-size, 1em);
-                padding: calc(1em / 2 - 2px);
-                background-color: var(--mjo-input-prefix-text-background-color, rgba(220, 220, 220, 0.5));
-                color: var(--mjo-input-prefix-text-color, currentColor);
-                display: grid;
-                place-items: center;
-                transition: color 0.3s;
-            }
-            .container[data-focused].prefixText {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
-            }
-            .container[data-focused][data-color="secondary"] .prefixText {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
             .icon {
                 position: relative;
@@ -343,27 +253,6 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
             .endImage {
                 padding-right: calc(1em / 2 - 4px);
             }
-            .passIcon {
-                cursor: pointer;
-            }
-            .clearabled {
-                opacity: 0;
-                font-size: calc(var(--mjo-input-font-size, 1em) * 0.8);
-                transition: opacity 0.3s;
-            }
-            .clearabled[data-visible] {
-                opacity: 1;
-                cursor: pointer;
-            }
-            .container .clearabled mjo-icon {
-                color: #999999 !important;
-            }
-            .container .clearabled:hover mjo-icon {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)) !important;
-            }
-            .container[data-color="secondary"] .clearabled:hover mjo-icon {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)) !important;
-            }
             .helper {
                 position: relative;
                 display: flex;
@@ -392,6 +281,6 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
 
 declare global {
     interface HTMLElementTagNameMap {
-        "mjo-textfield": MjoTextfield;
+        "mjo-textarea": MjoTextarea;
     }
 }

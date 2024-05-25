@@ -3,8 +3,8 @@
 --mjo-primary-color
 --mjo-secondary-color
 --mjo-border-color
---mjo-error-color
---mjo-success-color
+--mjo-color-error
+--mjo-color-success
 --mjo-radius
 /** mjo-button*/
 --mjo-button-bg-primary-color

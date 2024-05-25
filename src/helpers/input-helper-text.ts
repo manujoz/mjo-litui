@@ -26,9 +26,9 @@ export class InputHelperText extends LitElement {
                 position: relative;
                 display: block;
                 text-align: left;
-                font-size: var(--mjo-input-helper-text-font-size, calc(1em * 0.8));
-                font-weight: var(--mjo-input-helper-text-font-weight, normal);
-                color: var(--mjo-input-helper-text-fg-color, #555555);
+                font-size: var(--mjo-input-helper-font-size, calc(1em * 0.8));
+                font-weight: var(--mjo-input-helper-font-weight, normal);
+                color: var(--mjo-input-helper-color, #555555);
                 line-height: calc(1em * 1.2);
                 max-width: 100%;
             }
@@ -44,10 +44,10 @@ export class InputHelperText extends LitElement {
                 gap: 3px;
             }
             .error {
-                color: var(--mjo-error-color, #d31616);
+                color: var(--mjo-color-error, #d31616);
             }
             .success {
-                color: var(--mjo-success-color, #56b15b);
+                color: var(--mjo-color-success, #56b15b);
             }
             mjo-icon {
                 flex: 0 1 auto;

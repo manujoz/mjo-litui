@@ -36,6 +36,7 @@ export declare class IFormMixin {
     minlength?: number;
 
     form: HTMLFormElement | null;
+    mjoForm: MjoForm | null;
 
     submiForm(): void;
     updateFormData({ name, value }: { name: string; value: string }): void;
@@ -70,9 +71,10 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
         @property({ type: Number }) minlength?: number;
 
         form: HTMLFormElement | null = null;
+        mjoForm: MjoForm | null = null;
 
-        private data?: { name: string; value: string };
-        private listeners = {
+        private dataFormMixin?: { name: string; value: string };
+        private listenersFormMixin = {
             formData: (ev: FormDataEvent) => {
                 this.#onFormdata(ev);
             },
@@ -85,13 +87,13 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
         disconnectedCallback() {
             super.disconnectedCallback();
 
-            this.form?.removeEventListener("formdata", this.listeners.formData);
+            this.form?.removeEventListener("formdata", this.listenersFormMixin.formData);
         }
 
         updateFormData({ name, value }: { name: string; value: string }) {
             if (!name) return;
 
-            this.data = { name, value };
+            this.dataFormMixin = { name, value };
         }
 
         submiForm() {
@@ -104,22 +106,22 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
 
         #getForm() {
             this.form = searchClosestElement(this, "form") as HTMLFormElement | null;
-            this.form?.addEventListener("formdata", this.listeners.formData);
+            this.form?.addEventListener("formdata", this.listenersFormMixin.formData);
 
-            const mjoForm = (this.form?.parentNode as ShadowRoot)?.host as MjoForm | null;
-            if (mjoForm?.tagName === "MJO-FORM") {
+            this.mjoForm = (this.form?.parentNode as ShadowRoot)?.host as MjoForm | null;
+            if (this.mjoForm?.tagName === "MJO-FORM") {
                 if (this.tagName === "MJO-BUTTON" && (this as unknown as MjoButton).type === "submit") {
-                    mjoForm.submitButton = this as unknown as MjoButton;
+                    this.mjoForm.submitButton = this as unknown as MjoButton;
                 } else {
-                    mjoForm.elements.push(this as unknown as MjoFormElements);
+                    this.mjoForm.elements.push(this as unknown as MjoFormElements);
                 }
             }
         }
 
         #onFormdata(ev: FormDataEvent) {
-            if (!this.data) return;
+            if (!this.dataFormMixin) return;
 
-            ev.formData.set(this.data.name, this.data.value);
+            ev.formData.set(this.dataFormMixin.name, this.dataFormMixin.value);
         }
     }
 
