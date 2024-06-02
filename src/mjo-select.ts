@@ -47,6 +47,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     @state() private startOptionIcon?: string;
     @state() private endOptionIcon?: string;
 
+    type = "select";
     dropdownRef = createRef<MjoDropdown>();
     inputRef = createRef<HTMLInputElement>();
     inputVisibleRef = createRef<HTMLInputElement>();
@@ -158,6 +159,10 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
         }
 
         this.updateFormData({ name: this.name || "", value: this.value });
+    }
+
+    getValue() {
+        return this.value;
     }
 
     #handleBlur() {

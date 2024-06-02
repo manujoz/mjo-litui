@@ -17,7 +17,7 @@ export class MjoDropdown extends LitElement {
     @property({ type: Boolean, reflect: true }) isOpen = false;
     @property({ type: Object }) css?: CSSResult;
     @property({ type: Object }) html?: TemplateResult<1>;
-    @property({ type: String }) behavior: "hover" | "click" = "hover";
+    @property({ type: String }) behaviour: "hover" | "click" = "hover";
     @property({ type: String, converter: convertToPx }) width?: string;
     @property({ type: String, converter: convertToPx }) height?: string;
 
@@ -42,7 +42,7 @@ export class MjoDropdown extends LitElement {
 
         this.#createDropdown();
 
-        if (this.behavior === "hover") {
+        if (this.behaviour === "hover") {
             this.addEventListener("mouseenter", this.#listeners.open);
             this.dropdown?.addEventListener("mouseleave", this.#listeners.close);
         } else {
@@ -55,7 +55,7 @@ export class MjoDropdown extends LitElement {
     disconnectedCallback() {
         super.disconnectedCallback();
 
-        if (this.behavior === "hover") {
+        if (this.behaviour === "hover") {
             this.removeEventListener("mouseenter", this.#listeners.open);
             this.dropdown?.removeEventListener("mouseleave", this.#listeners.close);
         } else {
@@ -114,7 +114,7 @@ export class MjoDropdown extends LitElement {
     }
 
     #close(ev?: Event) {
-        if (this.behavior === "click" && ev?.composedPath().includes(this) && Date.now() - this.openTimestamp < 100) return;
+        if (this.behaviour === "click" && ev?.composedPath().includes(this) && Date.now() - this.openTimestamp < 100) return;
 
         if (!this.isOpen) return;
 

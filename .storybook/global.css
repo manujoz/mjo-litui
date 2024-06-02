@@ -1,0 +1,13 @@
+body {
+    font-family: "roboto";
+
+    height: 100vh;
+    background-color: #222222;
+    display: grid;
+    place-content: center;
+    color: var(--mjo-foreground-color);
+}
+
+.storyContainer {
+    padding: 20px;
+}

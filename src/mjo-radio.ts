@@ -2,7 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { createRef, ref } from "lit/directives/ref.js";
-import { AiFillCheckCircle } from "mjo-icons/ai/AiFillCheckCircle";
+import { AiFillCheckCircle } from "mjo-icons/ai/AiFillCheckCircle.js";
 
 import { FormMixin } from "./mixins/form-mixin.js";
 import { InputErrorMixin } from "./mixins/input-error.js";

@@ -12,6 +12,7 @@ import "./mjo-icon.js";
 
 @customElement("mjo-checkbox")
 export class MjoCheckbox extends InputErrorMixin(FormMixin(LitElement)) {
+    @property({ type: String }) color: "primary" | "secondary" = "primary";
     @property({ type: Boolean, reflect: true }) checked = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;

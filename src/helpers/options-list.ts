@@ -6,7 +6,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { createRef, ref } from "lit/directives/ref.js";
 import { repeat } from "lit/directives/repeat.js";
-import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch";
+import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch.js";
 
 import "../mjo-icon.js";
 import { getDictionary } from "../utils/dictionary.js";
