@@ -3,8 +3,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { createRef, ref } from "lit/directives/ref.js";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
+import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
+import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { TextAreaAutoSize } from "./utils/textarea-autosize.js";
 
 import { live } from "lit/directives/live.js";
@@ -38,6 +38,8 @@ export class MjoTextarea extends InputErrorMixin(FormMixin(LitElement)) implemen
 
     @state() private isFocused = false;
     @state() private valueLength = 0;
+
+    type = "textarea";
 
     inputRef = createRef<HTMLTextAreaElement>();
     textAreaAutoSize?: TextAreaAutoSize;
@@ -114,6 +116,14 @@ export class MjoTextarea extends InputErrorMixin(FormMixin(LitElement)) implemen
         super.disconnectedCallback();
 
         this.textAreaAutoSize?.destroy();
+    }
+
+    setValue(value: string) {
+        this.value = value;
+    }
+
+    getValue() {
+        return this.value;
     }
 
     #handleFocus() {

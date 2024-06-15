@@ -1,20 +1,36 @@
 {
     "root": true,
-    "env": { "browser": true, "node": true, "es2020": true },
+    "env": {
+        "browser": true,
+        "node": true,
+        "es2020": true
+    },
     "extends": [
-        "eslint:recommended", 
-        "plugin:wc/recommended", 
+        "eslint:recommended",
+        "plugin:wc/recommended",
         "plugin:lit/recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:prettier/recommended",
         "prettier"
     ],
-    "ignorePatterns": ["dist", ".eslintrc.json", "commitlint.config.js"],
+    "ignorePatterns": [
+        "dist",
+        ".eslintrc.json",
+        "commitlint.config.js"
+    ],
     "parser": "@typescript-eslint/parser",
     "rules": {
         "@typescript-eslint/no-var-requires": "off",
-        "curly": ["error", "multi-line"],
-        "max-len": ["error", { "code": 160 }],
+        "curly": [
+            "error",
+            "multi-line"
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": 160
+            }
+        ],
         "no-console": "error",
         "lit/binding-positions": "error",
         "lit/no-duplicate-template-bindings": "error",
@@ -24,11 +40,22 @@
         "lit/no-native-attributes": "error",
         "lit/no-useless-template-literals": "error",
         "lit/prefer-nothing": "error",
-        "lit/quoted-expressions": ["error", "never"],
+        "lit/quoted-expressions": [
+            "error",
+            "never"
+        ],
         "lit/value-after-constraints": "error",
-        "quotes": ["error", "double"],
-        "semi": ["error", "always"],
-        "wc/max-elements-per-file": ["error"],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "wc/max-elements-per-file": [
+            "error"
+        ],
         "wc/no-constructor-attributes": "error",
         "wc/no-constructor-params": "error",
         "wc/no-exports-with-element": "error",
@@ -37,13 +64,21 @@
         "wc/no-typos": "error",
         "wc/no-self-class": "off",
         "wc/tag-name-matches-class": "error",
-        "wc/file-name-matches-element": ["error", {"transform": ["kebab"]}],
-        "prettier/prettier": [ "error", 
-            { 
+        "wc/file-name-matches-element": [
+            "error",
+            {
+                "transform": [
+                    "kebab"
+                ]
+            }
+        ],
+        "prettier/prettier": [
+            "error",
+            {
                 "endOfLine": "auto",
                 "tabWidth": 4,
                 "printWidth": 160
             }
-          ]
+        ]
     }
 }

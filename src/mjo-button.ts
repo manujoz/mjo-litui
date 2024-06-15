@@ -19,6 +19,7 @@ export class MjoButton extends FormMixin(LitElement) {
     @property({ type: Boolean, reflect: true }) loading = false;
     @property({ type: Boolean, reflect: true }) rounded = false;
     @property({ type: Boolean }) toggleable = false;
+    @property({ type: Boolean }) smallCaps = false;
     @property({ type: Boolean }) noink = false;
     @property({ type: String }) startIcon?: string;
     @property({ type: String }) endIcon?: string;
@@ -37,6 +38,7 @@ export class MjoButton extends FormMixin(LitElement) {
             data-size=${this.size}
             ?data-rounded=${this.rounded}
             ?data-toggle=${this.toggle}
+            ?data-small-caps=${this.smallCaps}
             @click=${this.#handleClick}
         >
             ${this.startIcon && html` <mjo-icon src=${this.startIcon}></mjo-icon>`}
@@ -107,6 +109,9 @@ export class MjoButton extends FormMixin(LitElement) {
             }
             button:focus {
                 outline-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+            }
+            button[data-small-caps] {
+                font-variant: all-small-caps;
             }
             button[data-color="secondary"]:focus {
                 outline-color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));

@@ -2,13 +2,13 @@ import { type SliderHandle } from "./helpers/slider-handle.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 import { createRef, ref } from "lit/directives/ref.js";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
+import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
+import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 
-import { ifDefined } from "lit/directives/if-defined.js";
 import "./helpers/slider-handle.js";
 
 @customElement("mjo-slider")
@@ -29,6 +29,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
 
     @state() private isFocused = false;
 
+    type = "slider";
     stepsLeftsPx = [0];
     setpsValues = [0];
     inputRef = createRef<HTMLTextAreaElement>();

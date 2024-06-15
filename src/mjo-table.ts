@@ -3,10 +3,10 @@ import { MjoTableHeader, MjoTableRowItem, MjoTableRows } from "./types/mjo-table
 import { LitElement, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
-import { AiFillAlert } from "mjo-icons/ai/AiFillAlert";
-import { AiOutlineArrowUp } from "mjo-icons/ai/AiOutlineArrowUp";
+import { AiFillAlert } from "mjo-icons/ai/AiFillAlert.js";
+import { AiOutlineArrowUp } from "mjo-icons/ai/AiOutlineArrowUp.js";
 
-import "./mjo-icon";
+import "./mjo-icon.js";
 
 @customElement("mjo-table")
 export class MjoTable extends LitElement {

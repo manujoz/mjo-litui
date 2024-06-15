@@ -1,8 +1,8 @@
 import { LitElement, TemplateResult, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { AiOutlineUser } from "mjo-icons/ai/AiOutlineUser";
+import { AiOutlineUser } from "mjo-icons/ai/AiOutlineUser.js";
 
 @customElement("mjo-avatar")
 export class MjoAvatar extends LitElement {
@@ -10,7 +10,7 @@ export class MjoAvatar extends LitElement {
     @property({ type: Boolean }) disabled = false;
     @property({ type: Boolean }) showFallback = false;
     @property({ type: Boolean }) nameColoured = false;
-    @property({ type: Object }) fallback?: TemplateResult<1>;
+    @property({ type: String }) fallback?: string;
     @property({ type: String }) alt?: string;
     @property({ type: String }) color: "default" | "primary" | "secondary" | "success" | "warning" | "info" | "error" = "default";
     @property({ type: String }) name?: string;
@@ -19,7 +19,10 @@ export class MjoAvatar extends LitElement {
     @property({ type: String }) src?: string;
 
     @state() private initial = "";
+    @state() private fallbackIcon?: TemplateResult<1>;
     @state() private error = false;
+
+    @query(".image.name") private nameElement!: HTMLImageElement;
 
     render() {
         return html`<div
@@ -32,9 +35,9 @@ export class MjoAvatar extends LitElement {
                       <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${this.#handleError} />
                   </div>`
                 : this.fallback && this.showFallback
-                  ? html`<div class="image fallback radius-${this.radius} font-size-${this.size}">${this.fallback}</div>`
+                  ? html`<div class="image fallback radius-${this.radius} font-size-${this.size}">${this.fallbackIcon}</div>`
                   : this.name
-                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}">${this.initial}</div>`
+                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}"><span>${this.initial}</span></div>`
                     : html`<div class="image radius-${this.radius}"></div>`}
         </div>`;
     }
@@ -55,11 +58,15 @@ export class MjoAvatar extends LitElement {
     protected updated(): void {
         if (this.name && this.nameColoured) {
             const [bg, fg] = this.#colorByInitial();
-            this.style.setProperty("--mjo-avatar-name-auto-background-color", bg);
-            this.style.setProperty("--mjo-avatar-name-auto-foreground-color", fg);
+            this.nameElement.style.backgroundColor = bg;
+            this.nameElement.style.color = fg;
         } else {
-            this.style.removeProperty("--mjo-avatar-name-auto-background-color");
-            this.style.removeProperty("--mjo-avatar-name-auto-foreground-color");
+            this.nameElement.style.backgroundColor = "";
+            this.nameElement.style.color = "";
+        }
+
+        if (this.name) {
+            this.initial = this.name[0].toUpperCase();
         }
     }
 
@@ -113,13 +120,14 @@ export class MjoAvatar extends LitElement {
         this.error = true;
         this.showFallback = true;
 
-        if (!this.fallback) {
+        if (!this.showFallback) {
             this.#setFallback();
         }
     }
 
     #setFallback() {
-        this.fallback = html`<mjo-icon src=${AiOutlineUser}></mjo-icon>`;
+        const icon = this.fallback || AiOutlineUser;
+        this.fallbackIcon = html`<mjo-icon src=${icon}></mjo-icon>`;
     }
 
     static styles = [
@@ -161,7 +169,7 @@ export class MjoAvatar extends LitElement {
                 display: grid;
                 place-content: center;
                 font-weight: bold;
-                background-color: var(--mjo-avatar-name-auto-background-color);
+                background-color: var(--mjo-avatar-name-auto-background-color, var(--mjo-avatar-background-color, var(--mjo-color-gray-400)));
                 color: var(--mjo-avatar-name-auto-foreground-color, var(--mjo-avatar-name-color, var(--mjo-color-gray-100)));
             }
 

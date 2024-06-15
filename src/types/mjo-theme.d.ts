@@ -99,6 +99,16 @@ type MjoThemeMode = {
 
 type MjoThemeShadeStructure = {
     default?: string;
+    alpha0?: string;
+    alpha1?: string;
+    alpha2?: string;
+    alpha3?: string;
+    alpha4?: string;
+    alpha5?: string;
+    alpha6?: string;
+    alpha7?: string;
+    alpha8?: string;
+    alpha9?: string;
     "50"?: string;
     "100"?: string;
     "200"?: string;

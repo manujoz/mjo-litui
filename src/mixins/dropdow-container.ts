@@ -10,7 +10,7 @@ import {
     getTopInBottomPosition,
     getTopInMiddlePosition,
     getTopInTopPosition,
-} from "../utils/dropdown";
+} from "../utils/dropdown.js";
 
 @customElement("dropdow-container")
 export class DropdowContainer extends LitElement {

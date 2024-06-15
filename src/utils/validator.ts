@@ -454,7 +454,7 @@ export class MjoValidator {
             return true;
         }
 
-        const inputRef = input.inputRef.value;
+        const inputRef = input.inputRef.value as HTMLInputElement;
 
         let { checked } = inputRef;
 

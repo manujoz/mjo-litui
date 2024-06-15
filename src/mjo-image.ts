@@ -1,8 +1,8 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import ImageNotAvailable from "./assets/no-image.svg";
+import ImageNotAvailable from "./assets/no-image.js";
 
 @customElement("mjo-image")
 export class MjoImage extends LitElement {
@@ -10,14 +10,20 @@ export class MjoImage extends LitElement {
     @property({ type: String }) alt?: string;
     @property({ type: String }) fit: "contain" | "cover" | "fill" | "none" | "scale-down" = "cover";
 
+    @state() error = false;
+    @state() svgImage?: string;
+
     @query("img") img!: HTMLImageElement;
 
     render() {
-        return html`<img class=${`${this.fit}`} src=${this.src} alt=${ifDefined(this.alt)} @error=${this.#handleError} />`;
+        return !this.error
+            ? html`<img class=${`${this.fit}`} src=${this.src} alt=${ifDefined(this.alt)} @error=${this.#handleError} />`
+            : html`${this.svgImage}`;
     }
 
     #handleError() {
-        this.src = ImageNotAvailable;
+        this.error = true;
+        this.svgImage = ImageNotAvailable;
         this.img.classList.add("error");
     }
 
@@ -29,7 +35,8 @@ export class MjoImage extends LitElement {
                 display: inline-block;
                 vertical-align: middle;
             }
-            img {
+            img,
+            svg {
                 width: inherit;
                 height: inherit;
                 object-fit: cover;
@@ -50,7 +57,7 @@ export class MjoImage extends LitElement {
             img.scale-down {
                 object-fit: scale-down;
             }
-            img.error {
+            svg {
                 background-color: var(--mjo-image-error-background-color, #e0e0e0);
                 border-radius: var(--mjo-image-error-radius, 5px);
                 object-fit: contain;

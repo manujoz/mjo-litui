@@ -1,7 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle";
+import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
 
 import "./mjo-icon.js";
 
@@ -77,7 +77,6 @@ export class MjoChip extends LitElement {
             }
             mjo-icon.close {
                 cursor: pointer;
-                color: var(--mjo-color-gray-800);
                 transition: opacity 0.2s;
             }
             mjo-icon.close:hover {
@@ -114,6 +113,27 @@ export class MjoChip extends LitElement {
             .container[data-color="error"] {
                 background-color: var(--mjo-color-error);
                 color: var(--mjo-color-white);
+            }
+            .container[data-color="default"] mjo-icon.close {
+                color: var(--mjo-color-gray-800);
+            }
+            .container[data-color="primary"] mjo-icon.close {
+                color: var(--mjo-primary-color-200, var(--mjo-secondary-foreground-color));
+            }
+            .container[data-color="secondary"] mjo-icon.close {
+                color: var(--mjo-secondary-color-200, var(--mjo-secondary-foreground-color));
+            }
+            .container[data-color="success"] mjo-icon.close {
+                color: #d8ffd2;
+            }
+            .container[data-color="warning"] mjo-icon.close {
+                color: #fff2c6;
+            }
+            .container[data-color="info"] mjo-icon.close {
+                color: #c8e7ff;
+            }
+            .container[data-color="error"] mjo-icon.close {
+                color: #ffccd2;
             }
             .container[data-radius="none"] {
                 border-radius: 0px;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+export default `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 26.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
@@ -61,3 +61,4 @@
 	c-13.9,0.1-27.81,0.1-41.71,0.01c-4.43-0.03-7.43-2.93-7.28-6.57c0.15-3.63,3.15-6.06,7.68-6.09
 	C168.89,246.81,175.77,246.84,182.65,246.84z"/>
 </svg>
+`;
