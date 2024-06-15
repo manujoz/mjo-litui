@@ -37,6 +37,11 @@ const meta: Meta = {
             defaultValue: false,
             description: "Set fullwidth for the button.",
         },
+        smallCaps: {
+            control: "boolean",
+            defaultValue: false,
+            description: "Set small caps.",
+        },
         loading: {
             control: "boolean",
             defaultValue: false,
@@ -98,6 +103,7 @@ export const Default: Story = {
         endIcon: "",
         fullwidth: false,
         loading: false,
+        smallCaps: false,
         noink: false,
         rounded: false,
         size: "medium",
@@ -111,6 +117,7 @@ export const Default: Story = {
             <mjo-button
                 color=${args.color}
                 ?disabled=${args.disabled}
+                ?smallCaps=${args.smallCaps}
                 endIcon=${args.endIcon}
                 ?fullwidth=${args.fullwidth}
                 ?loading=${args.loading}

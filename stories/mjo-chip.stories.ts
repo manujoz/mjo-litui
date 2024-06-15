@@ -18,7 +18,7 @@ const meta: Meta = {
     argTypes: {
         color: {
             control: { type: "select" },
-            options: ["primary", "secondary", "default", "success", "warning", "error", "info"],
+            options: ["default", "primary", "secondary", "default", "success", "warning", "error", "info"],
             defaultValue: "primary",
             description: "Sets the color of the chip.",
         },
