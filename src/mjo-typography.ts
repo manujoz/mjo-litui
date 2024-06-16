@@ -77,3 +77,9 @@ export class MjoTypography extends LitElement {
         `,
     ];
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "mjo-typography": MjoTypography;
+    }
+}
