@@ -78,9 +78,9 @@ export class MjoRadio extends InputErrorMixin(FormMixin(LitElement)) {
                 position: relative;
             }
             .container[data-disabled] {
-                --mjo-checkbox-border-color: var(--mjo-color-disabled, #c2c2c2);
-                --mjo-checkbox-checked-border-color: var(--mjo-color-disabled, #c2c2c2);
-                --mjo-checkbox-checked-color: var(--mjo-color-disabled, #c2c2c2);
+                --mjo-radio-border-color: var(--mjo-color-disabled, #c2c2c2);
+                --mjo-radio-checked-border-color: var(--mjo-color-disabled, #c2c2c2);
+                --mjo-radio-checked-color: var(--mjo-color-disabled, #c2c2c2);
             }
             .container[data-disabled] input-helper-text {
                 color: var(--mjo-color-disabled, #c2c2c2);
@@ -102,7 +102,7 @@ export class MjoRadio extends InputErrorMixin(FormMixin(LitElement)) {
             }
             .checkbox {
                 position: relative;
-                border: solid 2px var(--mjo-checkbox-border-color, rgb(51, 51, 51));
+                border: solid 2px var(--mjo-radio-border-color, rgb(51, 51, 51));
                 border-radius: 9999px;
                 line-height: 0;
                 transition: border-color 0.3s;
@@ -113,8 +113,8 @@ export class MjoRadio extends InputErrorMixin(FormMixin(LitElement)) {
                 font-size: 1rem;
             }
             .checkbox[data-checked] {
-                color: var(--mjo-checkbox-checked-color, var(--mjo-primary-color));
-                border-color: var(--mjo-checkbox-checked-border-color, var(--mjo-checkbox-checked-color, var(--mjo-primary-color)));
+                color: var(--mjo-radio-checked-color, var(--mjo-primary-color));
+                border-color: var(--mjo-radio-checked-border-color, var(--mjo-radio-checked-color, var(--mjo-primary-color)));
             }
             .checkbox[data-checked] mjo-icon {
                 transform: scale(1);

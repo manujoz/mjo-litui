@@ -2,7 +2,8 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import ImageNotAvailable from "./assets/no-image.js";
+import { unsafeSVG } from "lit/directives/unsafe-svg.js";
+import ImageNotAvailable from "./assets/no-image.svg";
 
 @customElement("mjo-image")
 export class MjoImage extends LitElement {
@@ -18,7 +19,7 @@ export class MjoImage extends LitElement {
     render() {
         return !this.error
             ? html`<img class=${`${this.fit}`} src=${this.src} alt=${ifDefined(this.alt)} @error=${this.#handleError} />`
-            : html`${this.svgImage}`;
+            : html`${unsafeSVG(this.svgImage)}`;
     }
 
     #handleError() {

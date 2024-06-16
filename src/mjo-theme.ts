@@ -1,4 +1,4 @@
-import { MjoThemeConfig, MjoThemeShadeStructure } from "./types/mjo-theme";
+import { MjoInputTheme, MjoThemeConfig, MjoThemeShadeStructure } from "./types/mjo-theme";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -24,7 +24,7 @@ export class MjoTheme extends LitElement {
     }
 
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
-        if (_changedProperties.has("theme") && _changedProperties.get("theme") !== this.theme) {
+        if (_changedProperties.has("theme") && _changedProperties.get("theme") && _changedProperties.get("theme") !== this.theme) {
             this.applyTheme();
         }
     }
@@ -75,7 +75,6 @@ export class MjoTheme extends LitElement {
 
         for (const key in theme) {
             const value = (theme as MjoThemeConfig)[key as keyof MjoThemeConfig];
-
             if ((key === "dark" || key === "light") && this.theme !== key) {
                 continue;
             }
@@ -90,6 +89,11 @@ export class MjoTheme extends LitElement {
                 continue;
             }
 
+            if (key === "components") {
+                this.#applyComponentsStyles(value as MjoThemeConfig["components"]);
+                continue;
+            }
+
             if (typeof value === "object") {
                 this.#applyThemeToCssVars(value as MjoThemeConfig);
                 continue;
@@ -98,6 +102,16 @@ export class MjoTheme extends LitElement {
             const cssVar = `${prefix}${this.#kamelCaseToKebabCase(key)}`;
 
             this.cssStyles += `${cssVar}: ${value};`;
+        }
+    }
+
+    #applyComponentsStyles(components: MjoThemeConfig["components"]) {
+        for (const key in components) {
+            const component = components[key as keyof MjoThemeConfig["components"]] as MjoInputTheme;
+            for (const componentKey in component) {
+                const value = component[componentKey as keyof typeof component];
+                this.cssStyles += `--${this.#kamelCaseToKebabCase(key)}-${this.#kamelCaseToKebabCase(componentKey)}: ${value};`;
+            }
         }
     }
 

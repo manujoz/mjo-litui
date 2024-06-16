@@ -149,7 +149,7 @@ export class MjoAvatar extends LitElement {
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
-                background-color: var(--mjo-avatar-background-color, var(--mjo-color-gray-400));
+                background: var(--mjo-avatar-background-color, var(--mjo-color-gray-400));
                 transition-property: background-color border-color border-radius;
                 transition-duration: 0.3s;
             }
