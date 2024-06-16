@@ -215,7 +215,7 @@ export class MjoTable extends LitElement {
         th {
             cursor: pointer;
             user-select: none;
-            background-color: var(--mjo-table-header-background-color, var(--illou-primary-color, rgb(235, 195, 23)));
+            background-color: var(--mjo-table-header-background-color, var(--mjo-primary-color, rgb(235, 195, 23)));
             color: var(--mjo-table-header-foreground-color, var(--mjo-foreground-color, #333333));
         }
 

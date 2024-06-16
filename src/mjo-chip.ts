@@ -54,7 +54,7 @@ export class MjoChip extends LitElement {
                 color: var(--mjo-color-white);
                 border-radius: 9999px;
                 font-size: var(--mjo-chip-font-size-medium-size, 0.9em);
-                line-height: var(--mjo-chip-line-height-size-medium, 1em);
+                line-height: var(--mjo-chip-line-height-medium-size, 1em);
                 height: 1.6em;
                 display: flex;
                 flex-flow: row nowrap;

@@ -80,10 +80,10 @@ export class MjoCheckbox extends InputErrorMixin(FormMixin(LitElement)) {
                 --mjo-checkbox-checked-color: var(--mjo-color-disabled, #c2c2c2);
             }
             .container[data-disabled] input-helper-text {
-                color: var(--illo-disabled-color, #c2c2c2);
+                color: var(--mjo-disabled-color, #c2c2c2);
             }
             .container[data-disabled] .label {
-                color: var(--illo-disabled-color, #c2c2c2);
+                color: var(--mjo-disabled-color, #c2c2c2);
             }
             .flexContainer {
                 position: relative;

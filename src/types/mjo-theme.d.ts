@@ -30,15 +30,21 @@ export interface MjoThemeConfig {
     /** --mjo-space-xxlarge */
     spaceXXLarge?: string;
     components?: {
-        mjoTextfield?: MjoInputTheme;
-        mjoSelect?: MjoSelectTheme;
-        mjoTextarea?: MjoTextaraTheme;
+        mjoAvatar?: MjoAvatarTheme;
+        mjoCheckbox?: MjoCheckboxTheme;
         mjoButton?: MjoButtonTheme;
+        mjoChip?: MjoChipTheme;
         mjoDropdown?: MjoDropdownTheme;
         mjoIcon?: MjoIconTheme;
-        mjoRipple?: MjoRippleTheme;
-        mjoSlider?: MjoSliderTheme;
+        mjoImage?: MjoImageTheme;
         mjoIonic?: MjoIonicTheme;
+        mjoRadio?: MjoRadioTheme;
+        mjoRipple?: MjoRippleTheme;
+        mjoSelect?: MjoSelectTheme;
+        mjoSlider?: MjoSliderTheme;
+        mjoTable?: MjoTableTheme;
+        mjoTextarea?: MjoTextaraTheme;
+        mjoTextfield?: MjoInputTheme;
     };
     colors?: {
         /** --mjo-color-white */
@@ -136,186 +142,158 @@ type MjoThemeBoxShadow = {
     "5"?: string;
 };
 
-interface MjoInputTheme {
-    /** --mjo-input-background-color */
+interface MjoAvatarTheme {
     backgroundColor?: string;
-    /** --mjo-input-border-color */
-    borderColor?: string;
-    /** --mjo-input-border-color-hover */
-    borderColorHover?: string;
-    /** --mjo-input-border-style */
-    borderStyle?: string;
-    /** --mjo-input-border-style-focus */
-    borderStyleFocus?: string;
-    /** --mjo-input-border-style-hover */
-    borderStyleHover?: string;
-    /** --mjo-input-border-width */
-    borderWidth?: string;
-    /** --mjo-input-border-width-focus */
-    borderWidthFocus?: string;
-    /** --mjo-input-border-width-hover */
-    borderWidthHover?: string;
-    /** --mjo-input-box-shadow */
-    boxShadow?: string;
-    /** --mjo-input-color */
-    color?: string;
-    /** --mjo-input-font-family */
-    fontFamily?: string;
-    /** --mjo-input-font-size */
-    fontSize?: string;
-    /** --mjo-input-font-weight */
-    fontWeight?: string;
-    /** --mjo-input-helper-color */
-    helperColor?: string;
-    /** --mjo-input-helper-font-size */
-    helperFontSize?: string;
-    /** --mjo-input-helper-font-weight */
-    helperFontWeight?: string;
-    /** --mjo-input-label-color */
-    labelColor?: string;
-    /** --mjo-input-label-font-size */
-    labelFontSize?: string;
-    /** --mjo-input-label-font-weight */
-    labelFontWeight?: string;
-    /** --mjo-input-padding */
-    padding?: string;
-    /** --mjo-input-padding-small */
-    paddingSmall?: string;
-    /** --mjo-input-padding-large */
-    paddingLarge?: string;
-    /** --mjo-input-prefix-text-background-color */
-    prefixTextBackgroundColor?: string;
-    /** --mjo-input-prefix-text-color */
-    prefixTextColor?: string;
-    /** --mjo-input-radius */
-    radius?: string;
-}
-
-interface MjoSelectTheme {
-    /** --mjo-select-arrow-color */
-    arrowColor?: string;
-    /** --mjo-select-option-padding */
-    optionPadding?: string;
-    /** --mjo-select-preselected-background-color */
-    optionPreselectedBackgroundColor?: string;
-    /** --mjo-select-preselected-color */
-    optionPreselectedColor?: string;
-    /** --mjo-select-selected-primary-color */
-    optionSelectedPrimaryColor?: string;
-    /** --mjo-select-selected-secondary-color */
-    optionSelectedSecondaryColor?: string;
-    /** --mjo-select-font-size */
-    optionFontSize?: string;
-}
-
-interface MjoTextaraTheme {
-    /** --mjo-textarea-padding */
-    padding?: string;
-    /** --mjo-textarea-padding-small */
-    paddingSmall?: string;
-    /** --mjo-textarea-padding-large */
-    paddingLarge?: string;
+    borderWith?: string;
+    fallbackColor?: string;
+    fallbackSizeSmall?: string;
+    fallbackSizeMedium?: string;
+    fallbackSizeLarge?: string;
+    nameColor?: string;
+    radiusSmall?: string;
+    radiusMedium?: string;
+    radiusLarge?: string;
+    sizeSmall?: string;
+    sizeMedium?: string;
+    sizeLarge?: string;
 }
 
 interface MjoButtonTheme {
-    /** --mjo-button-disabled-background-color */
     disabledBackgroundColor?: string;
-    /** --mjo-button-disabled-foreground-color */
     disabledForegroundColor?: string;
-    /** --mjo-button-font-family */
     fontFamily?: string;
-    /** --mjo-button-font-size */
     fontSize?: string;
-    /** --mjo-button-font-weight */
     fontWeight?: string;
-    /** --mjo-button-padding */
     padding?: string;
-    /** --mjo-button-primary-color */
     pirmaryColor?: string;
-    /** --mjo-button-primary-border */
     primaryBorder?: string;
-    /** --mjo-button-primary-color-hover */
     primaryColorHover?: string;
-    /** --mjo-button-primary-foreground-color */
     primaryForegroundColor?: string;
-    /** --mjo-button-radius */
     radius?: string;
-    /** --mjo-button-secondary-border */
     secondaryBorder?: string;
-    /** --mjo-button-secondary-color */
     secondaryColor?: string;
-    /** --mjo-button-secondary-color-hover */
     secondaryColorHover?: string;
-    /** --mjo-button-secondary-foreground-color */
     secondaryForegroundColor?: string;
 }
 
+interface MjoCheckboxTheme {
+    borderColor?: string;
+    checkedColor?: string;
+    checkedBorderColor?: string;
+}
+
+interface MjoChipTheme {
+    borderWidthSizeSmall?: string;
+    borderWidthSizeMedium?: string;
+    borderWidthSizeLarge?: string;
+    fontSizeSmallSize?: string;
+    fontSizeMediumSize?: string;
+    fontSizeLargeSize?: string;
+    gap?: string;
+    lineHeightSmallSize?: string;
+    lineHeightMediumSize?: string;
+    lineHeightLargeSize?: string;
+    padding?: string;
+}
+
 interface MjoDropdownTheme {
-    /** --mjo-dropdown-background-color */
     backgroundColor?: string;
-    /** --mjo-dropdown-radius */
     radius?: string;
-    /** --mjo-dropdown-box-shadow */
     boxShadow?: string;
 }
 
 interface MjoIconTheme {
-    /** --mjo-icon-transition */
     transition?: string;
 }
 
-interface MjoRippleTheme {
-    /** --mjo-ripple-color */
+interface MjoImageTheme {
+    errorBackgroundColor?: string;
+    errorRadius?: string;
+}
+
+interface MjoIonicTheme {
+    colorOne?: string;
+    colorTwo?: string;
+    colorThree?: string;
+    radius?: string;
+}
+
+interface MjoInputTheme {
+    backgroundColor?: string;
+    borderColor?: string;
+    borderColorHover?: string;
+    borderStyle?: string;
+    borderStyleFocus?: string;
+    borderStyleHover?: string;
+    borderWidth?: string;
+    borderWidthFocus?: string;
+    borderWidthHover?: string;
+    boxShadow?: string;
     color?: string;
-    /** --mjo-ripple-opacity */
+    fontFamily?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    helperColor?: string;
+    helperFontSize?: string;
+    helperFontWeight?: string;
+    labelColor?: string;
+    labelFontSize?: string;
+    labelFontWeight?: string;
+    padding?: string;
+    paddingSmall?: string;
+    paddingLarge?: string;
+    prefixTextBackgroundColor?: string;
+    prefixTextColor?: string;
+    radius?: string;
+}
+
+interface MjoRadioTheme {
+    borderColor?: string;
+    checkedColor?: string;
+    checkedBorderColor?: string;
+}
+
+interface MjoRippleTheme {
+    color?: string;
     opacity?: string;
 }
 
 interface MjoSliderTheme {
-    /** --mjo-slider-background-color */
     backgroundColor?: string;
-    /** --mjo-slider-radius */
     radius?: string;
-    /** --mjo-slider-progress-color */
     progressColor?: string;
 }
 
-interface MjoIonicTheme {
-    /** --mjo-ionic-color-one */
-    colorOne?: string;
-    /** --mjo-ionic-color-two */
-    colorTwo?: string;
-    /** --mjo-ionic-color-three */
-    colorThree?: string;
-    /** --mjo-ionic-radius */
-    radius?: string;
+interface MjoSelectTheme {
+    arrowColor?: string;
+    optionPadding?: string;
+    optionPreselectedBackgroundColor?: string;
+    optionPreselectedColor?: string;
+    optionSelectedPrimaryColor?: string;
+    optionSelectedSecondaryColor?: string;
+    optionFontSize?: string;
 }
 
-interface MjoAvatarTheme {
-    /** --mjo-avatar-background-color */
+interface MjoTableTheme {
     backgroundColor?: string;
-    /** --mjo-avatar-border-width */
-    borderWith?: string;
-    /** --mjo-avatar-fallback-color */
-    fallbackColor?: string;
-    /** --mjo-avatar-fallback-size-small */
-    fallbackSizeSmall?: string;
-    /** --mjo-avatar-fallback-size-medium */
-    fallbackSizeMedium?: string;
-    /** --mjo-avatar-fallback-size-large */
-    fallbackSizeLarge?: string;
-    /** --mjo-avatar-name-color */
-    nameColor?: string;
-    /** --mjo-avatar-radius-small */
-    radiusSmall?: string;
-    /** --mjo-avatar-radius-medium */
-    radiusMedium?: string;
-    /** --mjo-avatar-radius-large */
-    radiusLarge?: string;
-    /** --mjo-avatar-size-small */
-    sizeSmall?: string;
-    /** --mjo-avatar-size-medium */
-    sizeMedium?: string;
-    /** --mjo-avatar-size-large */
-    sizeLarge?: string;
+    foregroundColor?: string;
+    headerFontSize?: string;
+    bodyFontSize?: string;
+    cellForegroundColor?: string;
+    cellEvenBackgroundColor?: string;
+    cellEvenForegroundColor?: string;
+    cellHeaderBackgroundColor?: string;
+    cellHeaderForegroundColor?: string;
+    footerBackgroundColor?: string;
+    footerColor?: string;
+    footerFontSize?: string;
+    footerRowSelectedColor?: string;
+    noDataOpacity?: string;
+    noDataWidth?: string;
+}
+
+interface MjoTextaraTheme {
+    padding?: string;
+    paddingSmall?: string;
+    paddingLarge?: string;
 }
