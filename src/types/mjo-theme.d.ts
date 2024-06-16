@@ -45,6 +45,7 @@ export interface MjoThemeConfig {
         mjoTable?: MjoTableTheme;
         mjoTextarea?: MjoTextaraTheme;
         mjoTextfield?: MjoInputTheme;
+        mjoTypography?: TypographyTheme;
     };
     colors?: {
         /** --mjo-color-white */
@@ -296,4 +297,21 @@ interface MjoTextaraTheme {
     padding?: string;
     paddingSmall?: string;
     paddingLarge?: string;
+}
+
+interface TypographyTheme {
+    h1FontSize?: string;
+    h1FontWeight?: string;
+    h2FontSize?: string;
+    h2FontWeight?: string;
+    h3FontSize?: string;
+    h3FontWeight?: string;
+    h4FontSize?: string;
+    h4FontWeight?: string;
+    h5FontSize?: string;
+    h5FontWeight?: string;
+    h6FontSize?: string;
+    h6FontWeight?: string;
+    pFontSize?: string;
+    pFontWeight?: string;
 }
