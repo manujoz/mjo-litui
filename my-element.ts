@@ -107,6 +107,7 @@ export class MyElement extends LitElement {
 
     #handleSubmit(ev: MjoFormSubmitEvent) {
         const { response } = ev.detail;
+        console.log(ev.detail);
         setTimeout(() => {
             if (response.submitButton) response.submitButton.loading = false;
         }, 3000);
