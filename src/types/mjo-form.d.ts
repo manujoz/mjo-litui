@@ -20,6 +20,6 @@ export interface MjoFormResponse {
     elements: MjoFormElements[];
     submitButton: MjoButton | null;
     data: {
-        [key: string]: string;
+        [key: string]: string | number | boolean | FileList | null;
     };
 }
