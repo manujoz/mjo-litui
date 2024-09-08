@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
@@ -61,7 +61,6 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                     ${ref(this.inputRef)}
                     autocapitalize=${ifDefined(this.autoCapitalize)}
                     autocomplete=${ifDefined(this.autoComplete)}
-                    ?autofocus=${this.autoFocus}
                     ?disabled=${this.disabled}
                     name=${ifDefined(this.name)}
                     max=${ifDefined(this.max)}
@@ -126,6 +125,14 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
         }
 
         this.updateFormData({ name: this.name || "", value: this.value });
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues): void {
+        if (_changedProperties.has("autoFocus") && this.autoFocus) {
+            setTimeout(() => {
+                this.focus();
+            }, 50);
+        }
     }
 
     blur() {

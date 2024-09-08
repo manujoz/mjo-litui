@@ -49,7 +49,7 @@ export class MyElement extends LitElement {
             </div>
             <div>
                 <mjo-form @submit=${this.#handleSubmit} .errmessages=${messages} .inputsErrmessages=${inputsMessages}>
-                    <mjo-textfield label="Name" name="name" type="password" selectOnFocus clearabled counter></mjo-textfield>
+                    <mjo-textfield autoFocus label="Name" name="name" type="password" selectOnFocus clearabled counter></mjo-textfield>
                     <p>
                         <mjo-select color="secondary" name="select" label="Este es el select">
                             <mjo-option startIcon=${AiOutlineSearch} value="">Selecciona...</mjo-option>
