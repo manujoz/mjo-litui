@@ -128,6 +128,8 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
     }
 
     protected firstUpdated(_changedProperties: PropertyValues): void {
+        super.firstUpdated(_changedProperties);
+
         if (_changedProperties.has("autoFocus") && this.autoFocus) {
             setTimeout(() => {
                 this.focus();
