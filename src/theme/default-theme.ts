@@ -10,6 +10,7 @@ export const defaultTheme: MjoThemeConfig = {
     fontWeightBold: "700",
     fontWeightLight: "300",
     fontWeightRegular: "400",
+    spaceXSmall: "6px",
     spaceSmall: "8px",
     spaceMedium: "16px",
     spaceLarge: "24px",
