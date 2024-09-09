@@ -3,7 +3,7 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
-import ImageNotAvailable from "./assets/no-image.svg";
+import ImageNotAvailable from "./assets/no-image";
 
 @customElement("mjo-image")
 export class MjoImage extends LitElement {

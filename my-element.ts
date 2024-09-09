@@ -6,6 +6,7 @@ import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch";
 
 import { theme } from "./theme.js";
 
+import "./src/mjo-alert.js";
 import "./src/mjo-avatar.js";
 import "./src/mjo-button.js";
 import "./src/mjo-dropdown.js";
@@ -43,13 +44,21 @@ export class MyElement extends LitElement {
             </mjo-theme>
             <div style="padding: 20px;">
                 <mjo-image src="asdasdsa"></mjo-image>
+                <mjo-alert
+                    type="error"
+                    message="este es el mensaje de error"
+                    size="small"
+                    closable
+                    rounded="large"
+                    detail="Est es el detalle de la alerta"
+                ></mjo-alert>
             </div>
             <div style="padding: 20px;">
                 <mjo-avatar size="small" name="Á" bordered nameColoured></mjo-avatar>
             </div>
             <div>
                 <mjo-form @submit=${this.#handleSubmit} .errmessages=${messages} .inputsErrmessages=${inputsMessages}>
-                    <mjo-textfield label="Name" name="name" type="password" selectOnFocus clearabled counter></mjo-textfield>
+                    <mjo-textfield autoFocus label="Name" name="name" type="password" selectOnFocus clearabled counter></mjo-textfield>
                     <p>
                         <mjo-select color="secondary" name="select" label="Este es el select">
                             <mjo-option startIcon=${AiOutlineSearch} value="">Selecciona...</mjo-option>

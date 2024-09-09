@@ -66,7 +66,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                     @optionsblur=${() => this.#handleOptionsBlur()}
                 ></options-list>`}
                 preventScroll
-                behavior="click"
+                behaviour="click"
                 fullwidth
                 @open=${this.#handleOpen}
                 @close=${this.#handleClose}

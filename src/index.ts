@@ -1,3 +1,4 @@
+export { MjoAlert } from "./mjo-alert.js";
 export { MjoAvatar } from "./mjo-avatar.js";
 export { MjoButton } from "./mjo-button.js";
 export { MjoCheckbox } from "./mjo-checkbox.js";

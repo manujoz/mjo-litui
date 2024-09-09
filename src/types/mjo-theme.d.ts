@@ -20,6 +20,8 @@ export interface MjoThemeConfig {
     /** --mjo-font-weight-bold */
     fontWeightBold?: string;
     /** --mjo-space-small */
+    spaceXSmall?: string;
+    /** --mjo-space-small */
     spaceSmall?: string;
     /** --mjo-space */
     spaceMedium?: string;
