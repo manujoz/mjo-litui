@@ -1,3 +1,4 @@
+import { type OptionsList } from "./helpers/options-list.js";
 import { type MjoDropdown } from "./mjo-dropdown.js";
 import { type MjoOption } from "./mjo-option.js";
 
@@ -51,6 +52,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     dropdownRef = createRef<MjoDropdown>();
     inputRef = createRef<HTMLInputElement>();
     inputVisibleRef = createRef<HTMLInputElement>();
+    optionListRef = createRef<OptionsList>();
 
     observer!: MutationObserver;
 
@@ -61,6 +63,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
             <mjo-dropdown
                 ${ref(this.dropdownRef)}
                 .html=${html`<options-list
+                    ${ref(this.optionListRef)}
                     .options=${this.options}
                     .mjoSelect=${this}
                     ?searchable=${this.searchable}
@@ -234,6 +237,10 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     }
 
     #setOptions() {
+        if (this.optionListRef.value) {
+            this.optionListRef.value.resetFilter();
+        }
+
         const options = this.querySelectorAll("mjo-option");
         if (!options.length) return;
 
