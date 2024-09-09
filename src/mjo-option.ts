@@ -43,7 +43,7 @@ export class MjoOption extends LitElement {
                 flex-flow: row nowrap;
                 overflow: hidden;
                 position: relative;
-                padding: var(--mjo-select-option-padding, 5px) 0;
+                padding: var(--mjo-select-option-padding, 5px);
                 gap: var(--mjo-select-option-padding, 5px);
                 transition: background-color 0.2s;
             }
