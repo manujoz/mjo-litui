@@ -6,6 +6,7 @@ import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch";
 
 import { theme } from "./theme.js";
 
+import { repeat } from "lit/directives/repeat.js";
 import "./src/mjo-alert.js";
 import "./src/mjo-avatar.js";
 import "./src/mjo-button.js";
@@ -37,6 +38,8 @@ const inputsMessages: InputsValidatorMessages = {
  */
 @customElement("my-element")
 export class MyElement extends LitElement {
+    @state() options: { value: string; inner: string }[] = [];
+
     render() {
         return html`<div class=".container">
             <mjo-theme theme="light" .config=${theme} scope="global">
@@ -57,28 +60,31 @@ export class MyElement extends LitElement {
                 <mjo-avatar size="small" name="Á" bordered nameColoured></mjo-avatar>
             </div>
             <div>
-                <mjo-form @submit=${this.#handleSubmit} .errmessages=${messages} .inputsErrmessages=${inputsMessages}>
-                    <mjo-textfield autoFocus label="Name" name="name" type="password" selectOnFocus clearabled counter></mjo-textfield>
-                    <p>
-                        <mjo-select color="secondary" name="select" label="Este es el select">
-                            <mjo-option startIcon=${AiOutlineSearch} value="">Selecciona...</mjo-option>
-                            <mjo-option startIcon=${AiOutlineSearch} value="1">Barcelona</mjo-option>
-                            <mjo-option startIcon=${AiOutlineSearch} value="2">Madrid</mjo-option>
-                            <mjo-option startIcon=${AiOutlineSearch} value="3">Valencia</mjo-option>
-                            <mjo-option startIcon=${AiOutlineSearch} value="4">Sevilla</mjo-option>
-                            <mjo-option startIcon=${AiOutlineSearch} value="5">Bilbao</mjo-option>
-                        </mjo-select>
-                    </p>
-                    <p>
-                        <mjo-textarea name="description" label="Description" startIcon=${AiOutlineSearch} maxHeight="200"></mjo-textarea>
-                    </p>
-                    <p>
-                        <mjo-slider name="quantity" label="Slider" step="1" max="100" value="20" tooltip valueSuffix="€"></mjo-slider>
-                    </p>
-                    <p>
-                        <mjo-button size="small" type="submit" startIcon=${AiOutlineSearch} color="primary" variant="dashed">ENVIAR</mjo-button>
-                    </p>
-                </mjo-form>
+                <mjo-theme theme="dark" .config=${theme} scope="local">
+                    <mjo-form @submit=${this.#handleSubmit} .errmessages=${messages} .inputsErrmessages=${inputsMessages}>
+                        <mjo-textfield autoFocus label="Name" name="name" type="password" selectOnFocus clearabled counter></mjo-textfield>
+                        <p>
+                            <mjo-select name="select" label="Este es el select" searchable>
+                                ${this.options.length === 0
+                                    ? html`<mjo-option value="">Selecciona...</mjo-option>`
+                                    : repeat(
+                                          this.options,
+                                          (option) => option.value,
+                                          (option) => html`<mjo-option value=${option.value}>${option.inner}</mjo-option>`,
+                                      )}
+                            </mjo-select>
+                        </p>
+                        <p>
+                            <mjo-textarea name="description" label="Description" startIcon=${AiOutlineSearch} maxHeight="200"></mjo-textarea>
+                        </p>
+                        <p>
+                            <mjo-slider name="quantity" label="Slider" step="1" max="100" value="20" tooltip valueSuffix="€"></mjo-slider>
+                        </p>
+                        <p>
+                            <mjo-button size="small" type="submit" startIcon=${AiOutlineSearch} color="primary" variant="dashed">ENVIAR</mjo-button>
+                        </p>
+                    </mjo-form>
+                </mjo-theme>
                 <form>
                     <input type="text" name="name" />
                     <mjo-textfield label="Email" name="email"></mjo-textfield>
@@ -105,9 +111,15 @@ export class MyElement extends LitElement {
     connectedCallback(): void {
         super.connectedCallback();
 
+        this.setOptions();
+
         setTimeout(() => {
             this.html = this.renderHtml(2);
         }, 3000);
+
+        setTimeout(() => {
+            this.setOptions("refresh");
+        }, 5000);
     }
 
     renderHtml(num: number) {
@@ -119,6 +131,26 @@ export class MyElement extends LitElement {
         setTimeout(() => {
             if (response.submitButton) response.submitButton.loading = false;
         }, 3000);
+    }
+
+    setOptions(action: "start" | "refresh" = "start") {
+        if (action === "refresh") {
+            this.options = [
+                { value: "6", inner: "Dos Hermanas" },
+                { value: "7", inner: "Utrera" },
+                { value: "8", inner: "Los Palacios" },
+                { value: "9", inner: "Las Cabezas" },
+                { value: "10", inner: "Alcalá" },
+            ];
+        } else {
+            this.options = [
+                { value: "1", inner: "Barcelona" },
+                { value: "2", inner: "Madrid" },
+                { value: "3", inner: "Valencia" },
+                { value: "4", inner: "Sevilla" },
+                { value: "5", inner: "Bilbao" },
+            ];
+        }
     }
 
     static styles = css`

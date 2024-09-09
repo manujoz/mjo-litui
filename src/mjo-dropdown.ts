@@ -1,7 +1,10 @@
+import { type DropdowContainer } from "./mixins/dropdow-container";
+import { type MjoTheme } from "./mjo-theme.js";
+
 import { CSSResult, LitElement, TemplateResult, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { type DropdowContainer } from "./mixins/dropdow-container";
+import { searchClosestElement } from "./utils/shadow-dom.js";
 
 import "./mixins/dropdow-container.js";
 
@@ -126,6 +129,8 @@ export class MjoDropdown extends LitElement {
     }
 
     #createDropdown() {
+        const themeElement = searchClosestElement(this as LitElement, "mjo-theme") as MjoTheme | null;
+
         this.dropdown = document.createElement("dropdow-container");
         this.dropdown.host = this;
         this.dropdown.html = this.html;
@@ -134,7 +139,16 @@ export class MjoDropdown extends LitElement {
 
         if (this.width) this.dropdown.style.width = this.width;
 
-        document.body.appendChild(this.dropdown);
+        if (themeElement) {
+            const themeClone = document.createElement("mjo-theme") as MjoTheme;
+            themeClone.config = themeElement.config;
+            themeClone.theme = themeElement.theme;
+            themeClone.scope = "local";
+            themeClone.appendChild(this.dropdown);
+            document.body.appendChild(themeClone);
+        } else {
+            document.body.appendChild(this.dropdown);
+        }
     }
 
     static styles = [

@@ -1,7 +1,7 @@
 import { type LitElement } from "lit";
 
 export const searchClosestElement = (element: LitElement, selector: keyof HTMLElementTagNameMap) => {
-    let parent: HTMLElement | ShadowRoot["host"] | null = element.parentElement;
+    let parent: HTMLElement | ShadowRoot["host"] | null = element.parentElement || (element.getRootNode() as ShadowRoot).host;
 
     let el = querySelectorShadowRoot(selector, parent);
     if (el) {

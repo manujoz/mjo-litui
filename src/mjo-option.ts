@@ -60,6 +60,7 @@ export class MjoOption extends LitElement {
                 padding: var(--mjo-select-option-padding, 5px);
                 gap: var(--mjo-select-option-padding, 5px);
                 transition: background-color 0.2s;
+                color: var(--mjo-foreground-color);
             }
             .container[data-preselected],
             .container:hover {

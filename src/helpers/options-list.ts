@@ -2,7 +2,7 @@ import { type locales } from "../locales/locales.js";
 import { type MjoOption } from "../mjo-option.js";
 import { type MjoSelect } from "../mjo-select";
 
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { createRef, ref } from "lit/directives/ref.js";
 import { repeat } from "lit/directives/repeat.js";
@@ -70,7 +70,7 @@ export class OptionsList extends LitElement {
         document.removeEventListener("keydown", this.listeners.keydown);
     }
 
-    protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
+    protected updated(_changedProperties: PropertyValues): void {
         if (_changedProperties.has("open") && this.open) {
             this.focus();
         }
@@ -78,6 +78,11 @@ export class OptionsList extends LitElement {
 
     focus() {
         this.inputRef.value?.focus();
+    }
+
+    resetFilter() {
+        this.filter = "";
+        if (this.inputRef.value) this.inputRef.value.value = "";
     }
 
     #handleInputClick(ev: Event) {
@@ -194,6 +199,8 @@ export class OptionsList extends LitElement {
                 border: none;
                 font-family: inherit;
                 font-size: inherit;
+                background-color: transparent;
+                color: var(--mjo-foreground-color, currentColor);
             }
             input:focus {
                 outline: none;
@@ -202,6 +209,12 @@ export class OptionsList extends LitElement {
                 width: 20px;
                 height: 20px;
                 padding: 0 0.5em;
+                color: var(--mjo-foreground-color, currentColor);
+                display: flex;
+                place-content: center;
+            }
+            .icon mjo-icon {
+                font-size: 1.1em;
             }
         `,
     ];
