@@ -13,8 +13,16 @@ export class MjoOption extends LitElement {
     @property({ type: String }) startImage = "";
     @property({ type: String }) endImage = "";
 
+    handleClick?: (value: string) => void;
+
     render() {
-        return html`<div class="container" data-color=${this.color} ?data-selected=${this.selected} ?data-preselected=${this.preSelected}>
+        return html`<div
+            @click=${this.#handleClick}
+            class="container"
+            data-color=${this.color}
+            ?data-selected=${this.selected}
+            ?data-preselected=${this.preSelected}
+        >
             ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
             ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
             <div class="option">${this.text || this.value}</div>
@@ -28,6 +36,12 @@ export class MjoOption extends LitElement {
 
         if (!this.text) {
             this.text = this.textContent || this.value;
+        }
+    }
+
+    #handleClick() {
+        if (this.handleClick) {
+            this.handleClick(this.value);
         }
     }
 

@@ -52,6 +52,8 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     inputRef = createRef<HTMLInputElement>();
     inputVisibleRef = createRef<HTMLInputElement>();
 
+    observer!: MutationObserver;
+
     render() {
         return html`${this.label
                 ? html`<input-label color=${this.color} label=${this.label} ?focused=${this.isFocused} ?error=${this.error}></input-label>`
@@ -129,6 +131,19 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
         }
 
         this.updateFormData({ name: this.name || "", value: this.value });
+
+        this.observer = new MutationObserver(() => {
+            this.#setOptions();
+            this.#handleOptions();
+        });
+
+        this.observer.observe(this, { childList: true });
+    }
+
+    disconnectedCallback(): void {
+        super.disconnectedCallback();
+
+        this.observer.disconnect();
     }
 
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
@@ -208,9 +223,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
             }
 
             option.color = this.color;
-            option.addEventListener("click", () => {
-                this.setValue(option.value);
-            });
+            option.handleClick = this.setValue.bind(this);
         }
 
         if (!hasSelected) {
@@ -222,9 +235,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
 
     #setOptions() {
         const options = this.querySelectorAll("mjo-option");
-        if (!options.length) {
-            throw new Error(`[mjo-select=name=${this.name}]: No options found`);
-        }
+        if (!options.length) return;
 
         this.options = Array.from(options) as MjoOption[];
     }
@@ -291,6 +302,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 font-weight: var(--mjo-input-font-weight, normal);
                 font-family: var(--mjo-input-font-family, inherit);
                 line-height: var(--mjo-input-font-size, 1em);
+                color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
                 box-sizing: border-box;
                 flex: 1 1 0;
                 width: inherit;
@@ -339,6 +351,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 position: relative;
                 display: grid;
                 place-items: center;
+                color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
             }
             mjo-icon {
                 font-size: var(--mjo-input-font-size, 1em);
@@ -372,7 +385,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 padding-right: calc(1em / 2 - 4px);
             }
             .arrowDown {
-                color: var(--mjo-select-arrow-color, #666666);
+                color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
                 font-size: 0.8em;
             }
             .passIcon {
