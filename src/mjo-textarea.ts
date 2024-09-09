@@ -205,6 +205,7 @@ export class MjoTextarea extends InputErrorMixin(FormMixin(LitElement)) implemen
                 font-weight: var(--mjo-input-font-weight, normal);
                 font-family: var(--mjo-input-font-family, inherit);
                 line-height: var(--mjo-input-font-size, 1em);
+                color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
                 box-sizing: border-box;
                 flex: 1 1 0;
                 width: inherit;
@@ -231,6 +232,7 @@ export class MjoTextarea extends InputErrorMixin(FormMixin(LitElement)) implemen
                 position: relative;
                 display: grid;
                 place-items: center;
+                color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
             }
             mjo-icon {
                 font-size: var(--mjo-input-font-size, 1em);

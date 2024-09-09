@@ -320,6 +320,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                 position: relative;
                 display: grid;
                 place-items: center;
+                color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
             }
             mjo-icon {
                 font-size: var(--mjo-input-font-size, 1em);
