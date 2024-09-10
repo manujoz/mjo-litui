@@ -41,7 +41,7 @@ export class SliderHandle extends LitElement {
         super.connectedCallback();
 
         this.addEventListener("mousedown", this.listeners.mousedown);
-        this.addEventListener("touchstart", this.listeners.mousedown);
+        this.addEventListener("touchstart", this.listeners.mousedown, { passive: true });
         document.addEventListener("mousemove", this.listeners.mousemove);
         document.addEventListener("touchmove", this.listeners.mousemove);
         document.addEventListener("mouseup", this.listeners.mouseup);
@@ -112,7 +112,7 @@ export class SliderHandle extends LitElement {
     }
 
     #handlePress(ev: MouseEvent | TouchEvent) {
-        ev.preventDefault();
+        if (ev.type !== "touchstart") ev.preventDefault();
         this.pressed = true;
 
         if (ev.type === "mousedown") {
