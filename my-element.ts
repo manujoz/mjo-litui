@@ -63,6 +63,7 @@ export class MyElement extends LitElement {
                 <mjo-theme theme="dark" .config=${theme} scope="local">
                     <mjo-form @submit=${this.#handleSubmit} .errmessages=${messages} .inputsErrmessages=${inputsMessages}>
                         <mjo-textfield autoFocus label="Name" name="name" type="password" selectOnFocus clearabled counter></mjo-textfield>
+                        <mjo-textfield autoFocus label="Name" name="nameequal" type="password" selectOnFocus clearabled counter equalto="name"></mjo-textfield>
                         <p>
                             <mjo-select name="select" label="Este es el select" searchable>
                                 ${this.options.length === 0
@@ -87,7 +88,7 @@ export class MyElement extends LitElement {
                 </mjo-theme>
                 <form>
                     <input type="text" name="name" />
-                    <mjo-textfield label="Email" name="email"></mjo-textfield>
+                    <mjo-textfield label="Email" type="number" name="email" nospiners></mjo-textfield>
                     <mjo-dropdown
                         .html=${this.html}
                         .css=${css`

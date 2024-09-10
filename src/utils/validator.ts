@@ -14,7 +14,7 @@ export class MjoValidator {
         errInput: MjoFormElements | null;
     } {
         for (const input of elements) {
-            const { errmsg, error, rule } = this.validateInput({ input, form });
+            const { errmsg, error, rule } = this.validateInput({ input, form, elements });
             if (error) {
                 return {
                     error,
@@ -33,7 +33,7 @@ export class MjoValidator {
         };
     }
 
-    validateInput({ input, form }: { input: MjoFormElements; form: HTMLFormElement }) {
+    validateInput({ input, form, elements }: { input: MjoFormElements; form: HTMLFormElement; elements: MjoFormElements[] }) {
         const response: {
             error: boolean;
             errmsg: string;
@@ -215,8 +215,10 @@ export class MjoValidator {
         }
 
         if (input.equalto) {
-            response.error = !this.#validateEqualTo(input, form);
-            response.errmsg = response.error ? this.#getErrorMessage(input, "equalto") : "";
+            const equalToElement = elements.find((el) => el.name === input.equalto);
+            const variable = equalToElement?.label ?? input.equalto;
+            response.error = !this.#validateEqualTo(input, elements);
+            response.errmsg = response.error ? this.#getErrorMessage(input, "equalto", [variable]) : "";
             response.rule = "equalto";
 
             this.#setInputError(input, response.errmsg);
@@ -723,9 +725,9 @@ export class MjoValidator {
         return true;
     }
 
-    #validateEqualTo(input: MjoFormElements, form: HTMLFormElement) {
+    #validateEqualTo(input: MjoFormElements, elements: MjoFormElements[]) {
         const equalto = input.getAttribute("equalto");
-        const inputEq = form.querySelector(`[name=${equalto}]`) as MjoFormElements;
+        const inputEq = elements.find((el) => el.name === equalto);
         const value = this.#getInputValue(input);
 
         if (!inputEq) return false;

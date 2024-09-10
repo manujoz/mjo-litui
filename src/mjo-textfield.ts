@@ -41,6 +41,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
     @property({ type: Boolean }) counter: boolean = false;
     @property({ type: Boolean }) selectOnFocus = false;
     @property({ type: Boolean }) clearabled = false;
+    @property({ type: Boolean }) nospiners = false;
 
     @state() private isFocused = false;
     @state() private valueLength = 0;
@@ -78,6 +79,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                     aria-label=${this.label || this.ariaLabel || nothing}
                     aria-errormessage=${this.errormsg || nothing}
                     aria-required=${ifDefined(this.required)}
+                    ?data-nospiners=${this.nospiners}
                 />
                 ${this.clearabled
                     ? html`<div class="icon endIcon clearabled" ?data-visible=${this.value.length > 0} @click=${this.#handleClearabled}>
@@ -288,6 +290,11 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
             input::-ms-reveal,
             input::-ms-clear {
                 display: none !important;
+            }
+            input[data-nospiners]::-webkit-inner-spin-button,
+            input[data-nospiners]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
             }
             .container[data-size="small"] input {
                 padding: var(--mjo-input-padding-small, calc(1em / 2 - 4px) calc(1em / 2));
