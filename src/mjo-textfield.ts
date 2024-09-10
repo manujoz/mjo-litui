@@ -1,8 +1,7 @@
 import { LitElement, PropertyValues, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
-import { createRef, ref } from "lit/directives/ref.js";
 import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
 import { AiFillEye } from "mjo-icons/ai/AiFillEye.js";
 import { AiFillEyeInvisible } from "mjo-icons/ai/AiFillEyeInvisible.js";
@@ -46,7 +45,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
     @state() private isFocused = false;
     @state() private valueLength = 0;
 
-    inputRef = createRef<HTMLInputElement>();
+    @query("input#mjoTextfiedlInput") inputElement!: HTMLInputElement;
     isPassword = false;
 
     render() {
@@ -58,7 +57,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                 ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
                 ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
                 <input
-                    ${ref(this.inputRef)}
+                    id="mjoTextfiedlInput"
                     autocapitalize=${ifDefined(this.autoCapitalize)}
                     autocomplete=${ifDefined(this.autoComplete)}
                     ?disabled=${this.disabled}
@@ -138,7 +137,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
     }
 
     blur() {
-        this.inputRef.value?.blur();
+        this.inputElement.blur();
     }
 
     clear(focus = false) {
@@ -148,7 +147,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
     }
 
     focus() {
-        this.inputRef.value?.focus();
+        this.inputElement.focus();
     }
 
     getError() {
@@ -190,16 +189,16 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
         this.isFocused = true;
 
         if (this.selectOnFocus) {
-            this.inputRef.value?.select();
+            this.inputElement.select();
             return;
         }
 
         setTimeout(() => {
-            if (!this.inputRef.value) return;
-            const oldTyoe = this.inputRef.value.type;
-            this.inputRef.value.type = oldTyoe !== "password" ? "text" : "password";
-            this.inputRef.value.setSelectionRange(this.value.length, this.value.length);
-            this.inputRef.value.type = oldTyoe;
+            if (!this.inputElement) return;
+            const oldTyoe = this.inputElement.type;
+            this.inputElement.type = oldTyoe !== "password" ? "text" : "password";
+            this.inputElement.setSelectionRange(this.value.length, this.value.length);
+            this.inputElement.type = oldTyoe;
         }, 10);
     };
 

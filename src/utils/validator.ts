@@ -446,7 +446,7 @@ export class MjoValidator {
     }
 
     #validateIsRequired(input: MjoFormElements, form: HTMLFormElement) {
-        if (!input.inputRef.value) return false;
+        if (!input.inputElement) return false;
 
         if (input.tagName !== "MJO-CHECKBOX" && input.tagName !== "MJO-RADIO") {
             const value = this.#getInputValue(input);
@@ -454,7 +454,7 @@ export class MjoValidator {
             return true;
         }
 
-        const inputRef = input.inputRef.value as HTMLInputElement;
+        const inputRef = input.inputElement as HTMLInputElement;
 
         let { checked } = inputRef;
 

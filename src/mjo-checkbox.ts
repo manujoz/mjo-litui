@@ -1,7 +1,6 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { createRef, ref } from "lit/directives/ref.js";
 import { AiFillCheckSquare } from "mjo-icons/ai/AiFillCheckSquare.js";
 
 import { FormMixin } from "./mixins/form-mixin.js";
@@ -22,8 +21,9 @@ export class MjoCheckbox extends InputErrorMixin(FormMixin(LitElement)) {
     @property({ type: String, reflect: true }) checkgroup?: string;
     @property({ type: Boolean }) hideErrors = false;
 
+    @query("input#mjoCheckboxInput") inputElement!: HTMLInputElement;
+
     type = "checkbox";
-    inputRef = createRef<HTMLInputElement>();
 
     render() {
         return html` <div class="container" ?data-disabled=${this.disabled}>
@@ -32,7 +32,7 @@ export class MjoCheckbox extends InputErrorMixin(FormMixin(LitElement)) {
                     <div class="checkbox" ?data-checked=${this.checked}><mjo-icon src=${AiFillCheckSquare}></mjo-icon></div>
                 </div>
                 ${this.label ? html`<div class="label">${this.label}</div>` : nothing}
-                <input ${ref(this.inputRef)} type="checkbox" name=${ifDefined(this.name)} value=${ifDefined(this.value)} ?checked=${this.checked} />
+                <input id="mjoCheckboxInput" type="checkbox" name=${ifDefined(this.name)} value=${ifDefined(this.value)} ?checked=${this.checked} />
             </div>
             ${this.helperText ? html`<input-helper-text>${this.helperText}</input-helper-text> ` : nothing}
             ${this.errormsg || this.successmsg

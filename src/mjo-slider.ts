@@ -1,7 +1,7 @@
 import { type SliderHandle } from "./helpers/slider-handle.js";
 
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 import { createRef, ref } from "lit/directives/ref.js";
@@ -29,10 +29,11 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
 
     @state() private isFocused = false;
 
+    @query("input#mjoSliderInput") inputElement!: HTMLInputElement;
+
     type = "slider";
     stepsLeftsPx = [0];
     setpsValues = [0];
-    inputRef = createRef<HTMLTextAreaElement>();
     rangebarRef = createRef<HTMLDivElement>();
     progressbarRef = createRef<HTMLDivElement>();
     sliderOneRef = createRef<SliderHandle>();
@@ -77,7 +78,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                           color=${this.color}
                       ></slider-handle>`
                     : nothing}
-                <input ${ref(this.inputRef)} name=${ifDefined(this.name)} type="hidden" .value=${live(this.value)} />
+                <input id="mjoSliderInput" name=${ifDefined(this.name)} type="hidden" .value=${live(this.value)} />
             </div>`;
     }
 

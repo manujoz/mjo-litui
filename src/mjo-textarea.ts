@@ -1,7 +1,6 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { createRef, ref } from "lit/directives/ref.js";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
@@ -39,9 +38,10 @@ export class MjoTextarea extends InputErrorMixin(FormMixin(LitElement)) implemen
     @state() private isFocused = false;
     @state() private valueLength = 0;
 
+    @query("textarea#mjoTextareaInput") inputElement!: HTMLTextAreaElement;
+
     type = "textarea";
 
-    inputRef = createRef<HTMLTextAreaElement>();
     textAreaAutoSize?: TextAreaAutoSize;
 
     render() {
@@ -52,7 +52,7 @@ export class MjoTextarea extends InputErrorMixin(FormMixin(LitElement)) implemen
                 ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
                 ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
                 <textarea
-                    ${ref(this.inputRef)}
+                    id="mjoTextareaInput"
                     autocapitalize=${ifDefined(this.autoCapitalize)}
                     autocomplete=${ifDefined(this.autoComplete)}
                     ?autofocus=${this.autoFocus}
@@ -107,9 +107,7 @@ export class MjoTextarea extends InputErrorMixin(FormMixin(LitElement)) implemen
     protected firstUpdated(_changedProperties: Map<PropertyKey, unknown>): void {
         super.firstUpdated(_changedProperties);
 
-        if (this.inputRef.value) {
-            this.textAreaAutoSize = new TextAreaAutoSize(this.inputRef.value, this.rows, this.maxHeight);
-        }
+        this.textAreaAutoSize = new TextAreaAutoSize(this.inputElement, this.rows, this.maxHeight);
     }
 
     disconnectedCallback(): void {
@@ -130,13 +128,12 @@ export class MjoTextarea extends InputErrorMixin(FormMixin(LitElement)) implemen
         this.isFocused = true;
 
         if (this.selectOnFocus) {
-            this.inputRef.value?.select();
+            this.inputElement.select();
             return;
         }
 
         setTimeout(() => {
-            if (!this.inputRef.value) return;
-            this.inputRef.value.setSelectionRange(this.value.length, this.value.length);
+            this.inputElement.setSelectionRange(this.value.length, this.value.length);
         }, 10);
     }
 

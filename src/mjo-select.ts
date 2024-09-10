@@ -49,7 +49,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     @state() private endOptionIcon?: string;
 
     @query("mjo-dropdown") dropdownElement!: MjoDropdown;
-    @query("input#inputHidden") inputHiddenElement!: HTMLInputElement;
+    @query("input#inputHidden") inputElement!: HTMLInputElement;
     @query("input#inputVisible") inputVisibleElement!: HTMLInputElement;
 
     type = "select";
@@ -151,7 +151,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     }
 
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
-        if (_changedProperties.has("value") && this.value !== this.inputHiddenElement.value) {
+        if (_changedProperties.has("value") && this.value !== this.inputElement.value) {
             this.setValue(this.value);
         }
     }
