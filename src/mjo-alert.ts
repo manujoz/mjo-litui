@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
@@ -33,17 +33,19 @@ export class MjoAlert extends LitElement {
         `;
     }
 
-    protected updated(): void {
-        if (this.type === "warning") {
-            this.icon = AiFillWarning;
-        } else if (this.type === "info") {
-            this.icon = AiFillInfoCircle;
-        } else if (this.type === "error") {
-            this.icon = AiFillCloseCircle;
-        } else if (this.type === "success") {
-            this.icon = AiFillCheckCircle;
-        } else {
-            this.icon = "";
+    protected updated(_changedProperties: PropertyValues): void {
+        if (_changedProperties.has("type")) {
+            if (this.type === "warning") {
+                this.icon = AiFillWarning;
+            } else if (this.type === "info") {
+                this.icon = AiFillInfoCircle;
+            } else if (this.type === "error") {
+                this.icon = AiFillCloseCircle;
+            } else if (this.type === "success") {
+                this.icon = AiFillCheckCircle;
+            } else {
+                this.icon = "";
+            }
         }
     }
 
