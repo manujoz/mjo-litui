@@ -33,6 +33,7 @@ body {
     margin: 0;
     min-height: 500vh;
     display: grid;
+    overflow-x: hidden;
     place-content: center;
     background-color: var(--mjo-background-color);
 }

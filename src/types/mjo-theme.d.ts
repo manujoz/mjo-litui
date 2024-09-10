@@ -87,15 +87,15 @@ type MjoThemeMode = {
     /** --mjo-primary-color, --mjo-primary-color-hover, --mjo-primary-color-[50-900] */
     primaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string;
     /** --mjo-primary-foreground-color */
-    primaryForegroundColor?: string;
+    primaryForegroundColor?: MjoThemeColorSmall | string;
     /** --mjo-secondary-color, -mjo-secondary-color-hover, --mjo-secondary-color-[50-900] */
     secondaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string;
     /** --mjo-secondary-foreground-color */
-    secondaryForegroundColor?: string;
+    secondaryForegroundColor?: MjoThemeColorSmall | string;
     /** --mjo-border-color, --mjo-border-color-light, --mjo-border-color-dark */
     borderColor?: MjoThemeColorSmall | string;
     /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */
-    backgroundColor?: MjoThemeColorSmall | string;
+    backgroundColor?: ({ hover: string } & MjoThemeColorSmall) | string;
     /** --mjo-foreground-color, --mjo-foreground-color-light, --mjo-foreground-color-dark */
     foregroundColor?: MjoThemeColorSmall | string;
     /** --mjo-box-shadow, --mjo-box-shadow-[215] */

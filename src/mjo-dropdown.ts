@@ -1,4 +1,4 @@
-import { type DropdowContainer } from "./mixins/dropdow-container";
+import { type DropdowContainer } from "./helpers/dropdow-container";
 import { type MjoTheme } from "./mjo-theme.js";
 
 import { CSSResult, LitElement, TemplateResult, css, html } from "lit";
@@ -6,7 +6,7 @@ import { customElement, property } from "lit/decorators.js";
 
 import { searchClosestElement } from "./utils/shadow-dom.js";
 
-import "./mixins/dropdow-container.js";
+import "./helpers/dropdow-container.js";
 
 const convertToPx = (value: string | null): string | null => {
     if (value === null) return value;
@@ -24,7 +24,7 @@ export class MjoDropdown extends LitElement {
     @property({ type: String, converter: convertToPx }) width?: string;
     @property({ type: String, converter: convertToPx }) height?: string;
 
-    dropdown?: DropdowContainer | null;
+    dropdownContainer?: DropdowContainer | null;
     openTimestamp = 0;
 
     #listeners = {
@@ -47,7 +47,7 @@ export class MjoDropdown extends LitElement {
 
         if (this.behaviour === "hover") {
             this.addEventListener("mouseenter", this.#listeners.open);
-            this.dropdown?.addEventListener("mouseleave", this.#listeners.close);
+            this.dropdownContainer?.addEventListener("mouseleave", this.#listeners.close);
         } else {
             this.addEventListener("click", this.#listeners.open);
         }
@@ -60,7 +60,7 @@ export class MjoDropdown extends LitElement {
 
         if (this.behaviour === "hover") {
             this.removeEventListener("mouseenter", this.#listeners.open);
-            this.dropdown?.removeEventListener("mouseleave", this.#listeners.close);
+            this.dropdownContainer?.removeEventListener("mouseleave", this.#listeners.close);
         } else {
             this.removeEventListener("click", this.#listeners.open);
         }
@@ -72,21 +72,21 @@ export class MjoDropdown extends LitElement {
         super.updated(changedProperties);
 
         if (changedProperties.has("html") && this.html) {
-            if (!this.dropdown) return;
-            this.dropdown.html = this.html;
+            if (!this.dropdownContainer) return;
+            this.dropdownContainer.html = this.html;
         }
         if (changedProperties.has("css") && this.css) {
-            if (!this.dropdown) return;
-            this.dropdown.css = this.css;
+            if (!this.dropdownContainer) return;
+            this.dropdownContainer.css = this.css;
         }
         if (changedProperties.has("preventScroll") && this.preventScroll) {
-            if (!this.dropdown) return;
-            this.dropdown.preventScroll = this.preventScroll;
+            if (!this.dropdownContainer) return;
+            this.dropdownContainer.preventScroll = this.preventScroll;
         }
         if (changedProperties.has("width") && this.width !== undefined) {
-            if (!this.dropdown) return;
+            if (!this.dropdownContainer) return;
 
-            this.dropdown.style.display = this.width;
+            this.dropdownContainer.style.display = this.width;
         }
     }
 
@@ -98,19 +98,35 @@ export class MjoDropdown extends LitElement {
         this.#close(ev);
     }
 
+    updatePosition() {
+        this.dropdownContainer?.updatePosition();
+    }
+
+    scrollToTop(top: number) {
+        this.dropdownContainer?.scrollToTop(top);
+    }
+
+    getScroll() {
+        return this.dropdownContainer?.getScroll() ?? { top: 0, left: 0 };
+    }
+
+    getHeigth() {
+        return this.dropdownContainer?.offsetHeight ?? 0;
+    }
+
     #open() {
         if (this.isOpen) return;
 
-        if (this.fullwidth && this.dropdown) {
-            this.dropdown.width = `${this.offsetWidth}px`;
+        if (this.fullwidth && this.dropdownContainer) {
+            this.dropdownContainer.width = `${this.offsetWidth}px`;
         }
 
-        if (this.height && this.dropdown) {
-            this.dropdown.height = this.height;
+        if (this.height && this.dropdownContainer) {
+            this.dropdownContainer.height = this.height;
         }
 
         this.isOpen = true;
-        this.dropdown?.open();
+        this.dropdownContainer?.open();
         this.openTimestamp = Date.now();
 
         this.dispatchEvent(new CustomEvent("open"));
@@ -122,7 +138,7 @@ export class MjoDropdown extends LitElement {
         if (!this.isOpen) return;
 
         this.isOpen = false;
-        this.dropdown?.close();
+        this.dropdownContainer?.close();
         this.openTimestamp = 0;
 
         this.dispatchEvent(new CustomEvent("close"));
@@ -131,23 +147,23 @@ export class MjoDropdown extends LitElement {
     #createDropdown() {
         const themeElement = searchClosestElement(this as LitElement, "mjo-theme") as MjoTheme | null;
 
-        this.dropdown = document.createElement("dropdow-container");
-        this.dropdown.host = this;
-        this.dropdown.html = this.html;
-        this.dropdown.css = this.css;
-        this.dropdown.preventScroll = this.preventScroll;
+        this.dropdownContainer = document.createElement("dropdow-container");
+        this.dropdownContainer.host = this;
+        this.dropdownContainer.html = this.html;
+        this.dropdownContainer.css = this.css;
+        this.dropdownContainer.preventScroll = this.preventScroll;
 
-        if (this.width) this.dropdown.style.width = this.width;
+        if (this.width) this.dropdownContainer.style.width = this.width;
 
         if (themeElement) {
             const themeClone = document.createElement("mjo-theme") as MjoTheme;
             themeClone.config = themeElement.config;
             themeClone.theme = themeElement.theme;
             themeClone.scope = "local";
-            themeClone.appendChild(this.dropdown);
+            themeClone.appendChild(this.dropdownContainer);
             document.body.appendChild(themeClone);
         } else {
-            document.body.appendChild(this.dropdown);
+            document.body.appendChild(this.dropdownContainer);
         }
     }
 

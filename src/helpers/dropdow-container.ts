@@ -93,11 +93,31 @@ export class DropdowContainer extends LitElement {
         }, 5);
     }
 
+    scrollToTop(top: number) {
+        this.scrollTo({
+            top,
+        });
+    }
+
+    getScroll() {
+        return {
+            top: this.scrollTop,
+            left: this.scrollLeft,
+        };
+    }
+
     updatePosition() {
         if (this.offsetHeight === 0 || !this.host) return;
 
         const container = this.host as unknown as HTMLElement;
         const [x, y] = this.position.split("-");
+
+        const left =
+            x === "left"
+                ? getLeftInLeftPosition({ dropDown: this, container })
+                : x === "center"
+                  ? getLeftInCenterPOsition({ dropDown: this, container })
+                  : getLeftInRightPosition({ dropDown: this, container });
 
         const top =
             y === "bottom"
@@ -105,12 +125,6 @@ export class DropdowContainer extends LitElement {
                 : y === "middle"
                   ? getTopInMiddlePosition({ dropDown: this, container })
                   : getTopInTopPosition({ dropDown: this, container });
-        const left =
-            x === "left"
-                ? getLeftInLeftPosition({ dropDown: this, container })
-                : x === "center"
-                  ? getLeftInCenterPOsition({ dropDown: this, container })
-                  : getLeftInRightPosition({ dropDown: this, container });
 
         this.style.top = `${top}px`;
         this.style.left = `${left}px`;
@@ -153,7 +167,7 @@ export class DropdowContainer extends LitElement {
     }
 
     #preventWheel(ev: WheelEvent) {
-        if (ev.target === this) ev.preventDefault();
+        if (ev.target !== this) ev.preventDefault();
     }
 
     #getScrollbarElements() {
@@ -185,7 +199,8 @@ export class DropdowContainer extends LitElement {
                 border-radius: var(--mjo-dropdown-radius, var(--mjo-radius-medium, 5px));
                 transform-origin: top center;
                 max-width: calc(100vw - 20px);
-                overflow: hidden;
+                overflow-x: hidden;
+                overflow-y: auto;
             }
         `,
     ];

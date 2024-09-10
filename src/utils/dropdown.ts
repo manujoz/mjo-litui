@@ -1,9 +1,16 @@
-import { type DropdowContainer } from "../mixins/dropdow-container";
+import { type DropdowContainer } from "../helpers/dropdow-container";
+
+const DROPDOWN_MARGIN = 15;
 
 export const getTopInTopPosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
     const top = container.getBoundingClientRect().top + window.scrollY - dropDown.offsetHeight - 5;
 
-    if (dropDown.offsetHeight >= window.innerHeight - 30) return 15;
+    if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
+        dropDown.style.maxHeight = `${window.innerHeight - DROPDOWN_MARGIN * 2}px`;
+        return window.scrollY + DROPDOWN_MARGIN;
+    } else {
+        dropDown.style.maxHeight = "";
+    }
 
     if (top < window.scrollY) return getTopInBottomPosition({ dropDown, container });
 
@@ -12,7 +19,12 @@ export const getTopInTopPosition = ({ dropDown, container }: { dropDown: Dropdow
 export const getTopInBottomPosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
     const top = container.getBoundingClientRect().top + window.scrollY + container.offsetHeight + 5;
 
-    if (dropDown.offsetHeight >= window.innerHeight - 30) return 15;
+    if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
+        dropDown.style.maxHeight = `${window.innerHeight - DROPDOWN_MARGIN * 2}px`;
+        return window.scrollY + DROPDOWN_MARGIN;
+    } else {
+        dropDown.style.maxHeight = "";
+    }
 
     if (top + dropDown.offsetHeight > window.innerHeight + window.scrollY) return getTopInTopPosition({ dropDown, container });
 
@@ -21,7 +33,12 @@ export const getTopInBottomPosition = ({ dropDown, container }: { dropDown: Drop
 export const getTopInMiddlePosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
     const top = container.getBoundingClientRect().top + window.scrollY + container.offsetHeight / 2 - dropDown.offsetHeight / 2;
 
-    if (dropDown.offsetHeight >= window.innerHeight - 30) return 15;
+    if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
+        dropDown.style.maxHeight = `${window.innerHeight - DROPDOWN_MARGIN * 2}px`;
+        return window.scrollY + DROPDOWN_MARGIN;
+    } else {
+        dropDown.style.maxHeight = "";
+    }
 
     if (top < window.scrollY) return 0;
 
@@ -34,7 +51,7 @@ export const getTopInMiddlePosition = ({ dropDown, container }: { dropDown: Drop
 export const getLeftInLeftPosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
     const left = container.getBoundingClientRect().left + window.scrollX - dropDown.offsetWidth - 5;
 
-    if (dropDown.offsetWidth >= window.innerWidth - 30) return 15;
+    if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2) return DROPDOWN_MARGIN;
 
     if (left < window.scrollX) return getLeftInRightPosition({ dropDown, container });
 
@@ -43,7 +60,7 @@ export const getLeftInLeftPosition = ({ dropDown, container }: { dropDown: Dropd
 export const getLeftInCenterPOsition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
     const left = container.getBoundingClientRect().left + window.scrollX + container.offsetWidth / 2 - dropDown.offsetWidth / 2;
 
-    if (dropDown.offsetWidth >= window.innerWidth - 30) return 15;
+    if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2) return DROPDOWN_MARGIN;
 
     if (left < window.scrollX) return 0;
 
@@ -56,7 +73,7 @@ export const getLeftInCenterPOsition = ({ dropDown, container }: { dropDown: Dro
 export const getLeftInRightPosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
     const left = container.getBoundingClientRect().left + window.scrollX + container.offsetWidth + 5;
 
-    if (dropDown.offsetWidth >= window.innerWidth - 30) return 15;
+    if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2) return DROPDOWN_MARGIN;
 
     if (left + dropDown.offsetWidth > window.innerWidth + window.scrollX) {
         return getLeftInLeftPosition({ dropDown, container });

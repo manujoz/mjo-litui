@@ -3,7 +3,7 @@ import { type MjoDropdown } from "./mjo-dropdown.js";
 import { type MjoOption } from "./mjo-option.js";
 
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 import { createRef, ref } from "lit/directives/ref.js";
@@ -48,10 +48,11 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     @state() private startOptionIcon?: string;
     @state() private endOptionIcon?: string;
 
+    @query("mjo-dropdown") dropdownElement!: MjoDropdown;
+    @query("input#inputHidden") inputHiddenElement!: HTMLInputElement;
+    @query("input#inputVisible") inputVisibleElement!: HTMLInputElement;
+
     type = "select";
-    dropdownRef = createRef<MjoDropdown>();
-    inputRef = createRef<HTMLInputElement>();
-    inputVisibleRef = createRef<HTMLInputElement>();
     optionListRef = createRef<OptionsList>();
 
     observer!: MutationObserver;
@@ -61,14 +62,14 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 ? html`<input-label color=${this.color} label=${this.label} ?focused=${this.isFocused} ?error=${this.error}></input-label>`
                 : nothing}
             <mjo-dropdown
-                ${ref(this.dropdownRef)}
                 .html=${html`<options-list
                     ${ref(this.optionListRef)}
                     .options=${this.options}
                     .mjoSelect=${this}
                     ?searchable=${this.searchable}
                     ?open=${this.open}
-                    @optionsblur=${() => this.#handleOptionsBlur()}
+                    @options-list.blur=${() => this.#handleOptionsBlur()}
+                    @options-list.filter=${() => this.#handleOptionListFilter()}
                 ></options-list>`}
                 preventScroll
                 behaviour="click"
@@ -85,7 +86,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                         ? html`<div class="image startImage optionImage"><img src=${this.startOptionImage} alt="Input image" /></div>`
                         : nothing}
                     <input
-                        ${ref(this.inputVisibleRef)}
+                        id="inputVisible"
                         ?autofocus=${this.autoFocus}
                         ?disabled=${this.disabled}
                         placeholder=${ifDefined(this.placeholder)}
@@ -98,7 +99,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                         @focus=${this.#handleFocus}
                         @blur=${this.#handleBlur}
                     />
-                    <input ${ref(this.inputRef)} type="hidden" name=${ifDefined(this.name)} .value=${live(this.value)} />
+                    <input id="inputHidden" type="hidden" name=${ifDefined(this.name)} .value=${live(this.value)} />
                     ${this.clearabled
                         ? html`<div class="icon endIcon clearabled" ?data-visible=${this.value.length > 0} @click=${this.#handleClearabled}>
                               <mjo-icon src=${AiFillCloseCircle}></mjo-icon>
@@ -130,7 +131,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
         this.#handleOptions();
 
         if (this.autoFocus) {
-            this.inputVisibleRef.value?.focus();
+            this.inputVisibleElement.focus();
         }
 
         this.updateFormData({ name: this.name || "", value: this.value });
@@ -150,13 +151,13 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     }
 
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
-        if (_changedProperties.has("value") && this.value !== this.inputRef.value?.value) {
+        if (_changedProperties.has("value") && this.value !== this.inputHiddenElement.value) {
             this.setValue(this.value);
         }
     }
 
     focus() {
-        this.inputVisibleRef.value?.focus();
+        this.inputVisibleElement.focus();
     }
 
     isOpen() {
@@ -185,7 +186,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
 
     #handleBlur() {
         if (this.searchable) return;
-        this.dropdownRef.value?.close();
+        this.dropdownElement.close();
     }
 
     #handleClearabled() {}
@@ -196,7 +197,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     }
 
     #handleFocus() {
-        this.dropdownRef.value?.open();
+        this.dropdownElement.open();
     }
 
     #handleOpen() {
@@ -206,7 +207,13 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
 
     #handleOptionsBlur() {
         this.focus();
-        this.dropdownRef.value?.close();
+        this.dropdownElement.close();
+    }
+
+    #handleOptionListFilter() {
+        setTimeout(() => {
+            this.dropdownElement.updatePosition();
+        }, 50);
     }
 
     async #handleOptions() {

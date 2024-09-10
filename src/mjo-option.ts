@@ -64,8 +64,8 @@ export class MjoOption extends LitElement {
             }
             .container[data-preselected],
             .container:hover {
-                background-color: var(--mjo-select-option-preselected-background-color, #eeeeee);
-                color: var(--mjo-select-option-preselected-color, currentColor);
+                background-color: var(--mjo-select-option-preselected-background-color, var(--mjo-background-color-hover, #eeeeee));
+                color: var(--mjo-select-option-preselected-color, var(--mjo-foreground-color, currentColor));
             }
             .container[data-selected] {
                 background-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));

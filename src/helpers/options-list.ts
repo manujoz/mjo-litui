@@ -3,8 +3,7 @@ import { type MjoOption } from "../mjo-option.js";
 import { type MjoSelect } from "../mjo-select";
 
 import { LitElement, PropertyValues, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { createRef, ref } from "lit/directives/ref.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch.js";
 
@@ -21,7 +20,9 @@ export class OptionsList extends LitElement {
     @property({ type: Boolean }) open = false;
     @property({ type: String }) filter = "";
 
-    inputRef = createRef<HTMLInputElement>();
+    @query("input#optionsListsInputSearch") inputElement?: HTMLInputElement;
+    @query(".search") searchElement?: HTMLDivElement;
+
     listeners = {
         keydown: (ev: KeyboardEvent) => {
             this.#handleKeydown(ev);
@@ -33,7 +34,7 @@ export class OptionsList extends LitElement {
             ${this.searchable
                 ? html`<div class="search" @click=${this.#handleInputClick}>
                       <div class="input">
-                          <input ${ref(this.inputRef)} type="text" placeholder=${dictionary.search} @input=${this.#hanldeInput} tabindex="0" />
+                          <input id="optionsListsInputSearch" type="text" placeholder=${dictionary.search} @input=${this.#hanldeInput} tabindex="0" />
                       </div>
                       <div class="icon">
                           <mjo-icon src=${AiOutlineSearch}></mjo-icon>
@@ -72,17 +73,17 @@ export class OptionsList extends LitElement {
 
     protected updated(_changedProperties: PropertyValues): void {
         if (_changedProperties.has("open") && this.open) {
-            this.focus();
+            this.#opened();
         }
     }
 
     focus() {
-        this.inputRef.value?.focus();
+        this.inputElement?.focus();
     }
 
     resetFilter() {
         this.filter = "";
-        if (this.inputRef.value) this.inputRef.value.value = "";
+        if (this.inputElement) this.inputElement.value = "";
     }
 
     #handleInputClick(ev: Event) {
@@ -91,6 +92,8 @@ export class OptionsList extends LitElement {
 
     #hanldeInput(ev: InputEvent) {
         this.filter = (ev.target as HTMLInputElement).value;
+
+        this.dispatchEvent(new CustomEvent("options-list.filter", { detail: { filter: this.filter } }));
     }
 
     #handleKeydown(ev: KeyboardEvent) {
@@ -107,24 +110,7 @@ export class OptionsList extends LitElement {
             this.#select();
         } else if (ev.key === "Tab" && this.searchable) {
             ev.preventDefault();
-            this.dispatchEvent(new CustomEvent("optionsblur", { bubbles: true }));
-        }
-    }
-
-    #select() {
-        const selected = this.options.find((option) => option.selected);
-        const preselected = this.options.find((option) => option.preSelected);
-
-        if (selected) {
-            selected.selected = false;
-        }
-
-        if (preselected) {
-            preselected.selected = true;
-            preselected.preSelected = false;
-            this.mjoSelect?.setValue(preselected.value);
-            this.mjoSelect?.focus();
-            this.mjoSelect?.dropdownRef.value?.close();
+            this.dispatchEvent(new CustomEvent("options-list.blur", { bubbles: true }));
         }
     }
 
@@ -151,6 +137,8 @@ export class OptionsList extends LitElement {
         if (next) {
             next.preSelected = true;
         }
+
+        this.#scrollTopOption(next);
     }
 
     #moveUp() {
@@ -176,17 +164,64 @@ export class OptionsList extends LitElement {
         if (next) {
             next.preSelected = true;
         }
+
+        this.#scrollTopOption(next);
+    }
+
+    #opened() {
+        this.focus();
+        const selected = this.options.find((option) => option.selected);
+        if (selected) {
+            this.#scrollTopOption(selected);
+        }
+    }
+
+    #scrollTopOption(option: MjoOption) {
+        let top = option.offsetTop;
+        const searhHeight = this.searchElement?.offsetHeight ?? 0;
+        const scroll = this.mjoSelect?.dropdownElement.getScroll() ?? { top: 0, left: 0 };
+        const height = this.mjoSelect?.dropdownElement.getHeigth() ?? 0;
+
+        if (top < scroll.top + searhHeight) {
+            this.mjoSelect?.dropdownElement.scrollToTop(top - searhHeight);
+        } else if (top + option.offsetHeight > scroll.top + height) {
+            top = top + option.offsetHeight - height;
+            this.mjoSelect?.dropdownElement.scrollToTop(top);
+        }
+    }
+
+    #select() {
+        const selected = this.options.find((option) => option.selected);
+        const preselected = this.options.find((option) => option.preSelected);
+
+        if (selected) {
+            selected.selected = false;
+        }
+
+        if (preselected) {
+            preselected.selected = true;
+            preselected.preSelected = false;
+            this.mjoSelect?.setValue(preselected.value);
+            this.mjoSelect?.focus();
+            this.mjoSelect?.dropdownElement.close();
+        }
     }
 
     static styles = [
         css`
             :host {
                 display: block;
+                position: relative;
             }
 
             .search {
+                position: sticky;
+                top: 0;
                 display: flex;
                 align-items: center;
+                z-index: 1;
+                background-color: var(--mjo-dropdown-background-color, var(--mjo-background-color-dark, white));
+                box-shadow: var(--mjo-dropdown-box-shadow, var(--mjo-box-shadow-1, 0px 2px 3px rgba(50, 50, 50, 0.5)));
             }
             .input {
                 flex-grow: 1;
