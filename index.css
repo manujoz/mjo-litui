@@ -4,20 +4,11 @@
     line-height: 1.5;
     font-weight: 400;
 
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
-
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
     /* --mjo-primary-color: #5e62be;
     --mjo-primary-color-hover: #6ce795; */
     /* --mjo-secondary-color: #e02828;
     --mjo-secondary-color-hover: #e79d6c; */
-    --mjo-foreground: #333333;
+    /* --mjo-foreground: #333333; */
 }
 
 a {
@@ -36,11 +27,5 @@ body {
     overflow-x: hidden;
     place-content: center;
     background-color: var(--mjo-background-color);
-}
-
-@media (prefers-color-scheme: light) {
-    :root {
-        color: #213547;
-        background-color: #ffffff;
-    }
+    color: var(--mjo-foreground-color);
 }

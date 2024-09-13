@@ -96,6 +96,8 @@ type MjoThemeMode = {
     borderColor?: MjoThemeColorSmall | string;
     /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */
     backgroundColor?: ({ hover: string } & MjoThemeColorSmall) | string;
+    /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */
+    backgroundColorCard?: MjoThemeColorContrasts | string;
     /** --mjo-foreground-color, --mjo-foreground-color-light, --mjo-foreground-color-dark */
     foregroundColor?: MjoThemeColorSmall | string;
     /** --mjo-box-shadow, --mjo-box-shadow-[215] */
@@ -134,6 +136,12 @@ type MjoThemeColorSmall = {
     default?: string;
     light?: string;
     dark?: string;
+};
+
+type MjoThemeColorContrasts = {
+    default?: string;
+    low?: string;
+    high?: string;
 };
 
 type MjoThemeBoxShadow = {

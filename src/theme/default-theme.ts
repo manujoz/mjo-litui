@@ -276,20 +276,25 @@ export const defaultTheme: MjoThemeConfig = {
             dark: "#cccccc",
         },
         borderColor: {
-            default: "#aaaaaa",
-            light: "#cccccc",
-            dark: "#888888",
+            default: "#777777",
+            light: "#aaaaaa",
+            dark: "#555555",
         },
         backgroundColor: {
             hover: "#666666",
             default: "#333333",
-            light: "#555555",
+            light: "#444444",
             dark: "#222222",
         },
+        backgroundColorCard: {
+            default: "#444444",
+            low: "#333333",
+            high: "#777777",
+        },
         foregroundColor: {
-            default: "#ffffff",
-            light: "#f2f2f2",
-            dark: "#cccccc",
+            default: "#f0f0f0",
+            light: "#cccccc",
+            dark: "#ffffff",
         },
     },
     light: {
@@ -369,6 +374,11 @@ export const defaultTheme: MjoThemeConfig = {
             default: "#fafafa",
             light: "#ffffff",
             dark: "#e6e6e6",
+        },
+        backgroundColorCard: {
+            default: "#ffffff",
+            low: "#fafafa",
+            high: "#e6e6e6",
         },
         foregroundColor: {
             default: "#333333",

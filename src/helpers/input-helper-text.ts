@@ -28,7 +28,7 @@ export class InputHelperText extends LitElement {
                 text-align: left;
                 font-size: var(--mjo-input-helper-font-size, calc(1em * 0.8));
                 font-weight: var(--mjo-input-helper-font-weight, normal);
-                color: var(--mjo-input-helper-color, #555555);
+                color: var(--mjo-input-helper-color, currentColor);
                 line-height: calc(1em * 1.2);
                 max-width: 100%;
             }

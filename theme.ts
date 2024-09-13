@@ -31,7 +31,6 @@ export const theme: MjoThemeConfig = {
             "900": "#073c25",
         },
         secondaryColor: "#f0a34b",
-        foregroundColor: "#ffffff",
     },
     components: {
         mjoButton: {
