@@ -65,6 +65,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                     valueSuffix=${this.valueSuffix}
                     size="20"
                     color=${this.color}
+                    @release=${this.#handleRelease}
                 ></slider-handle>
                 ${this.isRange
                     ? html`<slider-handle
@@ -76,6 +77,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                           valueSuffix=${this.valueSuffix}
                           size="20"
                           color=${this.color}
+                          @release=${this.#handleRelease}
                       ></slider-handle>`
                     : nothing}
                 <input id="mjoSliderInput" name=${ifDefined(this.name)} type="hidden" .value=${live(this.value)} />
@@ -180,6 +182,10 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
         }
     }
 
+    #handleRelease() {
+        this.dispatchEvent(new Event("change"));
+    }
+
     #setSteps() {
         const width = this.rangebarRef.value?.getBoundingClientRect().width || 0;
         const steps = (this.max - this.min) / this.step + 1;
@@ -235,6 +241,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
             }
         }
 
+        this.dispatchEvent(new CustomEvent("move", { detail: { value, target: this } }));
         this.setValue(value);
         this.#setProgress();
         slider.setLeftPosition(closestPosition);

@@ -76,6 +76,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 fullwidth
                 @open=${this.#handleOpen}
                 @close=${this.#handleClose}
+                @click=${this.#handleClick}
             >
                 <div class="container" data-color=${this.color} ?data-focused=${this.isFocused} data-size=${this.size} ?data-error=${this.error}>
                     ${this.prefixText ? html`<div class="prefixText">${this.prefixText}</div>` : nothing}
@@ -164,7 +165,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
         return this.open;
     }
 
-    setValue(value: string) {
+    setValue(value: string, noDispatch: boolean = false) {
         for (const option of this.options) {
             option.selected = option.value === value;
             if (option.value === value) {
@@ -177,6 +178,10 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
             }
         }
 
+        if (!noDispatch) {
+            this.dispatchEvent(new Event("change"));
+        }
+
         this.updateFormData({ name: this.name || "", value: this.value });
     }
 
@@ -187,6 +192,12 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     #handleBlur() {
         if (this.searchable) return;
         this.dropdownElement.close();
+    }
+
+    #handleClick() {
+        if (!this.open) {
+            this.dispatchEvent(new FocusEvent("focus"));
+        }
     }
 
     #handleClearabled() {}
@@ -240,7 +251,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
             this.options[0].selected = true;
         }
 
-        this.setValue(selectedValue || "");
+        this.setValue(selectedValue || "", true);
     }
 
     #setOptions() {

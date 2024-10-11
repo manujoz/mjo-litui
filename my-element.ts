@@ -75,12 +75,39 @@ export class MyElement extends LitElement {
                                       (option) => html`<mjo-option value=${option.value}>${option.inner}</mjo-option>`,
                                   )}
                         </mjo-select>
+                        <mjo-select name="select" label="Este es el select" searchable @change=${this.#handleChange} @focus=${this.#handleFocus}>
+                            <mjo-option value="">Selecciona...</mjo-option>
+                            <mjo-option value="1">Barcelona</mjo-option>
+                            <mjo-option value="2">Madrid</mjo-option>
+                            <mjo-option selected value="3">Valencia</mjo-option>
+                            <mjo-option value="4">Sevilla</mjo-option>
+                            <mjo-option value="5">Bilbao</mjo-option>
+                            <mjo-option value="6">Málaga</mjo-option>
+                            <mjo-option value="7">Zaragoza</mjo-option>
+                            <mjo-option value="8">Murcia</mjo-option>
+                            <mjo-option value="9">Palma</mjo-option>
+                        </mjo-select>
                     </p>
                     <p>
-                        <mjo-textarea name="description" label="Description" startIcon=${AiOutlineSearch} maxHeight="200"></mjo-textarea>
+                        <mjo-textarea
+                            name="description"
+                            label="Description"
+                            startIcon=${AiOutlineSearch}
+                            maxHeight="200"
+                            @change=${this.#handleChange}
+                        ></mjo-textarea>
                     </p>
                     <p>
-                        <mjo-slider name="quantity" label="Slider" step="1" max="100" value="20" tooltip valueSuffix="€"></mjo-slider>
+                        <mjo-slider
+                            name="quantity"
+                            label="Slider"
+                            step="1"
+                            max="100"
+                            value="20"
+                            tooltip
+                            valueSuffix="€"
+                            @change=${this.#handleChange}
+                        ></mjo-slider>
                     </p>
                     <p>
                         <mjo-button size="small" type="submit" startIcon=${AiOutlineSearch} color="primary" variant="dashed">ENVIAR</mjo-button>
@@ -119,6 +146,14 @@ export class MyElement extends LitElement {
         }, 3000);
     }
 
+    #handleFocus(ev: FocusEvent) {
+        console.log(ev);
+    }
+
+    #handleChange(ev: Event) {
+        console.log(ev.currentTarget.value);
+    }
+
     renderHtml(num: number) {
         return html`<div class="container">hola ${num}</div>`;
     }
@@ -132,6 +167,7 @@ export class MyElement extends LitElement {
 
     setOptions() {
         this.options = [
+            { value: "", inner: "Selecciona..." },
             { value: "1", inner: "Barcelona" },
             { value: "2", inner: "Madrid" },
             { value: "3", inner: "Valencia" },

@@ -76,6 +76,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                     @blur=${this.#handleBlur}
                     @input=${this.#handleInput}
                     @keyup=${this.#handleKeyup}
+                    @change=${this.#handleInput}
                     aria-label=${this.label || this.ariaLabel || nothing}
                     aria-errormessage=${this.errormsg || nothing}
                     aria-required=${ifDefined(this.required)}
@@ -207,6 +208,10 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
     #handleInput = (ev: InputEvent) => {
         this.value = (ev.currentTarget as HTMLInputElement).value;
         this.valueLength = this.value.length;
+
+        if (ev.type === "change") {
+            this.dispatchEvent(new Event("change"));
+        }
 
         this.updateFormData({ name: this.name || "", value: this.value });
     };

@@ -129,6 +129,8 @@ export class SliderHandle extends LitElement {
         this.start = 0;
 
         this.setLeft();
+
+        this.dispatchEvent(new CustomEvent("release", { detail: { target: this } }));
     }
 
     #setFontSize() {

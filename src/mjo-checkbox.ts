@@ -62,7 +62,7 @@ export class MjoCheckbox extends InputErrorMixin(FormMixin(LitElement)) {
 
         this.checked = !this.checked;
         this.updateFormData({ name: this.name || "", value: this.checked ? this.value || "1" : "" });
-        this.dispatchEvent(new Event("change", { bubbles: true, composed: true }));
+        this.dispatchEvent(new Event("change"));
     }
 
     static styles = [
