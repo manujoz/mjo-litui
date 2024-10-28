@@ -48,6 +48,7 @@ export interface MjoThemeConfig {
         mjoTextarea?: MjoTextaraTheme;
         mjoTextfield?: MjoInputTheme;
         mjoTypography?: TypographyTheme;
+        mjoSwitch?: MjoSwitchTheme;
     };
     colors?: {
         /** --mjo-color-white */
@@ -324,4 +325,12 @@ interface TypographyTheme {
     h6FontWeight?: string;
     pFontSize?: string;
     pFontWeight?: string;
+}
+
+interface MjoSwitchTheme {
+    sizeMedium?: string;
+    sizeSmall?: string;
+    sizeLarge?: string;
+    backgroundColor?: string;
+    backgroundColorChecked?: string;
 }
