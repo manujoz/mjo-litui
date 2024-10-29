@@ -99,7 +99,7 @@ export class MjoCheckbox extends InputErrorMixin(FormMixin(LitElement)) {
             }
             .checkbox {
                 position: relative;
-                border: solid 2px var(--mjo-checkbox-border-color, rgb(51, 51, 51));
+                border: solid 2px var(--mjo-checkbox-border-color, var(--mjo-foreground-color-light, rgb(51, 51, 51)));
                 border-radius: 0.2rem;
                 line-height: 0;
                 transition: border-color 0.3s;

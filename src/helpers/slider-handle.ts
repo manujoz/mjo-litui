@@ -125,6 +125,8 @@ export class SliderHandle extends LitElement {
     #handleLeave(ev: MouseEvent | TouchEvent) {
         ev.preventDefault();
 
+        if (!this.pressed) return;
+
         this.pressed = false;
         this.start = 0;
 

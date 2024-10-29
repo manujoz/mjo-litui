@@ -11,11 +11,14 @@ import "./src/mjo-alert.js";
 import "./src/mjo-avatar.js";
 import "./src/mjo-button.js";
 import "./src/mjo-card.js";
+import "./src/mjo-checkbox.js";
+import "./src/mjo-color-picker.js";
 import "./src/mjo-dropdown.js";
 import "./src/mjo-form.js";
 import "./src/mjo-image.js";
 import "./src/mjo-select.js";
 import "./src/mjo-slider.js";
+import "./src/mjo-switch.js";
 import "./src/mjo-textarea.js";
 import "./src/mjo-textfield.js";
 import "./src/mjo-theme.js";
@@ -46,18 +49,7 @@ export class MyElement extends LitElement {
             <mjo-theme theme="dark" .config=${theme} scope="global">
                 <p style="color: var(--mjo-primary-color);">Hola mundo</p>
             </mjo-theme>
-            <div style="padding: 20px;">
-                <mjo-image src="asdasdsa"></mjo-image>
-                <mjo-alert
-                    type="error"
-                    message="este es el mensaje de error"
-                    size="small"
-                    closable
-                    rounded="large"
-                    detail="Est es el detalle de la alerta"
-                ></mjo-alert>
-                <mjo-card style="margin-top: 20px"> Este es el contenido de la tarjeta </mjo-card>
-            </div>
+
             <div style="padding: 20px;">
                 <mjo-avatar size="small" name="Á" bordered nameColoured></mjo-avatar>
             </div>
@@ -75,7 +67,7 @@ export class MyElement extends LitElement {
                                       (option) => html`<mjo-option value=${option.value}>${option.inner}</mjo-option>`,
                                   )}
                         </mjo-select>
-                        <mjo-select name="select" label="Este es el select" searchable @change=${this.#handleChange} @focus=${this.#handleFocus}>
+                        <mjo-select name="select1" label="Este es el select" searchable @change=${this.#handleChange} @focus=${this.#handleFocus}>
                             <mjo-option value="">Selecciona...</mjo-option>
                             <mjo-option value="1">Barcelona</mjo-option>
                             <mjo-option value="2">Madrid</mjo-option>
@@ -110,31 +102,27 @@ export class MyElement extends LitElement {
                         ></mjo-slider>
                     </p>
                     <p>
+                        <mjo-card>
+                            <mjo-color-picker size="large" disabled @change=${this.#handleChange} name="color" label="Color" value="#FF0000"></mjo-color-picker>
+                            <mjo-checkbox name="checkbox" label="check"></mjo-checkbox>
+                        </mjo-card>
+                    </p>
+                    <p>
+                        <mjo-switch name="switch"></mjo-switch>
+                    </p>
+                    <p>
                         <mjo-button size="small" type="submit" startIcon=${AiOutlineSearch} color="primary" variant="dashed">ENVIAR</mjo-button>
                     </p>
                 </mjo-form>
-                <form>
-                    <input type="text" name="name" />
-                    <mjo-textfield label="Email" type="number" name="email" nospiners></mjo-textfield>
-                    <mjo-dropdown
-                        .html=${this.html}
-                        .css=${css`
-                            .container {
-                                position: relative;
-                                display: grid;
-                                place-content: center;
-                                padding: 10px;
-                            }
-                        `}
-                    >
-                        <button type="submit">Submit</button>
-                    </mjo-dropdown>
-                </form>
             </div>
         </div>`;
     }
 
     @state() html = this.renderHtml(1);
+
+    #handleInput(ev: Event) {
+        console.log(ev.currentTarget);
+    }
 
     connectedCallback(): void {
         super.connectedCallback();
@@ -160,6 +148,8 @@ export class MyElement extends LitElement {
 
     #handleSubmit(ev: MjoFormSubmitEvent) {
         const { response } = ev.detail;
+
+        console.log(response);
         setTimeout(() => {
             if (response.submitButton) response.submitButton.loading = false;
         }, 3000);
