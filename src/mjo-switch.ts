@@ -27,6 +27,8 @@ export class MjoSwitch extends InputErrorMixin(FormMixin(LitElement)) {
     @query("input#mjoSwitchInput") inputElement!: HTMLInputElement;
     @query(".checkItem") checkItem!: HTMLDivElement;
 
+    type = "switch";
+
     render() {
         return html`
             ${this.label ? html`<input-label color=${this.color} label=${this.label} ?error=${this.error}></input-label>` : nothing}

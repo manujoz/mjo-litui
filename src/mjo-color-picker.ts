@@ -23,6 +23,8 @@ export class MjoColorPicker extends InputErrorMixin(FormMixin(LitElement)) {
     @query("input") inputElement!: HTMLInputElement;
     @query(".color-picker") colorPicker!: HTMLDivElement;
 
+    type = "colorpicker";
+
     render() {
         return html`
             ${this.label ? html`<input-label color=${this.color} label=${this.label} ?error=${this.error}></input-label>` : nothing}
