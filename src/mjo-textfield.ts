@@ -302,7 +302,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                 color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
                 box-sizing: border-box;
                 flex: 1 1 0;
-                width: inherit;
+                width: 100%;
                 min-width: 0;
             }
             input:focus {
