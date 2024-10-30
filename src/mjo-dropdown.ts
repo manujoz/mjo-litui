@@ -16,6 +16,7 @@ const convertToPx = (value: string | null): string | null => {
 @customElement("mjo-dropdown")
 export class MjoDropdown extends LitElement {
     @property({ type: Boolean }) fullwidth = false;
+    @property({ type: Boolean }) disabled = false;
     @property({ type: Boolean }) preventScroll = false;
     @property({ type: Boolean, reflect: true }) isOpen = false;
     @property({ type: Object }) css?: CSSResult;
@@ -115,7 +116,7 @@ export class MjoDropdown extends LitElement {
     }
 
     #open() {
-        if (this.isOpen) return;
+        if (this.isOpen || this.disabled) return;
 
         if (this.fullwidth && this.dropdownContainer) {
             this.dropdownContainer.width = `${this.offsetWidth}px`;

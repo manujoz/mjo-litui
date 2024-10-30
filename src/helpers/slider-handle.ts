@@ -5,6 +5,7 @@ import { customElement, property } from "lit/decorators.js";
 export class SliderHandle extends LitElement {
     @property({ type: Boolean }) pressed = false;
     @property({ type: Boolean }) tooltip = false;
+    @property({ type: Boolean }) disabled = false;
     @property({ type: Number }) size = 20;
     @property({ type: Number }) left = 0;
     @property({ type: String }) value = "0";
@@ -33,7 +34,9 @@ export class SliderHandle extends LitElement {
                       <div class="text" data-color=${this.color}>${this.valuePrefix}${this.value}${this.valueSuffix}</div>
                   </div>`
                 : nothing}
-            <div class="outter" ?data-pressed=${this.pressed} data-color=${this.color}><div class="inner" ?data-pressed=${this.pressed}></div></div>
+            <div class="outter" ?data-pressed=${this.pressed} data-color=${this.color} ?data-disabled=${this.disabled}>
+                <div class="inner" ?data-pressed=${this.pressed}></div>
+            </div>
         `;
     }
 
@@ -113,6 +116,8 @@ export class SliderHandle extends LitElement {
 
     #handlePress(ev: MouseEvent | TouchEvent) {
         if (ev.type !== "touchstart") ev.preventDefault();
+
+        if (this.disabled) return;
         this.pressed = true;
 
         if (ev.type === "mousedown") {
@@ -221,6 +226,10 @@ export class SliderHandle extends LitElement {
             }
             .outter[data-pressed] {
                 cursor: grabbing;
+            }
+            .outter[data-disabled] {
+                cursor: not-allowed;
+                background-color: var(--mjo-slider-background-color, var(--mjo-border-color-dark, #c7c7c7));
             }
             .inner {
                 position: absolute;

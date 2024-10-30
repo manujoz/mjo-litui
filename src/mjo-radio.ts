@@ -78,15 +78,12 @@ export class MjoRadio extends InputErrorMixin(FormMixin(LitElement)) {
                 position: relative;
             }
             .container[data-disabled] {
-                --mjo-radio-border-color: var(--mjo-color-disabled, #c2c2c2);
-                --mjo-radio-checked-border-color: var(--mjo-color-disabled, #c2c2c2);
-                --mjo-radio-checked-color: var(--mjo-color-disabled, #c2c2c2);
+                opacity: 0.5;
+                cursor: not-allowed;
             }
-            .container[data-disabled] input-helper-text {
-                color: var(--mjo-color-disabled, #c2c2c2);
-            }
+            .container[data-disabled] input-helper-text,
             .container[data-disabled] .label {
-                color: var(--mjo-color-disabled, #c2c2c2);
+                opacity: 0.5;
             }
             .flexContainer {
                 position: relative;
@@ -94,6 +91,9 @@ export class MjoRadio extends InputErrorMixin(FormMixin(LitElement)) {
                 flex-flow: row nowrap;
                 align-items: center;
                 cursor: pointer;
+            }
+            .container[data-disabled] .flexContainer {
+                cursor: not-allowed;
             }
             .box {
                 position: relative;

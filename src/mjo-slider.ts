@@ -16,6 +16,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
     @property({ type: Boolean }) hideValue = false;
     @property({ type: Boolean }) isRange = false;
     @property({ type: Boolean }) tooltip = false;
+    @property({ type: Boolean }) disabled = false;
     @property({ type: Number }) max = 1;
     @property({ type: Number }) min = 0;
     @property({ type: Number }) step = 0.01;
@@ -48,11 +49,19 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
     render() {
         return html`<div class="label">
                 ${this.label
-                    ? html`<input-label color=${this.color} label=${this.label} ?focused=${this.isFocused} ?error=${this.error}></input-label>`
+                    ? html`<input-label
+                          color=${this.color}
+                          label=${this.label}
+                          ?focused=${this.isFocused}
+                          ?error=${this.error}
+                          ?data-disabled=${this.disabled}
+                      ></input-label>`
                     : nothing}
-                ${!this.hideValue ? html`<div class="value">${this.valuePrefix}${this.value}${this.valueSuffix}</div>` : nothing}
+                ${!this.hideValue
+                    ? html`<div class="value" ?data-disabled=${this.disabled}>${this.valuePrefix}${this.value}${this.valueSuffix}</div>`
+                    : nothing}
             </div>
-            <div class="container">
+            <div class="container" ?data-disabled=${this.disabled}>
                 <div ${ref(this.rangebarRef)} class="rangebar">
                     <div class="progress" data-color=${this.color} ${ref(this.progressbarRef)}></div>
                 </div>
@@ -60,6 +69,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                     ${ref(this.sliderOneRef)}
                     @move=${this.#handleMove}
                     ?tooltip=${this.tooltip}
+                    ?disabled=${this.disabled}
                     value=${this.#getSliderValue("one")}
                     valuePrefix=${this.valuePrefix}
                     valueSuffix=${this.valueSuffix}
@@ -71,6 +81,7 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                     ? html`<slider-handle
                           ${ref(this.sliderTwoRef)}
                           @move=${this.#handleMove}
+                          ?disabled=${this.tooltip}
                           ?tooltip=${this.tooltip}
                           value=${this.#getSliderValue("two")}
                           valuePrefix=${this.valuePrefix}
@@ -305,6 +316,11 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                 height: 20px;
                 display: flex;
                 align-items: center;
+            }
+            .container[data-disabled],
+            .value[data-disabled],
+            input-label[data-disabled] {
+                opacity: 0.5;
             }
             .rangebar {
                 position: relative;

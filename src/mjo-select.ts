@@ -59,7 +59,13 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
 
     render() {
         return html`${this.label
-                ? html`<input-label color=${this.color} label=${this.label} ?focused=${this.isFocused} ?error=${this.error}></input-label>`
+                ? html`<input-label
+                      color=${this.color}
+                      label=${this.label}
+                      ?focused=${this.isFocused}
+                      ?error=${this.error}
+                      ?data-disabled=${this.disabled}
+                  ></input-label>`
                 : nothing}
             <mjo-dropdown
                 .html=${html`<options-list
@@ -71,6 +77,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                     @options-list.blur=${() => this.#handleOptionsBlur()}
                     @options-list.filter=${() => this.#handleOptionListFilter()}
                 ></options-list>`}
+                ?disabled=${this.disabled}
                 preventScroll
                 behaviour="click"
                 fullwidth
@@ -78,7 +85,14 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 @close=${this.#handleClose}
                 @click=${this.#handleClick}
             >
-                <div class="container" data-color=${this.color} ?data-focused=${this.isFocused} data-size=${this.size} ?data-error=${this.error}>
+                <div
+                    class="container"
+                    data-color=${this.color}
+                    ?data-focused=${this.isFocused}
+                    data-size=${this.size}
+                    ?data-error=${this.error}
+                    ?data-disabled=${this.disabled}
+                >
                     ${this.prefixText ? html`<div class="prefixText">${this.prefixText}</div>` : nothing}
                     ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
                     ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
@@ -116,7 +130,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                     <div class="icon endIcon arrowDown"><mjo-icon src=${AiOutlineDown}></mjo-icon></div>
                 </div>
             </mjo-dropdown>
-            <div class="helper">
+            <div class="helper" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
                     ? html`<input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
                           >${this.helperText}</input-helper-text
@@ -318,6 +332,14 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
             .container[data-error][data-color="secondary"] {
                 border-color: var(--mjo-color-error, #d31616);
             }
+            .container[data-disabled] {
+                border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
+                opacity: 0.5;
+            }
+            input-label[data-disabled],
+            .helper[data-disabled] {
+                opacity: 0.5;
+            }
             input {
                 position: relative;
                 background-color: transparent;
@@ -330,7 +352,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
                 box-sizing: border-box;
                 flex: 1 1 0;
-                width: inherit;
+                width: 100%;
                 min-width: 0;
                 user-select: none;
             }

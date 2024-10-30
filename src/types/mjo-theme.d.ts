@@ -341,4 +341,6 @@ interface MjoSwitchTheme {
     sizeLarge?: string;
     backgroundColor?: string;
     backgroundColorChecked?: string;
+    ballBackgroundColor?: string;
+    ballBackgroundColorChecked?: string;
 }

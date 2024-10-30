@@ -32,7 +32,14 @@ export class MjoSwitch extends InputErrorMixin(FormMixin(LitElement)) {
     render() {
         return html`
             ${this.label ? html`<input-label color=${this.color} label=${this.label} ?error=${this.error}></input-label>` : nothing}
-            <div class="container" ?data-disabled=${this.disabled} ?data-checked=${this.checked} data-size=${this.size} @click=${this.#handleClick}>
+            <div
+                class="container"
+                data-color=${this.color}
+                ?data-disabled=${this.disabled}
+                ?data-checked=${this.checked}
+                data-size=${this.size}
+                @click=${this.#handleClick}
+            >
                 <div class="checkItem">
                     <mjo-icon src=${GiCheckMark}></mjo-icon>
                 </div>
@@ -104,6 +111,9 @@ export class MjoSwitch extends InputErrorMixin(FormMixin(LitElement)) {
             .container[data-checked] {
                 background-color: var(--mjo-switch-background-color-checked, var(--mjo-primary-color, #007bff));
             }
+            .container[data-checked][data-color="secondary"] {
+                background-color: var(--mjo-switch-background-color-checked, var(--mjo-secondary-color, #007bff));
+            }
             .checkItem {
                 position: absolute;
                 top: 2px;
@@ -111,22 +121,21 @@ export class MjoSwitch extends InputErrorMixin(FormMixin(LitElement)) {
                 border-radius: 50%;
                 width: calc(var(--mjo-switch-size-medium, 28px) - 4px);
                 height: calc(var(--mjo-switch-size-medium, 28px) - 4px);
-                background-color: var(--mjo-switch-background-color, var(--mjo-foreground-color, #ffffff));
+                background-color: var(--mjo-switch-ball-background-color, var(--mjo-foreground-color, #333333));
                 display: grid;
                 place-content: center;
                 transition:
+                    color 0.3s,
                     left 0.3s,
                     width 0.3s;
             }
-            .checkItem mjo-icon {
-                color: var(--mjo-switch-background-color-checked, var(--mjo-primary-color, #007bff));
-                font-size: calc((var(--mjo-switch-size-medium, 28px) - 4px) * 0.6);
-                transform: scale(0);
-                transform-origin: center;
-                transition: transform 0.5s;
-            }
             .container[data-checked] .checkItem {
                 left: calc(100% - var(--mjo-switch-size-medium, 28px) + 2px);
+                background-color: var(--mjo-switch-ball-background-color-checked, var(--mjo-primary-foreground-color, #ffffff));
+            }
+            .container[data-checked][data-color="secondary"] .checkItem {
+                left: calc(100% - var(--mjo-switch-size-medium, 28px) + 2px);
+                background-color: var(--mjo-switch-ball-background-color-checked, var(--mjo-secondary-foreground-color, #ffffff));
             }
             .container[data-size="small"] .checkItem {
                 width: calc(var(--mjo-switch-size-small, 20px) - 4px);
@@ -150,6 +159,16 @@ export class MjoSwitch extends InputErrorMixin(FormMixin(LitElement)) {
             }
             .container[data-checked] .checkItem mjo-icon {
                 transform: scale(1);
+            }
+            .checkItem mjo-icon {
+                color: var(--mjo-switch-background-color-checked, var(--mjo-primary-color, #007bff));
+                font-size: calc((var(--mjo-switch-size-medium, 28px) - 4px) * 0.6);
+                transform: scale(0);
+                transform-origin: center;
+                transition: transform 0.5s;
+            }
+            .container[data-color="secondary"] .checkItem mjo-icon {
+                color: var(--mjo-switch-background-color-checked, var(--mjo-secondary-color, #007bff));
             }
             input {
                 display: none;

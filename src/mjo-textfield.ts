@@ -51,9 +51,22 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
 
     render() {
         return html`${this.label
-                ? html`<input-label color=${this.color} label=${this.label} ?focused=${this.isFocused} ?error=${this.error}></input-label>`
+                ? html`<input-label
+                      color=${this.color}
+                      label=${this.label}
+                      ?focused=${this.isFocused}
+                      ?error=${this.error}
+                      ?data-disabled=${this.disabled}
+                  ></input-label>`
                 : nothing}
-            <div class="container" data-color=${this.color} ?data-focused=${this.isFocused} data-size=${this.size} ?data-error=${this.error}>
+            <div
+                class="container"
+                data-color=${this.color}
+                ?data-focused=${this.isFocused}
+                data-size=${this.size}
+                ?data-error=${this.error}
+                ?data-disabled=${this.disabled}
+            >
                 ${this.prefixText ? html`<div class="prefixText">${this.prefixText}</div>` : nothing}
                 ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
                 ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
@@ -98,7 +111,7 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                     : nothing}
                 ${this.suffixText ? html`<div class="prefixText">${this.suffixText}</div>` : nothing}
             </div>
-            <div class="helper">
+            <div class="helper" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
                     ? html`<input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
                           >${this.helperText}</input-helper-text
@@ -255,6 +268,14 @@ export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) impleme
                 border-style: var(--mjo-input-border-style-hover, solid);
                 border-width: var(--mjo-input-border-width-hover, 1px);
                 border-color: var(--mjo-input-border-color-hover, #cccccc);
+            }
+            .container[data-disabled] {
+                border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
+                opacity: 0.5;
+            }
+            input-label[data-disabled],
+            .helper[data-disabled] {
+                opacity: 0.5;
             }
             .container[data-focused] {
                 border-style: var(--mjo-input-border-style-focus, solid);

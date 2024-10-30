@@ -27,7 +27,9 @@ export class MjoColorPicker extends InputErrorMixin(FormMixin(LitElement)) {
 
     render() {
         return html`
-            ${this.label ? html`<input-label color=${this.color} label=${this.label} ?error=${this.error}></input-label>` : nothing}
+            ${this.label
+                ? html`<input-label color=${this.color} label=${this.label} ?error=${this.error} ?data-disabled=${this.disabled}></input-label>`
+                : nothing}
             <div class="container" ?data-rounded=${this.rounded} data-size=${this.size} ?data-disabled=${this.disabled}>
                 <div class="color-picker"></div>
                 <input
@@ -112,6 +114,9 @@ export class MjoColorPicker extends InputErrorMixin(FormMixin(LitElement)) {
             .container[data-disabled] {
                 opacity: 0.5;
                 filter: grayscale(0.5);
+            }
+            input-label[data-disabled] {
+                opacity: 0.5;
             }
             input {
                 opacity: 0;
