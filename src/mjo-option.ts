@@ -35,7 +35,7 @@ export class MjoOption extends LitElement {
         super.connectedCallback();
 
         if (!this.text) {
-            this.text = this.textContent || this.value;
+            this.text = this.textContent?.trim() || this.value;
         }
     }
 
