@@ -50,6 +50,7 @@ export interface MjoThemeConfig {
         mjoTypography?: TypographyTheme;
         mjoColorPicker?: MjoColorPickerTheme;
         mjoSwitch?: MjoSwitchTheme;
+        mjoMessage?: MjoMessageTheme;
     };
     colors?: {
         /** --mjo-color-white */
@@ -343,4 +344,10 @@ interface MjoSwitchTheme {
     backgroundColorChecked?: string;
     ballBackgroundColor?: string;
     ballBackgroundColorChecked?: string;
+}
+
+interface MjoMessageTheme {
+    backgroundColor?: string;
+    boxShadow?: string;
+    radius?: string;
 }
