@@ -31,7 +31,7 @@ export class MessageContainer extends LitElement {
         css`
             :host {
                 position: fixed;
-                top: 0;
+                top: var(--mjo-message-top, 0);
                 left: 0;
                 right: 0;
                 display: flex;

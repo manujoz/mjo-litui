@@ -349,5 +349,7 @@ interface MjoSwitchTheme {
 interface MjoMessageTheme {
     backgroundColor?: string;
     boxShadow?: string;
+    marginTop?: string;
+    top?: string;
     radius?: string;
 }

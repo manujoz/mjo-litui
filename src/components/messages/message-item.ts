@@ -46,9 +46,11 @@ export class MessageItem extends LitElement {
         clearTimeout(this.timeOut!);
         this.removing = true;
 
+        const marginTop = window.getComputedStyle(this).marginTop;
+
         this.style.animation = "none";
         this.style.opacity = "1";
-        this.style.marginTop = "15px";
+        this.style.marginTop = marginTop;
         this.style.transition = "margin 0.5s, opacity 0.3s";
 
         setTimeout(() => {
@@ -71,7 +73,7 @@ export class MessageItem extends LitElement {
                 background-color: var(--mjo-message-background-color, var(--mjo-background-color-dark, #ffffff));
                 box-shadow: var(--mjo-message-box-shadow, var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1)));
                 border-radius: var(--mjo-message-radius, var(--mjo-radius-large, 4px));
-                margin: 15px 0 0;
+                margin: var(--mjo-message-margin-top, 15px) 0 0;
                 padding: 7px 15px;
                 max-width: 90vw;
                 box-sizing: border-box;
@@ -85,7 +87,7 @@ export class MessageItem extends LitElement {
                 }
                 to {
                     opacity: 1;
-                    margin-top: 15px;
+                    margin-top: var(--mjo-message-margin-top, 15px);
                 }
             }
 
