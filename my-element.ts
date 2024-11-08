@@ -3,11 +3,12 @@ import { MjoFormSubmitEvent } from "./src/types/mjo-form";
 
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch";
+import { repeat } from "lit/directives/repeat.js";
 
+import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch";
+import { InputsValidatorMessages, ValidatorMessages } from "./src/types/validator.js";
 import { theme } from "./theme.js";
 
-import { repeat } from "lit/directives/repeat.js";
 import "./src/mjo-alert.js";
 import "./src/mjo-avatar.js";
 import "./src/mjo-button.js";
@@ -18,14 +19,14 @@ import "./src/mjo-dropdown.js";
 import "./src/mjo-form.js";
 import "./src/mjo-image.js";
 import "./src/mjo-message.js";
-import { MjoMessage } from "./src/mjo-message.js";
+import "./src/mjo-notification.js";
+import { MjoNotification } from "./src/mjo-notification.js";
 import "./src/mjo-select.js";
 import "./src/mjo-slider.js";
 import "./src/mjo-switch.js";
 import "./src/mjo-textarea.js";
 import "./src/mjo-textfield.js";
 import "./src/mjo-theme.js";
-import { InputsValidatorMessages, ValidatorMessages } from "./src/types/validator.js";
 
 const messages: Partial<ValidatorMessages> = {
     required: "Este campo es obligatorio",
@@ -144,7 +145,8 @@ export class MyElement extends LitElement {
                     </mjo-form>
                 </div>
             </div>
-            <mjo-message></mjo-message> `;
+            <mjo-message></mjo-message>
+            <mjo-notification></mjo-notification> `;
     }
 
     @state() html = this.renderHtml(1);
@@ -164,22 +166,42 @@ export class MyElement extends LitElement {
     }
 
     protected firstUpdated(): void {
-        const message = this.shadowRoot?.querySelector("mjo-message") as MjoMessage;
+        // const message = this.shadowRoot?.querySelector("mjo-message") as MjoMessage;
+        // setTimeout(() => {
+        //     message.controller.show({ message: "Hola mundo", type: "info" });
+        //     setTimeout(() => {
+        //         message.controller.show({ message: "Hola mundo", type: "warning" });
+        //     }, 1000);
+        //     setTimeout(() => {
+        //         message.controller.show({ message: "Hola mundo", type: "error", time: 5000 });
+        //     }, 1500);
+        //     setTimeout(() => {
+        //         message.controller.show({ message: "Hola mundo", type: "success" });
+        //     }, 2000);
+        //     setTimeout(() => {
+        //         message.controller.show({ message: "Hola mundo", type: "info" });
+        //     }, 2500);
+        // }, 1000);
+
+        const notification = this.shadowRoot?.querySelector("mjo-notification") as MjoNotification;
         setTimeout(() => {
-            message.controller.show({ message: "Hola mundo", type: "info" });
-            setTimeout(() => {
-                message.controller.show({ message: "Hola mundo", type: "warning" });
-            }, 1000);
-            setTimeout(() => {
-                message.controller.show({ message: "Hola mundo", type: "error", time: 5000 });
-            }, 1500);
-            setTimeout(() => {
-                message.controller.show({ message: "Hola mundo", type: "success" });
-            }, 2000);
-            setTimeout(() => {
-                message.controller.show({ message: "Hola mundo", type: "info" });
-            }, 2500);
-        }, 1000);
+            notification.controller.show({ message: "Hola mundo", type: "info", title: "Este es el título" });
+        }, 2000);
+        setTimeout(() => {
+            notification.controller.show({ message: "Hola mundo 2", type: "error", title: "Este es el título" });
+        }, 5000);
+        setTimeout(() => {
+            notification.controller.show({ message: "Hola mundo 2", type: "warning", title: "Este es el título" });
+        }, 6000);
+        setTimeout(() => {
+            notification.controller.show({ message: "Hola mundo 2", type: "success", title: "Este es el título", time: 5000 });
+        }, 7000);
+        setTimeout(() => {
+            notification.controller.show({
+                message: html`<mjo-icon src=${AiOutlineSearch}></mjo-icon> Adios amigo
+                    <p>Adios amigo</p>`,
+            });
+        }, 9000);
     }
 
     #handleFocus(ev: FocusEvent) {
@@ -284,6 +306,9 @@ export class MyElement extends LitElement {
             min-width: 100vw;
             margin: 0 auto;
             text-align: center;
+        }
+        mjo-notification {
+            --mjo-notification-margin: 11px;
         }
         .container {
             position: relative;

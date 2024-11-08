@@ -2,11 +2,11 @@ import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
-import { AiFillCheckCircle } from "mjo-icons/ai/AiFillCheckCircle";
-import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle";
-import { AiFillInfoCircle } from "mjo-icons/ai/AiFillInfoCircle";
-import { AiFillWarning } from "mjo-icons/ai/AiFillWarning";
-import { AiOutlineClose } from "mjo-icons/ai/AiOutlineClose";
+import { AiFillCheckCircle } from "mjo-icons/ai/AiFillCheckCircle.js";
+import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
+import { AiFillInfoCircle } from "mjo-icons/ai/AiFillInfoCircle.js";
+import { AiFillWarning } from "mjo-icons/ai/AiFillWarning.js";
+import { AiOutlineClose } from "mjo-icons/ai/AiOutlineClose.js";
 
 @customElement("mjo-alert")
 export class MjoAlert extends LitElement {

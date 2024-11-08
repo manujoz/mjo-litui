@@ -1,5 +1,6 @@
 import type { MessageContainer } from "../components/messages/message-container";
 import type { MjoMessage } from "../mjo-message";
+import { MessageShowParams } from "../types/mjo-message";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
 
@@ -11,7 +12,7 @@ export class MessageController implements ReactiveController {
         (this.host = host).addController(this);
     }
 
-    show({ message, type = "info", time }: { message: string; type?: "info" | "warning" | "error" | "success"; time?: number }) {
+    show({ message, type = "info", time }: MessageShowParams) {
         this.messageContainer.show({ message, type, time });
     }
 

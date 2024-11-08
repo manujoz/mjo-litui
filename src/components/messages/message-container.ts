@@ -1,3 +1,4 @@
+import { MessageShowParams } from "../../types/mjo-message.js";
 import type { MessageItem } from "./message-item.js";
 
 import { LitElement, css, html } from "lit";
@@ -13,7 +14,7 @@ export class MessageContainer extends LitElement {
         return html`<div class="container"></div>`;
     }
 
-    show({ message, type = "info", time }: { message: string; type?: "info" | "warning" | "error" | "success"; time?: number }) {
+    show({ message, type = "info", time }: MessageShowParams) {
         const messageItem = document.createElement("message-item") as MessageItem;
         messageItem.message = message;
         messageItem.type = type;
