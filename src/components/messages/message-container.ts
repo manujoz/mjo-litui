@@ -4,10 +4,12 @@ import type { MessageItem } from "./message-item.js";
 import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
 
+import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+
 import "./message-item.js";
 
 @customElement("message-container")
-export class MessageContainer extends LitElement {
+export class MessageContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @query(".container") container!: HTMLDivElement;
 
     render() {

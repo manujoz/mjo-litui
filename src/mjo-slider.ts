@@ -8,11 +8,12 @@ import { createRef, ref } from "lit/directives/ref.js";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./helpers/slider-handle.js";
 
 @customElement("mjo-slider")
-export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements IInputErrorMixin, IFormMixin {
+export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: Boolean }) hideValue = false;
     @property({ type: Boolean }) isRange = false;
     @property({ type: Boolean }) tooltip = false;
@@ -334,11 +335,11 @@ export class MjoSlider extends InputErrorMixin(FormMixin(LitElement)) implements
                 top: 0;
                 left: 0;
                 height: 100%;
-                background-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #007bff));
+                background-color: var(--mjo-slider-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #007bff)));
                 border-radius: inherit;
             }
             .progress[data-color="secondary"] {
-                background-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #ff8800));
+                background-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #ff8800)));
             }
         `,
     ];

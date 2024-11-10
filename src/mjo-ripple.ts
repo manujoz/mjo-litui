@@ -1,8 +1,10 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+
 @customElement("mjo-ripple")
-export class MjoRipple extends LitElement {
+export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
     parent?: HTMLElement;
     timeoutRipple?: NodeJS.Timeout;
 

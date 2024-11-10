@@ -26,9 +26,27 @@ export class InputHelperText extends LitElement {
                 position: relative;
                 display: block;
                 text-align: left;
-                font-size: var(--mjo-input-helper-font-size, calc(1em * 0.8));
-                font-weight: var(--mjo-input-helper-font-weight, normal);
-                color: var(--mjo-input-helper-color, currentColor);
+                font-size: var(
+                    --mjo-radio-helper-font-size,
+                    var(
+                        --mjo-checkbox-helper-font-size,
+                        var(--mjo-switch-helper-font-size, var(--mjo-textarea-helper-font-size, var(--mjo-input-helper-font-size, calc(1em * 0.8))))
+                    )
+                );
+                font-weight: var(
+                    --mjo-radio-helper-font-weight,
+                    var(
+                        --mjo-checkbox-helper-font-weight,
+                        var(--mjo-switch-helper-font-weight, var(--mjo-textarea-helper-font-weight, var(--mjo-input-helper-font-weight, normal)))
+                    )
+                );
+                color: var(
+                    --mjo-radio-helper-color,
+                    var(
+                        --mjo-checkbox-helper-color,
+                        var(--mjo-switch-helper-color, var(--mjo-textarea-helper-color, var(--mjo-input-helper-color, currentColor)))
+                    )
+                );
                 line-height: calc(1em * 1.2);
                 max-width: 100%;
             }

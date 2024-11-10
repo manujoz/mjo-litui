@@ -1,7 +1,9 @@
-import { type MjoDropdown } from "../mjo-dropdown";
+import { type MjoDropdown } from "../../mjo-dropdown";
 
 import { LitElement, TemplateResult, css, html, nothing, type CSSResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
+
+import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
 import {
     getLeftInCenterPOsition,
@@ -10,10 +12,10 @@ import {
     getTopInBottomPosition,
     getTopInMiddlePosition,
     getTopInTopPosition,
-} from "../utils/dropdown.js";
+} from "../../utils/dropdown.js";
 
 @customElement("dropdow-container")
-export class DropdowContainer extends LitElement {
+export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Object }) css?: CSSResult;
     @property({ type: Object }) html?: TemplateResult<1>;
     @property({ type: String }) position: DropdownPositions = "center-bottom";
@@ -41,7 +43,7 @@ export class DropdowContainer extends LitElement {
             ? html`<style type="text/css">
                   ${this.css.toString().replace(/\s+/g, " ")}
               </style>`
-            : nothing}${this.html ? this.html : nothing}`;
+            : nothing}${this.html ? html`<div class="container">${this.html}</div>` : nothing}`;
     }
 
     connectedCallback(): void {
@@ -194,13 +196,16 @@ export class DropdowContainer extends LitElement {
                 position: absolute;
                 transition: all 0.3s;
                 opacity: 0;
-                background-color: var(--mjo-dropdown-background-color, var(--mjo-background-color, white));
-                box-shadow: var(--mjo-dropdown-box-shadow, var(--mjo-box-shadow, 0px 0px 7px rgba(0, 0, 0, 0.5)));
-                border-radius: var(--mjo-dropdown-radius, var(--mjo-radius-medium, 5px));
                 transform-origin: top center;
                 max-width: calc(100vw - 20px);
+                box-shadow: var(--mjo-dropdown-box-shadow, var(--mjo-box-shadow, 0px 0px 7px rgba(0, 0, 0, 0.5)));
+                border-radius: var(--mjo-dropdown-radius, var(--mjo-radius-medium, 5px));
                 overflow-x: hidden;
                 overflow-y: auto;
+            }
+            .container {
+                background-color: var(--dropdow-container-background-color, var(--mjo-dropdown-background-color, var(--mjo-background-color, white)));
+                overflow: hidden;
             }
         `,
     ];

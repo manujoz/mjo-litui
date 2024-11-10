@@ -13,10 +13,11 @@ import "./helpers/input-counter.js";
 import "./helpers/input-helper-text.js";
 import "./helpers/input-label.js";
 
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import "./mjo-icon.js";
 
 @customElement("mjo-textfield")
-export class MjoTextfield extends InputErrorMixin(FormMixin(LitElement)) implements IInputErrorMixin, IFormMixin {
+export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: String }) autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
     @property({ type: String }) autoComplete?: AutoFillContactField;
     @property({ type: Boolean }) autoFocus = false;

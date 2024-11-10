@@ -2,8 +2,9 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { FormMixin } from "./mixins/form-mixin";
-import { InputErrorMixin } from "./mixins/input-error";
+import { FormMixin, IFormMixin } from "./mixins/form-mixin";
+import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import { GiCheckMark } from "mjo-icons/gi/GiCheckMark.js";
 
@@ -12,7 +13,7 @@ import "./helpers/input-label.js";
 import "./mjo-icon.js";
 
 @customElement("mjo-switch")
-export class MjoSwitch extends InputErrorMixin(FormMixin(LitElement)) {
+export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
     @property({ type: String }) color: "primary" | "secondary" = "primary";
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: Boolean, reflect: true }) checked = false;
@@ -91,10 +92,10 @@ export class MjoSwitch extends InputErrorMixin(FormMixin(LitElement)) {
                 position: relative;
                 height: var(--mjo-switch-size-medium, 28px);
                 background-color: var(--mjo-switch-background-color, var(--mjo-background-color-light, #dddddd));
-                border-radius: var(--mjo-switch-border-radius, 50px);
-                border-style: var(--mjo-input-border-style, solid);
-                border-width: var(--mjo-input-border-width, 1px);
-                border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
+                border-radius: var(--mjo-switch-radius, 50px);
+                border-style: var(--mjo-switch-border-style, var(--mjo-input-border-style, solid));
+                border-width: var(--mjo-switch-border-width, var(--mjo-input-border-width, 1px));
+                border-color: var(--mjo-switch-border-color, var(--mjo-input-border-color, var(--mjo-border-color, #dddddd)));
                 transition: background-color 0.3s;
                 cursor: pointer;
             }

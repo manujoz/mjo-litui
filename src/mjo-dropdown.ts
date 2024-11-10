@@ -1,12 +1,13 @@
-import { type DropdowContainer } from "./helpers/dropdow-container";
+import { type DropdowContainer } from "./components/dropdwon/dropdow-container";
 import { type MjoTheme } from "./mjo-theme.js";
 
 import { CSSResult, LitElement, TemplateResult, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { searchClosestElement } from "./utils/shadow-dom.js";
 
-import "./helpers/dropdow-container.js";
+import "./components/dropdwon/dropdow-container.js";
 
 const convertToPx = (value: string | null): string | null => {
     if (value === null) return value;
@@ -14,7 +15,7 @@ const convertToPx = (value: string | null): string | null => {
 };
 
 @customElement("mjo-dropdown")
-export class MjoDropdown extends LitElement {
+export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: Boolean }) disabled = false;
     @property({ type: Boolean }) preventScroll = false;
@@ -153,6 +154,8 @@ export class MjoDropdown extends LitElement {
         this.dropdownContainer.html = this.html;
         this.dropdownContainer.css = this.css;
         this.dropdownContainer.preventScroll = this.preventScroll;
+
+        if (this.theme) this.dropdownContainer.theme = this.theme as Record<string, string>;
 
         if (this.width) this.dropdownContainer.style.width = this.width;
 

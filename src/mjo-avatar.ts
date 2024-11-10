@@ -2,10 +2,12 @@ import { LitElement, TemplateResult, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+
 import { AiOutlineUser } from "mjo-icons/ai/AiOutlineUser.js";
 
 @customElement("mjo-avatar")
-export class MjoAvatar extends LitElement {
+export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) bordered = false;
     @property({ type: Boolean }) disabled = false;
     @property({ type: Boolean }) showFallback = false;

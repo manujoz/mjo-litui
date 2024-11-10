@@ -1,8 +1,9 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
 
 @customElement("mjo-option")
-export class MjoOption extends LitElement {
+export class MjoOption extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) value = "";
     @property({ type: String }) text = "";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
@@ -57,28 +58,37 @@ export class MjoOption extends LitElement {
                 flex-flow: row nowrap;
                 overflow: hidden;
                 position: relative;
-                padding: var(--mjo-select-option-padding, 5px);
-                gap: var(--mjo-select-option-padding, 5px);
+                padding: var(--mjo-option-option-padding, var(--mjo-select-option-padding, 5px));
+                gap: var(--mjo-option-option-padding, var(--mjo-select-option-padding, 5px));
                 transition: background-color 0.2s;
                 color: var(--mjo-foreground-color);
             }
             .container[data-preselected],
             .container:hover {
-                background-color: var(--mjo-select-option-preselected-background-color, var(--mjo-background-color-hover, #eeeeee));
-                color: var(--mjo-select-option-preselected-color, var(--mjo-foreground-color, currentColor));
+                background-color: var(
+                    --mjo-option-option-preselected-background-color,
+                    var(--mjo-select-option-preselected-background-color, var(--mjo-background-color-hover, #eeeeee))
+                );
+                color: var(--mjo-option-option-preselected-color, var(--mjo-select-option-preselected-color, var(--mjo-foreground-color, currentColor)));
             }
             .container[data-selected] {
-                background-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
-                color: var(--mjo-select-option-selected-primary-color, var(--mjo-primary-foreground-color, white));
+                background-color: var(--mjo-option-option-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)));
+                color: var(
+                    --mjo-option-option-selected-primary-color,
+                    var(--mjo-select-option-selected-primary-color, var(--mjo-primary-foreground-color, white))
+                );
             }
             .container[data-color="secondary"][data-selected] {
-                background-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #1d7fdb));
-                color: var(--mjo-select-option-selected-secondary-color, var(--mjo-secondary-foreground-color, white));
+                background-color: var(--mjo-option-option-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #1d7fdb)));
+                color: var(
+                    --mjo-option-option-selected-secondary-color,
+                    var(--mjo-select-option-selected-secondary-color, var(--mjo-secondary-foreground-color, white))
+                );
             }
             .option {
                 position: relative;
                 user-select: none;
-                font-size: var(--mjo-select-option-font-size, 0.8em);
+                font-size: var(--mjo-option-option-font-size, var(--mjo-select-option-font-size, 0.8em));
             }
             .icon {
                 position: relative;
@@ -104,7 +114,7 @@ export class MjoOption extends LitElement {
                 padding-right: calc(1em / 2 - 4px);
             }
             mjo-icon {
-                font-size: var(--mjo-input-font-size, 1em);
+                font-size: var(--mjo-option-option-font-size, var(--mjo-select-option-font-size, var(--mjo-input-font-size, 1em)));
             }
         `,
     ];

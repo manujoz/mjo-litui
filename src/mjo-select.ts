@@ -1,6 +1,7 @@
 import { type OptionsList } from "./helpers/options-list.js";
 import { type MjoDropdown } from "./mjo-dropdown.js";
 import { type MjoOption } from "./mjo-option.js";
+import { type MjoDropdownTheme } from "./types/mjo-theme.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
@@ -12,13 +13,14 @@ import { AiOutlineDown } from "mjo-icons/ai/AiOutlineDown.js";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./helpers/options-list.js";
 import "./mjo-dropdown.js";
 import "./mjo-option.js";
 
 @customElement("mjo-select")
-export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements IInputErrorMixin, IFormMixin {
+export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: Boolean }) autoFocus = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean }) fullwidth = false;
@@ -38,6 +40,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
     @property({ type: Boolean }) selectOnFocus = false;
     @property({ type: Boolean }) clearabled = false;
     @property({ type: Boolean }) searchable = false;
+    @property({ type: Object }) dropDownTheme?: MjoDropdownTheme;
 
     @state() private isFocused = false;
     @state() private open = false;
@@ -74,6 +77,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                     .mjoSelect=${this}
                     ?searchable=${this.searchable}
                     ?open=${this.open}
+                    .theme=${this.theme}
                     @options-list.blur=${() => this.#handleOptionsBlur()}
                     @options-list.filter=${() => this.#handleOptionListFilter()}
                 ></options-list>`}
@@ -81,6 +85,7 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
                 preventScroll
                 behaviour="click"
                 fullwidth
+                .theme=${this.dropDownTheme}
                 @open=${this.#handleOpen}
                 @close=${this.#handleClose}
                 @click=${this.#handleClick}
@@ -277,6 +282,10 @@ export class MjoSelect extends InputErrorMixin(FormMixin(LitElement)) implements
         if (!options.length) return;
 
         this.options = Array.from(options) as MjoOption[];
+
+        this.options.forEach((option) => {
+            option.theme = this.theme;
+        });
     }
 
     static styles = [

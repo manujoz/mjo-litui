@@ -33,24 +33,26 @@ export interface MjoThemeConfig {
     spaceXXLarge?: string;
     components?: {
         mjoAvatar?: MjoAvatarTheme;
-        mjoCheckbox?: MjoCheckboxTheme;
         mjoButton?: MjoButtonTheme;
+        mjoCard?: MjoCardTheme;
+        mjoCheckbox?: MjoCheckboxTheme;
         mjoChip?: MjoChipTheme;
+        mjoColorPicker?: MjoColorPickerTheme;
         mjoDropdown?: MjoDropdownTheme;
         mjoIcon?: MjoIconTheme;
         mjoImage?: MjoImageTheme;
         mjoIonic?: MjoIonicTheme;
+        mjoMessage?: MjoMessageTheme;
+        mjoNotification?: MjoNotificationTheme;
         mjoRadio?: MjoRadioTheme;
         mjoRipple?: MjoRippleTheme;
         mjoSelect?: MjoSelectTheme;
         mjoSlider?: MjoSliderTheme;
+        mjoSwitch?: MjoSwitchTheme;
         mjoTable?: MjoTableTheme;
         mjoTextarea?: MjoTextaraTheme;
         mjoTextfield?: MjoInputTheme;
         mjoTypography?: TypographyTheme;
-        mjoColorPicker?: MjoColorPickerTheme;
-        mjoSwitch?: MjoSwitchTheme;
-        mjoMessage?: MjoMessageTheme;
     };
     colors?: {
         /** --mjo-color-white */
@@ -156,9 +158,9 @@ type MjoThemeBoxShadow = {
     "5"?: string;
 };
 
-interface MjoAvatarTheme {
+export interface MjoAvatarTheme {
     backgroundColor?: string;
-    borderWith?: string;
+    borderWidth?: string;
     fallbackColor?: string;
     fallbackSizeSmall?: string;
     fallbackSizeMedium?: string;
@@ -172,7 +174,7 @@ interface MjoAvatarTheme {
     sizeLarge?: string;
 }
 
-interface MjoButtonTheme {
+export interface MjoButtonTheme {
     disabledBackgroundColor?: string;
     disabledForegroundColor?: string;
     fontFamily?: string;
@@ -190,13 +192,19 @@ interface MjoButtonTheme {
     secondaryForegroundColor?: string;
 }
 
-interface MjoCheckboxTheme {
+export interface MjoCheckboxTheme {
     borderColor?: string;
     checkedColor?: string;
     checkedBorderColor?: string;
+    helperColor?: string;
+    helperFontSize?: string;
+    helperFontWeight?: string;
+    labelColor?: string;
+    labelFontSize?: string;
+    labelFontWeight?: string;
 }
 
-interface MjoChipTheme {
+export interface MjoChipTheme {
     borderWidthSizeSmall?: string;
     borderWidthSizeMedium?: string;
     borderWidthSizeLarge?: string;
@@ -210,29 +218,29 @@ interface MjoChipTheme {
     padding?: string;
 }
 
-interface MjoDropdownTheme {
+export interface MjoDropdownTheme {
     backgroundColor?: string;
     radius?: string;
     boxShadow?: string;
 }
 
-interface MjoIconTheme {
+export interface MjoIconTheme {
     transition?: string;
 }
 
-interface MjoImageTheme {
+export interface MjoImageTheme {
     errorBackgroundColor?: string;
     errorRadius?: string;
 }
 
-interface MjoIonicTheme {
+export interface MjoIonicTheme {
     colorOne?: string;
     colorTwo?: string;
     colorThree?: string;
     radius?: string;
 }
 
-interface MjoInputTheme {
+export interface MjoInputTheme {
     backgroundColor?: string;
     borderColor?: string;
     borderColorHover?: string;
@@ -261,24 +269,39 @@ interface MjoInputTheme {
     radius?: string;
 }
 
-interface MjoRadioTheme {
+export interface MjoRadioTheme {
     borderColor?: string;
     checkedColor?: string;
     checkedBorderColor?: string;
+    helperColor?: string;
+    helperFontSize?: string;
+    helperFontWeight?: string;
+    labelColor?: string;
+    labelFontSize?: string;
+    labelFontWeight?: string;
 }
 
-interface MjoRippleTheme {
+export interface MjoRippleTheme {
     color?: string;
     opacity?: string;
 }
 
-interface MjoSliderTheme {
+export interface MjoSliderTheme {
     backgroundColor?: string;
     radius?: string;
     progressColor?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
+    labelColor?: string;
+    labelFontSize?: string;
+    labelFontWeight?: string;
+    primaryColor?: string;
+    primaryForegroundColor?: string;
+    secondaryColor?: string;
+    secondaryForegroundColor?: string;
 }
 
-interface MjoSelectTheme {
+export interface MjoSelectTheme extends MjoInputTheme {
     arrowColor?: string;
     optionPadding?: string;
     optionPreselectedBackgroundColor?: string;
@@ -286,9 +309,11 @@ interface MjoSelectTheme {
     optionSelectedPrimaryColor?: string;
     optionSelectedSecondaryColor?: string;
     optionFontSize?: string;
+    optionPrimaryColor?: string;
+    optionSecondaryColor?: string;
 }
 
-interface MjoTableTheme {
+export interface MjoTableTheme {
     backgroundColor?: string;
     foregroundColor?: string;
     headerFontSize?: string;
@@ -306,20 +331,28 @@ interface MjoTableTheme {
     noDataWidth?: string;
 }
 
-interface MjoTextaraTheme {
+export interface MjoTextaraTheme extends MjoInputTheme {
     padding?: string;
     paddingSmall?: string;
     paddingLarge?: string;
 }
 
-interface MjoColorPickerTheme {
+export interface MjoColorPickerTheme {
     height?: string;
     sizeSmall?: string;
     sizeMedium?: string;
     sizeLarge?: string;
+    borderStyle?: string;
+    borderWidth?: string;
+    borderColor?: string;
+    radius?: string;
+    boxShadow?: string;
+    labelColor?: string;
+    labelFontSize?: string;
+    labelFontWeight?: string;
 }
 
-interface TypographyTheme {
+export interface TypographyTheme {
     h1FontSize?: string;
     h1FontWeight?: string;
     h2FontSize?: string;
@@ -336,7 +369,7 @@ interface TypographyTheme {
     pFontWeight?: string;
 }
 
-interface MjoSwitchTheme {
+export interface MjoSwitchTheme {
     sizeMedium?: string;
     sizeSmall?: string;
     sizeLarge?: string;
@@ -344,12 +377,46 @@ interface MjoSwitchTheme {
     backgroundColorChecked?: string;
     ballBackgroundColor?: string;
     ballBackgroundColorChecked?: string;
+    radius?: string;
+    borderStyle?: string;
+    borderWidth?: string;
+    borderColor?: string;
+    helperColor?: string;
+    helperFontSize?: string;
+    helperFontWeight?: string;
+    labelColor?: string;
+    labelFontSize?: string;
+    labelFontWeight?: string;
 }
 
-interface MjoMessageTheme {
+export interface MjoMessageTheme {
     backgroundColor?: string;
     boxShadow?: string;
     marginTop?: string;
     top?: string;
     radius?: string;
+}
+
+export interface MjoNotificationTheme {
+    backgroundColor?: string;
+    boxShadow?: string;
+    radius?: string;
+    margin?: string;
+    titleFontSize?: string;
+    titleFontWeight?: string;
+    titleColor?: string;
+    closeHoverBackgroundColor?: string;
+    messageFontSize?: string;
+    messageColor?: string;
+}
+
+export interface MjoCardTheme {
+    backgroundColor?: string;
+    backgroundColorLow?: string;
+    backgroundColorHigh?: string;
+    radiusSmall?: string;
+    radiusMedium?: string;
+    radiusLarge?: string;
+    padding?: string;
+    boxShadow?: string;
 }

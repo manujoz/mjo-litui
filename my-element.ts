@@ -27,6 +27,7 @@ import "./src/mjo-switch.js";
 import "./src/mjo-textarea.js";
 import "./src/mjo-textfield.js";
 import "./src/mjo-theme.js";
+import { MjoAvatarTheme, MjoSelectTheme } from "./src/types/mjo-theme.js";
 
 const messages: Partial<ValidatorMessages> = {
     required: "Este campo es obligatorio",
@@ -55,7 +56,13 @@ export class MyElement extends LitElement {
                 </mjo-theme>
 
                 <div style="padding: 20px;">
-                    <mjo-avatar size="small" name="Á" bordered nameColoured></mjo-avatar>
+                    <mjo-avatar
+                        size="small"
+                        name="Á"
+                        bordered
+                        nameColoured
+                        .theme=${{ backgroundColor: "red", borderWidth: "5px" } as MjoAvatarTheme}
+                    ></mjo-avatar>
                 </div>
                 <div>
                     <mjo-form @submit=${this.#handleSubmit} .errmessages=${messages} .inputsErrmessages=${inputsMessages}>
@@ -71,7 +78,14 @@ export class MyElement extends LitElement {
                                           (option) => html`<mjo-option value=${option.value}>${option.inner}</mjo-option>`,
                                       )}
                             </mjo-select>
-                            <mjo-select name="select1" label="Este es el select" searchable @change=${this.#handleChange} @focus=${this.#handleFocus}>
+                            <mjo-select
+                                name="select1"
+                                label="Este es el select"
+                                searchable
+                                .dropDownTheme=${{ backgroundColor: "red" } as MjoSelectTheme}
+                                @change=${this.#handleChange}
+                                @focus=${this.#handleFocus}
+                            >
                                 <mjo-option value="">Selecciona...</mjo-option>
                                 <mjo-option value="1">Barcelona</mjo-option>
                                 <mjo-option value="2">Madrid</mjo-option>
@@ -138,6 +152,7 @@ export class MyElement extends LitElement {
                         </p>
                         <p>
                             <mjo-switch name="switch"></mjo-switch>
+                            <mjo-dropdown theme></mjo-dropdown>
                         </p>
                         <p>
                             <mjo-button size="small" type="submit" startIcon=${AiOutlineSearch} color="primary" variant="dashed">ENVIAR</mjo-button>

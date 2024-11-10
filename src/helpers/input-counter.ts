@@ -27,9 +27,9 @@ export class InputCounter extends LitElement {
         css`
             :host {
                 display: block;
-                font-size: var(--mjo-input-helper-font-size, calc(1em * 0.8));
-                font-weight: var(--mjo-input-helper-font-weight, normal);
-                color: var(--mjo-input-helper-color, var(--mjo-foreground-color-light));
+                font-size: var(--mjo-textarea-helper-font-size, var(--mjo-input-helper-font-size, calc(1em * 0.8)));
+                font-weight: var(--mjo-textarea-helper-font-weight, var(--mjo-input-helper-font-weight, normal));
+                color: var(--mjo-textarea-helper-color, var(--mjo-input-helper-color, var(--mjo-foreground-color-light)));
                 line-height: calc(1em * 1.2);
                 transition: color 0.3s;
             }

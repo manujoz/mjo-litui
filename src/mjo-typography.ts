@@ -1,8 +1,10 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+
 @customElement("mjo-typography")
-export class MjoTypography extends LitElement {
+export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) variant: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" = "p";
 
     render() {

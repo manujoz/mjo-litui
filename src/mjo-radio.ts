@@ -3,13 +3,15 @@ import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { AiFillCheckCircle } from "mjo-icons/ai/AiFillCheckCircle.js";
 
-import { FormMixin } from "./mixins/form-mixin.js";
-import { InputErrorMixin } from "./mixins/input-error.js";
+import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
+import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
+import "./helpers/input-helper-text.js";
 import "./mjo-icon.js";
 
 @customElement("mjo-radio")
-export class MjoRadio extends InputErrorMixin(FormMixin(LitElement)) {
+export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IFormMixin, IInputErrorMixin {
     @property({ type: Boolean, reflect: true }) checked = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;

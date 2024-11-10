@@ -1,12 +1,14 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
+
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+
 import ImageNotAvailable from "./assets/no-image";
 
 @customElement("mjo-image")
-export class MjoImage extends LitElement {
+export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) src = "";
     @property({ type: String }) alt?: string;
     @property({ type: String }) fit: "contain" | "cover" | "fill" | "none" | "scale-down" = "cover";

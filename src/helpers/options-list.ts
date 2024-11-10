@@ -5,15 +5,17 @@ import { type MjoSelect } from "../mjo-select";
 import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
+
 import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch.js";
+import { IThemeMixin, ThemeMixin } from "../mixins/theme-mixin.js";
+import { getDictionary } from "../utils/dictionary.js";
 
 import "../mjo-icon.js";
-import { getDictionary } from "../utils/dictionary.js";
 
 const dictionary = getDictionary(document.querySelector("html")?.lang as keyof typeof locales);
 
 @customElement("options-list")
-export class OptionsList extends LitElement {
+export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Array }) options: MjoOption[] = [];
     @property({ type: Object }) mjoSelect: MjoSelect | null = null;
     @property({ type: Boolean }) searchable = false;

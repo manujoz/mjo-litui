@@ -2,6 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import { FormMixin } from "./mixins/form-mixin.js";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-icon.js";
 import "./mjo-ripple.js";
@@ -13,7 +14,7 @@ import "./mjo-ripple.js";
  * @csspart button - The button
  */
 @customElement("mjo-button")
-export class MjoButton extends FormMixin(LitElement) {
+export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThemeMixin {
     @property({ type: Boolean, reflect: true }) fullwidth = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean, reflect: true }) loading = false;

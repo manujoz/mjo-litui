@@ -1,8 +1,10 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+
 @customElement("mjo-ionic")
-export class MjoIonic extends LitElement {
+export class MjoIonic extends ThemeMixin(LitElement) implements IThemeMixin {
     static styles = [
         css`
             :host {

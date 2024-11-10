@@ -6,10 +6,12 @@ import { repeat } from "lit/directives/repeat.js";
 import { AiFillAlert } from "mjo-icons/ai/AiFillAlert.js";
 import { AiOutlineArrowUp } from "mjo-icons/ai/AiOutlineArrowUp.js";
 
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+
 import "./mjo-icon.js";
 
 @customElement("mjo-table")
-export class MjoTable extends LitElement {
+export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Number }) page = 1;
     @property({ type: Number }) itemsPerPage = 10;
     @property({ type: Array }) headers: MjoTableHeader[] = [];

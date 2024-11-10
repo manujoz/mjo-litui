@@ -1,4 +1,4 @@
-import { type DropdowContainer } from "../helpers/dropdow-container";
+import { type DropdowContainer } from "../components/dropdwon/dropdow-container";
 
 const DROPDOWN_MARGIN = 15;
 

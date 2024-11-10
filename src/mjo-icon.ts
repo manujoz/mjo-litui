@@ -2,8 +2,10 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+
 @customElement("mjo-icon")
-export class MjoIcon extends LitElement {
+export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) src?: string;
 
     render() {

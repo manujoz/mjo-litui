@@ -1,8 +1,10 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+
 @customElement("mjo-card")
-export class MjoCard extends LitElement {
+export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String, noAccessor: true }) contrast?: "low" | "high" | "normal";
     @property({ type: String, noAccessor: true }) radius?: "none" | "small" | "medium" | "large" = "medium";
 
@@ -31,7 +33,7 @@ export class MjoCard extends LitElement {
         css`
             :host {
                 display: block;
-                padding: var(--mjo-space-small);
+                padding: var(--mjo-card-padding, var(--mjo-space-small));
                 box-shadow: var(--mjo-card-box-shadow, var(--mjo-box-shadow-1, inherit));
                 background-color: var(--mjo-card-background-color, var(--mjo-background-color-card, white));
             }

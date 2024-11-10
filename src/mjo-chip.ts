@@ -2,11 +2,12 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-icon.js";
 
 @customElement("mjo-chip")
-export class MjoChip extends LitElement {
+export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) closable = false;
     @property({ type: Boolean }) disabled = false;
     @property({ type: String }) color: "primary" | "secondary" | "default" | "success" | "warning" | "info" | "error" = "default";

@@ -2,14 +2,15 @@ import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { FormMixin } from "./mixins/form-mixin";
-import { InputErrorMixin } from "./mixins/input-error";
+import { FormMixin, IFormMixin } from "./mixins/form-mixin";
+import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
 
 import "./helpers/input-helper-text";
 import "./helpers/input-label";
 
 @customElement("mjo-color-picker")
-export class MjoColorPicker extends InputErrorMixin(FormMixin(LitElement)) {
+export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IFormMixin, IInputErrorMixin, IThemeMixin {
     @property({ type: String }) color: "primary" | "secondary" = "primary";
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
@@ -97,11 +98,11 @@ export class MjoColorPicker extends InputErrorMixin(FormMixin(LitElement)) {
                 width: inherit;
                 width: var(--mjo-color-picker-size-medium, 28px);
                 height: var(--mjo-color-picker-size-medium, 28px);
-                border-style: var(--mjo-input-border-style, solid);
-                border-width: var(--mjo-input-border-width, 1px);
-                border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
-                box-shadow: var(--mjo-input-box-shadow, none);
-                border-radius: var(--mjo-input-radius, var(--mjo-radius, 5px));
+                border-style: var(--mjo-color-picker-border-style, var(--mjo-input-border-style, solid));
+                border-width: var(--mjo-color-picker-border-width, var(--mjo-input-border-width, 1px));
+                border-color: var(--mjo-color-picker-border-color, var(--mjo-input-border-color, var(--mjo-border-color, #dddddd)));
+                box-shadow: var(--mjo-color-picker-box-shadow, var(--mjo-input-box-shadow, none));
+                border-radius: var(--mjo-color-picker-radius, var(--mjo-input-radius, var(--mjo-radius, 5px)));
             }
             .container[data-size="small"] {
                 width: var(--mjo-color-picker-size-small, 20px);

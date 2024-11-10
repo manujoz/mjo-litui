@@ -23,9 +23,36 @@ export class InputLabel extends LitElement {
                 position: relative;
                 display: block;
                 text-align: left;
-                font-size: var(--mjo-input-label-font-size, calc(1em * 0.8));
-                font-weight: var(--mjo-input-label-font-weight, normal);
-                color: var(--mjo-input-label-color, currentColor);
+                font-size: var(
+                    --mjo-color-picker-label-font-size,
+                    var(
+                        --mjo-select-label-font-size,
+                        var(
+                            --mjo-slider-label-font-size,
+                            var(--mjo-switch-label-font-size, var(--mjo-textarea-label-font-size, var(--mjo-input-label-font-size, calc(1em * 0.8))))
+                        )
+                    )
+                );
+                font-weight: var(
+                    --mjo-color-picker-label-font-weight,
+                    var(
+                        --mjo-select-label-font-weight,
+                        var(
+                            --mjo-slider-label-font-weight,
+                            var(--mjo-switch-label-font-weight, var(--mjo-textarea-label-font-weight, var(--mjo-input-label-font-weight, normal)))
+                        )
+                    )
+                );
+                color: var(
+                    --mjo-color-picker-label-color,
+                    var(
+                        --mjo-select-label-color,
+                        var(
+                            --mjo-slider-label-color,
+                            var(--mjo-switch-label-color, var(--mjo-textarea-label-color, var(--mjo-input-label-color, currentColor)))
+                        )
+                    )
+                );
             }
             .container {
                 position: relative;

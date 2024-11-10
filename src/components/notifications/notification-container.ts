@@ -4,10 +4,12 @@ import type { NotificationItem } from "./notification-item";
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
+import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+
 import "./notification-item.js";
 
 @customElement("notification-container")
-export class NotificationContainer extends LitElement {
+export class NotificationContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) position: NotificationPositions = "top-right";
     @property({ type: Number }) threshold = 4;
 
