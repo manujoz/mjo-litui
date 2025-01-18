@@ -2,7 +2,7 @@ import { type locales } from "../locales/locales.js";
 import { type MjoOption } from "../mjo-option.js";
 import { type MjoSelect } from "../mjo-select";
 
-import { LitElement, PropertyValues, css, html, nothing } from "lit";
+import { LitElement, PropertyValues, css, html, isServer, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 
@@ -11,8 +11,6 @@ import { IThemeMixin, ThemeMixin } from "../mixins/theme-mixin.js";
 import { getDictionary } from "../utils/dictionary.js";
 
 import "../mjo-icon.js";
-
-const dictionary = getDictionary(document.querySelector("html")?.lang as keyof typeof locales);
 
 @customElement("options-list")
 export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -25,6 +23,8 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
     @query("input#optionsListsInputSearch") inputElement?: HTMLInputElement;
     @query(".search") searchElement?: HTMLDivElement;
 
+    dictionary!: (typeof locales)["en"];
+
     listeners = {
         keydown: (ev: KeyboardEvent) => {
             this.#handleKeydown(ev);
@@ -36,7 +36,7 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
             ${this.searchable
                 ? html`<div class="search" @click=${this.#handleInputClick}>
                       <div class="input">
-                          <input id="optionsListsInputSearch" type="text" placeholder=${dictionary.search} @input=${this.#hanldeInput} tabindex="0" />
+                          <input id="optionsListsInputSearch" type="text" placeholder=${this.dictionary.search} @input=${this.#hanldeInput} tabindex="0" />
                       </div>
                       <div class="icon">
                           <mjo-icon src=${AiOutlineSearch}></mjo-icon>
@@ -63,6 +63,9 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
 
     connectedCallback(): void {
         super.connectedCallback();
+
+        const lang = isServer ? "en" : (document.querySelector("html")?.lang as keyof typeof locales);
+        this.dictionary = getDictionary(lang);
 
         document.addEventListener("keydown", this.listeners.keydown);
     }
