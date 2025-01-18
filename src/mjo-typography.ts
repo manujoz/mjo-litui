@@ -5,24 +5,25 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
 
 @customElement("mjo-typography")
 export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin {
-    @property({ type: String }) variant: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" = "p";
+    @property({ type: String }) size: "h1" | "h2" | "h3" | "base" | "body1" | "body2" | "body3" = "base";
+    @property({ type: String }) weight: "light" | "regular" | "medium" | "bold" = "regular";
 
     render() {
-        switch (this.variant) {
+        switch (this.size) {
             case "h1":
-                return html`<h1><slot></slot></h1>`;
+                return html`<h1 class=${`${this.weight}`}><slot></slot></h1>`;
             case "h2":
-                return html`<h2><slot></slot></h2>`;
+                return html`<h2 class=${`${this.weight}`}><slot></slot></h2>`;
             case "h3":
-                return html`<h3><slot></slot></h3>`;
-            case "h4":
-                return html`<h4><slot></slot></h4>`;
-            case "h5":
-                return html`<h5><slot></slot></h5>`;
-            case "h6":
-                return html`<h6><slot></slot></h6>`;
+                return html`<h3 class=${`${this.weight}`}><slot></slot></h3>`;
+            case "body1":
+                return html`<p class=${`body1 ${this.weight}`}><slot></slot></p>`;
+            case "body2":
+                return html`<p class=${`body2 ${this.weight}`}><slot></slot></p>`;
+            case "body3":
+                return html`<p class=${`body3 ${this.weight}`}><slot></slot></p>`;
             default:
-                return html`<p><slot></slot></p>`;
+                return html`<p class=${`base ${this.weight}`}><slot></slot></p>`;
         }
     }
 
@@ -31,38 +32,6 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
             :host {
                 display: block;
                 margin: 0.5em 0;
-                font-size: var(--mjo-typography-p-font-size, 1em);
-                font-weight: var(--mjo-typography-p-font-weight, 400);
-            }
-            :host([variant="h1"]) {
-                font-size: var(--mjo-typography-h1-font-size, 2em);
-                font-weight: var(--mjo-typography-h1-font-weight, 500);
-                margin: 0.7em 0;
-            }
-            :host([variant="h2"]) {
-                font-size: var(--mjo-typography-h2-font-size, 1.8em);
-                font-weight: var(--mjo-typography-h2-font-weight, 500);
-                margin: 0.7em 0;
-            }
-            :host([variant="h3"]) {
-                font-size: var(--mjo-typography-h3-font-size, 1.5em);
-                font-weight: var(--mjo-typography-h3-font-weight, 500);
-                margin: 0.7em 0;
-            }
-            :host([variant="h4"]) {
-                font-size: var(--mjo-typography-h4-font-size, 1.3em);
-                font-weight: var(--mjo-typography-h4-font-weight, 500);
-                margin: 0.7em 0;
-            }
-            :host([variant="h5"]) {
-                font-size: var(--mjo-typography-h5-font-size, 1.1em);
-                font-weight: var(--mjo-typography-h5-font-weight, 500);
-                margin: 0.7em 0;
-            }
-            :host([variant="h6"]) {
-                font-size: var(--mjo-typography-h6-font-size, 1em);
-                font-weight: var(--mjo-typography-h6-font-weight, 500);
-                margin: 0.7em 0;
             }
             h1,
             h2,
@@ -71,10 +40,48 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
             h5,
             h6,
             p {
-                font-size: inherit;
-                font-weight: inherit;
                 padding: 0;
                 margin: 0;
+            }
+            h1 {
+                font-size: var(--mjo-typography-h1-font-size, 2em);
+                line-height: var(--mjo-typography-h1-line-height, 2.5em);
+            }
+            h2 {
+                font-size: var(--mjo-typography-h2-font-size, 1.5em);
+                line-height: var(--mjo-typography-h2-line-height, 2em);
+            }
+            h3 {
+                font-size: var(--mjo-typography-h3-font-size, 1.25em);
+                line-height: var(--mjo-typography-h3-line-height, 1.75em);
+            }
+            .bsae {
+                font-size: var(--mjo-typography-base-font-size, 1em);
+                line-height: var(--mjo-typography-base-line-height, 1.5em);
+            }
+            .body1 {
+                font-size: var(--mjo-typography-body1-font-size, 0.875em);
+                line-height: var(--mjo-typography-body1-line-height, 1.375em);
+            }
+            .body2 {
+                font-size: var(--mjo-typography-body2-font-size, 0.75em);
+                line-height: var(--mjo-typography-body2-line-height, 1.25em);
+            }
+            .body3 {
+                font-size: var(--mjo-typography-body3-font-size, 0.625em);
+                line-height: var(--mjo-typography-body3-line-height, 1.125em);
+            }
+            .light {
+                font-weight: var(--mjo-typography-font-weight-light, 300);
+            }
+            .regular {
+                font-weight: var(--mjo-typography-font-weight-regular, 400);
+            }
+            .medium {
+                font-weight: var(--mjo-typography-font-weight-medium, 500);
+            }
+            .bold {
+                font-weight: var(--mjo-typography-font-weight-bold, 700);
             }
         `,
     ];

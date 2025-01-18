@@ -354,19 +354,23 @@ export interface MjoColorPickerTheme {
 
 export interface TypographyTheme {
     h1FontSize?: string;
-    h1FontWeight?: string;
+    h1LineHeight?: string;
     h2FontSize?: string;
-    h2FontWeight?: string;
+    h2LineHeight?: string;
     h3FontSize?: string;
-    h3FontWeight?: string;
-    h4FontSize?: string;
-    h4FontWeight?: string;
-    h5FontSize?: string;
-    h5FontWeight?: string;
-    h6FontSize?: string;
-    h6FontWeight?: string;
-    pFontSize?: string;
-    pFontWeight?: string;
+    h3LineHeight?: string;
+    baseFontSize?: string;
+    baseLineHeight?: string;
+    body1FontSize?: string;
+    body1LineHeight?: string;
+    body2FontSize?: string;
+    body2LineHeight?: string;
+    body3FontSize?: string;
+    body3LineHeight?: string;
+    fontWeightLight?: string;
+    fontWeightRegular?: string;
+    fontWeightMedium?: string;
+    fontWeightBold?: string;
 }
 
 export interface MjoSwitchTheme {
