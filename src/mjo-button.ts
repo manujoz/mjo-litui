@@ -26,7 +26,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     @property({ type: String }) endIcon?: string;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
-    @property({ type: String }) variant: "default" | "ghost" | "dashed" | "link" | "text" = "default";
+    @property({ type: String }) variant: "default" | "ghost" | "dashed" | "link" | "text" | "flat" = "default";
     @property({ type: String }) type: "button" | "submit" | "reset" | "menu" = "button";
 
     @state() private toggle = false;
@@ -141,6 +141,26 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             }
             button[data-variant="ghost"][data-color="secondary"]:hover {
                 background-color: rgba(230, 230, 230, 0.5);
+            }
+            button[data-variant="flat"] {
+                background-color: var(--mjo-button-flat-primary-background-color, var(--mjo-primary-color-alpha2, #1d7fdb22));
+                color: var(--mjo-button-flat-primary-foreground-color, var(--mjo-primary-foreground-color, #ffffff));
+                border: none;
+            }
+            button[data-variant="flat"]:hover {
+                background-color: var(--mjo-button-flat-primary-background-color-hover, var(--mjo-primary-color-alpha1, #1d7fdb22));
+                color: var(--mjo-button-flat-primary-foreground-color-hover, var(--mjo-primary-foreground-color, #ffffff));
+                border: none;
+            }
+            button[data-variant="flat"][data-color="secondary"] {
+                background-color: var(--mjo-button-flat-secondary-background-color, var(--mjo-secondary-color-alpha2, #cc3d7422));
+                color: var(--mjo-button-flat-secondary-foreground-color, var(--mjo-secondary-foreground-color, #ffffff));
+                border: none;
+            }
+            button[data-variant="flat"][data-color="secondary"]:hover {
+                background-color: var(--mjo-button-flat-secondary-background-color-hover, var(--mjo-secondary-color-alpha1, #cc3d7422));
+                color: var(--mjo-button-flat-secondary-foreground-color-hover, var(--mjo-secondary-foreground-color, #ffffff));
+                border: none;
             }
             button[data-variant="dashed"] {
                 background-color: transparent;

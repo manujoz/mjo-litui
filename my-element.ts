@@ -155,7 +155,7 @@ export class MyElement extends LitElement {
                             <mjo-dropdown theme></mjo-dropdown>
                         </p>
                         <p>
-                            <mjo-button size="small" type="submit" startIcon=${AiOutlineSearch} color="primary" variant="dashed">ENVIAR</mjo-button>
+                            <mjo-button size="medium" type="submit" startIcon=${AiOutlineSearch} color="primary" variant="flat">ENVIAR</mjo-button>
                         </p>
                     </mjo-form>
                 </div>

@@ -190,6 +190,14 @@ export interface MjoButtonTheme {
     secondaryColor?: string;
     secondaryColorHover?: string;
     secondaryForegroundColor?: string;
+    flatPrimaryBackgroundColor?: string;
+    flatPrimaryBackgroundColorHover?: string;
+    flatPrimaryForegroundColor?: string;
+    flatPrimaryForegroundColorHover?: string;
+    flatSecondaryBackgroundColor?: string;
+    flatSecondaryBackgroundColorHover?: string;
+    flatSecondaryForegroundColor?: string;
+    flatSecondaryForegroundColorHover?: string;
 }
 
 export interface MjoCheckboxTheme {
