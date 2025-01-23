@@ -32,6 +32,7 @@ export interface MjoThemeConfig {
     /** --mjo-space-xxlarge */
     spaceXXLarge?: string;
     components?: {
+        mjoAlert?: MjoAlertTheme;
         mjoAvatar?: MjoAvatarTheme;
         mjoButton?: MjoButtonTheme;
         mjoCard?: MjoCardTheme;
@@ -43,6 +44,7 @@ export interface MjoThemeConfig {
         mjoImage?: MjoImageTheme;
         mjoIonic?: MjoIonicTheme;
         mjoMessage?: MjoMessageTheme;
+        mjoModal?: MjoModalTheme;
         mjoNotification?: MjoNotificationTheme;
         mjoRadio?: MjoRadioTheme;
         mjoRipple?: MjoRippleTheme;
@@ -100,7 +102,7 @@ type MjoThemeMode = {
     /** --mjo-border-color, --mjo-border-color-light, --mjo-border-color-dark */
     borderColor?: MjoThemeColorSmall | string;
     /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */
-    backgroundColor?: ({ hover: string } & MjoThemeColorSmall) | string;
+    backgroundColor?: ({ hover: string } & MjoThemeColorContrasts) | string;
     /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */
     backgroundColorCard?: MjoThemeColorContrasts | string;
     /** --mjo-foreground-color, --mjo-foreground-color-light, --mjo-foreground-color-dark */
@@ -145,8 +147,10 @@ type MjoThemeColorSmall = {
 
 type MjoThemeColorContrasts = {
     default?: string;
+    xlow?: string;
     low?: string;
     high?: string;
+    xhigh?: string;
 };
 
 type MjoThemeBoxShadow = {
@@ -157,6 +161,10 @@ type MjoThemeBoxShadow = {
     "4"?: string;
     "5"?: string;
 };
+
+export interface MjoAlertTheme {
+    space?: string;
+}
 
 export interface MjoAvatarTheme {
     backgroundColor?: string;
@@ -431,4 +439,13 @@ export interface MjoCardTheme {
     radiusLarge?: string;
     padding?: string;
     boxShadow?: string;
+}
+
+export interface MjoModalTheme {
+    iconCloseSize?: string;
+    titleBorderColor?: string;
+    backgroundColor?: string;
+    radius?: string;
+    boxShadow?: string;
+    width?: string;
 }

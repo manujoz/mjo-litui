@@ -257,7 +257,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                 border-style: var(--mjo-input-border-style, solid);
                 border-width: var(--mjo-input-border-width, 1px);
                 border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
-                background-color: var(--mjo-input-background-color, var(--mjo-background-color-light, #ffffff));
+                background-color: var(--mjo-input-background-color, var(--mjo-background-color-high, #ffffff));
                 box-shadow: var(--mjo-input-box-shadow, none);
                 display: flex;
                 flex-flow: row nowrap;

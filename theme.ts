@@ -32,9 +32,4 @@ export const theme: MjoThemeConfig = {
         },
         secondaryColor: "#f0a34b",
     },
-    components: {
-        mjoButton: {
-            fontSize: "30px",
-        },
-    },
 };

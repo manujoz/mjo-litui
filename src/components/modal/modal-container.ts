@@ -11,7 +11,7 @@ import "../../mjo-typography.js";
 
 @customElement("modal-container")
 export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixin {
-    @property({ type: Boolean }) open = false;
+    @property({ type: Boolean }) isOpen = false;
     @property({ type: String }) titleMsg = "";
     @property({ type: String }) content: string | TemplateResult<1> = "";
 
@@ -35,7 +35,7 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
     }
 
     show({ content, time, title, width, animationDuration, blocked = false }: ModalShowParams) {
-        this.open = true;
+        if (this.isOpen) return;
 
         if (animationDuration) this.#animationDuration = animationDuration;
 
@@ -60,18 +60,20 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
         }
     }
 
+    close() {
+        if (!this.isOpen) return;
+
+        this.#close();
+    }
+
     #handleClose() {
         if (this.blocked) return;
         this.close();
     }
 
-    close() {
-        this.open = false;
-
-        this.#close();
-    }
-
     #open() {
+        this.isOpen = true;
+
         this.style.display = "grid";
 
         this.background.animate([{ opacity: 0 }, { opacity: 1 }], { duration: this.#animationDuration, fill: "forwards" });
@@ -86,6 +88,8 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
     }
 
     #close() {
+        this.isOpen = false;
+
         this.background.animate([{ opacity: 1 }, { opacity: 0 }], { duration: this.#animationDuration, fill: "forwards" });
         this.closeIcon?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: this.#animationDuration, fill: "forwards" });
         this.container.animate(
@@ -123,20 +127,20 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
                 position: absolute;
                 top: var(--mjo-space-small, 5px);
                 right: var(--mjo-space-small, 5px);
-                font-size: var(--mjo-moda-icon-close-size, 30px);
+                font-size: var(--mjo-modal-icon-close-size, 30px);
                 cursor: pointer;
             }
             .title {
                 position: relative;
                 margin: var(--mjo-space-small, 5px);
                 padding-bottom: var(--mjo-space-xsmall, 5px);
-                border-bottom: 1px solid var(--mjo-modal-border-color, var(--mjo-border-color, #ccc));
+                border-bottom: 1px solid var(--mjo-modal-title-border-color, var(--mjo-border-color, #ccc));
             }
             .container {
                 position: relative;
                 background-color: var(--mjo-modal-background-color, var(--mjo-background-color, #fff));
                 box-shadow: var(--mjo-modal-box-shadow, var(--mjo-box-shadow3, 0 0 10px rgba(0, 0, 0, 0.5)));
-                border-radius: var(--mjo-modal-border-radius, var(--mjo-border-radius, 5px));
+                border-radius: var(--mjo-modal-radius, var(--mjo-border-radius, 5px));
                 width: var(--mjo-modal-width, 450px);
                 max-width: calc(100vw - 30px);
                 box-sizing: border-box;

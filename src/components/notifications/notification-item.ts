@@ -87,7 +87,7 @@ export class NotificationItem extends LitElement {
                 position: relative;
                 max-width: 90vw;
                 width: 400px;
-                background-color: var(--mjo-notification-background-color, var(--mjo-background-color-dark, #ffffff));
+                background-color: var(--mjo-notification-background-color, var(--mjo-background-color-low, #ffffff));
                 box-shadow: var(--mjo-notification-box-shadow, var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1)));
                 border-radius: var(--mjo-notification-radius, var(--mjo-radius-large, 4px));
                 overflow: hidden;
@@ -154,7 +154,7 @@ export class NotificationItem extends LitElement {
                 font-size: 20px;
             }
             .close:hover {
-                background-color: var(--mjo-notification-close-hover-background-color, var(--mjo-background-color-light, #f5f5f5));
+                background-color: var(--mjo-notification-close-hover-background-color, var(--mjo-background-color-high, #f5f5f5));
                 border-radius: 3px;
             }
             .message {

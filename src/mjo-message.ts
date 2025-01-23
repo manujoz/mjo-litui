@@ -1,16 +1,13 @@
-import { MjoMessageTheme } from "./types/mjo-theme.js";
-
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 
 import { MessageController } from "./controllers/message-controller.js";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./components/messages/message-container.js";
 
 @customElement("mjo-message")
-export class MjoMessage extends LitElement {
-    @property({ type: Object }) theme?: MjoMessageTheme;
-
+export class MjoMessage extends ThemeMixin(LitElement) implements IThemeMixin {
     controller = new MessageController(this);
 
     render() {

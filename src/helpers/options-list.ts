@@ -225,7 +225,7 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
                 display: flex;
                 align-items: center;
                 z-index: 1;
-                background-color: var(--mjo-dropdown-background-color, var(--mjo-background-color-dark, white));
+                background-color: var(--mjo-dropdown-background-color, var(--mjo-background-color-low, white));
                 box-shadow: var(--mjo-dropdown-box-shadow, var(--mjo-box-shadow-1, 0px 2px 3px rgba(50, 50, 50, 0.5)));
             }
             .input {

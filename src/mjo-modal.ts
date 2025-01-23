@@ -8,7 +8,7 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 export class MjoModal extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) open = false;
 
-    modalController = new ModalController(this);
+    controller = new ModalController(this);
 
     render() {
         return html`<div class="container"><slot></slot></div>`;
