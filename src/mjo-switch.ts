@@ -6,7 +6,7 @@ import { FormMixin, IFormMixin } from "./mixins/form-mixin";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import { GiCheckMark } from "mjo-icons/gi/GiCheckMark.js";
+import { GiCheckMark } from "mjo-icons/gi";
 
 import "./helpers/input-helper-text.js";
 import "./helpers/input-label.js";

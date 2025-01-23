@@ -297,8 +297,10 @@ export const defaultTheme: MjoThemeConfig = {
         },
         foregroundColor: {
             default: "#f0f0f0",
-            light: "#cccccc",
-            dark: "#ffffff",
+            xlow: "#999999",
+            low: "#bbbbbb",
+            high: "#ffffff",
+            xhigh: "#ffffff",
         },
     },
     light: {
@@ -390,8 +392,10 @@ export const defaultTheme: MjoThemeConfig = {
         },
         foregroundColor: {
             default: "#333333",
-            light: "#666666",
-            dark: "#000000",
+            xlow: "#999999",
+            low: "#666666",
+            high: "#151515",
+            xhigh: "#000000",
         },
     },
 };

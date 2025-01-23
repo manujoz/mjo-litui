@@ -3,11 +3,7 @@ import { NotificationPositions, NotificationTypes } from "../../types/mjo-notifi
 import { LitElement, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { AiFillCheckCircle } from "mjo-icons/ai/AiFillCheckCircle.js";
-import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
-import { AiFillInfoCircle } from "mjo-icons/ai/AiFillInfoCircle.js";
-import { AiFillWarning } from "mjo-icons/ai/AiFillWarning.js";
-import { AiOutlineClose } from "mjo-icons/ai/AiOutlineClose.js";
+import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
 
 @customElement("notification-item")
 export class NotificationItem extends LitElement {

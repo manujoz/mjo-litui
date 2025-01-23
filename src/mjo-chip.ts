@@ -1,7 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
+import { AiFillCloseCircle } from "mjo-icons/ai";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-icon.js";

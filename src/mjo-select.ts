@@ -8,8 +8,7 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 import { createRef, ref } from "lit/directives/ref.js";
-import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
-import { AiOutlineDown } from "mjo-icons/ai/AiOutlineDown.js";
+import { AiFillCloseCircle, AiOutlineDown } from "mjo-icons/ai";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";

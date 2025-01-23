@@ -5,10 +5,11 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 
-import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch";
+import { AiOutlineSearch } from "mjo-icons/ai";
 import { InputsValidatorMessages, ValidatorMessages } from "./src/types/validator.js";
 import { theme } from "./theme.js";
 
+import "./src/mjo-accordion.js";
 import "./src/mjo-alert.js";
 import "./src/mjo-avatar.js";
 import "./src/mjo-button.js";
@@ -66,6 +67,31 @@ export class MyElement extends LitElement {
                         nameColoured
                         .theme=${{ backgroundColor: "red", borderWidth: "5px" } as MjoAvatarTheme}
                     ></mjo-avatar>
+                </div>
+                <div style="padding: 20px;">
+                    <mjo-accordion>
+                        <mjo-accordion-item itemTitle="Item 1" itemSubtitle="Este es el subtitulo" expanded>
+                            Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam,
+                            quod. Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam, quod.Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam,
+                            quod. Quisquam, quod.Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam, quod. Quisquam, quod.
+                        </mjo-accordion-item>
+                        <mjo-accordion-item itemTitle="Item 2">
+                            Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam,Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam,Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam,Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam,Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam,
+                        </mjo-accordion-item>
+                        <mjo-accordion-item itemTitle="Item 3">
+                            Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam,Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam,Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
+                            Quisquam,
+                        </mjo-accordion-item>
+                    </mjo-accordion>
                 </div>
                 <div>
                     <mjo-form @submit=${this.#handleSubmit} .errmessages=${messages} .inputsErrmessages=${inputsMessages}>

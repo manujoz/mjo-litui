@@ -2,8 +2,8 @@ import { DrawerShowParams } from "../../types/mjo-drawer";
 
 import { LitElement, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
+import { AiOutlineClose } from "mjo-icons/ai";
 
-import { AiOutlineClose } from "mjo-icons/ai/AiOutlineClose.js";
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
 @customElement("drawer-container")

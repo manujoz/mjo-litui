@@ -6,7 +6,7 @@ import { LitElement, PropertyValues, css, html, isServer, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 
-import { AiOutlineSearch } from "mjo-icons/ai/AiOutlineSearch.js";
+import { AiOutlineSearch } from "mjo-icons/ai";
 import { IThemeMixin, ThemeMixin } from "../mixins/theme-mixin.js";
 import { getDictionary } from "../utils/dictionary.js";
 

@@ -2,9 +2,7 @@ import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
-import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
-import { AiFillEye } from "mjo-icons/ai/AiFillEye.js";
-import { AiFillEyeInvisible } from "mjo-icons/ai/AiFillEyeInvisible.js";
+import { AiFillCloseCircle, AiFillEye, AiFillEyeInvisible } from "mjo-icons/ai";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";

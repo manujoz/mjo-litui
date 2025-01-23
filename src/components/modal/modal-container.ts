@@ -3,7 +3,7 @@ import { ModalShowParams } from "../../types/mjo-modal";
 import { LitElement, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 
-import { AiOutlineClose } from "mjo-icons/ai/AiOutlineClose.js";
+import { AiOutlineClose } from "mjo-icons/ai";
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
 import "../../mjo-icon.js";

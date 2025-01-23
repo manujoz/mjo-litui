@@ -4,7 +4,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
 
-import { AiOutlineUser } from "mjo-icons/ai/AiOutlineUser.js";
+import { AiOutlineUser } from "mjo-icons/ai";
 
 @customElement("mjo-avatar")
 export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {

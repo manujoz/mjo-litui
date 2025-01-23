@@ -3,10 +3,7 @@ import { MessageTypes } from "../../types/mjo-message";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { AiFillCheckCircle } from "mjo-icons/ai/AiFillCheckCircle.js";
-import { AiFillCloseCircle } from "mjo-icons/ai/AiFillCloseCircle.js";
-import { AiFillInfoCircle } from "mjo-icons/ai/AiFillInfoCircle.js";
-import { AiFillWarning } from "mjo-icons/ai/AiFillWarning.js";
+import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning } from "mjo-icons/ai";
 
 @customElement("message-item")
 export class MessageItem extends LitElement {

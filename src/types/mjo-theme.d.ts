@@ -106,7 +106,7 @@ type MjoThemeMode = {
     /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */
     backgroundColorCard?: MjoThemeColorContrasts | string;
     /** --mjo-foreground-color, --mjo-foreground-color-light, --mjo-foreground-color-dark */
-    foregroundColor?: MjoThemeColorSmall | string;
+    foregroundColor?: MjoThemeColorContrasts | string;
     /** --mjo-box-shadow, --mjo-box-shadow-[215] */
     boxShadow?: MjoThemeBoxShadow;
     /** --mjo-disabled-color */
