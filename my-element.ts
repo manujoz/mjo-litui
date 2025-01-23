@@ -69,8 +69,8 @@ export class MyElement extends LitElement {
                     ></mjo-avatar>
                 </div>
                 <div style="padding: 20px;">
-                    <mjo-accordion>
-                        <mjo-accordion-item itemTitle="Item 1" itemSubtitle="Este es el subtitulo" expanded>
+                    <mjo-accordion variant="splitted">
+                        <mjo-accordion-item itemTitle="Item 1" expanded>
                             Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam,
                             quod. Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
                             Quisquam, quod.Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam,

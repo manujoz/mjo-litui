@@ -1,9 +1,9 @@
 import { LitElement, PropertyValues, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
+import { AiOutlineRight } from "mjo-icons/ai";
 
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
-import { AiOutlineClose } from "mjo-icons/ai";
 import "../../mjo-icon.js";
 
 @customElement("mjo-accordion-item")
@@ -12,14 +12,16 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
     @property({ type: String }) itemSubtitle = "";
     @property({ type: Boolean }) expanded = false;
     @property({ type: Boolean }) disabled = false;
-    @property({ type: String }) icon = AiOutlineClose;
+    @property({ type: String }) icon = AiOutlineRight;
 
-    @query(".content") content!: HTMLElement;
+    @query(".container") containerEl!: HTMLElement;
+    @query(".content") contentEl!: HTMLElement;
+    @query(".iconContainer mjo-icon") iconEl!: HTMLElement;
 
     render() {
         return html`
             <div class="container">
-                <div class="titleContainer">
+                <div class="titleContainer" @click=${this.#toggleContent}>
                     <div class="titleContent">
                         ${typeof this.itemTitle === "string"
                             ? html`
@@ -30,7 +32,9 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
                               `
                             : this.itemTitle}
                     </div>
-                    <div class="iconContainer"></div>
+                    <div class="iconContainer">
+                        <mjo-icon src=${this.icon}></mjo-icon>
+                    </div>
                 </div>
                 <div class="content">
                     <slot></slot>
@@ -41,26 +45,33 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
 
     updated(_changedProperties: PropertyValues) {
         if (_changedProperties.has("expanded")) {
-            this.#toggleContent();
+            if (this.expanded) {
+                this.#openContent();
+            } else {
+                this.#closeContent();
+            }
         }
     }
 
     #toggleContent() {
-        if (this.expanded) {
-            this.#openContent();
-        } else {
-            this.#closeContent();
-        }
+        this.expanded = !this.expanded;
+
+        this.dispatchEvent(new CustomEvent("toggle", { detail: { item: this, expanded: this.expanded } }));
     }
 
     #openContent() {
-        const scrollHeight = this.content.scrollHeight;
+        const scrollHeight = this.contentEl.scrollHeight;
 
-        this.content.style.maxHeight = `${scrollHeight}px`;
+        this.containerEl.style.paddingBottom = "var(--mjo-accordion-item-content-padding, var(--mjo-space-medium))";
+        this.contentEl.style.maxHeight = `${scrollHeight}px`;
+        this.contentEl.style.opacity = "1";
+        this.iconEl.style.transform = "rotate(90deg)";
     }
 
     #closeContent() {
-        this.content.style.maxHeight = "0";
+        this.containerEl.removeAttribute("style");
+        this.contentEl.removeAttribute("style");
+        this.iconEl.removeAttribute("style");
     }
 
     static styles = [
@@ -68,18 +79,47 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
             :host {
                 display: block;
             }
+            .container {
+                position: relative;
+                transition: padding 0.3s ease-in-out;
+            }
+            .titleContainer {
+                position: relative;
+                display: flex;
+                cursor: pointer;
+                padding: var(--mjo-accordion-item-title-padding, var(--mjo-space-medium)) 0;
+            }
+            .titleContent {
+                position: relative;
+                flex: 1 1 0;
+            }
+            .iconContainer {
+                position: relative;
+                flex: 0 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+            }
+            .iconContainer mjo-icon {
+                transition: transform 0.3s ease-in-out;
+            }
             .title {
                 margin: 0;
                 font-size: var(--mjo-accordion-item-title-font-size, 1em);
+                color: var(--mjo-accordion-item-title-color, var(--mjo-foreground-color));
             }
             .subtitle {
                 margin: 0;
-                color: var(--mjo-foreground-color-low);
+                color: var(--mjo-accordion-item-subtitle-color, var(--mjo-foreground-color-low));
             }
             .content {
                 max-height: 0;
                 overflow: hidden;
-                transition: max-height 0.3s ease-in-out;
+                opacity: 0;
+                box-sizing: border-box;
+                transition:
+                    max-height 0.3s ease-in-out,
+                    opacity 0.3s ease-in-out;
             }
         `,
     ];
@@ -90,3 +130,5 @@ declare global {
         "mjo-accordion-item": MjoAccordionItem;
     }
 }
+
+export type MjoAccordionToggleEvent = CustomEvent<{ item: MjoAccordionItem; expanded: boolean }>;
