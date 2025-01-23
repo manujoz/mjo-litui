@@ -19,6 +19,8 @@ import "./src/mjo-dropdown.js";
 import "./src/mjo-form.js";
 import "./src/mjo-image.js";
 import "./src/mjo-message.js";
+import "./src/mjo-modal.js";
+import { MjoModal } from "./src/mjo-modal.js";
 import "./src/mjo-notification.js";
 import { MjoNotification } from "./src/mjo-notification.js";
 import "./src/mjo-select.js";
@@ -157,11 +159,15 @@ export class MyElement extends LitElement {
                         <p>
                             <mjo-button size="medium" type="submit" startIcon=${AiOutlineSearch} color="primary" variant="flat">ENVIAR</mjo-button>
                         </p>
+                        <p>
+                            <mjo-button size="medium" variant="flat" @click=${this.#openModal}>ABRIR MODAL</mjo-button>
+                        </p>
                     </mjo-form>
                 </div>
             </div>
             <mjo-message></mjo-message>
-            <mjo-notification></mjo-notification> `;
+            <mjo-notification></mjo-notification>
+            <mjo-modal></mjo-modal> `;
     }
 
     @state() html = this.renderHtml(1);
@@ -178,6 +184,23 @@ export class MyElement extends LitElement {
         setTimeout(() => {
             this.html = this.renderHtml(2);
         }, 3000);
+    }
+
+    #openModal() {
+        const modal = this.shadowRoot?.querySelector("mjo-modal") as MjoModal;
+        modal.modalController.show({
+            content: html`
+                <mjo-typography size="body2">
+                    Este es el contenido que estamos metiendo Este es el contenido que estamos metiendo Este es el contenido que estamos metiendo Este es el
+                    contenido que estamos metiendo Este es el contenido que estamos metiendo Este es el contenido que estamos metiendo
+                </mjo-typography>
+                <mjo-typography size="body2">
+                    Este es el contenido que estamos metiendo Este es el contenido que estamos metiendo Este es el contenido que estamos metiendo Este es el
+                    contenido que estamos metiendo Este es el contenido que estamos metiendo Este es el contenido que estamos metiendo
+                </mjo-typography>
+            `,
+            title: "Este es el título",
+        });
     }
 
     protected firstUpdated(): void {
