@@ -43,7 +43,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             @click=${this.#handleClick}
         >
             ${this.startIcon && html` <mjo-icon src=${this.startIcon}></mjo-icon>`}
-            <slot></slot>
+            <mjo-typography tag="none"><slot></slot></mjo-typography>
             ${this.endIcon && html` <mjo-icon src=${this.endIcon}></mjo-icon>`}
             ${!this.noink && !this.disabled && !this.loading ? html`<mjo-ripple></mjo-ripple>` : nothing}
             ${this.loading ? html`<div class="loading"></div>` : nothing}

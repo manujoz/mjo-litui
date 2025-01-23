@@ -5,7 +5,7 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
 
 @customElement("mjo-typography")
 export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin {
-    @property({ type: String }) tag: "h1" | "h2" | "h3" | "h4" | "h5" | "p" = "p";
+    @property({ type: String }) tag: "h1" | "h2" | "h3" | "h4" | "h5" | "p" | "span" | "none" = "p";
     @property({ type: String }) size: "heading1" | "heading2" | "heading3" | "base" | "body1" | "body2" | "body3" = "base";
     @property({ type: String }) weight: "light" | "regular" | "medium" | "bold" = "regular";
 
@@ -21,8 +21,12 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
                 return html`<h4 class=${`${this.size} ${this.weight}`}><slot></slot></h4>`;
             case "h5":
                 return html`<h5 class=${`${this.size} ${this.weight}`}><slot></slot></h5>`;
-            default:
+            case "span":
+                return html`<span class=${`${this.size} ${this.weight}`}><slot></slot></span>`;
+            case "p":
                 return html`<p class=${`${this.size} ${this.weight}`}><slot></slot></p>`;
+            default:
+                return html`<slot></slot>`;
         }
     }
 
@@ -32,13 +36,22 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
                 display: block;
                 margin: 0.5em 0;
             }
+            :host([tag="span"]),
+            :host([tag="none"]) {
+                margin: 0;
+                display: inline;
+            }
+            :host([tag="none"]) {
+                line-height: calc(1em + 6px);
+            }
             h1,
             h2,
             h3,
             h4,
             h5,
             h6,
-            p {
+            p,
+            span {
                 padding: 0;
                 margin: 0;
             }
