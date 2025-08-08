@@ -168,6 +168,7 @@ export interface MjoAccordionTheme {
     backgroundColor?: string;
     borderColor?: string;
     padding?: string;
+    paddingCompact?: string;
     radius?: string;
     gap?: string;
 }
@@ -210,7 +211,7 @@ export interface MjoButtonTheme {
     primaryBorder?: string;
     primaryColorHover?: string;
     primaryForegroundColor?: string;
-    radius?: string;
+    boderRadius?: string;
     secondaryBorder?: string;
     secondaryColor?: string;
     secondaryColorHover?: string;

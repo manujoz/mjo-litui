@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { AiFillCheckCircle, AiFillCloseCircle } from "mjo-icons/ai";
 
 import "../mjo-icon.js";
+import "../mjo-typography.js";
 
 @customElement("input-helper-text")
 export class InputHelperText extends LitElement {
@@ -15,7 +16,7 @@ export class InputHelperText extends LitElement {
                 ? html`<div class="error"><mjo-icon src=${AiFillCloseCircle}></mjo-icon>${this.errormsg}</div>`
                 : this.successmsg
                   ? html`<div class="success"><mjo-icon src=${AiFillCheckCircle}></mjo-icon>${this.successmsg}</div>`
-                  : html`<slot></slot>`}
+                  : html`<mjo-typography tag="none"><slot></slot></mjo-typography>`}
         </div>`;
     }
 

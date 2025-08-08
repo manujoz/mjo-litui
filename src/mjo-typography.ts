@@ -93,7 +93,7 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
                 font-weight: var(--mjo-typography-font-weight-medium, 500);
             }
             .bold {
-                font-weight: var(--mjo-typography-font-weight-bold, 700);
+                font-weight: var(--mjo-typography-font-weight-bold, 600);
             }
         `,
     ];

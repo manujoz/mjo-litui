@@ -46,28 +46,12 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         super.connectedCallback();
 
         this.#createDropdown();
-
-        if (this.behaviour === "hover") {
-            this.addEventListener("mouseenter", this.#listeners.open);
-            this.dropdownContainer?.addEventListener("mouseleave", this.#listeners.close);
-        } else {
-            this.addEventListener("click", this.#listeners.open);
-        }
-
-        document.addEventListener("click", this.#listeners.close);
     }
 
     disconnectedCallback() {
         super.disconnectedCallback();
 
-        if (this.behaviour === "hover") {
-            this.removeEventListener("mouseenter", this.#listeners.open);
-            this.dropdownContainer?.removeEventListener("mouseleave", this.#listeners.close);
-        } else {
-            this.removeEventListener("click", this.#listeners.open);
-        }
-
-        document.removeEventListener("click", this.#listeners.close);
+        this.#removeListeners();
     }
 
     protected updated(changedProperties: Map<PropertyKey, unknown>): void {
@@ -90,6 +74,29 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
 
             this.dropdownContainer.style.display = this.width;
         }
+
+        if (changedProperties.has("behaviour") && this.behaviour !== undefined) {
+            this.#removeListeners();
+            this.#setListeners();
+        }
+    }
+
+    #setListeners() {
+        if (this.behaviour === "hover") {
+            this.addEventListener("mouseenter", this.#listeners.open);
+            this.dropdownContainer?.addEventListener("mouseleave", this.#listeners.close);
+        } else {
+            this.addEventListener("click", this.#listeners.open);
+        }
+
+        document.addEventListener("click", this.#listeners.close);
+    }
+
+    #removeListeners() {
+        this.removeEventListener("mouseenter", this.#listeners.open);
+        this.dropdownContainer?.removeEventListener("mouseleave", this.#listeners.close);
+        this.removeEventListener("click", this.#listeners.open);
+        document.removeEventListener("click", this.#listeners.close);
     }
 
     open() {

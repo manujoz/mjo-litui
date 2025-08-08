@@ -18,7 +18,7 @@ const meta: Meta = {
     argTypes: {
         color: {
             control: { type: "select" },
-            options: ["primary", "secondary"],
+            options: ["primary", "secondary", "success", "warning", "error", "info"],
             defaultValue: "primary",
             description: "Sets the color of the button.",
         },
@@ -75,13 +75,13 @@ const meta: Meta = {
         },
         variant: {
             control: { type: "select" },
-            options: ["default", "ghost", "dashed", "link", "text"],
+            options: ["default", "flat", "ghost", "dashed", "link", "text"],
             defaultValue: "default",
             description: "Button variant.",
         },
         type: {
             control: { type: "select" },
-            options: ["button", "submit", "reset"],
+            options: ["button", "submit", "reset", "menu"],
             defaultValue: "button",
             description: "Button type.",
         },

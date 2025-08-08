@@ -12,8 +12,12 @@ export class DrawerController implements ReactiveController {
         (this.host = host).addController(this);
     }
 
-    show({ title, content, position, width, height, blocked, animationDuration }: DrawerShowParams) {
-        this.drawerContainer.open({ title, content, position, width, height, blocked, animationDuration });
+    show({ title, content, position, width, height, blocked, animationDuration, onOpen, onClose }: DrawerShowParams) {
+        this.drawerContainer.open({ title, content, position, width, height, blocked, animationDuration, onOpen, onClose });
+    }
+
+    close() {
+        this.drawerContainer.close();
     }
 
     hostConnected(): void {
