@@ -19,12 +19,14 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
         return html`<div class="container" data-position=${this.position}></div>`;
     }
 
-    show({ message, type, time, title }: NotificationShowParams) {
+    show({ message, type, time, title, onClose }: NotificationShowParams) {
         const notificationItem = document.createElement("notification-item") as NotificationItem;
         notificationItem.message = message;
         notificationItem.type = type;
         notificationItem.notificationTitle = title;
+        if (onClose) notificationItem.onClose = onClose;
         notificationItem.setAttribute("position", this.position || "top-right");
+
         notificationItem.style.position = "absolute";
         notificationItem.style.opacity = "0";
 

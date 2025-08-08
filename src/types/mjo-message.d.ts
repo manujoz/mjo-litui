@@ -4,4 +4,5 @@ export interface MessageShowParams {
     message: string;
     type?: MessageTypes;
     time?: number;
+    onClose?: () => void;
 }

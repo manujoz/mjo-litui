@@ -1,7 +1,7 @@
 import type { MjoAccordionItem, MjoAccordionToggleEvent } from "./components/accordion/mjo-accordion-item.js";
 
 import { LitElement, PropertyValues, css, html } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
@@ -13,7 +13,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
     @property({ type: String }) selectionMode: "single" | "multiple" = "single";
     @property({ type: Boolean }) compact = false;
 
-    @state() items: MjoAccordionItem[] = [];
+    items: MjoAccordionItem[] = [];
 
     @query(".container") containerEl!: HTMLElement;
 

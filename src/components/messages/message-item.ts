@@ -11,6 +11,7 @@ export class MessageItem extends LitElement {
     @property({ type: String }) type: MessageTypes = "info";
     @property({ type: Number }) time = 3000;
 
+    onClose?: () => void;
     timeOut?: NodeJS.Timeout;
     removing = false;
 
@@ -58,6 +59,7 @@ export class MessageItem extends LitElement {
         }, 20);
 
         setTimeout(() => {
+            if (typeof this.onClose === "function") this.onClose();
             this.dispatchEvent(new CustomEvent("remove"));
             this.remove();
         }, 520);

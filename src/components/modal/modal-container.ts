@@ -21,6 +21,7 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
     @query(".container") container!: HTMLDivElement;
     @query(".close") closeIcon?: HTMLElement;
 
+    onClose?: () => void;
     #animationDuration = 200;
 
     render() {
@@ -34,12 +35,14 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
         `;
     }
 
-    show({ content, time, title, width, animationDuration, blocked = false }: ModalShowParams) {
+    show({ content, time, title, width, animationDuration, blocked = false, onClose }: ModalShowParams) {
         if (this.isOpen) return;
 
         if (animationDuration) this.#animationDuration = animationDuration;
 
         if (title) this.titleMsg = title;
+
+        if (onClose) this.onClose = onClose;
         this.content = content;
         this.blocked = blocked;
 
@@ -101,6 +104,7 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
         );
 
         setTimeout(() => {
+            if (typeof this.onClose === "function") this.onClose();
             this.style.display = "none";
         }, this.#animationDuration);
     }
@@ -130,12 +134,6 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
                 font-size: var(--mjo-modal-icon-close-size, 30px);
                 cursor: pointer;
             }
-            .title {
-                position: relative;
-                margin: var(--mjo-space-small, 5px);
-                padding-bottom: var(--mjo-space-xsmall, 5px);
-                border-bottom: 1px solid var(--mjo-modal-title-border-color, var(--mjo-border-color, #ccc));
-            }
             .container {
                 position: relative;
                 background-color: var(--mjo-modal-background-color, var(--mjo-background-color, #fff));
@@ -145,6 +143,20 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
                 max-width: calc(100vw - 30px);
                 box-sizing: border-box;
                 max-height: calc(100vh - 30px);
+                display: flex;
+                flex-direction: column;
+            }
+            .title {
+                position: relative;
+                margin: var(--mjo-space-small, 5px);
+                padding-bottom: var(--mjo-space-xsmall, 5px);
+                border-bottom: 1px solid var(--mjo-modal-title-border-color, var(--mjo-border-color, #ccc));
+                flex: 0 1 0;
+            }
+            .content {
+                position: relative;
+                overflow: auto;
+                flex: 1 1 auto;
             }
         `,
     ];

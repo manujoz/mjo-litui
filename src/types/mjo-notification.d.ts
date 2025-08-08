@@ -8,4 +8,5 @@ export interface NotificationShowParams {
     message: string | TemplateResult<1>;
     type?: NotificationTypes;
     time?: number;
+    onClose?: () => void;
 }

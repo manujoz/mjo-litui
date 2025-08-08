@@ -21,7 +21,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
 
     render() {
         return html`
-            <div class="container">
+            <div class="container" ?data-compact=${this.compact}>
                 <div class="titleContainer" @click=${this.#toggleContent}>
                     <div class="titleContent">
                         ${typeof this.itemTitle === "string"
@@ -55,7 +55,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
     }
 
     setCompact(compact: boolean) {
-        this.containerEl.classList.toggle("compact", compact);
+        this.compact = compact;
     }
 
     #toggleContent() {
@@ -94,7 +94,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
                 cursor: pointer;
                 padding: var(--mjo-accordion-item-title-padding, var(--mjo-space-medium)) 0;
             }
-            .container.compact .titleContainer {
+            .container[data-compact] .titleContainer {
                 padding: var(--mjo-accordion-item-title-padding-compact, var(--mjo-space-small)) 0;
             }
             .titleContent {
