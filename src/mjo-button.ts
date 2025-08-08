@@ -6,6 +6,7 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-icon.js";
 import "./mjo-ripple.js";
+import "./mjo-typography.js";
 
 /**
  * An example element.
@@ -25,7 +26,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     @property({ type: String }) startIcon?: string;
     @property({ type: String }) endIcon?: string;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
-    @property({ type: String }) color: "primary" | "secondary" = "primary";
+    @property({ type: String }) color: "primary" | "secondary" | "success" | "info" | "warning" | "error" = "primary";
     @property({ type: String }) variant: "default" | "ghost" | "dashed" | "link" | "text" | "flat" = "default";
     @property({ type: String }) type: "button" | "submit" | "reset" | "menu" = "button";
 
@@ -85,7 +86,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             button {
                 align-items: center;
                 background-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-                border-radius: var(--mjo-button-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-button-border-radius, var(--mjo-radius, 5px));
                 border: var(--mjo-button-primary-border, solid 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb)));
                 box-sizing: border-box;
                 color: var(--mjo-button-primary-foreground-color, var(--mjo-primary-foreground-color, white));
@@ -126,6 +127,44 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 background-color: var(--mjo-button-secondary-color-hover, var(--mjo-secondary-color-hover, #d86490));
                 border: solid 1px var(--mjo-button-secondary-color-hover, var(--mjo-secondary-color-hover, #d86490));
             }
+            button[data-color="success"]:focus {
+                outline-color: var(--mjo-color-success);
+            }
+            button[data-color="success"] {
+                background-color: var(--mjo-color-success);
+                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-color-success));
+                color: white;
+            }
+            button[data-color="info"]:focus {
+                outline-color: var(--mjo-color-info);
+            }
+            button[data-color="info"] {
+                background-color: var(--mjo-color-info);
+                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-color-info));
+                color: white;
+            }
+            button[data-color="warning"]:focus {
+                outline-color: var(--mjo-color-warning);
+            }
+            button[data-color="warning"] {
+                background-color: var(--mjo-color-warning);
+                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-color-warning));
+                color: white;
+            }
+            button[data-color="error"]:focus {
+                outline-color: var(--mjo-color-error);
+            }
+            button[data-color="error"] {
+                background-color: var(--mjo-color-error);
+                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-color-error));
+                color: white;
+            }
+            button[data-color="success"]:hover,
+            button[data-color="info"]:hover,
+            button[data-color="warning"]:hover,
+            button[data-color="error"]:hover {
+                opacity: 0.8;
+            }
             button[data-variant="ghost"] {
                 background-color: transparent;
                 border: solid 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
@@ -136,11 +175,33 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 border: solid 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
                 color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
-            button[data-variant="ghost"]:hover {
-                background-color: rgba(230, 230, 230, 0.5);
+            button[data-variant="ghost"][data-color="info"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-color-info);
+                color: var(--mjo-color-info);
             }
-            button[data-variant="ghost"][data-color="secondary"]:hover {
-                background-color: rgba(230, 230, 230, 0.5);
+            button[data-variant="ghost"][data-color="warning"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-color-warning);
+                color: var(--mjo-color-warning);
+            }
+            button[data-variant="ghost"][data-color="error"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-color-error);
+                color: var(--mjo-color-error);
+            }
+            button[data-variant="ghost"][data-color="success"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-color-success);
+                color: var(--mjo-color-success);
+            }
+            button[data-variant="ghost"]:hover,
+            button[data-variant="ghost"][data-color="secondary"]:hover,
+            button[data-variant="ghost"][data-color="info"]:hover,
+            button[data-variant="ghost"][data-color="warning"]:hover,
+            button[data-variant="ghost"][data-color="error"]:hover,
+            button[data-variant="ghost"][data-color="success"]:hover {
+                background-color: var(--mjo-background-color-high);
             }
             button[data-variant="flat"] {
                 background-color: var(--mjo-button-flat-primary-background-color, var(--mjo-primary-color-alpha2, #1d7fdb22));
@@ -162,21 +223,78 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 color: var(--mjo-button-flat-secondary-foreground-color-hover, var(--mjo-secondary-foreground-color, #ffffff));
                 border: none;
             }
+            button[data-variant="flat"][data-color="success"],
+            button[data-variant="flat"][data-color="error"],
+            button[data-variant="flat"][data-color="info"],
+            button[data-variant="flat"][data-color="warning"] {
+                background-color: transparent;
+                color: white;
+                border: none;
+            }
+            button[data-variant="flat"][data-color="success"]::before {
+                background-color: var(--mjo-color-success);
+                position: absolute;
+                inset: 0;
+                content: "";
+                z-index: -1;
+                opacity: 0.2;
+            }
+            button[data-variant="flat"][data-color="info"]::before {
+                background-color: var(--mjo-color-info);
+                position: absolute;
+                inset: 0;
+                content: "";
+                z-index: -1;
+                opacity: 0.2;
+            }
+            button[data-variant="flat"][data-color="warning"]::before {
+                background-color: var(--mjo-color-warning);
+                position: absolute;
+                inset: 0;
+                content: "";
+                z-index: -1;
+                opacity: 0.2;
+            }
+            button[data-variant="flat"][data-color="error"]::before {
+                background-color: var(--mjo-color-error);
+                position: absolute;
+                inset: 0;
+                content: "";
+                z-index: -1;
+                opacity: 0.2;
+            }
             button[data-variant="dashed"] {
                 background-color: transparent;
                 border: dashed 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
                 color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
             }
             button[data-variant="dashed"][data-color="secondary"] {
-                background-color: transparent;
                 border: dashed 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
                 color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
-            button[data-variant="dashed"]:hover {
-                background-color: rgba(230, 230, 230, 0.5);
+            button[data-variant="dashed"][data-color="info"] {
+                border: dashed 1px var(--mjo-color-info);
+                color: var(--mjo-color-info);
             }
-            button[data-variant="dashed"][data-color="secondary"]:hover {
-                background-color: rgba(230, 230, 230, 0.5);
+            button[data-variant="dashed"][data-color="success"] {
+                border: dashed 1px var(--mjo-color-success);
+                color: var(--mjo-color-success);
+            }
+            button[data-variant="dashed"][data-color="warning"] {
+                border: dashed 1px var(--mjo-color-warning);
+                color: var(--mjo-color-warning);
+            }
+            button[data-variant="dashed"][data-color="error"] {
+                border: dashed 1px var(--mjo-color-error);
+                color: var(--mjo-color-error);
+            }
+            button[data-variant="dashed"]:hover,
+            button[data-variant="dashed"][data-color="secondary"]:hover,
+            button[data-variant="dashed"][data-color="info"]:hover,
+            button[data-variant="dashed"][data-color="warning"]:hover,
+            button[data-variant="dashed"][data-color="error"]:hover,
+            button[data-variant="dashed"][data-color="success"]:hover {
+                background-color: var(--mjo-background-color-high);
             }
             button[data-variant="link"] {
                 background-color: transparent;
@@ -184,9 +302,19 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
             }
             button[data-variant="link"][data-color="secondary"] {
-                background-color: transparent;
-                border: solid 1px transparent;
                 color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            button[data-variant="link"][data-color="info"] {
+                color: var(--mjo-color-info);
+            }
+            button[data-variant="link"][data-color="success"] {
+                color: var(--mjo-color-success);
+            }
+            button[data-variant="link"][data-color="warning"] {
+                color: var(--mjo-color-warning);
+            }
+            button[data-variant="link"][data-color="error"] {
+                color: var(--mjo-color-error);
             }
             button[data-variant="text"],
             button[data-variant="text"][data-color="secondary"] {
@@ -196,11 +324,22 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             }
             button[data-variant="text"]:hover {
                 color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-                background-color: rgba(220, 220, 220, 0.5);
+                background-color: var(--mjo-background-color-high);
             }
             button[data-variant="text"][data-color="secondary"]:hover {
-                background-color: rgba(220, 220, 220, 0.5);
                 color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            button[data-variant="text"][data-color="info"]:hover {
+                color: var(--mjo-color-info);
+            }
+            button[data-variant="text"][data-color="success"]:hover {
+                color: var(--mjo-color-success);
+            }
+            button[data-variant="text"][data-color="warning"]:hover {
+                color: var(--mjo-color-warning);
+            }
+            button[data-variant="text"][data-color="error"]:hover {
+                color: var(--mjo-color-error);
             }
             :host([disabled]) button,
             :host([loading]) button {
@@ -208,6 +347,131 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 color: var(--mjo-button-disabled-foreground-color, var(--mjo-disabled-foreground-color, #aaaaaa));
                 background-color: var(--mjo-button-disabled-background-color, var(--mjo-disabled-color, #e0e0e0));
                 border: solid 1px var(--mjo-button-disabled-background-color, var(--mjo-disabled-color, #e0e0e0));
+            }
+            :host([loading]) button[data-variant="ghost"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+            }
+            :host([loading]) button[data-variant="ghost"][data-color="secondary"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            :host([loading]) button[data-variant="ghost"][data-color="info"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-color-info);
+                color: var(--mjo-color-info);
+            }
+            :host([loading]) button[data-variant="ghost"][data-color="success"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-color-success);
+                color: var(--mjo-color-success);
+            }
+            :host([loading]) button[data-variant="ghost"][data-color="warning"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-color-warning);
+                color: var(--mjo-color-warning);
+            }
+            :host([loading]) button[data-variant="ghost"][data-color="error"] {
+                background-color: transparent;
+                border: solid 1px var(--mjo-color-error);
+                color: var(--mjo-color-error);
+            }
+            :host([loading]) button[data-variant="flat"] {
+                background-color: var(--mjo-button-flat-primary-background-color, var(--mjo-primary-color-alpha2, #1d7fdb22));
+                color: var(--mjo-button-flat-primary-foreground-color, var(--mjo-primary-foreground-color, #ffffff));
+                border: none;
+            }
+            :host([loading]) button[data-variant="flat"][data-color="secondary"] {
+                background-color: var(--mjo-button-flat-secondary-background-color, var(--mjo-secondary-color-alpha2, #cc3d7422));
+                color: var(--mjo-button-flat-secondary-foreground-color, var(--mjo-secondary-foreground-color, #ffffff));
+                border: none;
+            }
+            :host([loading]) button[data-variant="flat"][data-color="info"],
+            :host([loading]) button[data-variant="flat"][data-color="success"],
+            :host([loading]) button[data-variant="flat"][data-color="error"],
+            :host([loading]) button[data-variant="flat"][data-color="warning"] {
+                background-color: transparent;
+                color: white;
+                border: none;
+            }
+            :host([loading]) button[data-variant="flat"][data-color="info"]::before,
+            :host([loading]) button[data-variant="flat"][data-color="success"]::before,
+            :host([loading]) button[data-variant="flat"][data-color="warning"]::before,
+            :host([loading]) button[data-variant="flat"][data-color="error"]::before {
+                position: absolute;
+                inset: 0;
+                content: "";
+                z-index: -1;
+                opacity: 0.2;
+            }
+            :host([loading]) button[data-variant="flat"][data-color="info"]::before {
+                background-color: var(--mjo-color-info);
+            }
+            :host([loading]) button[data-variant="flat"][data-color="success"]::before {
+                background-color: var(--mjo-color-success);
+            }
+            :host([loading]) button[data-variant="flat"][data-color="warning"]::before {
+                background-color: var(--mjo-color-warning);
+            }
+            :host([loading]) button[data-variant="flat"][data-color="error"]::before {
+                background-color: var(--mjo-color-error);
+            }
+            :host([loading]) button[data-variant="dashed"] {
+                background-color: transparent;
+                border: dashed 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+            }
+            :host([loading]) button[data-variant="dashed"][data-color="secondary"] {
+                background-color: transparent;
+                border: dashed 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            :host([loading]) button[data-variant="dashed"][data-color="info"] {
+                background-color: transparent;
+                border: dashed 1px var(--mjo-color-info);
+                color: var(--mjo-color-info);
+            }
+            :host([loading]) button[data-variant="dashed"][data-color="success"] {
+                background-color: transparent;
+                border: dashed 1px var(--mjo-color-success);
+                color: var(--mjo-color-success);
+            }
+            :host([loading]) button[data-variant="dashed"][data-color="warning"] {
+                background-color: transparent;
+                border: dashed 1px var(--mjo-color-warning);
+                color: var(--mjo-color-warning);
+            }
+            :host([loading]) button[data-variant="dashed"][data-color="error"] {
+                background-color: transparent;
+                border: dashed 1px var(--mjo-color-error);
+                color: var(--mjo-color-error);
+            }
+            :host([loading]) button[data-variant="link"] {
+                background-color: transparent;
+                border: solid 1px transparent;
+                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+            }
+            :host([loading]) button[data-variant="link"][data-color="secondary"] {
+                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            :host([loading]) button[data-variant="link"][data-color="info"] {
+                color: var(--mjo-color-info);
+            }
+            :host([loading]) button[data-variant="link"][data-color="success"] {
+                color: var(--mjo-color-success);
+            }
+            :host([loading]) button[data-variant="link"][data-color="warning"] {
+                color: var(--mjo-color-warning);
+            }
+            :host([loading]) button[data-variant="link"][data-color="error"] {
+                color: var(--mjo-color-error);
+            }
+            :host([loading]) button[data-variant="text"] {
+                background-color: transparent;
+                border: solid 1px transparent;
+                color: currentColor;
             }
             button[data-size="small"] {
                 padding: 5px 10px;
@@ -250,6 +514,18 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             }
             button[data-color="secondary"] .loading {
                 background-color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            button[data-color="info"] .loading {
+                background-color: var(--mjo-color-info);
+            }
+            button[data-color="success"] .loading {
+                background-color: var(--mjo-color-success);
+            }
+            button[data-color="warning"] .loading {
+                background-color: var(--mjo-color-warning);
+            }
+            button[data-color="error"] .loading {
+                background-color: var(--mjo-color-error);
             }
             button[data-size="small"] .loading {
                 height: 0.19em;

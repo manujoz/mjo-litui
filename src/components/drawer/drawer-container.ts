@@ -19,6 +19,8 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
     @query(".container") container!: HTMLDivElement;
 
     #animationDuration = 200;
+    #onOpen?: () => void;
+    #onClose?: () => void;
 
     render() {
         return html`
@@ -43,7 +45,7 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
         `;
     }
 
-    open({ title, content, position = "right", width, height, blocked = false, animationDuration }: DrawerShowParams) {
+    open({ title, content, position = "right", width, height, blocked = false, animationDuration, onOpen, onClose }: DrawerShowParams) {
         if (this.isOpen) return;
 
         if (title) this.titleMsg = title;
@@ -52,20 +54,35 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
         this.blocked = blocked;
         this.position = position;
 
+        this.container.style.width = "";
+        this.container.style.height = "";
+
         if (width && (this.position === "left" || this.position === "right")) {
             if (typeof width === "number") {
-                this.style.width = `${width}px`;
+                this.container.style.width = `${width}px`;
             } else {
-                this.style.width = width;
+                this.container.style.width = width;
             }
         }
 
         if (height && (this.position === "top" || this.position === "bottom")) {
             if (typeof height === "number") {
-                this.style.height = `${height}px`;
+                this.container.style.height = `${height}px`;
             } else {
-                this.style.height = height;
+                this.container.style.height = height;
             }
+        }
+
+        if (typeof onOpen === "function") {
+            this.#onOpen = onOpen;
+        } else {
+            this.#onOpen = undefined;
+        }
+
+        if (typeof onClose === "function") {
+            this.#onClose = onClose;
+        } else {
+            this.#onClose = undefined;
         }
 
         this.#open();
@@ -98,7 +115,16 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
                     : "translateY(calc(100% + 30px))";
 
         this.background.animate([{ opacity: 0 }, { opacity: 1 }], { duration: this.#animationDuration, fill: "forwards" });
-        this.container.animate([{ transform: translateFrom }, { transform: "translate(0)" }], { duration: this.#animationDuration, fill: "forwards" });
+        const containerAnimation = this.container.animate([{ transform: translateFrom }, { transform: "translate(0)" }], {
+            duration: this.#animationDuration,
+            fill: "forwards",
+        });
+
+        containerAnimation.onfinish = () => {
+            if (typeof this.#onOpen === "function") {
+                this.#onOpen();
+            }
+        };
     }
 
     #close() {
@@ -114,11 +140,17 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
                     : "translateY(calc(100% + 30px))";
 
         this.background.animate([{ opacity: 1 }, { opacity: 0 }], { duration: this.#animationDuration, fill: "forwards" });
-        this.container.animate([{ transform: "translate(0)" }, { transform: translateTo }], { duration: this.#animationDuration, fill: "forwards" });
+        const containerAnimation = this.container.animate([{ transform: "translate(0)" }, { transform: translateTo }], {
+            duration: this.#animationDuration,
+            fill: "forwards",
+        });
 
-        setTimeout(() => {
+        containerAnimation.onfinish = () => {
             this.style.display = "none";
-        }, this.#animationDuration);
+            if (typeof this.#onClose === "function") {
+                this.#onClose();
+            }
+        };
     }
 
     static styles = [
@@ -143,6 +175,8 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
                 background-color: var(--mjo-drawer-background-color, var(--mjo-background-color, #fff));
                 box-shadow: var(--mjo-drawer-box-shadow, var(--mjo-box-shadow3, 0 0 10px rgba(0, 0, 0, 0.5)));
                 box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
             }
             .container[data-position="left"],
             .container[data-position="right"] {
@@ -180,6 +214,7 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
                 padding-bottom: var(--mjo-space-xsmall, 5px);
                 border-bottom: 1px solid var(--mjo-drawer-title-border-color, var(--mjo-border-color, #ccc));
                 display: flex;
+                flex: 0 1 auto;
             }
             .title mjo-typography {
                 flex: 1 1 0;
@@ -199,6 +234,11 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
             }
             .title mjo-icon:hover {
                 background-color: var(--mjo-background-color-high, #ffffff);
+            }
+            .content {
+                position: relative;
+                flex: 1 1 0;
+                display: flex;
             }
         `,
     ];

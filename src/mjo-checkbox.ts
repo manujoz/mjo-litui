@@ -9,6 +9,7 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./helpers/input-helper-text.js";
 import "./mjo-icon.js";
+import "./mjo-typography.js";
 
 @customElement("mjo-checkbox")
 export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
@@ -32,7 +33,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 <div class="box">
                     <div class="checkbox" ?data-checked=${this.checked}><mjo-icon src=${AiFillCheckSquare}></mjo-icon></div>
                 </div>
-                ${this.label ? html`<div class="label">${this.label}</div>` : nothing}
+                ${this.label ? html`<mjo-typography tag="none" class="label">${this.label}</mjo-typography>` : nothing}
                 <input id="mjoCheckboxInput" type="checkbox" name=${ifDefined(this.name)} value=${ifDefined(this.value)} ?checked=${this.checked} />
             </div>
             ${this.helperText ? html`<input-helper-text>${this.helperText}</input-helper-text> ` : nothing}
@@ -119,16 +120,14 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             }
             .label {
                 position: relative;
-                display: flex;
-                align-items: center;
-                padding-left: 5px;
+                padding-left: var(--mjo-space-small, 5px);
                 user-select: none;
             }
             input {
                 display: none;
             }
             input-helper-text {
-                padding-left: calc(1rem + 9px);
+                padding-left: calc(calc(1rem + var(--mjo-space-small, 5px)) + 2px);
             }
         `,
     ];

@@ -17,12 +17,12 @@ import "./src/mjo-card.js";
 import "./src/mjo-checkbox.js";
 import "./src/mjo-color-picker.js";
 import "./src/mjo-drawer.js";
-import { MjoDrawer } from "./src/mjo-drawer.js";
 import "./src/mjo-dropdown.js";
 import "./src/mjo-form.js";
 import "./src/mjo-image.js";
 import "./src/mjo-message.js";
 import "./src/mjo-modal.js";
+import { MjoModal } from "./src/mjo-modal.js";
 import "./src/mjo-notification.js";
 import { MjoNotification } from "./src/mjo-notification.js";
 import "./src/mjo-select.js";
@@ -69,7 +69,7 @@ export class MyElement extends LitElement {
                     ></mjo-avatar>
                 </div>
                 <div style="padding: 20px;">
-                    <mjo-accordion variant="splitted">
+                    <mjo-accordion variant="splitted" compact>
                         <mjo-accordion-item itemTitle="Item 1" expanded>
                             Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam,
                             quod. Lorem50 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Quisquam, quod. Quisquam, quod. Quisquam, quod.
@@ -187,7 +187,7 @@ export class MyElement extends LitElement {
                             <mjo-button size="medium" type="submit" startIcon=${AiOutlineSearch} color="primary" variant="flat">ENVIAR</mjo-button>
                         </p>
                         <p>
-                            <mjo-button size="medium" variant="flat" @click=${this.#openDrawer}>ABRIR MODAL</mjo-button>
+                            <mjo-button size="medium" variant="flat" @click=${this.#openModal}>ABRIR MODAL</mjo-button>
                         </p>
                     </mjo-form>
                 </div>
@@ -214,8 +214,8 @@ export class MyElement extends LitElement {
         }, 3000);
     }
 
-    #openDrawer() {
-        const modal = this.shadowRoot?.querySelector("mjo-drawer") as MjoDrawer;
+    #openModal() {
+        const modal = this.shadowRoot?.querySelector("mjo-modal") as MjoModal;
         modal.controller.show({
             content: html`
                 <mjo-typography size="body2">
@@ -251,7 +251,11 @@ export class MyElement extends LitElement {
 
         const notification = this.shadowRoot?.querySelector("mjo-notification") as MjoNotification;
         setTimeout(() => {
-            notification.controller.show({ message: "Hola mundo", type: "info", title: "Este es el título" });
+            notification.controller.show({
+                message: "Hola mundo",
+                type: "info",
+                title: "Este es el título",
+            });
         }, 2000);
         setTimeout(() => {
             notification.controller.show({ message: "Hola mundo 2", type: "error", title: "Este es el título" });

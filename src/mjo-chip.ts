@@ -5,6 +5,7 @@ import { AiFillCloseCircle } from "mjo-icons/ai";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-icon.js";
+import "./mjo-typography.js";
 
 @customElement("mjo-chip")
 export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -31,7 +32,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         >
             ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
             ${this.startIcon ? html`<mjo-icon src=${this.startIcon}></mjo-icon>` : nothing}
-            <span class="label">${this.label}</span>
+            <mjo-typography tag="span" class="label">${this.label}</mjo-typography>
             ${this.endIcon ? html`<mjo-icon src=${this.endIcon}></mjo-icon>` : nothing}
             ${this.closable
                 ? html`<mjo-icon class="close" src=${AiFillCloseCircle} @click=${this.#hanldeClick} role="button" tabindex="0"></mjo-icon>`

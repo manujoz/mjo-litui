@@ -13,6 +13,7 @@ export class NotificationItem extends LitElement {
     @property({ type: Number }) time = 0;
     @property({ type: String }) position?: NotificationPositions;
 
+    onClose?: () => void;
     timeOut?: NodeJS.Timeout;
     removing = false;
 
@@ -72,6 +73,7 @@ export class NotificationItem extends LitElement {
         }, 500);
 
         setTimeout(() => {
+            if (typeof this.onClose === "function") this.onClose();
             this.remove();
         }, 1000);
     }

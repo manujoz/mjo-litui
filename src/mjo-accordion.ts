@@ -1,7 +1,7 @@
 import type { MjoAccordionItem, MjoAccordionToggleEvent } from "./components/accordion/mjo-accordion-item.js";
 
-import { LitElement, css, html } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { LitElement, PropertyValues, css, html } from "lit";
+import { customElement, property, query } from "lit/decorators.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
@@ -13,18 +13,26 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
     @property({ type: String }) selectionMode: "single" | "multiple" = "single";
     @property({ type: Boolean }) compact = false;
 
-    @state() items: MjoAccordionItem[] = [];
+    items: MjoAccordionItem[] = [];
 
     @query(".container") containerEl!: HTMLElement;
 
     render() {
-        return html`<div class="container" data-variant=${this.variant}></div>`;
+        return html`<div class="container" data-variant=${this.variant} ?data-compact=${this.compact}></div>`;
     }
 
     firstUpdated(): void {
         this.items = Array.from(this.querySelectorAll("mjo-accordion-item"));
 
         this.#mount();
+    }
+
+    updated(_changedProperties: PropertyValues): void {
+        if (_changedProperties.has("compact")) {
+            this.items.forEach((item) => {
+                item.setCompact(this.compact);
+            });
+        }
     }
 
     #handleToggle = (event: Event) => {
@@ -59,10 +67,16 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
                 border-radius: var(--mjo-accordion-radius, var(--mjo-radius-large));
                 background-color: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
             }
+            .container[data-variant="shadow"][data-compact] {
+                padding: 0 var(--mjo-accordion-padding-compact, var(--mjo-space-small));
+            }
             .container[data-variant="bordered"] {
                 padding: 0 var(--mjo-accordion-padding, var(--mjo-space-medium));
                 border-radius: var(--mjo-accordion-radius, var(--mjo-radius-large));
                 border: 1px solid var(--mjo-accordion-border-color, var(--mjo-border-color));
+            }
+            .container[data-variant="bordered"][data-compact] {
+                padding: 0 var(--mjo-accordion-padding-compact, var(--mjo-space-small));
             }
             .container[data-variant="light"] mjo-accordion-item,
             .container[data-variant="shadow"] mjo-accordion-item,
@@ -83,6 +97,9 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
                 border-radius: var(--mjo-accordion-radius, var(--mjo-radius-large));
                 background-color: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
                 padding: 0 var(--mjo-accordion-padding, var(--mjo-space-medium));
+            }
+            .container[data-variant="splitted"][data-compact] mjo-accordion-item {
+                padding: 0 var(--mjo-accordion-padding-compact, var(--mjo-space-small));
             }
         `,
     ];

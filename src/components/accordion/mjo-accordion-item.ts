@@ -12,6 +12,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
     @property({ type: String }) itemSubtitle = "";
     @property({ type: Boolean }) expanded = false;
     @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean }) compact = false;
     @property({ type: String }) icon = AiOutlineRight;
 
     @query(".container") containerEl!: HTMLElement;
@@ -20,7 +21,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
 
     render() {
         return html`
-            <div class="container">
+            <div class="container" ?data-compact=${this.compact}>
                 <div class="titleContainer" @click=${this.#toggleContent}>
                     <div class="titleContent">
                         ${typeof this.itemTitle === "string"
@@ -51,6 +52,10 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
                 this.#closeContent();
             }
         }
+    }
+
+    setCompact(compact: boolean) {
+        this.compact = compact;
     }
 
     #toggleContent() {
@@ -88,6 +93,9 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
                 display: flex;
                 cursor: pointer;
                 padding: var(--mjo-accordion-item-title-padding, var(--mjo-space-medium)) 0;
+            }
+            .container[data-compact] .titleContainer {
+                padding: var(--mjo-accordion-item-title-padding-compact, var(--mjo-space-small)) 0;
             }
             .titleContent {
                 position: relative;

@@ -16,11 +16,12 @@ export class MessageContainer extends ThemeMixin(LitElement) implements IThemeMi
         return html`<div class="container"></div>`;
     }
 
-    show({ message, type = "info", time }: MessageShowParams) {
+    show({ message, type = "info", time, onClose }: MessageShowParams) {
         const messageItem = document.createElement("message-item") as MessageItem;
         messageItem.message = message;
         messageItem.type = type;
         if (time) messageItem.time = time;
+        if (onClose) messageItem.onClose = onClose;
 
         const messageItems = this.container.querySelectorAll("message-item");
         if (messageItems.length === 4) {

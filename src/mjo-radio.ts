@@ -9,9 +9,11 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./helpers/input-helper-text.js";
 import "./mjo-icon.js";
+import "./mjo-typography.js";
 
 @customElement("mjo-radio")
 export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IFormMixin, IInputErrorMixin {
+    @property({ type: String }) color: "primary" | "secondary" = "primary";
     @property({ type: Boolean, reflect: true }) checked = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
@@ -30,7 +32,7 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                 <div class="box">
                     <div class="checkbox" ?data-checked=${this.checked}><mjo-icon src=${AiFillCheckCircle}></mjo-icon></div>
                 </div>
-                ${this.label ? html`<div class="label">${this.label}</div>` : nothing}
+                ${this.label ? html`<mjo-typography tag="none" class="label">${this.label}</mjo-typography>` : nothing}
                 <input id="mjoRadioInput" type="radio" name=${ifDefined(this.name)} value=${ifDefined(this.value)} ?checked=${this.checked} />
             </div>
             ${this.helperText ? html`<input-helper-text>${this.helperText}</input-helper-text> ` : nothing}
@@ -104,7 +106,7 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
             }
             .checkbox {
                 position: relative;
-                border: solid 2px var(--mjo-radio-border-color, rgb(51, 51, 51));
+                border: solid 2px var(--mjo-checkbox-border-color, var(--mjo-foreground-color-low, rgb(51, 51, 51)));
                 border-radius: 9999px;
                 line-height: 0;
                 transition: border-color 0.3s;
@@ -123,16 +125,14 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
             }
             .label {
                 position: relative;
-                display: flex;
-                align-items: center;
-                padding-left: 5px;
+                padding-left: var(--mjo-space-small, 5px);
                 user-select: none;
             }
             input {
                 display: none;
             }
             input-helper-text {
-                padding-left: calc(1rem + 9px);
+                padding-left: calc(calc(1rem + var(--mjo-space-small, 5px)) + 2px);
             }
         `,
     ];

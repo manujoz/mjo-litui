@@ -8,4 +8,6 @@ export interface DrawerShowParams {
     height?: string | number;
     blocked?: boolean;
     animationDuration?: number;
+    onOpen?: () => void;
+    onClose?: () => void;
 }

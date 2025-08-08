@@ -6,7 +6,7 @@ import { html } from "lit";
 import "../src/mjo-typography";
 
 const meta: Meta = {
-    component: "mjo-dropdown",
+    component: "mjo-typography",
     parameters: {
         docs: {
             theme: themes.dark,
