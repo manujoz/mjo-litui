@@ -36,11 +36,15 @@ export class MessageItem extends LitElement {
         super.connectedCallback();
 
         this.timeOut = setTimeout(() => {
-            this.removeMessage();
+            this.#removeMessage();
         }, this.time);
     }
 
-    removeMessage() {
+    close() {
+        this.#removeMessage();
+    }
+
+    #removeMessage() {
         if (this.removing) return;
 
         clearTimeout(this.timeOut!);

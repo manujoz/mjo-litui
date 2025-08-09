@@ -12,8 +12,8 @@ export class NotificationController implements ReactiveController {
         (this.host = host).addController(this);
     }
 
-    show({ message, type, time, title, onClose }: NotificationShowParams) {
-        this.notificationContainer.show({ message, type, time, title, onClose });
+    async show({ message, type, time, title, onClose }: NotificationShowParams) {
+        return await this.notificationContainer.show({ message, type, time, title, onClose });
     }
 
     hostConnected(): void {

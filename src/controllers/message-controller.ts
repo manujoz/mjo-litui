@@ -12,8 +12,8 @@ export class MessageController implements ReactiveController {
         (this.host = host).addController(this);
     }
 
-    show({ message, type = "info", time, onClose }: MessageShowParams) {
-        this.messageContainer.show({ message, type, time, onClose });
+    async show({ message, type = "info", time, onClose }: MessageShowParams) {
+        return await this.messageContainer.show({ message, type, time, onClose });
     }
 
     hostConnected(): void {

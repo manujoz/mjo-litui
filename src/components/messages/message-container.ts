@@ -16,7 +16,7 @@ export class MessageContainer extends ThemeMixin(LitElement) implements IThemeMi
         return html`<div class="container"></div>`;
     }
 
-    show({ message, type = "info", time, onClose }: MessageShowParams) {
+    async show({ message, type = "info", time, onClose }: MessageShowParams) {
         const messageItem = document.createElement("message-item") as MessageItem;
         messageItem.message = message;
         messageItem.type = type;
@@ -25,10 +25,11 @@ export class MessageContainer extends ThemeMixin(LitElement) implements IThemeMi
 
         const messageItems = this.container.querySelectorAll("message-item");
         if (messageItems.length === 4) {
-            messageItems[0].removeMessage();
+            messageItems[0].close();
         }
 
         this.container.appendChild(messageItem);
+        return messageItem;
     }
 
     static styles = [

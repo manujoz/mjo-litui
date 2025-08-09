@@ -36,7 +36,7 @@ export class NotificationItem extends LitElement {
                 : nothing}
             <div class="container">
                 ${this.notificationTitle ? html`<div class="title">${this.notificationTitle}</div>` : nothing}
-                <div class="close" @click=${this.removeNotification}>
+                <div class="close" @click=${this.#removeNotification}>
                     <mjo-icon src=${AiOutlineClose}></mjo-icon>
                 </div>
                 <div class="message">${this.message}</div>
@@ -49,7 +49,7 @@ export class NotificationItem extends LitElement {
 
         if (this.time > 0) {
             this.timeOut = setTimeout(() => {
-                this.removeNotification();
+                this.close();
             }, this.time + 600);
         }
     }
@@ -58,7 +58,11 @@ export class NotificationItem extends LitElement {
         this.position = position;
     }
 
-    removeNotification() {
+    close() {
+        this.#removeNotification();
+    }
+
+    #removeNotification() {
         if (this.removing) return;
 
         this.removing = true;

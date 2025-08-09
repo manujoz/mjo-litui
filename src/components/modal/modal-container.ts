@@ -43,7 +43,7 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
         `;
     }
 
-    show({ content, time, title, width, animationDuration, blocked = false, closePosition = "out", onClose }: ModalShowParams) {
+    show({ content, time, title, width, animationDuration, blocked = false, closePosition = "in", onClose }: ModalShowParams) {
         if (this.isOpen) return;
 
         if (animationDuration) this.#animationDuration = animationDuration;
@@ -148,7 +148,6 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
                 position: absolute;
                 top: 5px;
                 right: 5px;
-                color: white;
             }
             .closeIn mjo-icon {
                 font-size: var(--mjo-modal-icon-close-size, 16px);

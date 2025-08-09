@@ -5,6 +5,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import { pause } from "../../utils/utils.js";
 
 import "./notification-item.js";
 
@@ -19,7 +20,7 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
         return html`<div class="container" data-position=${this.position}></div>`;
     }
 
-    show({ message, type, time, title, onClose }: NotificationShowParams) {
+    async show({ message, type, time, title, onClose }: NotificationShowParams) {
         const notificationItem = document.createElement("notification-item") as NotificationItem;
         notificationItem.message = message;
         notificationItem.type = type;
@@ -40,12 +41,13 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
             this.container.insertBefore(notificationItem, notificationItems[0]);
         }
 
-        setTimeout(() => {
-            this.#showItem(notificationItem);
-        }, 30);
+        await pause(30);
+        this.#showItem(notificationItem);
+
+        return notificationItem;
     }
 
-    #showItem(item: NotificationItem) {
+    async #showItem(item: NotificationItem) {
         const margin = this.position.includes("top") ? parseInt(getComputedStyle(item).marginTop) : parseInt(getComputedStyle(item).marginBottom);
         const height = item.offsetHeight;
 
@@ -75,12 +77,11 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
         const notificationItems = this.container.querySelectorAll("notification-item");
         if (notificationItems.length === this.threshold + 1) {
             const index = this.position.includes("bottom") ? 0 : this.threshold;
-            notificationItems[index].removeNotification();
+            notificationItems[index].close();
             notificationItems[index].style.transform = this.position.includes("right") ? "translateX(110%)" : "translateX(-110%)";
 
-            setTimeout(() => {
-                notificationItems[index].remove();
-            }, 300);
+            await pause(300);
+            notificationItems[index].remove();
         }
     }
 
