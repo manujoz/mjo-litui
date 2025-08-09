@@ -9,7 +9,7 @@ Status: alpha (0.0.1-alpha.49). The API may change.
 -   Web Components with Shadow DOM and encapsulated styles
 -   Powerful theming system via `<mjo-theme>` (light/dark + overrides by variables and components)
 -   Overlays (modal, drawer, notifications) with reactive controllers
--   TypeScript types included and Vite/Storybook support
+-   TypeScript types included and Vite support
 -   Consistent `mjo-` prefix for all elements
 
 ## Extended Documentation
@@ -146,47 +146,44 @@ Patterns for drawer and notifications are analogous (use their respective contro
 
 ## Component List
 
-Available (with `mjo-` prefix):
+-   **[mjo-accordion](docs/mjo-accordion.md)** (+ `mjo-accordion-item`) - Collapsible content panels
+-   **[mjo-alert](docs/mjo-alert.md)** - Contextual feedback messages
+-   **[mjo-avatar](docs/mjo-avatar.md)** - User profile images and placeholders
+-   **[mjo-button](docs/mjo-button.md)** - Interactive buttons with variants and states
+-   **[mjo-card](docs/mjo-card.md)** - Content containers with elevation
+-   **[mjo-checkbox](docs/mjo-checkbox.md)** - Form checkboxes with validation
+-   **[mjo-chip](docs/mjo-chip.md)** - Compact elements for tags and filters
+-   **[mjo-color-picker](docs/mjo-color-picker.md)** - Color selection interface
+-   **[mjo-drawer](docs/mjo-drawer.md)** - Slide-out navigation panels
+-   **[mjo-dropdown](docs/mjo-dropdown.md)** - Contextual dropdown menus
+-   **[mjo-form](docs/mjo-form.md)** - Form container with validation
+-   **[mjo-grid](docs/mjo-grid.md)** - Responsive grid layout system
+-   **[mjo-icon](docs/mjo-icon.md)** - Icon display from mjo-icons
+-   **[mjo-image](docs/mjo-image.md)** - Enhanced image component with loading states
+-   **[mjo-ionic](docs/mjo-ionic.md)** - Ionic framework integration
+-   **[mjo-message](docs/mjo-message.md)** - Toast-style messages
+-   **[mjo-modal](docs/mjo-modal.md)** - Modal dialogs and overlays
+-   **[mjo-notification](docs/mjo-notification.md)** - System notifications
+-   **[mjo-option](docs/mjo-option.md)** - Select option items
+-   **[mjo-radio](docs/mjo-radio.md)** - Radio button inputs
+-   **[mjo-ripple](docs/mjo-ripple.md)** - Material Design ripple effects
+-   **[mjo-select](docs/mjo-select.md)** - Dropdown select inputs
+-   **[mjo-slider](docs/mjo-slider.md)** - Range slider inputs
+-   **[mjo-switch](docs/mjo-switch.md)** - Toggle switch controls
+-   **[mjo-table](docs/mjo-table.md)** - Data tables with sorting and filtering
+-   **[mjo-text-nowrap](docs/mjo-text-nowrap.md)** - Text overflow handling
+-   **[mjo-textarea](docs/mjo-textarea.md)** - Multi-line text inputs
+-   **[mjo-textfield](docs/mjo-textfield.md)** - Single-line text inputs
+-   **[mjo-theme](docs/mjo-theme.md)** - Theme configuration and CSS variables
+-   **[mjo-typography](docs/mjo-typography.md)** - Semantic text styling
 
--   accordion (+ `mjo-accordion-item`)
--   alert
--   avatar
--   button
--   card
--   checkbox
--   chip
--   color-picker
--   drawer
--   dropdown
--   form
--   grid
--   icon
--   image
--   ionic
--   message
--   modal
--   notification
--   option
--   radio
--   ripple
--   select
--   slider
--   switch
--   table
--   text-nowrap
--   textarea
--   textfield
--   theme
--   typography
-
-See Storybook for examples and props of each component.
+See individual component documentation for detailed examples and properties.
 
 ## Local Development
 
 Main scripts:
 
 -   `npm run dev`: starts Vite in development mode
--   `npm run storybook`: runs Storybook at http://localhost:6006
 -   `npm run preview`: serves the Vite build for local testing
 -   `npm run build`: compiles TypeScript and publishes from `dist/` (caution: runs `npm publish` in `dist`)
 
@@ -194,7 +191,6 @@ Getting started with contributions:
 
 1. Clone the repo and run `npm install`
 2. `npm run dev` for local playground
-3. `npm run storybook` to browse examples
 
 ## Project Structure (summary)
 
@@ -202,7 +198,7 @@ Getting started with contributions:
 -   `src/controllers/`: controllers for overlays (modal, drawer, notification)
 -   `src/helpers|mixins|utils/`: utilities, validation, and theme/form mixins
 -   `src/theme/default-theme.ts`: base theme configuration (light/dark + palettes)
--   `stories/*`: Storybook stories (CSF)
+-   `docs/`: comprehensive component documentation
 
 ## Best Practices and Conventions
 

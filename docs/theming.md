@@ -302,7 +302,7 @@ This does NOT modify the global theme, only that button.
 ## Best practices
 
 1. Change global tokens first before adjusting component-specific variables (promotes consistency).
-2. Use `scope="local"` for previews/embeds (e.g., inside Storybook) without affecting the rest.
+2. Use `scope="local"` for previews/embeds without affecting the rest.
 3. For dynamic changes (toggle dark/light), modify the `theme` property of `<mjo-theme>` and, if you mutate `config`, reassign or call `applyTheme()`.
 4. Avoid overusing `ThemeMixin` for global styles: it's meant for exceptions.
 

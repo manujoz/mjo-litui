@@ -7,7 +7,62 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 1. **[Getting Started](getting-started.md)** – Installation, first use, and development scripts.
 2. **[Theming](theming.md)** – Theme system, global variables, and targeted overrides.
 3. **Components** – Each `mjo-<name>.md` file documents a component.
-    - Available now: [mjo-button](mjo-button.md)
+
+## 🧩 Available Components
+
+### Core Components
+
+-   **[mjo-theme](mjo-theme.md)** - Theme configuration and CSS variables
+-   **[mjo-typography](mjo-typography.md)** - Semantic text styling
+-   **[mjo-icon](mjo-icon.md)** - Icon display from mjo-icons
+-   **[mjo-ripple](mjo-ripple.md)** - Material Design ripple effects
+
+### Layout & Structure
+
+-   **[mjo-card](mjo-card.md)** - Content containers with elevation
+-   **[mjo-grid](mjo-grid.md)** - Responsive grid layout system
+-   **[mjo-accordion](mjo-accordion.md)** - Collapsible content panels
+
+### Form Components
+
+-   **[mjo-form](mjo-form.md)** - Form container with validation
+-   **[mjo-textfield](mjo-textfield.md)** - Single-line text inputs
+-   **[mjo-textarea](mjo-textarea.md)** - Multi-line text inputs
+-   **[mjo-select](mjo-select.md)** - Dropdown select inputs
+-   **[mjo-option](mjo-option.md)** - Select option items
+-   **[mjo-checkbox](mjo-checkbox.md)** - Form checkboxes with validation
+-   **[mjo-radio](mjo-radio.md)** - Radio button inputs
+-   **[mjo-switch](mjo-switch.md)** - Toggle switch controls
+-   **[mjo-slider](mjo-slider.md)** - Range slider inputs
+-   **[mjo-color-picker](mjo-color-picker.md)** - Color selection interface
+
+### Interactive Components
+
+-   **[mjo-button](mjo-button.md)** - Interactive buttons with variants and states
+-   **[mjo-dropdown](mjo-dropdown.md)** - Contextual dropdown menus
+
+### Media & Display
+
+-   **[mjo-image](mjo-image.md)** - Enhanced image component with loading states
+-   **[mjo-avatar](mjo-avatar.md)** - User profile images and placeholders
+-   **[mjo-table](mjo-table.md)** - Data tables with sorting and filtering
+-   **[mjo-text-nowrap](mjo-text-nowrap.md)** - Text overflow handling
+
+### Feedback & Messaging
+
+-   **[mjo-alert](mjo-alert.md)** - Contextual feedback messages
+-   **[mjo-message](mjo-message.md)** - Toast-style messages
+-   **[mjo-notification](mjo-notification.md)** - System notifications
+
+### Overlays
+
+-   **[mjo-modal](mjo-modal.md)** - Modal dialogs and overlays
+-   **[mjo-drawer](mjo-drawer.md)** - Slide-out navigation panels
+
+### Utility Components
+
+-   **[mjo-chip](mjo-chip.md)** - Compact elements for tags and filters
+
 4. **Coming Soon** (suggested): accessibility, form patterns, contribution guides.
 
 ## 🧱 File Structure
@@ -66,7 +121,7 @@ Use cases (basic, advanced, form integration if applicable).
 
 Before adding a snippet:
 
-1. Test it in Storybook or the Vite sandbox (`npm run dev`).
+1. Test it in the Vite sandbox (`npm run dev`).
 2. Make sure it does not depend on strange imports: just `import 'mjo-litui';` or the specific import is enough.
 3. If it requires assets/icons, mention the dependency (`mjo-icons`).
 
@@ -76,17 +131,18 @@ When adding a new component:
 
 1. Implement the file `src/mjo-<name>.ts`.
 2. Export it in `src/index.ts`.
-3. Create a story in `stories/mjo-<name>.stories.ts`.
-4. Write `docs/mjo-<name>.md` using the template.
-5. Update the component list in the main README if necessary.
+3. Write `docs/mjo-<name>.md` using the template.
+4. Update the component list in the main README if necessary.
 
-## 🗺️ Suggested Documentation Roadmap
+## 🗺️ Documentation Status
 
--   mjo-modal (overlays + controller)
--   mjo-drawer / mjo-notification (controller pattern)
--   mjo-form / validation and mixins
--   mjo-select / options and accessibility
--   mjo-table / empty state and alternate styles
+All components have comprehensive documentation with:
+
+-   Usage examples and TypeScript integration
+-   Complete property and event documentation
+-   Theme customization guides
+-   Accessibility best practices
+-   Integration examples with other components
 
 ## 🔍 Useful Internal References
 
