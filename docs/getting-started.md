@@ -50,12 +50,11 @@ import "mjo-litui"; // registers all custom elements
 
 ## Development scripts
 
-| Script              | Purpose                                                   |
-| ------------------- | --------------------------------------------------------- |
-| `npm run dev`       | Start Vite dev server                                     |
-| `npm run storybook` | Run Storybook (http://localhost:6006)                     |
-| `npm run preview`   | Preview built bundle                                      |
-| `npm run build`     | Compile & publish from `dist/` (beware: runs npm publish) |
+| Script            | Purpose                                                   |
+| ----------------- | --------------------------------------------------------- |
+| `npm run dev`     | Start Vite dev server                                     |
+| `npm run preview` | Preview built bundle                                      |
+| `npm run build`   | Compile & publish from `dist/` (beware: runs npm publish) |
 
 ## Theming quick hint
 
