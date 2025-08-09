@@ -2,12 +2,12 @@ import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
+import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./helpers/input-helper-text";
-import "./helpers/input-label";
+import "./components/input/input-helper-text.js";
+import "./components/input/input-label.js";
 
 @customElement("mjo-color-picker")
 export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IFormMixin, IInputErrorMixin, IThemeMixin {

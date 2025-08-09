@@ -8,8 +8,8 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import { GiCheckMark } from "mjo-icons/gi";
 
-import "./helpers/input-helper-text.js";
-import "./helpers/input-label.js";
+import "./components/input/input-helper-text.js";
+import "./components/input/input-label.js";
 import "./mjo-icon.js";
 
 @customElement("mjo-switch")

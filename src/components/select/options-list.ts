@@ -1,16 +1,16 @@
-import { type locales } from "../locales/locales.js";
-import { type MjoOption } from "../mjo-option.js";
-import { type MjoSelect } from "../mjo-select";
+import { type locales } from "../../locales/locales.js";
+import { type MjoOption } from "../../mjo-option.js";
+import { type MjoSelect } from "../../mjo-select";
 
 import { LitElement, PropertyValues, css, html, isServer, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
-
 import { AiOutlineSearch } from "mjo-icons/ai";
-import { IThemeMixin, ThemeMixin } from "../mixins/theme-mixin.js";
-import { getDictionary } from "../utils/dictionary.js";
 
-import "../mjo-icon.js";
+import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import { getDictionary } from "../../utils/dictionary.js";
+
+import "../../mjo-icon.js";
 
 @customElement("options-list")
 export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {

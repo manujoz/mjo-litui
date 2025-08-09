@@ -2,8 +2,8 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { AiFillCheckCircle, AiFillCloseCircle } from "mjo-icons/ai";
 
-import "../mjo-icon.js";
-import "../mjo-typography.js";
+import "../../mjo-icon.js";
+import "../../mjo-typography.js";
 
 @customElement("input-helper-text")
 export class InputHelperText extends LitElement {

@@ -3,9 +3,9 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import ImageNotAvailable from "./assets/no-image";
+import ImageNotAvailable from "./utils/svg/no-image.js";
 
 @customElement("mjo-image")
 export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {

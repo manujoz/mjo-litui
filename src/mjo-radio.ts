@@ -7,7 +7,7 @@ import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./helpers/input-helper-text.js";
+import "./components/input/input-helper-text.js";
 import "./mjo-icon.js";
 import "./mjo-typography.js";
 

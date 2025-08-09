@@ -10,12 +10,6 @@ export default defineConfig({
             scopeBehaviour: "local",
         },
     },
+    root: `${__dirname}/dev`,
     plugins: [svg()],
-    build: {
-        rollupOptions: {
-            input: {
-                main: `${__dirname}/project/index.ts`,
-            },
-        },
-    },
 });

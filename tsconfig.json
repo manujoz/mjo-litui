@@ -23,5 +23,5 @@
     "declaration": true,
     "declarationMap": true,
   },
-  "include": ["src", "./*.ts", "stories"]
+  "include": ["src", "./*.ts", ".dev", "dev", ".vite.config.ts"],
 }

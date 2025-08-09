@@ -1,7 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import "../mjo-text-nowrap.js";
+import "../../mjo-text-nowrap.js";
 
 @customElement("input-label")
 export class InputLabel extends LitElement {

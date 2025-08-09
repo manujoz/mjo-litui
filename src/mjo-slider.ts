@@ -1,4 +1,4 @@
-import { type SliderHandle } from "./helpers/slider-handle.js";
+import { type SliderHandle } from "./components/slider/slider-handle.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
@@ -10,7 +10,8 @@ import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./helpers/slider-handle.js";
+import "./components/input/input-label.js";
+import "./components/slider/slider-handle.js";
 
 @customElement("mjo-slider")
 export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {

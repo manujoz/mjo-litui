@@ -1,16 +1,16 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { live } from "lit/directives/live.js";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { TextAreaAutoSize } from "./utils/textarea-autosize.js";
 
-import { live } from "lit/directives/live.js";
-import "./helpers/input-counter.js";
-import "./helpers/input-helper-text.js";
-import "./helpers/input-label.js";
+import "./components/input/input-counter.js";
+import "./components/input/input-helper-text.js";
+import "./components/input/input-label.js";
 
 @customElement("mjo-textarea")
 export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {

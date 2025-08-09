@@ -1,4 +1,4 @@
-import { type OptionsList } from "./helpers/options-list.js";
+import { type OptionsList } from "./components/select/options-list.js";
 import { type MjoDropdown } from "./mjo-dropdown.js";
 import { type MjoOption } from "./mjo-option.js";
 import { type MjoDropdownTheme } from "./types/mjo-theme.js";
@@ -14,7 +14,9 @@ import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./helpers/options-list.js";
+import "./components/input/input-helper-text.js";
+import "./components/input/input-label.js";
+import "./components/select/options-list.js";
 import "./mjo-dropdown.js";
 import "./mjo-option.js";
 

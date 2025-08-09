@@ -6,12 +6,11 @@ import { AiFillCloseCircle, AiFillEye, AiFillEyeInvisible } from "mjo-icons/ai";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
-
-import "./helpers/input-counter.js";
-import "./helpers/input-helper-text.js";
-import "./helpers/input-label.js";
-
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+
+import "./components/input/input-counter.js";
+import "./components/input/input-helper-text.js";
+import "./components/input/input-label.js";
 import "./mjo-icon.js";
 
 @customElement("mjo-textfield")
