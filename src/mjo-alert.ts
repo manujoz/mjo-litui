@@ -4,6 +4,8 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
 
+import "./mjo-icon";
+
 @customElement("mjo-alert")
 export class MjoAlert extends LitElement {
     @property({ type: String }) type: "success" | "info" | "warning" | "error" = "info";
