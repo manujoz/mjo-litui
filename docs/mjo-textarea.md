@@ -32,7 +32,7 @@ export class ExampleTextareaBasic extends LitElement {
                 placeholder="Type your message here..."
                 .value=${this.message}
                 @input=${this.#handleInput}
-                helper-text="Share your thoughts with us"
+                helperText="Share your thoughts with us"
             ></mjo-textarea>
 
             <p style="margin-top: 1rem;"><strong>Current message:</strong> ${this.message || "No message yet"}</p>
@@ -71,21 +71,21 @@ export class ExampleTextareaSizes extends LitElement {
                     size="small"
                     label="Small textarea"
                     placeholder="Small size with compact padding"
-                    helper-text="Compact size for limited space"
+                    helperText="Compact size for limited space"
                 ></mjo-textarea>
 
                 <mjo-textarea
                     size="medium"
                     label="Medium textarea"
                     placeholder="Default medium size"
-                    helper-text="Standard size for most use cases"
+                    helperText="Standard size for most use cases"
                 ></mjo-textarea>
 
                 <mjo-textarea
                     size="large"
                     label="Large textarea"
                     placeholder="Large size with generous padding"
-                    helper-text="Comfortable size for extensive writing"
+                    helperText="Comfortable size for extensive writing"
                 ></mjo-textarea>
             </div>
         `;
@@ -117,14 +117,14 @@ export class ExampleTextareaColors extends LitElement {
                     color="primary"
                     label="Primary color"
                     placeholder="Primary color scheme"
-                    helper-text="Uses primary theme colors when focused"
+                    helperText="Uses primary theme colors when focused"
                 ></mjo-textarea>
 
                 <mjo-textarea
                     color="secondary"
                     label="Secondary color"
                     placeholder="Secondary color scheme"
-                    helper-text="Uses secondary theme colors when focused"
+                    helperText="Uses secondary theme colors when focused"
                 ></mjo-textarea>
             </div>
         `;
@@ -137,7 +137,7 @@ export class ExampleTextareaColors extends LitElement {
 The textarea automatically adjusts its height based on content, starting with the specified number of rows.
 
 ```html
-<mjo-textarea label="Auto-resize textarea" rows="3" max-height="200" placeholder="Start typing to see auto-resize in action..."></mjo-textarea>
+<mjo-textarea label="Auto-resize textarea" rows="3" maxHeight="200" placeholder="Start typing to see auto-resize in action..."></mjo-textarea>
 ```
 
 ### Lit Example - Auto-resize
@@ -158,18 +158,18 @@ export class ExampleTextareaAutoresize extends LitElement {
                     label="Auto-resize textarea"
                     placeholder="Start typing and watch the textarea grow automatically..."
                     rows="2"
-                    max-height="150"
+                    maxHeight="150"
                     .value=${this.content}
                     @input=${this.#handleInput}
-                    helper-text="Grows automatically up to 150px height"
+                    helperText="Grows automatically up to 150px height"
                 ></mjo-textarea>
 
                 <mjo-textarea
                     label="Larger auto-resize"
                     placeholder="This one can grow much larger..."
                     rows="3"
-                    max-height="300"
-                    helper-text="Grows automatically up to 300px height"
+                    maxHeight="300"
+                    helperText="Grows automatically up to 300px height"
                 ></mjo-textarea>
             </div>
         `;
@@ -186,7 +186,7 @@ export class ExampleTextareaAutoresize extends LitElement {
 Enable character counting to help users stay within limits.
 
 ```html
-<mjo-textarea label="Comment" placeholder="Enter your comment..." counter maxlength="500" helper-text="Share your feedback"></mjo-textarea>
+<mjo-textarea label="Comment" placeholder="Enter your comment..." counter maxlength="500" helperText="Share your feedback"></mjo-textarea>
 ```
 
 ### Lit Example - Character Counter
@@ -210,7 +210,7 @@ export class ExampleTextareaCounter extends LitElement {
                     maxlength="200"
                     .value=${this.feedback}
                     @input=${this.#handleInput}
-                    helper-text="Share your experience with this product"
+                    helperText="Share your experience with this product"
                 ></mjo-textarea>
 
                 <mjo-textarea
@@ -218,7 +218,7 @@ export class ExampleTextareaCounter extends LitElement {
                     placeholder="Keep it short and sweet..."
                     counter
                     maxlength="50"
-                    helper-text="Maximum 50 characters"
+                    helperText="Maximum 50 characters"
                 ></mjo-textarea>
             </div>
         `;
@@ -235,7 +235,7 @@ export class ExampleTextareaCounter extends LitElement {
 Add visual context with start and end icons or images.
 
 ```html
-<mjo-textarea label="Message with icon" start-icon="mail" placeholder="Type your message..."></mjo-textarea>
+<mjo-textarea label="Message with icon" startIcon="mail" placeholder="Type your message..."></mjo-textarea>
 ```
 
 ### Lit Example - Icons
@@ -253,17 +253,17 @@ export class ExampleTextareaIcons extends LitElement {
             <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <mjo-textarea
                     label="Email Message"
-                    start-icon=${AiOutlineMail}
+                    startIcon=${AiOutlineMail}
                     placeholder="Compose your email..."
-                    helper-text="Message will be sent via email"
+                    helperText="Message will be sent via email"
                 ></mjo-textarea>
 
                 <mjo-textarea
                     label="Profile Bio"
-                    start-icon=${AiOutlineUser}
-                    end-icon=${AiOutlineEdit}
+                    startIcon=${AiOutlineUser}
+                    endIcon=${AiOutlineEdit}
                     placeholder="Tell others about yourself..."
-                    helper-text="This will appear on your public profile"
+                    helperText="This will appear on your public profile"
                 ></mjo-textarea>
             </div>
         `;
@@ -310,7 +310,7 @@ export class ExampleTextareaValidation extends LitElement {
                     counter
                     maxlength="500"
                     @input=${this.#handleInput}
-                    helper-text="Please provide a meaningful message"
+                    helperText="Please provide a meaningful message"
                 ></mjo-textarea>
 
                 <mjo-button @click=${this.#validate}> Validate Message </mjo-button>
@@ -366,7 +366,7 @@ export class ExampleTextareaForm extends LitElement {
                     label="Full Name"
                     required
                     placeholder="Enter your full name"
-                    helper-text="We'll use this to address you"
+                    helperText="We'll use this to address you"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -375,7 +375,7 @@ export class ExampleTextareaForm extends LitElement {
                     type="email"
                     required
                     placeholder="your@email.com"
-                    helper-text="We'll send a confirmation to this email"
+                    helperText="We'll send a confirmation to this email"
                 ></mjo-textfield>
 
                 <mjo-textarea
@@ -384,8 +384,8 @@ export class ExampleTextareaForm extends LitElement {
                     required
                     placeholder="Brief subject line..."
                     rows="1"
-                    max-height="100"
-                    helper-text="What is this message about?"
+                    maxHeight="100"
+                    helperText="What is this message about?"
                 ></mjo-textarea>
 
                 <mjo-textarea
@@ -397,8 +397,8 @@ export class ExampleTextareaForm extends LitElement {
                     counter
                     placeholder="Please provide details about your inquiry..."
                     rows="4"
-                    max-height="200"
-                    helper-text="Minimum 20 characters required"
+                    maxHeight="200"
+                    helperText="Minimum 20 characters required"
                 ></mjo-textarea>
 
                 <mjo-textarea
@@ -406,8 +406,8 @@ export class ExampleTextareaForm extends LitElement {
                     label="Additional Information (Optional)"
                     placeholder="Any other details you'd like to share..."
                     rows="2"
-                    max-height="150"
-                    helper-text="Optional field for extra context"
+                    maxHeight="150"
+                    helperText="Optional field for extra context"
                 ></mjo-textarea>
 
                 <mjo-button type="submit" style="margin-top: 1rem;"> Send Message </mjo-button>
@@ -485,7 +485,7 @@ export class ExampleTextareaAdvanced extends LitElement {
                     .readonly=${this.settings.readonly}
                     .disabled=${this.settings.disabled}
                     value="Sample text content for testing different states"
-                    helper-text="Use the checkboxes above to test different states"
+                    helperText="Use the checkboxes above to test different states"
                     counter
                     maxlength="200"
                 ></mjo-textarea>
@@ -520,11 +520,11 @@ console.log(message);`;
         return html`
             <mjo-textarea
                 label="JavaScript Code"
-                start-icon=${AiOutlineCode}
+                startIcon=${AiOutlineCode}
                 .value=${this.code}
                 @input=${this.#handleCodeChange}
                 rows="6"
-                max-height="400"
+                maxHeight="400"
                 fullwidth
                 style="
                     --mjo-textarea-font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
@@ -533,7 +533,7 @@ console.log(message);`;
                     --mjo-textarea-color: #d4d4d4;
                     --mjo-textarea-border-color: #3c3c3c;
                 "
-                helper-text="Enter your JavaScript code here"
+                helperText="Enter your JavaScript code here"
                 counter
                 maxlength="2000"
             ></mjo-textarea>
@@ -654,7 +654,7 @@ export class ExampleTextareaTheme extends LitElement {
                 <mjo-textarea
                     label="Themed textarea"
                     placeholder="This textarea uses custom theme settings"
-                    helper-text="Styled with custom theme configuration"
+                    helperText="Styled with custom theme configuration"
                 ></mjo-textarea>
             </mjo-theme>
         `;
@@ -684,7 +684,7 @@ export class ExampleTextareaCustomTheme extends LitElement {
                     fontSize: "18px",
                     padding: "16px 20px",
                 }}
-                helper-text="This textarea has component-level custom styling"
+                helperText="This textarea has component-level custom styling"
             ></mjo-textarea>
         `;
     }

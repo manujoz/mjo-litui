@@ -111,7 +111,7 @@ Switches can be disabled to prevent user interaction.
 Provide additional context with helper text.
 
 ```html
-<mjo-switch label="Dark mode" helper-text="Switch to dark theme" checked></mjo-switch>
+<mjo-switch label="Dark mode" helperText="Switch to dark theme" checked></mjo-switch>
 ```
 
 ## Form Integration
@@ -120,9 +120,9 @@ The switch integrates seamlessly with `mjo-form` and supports validation.
 
 ```html
 <mjo-form>
-    <mjo-switch name="terms" label="I agree to the terms and conditions" required helper-text="You must accept the terms to continue"></mjo-switch>
+    <mjo-switch name="terms" label="I agree to the terms and conditions" required helperText="You must accept the terms to continue"></mjo-switch>
 
-    <mjo-switch name="newsletter" label="Subscribe to newsletter" helper-text="Receive updates about our products"></mjo-switch>
+    <mjo-switch name="newsletter" label="Subscribe to newsletter" helperText="Receive updates about our products"></mjo-switch>
 </mjo-form>
 ```
 
@@ -144,13 +144,13 @@ export class ExampleSwitchForm extends LitElement {
             <mjo-form @mjo-form-submit=${this.#handleSubmit}>
                 <h3>User Preferences</h3>
 
-                <mjo-switch name="notifications" label="Email notifications" helper-text="Receive important updates via email" checked></mjo-switch>
+                <mjo-switch name="notifications" label="Email notifications" helperText="Receive important updates via email" checked></mjo-switch>
 
-                <mjo-switch name="marketing" label="Marketing emails" helper-text="Receive promotional content and offers"></mjo-switch>
+                <mjo-switch name="marketing" label="Marketing emails" helperText="Receive promotional content and offers"></mjo-switch>
 
-                <mjo-switch name="darkMode" label="Dark mode" helper-text="Use dark theme interface"></mjo-switch>
+                <mjo-switch name="darkMode" label="Dark mode" helperText="Use dark theme interface"></mjo-switch>
 
-                <mjo-switch name="terms" label="I agree to the terms and conditions" required helper-text="Required to save preferences"></mjo-switch>
+                <mjo-switch name="terms" label="I agree to the terms and conditions" required helperText="Required to save preferences"></mjo-switch>
 
                 <mjo-button type="submit" style="margin-top: 1rem;"> Save Preferences </mjo-button>
             </mjo-form>
@@ -194,28 +194,28 @@ export class ExampleSwitchAdvanced extends LitElement {
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
                     <mjo-switch
                         label="Enable notifications"
-                        helper-text="Show desktop notifications for important events"
+                        helperText="Show desktop notifications for important events"
                         .checked=${this.settings.notifications}
                         @mjo-switch=${(e: CustomEvent) => this.#updateSetting("notifications", e.detail.checked)}
                     ></mjo-switch>
 
                     <mjo-switch
                         label="Dark mode"
-                        helper-text="Use dark theme for better visibility in low light"
+                        helperText="Use dark theme for better visibility in low light"
                         .checked=${this.settings.darkMode}
                         @mjo-switch=${(e: CustomEvent) => this.#updateSetting("darkMode", e.detail.checked)}
                     ></mjo-switch>
 
                     <mjo-switch
                         label="Auto-save"
-                        helper-text="Automatically save changes every 5 minutes"
+                        helperText="Automatically save changes every 5 minutes"
                         .checked=${this.settings.autoSave}
                         @mjo-switch=${(e: CustomEvent) => this.#updateSetting("autoSave", e.detail.checked)}
                     ></mjo-switch>
 
                     <mjo-switch
                         label="Show preview"
-                        helper-text="Display preview panel while editing"
+                        helperText="Display preview panel while editing"
                         .checked=${this.settings.showPreview}
                         @mjo-switch=${(e: CustomEvent) => this.#updateSetting("showPreview", e.detail.checked)}
                         .disabled=${!this.settings.autoSave}
@@ -318,7 +318,7 @@ export class ExampleSwitchTheme extends LitElement {
                     },
                 }}
             >
-                <mjo-switch label="Custom themed switch" helper-text="This switch uses custom theme colors" checked></mjo-switch>
+                <mjo-switch label="Custom themed switch" helperText="This switch uses custom theme colors" checked></mjo-switch>
             </mjo-theme>
         `;
     }
@@ -338,7 +338,7 @@ export class ExampleSwitchCustomTheme extends LitElement {
         return html`
             <mjo-switch
                 label="Custom switch"
-                helper-text="Custom themed switch"
+                helperText="Custom themed switch"
                 .theme=${{
                     backgroundColorChecked: "#8B5CF6",
                     sizeMedium: "20px",

@@ -32,7 +32,7 @@ export class ExampleTextfieldBasic extends LitElement {
                 placeholder="Enter your full name"
                 .value=${this.name}
                 @input=${this.#handleInput}
-                helper-text="This will be used as your display name"
+                helperText="This will be used as your display name"
             ></mjo-textfield>
 
             <p style="margin-top: 1rem;"><strong>Current value:</strong> ${this.name || "No name entered"}</p>
@@ -84,7 +84,7 @@ export class ExampleTextfieldTypes extends LitElement {
                     placeholder="your@email.com"
                     .value=${this.formData.email}
                     @input=${(e: CustomEvent) => this.#updateField("email", e)}
-                    helper-text="We'll never share your email"
+                    helperText="We'll never share your email"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -93,7 +93,7 @@ export class ExampleTextfieldTypes extends LitElement {
                     placeholder="Enter secure password"
                     .value=${this.formData.password}
                     @input=${(e: CustomEvent) => this.#updateField("password", e)}
-                    helper-text="Password must be at least 8 characters"
+                    helperText="Password must be at least 8 characters"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -104,7 +104,7 @@ export class ExampleTextfieldTypes extends LitElement {
                     max="120"
                     .value=${this.formData.age}
                     @input=${(e: CustomEvent) => this.#updateField("age", e)}
-                    helper-text="Must be between 18 and 120"
+                    helperText="Must be between 18 and 120"
                     nospiners
                 ></mjo-textfield>
 
@@ -114,7 +114,7 @@ export class ExampleTextfieldTypes extends LitElement {
                     placeholder="+1 234 567 8900"
                     .value=${this.formData.phone}
                     @input=${(e: CustomEvent) => this.#updateField("phone", e)}
-                    helper-text="Include country code"
+                    helperText="Include country code"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -123,7 +123,7 @@ export class ExampleTextfieldTypes extends LitElement {
                     placeholder="https://yourwebsite.com"
                     .value=${this.formData.website}
                     @input=${(e: CustomEvent) => this.#updateField("website", e)}
-                    helper-text="Your personal or company website"
+                    helperText="Your personal or company website"
                 ></mjo-textfield>
             </div>
         `;
@@ -164,21 +164,21 @@ export class ExampleTextfieldSizes extends LitElement {
                     size="small"
                     label="Small textfield"
                     placeholder="Compact input for tight spaces"
-                    helper-text="Small size with reduced padding"
+                    helperText="Small size with reduced padding"
                 ></mjo-textfield>
 
                 <mjo-textfield
                     size="medium"
                     label="Medium textfield"
                     placeholder="Standard size for most cases"
-                    helper-text="Default medium size"
+                    helperText="Default medium size"
                 ></mjo-textfield>
 
                 <mjo-textfield
                     size="large"
                     label="Large textfield"
                     placeholder="Generous spacing for prominence"
-                    helper-text="Large size with extra padding"
+                    helperText="Large size with extra padding"
                 ></mjo-textfield>
             </div>
         `;
@@ -210,14 +210,14 @@ export class ExampleTextfieldColors extends LitElement {
                     color="primary"
                     label="Primary color"
                     placeholder="Primary color scheme"
-                    helper-text="Uses primary theme colors when focused"
+                    helperText="Uses primary theme colors when focused"
                 ></mjo-textfield>
 
                 <mjo-textfield
                     color="secondary"
                     label="Secondary color"
                     placeholder="Secondary color scheme"
-                    helper-text="Uses secondary theme colors when focused"
+                    helperText="Uses secondary theme colors when focused"
                 ></mjo-textfield>
             </div>
         `;
@@ -230,9 +230,9 @@ export class ExampleTextfieldColors extends LitElement {
 Add visual context with start and end icons or images.
 
 ```html
-<mjo-textfield label="Email" start-icon="mail" placeholder="your@email.com"></mjo-textfield>
+<mjo-textfield label="Email" startIcon="mail" placeholder="your@email.com"></mjo-textfield>
 
-<mjo-textfield label="Search" end-icon="search" placeholder="Search here..."></mjo-textfield>
+<mjo-textfield label="Search" endIcon="search" placeholder="Search here..."></mjo-textfield>
 ```
 
 ### Lit Example - Icons
@@ -248,24 +248,24 @@ export class ExampleTextfieldIcons extends LitElement {
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-textfield label="Email Address" start-icon=${AiOutlineMail} placeholder="your@email.com" helper-text="Your email address"></mjo-textfield>
+                <mjo-textfield label="Email Address" startIcon=${AiOutlineMail} placeholder="your@email.com" helperText="Your email address"></mjo-textfield>
 
-                <mjo-textfield label="Search Query" end-icon=${AiOutlineSearch} placeholder="Search..." helper-text="Enter search terms"></mjo-textfield>
+                <mjo-textfield label="Search Query" endIcon=${AiOutlineSearch} placeholder="Search..." helperText="Enter search terms"></mjo-textfield>
 
                 <mjo-textfield
                     label="Username"
-                    start-icon=${AiOutlineUser}
-                    end-icon=${AiOutlineGlobal}
+                    startIcon=${AiOutlineUser}
+                    endIcon=${AiOutlineGlobal}
                     placeholder="your-username"
-                    helper-text="Unique username for your account"
+                    helperText="Unique username for your account"
                 ></mjo-textfield>
 
                 <mjo-textfield
                     label="Phone Number"
-                    start-icon=${AiOutlinePhone}
+                    startIcon=${AiOutlinePhone}
                     type="tel"
                     placeholder="+1 234 567 8900"
-                    helper-text="Your contact number"
+                    helperText="Your contact number"
                 ></mjo-textfield>
             </div>
         `;
@@ -305,7 +305,7 @@ export class ExampleTextfieldPassword extends LitElement {
                     placeholder="Enter your password"
                     .value=${this.password}
                     @input=${this.#handlePasswordChange}
-                    helper-text="Password must be at least 8 characters"
+                    helperText="Password must be at least 8 characters"
                     counter
                     maxlength="50"
                 ></mjo-textfield>
@@ -319,7 +319,7 @@ export class ExampleTextfieldPassword extends LitElement {
                     ?error=${showConfirmError}
                     errormsg=${showConfirmError ? "Passwords do not match" : ""}
                     successmsg=${passwordsMatch && this.confirmPassword.length > 0 ? "Passwords match!" : ""}
-                    helper-text="Re-enter your password"
+                    helperText="Re-enter your password"
                 ></mjo-textfield>
             </div>
         `;
@@ -340,7 +340,7 @@ export class ExampleTextfieldPassword extends LitElement {
 Add textual context with prefix and suffix elements.
 
 ```html
-<mjo-textfield label="Price" prefix-text="$" suffix-text="USD" placeholder="0.00"></mjo-textfield>
+<mjo-textfield label="Price" prefixText="$" suffixText="USD" placeholder="0.00"></mjo-textfield>
 ```
 
 ### Lit Example - Prefix/Suffix
@@ -361,35 +361,35 @@ export class ExampleTextfieldPrefixSuffix extends LitElement {
             <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <mjo-textfield
                     label="Product Price"
-                    prefix-text="$"
-                    suffix-text="USD"
+                    prefixText="$"
+                    suffixText="USD"
                     type="number"
                     placeholder="99.99"
                     .value=${this.price}
                     @input=${(e: CustomEvent) => (this.price = (e.target as any).value)}
-                    helper-text="Price in US dollars"
+                    helperText="Price in US dollars"
                     nospiners
                 ></mjo-textfield>
 
                 <mjo-textfield
                     label="Website URL"
-                    prefix-text="https://"
-                    suffix-text=".com"
+                    prefixText="https://"
+                    suffixText=".com"
                     placeholder="yoursite"
                     .value=${this.website}
                     @input=${(e: CustomEvent) => (this.website = (e.target as any).value)}
-                    helper-text="Your website domain"
+                    helperText="Your website domain"
                 ></mjo-textfield>
 
                 <mjo-textfield
                     label="Package Weight"
-                    suffix-text="kg"
+                    suffixText="kg"
                     type="number"
                     placeholder="1.5"
                     step="0.1"
                     .value=${this.weight}
                     @input=${(e: CustomEvent) => (this.weight = (e.target as any).value)}
-                    helper-text="Weight in kilograms"
+                    helperText="Weight in kilograms"
                     nospiners
                 ></mjo-textfield>
             </div>
@@ -424,12 +424,12 @@ export class ExampleTextfieldClearable extends LitElement {
             <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <mjo-textfield
                     label="Search Products"
-                    start-icon=${AiOutlineSearch}
+                    startIcon=${AiOutlineSearch}
                     placeholder="Search for products..."
                     clearabled
                     .value=${this.searchQuery}
                     @input=${(e: CustomEvent) => (this.searchQuery = (e.target as any).value)}
-                    helper-text="Clear button appears when typing"
+                    helperText="Clear button appears when typing"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -439,7 +439,7 @@ export class ExampleTextfieldClearable extends LitElement {
                     clearabled
                     .value=${this.email}
                     @input=${(e: CustomEvent) => (this.email = (e.target as any).value)}
-                    helper-text="Click X to clear the field"
+                    helperText="Click X to clear the field"
                 ></mjo-textfield>
 
                 <div style="margin-top: 1rem;">
@@ -482,7 +482,7 @@ export class ExampleTextfieldCounter extends LitElement {
                     @input=${(e: CustomEvent) => (this.bio = (e.target as any).value)}
                     counter
                     maxlength="200"
-                    helper-text="Brief description for your profile"
+                    helperText="Brief description for your profile"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -492,7 +492,7 @@ export class ExampleTextfieldCounter extends LitElement {
                     @input=${(e: CustomEvent) => (this.title = (e.target as any).value)}
                     counter
                     maxlength="50"
-                    helper-text="Keep it concise and professional"
+                    helperText="Keep it concise and professional"
                 ></mjo-textfield>
             </div>
         `;
@@ -541,7 +541,7 @@ export class ExampleTextfieldValidation extends LitElement {
                     ?error=${!!this.emailError}
                     errormsg=${this.emailError}
                     successmsg=${this.emailSuccess}
-                    helper-text="We'll send a verification email"
+                    helperText="We'll send a verification email"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -552,7 +552,7 @@ export class ExampleTextfieldValidation extends LitElement {
                     ?error=${!!this.usernameError}
                     errormsg=${this.usernameError}
                     successmsg=${this.usernameSuccess}
-                    helper-text="3-20 characters, letters and numbers only"
+                    helperText="3-20 characters, letters and numbers only"
                     counter
                     maxlength="20"
                 ></mjo-textfield>
@@ -636,9 +636,9 @@ export class ExampleTextfieldForm extends LitElement {
                 <h3>User Registration</h3>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <mjo-textfield name="firstName" label="First Name" required placeholder="John" helper-text="Your given name"></mjo-textfield>
+                    <mjo-textfield name="firstName" label="First Name" required placeholder="John" helperText="Your given name"></mjo-textfield>
 
-                    <mjo-textfield name="lastName" label="Last Name" required placeholder="Doe" helper-text="Your family name"></mjo-textfield>
+                    <mjo-textfield name="lastName" label="Last Name" required placeholder="Doe" helperText="Your family name"></mjo-textfield>
                 </div>
 
                 <mjo-textfield
@@ -648,7 +648,7 @@ export class ExampleTextfieldForm extends LitElement {
                     minlength="3"
                     maxlength="20"
                     placeholder="johndoe"
-                    helper-text="Unique username for your account"
+                    helperText="Unique username for your account"
                     counter
                 ></mjo-textfield>
 
@@ -658,7 +658,7 @@ export class ExampleTextfieldForm extends LitElement {
                     type="email"
                     required
                     placeholder="john@example.com"
-                    helper-text="We'll send verification to this email"
+                    helperText="We'll send verification to this email"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -668,7 +668,7 @@ export class ExampleTextfieldForm extends LitElement {
                     required
                     minlength="8"
                     placeholder="Enter secure password"
-                    helper-text="Minimum 8 characters required"
+                    helperText="Minimum 8 characters required"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -676,7 +676,7 @@ export class ExampleTextfieldForm extends LitElement {
                     label="Phone Number"
                     type="tel"
                     placeholder="+1 234 567 8900"
-                    helper-text="Optional: for account recovery"
+                    helperText="Optional: for account recovery"
                 ></mjo-textfield>
 
                 <mjo-textfield
@@ -684,10 +684,10 @@ export class ExampleTextfieldForm extends LitElement {
                     label="Website (Optional)"
                     type="url"
                     placeholder="https://yourwebsite.com"
-                    helper-text="Your personal or professional website"
+                    helperText="Your personal or professional website"
                 ></mjo-textfield>
 
-                <mjo-textfield name="company" label="Company" placeholder="Acme Corp" helper-text="Where do you work?"></mjo-textfield>
+                <mjo-textfield name="company" label="Company" placeholder="Acme Corp" helperText="Where do you work?"></mjo-textfield>
 
                 <mjo-button type="submit" style="margin-top: 1rem;"> Create Account </mjo-button>
             </mjo-form>
@@ -783,7 +783,7 @@ export class ExampleTextfieldAdvanced extends LitElement {
                     .readonly=${this.settings.readonly}
                     .disabled=${this.settings.disabled}
                     .fullwidth=${this.settings.fullwidth}
-                    helper-text="Use the checkboxes above to test different states"
+                    helperText="Use the checkboxes above to test different states"
                     clearabled
                     counter
                     maxlength="100"
@@ -919,7 +919,7 @@ export class ExampleTextfieldTheme extends LitElement {
                 <mjo-textfield
                     label="Themed textfield"
                     placeholder="This textfield uses custom theme settings"
-                    helper-text="Styled with custom theme configuration"
+                    helperText="Styled with custom theme configuration"
                 ></mjo-textfield>
             </mjo-theme>
         `;
@@ -949,7 +949,7 @@ export class ExampleTextfieldCustomTheme extends LitElement {
                     fontSize: "18px",
                     padding: "16px 20px",
                 }}
-                helper-text="This textfield has component-level custom styling"
+                helperText="This textfield has component-level custom styling"
             ></mjo-textfield>
         `;
     }
