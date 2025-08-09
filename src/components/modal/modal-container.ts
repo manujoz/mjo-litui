@@ -14,6 +14,7 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
     @property({ type: Boolean }) isOpen = false;
     @property({ type: String }) titleMsg = "";
     @property({ type: String }) content: string | TemplateResult<1> = "";
+    @property({ type: String }) closePosition: "out" | "in" = "in";
 
     @state() blocked = false;
 
@@ -27,15 +28,22 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
     render() {
         return html`
             <div class="background" @click=${this.#handleClose}></div>
-            ${this.blocked ? nothing : html`<mjo-icon class="close" src=${AiOutlineClose} @click=${this.#handleClose}></mjo-icon>`}
+            ${!this.blocked && this.closePosition === "out"
+                ? html`<mjo-icon class="closeOut" src=${AiOutlineClose} @click=${this.#handleClose}></mjo-icon>`
+                : nothing}
             <div class="container">
                 ${this.titleMsg ? html`<mjo-typography class="title" size="heading3" tag="h5" weight="medium">${this.titleMsg}</mjo-typography>` : ""}
                 <div class="content">${this.content}</div>
+                ${!this.blocked && this.closePosition === "in"
+                    ? html`<div class="closeIn">
+                          <mjo-icon class="close" @click=${this.#handleClose} src=${AiOutlineClose}></mjo-icon>
+                      </div>`
+                    : nothing}
             </div>
         `;
     }
 
-    show({ content, time, title, width, animationDuration, blocked = false, onClose }: ModalShowParams) {
+    show({ content, time, title, width, animationDuration, blocked = false, closePosition = "out", onClose }: ModalShowParams) {
         if (this.isOpen) return;
 
         if (animationDuration) this.#animationDuration = animationDuration;
@@ -45,6 +53,7 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
         if (onClose) this.onClose = onClose;
         this.content = content;
         this.blocked = blocked;
+        this.closePosition = closePosition;
 
         if (width) {
             if (typeof width === "number") {
@@ -127,12 +136,29 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
                 background-color: rgba(0, 0, 0, 0.5);
                 backdrop-filter: blur(5px);
             }
-            .close {
+            .closeOut {
                 position: absolute;
                 top: var(--mjo-space-small, 5px);
                 right: var(--mjo-space-small, 5px);
                 font-size: var(--mjo-modal-icon-close-size, 30px);
+                color: white;
                 cursor: pointer;
+            }
+            .closeIn {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                color: white;
+            }
+            .closeIn mjo-icon {
+                font-size: var(--mjo-modal-icon-close-size, 16px);
+                vertical-align: middle;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                padding: 2px;
+            }
+            .closeIn mjo-icon:hover {
+                background-color: var(--mjo-background-color-low);
             }
             .container {
                 position: relative;

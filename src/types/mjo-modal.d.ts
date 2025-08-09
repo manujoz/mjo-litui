@@ -7,5 +7,6 @@ export interface ModalShowParams {
     width?: string | number;
     animationDuration?: number;
     blocked?: boolean;
+    closePosition?: "out" | "in";
     onClose?: () => void;
 }
