@@ -19,8 +19,8 @@ Este documento ayuda a agentes de IA (Copilot, Claude, etc.) a navegar y contrib
 ```
 src/
   mjo-*.ts           # Componentes principales
+  components/        # Componentes auxiliares para los componentes principales ordenados por subcarpetas
   controllers/       # Controladores para overlays (drawer, modal, notification)
-  helpers/           # Funciones auxiliares (validación, textarea autosize)
   mixins/            # Mixins para formularios, temas y validación
   theme/             # Temas predeterminados (default-theme.ts)
   types/             # Declaraciones de tipos (.d.ts)
@@ -62,8 +62,7 @@ README.md            # Documentación de nivel superior
 
 ## 6. Flujo de Desarrollo
 
-- `npm run dev`: arranca Vite en modo desarrollo.
-- `npm run storybook`: abre Storybook en `http://localhost:6006`.
+- `npm run dev`: arranca Vite en modo desarrollo. Los archivos del servidor de desarrollo para renderizar los componentes que se están desarrollando estan en `dev/`.
 - `npm run build`: compila TypeScript (`tsconfig.build.json`), copia tipos y publica desde `dist/`.
 - `npm run preview`: sirve build de Vite para pruebas locales.
 
@@ -72,35 +71,28 @@ README.md            # Documentación de nivel superior
 1. Crear `src/mjo-nombre.ts` con prefijo `mjo-` y decorar con `@customElement`.
 2. Exportar en `src/index.ts` para incluir en bundle.
 3. Añadir tipo en `src/types/mjo-nombre.d.ts`.
-4. Crear historia en `stories/mjo-nombre.stories.ts`.
-5. Actualizar tests o lint-staged si es necesario.
+4. Actualizar tests o lint-staged si es necesario.
 
-## 8. Storybook
-
-- Cada componente tiene su `.stories.ts` en `stories/`.
-- Usa enfoques CSF (Component Story Format).
-- Importar componente y escribir ejemplos de propiedades.
-
-## 9. Publicación
+## 8. Publicación
 
 - El comando de build copia `package.json`, `.npmignore` y `README.md` a `dist/` antes de `npm publish`.
 - Verificar versión en `package.json` (0.0.1-alpha.{n}).
 
-## 10. Convenciones
+## 9. Convenciones
 
 - Prefijo obligatorio `mjo-`.
 - Tipos definidoss en `src/types`.
 - Evitar dependencias adicionales aparte de `lit`, `@lit/context`, `mjo-icons`.
 - Animaciones basadas en CSS custom properties y mixins.
 
-## 11. Documentación
+## 10. Documentación
 
 - La documentación del proyecto debe estar escrita en inglés.
 - El README.md debe contener información sobre la instalación y uso general de la librería.
 - Cada componente debe estar documentado en la carpeta `docs/mjo-<nombre-del-componente>.md` con todos los detalles del componente, su utilidad, uso, propiedades, métodos públicos, eventos y variables css así como también los estilos que se pueden asignar en estilos.
 - Incluir ejemplos del uso del componente.
 
-### 11.1 Patrones de documentación (estilo unificado)
+### 10.1 Patrones de documentación (estilo unificado)
 
 - Ejemplos en TypeScript usando Lit: siempre `import { LitElement, html } from 'lit'` y `@customElement('example-...')`.
 - Preferir imports específicos de componentes: `import 'mjo-litui/mjo-button'` sobre `import 'mjo-litui'` salvo en ejemplos que requieren todo.
