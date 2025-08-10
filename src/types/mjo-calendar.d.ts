@@ -1,3 +1,11 @@
+export interface CalendarLocale {
+    months: string[];
+    monthsShort: string[];
+    weekdays: string[];
+    weekdaysShort: string[];
+    weekdaysMin: string[];
+}
+
 export interface MjoCalendarTheme {
     fontFamily?: string;
     background?: string;

@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { SupportedLocale } from "./types/locales";
+
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { FaChevronLeft, FaChevronRight } from "mjo-icons/fa";
+import { locales } from "./locales/locales.js";
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
@@ -34,7 +37,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @property({ type: String }) value?: string;
     @property({ type: String }) startDate?: string;
     @property({ type: String }) endDate?: string;
-    @property({ type: String }) locale: string = "en-US";
+    @property({ type: String }) locale: SupportedLocale = "en";
     @property({ type: String }) minDate?: string;
     @property({ type: String }) maxDate?: string;
     @property({ type: Boolean, reflect: true }) disabled = false;
@@ -56,9 +59,38 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @state() private rightCalendarMonth = new Date().getMonth() + 1;
     @state() private rightCalendarYear = new Date().getFullYear();
 
-    private monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    get currentLocale() {
+        return locales[this.locale] || locales.en;
+    }
 
-    private weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    get monthNames() {
+        return this.currentLocale.calendar.months;
+    }
+
+    get weekDays() {
+        return this.currentLocale.calendar.weekdaysShort;
+    }
+
+    #getDateLocale(): string {
+        const localeMap: Record<SupportedLocale, string> = {
+            en: "en-US",
+            es: "es-ES",
+            fr: "fr-FR",
+            pt: "pt-PT",
+            it: "it-IT",
+            de: "de-DE",
+            nl: "nl-NL",
+            bg: "bg-BG",
+            sr: "sr-RS",
+            ru: "ru-RU",
+            zh: "zh-CN",
+            ja: "ja-JP",
+            ko: "ko-KR",
+            tr: "tr-TR",
+            pl: "pl-PL",
+        };
+        return localeMap[this.locale] || "en-US";
+    }
 
     connectedCallback(): void {
         super.connectedCallback();
@@ -160,7 +192,10 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         const today = new Date();
 
         // Adjust week days based on first day of week preference
-        const weekDaysAdjusted = this.firstDayOfWeek === "monday" ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] : this.weekDays;
+        const weekDaysAdjusted =
+            this.firstDayOfWeek === "monday"
+                ? [this.weekDays[1], this.weekDays[2], this.weekDays[3], this.weekDays[4], this.weekDays[5], this.weekDays[6], this.weekDays[0]]
+                : this.weekDays;
 
         const days = [];
 
@@ -412,7 +447,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             new CustomEvent("date-selected", {
                 detail: {
                     date: this.value,
-                    formattedDate: this.selectedDate?.toLocaleDateString(this.locale),
+                    formattedDate: this.selectedDate?.toLocaleDateString(this.#getDateLocale()),
                 },
                 bubbles: true,
                 composed: true,
@@ -426,8 +461,8 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 detail: {
                     startDate: this.startDate,
                     endDate: this.endDate,
-                    formattedStartDate: this.selectedStartDate?.toLocaleDateString(this.locale),
-                    formattedEndDate: this.selectedEndDate?.toLocaleDateString(this.locale),
+                    formattedStartDate: this.selectedStartDate?.toLocaleDateString(this.#getDateLocale()),
+                    formattedEndDate: this.selectedEndDate?.toLocaleDateString(this.#getDateLocale()),
                 },
                 bubbles: true,
                 composed: true,

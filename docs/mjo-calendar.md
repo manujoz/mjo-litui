@@ -1,6 +1,6 @@
 # mjo-calendar
 
-Configurable calendar component for date selection, supporting both single date and date range selection with intuitive navigation controls.
+Configurable calendar component for date selection, supporting both single date and date range selection with intuitive navigation controls. The component includes internationalization support for 15 languages.
 
 ## HTML Usage
 
@@ -10,6 +10,9 @@ Configurable calendar component for date selection, supporting both single date 
 
 <!-- Date range selection -->
 <mjo-calendar mode="range" start-date="2025-01-10" end-date="2025-01-20"></mjo-calendar>
+
+<!-- With different locale -->
+<mjo-calendar mode="single" locale="es"></mjo-calendar>
 
 <!-- With constraints -->
 <mjo-calendar mode="single" min-date="2025-01-01" max-date="2025-12-31" color="secondary" size="large"></mjo-calendar>
@@ -115,7 +118,7 @@ export class ExampleCalendarCustom extends LitElement {
                 mode="single"
                 size="large"
                 color="secondary"
-                locale="es-ES"
+                locale="es"
                 first-day-of-week="monday"
                 .theme=${this.calendarTheme}
                 .disabled-dates=${["2025-01-15", "2025-01-20"]}
@@ -134,7 +137,7 @@ export class ExampleCalendarCustom extends LitElement {
 | `value`           | `string \| undefined`            | `undefined` | no       | Selected date in YYYY-MM-DD format (single mode)    |
 | `startDate`       | `string \| undefined`            | `undefined` | no       | Start date for range selection in YYYY-MM-DD format |
 | `endDate`         | `string \| undefined`            | `undefined` | no       | End date for range selection in YYYY-MM-DD format   |
-| `locale`          | `string`                         | `"en-US"`   | no       | Locale for date formatting                          |
+| `locale`          | `SupportedLocale`                | `"en"`      | no       | Language locale for months/days translation         |
 | `minDate`         | `string \| undefined`            | `undefined` | no       | Minimum selectable date in YYYY-MM-DD format        |
 | `maxDate`         | `string \| undefined`            | `undefined` | no       | Maximum selectable date in YYYY-MM-DD format        |
 | `disabled`        | `boolean`                        | `false`     | yes      | Disables calendar interaction                       |
@@ -304,6 +307,50 @@ When used with `name` attribute, the calendar integrates with `mjo-form`:
     <mjo-calendar name="vacation-dates" mode="range"></mjo-calendar>
 </mjo-form>
 ```
+
+## Internationalization
+
+The calendar component supports 15 languages with automatic translation of month names and weekday labels:
+
+### Supported Locales
+
+| Locale | Language   | Code |
+| ------ | ---------- | ---- |
+| `en`   | English    | en   |
+| `es`   | Spanish    | es   |
+| `fr`   | French     | fr   |
+| `pt`   | Portuguese | pt   |
+| `it`   | Italian    | it   |
+| `de`   | German     | de   |
+| `nl`   | Dutch      | nl   |
+| `bg`   | Bulgarian  | bg   |
+| `sr`   | Serbian    | sr   |
+| `ru`   | Russian    | ru   |
+| `zh`   | Chinese    | zh   |
+| `ja`   | Japanese   | ja   |
+| `ko`   | Korean     | ko   |
+| `tr`   | Turkish    | tr   |
+| `pl`   | Polish     | pl   |
+
+### Usage Examples
+
+```html
+<!-- Spanish calendar -->
+<mjo-calendar locale="es" mode="single"></mjo-calendar>
+
+<!-- French calendar with range -->
+<mjo-calendar locale="fr" mode="range"></mjo-calendar>
+
+<!-- German calendar -->
+<mjo-calendar locale="de" mode="single"></mjo-calendar>
+```
+
+The locale property affects:
+
+-   Month names in the header
+-   Weekday abbreviations
+-   Date formatting in events
+-   Starting day of the week (can be overridden with `firstDayOfWeek`)
 
 ## Accessibility Notes
 
