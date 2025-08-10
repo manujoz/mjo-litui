@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { SupportedLocale } from "./types/locales";
+import { SupportedLocale } from "./types/locales.js";
 
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { classMap } from "lit/directives/class-map.js";
 
-import { FaChevronLeft, FaChevronRight } from "mjo-icons/fa";
 import { locales } from "./locales/locales.js";
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { CalendarUtils } from "./utils/calendar.js";
 
-import "./mjo-button.js";
-import "./mjo-icon.js";
-import "./mjo-typography.js";
+import "./components/calendar/calendar-grid.js";
+import "./components/calendar/calendar-header.js";
+import "./components/calendar/calendar-month-picker.js";
+import "./components/calendar/calendar-year-picker.js";
 
 /**
  * A configurable calendar component for date selection.
@@ -58,6 +57,9 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @state() private leftCalendarYear = new Date().getFullYear();
     @state() private rightCalendarMonth = new Date().getMonth() + 1;
     @state() private rightCalendarYear = new Date().getFullYear();
+    @state() private showMonthPicker = false;
+    @state() private showYearPicker = false;
+    @state() private pickerSide: "single" | "left" | "right" = "single";
 
     get currentLocale() {
         return locales[this.locale] || locales.en;
@@ -69,27 +71,6 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
 
     get weekDays() {
         return this.currentLocale.calendar.weekdaysShort;
-    }
-
-    #getDateLocale(): string {
-        const localeMap: Record<SupportedLocale, string> = {
-            en: "en-US",
-            es: "es-ES",
-            fr: "fr-FR",
-            pt: "pt-PT",
-            it: "it-IT",
-            de: "de-DE",
-            nl: "nl-NL",
-            bg: "bg-BG",
-            sr: "sr-RS",
-            ru: "ru-RU",
-            zh: "zh-CN",
-            ja: "ja-JP",
-            ko: "ko-KR",
-            tr: "tr-TR",
-            pl: "pl-PL",
-        };
-        return localeMap[this.locale] || "en-US";
     }
 
     connectedCallback(): void {
@@ -107,8 +88,65 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     #renderSingleCalendar() {
         return html`
             <div class="calendar-container" part="calendar" data-size=${this.size} data-color=${this.color} ?data-disabled=${this.disabled}>
-                ${this.#renderCalendarHeader(this.currentMonth, this.currentYear, "single")}
-                ${this.#renderCalendarGrid(this.currentMonth, this.currentYear, "single")}
+                ${this.showMonthPicker
+                    ? html`
+                          <calendar-month-picker
+                              .selectedMonth=${this.currentMonth}
+                              .monthNames=${this.monthNames}
+                              .disabled=${this.disabled}
+                              @month-selected=${this.#handleMonthSelected}
+                              @click=${(e: Event) => e.stopPropagation()}
+                          ></calendar-month-picker>
+                      `
+                    : this.showYearPicker
+                      ? html`
+                            <calendar-year-picker
+                                .selectedYear=${this.currentYear}
+                                .disabled=${this.disabled}
+                                @year-selected=${this.#handleYearSelected}
+                                @click=${(e: Event) => e.stopPropagation()}
+                            ></calendar-year-picker>
+                        `
+                      : html`
+                            <calendar-header
+                                .month=${this.currentMonth}
+                                .year=${this.currentYear}
+                                .monthNames=${this.monthNames}
+                                .disabled=${this.disabled}
+                                side="single"
+                                @navigate=${this.#handleNavigate}
+                                @month-picker=${this.#handleMonthPicker}
+                                @year-picker=${this.#handleYearPicker}
+                            ></calendar-header>
+                            <calendar-grid
+                                .month=${this.currentMonth}
+                                .year=${this.currentYear}
+                                .weekDays=${this.weekDays}
+                                .firstDayOfWeek=${this.firstDayOfWeek}
+                                .mode=${this.mode}
+                                .showToday=${this.showToday}
+                                .size=${this.size}
+                                .disabled=${this.disabled}
+                                .minDate=${this.minDate}
+                                .maxDate=${this.maxDate}
+                                .disabledDates=${this.disabledDates}
+                                .selectedDate=${this.selectedDate}
+                                .selectedStartDate=${this.selectedStartDate}
+                                .selectedEndDate=${this.selectedEndDate}
+                                .hoverDate=${this.hoverDate}
+                                side="single"
+                                @date-click=${this.#handleDateClick}
+                                @date-hover=${this.#handleDateHover}
+                                @date-leave=${this.#handleDateLeave}
+                            ></calendar-grid>
+                        `}
+                ${this.showMonthPicker || this.showYearPicker
+                    ? html`
+                          <div class="picker-overlay" @click=${this.#handlePickerClose}>
+                              <div class="picker-backdrop"></div>
+                          </div>
+                      `
+                    : ""}
             </div>
         `;
     }
@@ -128,131 +166,121 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             <div class="calendar-range-container" part="calendar" data-size=${this.size} data-color=${this.color} ?data-disabled=${this.disabled}>
                 <!-- Left Calendar -->
                 <div class="calendar-side">
-                    ${this.#renderCalendarHeader(this.leftCalendarMonth, this.leftCalendarYear, "left")}
-                    ${this.#renderCalendarGrid(this.leftCalendarMonth, this.leftCalendarYear, "left")}
+                    ${this.showMonthPicker && this.pickerSide === "left"
+                        ? html`
+                              <calendar-month-picker
+                                  .selectedMonth=${this.leftCalendarMonth}
+                                  .monthNames=${this.monthNames}
+                                  .disabled=${this.disabled}
+                                  @month-selected=${this.#handleMonthSelected}
+                                  @click=${(e: Event) => e.stopPropagation()}
+                              ></calendar-month-picker>
+                          `
+                        : this.showYearPicker && this.pickerSide === "left"
+                          ? html`
+                                <calendar-year-picker
+                                    .selectedYear=${this.leftCalendarYear}
+                                    .disabled=${this.disabled}
+                                    @year-selected=${this.#handleYearSelected}
+                                    @click=${(e: Event) => e.stopPropagation()}
+                                ></calendar-year-picker>
+                            `
+                          : html`
+                                <calendar-header
+                                    .month=${this.leftCalendarMonth}
+                                    .year=${this.leftCalendarYear}
+                                    .monthNames=${this.monthNames}
+                                    .disabled=${this.disabled}
+                                    side="left"
+                                    @navigate=${this.#handleNavigate}
+                                    @month-picker=${this.#handleMonthPicker}
+                                    @year-picker=${this.#handleYearPicker}
+                                ></calendar-header>
+                                <calendar-grid
+                                    .month=${this.leftCalendarMonth}
+                                    .year=${this.leftCalendarYear}
+                                    .weekDays=${this.weekDays}
+                                    .firstDayOfWeek=${this.firstDayOfWeek}
+                                    .mode=${this.mode}
+                                    .showToday=${this.showToday}
+                                    .size=${this.size}
+                                    .disabled=${this.disabled}
+                                    .minDate=${this.minDate}
+                                    .maxDate=${this.maxDate}
+                                    .disabledDates=${this.disabledDates}
+                                    .selectedDate=${this.selectedDate}
+                                    .selectedStartDate=${this.selectedStartDate}
+                                    .selectedEndDate=${this.selectedEndDate}
+                                    .hoverDate=${this.hoverDate}
+                                    side="left"
+                                    @date-click=${this.#handleDateClick}
+                                    @date-hover=${this.#handleDateHover}
+                                    @date-leave=${this.#handleDateLeave}
+                                ></calendar-grid>
+                            `}
                 </div>
                 <!-- Right Calendar -->
                 <div class="calendar-side">
-                    ${this.#renderCalendarHeader(this.rightCalendarMonth, this.rightCalendarYear, "right")}
-                    ${this.#renderCalendarGrid(this.rightCalendarMonth, this.rightCalendarYear, "right")}
-                </div>
-            </div>
-        `;
-    }
-
-    #renderCalendarHeader(month: number, year: number, side: "single" | "left" | "right") {
-        return html`
-            <div class="calendar-header" part="header">
-                <div class="navigation" part="navigation">
-                    ${side === "single" || side === "left"
+                    ${this.showMonthPicker && this.pickerSide === "right"
                         ? html`
-                              <mjo-button
-                                  variant="ghost"
-                                  size="small"
-                                  rounded
-                                  startIcon=${FaChevronLeft}
-                                  @click=${() => this.#navigateMonth(-1, side)}
-                                  ?disabled=${this.disabled}
-                              ></mjo-button>
+                              <calendar-month-picker
+                                  .selectedMonth=${this.rightCalendarMonth}
+                                  .monthNames=${this.monthNames}
+                                  .disabled=${this.disabled}
+                                  @month-selected=${this.#handleMonthSelected}
+                                  @click=${(e: Event) => e.stopPropagation()}
+                              ></calendar-month-picker>
                           `
-                        : nothing}
-
-                    <div class="month-year-selectors" part="month-year">
-                        <mjo-button variant="text" @click=${() => this.#showMonthPicker(side)} ?disabled=${this.disabled}>
-                            <mjo-typography tag="none">${this.monthNames[month]}</mjo-typography>
-                        </mjo-button>
-                        <mjo-button variant="text" @click=${() => this.#showYearPicker(side)} ?disabled=${this.disabled}>
-                            <mjo-typography tag="none">${year}</mjo-typography>
-                        </mjo-button>
-                    </div>
-
-                    ${side === "single" || side === "right"
-                        ? html`
-                              <mjo-button
-                                  variant="ghost"
-                                  size="small"
-                                  rounded
-                                  startIcon=${FaChevronRight}
-                                  @click=${() => this.#navigateMonth(1, side)}
-                                  ?disabled=${this.disabled}
-                              ></mjo-button>
-                          `
-                        : nothing}
+                        : this.showYearPicker && this.pickerSide === "right"
+                          ? html`
+                                <calendar-year-picker
+                                    .selectedYear=${this.rightCalendarYear}
+                                    .disabled=${this.disabled}
+                                    @year-selected=${this.#handleYearSelected}
+                                    @click=${(e: Event) => e.stopPropagation()}
+                                ></calendar-year-picker>
+                            `
+                          : html`
+                                <calendar-header
+                                    .month=${this.rightCalendarMonth}
+                                    .year=${this.rightCalendarYear}
+                                    .monthNames=${this.monthNames}
+                                    .disabled=${this.disabled}
+                                    side="right"
+                                    @navigate=${this.#handleNavigate}
+                                    @month-picker=${this.#handleMonthPicker}
+                                    @year-picker=${this.#handleYearPicker}
+                                ></calendar-header>
+                                <calendar-grid
+                                    .month=${this.rightCalendarMonth}
+                                    .year=${this.rightCalendarYear}
+                                    .weekDays=${this.weekDays}
+                                    .firstDayOfWeek=${this.firstDayOfWeek}
+                                    .mode=${this.mode}
+                                    .showToday=${this.showToday}
+                                    .size=${this.size}
+                                    .disabled=${this.disabled}
+                                    .minDate=${this.minDate}
+                                    .maxDate=${this.maxDate}
+                                    .disabledDates=${this.disabledDates}
+                                    .selectedDate=${this.selectedDate}
+                                    .selectedStartDate=${this.selectedStartDate}
+                                    .selectedEndDate=${this.selectedEndDate}
+                                    .hoverDate=${this.hoverDate}
+                                    side="right"
+                                    @date-click=${this.#handleDateClick}
+                                    @date-hover=${this.#handleDateHover}
+                                    @date-leave=${this.#handleDateLeave}
+                                ></calendar-grid>
+                            `}
                 </div>
-            </div>
-        `;
-    }
-
-    #renderCalendarGrid(month: number, year: number, _side: "single" | "left" | "right") {
-        const firstDay = new Date(year, month, 1);
-        const lastDay = new Date(year, month + 1, 0);
-        const firstDayOfWeek = this.firstDayOfWeek === "monday" ? (firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1) : firstDay.getDay();
-
-        const daysInMonth = lastDay.getDate();
-        const today = new Date();
-
-        // Adjust week days based on first day of week preference
-        const weekDaysAdjusted =
-            this.firstDayOfWeek === "monday"
-                ? [this.weekDays[1], this.weekDays[2], this.weekDays[3], this.weekDays[4], this.weekDays[5], this.weekDays[6], this.weekDays[0]]
-                : this.weekDays;
-
-        const days = [];
-
-        // Empty cells for days before month starts
-        for (let i = 0; i < firstDayOfWeek; i++) {
-            days.push(html`<div class="day empty"></div>`);
-        }
-
-        // Days of the month
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const isToday = this.#isSameDay(date, today);
-            const isSelected = this.#isSelectedDate(date);
-            const isInRange = this.mode === "range" && this.#isInRange(date);
-            const isRangeStart = this.mode === "range" && this.#isRangeStart(date);
-            const isRangeEnd = this.mode === "range" && this.#isRangeEnd(date);
-            const isDisabled = this.#isDisabledDate(date);
-            const isHovered = this.mode === "range" && this.#isHoveredInRange(date);
-
-            const dayClasses = {
-                day: true,
-                today: isToday && this.showToday,
-                selected: isSelected,
-                "in-range": isInRange,
-                "range-start": isRangeStart,
-                "range-end": isRangeEnd,
-                disabled: isDisabled,
-                "hovered-range": isHovered,
-            };
-
-            days.push(html`
-                <div
-                    class=${classMap(dayClasses)}
-                    part="day ${isSelected ? "selected" : ""} ${isToday ? "today" : ""}"
-                    @click=${() => this.#selectDate(date)}
-                    @mouseenter=${() => this.#handleDateHover(date)}
-                    @mouseleave=${() => this.#handleDateLeave()}
-                >
-                    <mjo-typography tag="none">${day}</mjo-typography>
-                </div>
-            `);
-        }
-
-        return html`
-            <div class="calendar-grid" part="calendar-grid">
-                <!-- Week day headers -->
-                <div class="week-header">
-                    ${weekDaysAdjusted.map(
-                        (day) => html`
-                            <div class="week-day">
-                                <mjo-typography tag="none" size="small">${day}</mjo-typography>
-                            </div>
-                        `,
-                    )}
-                </div>
-                <!-- Days grid -->
-                <div class="days-grid">${days}</div>
+                ${this.showMonthPicker || this.showYearPicker
+                    ? html`
+                          <div class="picker-overlay" @click=${this.#handlePickerClose}>
+                              <div class="picker-backdrop"></div>
+                          </div>
+                      `
+                    : ""}
             </div>
         `;
     }
@@ -271,6 +299,58 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 this.selectedEndDate = new Date(this.endDate);
             }
         }
+    }
+
+    #handleNavigate(event: CustomEvent) {
+        const { direction, side } = event.detail;
+        this.#navigateMonth(direction, side);
+    }
+
+    #handleMonthPicker(event: CustomEvent) {
+        const { side } = event.detail;
+        this.pickerSide = side;
+        this.showMonthPicker = true;
+        this.showYearPicker = false;
+    }
+
+    #handleYearPicker(event: CustomEvent) {
+        const { side } = event.detail;
+        this.pickerSide = side;
+        this.showYearPicker = true;
+        this.showMonthPicker = false;
+    }
+
+    #handleDateClick(event: CustomEvent) {
+        const { date } = event.detail;
+        this.#selectDate(date);
+    }
+
+    #handleDateHover(event: CustomEvent) {
+        const { date } = event.detail;
+        if (this.mode === "range" && this.selectedStartDate && !this.selectedEndDate) {
+            this.hoverDate = date;
+        }
+    }
+
+    #handleDateLeave() {
+        this.hoverDate = undefined;
+    }
+
+    #handleMonthSelected(event: CustomEvent) {
+        const { month } = event.detail;
+        this.#setMonth(month, this.pickerSide);
+        this.showMonthPicker = false;
+    }
+
+    #handleYearSelected(event: CustomEvent) {
+        const { year } = event.detail;
+        this.#setYear(year, this.pickerSide);
+        this.showYearPicker = false;
+    }
+
+    #handlePickerClose() {
+        this.showMonthPicker = false;
+        this.showYearPicker = false;
     }
 
     #navigateMonth(direction: number, side: "single" | "left" | "right") {
@@ -313,17 +393,64 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             this.leftCalendarYear = this.rightCalendarYear;
             if (this.leftCalendarMonth < 0) {
                 this.leftCalendarMonth = 11;
+            }
+        }
+    }
+
+    #setMonth(month: number, side: "single" | "left" | "right") {
+        if (side === "single") {
+            this.currentMonth = month;
+        } else if (side === "left") {
+            this.leftCalendarMonth = month;
+            // Adjust right calendar to be one month ahead
+            this.rightCalendarMonth = this.leftCalendarMonth + 1;
+            this.rightCalendarYear = this.leftCalendarYear;
+            if (this.rightCalendarMonth > 11) {
+                this.rightCalendarMonth = 0;
+                this.rightCalendarYear++;
+            }
+        } else if (side === "right") {
+            this.rightCalendarMonth = month;
+            // Adjust left calendar to be one month behind
+            this.leftCalendarMonth = this.rightCalendarMonth - 1;
+            this.leftCalendarYear = this.rightCalendarYear;
+            if (this.leftCalendarMonth < 0) {
+                this.leftCalendarMonth = 11;
+                this.leftCalendarYear--;
+            }
+        }
+    }
+
+    #setYear(year: number, side: "single" | "left" | "right") {
+        if (side === "single") {
+            this.currentYear = year;
+        } else if (side === "left") {
+            this.leftCalendarYear = year;
+            // Adjust right calendar to maintain month difference
+            this.rightCalendarMonth = this.leftCalendarMonth + 1;
+            this.rightCalendarYear = this.leftCalendarYear;
+            if (this.rightCalendarMonth > 11) {
+                this.rightCalendarMonth = 0;
+                this.rightCalendarYear++;
+            }
+        } else if (side === "right") {
+            this.rightCalendarYear = year;
+            // Adjust left calendar to maintain month difference
+            this.leftCalendarMonth = this.rightCalendarMonth - 1;
+            this.leftCalendarYear = this.rightCalendarYear;
+            if (this.leftCalendarMonth < 0) {
+                this.leftCalendarMonth = 11;
                 this.leftCalendarYear--;
             }
         }
     }
 
     #selectDate(date: Date) {
-        if (this.#isDisabledDate(date)) return;
+        if (CalendarUtils.isDateDisabled(date, this.disabled, this.minDate, this.maxDate, this.disabledDates)) return;
 
         if (this.mode === "single") {
             this.selectedDate = date;
-            this.value = this.#formatDate(date);
+            this.value = CalendarUtils.formatDate(date);
             this.#updateFormData();
             this.#dispatchDateSelected();
         } else if (this.mode === "range") {
@@ -331,7 +458,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 // Start new range
                 this.selectedStartDate = date;
                 this.selectedEndDate = undefined;
-                this.startDate = this.#formatDate(date);
+                this.startDate = CalendarUtils.formatDate(date);
                 this.endDate = undefined;
             } else if (this.selectedStartDate && !this.selectedEndDate) {
                 // Complete range
@@ -339,95 +466,16 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     // Swap if end date is before start date
                     this.selectedEndDate = this.selectedStartDate;
                     this.selectedStartDate = date;
-                    this.endDate = this.#formatDate(this.selectedEndDate);
-                    this.startDate = this.#formatDate(this.selectedStartDate);
+                    this.endDate = CalendarUtils.formatDate(this.selectedEndDate);
+                    this.startDate = CalendarUtils.formatDate(this.selectedStartDate);
                 } else {
                     this.selectedEndDate = date;
-                    this.endDate = this.#formatDate(date);
+                    this.endDate = CalendarUtils.formatDate(date);
                 }
                 this.#updateFormData();
                 this.#dispatchRangeSelected();
             }
         }
-    }
-
-    #handleDateHover(date: Date) {
-        if (this.mode === "range" && this.selectedStartDate && !this.selectedEndDate) {
-            this.hoverDate = date;
-        }
-    }
-
-    #handleDateLeave() {
-        this.hoverDate = undefined;
-    }
-
-    #showMonthPicker(_side: "single" | "left" | "right") {
-        // TODO: Implement month picker modal
-    }
-
-    #showYearPicker(_side: "single" | "left" | "right") {
-        // TODO: Implement year picker modal
-    }
-
-    #isSameDay(date1: Date, date2: Date): boolean {
-        return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
-    }
-
-    #isSelectedDate(date: Date): boolean {
-        if (this.mode === "single" && this.selectedDate) {
-            return this.#isSameDay(date, this.selectedDate);
-        }
-        return false;
-    }
-
-    #isInRange(date: Date): boolean {
-        if (!this.selectedStartDate || !this.selectedEndDate) return false;
-        return date > this.selectedStartDate && date < this.selectedEndDate;
-    }
-
-    #isRangeStart(date: Date): boolean {
-        if (!this.selectedStartDate) return false;
-        return this.#isSameDay(date, this.selectedStartDate);
-    }
-
-    #isRangeEnd(date: Date): boolean {
-        if (!this.selectedEndDate) return false;
-        return this.#isSameDay(date, this.selectedEndDate);
-    }
-
-    #isHoveredInRange(date: Date): boolean {
-        if (!this.selectedStartDate || !this.hoverDate || this.selectedEndDate) return false;
-        const start = this.selectedStartDate;
-        const end = this.hoverDate;
-        if (end < start) {
-            return date > end && date < start;
-        }
-        return date > start && date < end;
-    }
-
-    #isDisabledDate(date: Date): boolean {
-        if (this.disabled) return true;
-
-        if (this.minDate) {
-            const minDate = new Date(this.minDate);
-            if (date < minDate) return true;
-        }
-
-        if (this.maxDate) {
-            const maxDate = new Date(this.maxDate);
-            if (date > maxDate) return true;
-        }
-
-        if (this.disabledDates) {
-            const dateStr = this.#formatDate(date);
-            return this.disabledDates.includes(dateStr);
-        }
-
-        return false;
-    }
-
-    #formatDate(date: Date): string {
-        return date.toISOString().split("T")[0]; // YYYY-MM-DD format
     }
 
     #updateFormData() {
@@ -447,7 +495,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             new CustomEvent("date-selected", {
                 detail: {
                     date: this.value,
-                    formattedDate: this.selectedDate?.toLocaleDateString(this.#getDateLocale()),
+                    formattedDate: this.selectedDate?.toLocaleDateString(CalendarUtils.getDateLocale(this.locale)),
                 },
                 bubbles: true,
                 composed: true,
@@ -461,8 +509,8 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 detail: {
                     startDate: this.startDate,
                     endDate: this.endDate,
-                    formattedStartDate: this.selectedStartDate?.toLocaleDateString(this.#getDateLocale()),
-                    formattedEndDate: this.selectedEndDate?.toLocaleDateString(this.#getDateLocale()),
+                    formattedStartDate: this.selectedStartDate?.toLocaleDateString(CalendarUtils.getDateLocale(this.locale)),
+                    formattedEndDate: this.selectedEndDate?.toLocaleDateString(CalendarUtils.getDateLocale(this.locale)),
                 },
                 bubbles: true,
                 composed: true,
@@ -500,101 +548,33 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 flex: 1;
             }
 
-            .calendar-header {
-                margin-bottom: 16px;
+            .picker-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: -1;
+                pointer-events: auto;
             }
 
-            .navigation {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 8px;
+            .picker-backdrop {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: transparent;
             }
 
-            .month-year-selectors {
-                display: flex;
-                align-items: center;
-                gap: 4px;
-            }
-
-            .calendar-grid {
-                width: 100%;
-            }
-
-            .week-header {
-                display: grid;
-                grid-template-columns: repeat(7, 1fr);
-                gap: 2px;
-                margin-bottom: 8px;
-            }
-
-            .week-day {
-                text-align: center;
-                padding: 8px 4px;
-                color: var(--mjo-calendar-week-day-color, var(--mjo-text-color-secondary, #666));
-                font-weight: var(--mjo-calendar-week-day-font-weight, 600);
-            }
-
-            .days-grid {
-                display: grid;
-                grid-template-columns: repeat(7, 1fr);
-                gap: 2px;
-            }
-
-            .day {
-                aspect-ratio: 1;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                border-radius: var(--mjo-calendar-day-border-radius, 4px);
-                transition: all 0.2s ease;
+            calendar-month-picker,
+            calendar-year-picker {
                 position: relative;
-                min-height: 32px;
-            }
-
-            .day.empty {
-                cursor: default;
-                pointer-events: none;
-            }
-
-            .day:not(.empty):not(.disabled):hover {
-                background: var(--mjo-calendar-day-hover-background, var(--mjo-background-color-high, #f5f5f5));
-            }
-
-            .day.today {
-                background: var(--mjo-calendar-today-background, var(--mjo-primary-color-alpha2, rgba(29, 127, 219, 0.1)));
-                color: var(--mjo-calendar-today-color, var(--mjo-primary-color, #1d7fdb));
-                font-weight: 600;
-            }
-
-            .day.selected {
-                background: var(--mjo-calendar-selected-background, var(--mjo-primary-color, #1d7fdb));
-                color: var(--mjo-calendar-selected-color, white);
-                font-weight: 600;
-            }
-
-            .day.range-start,
-            .day.range-end {
-                background: var(--mjo-calendar-range-endpoint-background, var(--mjo-primary-color, #1d7fdb));
-                color: var(--mjo-calendar-range-endpoint-color, white);
-                font-weight: 600;
-            }
-
-            .day.in-range,
-            .day.hovered-range {
-                background: var(--mjo-calendar-range-background, var(--mjo-primary-color-alpha1, rgba(29, 127, 219, 0.2)));
-                color: var(--mjo-calendar-range-color, var(--mjo-primary-color, #1d7fdb));
-            }
-
-            .day.disabled {
-                color: var(--mjo-calendar-disabled-color, var(--mjo-disabled-foreground-color, #aaa));
-                cursor: not-allowed;
-                background: var(--mjo-calendar-disabled-background, transparent);
-            }
-
-            .day.disabled:hover {
-                background: var(--mjo-calendar-disabled-background, transparent);
+                z-index: 10;
+                background: var(--mjo-calendar-picker-background, var(--mjo-background-color, white));
+                border: var(--mjo-calendar-picker-border, 1px solid var(--mjo-border-color, #e0e0e0));
+                border-radius: var(--mjo-calendar-picker-radius, var(--mjo-radius, 8px));
+                box-shadow: var(--mjo-calendar-picker-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
             }
 
             /* Size variations */
@@ -602,35 +582,20 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 font-size: 0.875rem;
             }
 
-            [data-size="small"] .day {
-                min-height: 28px;
-            }
-
             [data-size="large"] {
                 font-size: 1.125rem;
             }
 
-            [data-size="large"] .day {
-                min-height: 40px;
-            }
-
             /* Color variations */
-            [data-color="secondary"] .day.today {
-                background: var(--mjo-calendar-today-background-secondary, var(--mjo-secondary-color-alpha2, rgba(204, 61, 116, 0.1)));
-                color: var(--mjo-calendar-today-color-secondary, var(--mjo-secondary-color, #cc3d74));
-            }
-
-            [data-color="secondary"] .day.selected,
-            [data-color="secondary"] .day.range-start,
-            [data-color="secondary"] .day.range-end {
-                background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #cc3d74));
-                color: var(--mjo-calendar-selected-color-secondary, white);
-            }
-
-            [data-color="secondary"] .day.in-range,
-            [data-color="secondary"] .day.hovered-range {
-                background: var(--mjo-calendar-range-background-secondary, var(--mjo-secondary-color-alpha1, rgba(204, 61, 116, 0.2)));
-                color: var(--mjo-calendar-range-color-secondary, var(--mjo-secondary-color, #cc3d74));
+            [data-color="secondary"] calendar-grid {
+                --mjo-calendar-today-background: var(--mjo-calendar-today-background-secondary, var(--mjo-secondary-color-alpha2, rgba(204, 61, 116, 0.1)));
+                --mjo-calendar-today-color: var(--mjo-calendar-today-color-secondary, var(--mjo-secondary-color, #cc3d74));
+                --mjo-calendar-selected-background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #cc3d74));
+                --mjo-calendar-selected-color: var(--mjo-calendar-selected-color-secondary, white);
+                --mjo-calendar-range-endpoint-background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #cc3d74));
+                --mjo-calendar-range-endpoint-color: var(--mjo-calendar-selected-color-secondary, white);
+                --mjo-calendar-range-background: var(--mjo-calendar-range-background-secondary, var(--mjo-secondary-color-alpha1, rgba(204, 61, 116, 0.2)));
+                --mjo-calendar-range-color: var(--mjo-calendar-range-color-secondary, var(--mjo-secondary-color, #cc3d74));
             }
         `,
     ];

@@ -6,6 +6,17 @@ export interface CalendarLocale {
     weekdaysMin: string[];
 }
 
+export interface CalendarDateInfo {
+    date: Date;
+    isToday: boolean;
+    isSelected: boolean;
+    isInRange: boolean;
+    isRangeStart: boolean;
+    isRangeEnd: boolean;
+    isDisabled: boolean;
+    isHovered: boolean;
+}
+
 export interface MjoCalendarTheme {
     fontFamily?: string;
     background?: string;
