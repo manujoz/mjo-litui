@@ -1,0 +1,17 @@
+{
+    "extends": ["../.eslintrc.json"],
+    "env": {
+        "mocha": true,
+        "browser": true
+    },
+    "globals": {
+        "suite": "readonly",
+        "test": "readonly"
+    },
+    "rules": {
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "wc/file-name-matches-element": "off",
+        "wc/tag-name-matches-class": "off"
+    }
+}

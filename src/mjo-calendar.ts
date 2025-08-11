@@ -12,6 +12,16 @@ import "./components/calendar/calendar-grid.js";
 import "./components/calendar/calendar-header.js";
 import "./components/calendar/calendar-month-picker.js";
 import "./components/calendar/calendar-year-picker.js";
+import {
+    CalendarDateClickEvent,
+    CalendarDateHoverEvent,
+    CalendarHeaderSide,
+    CalendarMonthPickerEvent,
+    CalendarMonthSelectedEvent,
+    CalendarNavigateEvent,
+    CalendarYearPickerEvent,
+    CalendarYearSelectedEvent,
+} from "./types/mjo-calendar.js";
 
 /**
  * A configurable calendar component for date selection.
@@ -301,31 +311,31 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }
     }
 
-    #handleNavigate(event: CustomEvent) {
+    #handleNavigate(event: CalendarNavigateEvent) {
         const { direction, side } = event.detail;
         this.#navigateMonth(direction, side);
     }
 
-    #handleMonthPicker(event: CustomEvent) {
+    #handleMonthPicker(event: CalendarMonthPickerEvent) {
         const { side } = event.detail;
         this.pickerSide = side;
         this.showMonthPicker = true;
         this.showYearPicker = false;
     }
 
-    #handleYearPicker(event: CustomEvent) {
+    #handleYearPicker(event: CalendarYearPickerEvent) {
         const { side } = event.detail;
         this.pickerSide = side;
         this.showYearPicker = true;
         this.showMonthPicker = false;
     }
 
-    #handleDateClick(event: CustomEvent) {
+    #handleDateClick(event: CalendarDateClickEvent) {
         const { date } = event.detail;
         this.#selectDate(date);
     }
 
-    #handleDateHover(event: CustomEvent) {
+    #handleDateHover(event: CalendarDateHoverEvent) {
         const { date } = event.detail;
         if (this.mode === "range" && this.selectedStartDate && !this.selectedEndDate) {
             this.hoverDate = date;
@@ -336,13 +346,13 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.hoverDate = undefined;
     }
 
-    #handleMonthSelected(event: CustomEvent) {
+    #handleMonthSelected(event: CalendarMonthSelectedEvent) {
         const { month } = event.detail;
         this.#setMonth(month, this.pickerSide);
         this.showMonthPicker = false;
     }
 
-    #handleYearSelected(event: CustomEvent) {
+    #handleYearSelected(event: CalendarYearSelectedEvent) {
         const { year } = event.detail;
         this.#setYear(year, this.pickerSide);
         this.showYearPicker = false;
@@ -421,7 +431,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }
     }
 
-    #setYear(year: number, side: "single" | "left" | "right") {
+    #setYear(year: number, side: CalendarHeaderSide) {
         if (side === "single") {
             this.currentYear = year;
         } else if (side === "left") {
@@ -491,6 +501,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     #dispatchDateSelected() {
+        // Emit the specific date-selected event
         this.dispatchEvent(
             new CustomEvent("date-selected", {
                 detail: {
@@ -501,9 +512,21 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 composed: true,
             }),
         );
+
+        // Also emit a standard change event for consistency with other form controls
+        this.dispatchEvent(
+            new CustomEvent("change", {
+                detail: {
+                    value: this.value,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
     }
 
     #dispatchRangeSelected() {
+        // Emit the specific range-selected event
         this.dispatchEvent(
             new CustomEvent("range-selected", {
                 detail: {
@@ -511,6 +534,18 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     endDate: this.endDate,
                     formattedStartDate: this.selectedStartDate?.toLocaleDateString(CalendarUtils.getDateLocale(this.locale)),
                     formattedEndDate: this.selectedEndDate?.toLocaleDateString(CalendarUtils.getDateLocale(this.locale)),
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
+
+        // Also emit a standard change event for consistency with other form controls
+        this.dispatchEvent(
+            new CustomEvent("change", {
+                detail: {
+                    startDate: this.startDate,
+                    endDate: this.endDate,
                 },
                 bubbles: true,
                 composed: true,

@@ -26,7 +26,7 @@ Use npm (or your favorite package manager):
 npm i mjo-litui
 ```
 
-Requirements: Node.js >= 18 (Vite 5).
+Requirements: Node.js >= 22 LTS (Vite 5).
 
 ## Quick Usage
 
@@ -186,11 +186,27 @@ Main scripts:
 -   `npm run dev`: starts Vite in development mode
 -   `npm run preview`: serves the Vite build for local testing
 -   `npm run build`: compiles TypeScript and publishes from `dist/` (caution: runs `npm publish` in `dist`)
+-   `npm test`: runs all tests
+-   `npm run test:watch`: runs tests in watch mode
+-   `npm run test:coverage`: runs tests with coverage report
 
 Getting started with contributions:
 
-1. Clone the repo and run `npm install`
+1. Clone the repo and run `npm install` (this will automatically install Playwright browsers via postinstall script)
 2. `npm run dev` for local playground
+3. `npm test` to verify everything works
+
+### Testing
+
+Tests are built with Web Test Runner + Playwright for cross-browser testing (Chrome, Firefox, WebKit).
+
+Key files:
+
+-   `web-test-runner.config.js`: Testing configuration
+-   `test/`: All test files (TypeScript preferred)
+-   `test/utils/calendar-test-utils.ts`: Testing utilities for calendar component
+
+After `npm install`, everything should work automatically. The postinstall script ensures Playwright browsers are installed.
 
 ## Project Structure (summary)
 

@@ -150,17 +150,20 @@ export class ExampleCalendarCustom extends LitElement {
 
 ### Behavior Notes
 
--   In `single` mode, clicking a date selects it and fires `date-selected` event
--   In `range` mode, first click sets start date, second click sets end date and fires `range-selected` event
+-   In `single` mode, clicking a date selects it and fires `date-selected` and `change` events
+-   In `range` mode, first click sets start date, second click sets end date and fires `range-selected` and `change` events
 -   Range selection automatically swaps dates if end date is before start date
+-   Navigation (month/year changes) is always allowed regardless of `minDate`/`maxDate` constraints
+-   Date selection is restricted by `minDate`/`maxDate` and `disabledDates` constraints
 -   Form integration works through FormMixin when `name` attribute is provided
 
 ## Events
 
-| Event            | Detail                                                                                       | Emitted When                   |
-| ---------------- | -------------------------------------------------------------------------------------------- | ------------------------------ |
-| `date-selected`  | `{date: string, formattedDate: string}`                                                      | Date is selected (single mode) |
-| `range-selected` | `{startDate: string, endDate: string, formattedStartDate: string, formattedEndDate: string}` | Date range is selected         |
+| Event            | Detail                                                                                       | Emitted When                                    |
+| ---------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `date-selected`  | `{date: string, formattedDate: string}`                                                      | Date is selected (single mode)                  |
+| `range-selected` | `{startDate: string, endDate: string, formattedStartDate: string, formattedEndDate: string}` | Date range is selected                          |
+| `change`         | `{value: string}` (single) or `{startDate: string, endDate: string}` (range)                 | Date selection changes (for form compatibility) |
 
 ## CSS Variables
 

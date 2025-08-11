@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import "../../mjo-typography.js";
+import { CalendarDayClickEvent, CalendarDayHoverEvent } from "../../types/mjo-calendar.js";
 import { CalendarUtils } from "../../utils/calendar.js";
 import "./calendar-day.js";
 
@@ -98,7 +99,7 @@ export class CalendarGrid extends LitElement {
         `;
     }
 
-    #handleDayClick(event: CustomEvent) {
+    #handleDayClick(event: CalendarDayClickEvent) {
         const day = event.detail.day;
         const date = new Date(this.year, this.month, day);
         this.dispatchEvent(
@@ -110,7 +111,7 @@ export class CalendarGrid extends LitElement {
         );
     }
 
-    #handleDayHover(event: CustomEvent) {
+    #handleDayHover(event: CalendarDayHoverEvent) {
         const day = event.detail.day;
         const date = new Date(this.year, this.month, day);
         this.dispatchEvent(
