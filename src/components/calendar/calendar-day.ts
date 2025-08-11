@@ -93,6 +93,7 @@ export class CalendarDay extends LitElement {
             transition: all 0.2s ease;
             position: relative;
             min-height: 32px;
+            font-size: 1.3em;
         }
 
         .day.empty {
@@ -104,13 +105,13 @@ export class CalendarDay extends LitElement {
             background: var(--mjo-calendar-day-hover-background, var(--mjo-background-color-high, #f5f5f5));
         }
 
-        .day.today {
+        .day.today:not(.empty):not(.disabled) {
             background: var(--mjo-calendar-today-background, var(--mjo-primary-color-alpha2, rgba(29, 127, 219, 0.1)));
             color: var(--mjo-calendar-today-color, var(--mjo-primary-color, #1d7fdb));
             font-weight: 600;
         }
 
-        .day.selected {
+        .day.selected:not(.empty):not(.disabled) {
             background: var(--mjo-calendar-selected-background, var(--mjo-primary-color, #1d7fdb));
             color: var(--mjo-calendar-selected-color, white);
             font-weight: 600;

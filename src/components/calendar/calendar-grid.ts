@@ -169,24 +169,23 @@ export class CalendarGrid extends LitElement {
             width: 100%;
         }
 
-        .week-header {
+        .week-header,
+        .days-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 2px;
+        }
+        .week-header {
             margin-bottom: 8px;
         }
 
         .week-day {
             text-align: center;
             padding: 8px 4px;
-            color: var(--mjo-calendar-week-day-color, var(--mjo-text-color-secondary, #666));
+            color: var(--mjo-calendar-week-day-color, var(--mjo-foreground-color-xlow, #666));
             font-weight: var(--mjo-calendar-week-day-font-weight, 600);
-        }
-
-        .days-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 2px;
+            box-sizing: border-box;
+            width: 3em;
         }
     `;
 }

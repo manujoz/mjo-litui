@@ -306,8 +306,7 @@ The `mjo-theme` component generates CSS custom properties with the `--mjo-` pref
 | `--mjo-primary-color-disabled` | Primary color disabled state |
 | `--mjo-secondary-color`        | Secondary color default      |
 | `--mjo-background-color`       | Background color             |
-| `--mjo-surface-color`          | Surface color                |
-| `--mjo-text-color`             | Text color                   |
+| `--mjo-foreground-color`       | Text color                   |
 | `--mjo-border-color`           | Border color                 |
 
 ### Spacing Variables

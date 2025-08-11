@@ -7,10 +7,18 @@ export interface MjoThemeConfig {
     radiusLarge?: string;
     /** --mjo-font-size-small */
     fontSizeSmall?: string;
+    /** --mjo-font-size-xsmall */
+    fontSizeXsmall?: string;
+    /** --mjo-font-size-xsmall */
+    fontSizeXxsmall?: string;
     /** --mjo-font-size */
     fontSizeMedium?: string;
     /** --mjo-font-size-large */
     fontSizeLarge?: string;
+    /** --mjo-font-size-xlarge */
+    fontSizeXlarge?: string;
+    /** --mjo-font-size-xxlarge */
+    fontSizeXxlarge?: string;
     /** --mjo-font-weight-light */
     fontWeightLight?: string;
     /** --mjo-font-weight-regular */
@@ -19,8 +27,10 @@ export interface MjoThemeConfig {
     fontWeightMedium?: string;
     /** --mjo-font-weight-bold */
     fontWeightBold?: string;
-    /** --mjo-space-small */
-    spaceXSmall?: string;
+    /** --mjo-space-xxsmall */
+    spaceXxsmall?: string;
+    /** --mjo-space-xsmall */
+    spaceXsmall?: string;
     /** --mjo-space-small */
     spaceSmall?: string;
     /** --mjo-space */
@@ -28,9 +38,9 @@ export interface MjoThemeConfig {
     /** --mjo-space-large */
     spaceLarge?: string;
     /** --mjo-space-xlarge */
-    spaceXLarge?: string;
+    spaceXlarge?: string;
     /** --mjo-space-xxlarge */
-    spaceXXLarge?: string;
+    spaceXxlarge?: string;
     components?: {
         mjoAccordion?: MjoAccordionTheme;
         mjoAccordionItem?: MjoAccordionItemTheme;

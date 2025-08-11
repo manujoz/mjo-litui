@@ -105,6 +105,7 @@ export class CalendarHeader extends LitElement {
     static styles = css`
         .calendar-header {
             margin-bottom: 16px;
+            font-size: 1.3em;
         }
 
         .navigation {

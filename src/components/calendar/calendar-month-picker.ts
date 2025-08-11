@@ -54,7 +54,7 @@ export class CalendarMonthPicker extends LitElement {
         }
 
         .month-picker {
-            padding: 16px;
+            padding: var(--mjo-space-small);
         }
 
         .months-grid {
@@ -67,11 +67,12 @@ export class CalendarMonthPicker extends LitElement {
             background: var(--mjo-calendar-picker-button-background, transparent);
             border: var(--mjo-calendar-picker-button-border, 1px solid var(--mjo-border-color, #e0e0e0));
             border-radius: var(--mjo-calendar-picker-button-radius, var(--mjo-radius, 4px));
-            color: var(--mjo-calendar-picker-button-color, var(--mjo-text-color, #333));
+            color: var(--mjo-calendar-picker-button-color, var(--mjo-foreground-color-low, #333));
             cursor: pointer;
             font-family: inherit;
-            font-size: 0.875rem;
-            padding: 12px 8px;
+            font-size: 1.2em;
+            padding: 12px 4px;
+            box-sizing: border-box;
             transition: all 0.2s ease;
             min-height: 40px;
         }
@@ -86,10 +87,10 @@ export class CalendarMonthPicker extends LitElement {
             outline-offset: 2px;
         }
 
-        .month-button[data-selected] {
+        .month-button[data-selected]:not(:disabled) {
             background: var(--mjo-calendar-picker-button-selected-background, var(--mjo-primary-color, #4c81c9));
             border-color: var(--mjo-calendar-picker-button-selected-border, var(--mjo-primary-color, #4c81c9));
-            color: var(--mjo-calendar-picker-button-selected-color, white);
+            color: var(--mjo-calendar-picker-button-selected-color, var(--mjo-primary-foreground-color, white));
         }
 
         .month-button:disabled {

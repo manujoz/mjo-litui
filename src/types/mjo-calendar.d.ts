@@ -50,17 +50,17 @@ export type CalendarHeaderSide = "single" | "left" | "right";
 
 export interface CalendarDateSelectedEvent extends CustomEvent {
     detail: {
-        date?: string;
-        formattedDate?: string;
+        date?: Date;
+        dateString?: string;
     };
 }
 
 export interface CalendarRangeSelectedEvent extends CustomEvent {
     detail: {
-        startDate?: string;
-        endDate?: string;
-        formattedStartDate?: string;
-        formattedEndDate?: string;
+        startDate?: Date;
+        endDate?: Date;
+        startDateString?: string;
+        endDateString?: string;
     };
 }
 
