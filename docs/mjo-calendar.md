@@ -32,7 +32,8 @@ export class ExampleCalendarBasic extends LitElement {
     }
 
     private handleDateSelected(event: CustomEvent) {
-        console.log("Selected date:", event.detail.date);
+        console.log("Selected date:", event.detail.date); // Date object
+        console.log("Date string:", event.detail.dateString); // YYYY-MM-DD format
     }
 }
 ```
@@ -61,9 +62,11 @@ export class ExampleCalendarRange extends LitElement {
 
     private handleRangeSelected(event: CustomEvent) {
         this.selectedRange = {
-            start: event.detail.startDate,
-            end: event.detail.endDate,
+            start: event.detail.startDateString, // Using string version for display
+            end: event.detail.endDateString,
         };
+        console.log("Start date object:", event.detail.startDate); // Date object
+        console.log("End date object:", event.detail.endDate); // Date object
     }
 }
 ```
@@ -159,11 +162,20 @@ export class ExampleCalendarCustom extends LitElement {
 
 ## Events
 
-| Event            | Detail                                                                                       | Emitted When                                    |
-| ---------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `date-selected`  | `{date: string, formattedDate: string}`                                                      | Date is selected (single mode)                  |
-| `range-selected` | `{startDate: string, endDate: string, formattedStartDate: string, formattedEndDate: string}` | Date range is selected                          |
-| `change`         | `{value: string}` (single) or `{startDate: string, endDate: string}` (range)                 | Date selection changes (for form compatibility) |
+| Event            | Detail                                                                             | Emitted When                                    |
+| ---------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `date-selected`  | `{date: Date, dateString: string}`                                                 | Date is selected (single mode)                  |
+| `range-selected` | `{startDate: Date, endDate: Date, startDateString: string, endDateString: string}` | Date range is selected                          |
+| `change`         | Same as `date-selected` (single) or `range-selected` (range) detail                | Date selection changes (for form compatibility) |
+
+### Event Details
+
+All calendar events provide both Date objects and string representations:
+
+-   **Date objects**: Use for calculations, comparisons, and further processing
+-   **String values**: Pre-formatted as `YYYY-MM-DD` for display and form submission
+
+The `change` event uses the same detail structure as the specific event, making the calendar compatible with form libraries that listen for standard change events.
 
 ## CSS Variables
 

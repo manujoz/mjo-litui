@@ -17,35 +17,6 @@ export interface CalendarDateInfo {
     isHovered: boolean;
 }
 
-export interface MjoCalendarTheme {
-    fontFamily?: string;
-    background?: string;
-    border?: string;
-    borderRadius?: string;
-    shadow?: string;
-    padding?: string;
-    weekDayColor?: string;
-    weekDayFontWeight?: string;
-    dayBorderRadius?: string;
-    dayHoverBackground?: string;
-    todayBackground?: string;
-    todayColor?: string;
-    selectedBackground?: string;
-    selectedColor?: string;
-    rangeEndpointBackground?: string;
-    rangeEndpointColor?: string;
-    rangeBackground?: string;
-    rangeColor?: string;
-    disabledColor?: string;
-    disabledBackground?: string;
-    todayBackgroundSecondary?: string;
-    todayColorSecondary?: string;
-    selectedBackgroundSecondary?: string;
-    selectedColorSecondary?: string;
-    rangeBackgroundSecondary?: string;
-    rangeColorSecondary?: string;
-}
-
 export type CalendarHeaderSide = "single" | "left" | "right";
 
 export interface CalendarDateSelectedEvent extends CustomEvent {
@@ -132,7 +103,7 @@ export interface CalendarDayLeaveEvent extends CustomEvent {
 
 declare global {
     interface HTMLElementEventMap {
-        "date-selected": CustomEvent<CalendarDateSelectedEvent>;
-        "range-selected": CustomEvent<CalendarRangeSelectedEvent>;
+        "date-selected": CalendarDateSelectedEvent;
+        "range-selected": CalendarRangeSelectedEvent;
     }
 }

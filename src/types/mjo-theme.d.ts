@@ -47,6 +47,7 @@ export interface MjoThemeConfig {
         mjoAlert?: MjoAlertTheme;
         mjoAvatar?: MjoAvatarTheme;
         mjoButton?: MjoButtonTheme;
+        mjoCalendar?: MjoCalendarTheme;
         mjoCard?: MjoCardTheme;
         mjoCheckbox?: MjoCheckboxTheme;
         mjoChip?: MjoChipTheme;
@@ -476,4 +477,33 @@ export interface MjoModalTheme {
     radius?: string;
     boxShadow?: string;
     width?: string;
+}
+
+export interface MjoCalendarTheme {
+    fontFamily?: string;
+    background?: string;
+    border?: string;
+    borderRadius?: string;
+    shadow?: string;
+    padding?: string;
+    weekDayColor?: string;
+    weekDayFontWeight?: string;
+    dayBorderRadius?: string;
+    dayHoverBackground?: string;
+    todayBackground?: string;
+    todayColor?: string;
+    selectedBackground?: string;
+    selectedColor?: string;
+    rangeEndpointBackground?: string;
+    rangeEndpointColor?: string;
+    rangeBackground?: string;
+    rangeColor?: string;
+    disabledColor?: string;
+    disabledBackground?: string;
+    todayBackgroundSecondary?: string;
+    todayColorSecondary?: string;
+    selectedBackgroundSecondary?: string;
+    selectedColorSecondary?: string;
+    rangeBackgroundSecondary?: string;
+    rangeColorSecondary?: string;
 }
