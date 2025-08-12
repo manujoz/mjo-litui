@@ -1,0 +1,21 @@
+{
+	"servers": {
+		"atlassian": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"mcp-remote",
+				"https://mcp.atlassian.com/v1/sse"
+			],
+			"type": "stdio"
+		},
+		"context7": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"@upstash/context7-mcp"
+			]
+		},
+	}
+}

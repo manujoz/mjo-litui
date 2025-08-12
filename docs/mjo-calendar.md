@@ -1,6 +1,6 @@
 # mjo-calendar
 
-Configurable calendar component for date selection, supporting both single date and date range selection with intuitive navigation controls. The component includes internationalization support for 15 languages.
+Configurable calendar component for date selection, supporting both single date and date range selection with intuitive navigation controls. Includes adaptive dual-calendar rendering in range mode, internationalization support for 15 languages, theming via `ThemeMixin`, and a concise public programmatic API.
 
 ## HTML Usage
 
@@ -8,8 +8,17 @@ Configurable calendar component for date selection, supporting both single date 
 <!-- Single date selection -->
 <mjo-calendar mode="single" value="2025-01-15"></mjo-calendar>
 
-<!-- Date range selection -->
+<!-- Date range selection (auto dual calendars depending on width) -->
 <mjo-calendar mode="range" start-date="2025-01-10" end-date="2025-01-20"></mjo-calendar>
+
+<!-- Force single calendar for range mode -->
+<mjo-calendar mode="range" range-calendars="1"></mjo-calendar>
+
+<!-- Always show two calendars for range mode -->
+<mjo-calendar mode="range" range-calendars="2"></mjo-calendar>
+
+<!-- Auto (default) adapt to container width -->
+<mjo-calendar mode="range" range-calendars="auto"></mjo-calendar>
 
 <!-- With different locale -->
 <mjo-calendar mode="single" locale="es"></mjo-calendar>
@@ -32,8 +41,9 @@ export class ExampleCalendarBasic extends LitElement {
     }
 
     private handleDateSelected(event: CustomEvent) {
-        console.log("Selected date:", event.detail.date); // Date object
-        console.log("Date string:", event.detail.dateString); // YYYY-MM-DD format
+    console.log("Selected date object:", event.detail.date);      // Date | undefined
+    console.log("Selected date string:", event.detail.dateString); // YYYY-MM-DD
+    console.log("Value (alias):", event.detail.value);            // YYYY-MM-DD
     }
 }
 ```
@@ -53,7 +63,7 @@ export class ExampleCalendarRange extends LitElement {
         return html`
             <div>
                 <h3>Select Date Range</h3>
-                <mjo-calendar mode="range" @range-selected=${this.handleRangeSelected}></mjo-calendar>
+                <mjo-calendar mode="range" range-calendars="auto" @range-selected=${this.handleRangeSelected}></mjo-calendar>
 
                 ${this.selectedRange.start ? html` <p>Selected: ${this.selectedRange.start} to ${this.selectedRange.end}</p> ` : html`<p>No range selected</p>`}
             </div>
@@ -65,8 +75,10 @@ export class ExampleCalendarRange extends LitElement {
             start: event.detail.startDateString, // Using string version for display
             end: event.detail.endDateString,
         };
-        console.log("Start date object:", event.detail.startDate); // Date object
-        console.log("End date object:", event.detail.endDate); // Date object
+    console.log("Start date object:", event.detail.startDate);          // Date | undefined
+    console.log("End date object:", event.detail.endDate);              // Date | undefined
+    console.log("Start date string:", event.detail.startDateString);    // YYYY-MM-DD
+    console.log("End date string:", event.detail.endDateString);        // YYYY-MM-DD
     }
 }
 ```
@@ -150,32 +162,85 @@ export class ExampleCalendarCustom extends LitElement {
 | `showToday`       | `boolean`                        | `true`      | no       | Highlight today's date                              |
 | `showWeekNumbers` | `boolean`                        | `false`     | no       | Show week numbers (not implemented yet)             |
 | `firstDayOfWeek`  | `"sunday" \| "monday"`           | `"monday"`  | no       | First day of the week                               |
+| `range-calendars` | `"1" \| "2" \| "auto"`           | `"auto"`    | no       | Range mode calendar layout strategy (see below)     |
+
+### Range Calendar Layout (`range-calendars`)
+
+Controls how many calendars are shown in **range** mode:
+
+| Value  | Behavior                                                                                             |
+| ------ | ---------------------------------------------------------------------------------------------------- |
+| `1`    | Always render a single calendar (still supports selecting start then end)                            |
+| `2`    | Always render two adjacent months (left + right)                                                     |
+| `auto` | (Default) Render two calendars when the host (or parent) width ≥ 720px; otherwise fall back to one. |
+
+The auto mode uses a `ResizeObserver` for responsive adaptation.
 
 ### Behavior Notes
 
--   In `single` mode, clicking a date selects it and fires `date-selected` and `change` events
--   In `range` mode, first click sets start date, second click sets end date and fires `range-selected` and `change` events
--   Range selection automatically swaps dates if end date is before start date
--   Navigation (month/year changes) is always allowed regardless of `minDate`/`maxDate` constraints
--   Date selection is restricted by `minDate`/`maxDate` and `disabledDates` constraints
--   Form integration works through FormMixin when `name` attribute is provided
+- In `single` mode, clicking a date selects it and fires `date-selected` + `change`.
+- In `range` mode, first valid click sets start date, second sets end date and fires `range-selected` + `change`.
+- If the second selected date is earlier than the first, dates are automatically swapped (start <= end guarantee).
+- Navigation (month/year) ignores constraints; constraints only block selection.
+- Selection is vetoed by `minDate`, `maxDate`, and `disabledDates`.
+- In range mode with two calendars, months are always adjacent (left is month N, right is N+1).
+- `range-calendars="auto"` dynamically toggles dual layout depending on width threshold (720px).
+- Form integration works through `FormMixin` when `name` is present.
 
 ## Events
 
-| Event            | Detail                                                                             | Emitted When                                    |
-| ---------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `date-selected`  | `{date: Date, dateString: string}`                                                 | Date is selected (single mode)                  |
-| `range-selected` | `{startDate: Date, endDate: Date, startDateString: string, endDateString: string}` | Date range is selected                          |
-| `change`         | Same as `date-selected` (single) or `range-selected` (range) detail                | Date selection changes (for form compatibility) |
+| Event            | Detail (shape)                                                                                                                                                    | Emitted When                                    |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `date-selected`  | `{ date?: Date, dateString?: string, value?: string }`                                                                                                            | Date is selected (single mode)                  |
+| `range-selected` | `{ startDate?: Date, endDate?: Date, startDateString?: string, endDateString?: string, startDateValue?: string, endDateValue?: string }`                          | Date range fully selected (both ends)          |
+| `change`         | Mirrors `date-selected` (single) or `range-selected` (range) with identical detail fields (adds compatibility for generic form handlers & change event listeners) | Date selection changes                          |
 
 ### Event Details
 
-All calendar events provide both Date objects and string representations:
+All events expose date(s) in two forms:
 
--   **Date objects**: Use for calculations, comparisons, and further processing
--   **String values**: Pre-formatted as `YYYY-MM-DD` for display and form submission
+- **Date objects** (`date`, `startDate`, `endDate`) – omitted until selected (undefined-safe).
+- **String values** (`dateString`, `value`, `startDateString`, `endDateString`) – ISO-like `YYYY-MM-DD` for display or submission.
 
-The `change` event uses the same detail structure as the specific event, making the calendar compatible with form libraries that listen for standard change events.
+The `value`, `startDateValue`, and `endDateValue` fields are aliases (string mirrors) to simplify generic tooling consumption.
+## Public Programmatic API
+
+These methods provide controlled, side-effect-safe manipulation of the displayed months without relying on internal/legacy reactive fields.
+
+| Method                                        | Description                                                                                                   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `getDisplayedMonths(): {month; year;}[]`      | Returns a shallow copy (length 1 or 2) of the months currently rendered.                                     |
+| `setDisplayedMonths(months, enforceAdj = true)` | Sets one or two months. If two and `enforceAdj` is true (default), second is coerced to be next month.      |
+| `setMonth(side, month)`                       | Sets the month (0–11) for `"single"`, `"left"`, or `"right"` side, preserving adjacency in range mode.      |
+| `setYear(side, year)`                         | Sets the year for the given side, re-normalizing adjacency.                                                  |
+
+### Side Semantics
+
+- `"single"`: Used when `mode="single"` (index 0).
+- `"left"`, `"right"`: Applicable only in range mode. In dual mode they map to calendar indices 0 and 1 respectively.
+
+### Example: Programmatic Navigation
+
+```ts
+// Advance left month one forward while keeping adjacency
+const [left] = calendar.getDisplayedMonths();
+calendar.setMonth("left", (left.month + 1) % 12);
+
+// Jump to a specific pair (March 2032 / April 2032)
+calendar.setDisplayedMonths([
+    { month: 2, year: 2032 },
+    { month: 5, year: 2040 } // will be coerced to April 2032 because of adjacency rule
+]);
+
+// Skip adjacency enforcement deliberately
+calendar.setDisplayedMonths([
+    { month: 2, year: 2032 },
+    { month: 5, year: 2040 }
+], false);
+```
+
+> Legacy direct property accessors (`currentMonth`, `leftCalendarYear`, etc.) have been removed in favor of these methods.
+
 
 ## CSS Variables
 
@@ -310,8 +375,8 @@ html`<mjo-calendar .theme=${customTheme}></mjo-calendar>`;
 
 When used with `name` attribute, the calendar integrates with `mjo-form`:
 
--   **Single mode**: Sends selected date as string value
--   **Range mode**: Sends JSON string with `{start: "YYYY-MM-DD", end: "YYYY-MM-DD"}`
+- **Single mode**: Emits the selected date as `value`.
+- **Range mode**: Emits a JSON string `{ "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" }` once both dates are chosen.
 
 ```html
 <mjo-form>
@@ -369,10 +434,10 @@ The locale property affects:
 
 ## Accessibility Notes
 
--   Calendar provides keyboard navigation (planned feature)
--   All interactive elements have proper ARIA labels
--   Date formatting respects locale settings
--   Screen reader friendly date announcements
+- Keyboard navigation: planned (not yet implemented).
+- Interactive elements expose semantic roles and ARIA labels where relevant.
+- Locale-driven labeling (month / weekday names) aids screen reader context.
+- String date formats are stable for assistive tech.
 
 ## Performance Considerations
 
@@ -382,10 +447,10 @@ The locale property affects:
 
 ## Browser Support
 
--   Modern browsers with native Date API support
--   Internationalization API for locale formatting
--   CSS Grid for layout (IE11+ with polyfills)
+- Modern evergreen browsers (Chromium, Firefox, WebKit).
+- Relies on Intl for localized month/weekday names (widely supported in modern engines).
+- Uses CSS Grid & shadow DOM.
 
 ## Summary
 
-`<mjo-calendar>` provides a complete date selection solution with both single and range modes. It integrates seamlessly with forms, supports extensive theming, and follows your library's design patterns. Use global themes for consistency and ThemeMixin for specific customizations.
+`<mjo-calendar>` delivers flexible single & range date selection with adaptive dual-month rendering, responsive layout, typed events, theming hooks, and a clean programmatic API. Prefer the public methods for control, leverage `range-calendars` for layout strategy, and integrate with forms via the `name` attribute.

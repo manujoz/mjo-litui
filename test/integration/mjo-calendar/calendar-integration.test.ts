@@ -29,8 +29,8 @@ suite("mjo-calendar - Integration Tests", () => {
             });
 
             // Navigate to a specific month
-            (calendar as any).currentMonth = 5; // June
-            (calendar as any).currentYear = 2024;
+            calendar.setYear("single", 2024);
+            calendar.setMonth("single", 5); // June
             await CalendarTestUtils.waitForUpdate();
 
             // Select a date
@@ -39,7 +39,7 @@ suite("mjo-calendar - Integration Tests", () => {
 
             // Verify selection
             expect(eventFired).to.be.true;
-            expect(eventDetail!.date).to.equal(targetDate);
+            expect(eventDetail!.dateString).to.equal(targetDate);
             expect(calendar.value).to.equal(targetDate);
             CalendarAssertions.assertDateSelected(calendar, targetDate);
         });
@@ -60,8 +60,8 @@ suite("mjo-calendar - Integration Tests", () => {
             });
 
             // Navigate to a specific month
-            (calendar as any).currentMonth = 5; // June
-            (calendar as any).currentYear = 2024;
+            calendar.setYear("single", 2024);
+            calendar.setMonth("single", 5); // June
             await CalendarTestUtils.waitForUpdate();
 
             // Select date range
@@ -73,8 +73,8 @@ suite("mjo-calendar - Integration Tests", () => {
 
             // Verify range selection
             expect(eventCount).to.be.greaterThan(0);
-            expect(lastEventDetail!.startDate).to.equal(startDate);
-            expect(lastEventDetail!.endDate).to.equal(endDate);
+            expect(lastEventDetail!.startDateString).to.equal(startDate);
+            expect(lastEventDetail!.endDateString).to.equal(endDate);
             CalendarAssertions.assertRangeSelected(calendar, startDate, endDate);
         });
 
@@ -82,8 +82,9 @@ suite("mjo-calendar - Integration Tests", () => {
             calendar = (await CalendarTestUtils.createCalendarFixture()) as MjoCalendar;
             await CalendarTestUtils.waitForUpdate();
 
-            const initialMonth = (calendar as any).currentMonth;
-            const initialYear = (calendar as any).currentYear;
+            const dm0 = calendar.getDisplayedMonths()[0];
+            const initialMonth = dm0.month;
+            const initialYear = dm0.year;
 
             // Navigate to next month
             await CalendarTestUtils.clickNextMonth(calendar);
@@ -96,8 +97,9 @@ suite("mjo-calendar - Integration Tests", () => {
                 expectedYear = initialYear + 1;
             }
 
-            expect((calendar as any).currentMonth).to.equal(expectedMonth);
-            expect((calendar as any).currentYear).to.equal(expectedYear);
+            const after = calendar.getDisplayedMonths()[0];
+            expect(after.month).to.equal(expectedMonth);
+            expect(after.year).to.equal(expectedYear);
 
             // Select a date in the new month
             const targetDate = `${expectedYear}-${String(expectedMonth + 1).padStart(2, "0")}-15`;
@@ -119,10 +121,10 @@ suite("mjo-calendar - Integration Tests", () => {
             await CalendarTestUtils.selectMonthFromPicker(calendar, targetMonth);
 
             // Verify month changed
-            expect((calendar as any).currentMonth).to.equal(targetMonth);
+            expect(calendar.getDisplayedMonths()[0].month).to.equal(targetMonth);
 
             // Select a date in July
-            const targetDate = `${(calendar as any).currentYear}-07-15`;
+            const targetDate = `${calendar.getDisplayedMonths()[0].year}-07-15`;
             await CalendarTestUtils.selectDate(calendar, targetDate);
 
             CalendarAssertions.assertDateSelected(calendar, targetDate);
@@ -141,10 +143,10 @@ suite("mjo-calendar - Integration Tests", () => {
             await CalendarTestUtils.selectYearFromPicker(calendar, targetYear);
 
             // Verify year changed
-            expect((calendar as any).currentYear).to.equal(targetYear);
+            expect(calendar.getDisplayedMonths()[0].year).to.equal(targetYear);
 
             // Select a date in 2025
-            const targetDate = `2025-${String((calendar as any).currentMonth + 1).padStart(2, "0")}-15`;
+            const targetDate = `2025-${String(calendar.getDisplayedMonths()[0].month + 1).padStart(2, "0")}-15`;
             await CalendarTestUtils.selectDate(calendar, targetDate);
 
             CalendarAssertions.assertDateSelected(calendar, targetDate);
@@ -199,27 +201,33 @@ suite("mjo-calendar - Integration Tests", () => {
             })) as MjoCalendar;
 
             // Set to minimum month
-            (calendar as any).currentMonth = 5; // June
-            (calendar as any).currentYear = 2024;
+            calendar.setYear("single", 2024);
+            calendar.setMonth("single", 5); // June
             await CalendarTestUtils.waitForUpdate();
 
             // Should be able to navigate before min date
             await CalendarTestUtils.clickPreviousMonth(calendar);
 
             // Should have navigated to May (month 4)
-            expect((calendar as any).currentMonth).to.equal(4);
-            expect((calendar as any).currentYear).to.equal(2024);
+            {
+                const dm = calendar.getDisplayedMonths()[0];
+                expect(dm.month).to.equal(4);
+                expect(dm.year).to.equal(2024);
+            }
 
             // Navigate to maximum month
-            (calendar as any).currentMonth = 7; // August
+            calendar.setMonth("single", 7); // August
             await CalendarTestUtils.waitForUpdate();
 
             // Should be able to navigate after max date
             await CalendarTestUtils.clickNextMonth(calendar);
 
             // Should have navigated to September (month 8)
-            expect((calendar as any).currentMonth).to.equal(8);
-            expect((calendar as any).currentYear).to.equal(2024);
+            {
+                const dm = calendar.getDisplayedMonths()[0];
+                expect(dm.month).to.equal(8);
+                expect(dm.year).to.equal(2024);
+            }
         });
 
         test("should handle disabled dates in selection workflow", async () => {
@@ -229,8 +237,8 @@ suite("mjo-calendar - Integration Tests", () => {
                 disabledDates,
             })) as MjoCalendar;
 
-            (calendar as any).currentMonth = 5; // June
-            (calendar as any).currentYear = 2024;
+            calendar.setYear("single", 2024);
+            calendar.setMonth("single", 5); // June
             await CalendarTestUtils.waitForUpdate();
 
             // Try to select disabled date
@@ -255,9 +263,9 @@ suite("mjo-calendar - Integration Tests", () => {
                 maxDate,
                 disabledDates,
             })) as MjoCalendar;
-
-            (calendar as any).currentMonth = 5; // June
-            (calendar as any).currentYear = 2024;
+            // Position calendar at June 2024
+            calendar.setYear("left", 2024);
+            calendar.setMonth("left", 5);
             await CalendarTestUtils.waitForUpdate();
 
             // Select valid range avoiding constraints

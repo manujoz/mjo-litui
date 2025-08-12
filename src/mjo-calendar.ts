@@ -58,20 +58,32 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @property({ type: Boolean }) showToday = true;
     @property({ type: Boolean }) showWeekNumbers = false;
     @property({ type: String }) firstDayOfWeek: "sunday" | "monday" = "monday";
+    /**
+     * Controls how many calendars are shown in range mode.
+     * Accepted values:
+     *  - 1: always show a single calendar (still allows selecting start/end sequentially)
+     *  - 2: always show two synchronized calendars side by side
+     *  - "auto": attempts to show two; falls back to one if viewport width is small
+     * Default: "auto".
+     * (Note: this does NOT apply to single mode.)
+     */
+    @property({ type: String, attribute: "range-calendars" }) rangeCalendars: "1" | "2" | "auto" = "auto";
 
-    @state() private currentMonth = new Date().getMonth();
-    @state() private currentYear = new Date().getFullYear();
+    // Legacy month/year reactive states removed; derive via displayedMonths getters for backward compatibility during migration
     @state() private selectedDate?: Date;
     @state() private selectedStartDate?: Date;
     @state() private selectedEndDate?: Date;
     @state() private hoverDate?: Date;
-    @state() private leftCalendarMonth = new Date().getMonth();
-    @state() private leftCalendarYear = new Date().getFullYear();
-    @state() private rightCalendarMonth = new Date().getMonth() + 1;
-    @state() private rightCalendarYear = new Date().getFullYear();
-    @state() private showMonthPicker = false;
-    @state() private showYearPicker = false;
-    @state() private pickerSide: "single" | "left" | "right" = "single";
+    // Legacy left/right month/year removed; use displayedMonths[0|1]
+    @state() private picker: { open: boolean; type?: "month" | "year"; index: number } = { open: false, type: undefined, index: 0 };
+    /** Internal flag computed when rangeCalendars === "auto" determining if we show dual calendars */
+    @state() private autoDual = false;
+    /** Step 2: unified list of currently displayed months (length 1 or 2). */
+    @state() private displayedMonths: { month: number; year: number }[] = [];
+
+    static readonly AUTO_DUAL_THRESHOLD = 720; // px
+
+    #resizeObserver?: ResizeObserver;
 
     get currentLocale() {
         return locales[this.locale] || locales.en;
@@ -88,227 +100,209 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     connectedCallback(): void {
         super.connectedCallback();
         this.#initializeDates();
+        this.#syncDisplayedMonthsFromState();
+        // Setup ResizeObserver for adaptive dual-range mode
+        if (typeof ResizeObserver !== "undefined") {
+            this.#resizeObserver = new ResizeObserver(() => this._evaluateAutoDual());
+            // Defer observing until first paint to ensure rendering box is stable
+            requestAnimationFrame(() => {
+                this.#resizeObserver?.observe(this);
+                // Immediately evaluate once after observing
+                this._evaluateAutoDual();
+                this.#syncDisplayedMonthsFromState();
+            });
+        } else {
+            // Fallback: listen to window resize
+            window.addEventListener("resize", this.#handleWindowResize);
+            this._evaluateAutoDual();
+            this.#syncDisplayedMonthsFromState();
+        }
+    }
+
+    disconnectedCallback(): void {
+        super.disconnectedCallback();
+        this.#resizeObserver?.disconnect();
+        window.removeEventListener("resize", this.#handleWindowResize);
     }
 
     render() {
         if (this.mode === "range") {
-            return this.#renderRangeCalendar();
+            // Decide whether to render dual or single calendar in range mode
+            if (this.#shouldRenderDualRange()) {
+                return this.#renderRangeCalendar();
+            }
+            // Fallback to a single-calendar rendering but keeping range selection logic
+            return this.#renderSingleCalendar(/*rangeMode*/ true);
         }
         return this.#renderSingleCalendar();
     }
 
-    #renderSingleCalendar() {
+    #renderSingleCalendar(isRangeMode = false) {
+        if (this.displayedMonths.length === 0) {
+            const today = new Date();
+            this.displayedMonths = [{ month: today.getMonth(), year: today.getFullYear() }];
+        }
+        const dm = this.displayedMonths[0];
         return html`
             <div class="calendar-container" part="calendar" data-size=${this.size} data-color=${this.color} ?data-disabled=${this.disabled}>
-                ${html`
-                    <calendar-header
-                        .month=${this.currentMonth}
-                        .year=${this.currentYear}
-                        .monthNames=${this.monthNames}
-                        .disabled=${this.disabled}
-                        side="single"
-                        @navigate=${this.#handleNavigate}
-                        @month-picker=${this.#handleMonthPicker}
-                        @year-picker=${this.#handleYearPicker}
-                    ></calendar-header>
-                    <calendar-grid
-                        .month=${this.currentMonth}
-                        .year=${this.currentYear}
-                        .weekDays=${this.weekDays}
-                        .firstDayOfWeek=${this.firstDayOfWeek}
-                        .mode=${this.mode}
-                        .showToday=${this.showToday}
-                        .size=${this.size}
-                        .disabled=${this.disabled}
-                        .minDate=${this.minDate}
-                        .maxDate=${this.maxDate}
-                        .disabledDates=${this.disabledDates}
-                        .selectedDate=${this.selectedDate}
-                        .selectedStartDate=${this.selectedStartDate}
-                        .selectedEndDate=${this.selectedEndDate}
-                        .hoverDate=${this.hoverDate}
-                        side="single"
-                        @date-click=${this.#handleDateClick}
-                        @date-hover=${this.#handleDateHover}
-                        @date-leave=${this.#handleDateLeave}
-                    ></calendar-grid>
-                `}
-                ${this.showMonthPicker
+                ${this.#renderCalendarSide({
+                    month: dm.month,
+                    year: dm.year,
+                    side: "single",
+                    forceMode: isRangeMode ? "range" : this.mode,
+                })}
+                ${this.picker.open
+                    ? html`
+                          <div class="picker-overlay" @click=${this.#handlePickerClose}>
+                              <div class="picker-backdrop"></div>
+                          </div>
+                      `
+                    : ""}
+            </div>
+        `;
+    }
+
+    #shouldRenderDualRange(): boolean {
+        if (this.mode !== "range") return false;
+        const setting = this.rangeCalendars;
+        if (setting === "2") return true;
+        if (setting === "1") return false;
+        // Auto mode: rely on computed state updated by ResizeObserver / window resize
+        return this.autoDual;
+    }
+
+    #renderRangeCalendar() {
+        // Ensure we have two displayed months for range mode (adjacent)
+        if (this.displayedMonths.length !== 2) {
+            if (this.displayedMonths.length === 1) {
+                const first = this.displayedMonths[0];
+                const secondDate = new Date(first.year, first.month + 1, 1);
+                this.displayedMonths = [first, { month: secondDate.getMonth(), year: secondDate.getFullYear() }];
+            } else if (this.displayedMonths.length === 0) {
+                const today = new Date();
+                const next = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+                this.displayedMonths = [
+                    { month: today.getMonth(), year: today.getFullYear() },
+                    { month: next.getMonth(), year: next.getFullYear() },
+                ];
+            }
+        }
+        const months = this.displayedMonths;
+
+        return html`
+            <div class="calendar-range-container" part="calendar" data-size=${this.size} data-color=${this.color} ?data-disabled=${this.disabled}>
+                <!-- Left Calendar -->
+                ${this.#renderCalendarSide({ month: months[0].month, year: months[0].year, side: "left" })}
+                <!-- Right Calendar -->
+                ${this.#renderCalendarSide({ month: months[1].month, year: months[1].year, side: "right" })}
+                ${this.picker.open
+                    ? html`
+                          <div class="picker-overlay" @click=${this.#handlePickerClose}>
+                              <div class="picker-backdrop"></div>
+                          </div>
+                      `
+                    : ""}
+            </div>
+        `;
+    }
+
+    /** Helper to render a calendar side (single/left/right) */
+    #renderCalendarSide(args: { month: number; year: number; side: "single" | "left" | "right"; forceMode?: "single" | "range" }) {
+        const { month, year, side, forceMode } = args;
+        const calendarIndex = this.#calendarIndexForSide(side);
+        const isPickerSide = this.picker.open && this.picker.index === calendarIndex;
+        const mode = forceMode ?? this.mode;
+        return html`
+            <div class="calendar-side" data-side=${side}>
+                <calendar-header
+                    .month=${month}
+                    .year=${year}
+                    .monthNames=${this.monthNames}
+                    .disabled=${this.disabled}
+                    side=${side}
+                    @navigate=${this.#handleNavigate}
+                    @month-picker=${this.#handleMonthPicker}
+                    @year-picker=${this.#handleYearPicker}
+                ></calendar-header>
+                <calendar-grid
+                    .month=${month}
+                    .year=${year}
+                    .weekDays=${this.weekDays}
+                    .firstDayOfWeek=${this.firstDayOfWeek}
+                    .mode=${mode}
+                    .showToday=${this.showToday}
+                    .size=${this.size}
+                    .disabled=${this.disabled}
+                    .minDate=${this.minDate}
+                    .maxDate=${this.maxDate}
+                    .disabledDates=${this.disabledDates}
+                    .selectedDate=${this.selectedDate}
+                    .selectedStartDate=${this.selectedStartDate}
+                    .selectedEndDate=${this.selectedEndDate}
+                    .hoverDate=${this.hoverDate}
+                    side=${side}
+                    @date-click=${this.#handleDateClick}
+                    @date-hover=${this.#handleDateHover}
+                    @date-leave=${this.#handleDateLeave}
+                ></calendar-grid>
+                ${this.picker.open && this.picker.type === "month" && isPickerSide
                     ? html`
                           <calendar-month-picker
-                              .selectedMonth=${this.currentMonth}
+                              .selectedMonth=${month}
                               .monthNames=${this.monthNames}
                               .disabled=${this.disabled}
                               @month-selected=${this.#handleMonthSelected}
                               @click=${(e: Event) => e.stopPropagation()}
                           ></calendar-month-picker>
                       `
-                    : this.showYearPicker
+                    : this.picker.open && this.picker.type === "year" && isPickerSide
                       ? html`
                             <calendar-year-picker
-                                .selectedYear=${this.currentYear}
+                                .selectedYear=${year}
                                 .disabled=${this.disabled}
                                 @year-selected=${this.#handleYearSelected}
                                 @click=${(e: Event) => e.stopPropagation()}
                             ></calendar-year-picker>
                         `
                       : nothing}
-                ${this.showMonthPicker || this.showYearPicker
-                    ? html`
-                          <div class="picker-overlay" @click=${this.#handlePickerClose}>
-                              <div class="picker-backdrop"></div>
-                          </div>
-                      `
-                    : ""}
             </div>
         `;
     }
 
-    #renderRangeCalendar() {
-        // Adjust right calendar if needed
-        if (this.rightCalendarYear === this.leftCalendarYear && this.rightCalendarMonth === this.leftCalendarMonth) {
-            if (this.rightCalendarMonth === 11) {
-                this.rightCalendarMonth = 0;
-                this.rightCalendarYear++;
-            } else {
-                this.rightCalendarMonth++;
-            }
+    /** Recalculate autoDual flag (called by ResizeObserver / window resize); public (prefixed underscore) for testability */
+    _evaluateAutoDual() {
+        if (this.rangeCalendars !== "auto" || this.mode !== "range") return;
+        // Measure parent width preferentially (wrapper may define layout), fallback to host, then window
+        const parentWidth = this.parentElement?.getBoundingClientRect().width;
+        const hostRect = this.getBoundingClientRect();
+        const width = parentWidth || hostRect.width || window.innerWidth;
+        const shouldDual = width >= MjoCalendar.AUTO_DUAL_THRESHOLD;
+        if (shouldDual !== this.autoDual) {
+            this.autoDual = shouldDual;
         }
+    }
+    #handleWindowResize = () => this._evaluateAutoDual();
 
-        return html`
-            <div class="calendar-range-container" part="calendar" data-size=${this.size} data-color=${this.color} ?data-disabled=${this.disabled}>
-                <!-- Left Calendar -->
-                <div class="calendar-side">
-                    ${html`
-                        <calendar-header
-                            .month=${this.leftCalendarMonth}
-                            .year=${this.leftCalendarYear}
-                            .monthNames=${this.monthNames}
-                            .disabled=${this.disabled}
-                            side="left"
-                            @navigate=${this.#handleNavigate}
-                            @month-picker=${this.#handleMonthPicker}
-                            @year-picker=${this.#handleYearPicker}
-                        ></calendar-header>
-                        <calendar-grid
-                            .month=${this.leftCalendarMonth}
-                            .year=${this.leftCalendarYear}
-                            .weekDays=${this.weekDays}
-                            .firstDayOfWeek=${this.firstDayOfWeek}
-                            .mode=${this.mode}
-                            .showToday=${this.showToday}
-                            .size=${this.size}
-                            .disabled=${this.disabled}
-                            .minDate=${this.minDate}
-                            .maxDate=${this.maxDate}
-                            .disabledDates=${this.disabledDates}
-                            .selectedDate=${this.selectedDate}
-                            .selectedStartDate=${this.selectedStartDate}
-                            .selectedEndDate=${this.selectedEndDate}
-                            .hoverDate=${this.hoverDate}
-                            side="left"
-                            @date-click=${this.#handleDateClick}
-                            @date-hover=${this.#handleDateHover}
-                            @date-leave=${this.#handleDateLeave}
-                        ></calendar-grid>
-                    `}
-                    ${this.showMonthPicker && this.pickerSide === "left"
-                        ? html`
-                              <calendar-month-picker
-                                  .selectedMonth=${this.leftCalendarMonth}
-                                  .monthNames=${this.monthNames}
-                                  .disabled=${this.disabled}
-                                  @month-selected=${this.#handleMonthSelected}
-                                  @click=${(e: Event) => e.stopPropagation()}
-                              ></calendar-month-picker>
-                          `
-                        : this.showYearPicker && this.pickerSide === "left"
-                          ? html`
-                                <calendar-year-picker
-                                    .selectedYear=${this.leftCalendarYear}
-                                    .disabled=${this.disabled}
-                                    @year-selected=${this.#handleYearSelected}
-                                    @click=${(e: Event) => e.stopPropagation()}
-                                ></calendar-year-picker>
-                            `
-                          : nothing}
-                </div>
-                <!-- Right Calendar -->
-                <div class="calendar-side">
-                    ${html`
-                        <calendar-header
-                            .month=${this.rightCalendarMonth}
-                            .year=${this.rightCalendarYear}
-                            .monthNames=${this.monthNames}
-                            .disabled=${this.disabled}
-                            side="right"
-                            @navigate=${this.#handleNavigate}
-                            @month-picker=${this.#handleMonthPicker}
-                            @year-picker=${this.#handleYearPicker}
-                        ></calendar-header>
-                        <calendar-grid
-                            .month=${this.rightCalendarMonth}
-                            .year=${this.rightCalendarYear}
-                            .weekDays=${this.weekDays}
-                            .firstDayOfWeek=${this.firstDayOfWeek}
-                            .mode=${this.mode}
-                            .showToday=${this.showToday}
-                            .size=${this.size}
-                            .disabled=${this.disabled}
-                            .minDate=${this.minDate}
-                            .maxDate=${this.maxDate}
-                            .disabledDates=${this.disabledDates}
-                            .selectedDate=${this.selectedDate}
-                            .selectedStartDate=${this.selectedStartDate}
-                            .selectedEndDate=${this.selectedEndDate}
-                            .hoverDate=${this.hoverDate}
-                            side="right"
-                            @date-click=${this.#handleDateClick}
-                            @date-hover=${this.#handleDateHover}
-                            @date-leave=${this.#handleDateLeave}
-                        ></calendar-grid>
-                    `}
-                    ${this.showMonthPicker && this.pickerSide === "right"
-                        ? html`
-                              <calendar-month-picker
-                                  .selectedMonth=${this.rightCalendarMonth}
-                                  .monthNames=${this.monthNames}
-                                  .disabled=${this.disabled}
-                                  @month-selected=${this.#handleMonthSelected}
-                                  @click=${(e: Event) => e.stopPropagation()}
-                              ></calendar-month-picker>
-                          `
-                        : this.showYearPicker && this.pickerSide === "right"
-                          ? html`
-                                <calendar-year-picker
-                                    .selectedYear=${this.rightCalendarYear}
-                                    .disabled=${this.disabled}
-                                    @year-selected=${this.#handleYearSelected}
-                                    @click=${(e: Event) => e.stopPropagation()}
-                                ></calendar-year-picker>
-                            `
-                          : nothing}
-                </div>
-                ${this.showMonthPicker || this.showYearPicker
-                    ? html`
-                          <div class="picker-overlay" @click=${this.#handlePickerClose}>
-                              <div class="picker-backdrop"></div>
-                          </div>
-                      `
-                    : ""}
-            </div>
-        `;
+    /** Sync displayedMonths from legacy state */
+    #syncDisplayedMonthsFromState() {
+        if (this.displayedMonths.length === 0) {
+            const today = new Date();
+            this.displayedMonths = [{ month: today.getMonth(), year: today.getFullYear() }];
+        }
+        if (this.mode === "range" && this.#shouldRenderDualRange() && this.displayedMonths.length === 1) {
+            const first = this.displayedMonths[0];
+            const d = new Date(first.year, first.month + 1, 1);
+            this.displayedMonths = [first, { month: d.getMonth(), year: d.getFullYear() }];
+        }
     }
 
     #initializeDates() {
         if (this.value && this.mode === "single") {
             this.selectedDate = new Date(this.value);
-            this.currentMonth = this.selectedDate.getMonth();
-            this.currentYear = this.selectedDate.getFullYear();
+            this.displayedMonths = [{ month: this.selectedDate.getMonth(), year: this.selectedDate.getFullYear() }];
         } else if (this.startDate && this.mode === "range") {
             this.selectedStartDate = new Date(this.startDate);
-            this.leftCalendarMonth = this.selectedStartDate.getMonth();
-            this.leftCalendarYear = this.selectedStartDate.getFullYear();
+            this.displayedMonths = [{ month: this.selectedStartDate.getMonth(), year: this.selectedStartDate.getFullYear() }];
 
             if (this.endDate) {
                 this.selectedEndDate = new Date(this.endDate);
@@ -323,16 +317,12 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
 
     #handleMonthPicker(event: CalendarMonthPickerEvent) {
         const { side } = event.detail;
-        this.pickerSide = side;
-        this.showMonthPicker = true;
-        this.showYearPicker = false;
+        this.#openPicker("month", side);
     }
 
     #handleYearPicker(event: CalendarYearPickerEvent) {
         const { side } = event.detail;
-        this.pickerSide = side;
-        this.showYearPicker = true;
-        this.showMonthPicker = false;
+        this.#openPicker("year", side);
     }
 
     #handleDateClick(event: CalendarDateClickEvent) {
@@ -353,112 +343,147 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
 
     #handleMonthSelected(event: CalendarMonthSelectedEvent) {
         const { month } = event.detail;
-        this.#setMonth(month, this.pickerSide);
-        this.showMonthPicker = false;
+        const side = this.#sideForCalendarIndex(this.picker.index);
+        this.#setMonth(month, side);
+        this.#closePicker();
     }
 
     #handleYearSelected(event: CalendarYearSelectedEvent) {
         const { year } = event.detail;
-        this.#setYear(year, this.pickerSide);
-        this.showYearPicker = false;
+        const side = this.#sideForCalendarIndex(this.picker.index);
+        this.#setYear(year, side);
+        this.#closePicker();
     }
 
     #handlePickerClose() {
-        this.showMonthPicker = false;
-        this.showYearPicker = false;
+        this.#closePicker();
+    }
+
+    #openPicker(type: "month" | "year", side: "single" | "left" | "right") {
+        this.picker = { open: true, type, index: this.#calendarIndexForSide(side) };
+    }
+
+    #closePicker() {
+        if (this.picker.open) {
+            this.picker = { open: false, type: undefined, index: 0 };
+        }
+    }
+
+    #calendarIndexForSide(side: "single" | "left" | "right") {
+        if (side === "single") return 0;
+        return side === "left" ? 0 : 1;
+    }
+
+    #sideForCalendarIndex(index: number): "single" | "left" | "right" {
+        if (this.mode !== "range") return "single";
+        return index === 0 ? "left" : "right";
     }
 
     #navigateMonth(direction: number, side: "single" | "left" | "right") {
         if (side === "single") {
-            this.currentMonth += direction;
-            if (this.currentMonth > 11) {
-                this.currentMonth = 0;
-                this.currentYear++;
-            } else if (this.currentMonth < 0) {
-                this.currentMonth = 11;
-                this.currentYear--;
-            }
-        } else if (side === "left") {
-            this.leftCalendarMonth += direction;
-            if (this.leftCalendarMonth > 11) {
-                this.leftCalendarMonth = 0;
-                this.leftCalendarYear++;
-            } else if (this.leftCalendarMonth < 0) {
-                this.leftCalendarMonth = 11;
-                this.leftCalendarYear--;
-            }
-            // Adjust right calendar to be one month ahead
-            this.rightCalendarMonth = this.leftCalendarMonth + 1;
-            this.rightCalendarYear = this.leftCalendarYear;
-            if (this.rightCalendarMonth > 11) {
-                this.rightCalendarMonth = 0;
-                this.rightCalendarYear++;
-            }
-        } else if (side === "right") {
-            this.rightCalendarMonth += direction;
-            if (this.rightCalendarMonth > 11) {
-                this.rightCalendarMonth = 0;
-                this.rightCalendarYear++;
-            } else if (this.rightCalendarMonth < 0) {
-                this.rightCalendarMonth = 11;
-                this.rightCalendarYear--;
-            }
-            // Adjust left calendar to be one month behind
-            this.leftCalendarMonth = this.rightCalendarMonth - 1;
-            this.leftCalendarYear = this.rightCalendarYear;
-            if (this.leftCalendarMonth < 0) {
-                this.leftCalendarMonth = 11;
-            }
+            const base = this.displayedMonths[0];
+            const newDate = new Date(base.year, base.month + direction, 1);
+            this.displayedMonths = [{ month: newDate.getMonth(), year: newDate.getFullYear() }];
+            return;
+        }
+        // range mode
+        if (this.displayedMonths.length < 2) this.#syncDisplayedMonthsFromState();
+        const [left, right] = this.displayedMonths;
+        if (side === "left") {
+            const newLeft = new Date(left.year, left.month + direction, 1);
+            const newRight = new Date(newLeft.getFullYear(), newLeft.getMonth() + 1, 1);
+            this.displayedMonths = [
+                { month: newLeft.getMonth(), year: newLeft.getFullYear() },
+                { month: newRight.getMonth(), year: newRight.getFullYear() },
+            ];
+        } else {
+            const newRight = new Date(right.year, right.month + direction, 1);
+            const newLeft = new Date(newRight.getFullYear(), newRight.getMonth() - 1, 1);
+            this.displayedMonths = [
+                { month: newLeft.getMonth(), year: newLeft.getFullYear() },
+                { month: newRight.getMonth(), year: newRight.getFullYear() },
+            ];
         }
     }
 
     #setMonth(month: number, side: "single" | "left" | "right") {
+        if (this.displayedMonths.length === 0) this.#syncDisplayedMonthsFromState();
         if (side === "single") {
-            this.currentMonth = month;
-        } else if (side === "left") {
-            this.leftCalendarMonth = month;
-            // Adjust right calendar to be one month ahead
-            this.rightCalendarMonth = this.leftCalendarMonth + 1;
-            this.rightCalendarYear = this.leftCalendarYear;
-            if (this.rightCalendarMonth > 11) {
-                this.rightCalendarMonth = 0;
-                this.rightCalendarYear++;
-            }
-        } else if (side === "right") {
-            this.rightCalendarMonth = month;
-            // Adjust left calendar to be one month behind
-            this.leftCalendarMonth = this.rightCalendarMonth - 1;
-            this.leftCalendarYear = this.rightCalendarYear;
-            if (this.leftCalendarMonth < 0) {
-                this.leftCalendarMonth = 11;
-                this.leftCalendarYear--;
-            }
+            const year = this.displayedMonths[0].year;
+            this.displayedMonths = [{ month, year }];
+            return;
+        }
+        if (this.displayedMonths.length < 2) this.#syncDisplayedMonthsFromState();
+        const [left] = this.displayedMonths;
+        if (side === "left") {
+            const newLeft = { month, year: left.year };
+            const dRight = new Date(newLeft.year, newLeft.month + 1, 1);
+            this.displayedMonths = [newLeft, { month: dRight.getMonth(), year: dRight.getFullYear() }];
+        } else {
+            const rightYear = this.displayedMonths[1].year;
+            const newRight = { month, year: rightYear };
+            const dLeft = new Date(newRight.year, newRight.month - 1, 1);
+            this.displayedMonths = [{ month: dLeft.getMonth(), year: dLeft.getFullYear() }, newRight];
         }
     }
 
     #setYear(year: number, side: CalendarHeaderSide) {
+        if (this.displayedMonths.length === 0) this.#syncDisplayedMonthsFromState();
         if (side === "single") {
-            this.currentYear = year;
-        } else if (side === "left") {
-            this.leftCalendarYear = year;
-            // Adjust right calendar to maintain month difference
-            this.rightCalendarMonth = this.leftCalendarMonth + 1;
-            this.rightCalendarYear = this.leftCalendarYear;
-            if (this.rightCalendarMonth > 11) {
-                this.rightCalendarMonth = 0;
-                this.rightCalendarYear++;
-            }
-        } else if (side === "right") {
-            this.rightCalendarYear = year;
-            // Adjust left calendar to maintain month difference
-            this.leftCalendarMonth = this.rightCalendarMonth - 1;
-            this.leftCalendarYear = this.rightCalendarYear;
-            if (this.leftCalendarMonth < 0) {
-                this.leftCalendarMonth = 11;
-                this.leftCalendarYear--;
-            }
+            const month = this.displayedMonths[0].month;
+            this.displayedMonths = [{ month, year }];
+            return;
+        }
+        if (this.displayedMonths.length < 2) this.#syncDisplayedMonthsFromState();
+        if (side === "left") {
+            const left = { month: this.displayedMonths[0].month, year };
+            const rightDate = new Date(year, left.month + 1, 1);
+            this.displayedMonths = [left, { month: rightDate.getMonth(), year: rightDate.getFullYear() }];
+        } else {
+            const right = { month: this.displayedMonths[1].month, year };
+            const leftDate = new Date(year, right.month - 1, 1);
+            this.displayedMonths = [{ month: leftDate.getMonth(), year: leftDate.getFullYear() }, right];
         }
     }
+
+    /* =====================
+     * Public API (new)
+     * ===================== */
+    /** Returns a shallow copy of the currently displayed months (length 1 or 2). */
+    public getDisplayedMonths() {
+        return [...this.displayedMonths];
+    }
+
+    /**
+     * Sets the displayed months.
+     * If two months provided and not adjacent, the second will be coerced to be +1 month from the first by default.
+     */
+    public setDisplayedMonths(months: { month: number; year: number }[], enforceAdjacency = true) {
+        if (!Array.isArray(months) || months.length === 0) return;
+        if (months.length > 2) months = months.slice(0, 2);
+        const normalized = months.map((m) => ({ month: m.month, year: m.year }));
+        if (normalized.length === 2 && enforceAdjacency) {
+            const first = normalized[0];
+            const expected = this._addMonth(first, 1);
+            const second = normalized[1];
+            if (second.month !== expected.month || second.year !== expected.year) {
+                normalized[1] = expected;
+            }
+        }
+        this.displayedMonths = normalized;
+    }
+
+    /** Programmatically set a month for the given side (single/left/right). */
+    public setMonth(side: CalendarHeaderSide, month: number) {
+        this.#setMonth(month, side);
+    }
+
+    /** Programmatically set a year for the given side (single/left/right). */
+    public setYear(side: CalendarHeaderSide, year: number) {
+        this.#setYear(year, side);
+    }
+
+    // (Legacy accessors removed permanently)
 
     #selectDate(date: Date) {
         if (CalendarUtils.isDateDisabled(date, this.disabled, this.minDate, this.maxDate, this.disabledDates)) return;
@@ -506,9 +531,10 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     #dispatchDateSelected() {
-        const eventDetail: CalendarDateSelectedEvent["detail"] = {
-            date: new Date(this.value || ""),
+        const eventDetail: CalendarDateSelectedEvent["detail"] & { value?: string } = {
+            date: this.value ? new Date(this.value) : undefined,
             dateString: this.value,
+            value: this.value, // compatibility convenience
         };
 
         // Emit the specific date-selected event
@@ -531,11 +557,13 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     #dispatchRangeSelected() {
-        const eventDetail: CalendarRangeSelectedEvent["detail"] = {
-            startDate: new Date(this.startDate || ""),
-            endDate: new Date(this.endDate || ""),
+        const eventDetail: CalendarRangeSelectedEvent["detail"] & { startDateValue?: string; endDateValue?: string } = {
+            startDate: this.startDate ? new Date(this.startDate) : undefined,
+            endDate: this.endDate ? new Date(this.endDate) : undefined,
             startDateString: this.startDate,
             endDateString: this.endDate,
+            startDateValue: this.startDate,
+            endDateValue: this.endDate,
         };
 
         // Emit the specific range-selected event
@@ -555,6 +583,48 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 composed: true,
             }),
         );
+    }
+
+    /** Test helper: ensure displayed months are initialized and coherent (does not remove legacy yet). */
+    _ensureDisplayedMonths() {
+        this.#ensureDisplayedMonthsInternal();
+    }
+
+    #ensureDisplayedMonthsInternal() {
+        if (this.displayedMonths.length === 0) {
+            // derive base from selected values or legacy current/left
+            const base = this.selectedDate || this.selectedStartDate || new Date();
+            this.displayedMonths = [{ month: base.getMonth(), year: base.getFullYear() }];
+        }
+        if (this.mode === "range" && this.#shouldRenderDualRange()) {
+            if (this.displayedMonths.length === 1) {
+                const left = this.displayedMonths[0];
+                this.displayedMonths = [left, this._addMonth(left, 1)];
+            } else if (this.displayedMonths.length >= 2) {
+                // enforce adjacency between first two
+                const left = this.displayedMonths[0];
+                this.displayedMonths = [left, this._addMonth(left, 1)];
+            }
+        } else {
+            if (this.displayedMonths.length > 1) {
+                this.displayedMonths = [this.displayedMonths[0]];
+            }
+        }
+    }
+
+    /** Add delta months to a reference month/year. */
+    _addMonth(ref: { month: number; year: number }, delta: number) {
+        let m = ref.month + delta;
+        let y = ref.year;
+        while (m > 11) {
+            m -= 12;
+            y++;
+        }
+        while (m < 0) {
+            m += 12;
+            y--;
+        }
+        return { month: m, year: y };
     }
 
     static styles = [

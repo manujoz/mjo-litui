@@ -466,10 +466,9 @@ export class CalendarTestUtils extends TestUtils {
         const targetYear = targetDate.getFullYear();
         const targetDay = targetDate.getDate();
 
-        // Force calendar to display the target month/year
-        // We need to ensure both the main calendar and the grid components are updated
-        (calendar as any).currentYear = targetYear;
-        (calendar as any).currentMonth = targetMonth;
+        // Force calendar to display the target month/year using new API
+        calendar.setYear("single", targetYear);
+        calendar.setMonth("single", targetMonth);
 
         // Force multiple update cycles to ensure all child components are updated
         calendar.requestUpdate();
@@ -498,7 +497,7 @@ export class CalendarTestUtils extends TestUtils {
      * Navigate calendar to specific month/year
      */
     static async navigateToMonth(calendar: MjoCalendar, year: number, month: number): Promise<void> {
-        const currentYear = (calendar as any).currentYear;
+        const currentYear = calendar.getDisplayedMonths()[0].year;
 
         // Navigate year first if needed
         let yearDiff = year - currentYear;
@@ -515,7 +514,7 @@ export class CalendarTestUtils extends TestUtils {
         }
 
         // Navigate month
-        const currentMonth = (calendar as any).currentMonth;
+        const currentMonth = calendar.getDisplayedMonths()[0].month;
         let monthDiff = month - currentMonth;
 
         while (monthDiff !== 0) {
@@ -651,12 +650,14 @@ export class CalendarAssertions {
      */
     static assertCalendarMonth(calendar: MjoCalendar, month: number, year: number): void {
         if (calendar.mode === "single") {
-            assert.equal((calendar as any).currentMonth, month, `Current month should be ${month}`);
-            assert.equal((calendar as any).currentYear, year, `Current year should be ${year}`);
+            const dm = calendar.getDisplayedMonths()[0];
+            assert.equal(dm.month, month, `Current month should be ${month}`);
+            assert.equal(dm.year, year, `Current year should be ${year}`);
         } else {
             // For range mode, check left calendar
-            assert.equal((calendar as any).leftCalendarMonth, month, `Left calendar month should be ${month}`);
-            assert.equal((calendar as any).leftCalendarYear, year, `Left calendar year should be ${year}`);
+            const dms = calendar.getDisplayedMonths();
+            assert.equal(dms[0].month, month, `Left calendar month should be ${month}`);
+            assert.equal(dms[0].year, year, `Left calendar year should be ${year}`);
         }
     }
 
