@@ -41,9 +41,9 @@ export class ExampleCalendarBasic extends LitElement {
     }
 
     private handleDateSelected(event: CustomEvent) {
-    console.log("Selected date object:", event.detail.date);      // Date | undefined
-    console.log("Selected date string:", event.detail.dateString); // YYYY-MM-DD
-    console.log("Value (alias):", event.detail.value);            // YYYY-MM-DD
+        console.log("Selected date object:", event.detail.date); // Date | undefined
+        console.log("Selected date string:", event.detail.dateString); // YYYY-MM-DD
+        console.log("Value (alias):", event.detail.value); // YYYY-MM-DD
     }
 }
 ```
@@ -75,10 +75,10 @@ export class ExampleCalendarRange extends LitElement {
             start: event.detail.startDateString, // Using string version for display
             end: event.detail.endDateString,
         };
-    console.log("Start date object:", event.detail.startDate);          // Date | undefined
-    console.log("End date object:", event.detail.endDate);              // Date | undefined
-    console.log("Start date string:", event.detail.startDateString);    // YYYY-MM-DD
-    console.log("End date string:", event.detail.endDateString);        // YYYY-MM-DD
+        console.log("Start date object:", event.detail.startDate); // Date | undefined
+        console.log("End date object:", event.detail.endDate); // Date | undefined
+        console.log("Start date string:", event.detail.startDateString); // YYYY-MM-DD
+        console.log("End date string:", event.detail.endDateString); // YYYY-MM-DD
     }
 }
 ```
@@ -168,56 +168,57 @@ export class ExampleCalendarCustom extends LitElement {
 
 Controls how many calendars are shown in **range** mode:
 
-| Value  | Behavior                                                                                             |
-| ------ | ---------------------------------------------------------------------------------------------------- |
-| `1`    | Always render a single calendar (still supports selecting start then end)                            |
-| `2`    | Always render two adjacent months (left + right)                                                     |
+| Value  | Behavior                                                                                            |
+| ------ | --------------------------------------------------------------------------------------------------- |
+| `1`    | Always render a single calendar (still supports selecting start then end)                           |
+| `2`    | Always render two adjacent months (left + right)                                                    |
 | `auto` | (Default) Render two calendars when the host (or parent) width ≥ 720px; otherwise fall back to one. |
 
 The auto mode uses a `ResizeObserver` for responsive adaptation.
 
 ### Behavior Notes
 
-- In `single` mode, clicking a date selects it and fires `date-selected` + `change`.
-- In `range` mode, first valid click sets start date, second sets end date and fires `range-selected` + `change`.
-- If the second selected date is earlier than the first, dates are automatically swapped (start <= end guarantee).
-- Navigation (month/year) ignores constraints; constraints only block selection.
-- Selection is vetoed by `minDate`, `maxDate`, and `disabledDates`.
-- In range mode with two calendars, months are always adjacent (left is month N, right is N+1).
-- `range-calendars="auto"` dynamically toggles dual layout depending on width threshold (720px).
-- Form integration works through `FormMixin` when `name` is present.
+-   In `single` mode, clicking a date selects it and fires `date-selected` + `change`.
+-   In `range` mode, first valid click sets start date, second sets end date and fires `range-selected` + `change`.
+-   If the second selected date is earlier than the first, dates are automatically swapped (start <= end guarantee).
+-   Navigation (month/year) ignores constraints; constraints only block selection.
+-   Selection is vetoed by `minDate`, `maxDate`, and `disabledDates`.
+-   In range mode with two calendars, months are always adjacent (left is month N, right is N+1).
+-   `range-calendars="auto"` dynamically toggles dual layout depending on width threshold (720px).
+-   Form integration works through `FormMixin` when `name` is present.
 
 ## Events
 
-| Event            | Detail (shape)                                                                                                                                                    | Emitted When                                    |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `date-selected`  | `{ date?: Date, dateString?: string, value?: string }`                                                                                                            | Date is selected (single mode)                  |
-| `range-selected` | `{ startDate?: Date, endDate?: Date, startDateString?: string, endDateString?: string, startDateValue?: string, endDateValue?: string }`                          | Date range fully selected (both ends)          |
-| `change`         | Mirrors `date-selected` (single) or `range-selected` (range) with identical detail fields (adds compatibility for generic form handlers & change event listeners) | Date selection changes                          |
+| Event            | Detail (shape)                                                                                                                                                    | Emitted When                          |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `date-selected`  | `{ date?: Date, dateString?: string, value?: string }`                                                                                                            | Date is selected (single mode)        |
+| `range-selected` | `{ startDate?: Date, endDate?: Date, startDateString?: string, endDateString?: string, startDateValue?: string, endDateValue?: string }`                          | Date range fully selected (both ends) |
+| `change`         | Mirrors `date-selected` (single) or `range-selected` (range) with identical detail fields (adds compatibility for generic form handlers & change event listeners) | Date selection changes                |
 
 ### Event Details
 
 All events expose date(s) in two forms:
 
-- **Date objects** (`date`, `startDate`, `endDate`) – omitted until selected (undefined-safe).
-- **String values** (`dateString`, `value`, `startDateString`, `endDateString`) – ISO-like `YYYY-MM-DD` for display or submission.
+-   **Date objects** (`date`, `startDate`, `endDate`) – omitted until selected (undefined-safe).
+-   **String values** (`dateString`, `value`, `startDateString`, `endDateString`) – ISO-like `YYYY-MM-DD` for display or submission.
 
 The `value`, `startDateValue`, and `endDateValue` fields are aliases (string mirrors) to simplify generic tooling consumption.
+
 ## Public Programmatic API
 
 These methods provide controlled, side-effect-safe manipulation of the displayed months without relying on internal/legacy reactive fields.
 
-| Method                                        | Description                                                                                                   |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `getDisplayedMonths(): {month; year;}[]`      | Returns a shallow copy (length 1 or 2) of the months currently rendered.                                     |
-| `setDisplayedMonths(months, enforceAdj = true)` | Sets one or two months. If two and `enforceAdj` is true (default), second is coerced to be next month.      |
-| `setMonth(side, month)`                       | Sets the month (0–11) for `"single"`, `"left"`, or `"right"` side, preserving adjacency in range mode.      |
-| `setYear(side, year)`                         | Sets the year for the given side, re-normalizing adjacency.                                                  |
+| Method                                          | Description                                                                                            |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `getDisplayedMonths(): {month; year;}[]`        | Returns a shallow copy (length 1 or 2) of the months currently rendered.                               |
+| `setDisplayedMonths(months, enforceAdj = true)` | Sets one or two months. If two and `enforceAdj` is true (default), second is coerced to be next month. |
+| `setMonth(side, month)`                         | Sets the month (0–11) for `"single"`, `"left"`, or `"right"` side, preserving adjacency in range mode. |
+| `setYear(side, year)`                           | Sets the year for the given side, re-normalizing adjacency.                                            |
 
 ### Side Semantics
 
-- `"single"`: Used when `mode="single"` (index 0).
-- `"left"`, `"right"`: Applicable only in range mode. In dual mode they map to calendar indices 0 and 1 respectively.
+-   `"single"`: Used when `mode="single"` (index 0).
+-   `"left"`, `"right"`: Applicable only in range mode. In dual mode they map to calendar indices 0 and 1 respectively.
 
 ### Example: Programmatic Navigation
 
@@ -229,18 +230,20 @@ calendar.setMonth("left", (left.month + 1) % 12);
 // Jump to a specific pair (March 2032 / April 2032)
 calendar.setDisplayedMonths([
     { month: 2, year: 2032 },
-    { month: 5, year: 2040 } // will be coerced to April 2032 because of adjacency rule
+    { month: 5, year: 2040 }, // will be coerced to April 2032 because of adjacency rule
 ]);
 
 // Skip adjacency enforcement deliberately
-calendar.setDisplayedMonths([
-    { month: 2, year: 2032 },
-    { month: 5, year: 2040 }
-], false);
+calendar.setDisplayedMonths(
+    [
+        { month: 2, year: 2032 },
+        { month: 5, year: 2040 },
+    ],
+    false,
+);
 ```
 
 > Legacy direct property accessors (`currentMonth`, `leftCalendarYear`, etc.) have been removed in favor of these methods.
-
 
 ## CSS Variables
 
@@ -375,8 +378,8 @@ html`<mjo-calendar .theme=${customTheme}></mjo-calendar>`;
 
 When used with `name` attribute, the calendar integrates with `mjo-form`:
 
-- **Single mode**: Emits the selected date as `value`.
-- **Range mode**: Emits a JSON string `{ "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" }` once both dates are chosen.
+-   **Single mode**: Emits the selected date as `value`.
+-   **Range mode**: Emits a JSON string `{ "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" }` once both dates are chosen.
 
 ```html
 <mjo-form>
@@ -434,10 +437,10 @@ The locale property affects:
 
 ## Accessibility Notes
 
-- Keyboard navigation: planned (not yet implemented).
-- Interactive elements expose semantic roles and ARIA labels where relevant.
-- Locale-driven labeling (month / weekday names) aids screen reader context.
-- String date formats are stable for assistive tech.
+-   Keyboard navigation: planned (not yet implemented).
+-   Interactive elements expose semantic roles and ARIA labels where relevant.
+-   Locale-driven labeling (month / weekday names) aids screen reader context.
+-   String date formats are stable for assistive tech.
 
 ## Performance Considerations
 
@@ -447,9 +450,9 @@ The locale property affects:
 
 ## Browser Support
 
-- Modern evergreen browsers (Chromium, Firefox, WebKit).
-- Relies on Intl for localized month/weekday names (widely supported in modern engines).
-- Uses CSS Grid & shadow DOM.
+-   Modern evergreen browsers (Chromium, Firefox, WebKit).
+-   Relies on Intl for localized month/weekday names (widely supported in modern engines).
+-   Uses CSS Grid & shadow DOM.
 
 ## Summary
 

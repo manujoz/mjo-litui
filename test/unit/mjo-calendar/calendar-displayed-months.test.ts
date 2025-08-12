@@ -1,4 +1,4 @@
-import { fixture, html, expect } from "@open-wc/testing";
+import { expect, fixture, html } from "@open-wc/testing";
 import "../../../src/mjo-calendar.ts";
 
 async function make(range = false, width = 900) {
