@@ -38,3 +38,6 @@ suite("mjo-calendar - Additional branch coverage", () => {
         }
     });
 });
+
+// Deprecated duplicate consolidated into calendar.test.ts
+suite.skip("mjo-calendar duplicate branches-extra", () => {});

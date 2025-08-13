@@ -67,6 +67,7 @@ export interface MjoThemeConfig {
         mjoTable?: MjoTableTheme;
         mjoTextarea?: MjoTextaraTheme;
         mjoTextfield?: MjoInputTheme;
+        mjoDatePicker?: MjoDatePickerTheme;
         mjoTypography?: TypographyTheme;
     };
     colors?: {
@@ -356,6 +357,14 @@ export interface MjoSelectTheme extends MjoInputTheme {
     optionFontSize?: string;
     optionPrimaryColor?: string;
     optionSecondaryColor?: string;
+}
+
+export interface MjoDatePickerTheme extends MjoInputTheme {
+    panelBackgroundColor?: string;
+    panelRadius?: string;
+    panelBoxShadow?: string;
+    panelPadding?: string;
+    clearButtonColor?: string;
 }
 
 export interface MjoTableTheme {

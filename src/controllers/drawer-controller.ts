@@ -3,6 +3,7 @@ import type { MjoDrawer } from "../mjo-drawer";
 import { DrawerShowParams } from "../types/mjo-drawer";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
+import "../components/drawer/drawer-container.js";
 
 export class DrawerController implements ReactiveController {
     host: ReactiveControllerHost;

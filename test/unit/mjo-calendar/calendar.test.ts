@@ -212,3 +212,68 @@ suite("mjo-calendar - Basic Functionality", () => {
         });
     });
 });
+
+suite("Additional API", () => {
+    test("setDisplayedMonths adjacency enforcement and disabled", async () => {
+        const cal = (await CalendarTestUtils.createCalendarFixture({ mode: "range" })) as MjoCalendar;
+        cal.setDisplayedMonths([
+            { month: 0, year: 2025 },
+            { month: 3, year: 2025 },
+        ]);
+        let months = cal.getDisplayedMonths();
+        expect(months.length).to.equal(2);
+        expect(months[1].month).to.equal((months[0].month + 1) % 12);
+        cal.setDisplayedMonths(
+            [
+                { month: 0, year: 2025 },
+                { month: 3, year: 2025 },
+            ],
+            false,
+        );
+        months = cal.getDisplayedMonths();
+        expect(months[1].month).to.equal(3);
+    });
+
+    test("_addMonth rollover forward/backward", async () => {
+        const cal = (await CalendarTestUtils.createCalendarFixture()) as MjoCalendar;
+        const forward = (cal as any)._addMonth({ month: 11, year: 2025 }, 1);
+        expect(forward.month).to.equal(0);
+        expect(forward.year).to.equal(2026);
+        const back = (cal as any)._addMonth({ month: 0, year: 2025 }, -1);
+        expect(back.month).to.equal(11);
+        expect(back.year).to.equal(2024);
+    });
+
+    test("resetSelection vs reset clears selection appropriately", async () => {
+        const cal = (await CalendarTestUtils.createCalendarFixture({ mode: "range" })) as MjoCalendar;
+        cal.selectDate(new Date(2025, 5, 10));
+        cal.selectDate(new Date(2025, 5, 12));
+        expect(cal.startDate).to.exist;
+        expect(cal.endDate).to.exist;
+        cal.setDisplayedMonths([
+            { month: 8, year: 2025 },
+            { month: 9, year: 2025 },
+        ]);
+        cal.resetSelection();
+        expect(cal.startDate).to.be.undefined;
+        expect(cal.endDate).to.be.undefined;
+        cal.selectDate(new Date(2025, 7, 1));
+        cal.selectDate(new Date(2025, 7, 5));
+        expect(cal.startDate).to.exist;
+        expect(cal.endDate).to.exist;
+        cal.reset();
+        expect(cal.startDate).to.be.undefined;
+        expect(cal.endDate).to.be.undefined;
+    });
+
+    test("date-selected event emitted with single mode selectDate API", async () => {
+        const cal = (await CalendarTestUtils.createCalendarFixture({ mode: "single" })) as MjoCalendar;
+        const wait = new Promise<void>((resolve) => setTimeout(resolve));
+        setTimeout(() => cal.selectDate(new Date(2025, 4, 15)));
+        const ev: any = await new Promise((res) => {
+            cal.addEventListener("date-selected", (e: Event) => res(e));
+        });
+        await wait;
+        expect(ev.detail.dateString).to.equal("2025-05-15");
+    });
+});

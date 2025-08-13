@@ -8,6 +8,7 @@ export { MjoCard } from "./mjo-card.js";
 export { MjoCheckbox } from "./mjo-checkbox.js";
 export { MjoChip } from "./mjo-chip.js";
 export { MjoColorPicker } from "./mjo-color-picker.js";
+export { MjoDatePicker } from "./mjo-date-picker.js";
 export { MjoDrawer } from "./mjo-drawer.js";
 export { MjoDropdown } from "./mjo-dropdown.js";
 export { MjoForm } from "./mjo-form.js";

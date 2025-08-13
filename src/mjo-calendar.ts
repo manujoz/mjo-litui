@@ -483,6 +483,41 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.#setYear(year, side);
     }
 
+    /** Reset any current selection (single or range) and displayed months to initial state. */
+    public resetSelection() {
+        this.#doFullReset();
+    }
+
+    /** Full controlled reset API: clears selection, months, pickers and forces fresh today-based view. */
+    public reset() {
+        this.#doFullReset();
+    }
+
+    /**
+     * Programmatic date selection helper.
+     * Exposed primarily to facilitate unit testing without relying on internal
+     * shadow DOM event wiring. Mirrors a user clicking a date cell.
+     */
+    public selectDate(date: Date) {
+        this.#selectDate(date);
+    }
+
+    #doFullReset() {
+        this.selectedDate = undefined;
+        this.selectedStartDate = undefined;
+        this.selectedEndDate = undefined;
+        this.hoverDate = undefined;
+        this.value = undefined;
+        this.startDate = undefined;
+        this.endDate = undefined;
+        this.picker = { open: false, type: undefined, index: 0 };
+        // Reset displayed months so next render initializes fresh (current month)
+        this.displayedMonths = [];
+        this.autoDual = false; // will be recalculated if in auto mode
+        this.#syncDisplayedMonthsFromState();
+        this.requestUpdate();
+    }
+
     // (Legacy accessors removed permanently)
 
     #selectDate(date: Date) {

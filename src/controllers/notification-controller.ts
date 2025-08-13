@@ -3,6 +3,7 @@ import type { MjoNotification } from "../mjo-notification";
 import { NotificationPositions, NotificationShowParams } from "../types/mjo-notification";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
+import "../components/notifications/notification-container.js";
 
 export class NotificationController implements ReactiveController {
     host: ReactiveControllerHost;

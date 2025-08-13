@@ -166,6 +166,9 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             if (Number(values[1]) > this.max) {
                 values[1] = this.max.toString();
             }
+
+            // reconstruir el valor normalizado
+            value = `${values[0]}-${values[1]}`;
         } else {
             if (isNaN(Number(value))) {
                 throw new Error("[mjo-slider]: Invalid value, must be a number");

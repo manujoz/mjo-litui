@@ -3,6 +3,7 @@ import type { MjoMessage } from "../mjo-message";
 import { MessageShowParams } from "../types/mjo-message";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
+import "../components/messages/message-container.js";
 
 export class MessageController implements ReactiveController {
     host: ReactiveControllerHost;

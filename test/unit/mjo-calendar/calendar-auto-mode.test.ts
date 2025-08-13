@@ -68,3 +68,6 @@ suite("mjo-calendar range auto adaptive", () => {
         expect(single).to.exist;
     });
 });
+
+// Deprecated duplicate consolidated into calendar.test.ts
+suite.skip("mjo-calendar duplicate auto-mode", () => {});

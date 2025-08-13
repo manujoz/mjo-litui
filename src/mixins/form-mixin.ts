@@ -37,6 +37,7 @@ export declare class IFormMixin {
 
     form: HTMLFormElement | null;
     mjoForm: MjoForm | null;
+    formIgnore?: boolean;
 
     submiForm(): void;
     updateFormData({ name, value }: { name: string; value: string }): void;
@@ -69,6 +70,8 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
         @property({ type: Number }) min?: number;
         @property({ type: Number }) maxlength?: number;
         @property({ type: Number }) minlength?: number;
+
+        @property({ type: Boolean, attribute: "form-ignore" }) formIgnore: boolean = false;
 
         form: HTMLFormElement | null = null;
         mjoForm: MjoForm | null = null;
@@ -107,6 +110,9 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
         #getForm() {
             this.form = searchClosestElement(this, "form") as HTMLFormElement | null;
             this.form?.addEventListener("formdata", this.listenersFormMixin.formData);
+
+            // If this element should be ignored by form aggregation, exit early
+            if (this.formIgnore) return;
 
             this.mjoForm = (this.form?.parentNode as ShadowRoot)?.host as MjoForm | null;
             if (this.mjoForm?.tagName === "MJO-FORM") {
