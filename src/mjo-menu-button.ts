@@ -1,4 +1,4 @@
-import { MjoButtonEffect } from "./types/mjo-menu-button";
+import { MjoButtonEffect, MjoMenuButtonCloseEvent, MjoMenuButtonOpenEvent, MjoMenuButtonToggleEvent } from "./types/mjo-menu-button";
 
 import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
@@ -590,5 +590,11 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-menu-button": MjoMenuButton;
+    }
+
+    interface HTMLElementEventMap {
+        "menu-button-toggle": MjoMenuButtonToggleEvent;
+        "menu-button-open": MjoMenuButtonOpenEvent;
+        "menu-button-close": MjoMenuButtonCloseEvent;
     }
 }

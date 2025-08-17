@@ -12,19 +12,19 @@ export type MjoButtonEffect =
     | "spin"
     | "spin-reverse";
 
-export interface MjoButtonOpenEvent extends CustomEvent {
+export interface MjoMenuButtonOpenEvent extends CustomEvent {
     detail: {
         isOpen: true;
     };
 }
 
-export interface MjoButtonCloseEvent extends CustomEvent {
+export interface MjoMenuButtonCloseEvent extends CustomEvent {
     detail: {
         isOpen: false;
     };
 }
 
-export interface MjoButtonToggleEvent extends CustomEvent {
+export interface MjoMenuButtonToggleEvent extends CustomEvent {
     detail: {
         isOpen: boolean;
     };
