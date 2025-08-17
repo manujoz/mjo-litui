@@ -94,7 +94,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                     ?data-nospiners=${this.nospiners}
                 />
                 ${this.clearabled
-                    ? html`<div class="icon endIcon clearabled" ?data-visible=${this.value.length > 0} @click=${this.#handleClearabled}>
+                    ? html`<div class="icon endIcon clearabled" data-dropdown-noopen ?data-visible=${this.value.length > 0} @click=${this.#handleClearabled}>
                           <mjo-icon src=${AiFillCloseCircle}></mjo-icon>
                       </div>`
                     : nothing}
@@ -197,6 +197,8 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
     #handleClearabled() {
         this.value = "";
         this.valueLength = 0;
+
+        this.dispatchEvent(new CustomEvent("clear", { bubbles: true, composed: true }));
     }
 
     #handleFocus = () => {

@@ -25,12 +25,33 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) behaviour: "hover" | "click" = "hover";
     @property({ type: String, converter: convertToPx }) width?: string;
     @property({ type: String, converter: convertToPx }) height?: string;
+    @property({ type: Boolean }) preventCloseOnInnerClick = false;
+    /** Optional list of CSS selectors that, if any element in the click composedPath matches, will prevent opening (only for behaviour='click'). */
+    @property({ type: Array }) suppressOpenSelectors?: string[];
 
     dropdownContainer?: DropdowContainer | null;
     openTimestamp = 0;
 
     #listeners = {
-        open: () => {
+        open: (ev: Event) => {
+            if (this.behaviour === "click" && ev?.type === "click" && this.suppressOpenSelectors?.length) {
+                const path = ev.composedPath();
+                if (
+                    path.some((n) => {
+                        const el = n as HTMLElement;
+                        if (!el || !el.matches) return false;
+                        return this.suppressOpenSelectors!.some((sel) => {
+                            try {
+                                return el.matches(sel);
+                            } catch {
+                                return false;
+                            }
+                        });
+                    })
+                ) {
+                    return; // suppressed
+                }
+            }
             this.open();
         },
         close: (ev: Event) => {
@@ -142,14 +163,20 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     }
 
     #close(ev?: Event) {
-        if (this.behaviour === "click" && ev?.composedPath().includes(this) && Date.now() - this.openTimestamp < 100) return;
-
         if (!this.isOpen) return;
+        const path = ev?.composedPath();
+        const insideHost = !!path?.includes(this);
+        const insideContainer = !!(this.dropdownContainer && path?.includes(this.dropdownContainer));
+
+        if (insideHost && this.behaviour === "click" && Date.now() - this.openTimestamp < 100) return;
+
+        if (insideContainer && this.preventCloseOnInnerClick) return;
+
+        if (insideHost && !insideContainer) return;
 
         this.isOpen = false;
         this.dropdownContainer?.close();
         this.openTimestamp = 0;
-
         this.dispatchEvent(new CustomEvent("close"));
     }
 

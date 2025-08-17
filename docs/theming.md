@@ -163,9 +163,13 @@ These variables exist independently of any specific component and serve as the d
 
 ### 2. Typography (sizes and weights)
 
+-   `--mjo-font-size-xxsmall`
+-   `--mjo-font-size-xsmall`
 -   `--mjo-font-size-small`
 -   `--mjo-font-size` (medium)
 -   `--mjo-font-size-large`
+-   `--mjo-font-size-xlarge`
+-   `--mjo-font-size-xxlarge`
 -   `--mjo-font-weight-light`
 -   `--mjo-font-weight-regular`
 -   `--mjo-font-weight-medium`
@@ -173,12 +177,13 @@ These variables exist independently of any specific component and serve as the d
 
 ### 3. Spacing
 
--   `--mjo-space-x-small`
+-   `--mjo-space-xxsmall`
+-   `--mjo-space-xsmall`
 -   `--mjo-space-small`
 -   `--mjo-space` (medium)
 -   `--mjo-space-large`
--   `--mjo-space-x-large`
--   `--mjo-space-xx-large`
+-   `--mjo-space-xlarge`
+-   `--mjo-space-xxlarge`
 
 ### 4. Base palette (`colors`)
 
@@ -318,3 +323,7 @@ In DevTools, inspect a component and check the `:host` section to see the active
 4. Document specific variables in each component's guide (not here).
 
 With this, you can establish a consistent and adaptable visual identity for your entire component library.
+
+## Complete API Reference
+
+For detailed information about all available CSS variables, theme configuration interfaces, and complete examples, see [mjo-theme.md](./mjo-theme.md).

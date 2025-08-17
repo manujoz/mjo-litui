@@ -7,10 +7,18 @@ export interface MjoThemeConfig {
     radiusLarge?: string;
     /** --mjo-font-size-small */
     fontSizeSmall?: string;
+    /** --mjo-font-size-xsmall */
+    fontSizeXsmall?: string;
+    /** --mjo-font-size-xsmall */
+    fontSizeXxsmall?: string;
     /** --mjo-font-size */
     fontSizeMedium?: string;
     /** --mjo-font-size-large */
     fontSizeLarge?: string;
+    /** --mjo-font-size-xlarge */
+    fontSizeXlarge?: string;
+    /** --mjo-font-size-xxlarge */
+    fontSizeXxlarge?: string;
     /** --mjo-font-weight-light */
     fontWeightLight?: string;
     /** --mjo-font-weight-regular */
@@ -19,8 +27,10 @@ export interface MjoThemeConfig {
     fontWeightMedium?: string;
     /** --mjo-font-weight-bold */
     fontWeightBold?: string;
-    /** --mjo-space-small */
-    spaceXSmall?: string;
+    /** --mjo-space-xxsmall */
+    spaceXxsmall?: string;
+    /** --mjo-space-xsmall */
+    spaceXsmall?: string;
     /** --mjo-space-small */
     spaceSmall?: string;
     /** --mjo-space */
@@ -28,23 +38,26 @@ export interface MjoThemeConfig {
     /** --mjo-space-large */
     spaceLarge?: string;
     /** --mjo-space-xlarge */
-    spaceXLarge?: string;
+    spaceXlarge?: string;
     /** --mjo-space-xxlarge */
-    spaceXXLarge?: string;
+    spaceXxlarge?: string;
     components?: {
         mjoAccordion?: MjoAccordionTheme;
         mjoAccordionItem?: MjoAccordionItemTheme;
         mjoAlert?: MjoAlertTheme;
         mjoAvatar?: MjoAvatarTheme;
         mjoButton?: MjoButtonTheme;
+        mjoCalendar?: MjoCalendarTheme;
         mjoCard?: MjoCardTheme;
         mjoCheckbox?: MjoCheckboxTheme;
         mjoChip?: MjoChipTheme;
         mjoColorPicker?: MjoColorPickerTheme;
+        mjoDatePicker?: MjoDatePickerTheme;
         mjoDropdown?: MjoDropdownTheme;
         mjoIcon?: MjoIconTheme;
         mjoImage?: MjoImageTheme;
         mjoIonic?: MjoIonicTheme;
+        mjoMenuButton?: MjoMenuButtonTheme;
         mjoMessage?: MjoMessageTheme;
         mjoModal?: MjoModalTheme;
         mjoNotification?: MjoNotificationTheme;
@@ -347,6 +360,14 @@ export interface MjoSelectTheme extends MjoInputTheme {
     optionSecondaryColor?: string;
 }
 
+export interface MjoDatePickerTheme extends MjoInputTheme {
+    panelBackgroundColor?: string;
+    panelRadius?: string;
+    panelBoxShadow?: string;
+    panelPadding?: string;
+    clearButtonColor?: string;
+}
+
 export interface MjoTableTheme {
     backgroundColor?: string;
     foregroundColor?: string;
@@ -466,4 +487,37 @@ export interface MjoModalTheme {
     radius?: string;
     boxShadow?: string;
     width?: string;
+}
+
+export interface MjoCalendarTheme {
+    fontFamily?: string;
+    background?: string;
+    border?: string;
+    borderRadius?: string;
+    shadow?: string;
+    padding?: string;
+    weekDayColor?: string;
+    weekDayFontWeight?: string;
+    dayBorderRadius?: string;
+    dayHoverBackground?: string;
+    todayBackground?: string;
+    todayColor?: string;
+    selectedBackground?: string;
+    selectedColor?: string;
+    rangeEndpointBackground?: string;
+    rangeEndpointColor?: string;
+    rangeBackground?: string;
+    rangeColor?: string;
+    disabledColor?: string;
+    disabledBackground?: string;
+    todayBackgroundSecondary?: string;
+    todayColorSecondary?: string;
+    selectedBackgroundSecondary?: string;
+    selectedColorSecondary?: string;
+    rangeBackgroundSecondary?: string;
+    rangeColorSecondary?: string;
+}
+
+export interface MjoMenuButtonTheme {
+    colorHover?: string;
 }

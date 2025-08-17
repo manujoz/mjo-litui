@@ -16,7 +16,11 @@
     "ignorePatterns": [
         "dist",
         ".eslintrc.json",
-        "commitlint.config.js"
+        "commitlint.config.js",
+        "node_modules",
+        ".dev",
+        "dev",
+        "test"
     ],
     "parser": "@typescript-eslint/parser",
     "rules": {
