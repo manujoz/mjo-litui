@@ -2,7 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 @customElement("mjo-icon")
 export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {

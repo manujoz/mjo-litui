@@ -2,7 +2,7 @@ import { LitElement, TemplateResult, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import { AiOutlineUser } from "mjo-icons/ai";
 

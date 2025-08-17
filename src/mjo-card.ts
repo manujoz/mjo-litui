@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 @customElement("mjo-card")
 export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {

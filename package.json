@@ -4,6 +4,52 @@
     "description": "A collection of web components for building user interfaces with LitElement.",
     "type": "module",
     "main": "index.js",
+    "types": "index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./index.d.ts",
+            "import": "./index.js"
+        },
+        "./mjo-*": {
+            "types": "./mjo-*.d.ts",
+            "import": "./mjo-*.js"
+        },
+        "./components/*": {
+            "types": "./components/*.d.ts",
+            "import": "./components/*.js"
+        },
+        "./controllers/*": {
+            "types": "./controllers/*.d.ts",
+            "import": "./controllers/*.js"
+        },
+        "./mixins/*": {
+            "types": "./mixins/*.d.ts",
+            "import": "./mixins/*.js"
+        },
+        "./theme/*": {
+            "types": "./theme/*.d.ts",
+            "import": "./theme/*.js"
+        },
+        "./types/*": {
+            "types": "./types/*.d.ts",
+            "import": "./types/*.js"
+        },
+        "./utils/*": {
+            "types": "./utils/*.d.ts",
+            "import": "./utils/*.js"
+        }
+    },
+    "files": [
+        "*.js",
+        "*.d.ts",
+        "*.d.ts.map",
+        "components/",
+        "controllers/",
+        "mixins/",
+        "theme/",
+        "types/",
+        "utils/"
+    ],
     "keywords": [
         "web-components",
         "lit-element",

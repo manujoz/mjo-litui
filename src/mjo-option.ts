@@ -1,6 +1,6 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 @customElement("mjo-option")
 export class MjoOption extends ThemeMixin(LitElement) implements IThemeMixin {
