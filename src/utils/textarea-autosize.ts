@@ -16,11 +16,15 @@ export class TextAreaAutoSize {
 
         this.textarea.style.maxHeight = `${this.maxHeight}px`;
 
-        this.textarea.addEventListener("input", this.listeners.input);
+        if (typeof window !== "undefined") {
+            this.textarea.addEventListener("input", this.listeners.input);
+        }
     }
 
     destroy() {
-        this.textarea.removeEventListener("input", this.listeners.input);
+        if (typeof window !== "undefined") {
+            this.textarea.removeEventListener("input", this.listeners.input);
+        }
     }
 
     #autoSize() {

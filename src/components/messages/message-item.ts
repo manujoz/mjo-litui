@@ -50,7 +50,7 @@ export class MessageItem extends LitElement {
         clearTimeout(this.timeOut!);
         this.removing = true;
 
-        const marginTop = window.getComputedStyle(this).marginTop;
+        const marginTop = typeof window !== "undefined" ? window.getComputedStyle(this).marginTop : "0px";
 
         this.style.animation = "none";
         this.style.opacity = "1";

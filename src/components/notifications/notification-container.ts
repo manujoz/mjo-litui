@@ -21,6 +21,11 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
     }
 
     async show({ message, type, time, title, onClose }: NotificationShowParams) {
+        if (typeof document === "undefined") {
+            // Return a mock object for SSR
+            return {} as NotificationItem;
+        }
+
         const notificationItem = document.createElement("notification-item") as NotificationItem;
         notificationItem.message = message;
         notificationItem.type = type;

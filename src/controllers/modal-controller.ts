@@ -27,10 +27,14 @@ export class ModalController implements ReactiveController {
     }
 
     hostDisconnected(): void {
+        if (typeof document === "undefined") return;
+
         this.modalContainer.remove();
     }
 
     #createModalElement() {
+        if (typeof document === "undefined" || typeof window === "undefined") return;
+
         this.modalContainer = document.createElement("modal-container") as ModalContainer;
         this.modalContainer.style.zIndex = window.getComputedStyle(this.host as MjoModal).zIndex;
 

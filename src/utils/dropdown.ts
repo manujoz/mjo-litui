@@ -3,6 +3,8 @@ import { type DropdowContainer } from "../components/dropdwon/dropdow-container"
 const DROPDOWN_MARGIN = 15;
 
 export const getTopInTopPosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
+    if (typeof window === "undefined") return 0;
+
     let top = container.getBoundingClientRect().top + window.scrollY - dropDown.offsetHeight - 5;
 
     if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
@@ -25,6 +27,8 @@ export const getTopInTopPosition = ({ dropDown, container }: { dropDown: Dropdow
     return top;
 };
 export const getTopInBottomPosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
+    if (typeof window === "undefined") return 0;
+
     let top = container.getBoundingClientRect().top + window.scrollY + container.offsetHeight + 5;
 
     if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
@@ -47,6 +51,8 @@ export const getTopInBottomPosition = ({ dropDown, container }: { dropDown: Drop
     return top;
 };
 export const getTopInMiddlePosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
+    if (typeof window === "undefined") return 0;
+
     const top = container.getBoundingClientRect().top + window.scrollY + container.offsetHeight / 2 - dropDown.offsetHeight / 2;
 
     if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
@@ -65,6 +71,8 @@ export const getTopInMiddlePosition = ({ dropDown, container }: { dropDown: Drop
     return top;
 };
 export const getLeftInLeftPosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
+    if (typeof window === "undefined") return 0;
+
     let left = container.getBoundingClientRect().left + window.scrollX - dropDown.offsetWidth - 5;
 
     if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2) return DROPDOWN_MARGIN;
@@ -82,6 +90,8 @@ export const getLeftInLeftPosition = ({ dropDown, container }: { dropDown: Dropd
     return left;
 };
 export const getLeftInCenterPOsition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
+    if (typeof window === "undefined") return 0;
+
     const left = container.getBoundingClientRect().left + window.scrollX + container.offsetWidth / 2 - dropDown.offsetWidth / 2;
 
     if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2) return DROPDOWN_MARGIN;
@@ -95,6 +105,8 @@ export const getLeftInCenterPOsition = ({ dropDown, container }: { dropDown: Dro
     return left;
 };
 export const getLeftInRightPosition = ({ dropDown, container }: { dropDown: DropdowContainer; container: HTMLElement }): number => {
+    if (typeof window === "undefined") return 0;
+
     let left = container.getBoundingClientRect().left + window.scrollX + container.offsetWidth + 5;
 
     if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2) return DROPDOWN_MARGIN;

@@ -1,6 +1,8 @@
 import { type LitElement } from "lit";
 
 export const searchClosestElement = (element: LitElement, selector: keyof HTMLElementTagNameMap) => {
+    if (typeof window === "undefined" || !element.getRootNode) return null;
+
     let parent: HTMLElement | ShadowRoot["host"] | null = element.parentElement || (element.getRootNode() as ShadowRoot).host;
 
     let el = querySelectorShadowRoot(selector, parent);
@@ -25,6 +27,8 @@ export const searchClosestElement = (element: LitElement, selector: keyof HTMLEl
 };
 
 export const querySelectorShadowRoot = (selector: keyof HTMLElementTagNameMap, element: HTMLElement | Element | null) => {
+    if (typeof window === "undefined") return null;
+
     if (element?.shadowRoot) {
         return element.shadowRoot.querySelector(selector);
     }

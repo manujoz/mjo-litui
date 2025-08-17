@@ -15,7 +15,7 @@ import "../../mjo-icon.js";
 @customElement("options-list")
 export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Array }) options: MjoOption[] = [];
-    @property({ type: Object }) mjoSelect: MjoSelect | null = null;
+    @property({ type: Object }) mjoSelect?: MjoSelect;
     @property({ type: Boolean }) searchable = false;
     @property({ type: Boolean }) open = false;
     @property({ type: String }) filter = "";
@@ -64,16 +64,20 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
     connectedCallback(): void {
         super.connectedCallback();
 
-        const lang = isServer ? "en" : (document.querySelector("html")?.lang as keyof typeof locales);
+        const lang = isServer ? "en" : typeof document !== "undefined" ? (document.querySelector("html")?.lang as keyof typeof locales) : "en";
         this.dictionary = getDictionary(lang);
 
-        document.addEventListener("keydown", this.listeners.keydown);
+        if (typeof document !== "undefined") {
+            document.addEventListener("keydown", this.listeners.keydown);
+        }
     }
 
     disconnectedCallback(): void {
         super.disconnectedCallback();
 
-        document.removeEventListener("keydown", this.listeners.keydown);
+        if (typeof document !== "undefined") {
+            document.removeEventListener("keydown", this.listeners.keydown);
+        }
     }
 
     protected updated(_changedProperties: PropertyValues): void {

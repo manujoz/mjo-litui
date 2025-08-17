@@ -279,6 +279,8 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             this.optionListRef.value.resetFilter();
         }
 
+        if (typeof document === "undefined") return [];
+
         const options = this.querySelectorAll("mjo-option");
         if (!options.length) return;
 

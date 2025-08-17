@@ -45,10 +45,13 @@ export class SliderHandle extends LitElement {
 
         this.addEventListener("mousedown", this.listeners.mousedown);
         this.addEventListener("touchstart", this.listeners.mousedown, { passive: true });
-        document.addEventListener("mousemove", this.listeners.mousemove);
-        document.addEventListener("touchmove", this.listeners.mousemove);
-        document.addEventListener("mouseup", this.listeners.mouseup);
-        document.addEventListener("touchend", this.listeners.mouseup);
+
+        if (typeof document !== "undefined") {
+            document.addEventListener("mousemove", this.listeners.mousemove);
+            document.addEventListener("touchmove", this.listeners.mousemove);
+            document.addEventListener("mouseup", this.listeners.mouseup);
+            document.addEventListener("touchend", this.listeners.mouseup);
+        }
 
         this.#setFontSize();
         this.#setSize();
@@ -60,10 +63,13 @@ export class SliderHandle extends LitElement {
 
         this.removeEventListener("mousedown", this.listeners.mousedown);
         this.removeEventListener("touchstart", this.listeners.mousedown);
-        document.removeEventListener("mousemove", this.listeners.mousemove);
-        document.removeEventListener("touchmove", this.listeners.mousemove);
-        document.removeEventListener("mouseup", this.listeners.mouseup);
-        document.removeEventListener("touchend", this.listeners.mouseup);
+
+        if (typeof document !== "undefined") {
+            document.removeEventListener("mousemove", this.listeners.mousemove);
+            document.removeEventListener("touchmove", this.listeners.mousemove);
+            document.removeEventListener("mouseup", this.listeners.mouseup);
+            document.removeEventListener("touchend", this.listeners.mouseup);
+        }
     }
 
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
@@ -102,6 +108,8 @@ export class SliderHandle extends LitElement {
     }
 
     setLeft() {
+        if (typeof window === "undefined") return;
+
         this.left = Number(window.getComputedStyle(this).left.replace("px", "")) + this.size / 2;
     }
 

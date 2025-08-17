@@ -22,6 +22,8 @@ export class NotificationController implements ReactiveController {
     }
 
     hostDisconnected(): void {
+        if (typeof document === "undefined") return;
+
         this.notificationContainer.remove();
     }
 
@@ -30,6 +32,8 @@ export class NotificationController implements ReactiveController {
     }
 
     #createNotificationElement() {
+        if (typeof document === "undefined" || typeof window === "undefined") return;
+
         this.notificationContainer = document.createElement("notification-container") as NotificationContainer;
         this.notificationContainer.setAttribute("threshold", (this.host as MjoNotification).threshold.toString());
         this.notificationContainer.style.zIndex = window.getComputedStyle(this.host as MjoNotification).zIndex;

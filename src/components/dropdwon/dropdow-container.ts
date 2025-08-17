@@ -51,13 +51,17 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
 
         if (this.height) this.style.maxHeight = this.height;
 
-        window.addEventListener("resize", this.#listeners.resize);
+        if (typeof window !== "undefined") {
+            window.addEventListener("resize", this.#listeners.resize);
+        }
     }
 
     disconnectedCallback(): void {
         super.disconnectedCallback();
 
-        window.removeEventListener("resize", this.#listeners.resize);
+        if (typeof window !== "undefined") {
+            window.removeEventListener("resize", this.#listeners.resize);
+        }
     }
 
     protected updated(changedProperties: Map<PropertyKey, unknown>): void {
@@ -139,7 +143,9 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
             element.addEventListener("scroll", this.#listeners.scroll);
         });
 
-        if (this.preventScroll) document.addEventListener("wheel", this.#listeners.wheel, { passive: false });
+        if (this.preventScroll && typeof document !== "undefined") {
+            document.addEventListener("wheel", this.#listeners.wheel, { passive: false });
+        }
     }
 
     #removePreventScroll() {
@@ -147,7 +153,9 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
             element.removeEventListener("scroll", this.#listeners.scroll);
         });
 
-        document.removeEventListener("wheel", this.#listeners.wheel);
+        if (typeof document !== "undefined") {
+            document.removeEventListener("wheel", this.#listeners.wheel);
+        }
     }
 
     #handleScroll(ev: Event) {
@@ -157,7 +165,7 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
             for (const { element, scrollTop } of this.#scrollElements) {
                 if (element !== target) continue;
 
-                if (element === (window as unknown as HTMLElement)) {
+                if (element === (window as unknown as HTMLElement) && typeof window !== "undefined") {
                     window.scrollTo(0, scrollTop);
                 } else {
                     element.scrollTop = scrollTop;
@@ -173,6 +181,8 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
     }
 
     #getScrollbarElements() {
+        if (typeof window === "undefined") return;
+
         this.#scrollElements = [];
 
         let element = this.host as unknown as HTMLElement;

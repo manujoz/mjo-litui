@@ -22,10 +22,14 @@ export class MessageController implements ReactiveController {
     }
 
     hostDisconnected(): void {
+        if (typeof document === "undefined") return;
+
         this.messageContainer.remove();
     }
 
     #createMessageElement() {
+        if (typeof document === "undefined" || typeof window === "undefined") return;
+
         this.messageContainer = document.createElement("message-container") as MessageContainer;
         this.messageContainer.style.zIndex = window.getComputedStyle(this.host as MjoMessage).zIndex;
 

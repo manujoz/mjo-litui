@@ -131,7 +131,9 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
     connectedCallback(): void {
         super.connectedCallback();
 
-        document.querySelector("input")?.autocomplete;
+        if (typeof document !== "undefined") {
+            document.querySelector("input")?.autocomplete;
+        }
 
         if (this.type === "password" && !this.isPassword) {
             this.isPassword = true;

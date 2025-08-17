@@ -49,7 +49,9 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
     }
 
     firstUpdated(): void {
-        this.spans = this.menuButton.querySelectorAll("span");
+        if (this.menuButton) {
+            this.spans = this.menuButton.querySelectorAll("span");
+        }
 
         if (this.size === "sm") {
             this.style.width = "35px";

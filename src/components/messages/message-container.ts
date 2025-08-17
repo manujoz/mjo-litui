@@ -17,6 +17,11 @@ export class MessageContainer extends ThemeMixin(LitElement) implements IThemeMi
     }
 
     async show({ message, type = "info", time, onClose }: MessageShowParams) {
+        if (typeof document === "undefined") {
+            // Return a mock object for SSR
+            return {} as MessageItem;
+        }
+
         const messageItem = document.createElement("message-item") as MessageItem;
         messageItem.message = message;
         messageItem.type = type;

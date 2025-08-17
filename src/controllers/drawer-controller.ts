@@ -26,10 +26,14 @@ export class DrawerController implements ReactiveController {
     }
 
     hostDisconnected(): void {
+        if (typeof document === "undefined") return;
+
         this.drawerContainer.remove();
     }
 
     #createMessageElement() {
+        if (typeof document === "undefined" || typeof window === "undefined") return;
+
         this.drawerContainer = document.createElement("drawer-container") as DrawerContainer;
         this.drawerContainer.style.zIndex = window.getComputedStyle(this.host as MjoDrawer).zIndex;
 

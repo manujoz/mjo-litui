@@ -367,7 +367,7 @@ export class MjoValidator {
         }
 
         // Return default message
-        const lang = (document.querySelector("html")?.getAttribute("lang")?.split("-")[0] || "en") as string;
+        const lang = (typeof document !== "undefined" ? document.querySelector("html")?.getAttribute("lang")?.split("-")[0] : null) || "en";
         const defaultMessages = this.#defaultMessages(lang);
         let message = defaultMessages[rule];
 
@@ -913,6 +913,8 @@ export class MjoValidator {
     }
 
     #validateMincheck(input: MjoFormElements, form: HTMLFormElement) {
+        if (typeof document === "undefined") return true;
+
         const mincheck = parseInt(input.getAttribute("mincheck") ?? "0");
         const checkgroup = input.getAttribute("checkgroup");
         const checkboxs = [...form.querySelectorAll("input[type=checkbox]"), ...form.querySelectorAll("mo-checkbox")];
@@ -928,6 +930,8 @@ export class MjoValidator {
     }
 
     #validateMaxcheck(input: MjoFormElements, form: HTMLFormElement) {
+        if (typeof document === "undefined") return true;
+
         const maxcheck = parseInt(input.getAttribute("maxcheck") ?? "0");
         const checkgroup = input.getAttribute("checkgroup");
         const checkboxs = [...form.querySelectorAll("input[type=checkbox]"), ...form.querySelectorAll("mo-checkbox")];

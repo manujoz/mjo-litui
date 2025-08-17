@@ -26,6 +26,8 @@ export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
     }
 
     handleClick = (ev: MouseEvent) => {
+        if (typeof document === "undefined") return;
+
         const x = ev.offsetX;
         const y = ev.offsetY;
 

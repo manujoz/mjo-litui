@@ -38,6 +38,7 @@ export class MjoTheme extends LitElement {
 
         this.cssStyles += "}";
 
+        if (typeof document === "undefined" || typeof window === "undefined") return;
         let style: HTMLStyleElement;
         if (this.scope === "global") {
             style = document.querySelector("#mjo-theme") as HTMLStyleElement;
