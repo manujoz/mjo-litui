@@ -1,6 +1,6 @@
 {
     "name": "mjo-litui",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "A collection of web components for building user interfaces with LitElement.",
     "type": "module",
     "main": "index.js",
@@ -21,6 +21,10 @@
         "./controllers/*": {
             "types": "./controllers/*.d.ts",
             "import": "./controllers/*.js"
+        },
+        "./locales/*": {
+            "types": "./locales/*.d.ts",
+            "import": "./locales/*.js"
         },
         "./mixins/*": {
             "types": "./mixins/*.d.ts",
@@ -45,6 +49,7 @@
         "*.d.ts.map",
         "components/",
         "controllers/",
+        "locales/",
         "mixins/",
         "theme/",
         "types/",
