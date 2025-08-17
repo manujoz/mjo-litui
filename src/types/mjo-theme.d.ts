@@ -52,10 +52,12 @@ export interface MjoThemeConfig {
         mjoCheckbox?: MjoCheckboxTheme;
         mjoChip?: MjoChipTheme;
         mjoColorPicker?: MjoColorPickerTheme;
+        mjoDatePicker?: MjoDatePickerTheme;
         mjoDropdown?: MjoDropdownTheme;
         mjoIcon?: MjoIconTheme;
         mjoImage?: MjoImageTheme;
         mjoIonic?: MjoIonicTheme;
+        mjoMenuButton?: MjoMenuButtonTheme;
         mjoMessage?: MjoMessageTheme;
         mjoModal?: MjoModalTheme;
         mjoNotification?: MjoNotificationTheme;
@@ -67,7 +69,6 @@ export interface MjoThemeConfig {
         mjoTable?: MjoTableTheme;
         mjoTextarea?: MjoTextaraTheme;
         mjoTextfield?: MjoInputTheme;
-        mjoDatePicker?: MjoDatePickerTheme;
         mjoTypography?: TypographyTheme;
     };
     colors?: {
@@ -515,4 +516,8 @@ export interface MjoCalendarTheme {
     selectedColorSecondary?: string;
     rangeBackgroundSecondary?: string;
     rangeColorSecondary?: string;
+}
+
+export interface MjoMenuButtonTheme {
+    colorHover?: string;
 }
