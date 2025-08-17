@@ -42,7 +42,7 @@ export class ExampleCalendarBasic extends LitElement {
 
     private handleDateSelected(event: CustomEvent) {
         console.log("Selected date object:", event.detail.date); // Date | undefined
-        console.log("Selected date string:", event.detail.dateString); // YYYY-MM-DD
+        console.log("Selected date string:", event.detail.value); // YYYY-MM-DD
         console.log("Value (alias):", event.detail.value); // YYYY-MM-DD
     }
 }
@@ -72,13 +72,13 @@ export class ExampleCalendarRange extends LitElement {
 
     private handleRangeSelected(event: CustomEvent) {
         this.selectedRange = {
-            start: event.detail.startDateString, // Using string version for display
-            end: event.detail.endDateString,
+            start: event.detail.startDateValue, // Using string version for display
+            end: event.detail.endDateValue,
         };
         console.log("Start date object:", event.detail.startDate); // Date | undefined
         console.log("End date object:", event.detail.endDate); // Date | undefined
-        console.log("Start date string:", event.detail.startDateString); // YYYY-MM-DD
-        console.log("End date string:", event.detail.endDateString); // YYYY-MM-DD
+        console.log("Start date string:", event.detail.startDateValue); // YYYY-MM-DD
+        console.log("End date string:", event.detail.endDateValue); // YYYY-MM-DD
     }
 }
 ```
@@ -191,8 +191,8 @@ The auto mode uses a `ResizeObserver` for responsive adaptation.
 
 | Event            | Detail (shape)                                                                                                                                                    | Emitted When                          |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `date-selected`  | `{ date?: Date, dateString?: string, value?: string }`                                                                                                            | Date is selected (single mode)        |
-| `range-selected` | `{ startDate?: Date, endDate?: Date, startDateString?: string, endDateString?: string, startDateValue?: string, endDateValue?: string }`                          | Date range fully selected (both ends) |
+| `date-selected`  | `{ date?: Date, value?: string }`                                                                                                                                 | Date is selected (single mode)        |
+| `range-selected` | `{ startDate?: Date, endDate?: Date, startDateValue?: string, endDateValue?: string }`                                                                            | Date range fully selected (both ends) |
 | `change`         | Mirrors `date-selected` (single) or `range-selected` (range) with identical detail fields (adds compatibility for generic form handlers & change event listeners) | Date selection changes                |
 
 ### Event Details
@@ -200,9 +200,7 @@ The auto mode uses a `ResizeObserver` for responsive adaptation.
 All events expose date(s) in two forms:
 
 -   **Date objects** (`date`, `startDate`, `endDate`) – omitted until selected (undefined-safe).
--   **String values** (`dateString`, `value`, `startDateString`, `endDateString`) – ISO-like `YYYY-MM-DD` for display or submission.
-
-The `value`, `startDateValue`, and `endDateValue` fields are aliases (string mirrors) to simplify generic tooling consumption.
+-   **String values** (`value`, `startDateValue`, `endDateValue`) – ISO-like `YYYY-MM-DD` for display or submission.
 
 ## Public Programmatic API
 

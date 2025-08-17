@@ -102,6 +102,7 @@ export class CalendarGrid extends LitElement {
     #handleDayClick(event: CalendarDayClickEvent) {
         const day = event.detail.day;
         const date = new Date(this.year, this.month, day);
+
         this.dispatchEvent(
             new CustomEvent("date-click", {
                 detail: { date, formattedDate: CalendarUtils.formatDate(date) },
@@ -114,6 +115,7 @@ export class CalendarGrid extends LitElement {
     #handleDayHover(event: CalendarDayHoverEvent) {
         const day = event.detail.day;
         const date = new Date(this.year, this.month, day);
+
         this.dispatchEvent(
             new CustomEvent("date-hover", {
                 detail: { date },
@@ -136,31 +138,37 @@ export class CalendarGrid extends LitElement {
         if (this.mode === "single" && this.selectedDate) {
             return CalendarUtils.isSameDay(date, this.selectedDate);
         }
+
         return false;
     }
 
     #isInRange(date: Date): boolean {
         if (!this.selectedStartDate || !this.selectedEndDate) return false;
+
         return date > this.selectedStartDate && date < this.selectedEndDate;
     }
 
     #isRangeStart(date: Date): boolean {
         if (!this.selectedStartDate) return false;
+
         return CalendarUtils.isSameDay(date, this.selectedStartDate);
     }
 
     #isRangeEnd(date: Date): boolean {
         if (!this.selectedEndDate) return false;
+
         return CalendarUtils.isSameDay(date, this.selectedEndDate);
     }
 
     #isHoveredInRange(date: Date): boolean {
         if (!this.selectedStartDate || !this.hoverDate || this.selectedEndDate) return false;
+
         const start = this.selectedStartDate;
         const end = this.hoverDate;
         if (end < start) {
             return date > end && date < start;
         }
+
         return date > start && date < end;
     }
 

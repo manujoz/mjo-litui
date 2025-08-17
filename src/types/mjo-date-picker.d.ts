@@ -4,8 +4,8 @@ export interface DatePickerDateSelectedEvent extends CustomEvent {
         date?: Date;
         startDate?: Date;
         endDate?: Date;
-        startDateString?: string;
-        endDateString?: string;
+        startDateValue?: string;
+        endDateValue?: string;
     };
 }
 

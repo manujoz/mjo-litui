@@ -25,8 +25,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) behaviour: "hover" | "click" = "hover";
     @property({ type: String, converter: convertToPx }) width?: string;
     @property({ type: String, converter: convertToPx }) height?: string;
-    /** If true (default) a click inside the dropdown content will close it via global document listener. */
-    @property({ type: Boolean }) closeOnInnerClick: boolean = true;
+    @property({ type: Boolean }) preventCloseOnInnerClick = false;
     /** Optional list of CSS selectors that, if any element in the click composedPath matches, will prevent opening (only for behaviour='click'). */
     @property({ type: Array }) suppressOpenSelectors?: string[];
 
@@ -169,12 +168,10 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         const insideHost = !!path?.includes(this);
         const insideContainer = !!(this.dropdownContainer && path?.includes(this.dropdownContainer));
 
-        // Ignore the immediate host click just after opening (prevents instant close when behaviour='click')
         if (insideHost && this.behaviour === "click" && Date.now() - this.openTimestamp < 100) return;
 
-        if (insideContainer && !this.closeOnInnerClick) return; // stay open for interactions like calendar
+        if (insideContainer && this.preventCloseOnInnerClick) return;
 
-        // For host clicks we generally don't auto-close here; outside click or allowed inner click will proceed
         if (insideHost && !insideContainer) return;
 
         this.isOpen = false;

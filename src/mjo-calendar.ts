@@ -70,16 +70,16 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @property({ type: String, attribute: "range-calendars" }) rangeCalendars: "1" | "2" | "auto" = "auto";
 
     // Legacy month/year reactive states removed; derive via displayedMonths getters for backward compatibility during migration
-    @state() private selectedDate?: Date;
-    @state() private selectedStartDate?: Date;
-    @state() private selectedEndDate?: Date;
-    @state() private hoverDate?: Date;
+    @state() selectedDate?: Date;
+    @state() selectedStartDate?: Date;
+    @state() selectedEndDate?: Date;
+    @state() hoverDate?: Date;
     // Legacy left/right month/year removed; use displayedMonths[0|1]
-    @state() private picker: { open: boolean; type?: "month" | "year"; index: number } = { open: false, type: undefined, index: 0 };
+    @state() picker: { open: boolean; type?: "month" | "year"; index: number } = { open: false, type: undefined, index: 0 };
     /** Internal flag computed when rangeCalendars === "auto" determining if we show dual calendars */
-    @state() private autoDual = false;
+    @state() autoDual = false;
     /** Step 2: unified list of currently displayed months (length 1 or 2). */
-    @state() private displayedMonths: { month: number; year: number }[] = [];
+    @state() displayedMonths: { month: number; year: number }[] = [];
 
     static readonly AUTO_DUAL_THRESHOLD = 720; // px
 
@@ -95,34 +95,6 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
 
     get weekDays() {
         return this.currentLocale.calendar.weekdaysShort;
-    }
-
-    connectedCallback(): void {
-        super.connectedCallback();
-        this.#initializeDates();
-        this.#syncDisplayedMonthsFromState();
-        // Setup ResizeObserver for adaptive dual-range mode
-        if (typeof ResizeObserver !== "undefined") {
-            this.#resizeObserver = new ResizeObserver(() => this._evaluateAutoDual());
-            // Defer observing until first paint to ensure rendering box is stable
-            requestAnimationFrame(() => {
-                this.#resizeObserver?.observe(this);
-                // Immediately evaluate once after observing
-                this._evaluateAutoDual();
-                this.#syncDisplayedMonthsFromState();
-            });
-        } else {
-            // Fallback: listen to window resize
-            window.addEventListener("resize", this.#handleWindowResize);
-            this._evaluateAutoDual();
-            this.#syncDisplayedMonthsFromState();
-        }
-    }
-
-    disconnectedCallback(): void {
-        super.disconnectedCallback();
-        this.#resizeObserver?.disconnect();
-        window.removeEventListener("resize", this.#handleWindowResize);
     }
 
     render() {
@@ -151,22 +123,18 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     side: "single",
                     forceMode: isRangeMode ? "range" : this.mode,
                 })}
-                ${this.picker.open
-                    ? html`
-                          <div class="picker-overlay" @click=${this.#handlePickerClose}>
-                              <div class="picker-backdrop"></div>
-                          </div>
-                      `
-                    : ""}
             </div>
         `;
     }
 
     #shouldRenderDualRange(): boolean {
         if (this.mode !== "range") return false;
+
         const setting = this.rangeCalendars;
+
         if (setting === "2") return true;
         if (setting === "1") return false;
+
         // Auto mode: rely on computed state updated by ResizeObserver / window resize
         return this.autoDual;
     }
@@ -177,33 +145,57 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             if (this.displayedMonths.length === 1) {
                 const first = this.displayedMonths[0];
                 const secondDate = new Date(first.year, first.month + 1, 1);
+
                 this.displayedMonths = [first, { month: secondDate.getMonth(), year: secondDate.getFullYear() }];
             } else if (this.displayedMonths.length === 0) {
                 const today = new Date();
                 const next = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+
                 this.displayedMonths = [
                     { month: today.getMonth(), year: today.getFullYear() },
                     { month: next.getMonth(), year: next.getFullYear() },
                 ];
             }
         }
+
         const months = this.displayedMonths;
 
         return html`
             <div class="calendar-range-container" part="calendar" data-size=${this.size} data-color=${this.color} ?data-disabled=${this.disabled}>
-                <!-- Left Calendar -->
                 ${this.#renderCalendarSide({ month: months[0].month, year: months[0].year, side: "left" })}
-                <!-- Right Calendar -->
                 ${this.#renderCalendarSide({ month: months[1].month, year: months[1].year, side: "right" })}
-                ${this.picker.open
-                    ? html`
-                          <div class="picker-overlay" @click=${this.#handlePickerClose}>
-                              <div class="picker-backdrop"></div>
-                          </div>
-                      `
-                    : ""}
             </div>
         `;
+    }
+
+    connectedCallback(): void {
+        super.connectedCallback();
+
+        this.#initializeDates();
+        this.#syncDisplayedMonthsFromState();
+
+        // Setup ResizeObserver for adaptive dual-range mode
+        if (typeof ResizeObserver !== "undefined") {
+            this.#resizeObserver = new ResizeObserver(() => this.#evaluateAutoDual());
+            // Defer observing until first paint to ensure rendering box is stable
+            requestAnimationFrame(() => {
+                this.#resizeObserver?.observe(this);
+                // Immediately evaluate once after observing
+                this.#evaluateAutoDual();
+                this.#syncDisplayedMonthsFromState();
+            });
+        } else {
+            // Fallback: listen to window resize
+            window.addEventListener("resize", this.#handleWindowResize);
+            this.#evaluateAutoDual();
+            this.#syncDisplayedMonthsFromState();
+        }
+    }
+
+    disconnectedCallback(): void {
+        super.disconnectedCallback();
+        this.#resizeObserver?.disconnect();
+        window.removeEventListener("resize", this.#handleWindowResize);
     }
 
     /** Helper to render a calendar side (single/left/right) */
@@ -212,6 +204,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         const calendarIndex = this.#calendarIndexForSide(side);
         const isPickerSide = this.picker.open && this.picker.index === calendarIndex;
         const mode = forceMode ?? this.mode;
+
         return html`
             <div class="calendar-side" data-side=${side}>
                 <calendar-header
@@ -269,19 +262,75 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         `;
     }
 
-    /** Recalculate autoDual flag (called by ResizeObserver / window resize); public (prefixed underscore) for testability */
-    _evaluateAutoDual() {
+    /** Returns a shallow copy of the currently displayed months (length 1 or 2). */
+    getDisplayedMonths() {
+        return [...this.displayedMonths];
+    }
+
+    /**
+     * Sets the displayed months.
+     * If two months provided and not adjacent, the second will be coerced to be +1 month from the first by default.
+     */
+    setDisplayedMonths(months: { month: number; year: number }[], enforceAdjacency = true) {
+        if (!Array.isArray(months) || months.length === 0) return;
+        if (months.length > 2) months = months.slice(0, 2);
+        const normalized = months.map((m) => ({ month: m.month, year: m.year }));
+        if (normalized.length === 2 && enforceAdjacency) {
+            const first = normalized[0];
+            const expected = this.#addMonth(first, 1);
+            const second = normalized[1];
+            if (second.month !== expected.month || second.year !== expected.year) {
+                normalized[1] = expected;
+            }
+        }
+        this.displayedMonths = normalized;
+    }
+
+    /** Programmatically set a month for the given side . */
+    setMonth(side: CalendarHeaderSide, month: number) {
+        this.#setMonth(month, side);
+    }
+
+    /** Programmatically set a year for the given side. */
+    setYear(side: CalendarHeaderSide, year: number) {
+        this.#setYear(year, side);
+    }
+
+    /** Reset any current selection (single or range) and displayed months to initial state. */
+    resetSelection() {
+        this.#doFullReset();
+    }
+
+    /** Full controlled reset API: clears selection, months, pickers and forces fresh today-based view. */
+    reset() {
+        this.#doFullReset();
+    }
+
+    /**
+     * Programmatic date selection helper.
+     * Exposed primarily to facilitate unit testing without relying on internal
+     * shadow DOM event wiring. Mirrors a user clicking a date cell.
+     */
+    selectDate(date: Date) {
+        this.#selectDate(date);
+    }
+
+    /** Recalculate autoDual flag (called by ResizeObserver / window resize); */
+    #evaluateAutoDual() {
         if (this.rangeCalendars !== "auto" || this.mode !== "range") return;
+
         // Measure parent width preferentially (wrapper may define layout), fallback to host, then window
         const parentWidth = this.parentElement?.getBoundingClientRect().width;
         const hostRect = this.getBoundingClientRect();
         const width = parentWidth || hostRect.width || window.innerWidth;
         const shouldDual = width >= MjoCalendar.AUTO_DUAL_THRESHOLD;
+
         if (shouldDual !== this.autoDual) {
             this.autoDual = shouldDual;
         }
     }
-    #handleWindowResize = () => this._evaluateAutoDual();
+
+    #handleWindowResize = () => this.#evaluateAutoDual();
 
     /** Sync displayedMonths from legacy state */
     #syncDisplayedMonthsFromState() {
@@ -289,6 +338,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             const today = new Date();
             this.displayedMonths = [{ month: today.getMonth(), year: today.getFullYear() }];
         }
+
         if (this.mode === "range" && this.#shouldRenderDualRange() && this.displayedMonths.length === 1) {
             const first = this.displayedMonths[0];
             const d = new Date(first.year, first.month + 1, 1);
@@ -332,6 +382,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
 
     #handleDateHover(event: CalendarDateHoverEvent) {
         const { date } = event.detail;
+
         if (this.mode === "range" && this.selectedStartDate && !this.selectedEndDate) {
             this.hoverDate = date;
         }
@@ -344,6 +395,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     #handleMonthSelected(event: CalendarMonthSelectedEvent) {
         const { month } = event.detail;
         const side = this.#sideForCalendarIndex(this.picker.index);
+
         this.#setMonth(month, side);
         this.#closePicker();
     }
@@ -351,11 +403,8 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     #handleYearSelected(event: CalendarYearSelectedEvent) {
         const { year } = event.detail;
         const side = this.#sideForCalendarIndex(this.picker.index);
-        this.#setYear(year, side);
-        this.#closePicker();
-    }
 
-    #handlePickerClose() {
+        this.#setYear(year, side);
         this.#closePicker();
     }
 
@@ -386,12 +435,16 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             this.displayedMonths = [{ month: newDate.getMonth(), year: newDate.getFullYear() }];
             return;
         }
+
         // range mode
         if (this.displayedMonths.length < 2) this.#syncDisplayedMonthsFromState();
+
         const [left, right] = this.displayedMonths;
+
         if (side === "left") {
             const newLeft = new Date(left.year, left.month + direction, 1);
             const newRight = new Date(newLeft.getFullYear(), newLeft.getMonth() + 1, 1);
+
             this.displayedMonths = [
                 { month: newLeft.getMonth(), year: newLeft.getFullYear() },
                 { month: newRight.getMonth(), year: newRight.getFullYear() },
@@ -399,6 +452,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         } else {
             const newRight = new Date(right.year, right.month + direction, 1);
             const newLeft = new Date(newRight.getFullYear(), newRight.getMonth() - 1, 1);
+
             this.displayedMonths = [
                 { month: newLeft.getMonth(), year: newLeft.getFullYear() },
                 { month: newRight.getMonth(), year: newRight.getFullYear() },
@@ -408,33 +462,42 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
 
     #setMonth(month: number, side: "single" | "left" | "right") {
         if (this.displayedMonths.length === 0) this.#syncDisplayedMonthsFromState();
+
         if (side === "single") {
             const year = this.displayedMonths[0].year;
             this.displayedMonths = [{ month, year }];
             return;
         }
+
         if (this.displayedMonths.length < 2) this.#syncDisplayedMonthsFromState();
+
         const [left] = this.displayedMonths;
+
         if (side === "left") {
             const newLeft = { month, year: left.year };
             const dRight = new Date(newLeft.year, newLeft.month + 1, 1);
+
             this.displayedMonths = [newLeft, { month: dRight.getMonth(), year: dRight.getFullYear() }];
         } else {
             const rightYear = this.displayedMonths[1].year;
             const newRight = { month, year: rightYear };
             const dLeft = new Date(newRight.year, newRight.month - 1, 1);
+
             this.displayedMonths = [{ month: dLeft.getMonth(), year: dLeft.getFullYear() }, newRight];
         }
     }
 
     #setYear(year: number, side: CalendarHeaderSide) {
         if (this.displayedMonths.length === 0) this.#syncDisplayedMonthsFromState();
+
         if (side === "single") {
             const month = this.displayedMonths[0].month;
             this.displayedMonths = [{ month, year }];
             return;
         }
+
         if (this.displayedMonths.length < 2) this.#syncDisplayedMonthsFromState();
+
         if (side === "left") {
             const left = { month: this.displayedMonths[0].month, year };
             const rightDate = new Date(year, left.month + 1, 1);
@@ -444,62 +507,6 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             const leftDate = new Date(year, right.month - 1, 1);
             this.displayedMonths = [{ month: leftDate.getMonth(), year: leftDate.getFullYear() }, right];
         }
-    }
-
-    /* =====================
-     * Public API (new)
-     * ===================== */
-    /** Returns a shallow copy of the currently displayed months (length 1 or 2). */
-    public getDisplayedMonths() {
-        return [...this.displayedMonths];
-    }
-
-    /**
-     * Sets the displayed months.
-     * If two months provided and not adjacent, the second will be coerced to be +1 month from the first by default.
-     */
-    public setDisplayedMonths(months: { month: number; year: number }[], enforceAdjacency = true) {
-        if (!Array.isArray(months) || months.length === 0) return;
-        if (months.length > 2) months = months.slice(0, 2);
-        const normalized = months.map((m) => ({ month: m.month, year: m.year }));
-        if (normalized.length === 2 && enforceAdjacency) {
-            const first = normalized[0];
-            const expected = this._addMonth(first, 1);
-            const second = normalized[1];
-            if (second.month !== expected.month || second.year !== expected.year) {
-                normalized[1] = expected;
-            }
-        }
-        this.displayedMonths = normalized;
-    }
-
-    /** Programmatically set a month for the given side (single/left/right). */
-    public setMonth(side: CalendarHeaderSide, month: number) {
-        this.#setMonth(month, side);
-    }
-
-    /** Programmatically set a year for the given side (single/left/right). */
-    public setYear(side: CalendarHeaderSide, year: number) {
-        this.#setYear(year, side);
-    }
-
-    /** Reset any current selection (single or range) and displayed months to initial state. */
-    public resetSelection() {
-        this.#doFullReset();
-    }
-
-    /** Full controlled reset API: clears selection, months, pickers and forces fresh today-based view. */
-    public reset() {
-        this.#doFullReset();
-    }
-
-    /**
-     * Programmatic date selection helper.
-     * Exposed primarily to facilitate unit testing without relying on internal
-     * shadow DOM event wiring. Mirrors a user clicking a date cell.
-     */
-    public selectDate(date: Date) {
-        this.#selectDate(date);
     }
 
     #doFullReset() {
@@ -515,10 +522,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.displayedMonths = [];
         this.autoDual = false; // will be recalculated if in auto mode
         this.#syncDisplayedMonthsFromState();
-        this.requestUpdate();
     }
-
-    // (Legacy accessors removed permanently)
 
     #selectDate(date: Date) {
         if (CalendarUtils.isDateDisabled(date, this.disabled, this.minDate, this.maxDate, this.disabledDates)) return;
@@ -568,8 +572,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     #dispatchDateSelected() {
         const eventDetail: CalendarDateSelectedEvent["detail"] & { value?: string } = {
             date: this.value ? new Date(this.value) : undefined,
-            dateString: this.value,
-            value: this.value, // compatibility convenience
+            value: this.value,
         };
 
         // Emit the specific date-selected event
@@ -592,11 +595,9 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     #dispatchRangeSelected() {
-        const eventDetail: CalendarRangeSelectedEvent["detail"] & { startDateValue?: string; endDateValue?: string } = {
+        const eventDetail: CalendarRangeSelectedEvent["detail"] = {
             startDate: this.startDate ? new Date(this.startDate) : undefined,
             endDate: this.endDate ? new Date(this.endDate) : undefined,
-            startDateString: this.startDate,
-            endDateString: this.endDate,
             startDateValue: this.startDate,
             endDateValue: this.endDate,
         };
@@ -620,35 +621,8 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         );
     }
 
-    /** Test helper: ensure displayed months are initialized and coherent (does not remove legacy yet). */
-    _ensureDisplayedMonths() {
-        this.#ensureDisplayedMonthsInternal();
-    }
-
-    #ensureDisplayedMonthsInternal() {
-        if (this.displayedMonths.length === 0) {
-            // derive base from selected values or legacy current/left
-            const base = this.selectedDate || this.selectedStartDate || new Date();
-            this.displayedMonths = [{ month: base.getMonth(), year: base.getFullYear() }];
-        }
-        if (this.mode === "range" && this.#shouldRenderDualRange()) {
-            if (this.displayedMonths.length === 1) {
-                const left = this.displayedMonths[0];
-                this.displayedMonths = [left, this._addMonth(left, 1)];
-            } else if (this.displayedMonths.length >= 2) {
-                // enforce adjacency between first two
-                const left = this.displayedMonths[0];
-                this.displayedMonths = [left, this._addMonth(left, 1)];
-            }
-        } else {
-            if (this.displayedMonths.length > 1) {
-                this.displayedMonths = [this.displayedMonths[0]];
-            }
-        }
-    }
-
     /** Add delta months to a reference month/year. */
-    _addMonth(ref: { month: number; year: number }, delta: number) {
+    #addMonth(ref: { month: number; year: number }, delta: number) {
         let m = ref.month + delta;
         let y = ref.year;
         while (m > 11) {
@@ -692,25 +666,6 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
 
             .calendar-side {
                 flex: 1;
-            }
-
-            .picker-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: -1;
-                pointer-events: auto;
-            }
-
-            .picker-backdrop {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: transparent;
             }
 
             calendar-month-picker,

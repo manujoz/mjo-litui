@@ -52,6 +52,7 @@ export class CalendarDay extends LitElement {
 
     #handleClick() {
         if (this.isDisabled) return;
+
         this.dispatchEvent(
             new CustomEvent("day-click", {
                 detail: { day: this.day },
@@ -63,6 +64,7 @@ export class CalendarDay extends LitElement {
 
     #handleMouseEnter() {
         if (this.isDisabled) return;
+
         this.dispatchEvent(
             new CustomEvent("day-hover", {
                 detail: { day: this.day },

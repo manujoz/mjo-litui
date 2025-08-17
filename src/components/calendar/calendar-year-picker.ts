@@ -69,7 +69,9 @@ export class CalendarYearPicker extends LitElement {
 
     #isYearDisabled(year: number): boolean {
         if (this.minYear && year < this.minYear) return true;
+
         if (this.maxYear && year > this.maxYear) return true;
+
         return false;
     }
 
@@ -77,6 +79,7 @@ export class CalendarYearPicker extends LitElement {
         if (this.disabled || this.#isYearDisabled(year)) return;
 
         this.selectedYear = year;
+
         this.dispatchEvent(
             new CustomEvent("year-selected", {
                 detail: { year },
@@ -88,11 +91,13 @@ export class CalendarYearPicker extends LitElement {
 
     #previousDecade() {
         if (this.disabled) return;
+
         this.startYear -= 12;
     }
 
     #nextDecade() {
         if (this.disabled) return;
+
         this.startYear += 12;
     }
 
