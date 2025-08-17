@@ -197,10 +197,10 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.spans[0].style = "left: 50%; width: 0px;";
-            this.spans[1].style = "transform: rotate(45deg);";
-            this.spans[2].style = "transform: rotate(-45deg);";
-            this.spans[3].style = "left: 50%; width: 0px";
+            this.spans[0].style.cssText = "left: 50%; width: 0px;";
+            this.spans[1].style.cssText = "transform: rotate(45deg);";
+            this.spans[2].style.cssText = "transform: rotate(-45deg);";
+            this.spans[3].style.cssText = "left: 50%; width: 0px";
 
             pause(500).then(() => {
                 this.isAnimated = false;
@@ -214,10 +214,10 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.spans[0].style = "top: 48%; transform: rotate(45deg);";
-            this.spans[1].style = "width: 0px;";
-            this.spans[2].style = "width: 0px; left: 80%;";
-            this.spans[3].style = "top: 48%; transform: rotate(-45deg);";
+            this.spans[0].style.cssText = "top: 48%; transform: rotate(45deg);";
+            this.spans[1].style.cssText = "width: 0px;";
+            this.spans[2].style.cssText = "width: 0px; left: 80%;";
+            this.spans[3].style.cssText = "top: 48%; transform: rotate(-45deg);";
 
             pause(500).then(() => {
                 this.isAnimated = false;
@@ -231,10 +231,10 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.spans[0].style = "top: 48%; transform: rotate(-45deg);";
-            this.spans[1].style = "width: 0px;";
-            this.spans[2].style = "width: 0px; left: 80%;";
-            this.spans[3].style = "top: 48%; transform: rotate(45deg);";
+            this.spans[0].style.cssText = "top: 48%; transform: rotate(-45deg);";
+            this.spans[1].style.cssText = "width: 0px;";
+            this.spans[2].style.cssText = "width: 0px; left: 80%;";
+            this.spans[3].style.cssText = "top: 48%; transform: rotate(45deg);";
 
             pause(500).then(() => {
                 this.isAnimated = false;
@@ -248,10 +248,10 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.spans[0].style = "left: 50%; width: 0px;";
-            this.spans[1].style = "transition: all 1s; transform: rotate(225deg);";
-            this.spans[2].style = "transition: all 1s; transform: rotate(-225deg);";
-            this.spans[3].style = "left: 50%; width: 0px;";
+            this.spans[0].style.cssText = "left: 50%; width: 0px;";
+            this.spans[1].style.cssText = "transition: all 1s; transform: rotate(225deg);";
+            this.spans[2].style.cssText = "transition: all 1s; transform: rotate(-225deg);";
+            this.spans[3].style.cssText = "left: 50%; width: 0px;";
 
             pause(500).then(() => {
                 this.isAnimated = false;
@@ -259,8 +259,8 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         } else {
             this.isAnimated = true;
 
-            this.spans[1].style = "transition: all 1s; transform: rotate(0deg);";
-            this.spans[2].style = "transition: all 1s; transform: rotate(0deg);";
+            this.spans[1].style.cssText = "transition: all 1s; transform: rotate(0deg);";
+            this.spans[2].style.cssText = "transition: all 1s; transform: rotate(0deg);";
 
             pause(400).then(() => {
                 this.#removeStyles();
@@ -272,11 +272,11 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.container.style = "transition: all .9s; transform: rotate(360deg);";
-            this.spans[0].style = "transition: all .8s; left: 50%; width: 0px;";
-            this.spans[1].style = "transition: all .8s; transform: rotate(45deg);";
-            this.spans[2].style = "transition: all .8s; transform: rotate(-45deg);";
-            this.spans[3].style = "transition: all .8s; left: 50%; width: 0px;";
+            this.container.style.cssText = "transition: all .9s; transform: rotate(360deg);";
+            this.spans[0].style.cssText = "transition: all .8s; left: 50%; width: 0px;";
+            this.spans[1].style.cssText = "transition: all .8s; transform: rotate(45deg);";
+            this.spans[2].style.cssText = "transition: all .8s; transform: rotate(-45deg);";
+            this.spans[3].style.cssText = "transition: all .8s; left: 50%; width: 0px;";
 
             pause(500).then(() => {
                 this.isAnimated = false;
@@ -284,11 +284,11 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         } else {
             this.isAnimated = true;
 
-            this.container.style = "transition: all .9s; transform: rotate(0deg);";
-            this.spans[0].style = "transition: all .8s; left: 20%; width: 60%;";
-            this.spans[1].style = "transition: all .8s; transform: rotate(0deg);";
-            this.spans[2].style = "transition: all .8s; transform: rotate(0deg);";
-            this.spans[3].style = "transition: all .8s; left: 20%; width: 60%;";
+            this.container.style.cssText = "transition: all .9s; transform: rotate(0deg);";
+            this.spans[0].style.cssText = "transition: all .8s; left: 20%; width: 60%;";
+            this.spans[1].style.cssText = "transition: all .8s; transform: rotate(0deg);";
+            this.spans[2].style.cssText = "transition: all .8s; transform: rotate(0deg);";
+            this.spans[3].style.cssText = "transition: all .8s; left: 20%; width: 60%;";
 
             pause(800).then(() => {
                 this.#removeStyles();
@@ -300,11 +300,11 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.container.style = "transition: all .9s; transform: rotate(-360deg);";
-            this.spans[0].style = "transition: all .8s; left: 50%; width: 0px;";
-            this.spans[1].style = "transition: all .8s; transform: rotate(45deg);";
-            this.spans[2].style = "transition: all .8s; transform: rotate(-45deg);";
-            this.spans[3].style = "transition: all .8s; left: 50%; width: 0px;";
+            this.container.style.cssText = "transition: all .9s; transform: rotate(-360deg);";
+            this.spans[0].style.cssText = "transition: all .8s; left: 50%; width: 0px;";
+            this.spans[1].style.cssText = "transition: all .8s; transform: rotate(45deg);";
+            this.spans[2].style.cssText = "transition: all .8s; transform: rotate(-45deg);";
+            this.spans[3].style.cssText = "transition: all .8s; left: 50%; width: 0px;";
 
             pause(800).then(() => {
                 this.#removeStyles();
@@ -312,11 +312,11 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         } else {
             this.isAnimated = true;
 
-            this.container.style = "transition: all .9s; transform: rotate(0deg);";
-            this.spans[0].style = "transition: all .8s; left: 20%; width: 60%;";
-            this.spans[1].style = "transition: all .8s; transform: rotate(0deg);";
-            this.spans[2].style = "transition: all .8s; transform: rotate(0deg);";
-            this.spans[3].style = "transition: all .8s; left: 20%; width: 60%;";
+            this.container.style.cssText = "transition: all .9s; transform: rotate(0deg);";
+            this.spans[0].style.cssText = "transition: all .8s; left: 20%; width: 60%;";
+            this.spans[1].style.cssText = "transition: all .8s; transform: rotate(0deg);";
+            this.spans[2].style.cssText = "transition: all .8s; transform: rotate(0deg);";
+            this.spans[3].style.cssText = "transition: all .8s; left: 20%; width: 60%;";
 
             pause(800).then(() => {
                 this.#removeStyles();
@@ -328,10 +328,10 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.spans[0].style = "transition: .6s; left: 80%; width: 0px;";
-            this.spans[1].style = "transition: .6s; transform: rotate(45deg);";
-            this.spans[2].style = "transition: .6s; transform: rotate(135deg);";
-            this.spans[3].style = "transition: .6s; left: 20%; width: 0px;";
+            this.spans[0].style.cssText = "transition: .6s; left: 80%; width: 0px;";
+            this.spans[1].style.cssText = "transition: .6s; transform: rotate(45deg);";
+            this.spans[2].style.cssText = "transition: .6s; transform: rotate(135deg);";
+            this.spans[3].style.cssText = "transition: .6s; left: 20%; width: 0px;";
 
             pause(500).then(() => {
                 this.isAnimated = false;
@@ -339,10 +339,10 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         } else {
             this.isAnimated = true;
 
-            this.spans[0].style = "transition: all .6s; left: 20%; width: 60%;";
-            this.spans[1].style = "transition: all .6s; transform: rotate(0deg);";
-            this.spans[2].style = "transition: all .6s; transform: rotate(0deg);";
-            this.spans[3].style = "transition: all .6s; left: 20%; width: 60%;";
+            this.spans[0].style.cssText = "transition: all .6s; left: 20%; width: 60%;";
+            this.spans[1].style.cssText = "transition: all .6s; transform: rotate(0deg);";
+            this.spans[2].style.cssText = "transition: all .6s; transform: rotate(0deg);";
+            this.spans[3].style.cssText = "transition: all .6s; left: 20%; width: 60%;";
 
             pause(800).then(() => {
                 this.#removeStyles();
@@ -354,10 +354,10 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.spans[0].style = "transition: .6s; left: 20%; width: 0px;";
-            this.spans[1].style = "transition: .6s; transform: rotate(-45deg);";
-            this.spans[2].style = "transition: .6s; transform: rotate(-135deg);";
-            this.spans[3].style = "transition: .6s; left: 80%; width: 0px;";
+            this.spans[0].style.cssText = "transition: .6s; left: 20%; width: 0px;";
+            this.spans[1].style.cssText = "transition: .6s; transform: rotate(-45deg);";
+            this.spans[2].style.cssText = "transition: .6s; transform: rotate(-135deg);";
+            this.spans[3].style.cssText = "transition: .6s; left: 80%; width: 0px;";
 
             pause(500).then(() => {
                 this.isAnimated = false;
@@ -365,10 +365,10 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         } else {
             this.isAnimated = true;
 
-            this.spans[0].style = "transition: all .6s; left: 20%; width: 60%;";
-            this.spans[1].style = "transition: all .6s; transform: rotate(0deg);";
-            this.spans[2].style = "transition: all .6s; transform: rotate(0deg);";
-            this.spans[3].style = "transition: all .6s; left: 20%; width: 60%;";
+            this.spans[0].style.cssText = "transition: all .6s; left: 20%; width: 60%;";
+            this.spans[1].style.cssText = "transition: all .6s; transform: rotate(0deg);";
+            this.spans[2].style.cssText = "transition: all .6s; transform: rotate(0deg);";
+            this.spans[3].style.cssText = "transition: all .6s; left: 20%; width: 60%;";
 
             pause(800).then(() => {
                 this.#removeStyles();
@@ -380,12 +380,12 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.spans[1].style = "width: 0px;";
-            this.spans[2].style = "width: 0px; left: 80%";
-            this.spans[3].style = "top: 48%; transform: rotate(225deg);";
+            this.spans[1].style.cssText = "width: 0px;";
+            this.spans[2].style.cssText = "width: 0px; left: 80%";
+            this.spans[3].style.cssText = "top: 48%; transform: rotate(225deg);";
 
             pause(200).then(() => {
-                this.spans[0].style = "top: 48%; transform: rotate(-225deg);";
+                this.spans[0].style.cssText = "top: 48%; transform: rotate(-225deg);";
             });
 
             pause(700).then(() => {
@@ -408,12 +408,12 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.spans[0].style = "top: 48%; transform: rotate(225deg);";
-            this.spans[1].style = "width: 0px;";
-            this.spans[2].style = "width: 0px; left: 80%";
+            this.spans[0].style.cssText = "top: 48%; transform: rotate(225deg);";
+            this.spans[1].style.cssText = "width: 0px;";
+            this.spans[2].style.cssText = "width: 0px; left: 80%";
 
             pause(200).then(() => {
-                this.spans[3].style = "top: 48%; transform: rotate(-225deg);";
+                this.spans[3].style.cssText = "top: 48%; transform: rotate(-225deg);";
             });
 
             pause(700).then(() => {
@@ -436,13 +436,13 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.container.style = "transition: all .5s; transform: rotate(90deg);";
-            this.spans[1].style = "width: 0px;";
-            this.spans[2].style = "width: 0px; left: 80%;";
+            this.container.style.cssText = "transition: all .5s; transform: rotate(90deg);";
+            this.spans[1].style.cssText = "width: 0px;";
+            this.spans[2].style.cssText = "width: 0px; left: 80%;";
 
             pause(200).then(() => {
-                this.spans[0].style = "top: 48%; transform: rotate(45deg);";
-                this.spans[3].style = "top: 48%; transform: rotate(135deg);";
+                this.spans[0].style.cssText = "top: 48%; transform: rotate(45deg);";
+                this.spans[3].style.cssText = "top: 48%; transform: rotate(135deg);";
             });
 
             pause(700).then(() => {
@@ -451,7 +451,7 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         } else {
             this.isAnimated = true;
 
-            this.container.style = "transition: all .5s; transform: rotate(0deg);";
+            this.container.style.cssText = "transition: all .5s; transform: rotate(0deg);";
             this.spans[0].removeAttribute("style");
             this.spans[3].removeAttribute("style");
 
@@ -465,13 +465,13 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         if (this.isOpen) {
             this.isAnimated = true;
 
-            this.container.style = "transition: all .5s; transform: rotate(90deg);";
-            this.spans[1].style = "width: 0px;";
-            this.spans[2].style = "width: 0px; left: 80%;";
+            this.container.style.cssText = "transition: all .5s; transform: rotate(90deg);";
+            this.spans[1].style.cssText = "width: 0px;";
+            this.spans[2].style.cssText = "width: 0px; left: 80%;";
 
             pause(200).then(() => {
-                this.spans[0].style = "top: 48%; transform: rotate(-45deg);";
-                this.spans[3].style = "top: 48%; transform: rotate(-135deg);";
+                this.spans[0].style.cssText = "top: 48%; transform: rotate(-45deg);";
+                this.spans[3].style.cssText = "top: 48%; transform: rotate(-135deg);";
             });
 
             pause(700).then(() => {
@@ -480,7 +480,7 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         } else {
             this.isAnimated = true;
 
-            this.container.style = "transition: all .5s; transform: rotate(0deg);";
+            this.container.style.cssText = "transition: all .5s; transform: rotate(0deg);";
             this.spans[0].removeAttribute("style");
             this.spans[3].removeAttribute("style");
 
