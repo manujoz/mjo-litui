@@ -3,7 +3,7 @@ import { esbuildPlugin } from "@web/dev-server-esbuild";
 import { playwrightLauncher } from "@web/test-runner-playwright";
 
 export default {
-    files: "test/**/*.test.{js,ts}",
+    files: ["test/**/*.test.{js,ts}", "!test/components/TEMPLATE.test.{js,ts}"],
     nodeResolve: true,
 
     // Enable SSR testing capabilities and TypeScript compilation

@@ -78,9 +78,9 @@
         "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
         "build:public": "npm run build && cd dist && npm publish",
         "preview": "vite preview",
-        "test": "web-test-runner",
-        "test:watch": "web-test-runner --watch",
-        "test:coverage": "web-test-runner --coverage",
+        "test": "npm run build && web-test-runner",
+        "test:watch": "npm run build && web-test-runner --watch",
+        "test:coverage": "npm run build && web-test-runner --coverage",
         "postinstall": "npx playwright install"
     },
     "dependencies": {
@@ -93,6 +93,9 @@
         "@commitlint/cli": "^18.4.4",
         "@commitlint/config-conventional": "^18.4.4",
         "@esm-bundle/chai": "^4.3.4-fix.0",
+        "@lit-labs/ssr": "^3.3.1",
+        "@lit-labs/ssr-client": "^1.1.7",
+        "@lit-labs/ssr-dom-shim": "^1.4.0",
         "@lit-labs/testing": "^0.2.7",
         "@open-wc/testing": "^4.0.0",
         "@types/mocha": "^10.0.10",

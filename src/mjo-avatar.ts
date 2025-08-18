@@ -1,5 +1,5 @@
 import { LitElement, PropertyValues, TemplateResult, css, html } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
@@ -25,8 +25,6 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
 
     private initial = "";
 
-    @query(".image.name") private nameElement!: HTMLImageElement;
-
     render() {
         return html`<div
             class="container size-${this.size} radius-${this.radius} color-${this.color}"
@@ -37,7 +35,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 ? html`<div class="image radius-${this.radius}">
                       <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${this.#handleError} />
                   </div>`
-                : this.fallback && this.showFallback
+                : this.showFallback && this.fallbackIcon
                   ? html`<div class="image fallback radius-${this.radius} font-size-${this.size}">${this.fallbackIcon}</div>`
                   : this.name
                     ? html`<div class="image name radius-${this.radius} font-size-${this.size}"><span>${this.initial}</span></div>`
@@ -48,8 +46,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     connectedCallback(): void {
         super.connectedCallback();
 
-        if (!this.src && this.showFallback && !this.fallback) {
-            this.showFallback = true;
+        if (!this.src && this.showFallback) {
             this.#setFallback();
         }
 
@@ -63,16 +60,19 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             this.initial = this.name ? this.name[0].toUpperCase() : "";
         }
 
-        if (this.name && this.nameColoured && this.nameElement) {
+        // Query for nameElement each time to avoid stale references
+        const nameElement = this.shadowRoot?.querySelector(".image.name") as HTMLElement | null;
+
+        if (this.name && this.nameColoured && nameElement) {
             const [bg, fg] = this.#colorByInitial();
-            this.nameElement.style.backgroundColor = bg;
-            this.nameElement.style.color = fg;
-        } else if (this.nameElement) {
-            this.nameElement.style.backgroundColor = "";
-            this.nameElement.style.color = "";
+            nameElement.style.backgroundColor = bg;
+            nameElement.style.color = fg;
+        } else if (nameElement) {
+            nameElement.style.backgroundColor = "";
+            nameElement.style.color = "";
         }
 
-        const span = this.nameElement?.querySelector("span");
+        const span = nameElement?.querySelector("span");
         if (this.name && span) {
             span.textContent = this.name[0].toUpperCase();
         }
@@ -127,10 +127,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     #handleError() {
         this.error = true;
         this.showFallback = true;
-
-        if (!this.showFallback) {
-            this.#setFallback();
-        }
+        this.#setFallback();
     }
 
     #setFallback() {
