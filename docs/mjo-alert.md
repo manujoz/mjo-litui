@@ -315,11 +315,11 @@ Each alert type uses specific color tokens from the design system:
 | `--mjo-radius-small`  | Global radius system  | Small border radius option                    |
 | `--mjo-radius-medium` | Global radius system  | Medium border radius (default)                |
 | `--mjo-radius-large`  | Global radius system  | Large border radius option                    |
-| `--mjo-space-x-small` | Global spacing system | Gap between icon and text, small size spacing |
+| `--mjo-space-xsmall`  | Global spacing system | Gap between icon and text, small size spacing |
 
 ### Size-specific Adjustments
 
--   `small` size: Uses `--mjo-space-x-small` for padding and 0.8em font-size
+-   `small` size: Uses `--mjo-space-xsmall` for padding and 0.8em font-size
 -   `medium` size: Uses default `--mjo-alert-space` and 1em font-size
 -   `large` size: Uses default `--mjo-alert-space` and 1.2em font-size
 

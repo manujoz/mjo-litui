@@ -58,11 +58,11 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     }
 
     protected updated(): void {
-        if (this.name && this.nameColoured) {
+        if (this.name && this.nameColoured && this.nameElement) {
             const [bg, fg] = this.#colorByInitial();
             this.nameElement.style.backgroundColor = bg;
             this.nameElement.style.color = fg;
-        } else {
+        } else if (this.nameElement) {
             this.nameElement.style.backgroundColor = "";
             this.nameElement.style.color = "";
         }

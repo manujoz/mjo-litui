@@ -16,7 +16,7 @@ export class MjoAlert extends LitElement {
     @property({ type: Boolean }) closable: boolean = false;
     @property({ type: Boolean }) hideIcon: boolean = false;
 
-    @state() icon: string = "";
+    @state() private icon: string = "";
 
     render() {
         return html`
@@ -102,7 +102,7 @@ export class MjoAlert extends LitElement {
             }
             .container[data-size="small"] {
                 font-size: 0.8em;
-                --mjo-alert-space: var(--mjo-space-x-small);
+                --mjo-alert-space: var(--mjo-space-xsmall);
             }
             .container[data-size="large"] {
                 font-size: 1.2em;
@@ -121,7 +121,7 @@ export class MjoAlert extends LitElement {
                 position: relative;
                 display: flex;
                 flex-flow: row nowrap;
-                gap: var(--mjo-space-x-small);
+                gap: var(--mjo-space-xsmall);
             }
             .icon {
                 position: relative;
@@ -147,7 +147,7 @@ export class MjoAlert extends LitElement {
                 padding: var(--mjo-alert-space) 0 0 0;
             }
             .detail[data-icon] {
-                padding-left: calc(1em + var(--mjo-space-x-small));
+                padding-left: calc(1em + var(--mjo-space-xsmall));
             }
         `,
     ];
