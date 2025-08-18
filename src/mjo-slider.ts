@@ -35,14 +35,14 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     @query("input#mjoSliderInput") inputElement!: HTMLInputElement;
 
     type = "slider";
-    stepsLeftsPx = [0];
-    setpsValues = [0];
-    rangebarRef = createRef<HTMLDivElement>();
-    progressbarRef = createRef<HTMLDivElement>();
-    sliderOneRef = createRef<SliderHandle>();
-    sliderTwoRef = createRef<SliderHandle>();
+    private stepsLeftsPx = [0];
+    private stepsValues = [0];
+    private rangebarRef = createRef<HTMLDivElement>();
+    private progressbarRef = createRef<HTMLDivElement>();
+    private sliderOneRef = createRef<SliderHandle>();
+    private sliderTwoRef = createRef<SliderHandle>();
 
-    listeners = {
+    private listeners = {
         resize: () => {
             this.#setSteps();
         },
@@ -83,7 +83,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     ? html`<slider-handle
                           ${ref(this.sliderTwoRef)}
                           @move=${this.#handleMove}
-                          ?disabled=${this.tooltip}
+                          ?disabled=${this.disabled}
                           ?tooltip=${this.tooltip}
                           value=${this.#getSliderValue("two")}
                           valuePrefix=${this.valuePrefix}
@@ -100,16 +100,6 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     connectedCallback() {
         super.connectedCallback();
 
-        if (this.value === "undefined") {
-            if (!this.isRange) {
-                this.value = String(this.min);
-            } else {
-                this.value = `${this.min}-${this.max}`;
-            }
-        } else {
-            this.value = this.#checkValue(this.value);
-        }
-
         window.addEventListener("resize", this.listeners.resize);
 
         this.updateFormData({ name: this.name || "", value: this.value });
@@ -123,6 +113,16 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
     protected firstUpdated(_changedProperties: Map<PropertyKey, unknown>) {
         super.firstUpdated(_changedProperties);
+
+        if (this.value === "undefined") {
+            if (!this.isRange) {
+                this.value = String(this.min);
+            } else {
+                this.value = `${this.min}-${this.max}`;
+            }
+        } else {
+            this.value = this.#checkValue(this.value);
+        }
 
         this.#setSteps();
 
@@ -210,13 +210,13 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
         let value = this.min;
         this.stepsLeftsPx = [0];
-        this.setpsValues = [value];
+        this.stepsValues = [value];
         for (let i = 1; i < steps; i++) {
             value += this.step;
             const leftPx = pixels * i;
 
             this.stepsLeftsPx.push(Number(leftPx.toFixed(decimals)));
-            this.setpsValues.push(Number(value.toFixed(decimals)));
+            this.stepsValues.push(Number(value.toFixed(decimals)));
         }
     }
 
@@ -231,7 +231,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
         const closestPosition = this.stepsLeftsPx.reduce((prev, curr) => (Math.abs(curr - left) < Math.abs(prev - left) ? curr : prev));
         const index = this.stepsLeftsPx.indexOf(closestPosition);
-        let value = String(this.setpsValues[index]);
+        let value = String(this.stepsValues[index]);
 
         if (this.isRange) {
             if (slider === this.sliderOneRef.value) {
@@ -267,7 +267,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         const rangebar = this.rangebarRef.value;
         if (!rangebar) return;
 
-        const index = this.setpsValues.indexOf(Number(value));
+        const index = this.stepsValues.indexOf(Number(value));
         const left = this.stepsLeftsPx[index];
 
         slider.setLeftPosition(left);
@@ -279,11 +279,11 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         const progressbar = this.progressbarRef.value;
         if (!progressbar) return;
 
-        const indexOne = this.setpsValues.indexOf(Number(this.#getSliderValue("one")));
+        const indexOne = this.stepsValues.indexOf(Number(this.#getSliderValue("one")));
         const leftOne = this.stepsLeftsPx[indexOne];
 
         if (this.isRange) {
-            const indexTwo = this.setpsValues.indexOf(Number(this.#getSliderValue("two")));
+            const indexTwo = this.stepsValues.indexOf(Number(this.#getSliderValue("two")));
             const leftTwo = this.stepsLeftsPx[indexTwo];
 
             progressbar.style.left = `${leftOne}px`;

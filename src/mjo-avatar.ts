@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult, css, html } from "lit";
+import { LitElement, PropertyValues, TemplateResult, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
@@ -20,9 +20,10 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) src?: string;
 
-    @state() private initial = "";
     @state() private fallbackIcon?: TemplateResult<1>;
     @state() private error = false;
+
+    private initial = "";
 
     @query(".image.name") private nameElement!: HTMLImageElement;
 
@@ -57,7 +58,11 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
         }
     }
 
-    protected updated(): void {
+    protected updated(_changedProperties: PropertyValues): void {
+        if (_changedProperties.has("name")) {
+            this.initial = this.name ? this.name[0].toUpperCase() : "";
+        }
+
         if (this.name && this.nameColoured && this.nameElement) {
             const [bg, fg] = this.#colorByInitial();
             this.nameElement.style.backgroundColor = bg;
@@ -67,8 +72,9 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             this.nameElement.style.color = "";
         }
 
-        if (this.name) {
-            this.initial = this.name[0].toUpperCase();
+        const span = this.nameElement?.querySelector("span");
+        if (this.name && span) {
+            span.textContent = this.name[0].toUpperCase();
         }
     }
 
