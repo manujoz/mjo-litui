@@ -4,7 +4,7 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
 
-import "./mjo-icon";
+import "./mjo-icon.js";
 
 @customElement("mjo-alert")
 export class MjoAlert extends LitElement {

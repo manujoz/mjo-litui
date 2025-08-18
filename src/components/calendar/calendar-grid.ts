@@ -1,9 +1,11 @@
+import { CalendarDayClickEvent, CalendarDayHoverEvent } from "../../types/mjo-calendar.js";
+
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import "../../mjo-typography.js";
-import { CalendarDayClickEvent, CalendarDayHoverEvent } from "../../types/mjo-calendar.js";
 import { CalendarUtils } from "../../utils/calendar.js";
+
+import "../../mjo-typography.js";
 import "./calendar-day.js";
 
 /**

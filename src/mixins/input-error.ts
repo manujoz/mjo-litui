@@ -1,6 +1,7 @@
+import { type MixinConstructor } from "../types/mixins";
+
 import { LitElement } from "lit";
 import { property } from "lit/decorators.js";
-import { type MixinConstructor } from "../types/mixins";
 
 export declare class IInputErrorMixin {
     error: boolean;

@@ -5,11 +5,11 @@ import { CalendarDateSelectedEvent, CalendarRangeSelectedEvent } from "./types/m
 
 import { css, html, LitElement, PropertyValues, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
+import { PiCalendarDotsLight } from "mjo-icons/pi";
 
 import { createRef, ref } from "lit/directives/ref.js";
-import { PiCalendarDotsLight } from "mjo-icons/pi";
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
+import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-button.js";

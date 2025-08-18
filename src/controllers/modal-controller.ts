@@ -4,7 +4,7 @@ import { ModalShowParams } from "../types/mjo-modal";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
 
-import "../components/modal/modal-container";
+import "../components/modal/modal-container.js";
 
 export class ModalController implements ReactiveController {
     host: ReactiveControllerHost;

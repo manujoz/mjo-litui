@@ -1,10 +1,10 @@
-import { LitElement } from "lit";
-import { property } from "lit/decorators.js";
-
 import { type MjoButton } from "../mjo-button";
 import { type MjoForm } from "../mjo-form";
 import { type MjoFormElements } from "../types/litui";
 import { type MixinConstructor } from "../types/mixins";
+
+import { LitElement } from "lit";
+import { property } from "lit/decorators.js";
 
 import { searchClosestElement } from "../utils/shadow-dom.js";
 
