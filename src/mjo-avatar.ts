@@ -5,7 +5,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import { AiOutlineUser } from "mjo-icons/ai";
-
+// HOLA
 @customElement("mjo-avatar")
 export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) bordered = false;
@@ -47,8 +47,6 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
 
     connectedCallback(): void {
         super.connectedCallback();
-
-        console.log("Connected callback");
 
         if (!this.src && this.showFallback) {
             this.#setFallback();

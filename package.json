@@ -76,15 +76,15 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
-        "build:client": "vite build --config vite.config.client.js",
-        "build:public": "npm run build && cd dist && npm publish",
+        "build:publish": "npm run build && cd dist && npm publish",
         "preview": "vite preview",
         "test": "npm run build && web-test-runner",
         "test:watch": "npm run build && web-test-runner --watch",
         "test:coverage": "npm run build && web-test-runner --coverage",
         "postinstall": "npx playwright install",
-        "server:dev": "nodemon --exec tsx server/src/app.ts --watch server",
-        "server:dev:debug": "NODE_ENV=development nodemon --exec tsx server/src/app.ts --watch server --verbose"
+        "server:dev": " npm run server:build:client && nodemon --exec tsx server/src/app.ts --watch server",
+        "server:dev:debug": "NODE_ENV=development nodemon --exec tsx server/src/app.ts --watch server --verbose",
+        "server:build:client": "vite build --config vite.config.client.js"
     },
     "dependencies": {
         "@lit/context": "^1.1.3",

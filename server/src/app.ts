@@ -9,8 +9,6 @@ import { createMjoLituiWatcher } from "./file-watcher.js";
 import { HMRWebSocketManager } from "./websocket-manager.js";
 
 // Importar controladores directamente
-import { AvatarController } from "./controllers/avatar-controller.js";
-import { ChipController } from "./controllers/chip-controller.js";
 import { IndexController } from "./controllers/index-controller.js";
 import { ROUTES } from "./utils/routes.js";
 
@@ -31,8 +29,6 @@ const hmrManager = process.env.NODE_ENV !== "production" ? new HMRWebSocketManag
 
 // Inicializar controladores
 const indexController = new IndexController();
-const avatarController = new AvatarController();
-const chipController = new ChipController();
 
 // Flag para controlar reinicios
 let restartPending = false;
@@ -98,7 +94,7 @@ async function triggerBuild(changedFiles: string[] = []): Promise<void> {
     const { spawn } = await import("child_process");
 
     // Solo build del cliente (Vite) - el servidor no necesita rebuild constante
-    const clientBuildProcess = spawn("npm", ["run", "build:client"], {
+    const clientBuildProcess = spawn("npm", ["run", "server:build:client"], {
         stdio: "inherit",
         shell: true,
         cwd: join(__dirname, "../.."),

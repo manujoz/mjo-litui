@@ -1,24 +1,301 @@
+var _a, _b;
+import { _ as _$LH$1, n as noChange, P as PartType, r as render } from "./lit-core.js";
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+let resolveMethodName = null;
+const _$LH = {
+  boundAttributeSuffix: _$LH$1._boundAttributeSuffix,
+  marker: _$LH$1._marker,
+  markerMatch: _$LH$1._markerMatch,
+  HTML_RESULT: _$LH$1._HTML_RESULT,
+  getTemplateHtml: _$LH$1._getTemplateHtml,
+  overrideDirectiveResolve: (directiveClass, resolveOverrideFn) => class extends directiveClass {
+    _$resolve(_part, values) {
+      return resolveOverrideFn(this, values);
+    }
+  },
+  patchDirectiveResolve: (directiveClass, resolveOverrideFn) => {
+    if (directiveClass.prototype._$resolve !== resolveOverrideFn) {
+      resolveMethodName ?? (resolveMethodName = directiveClass.prototype._$resolve.name);
+      for (let proto = directiveClass.prototype; proto !== Object.prototype; proto = Object.getPrototypeOf(proto)) {
+        if (proto.hasOwnProperty(resolveMethodName)) {
+          proto[resolveMethodName] = resolveOverrideFn;
+          return;
+        }
+      }
+      throw new Error(`Internal error: It is possible that both dev mode and production mode Lit was mixed together during SSR. Please comment on the issue: https://github.com/lit/lit/issues/4527`);
+    }
+  },
+  setDirectiveClass(value, directiveClass) {
+    value["_$litDirective$"] = directiveClass;
+  },
+  getAttributePartCommittedValue: (part, value, index) => {
+    let committedValue = noChange;
+    part._commitValue = (value2) => committedValue = value2;
+    part._$setValue(value, part, index);
+    return committedValue;
+  },
+  connectedDisconnectable: (props) => ({
+    ...props,
+    _$isConnected: true
+  }),
+  resolveDirective: _$LH$1._resolveDirective,
+  AttributePart: _$LH$1._AttributePart,
+  PropertyPart: _$LH$1._PropertyPart,
+  BooleanAttributePart: _$LH$1._BooleanAttributePart,
+  EventPart: _$LH$1._EventPart,
+  ElementPart: _$LH$1._ElementPart,
+  TemplateInstance: _$LH$1._TemplateInstance,
+  isIterable: _$LH$1._isIterable,
+  ChildPart: _$LH$1._ChildPart
+};
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+((_a = window.ShadyDOM) == null ? void 0 : _a.inUse) && ((_b = window.ShadyDOM) == null ? void 0 : _b.noPatch) === true ? window.ShadyDOM.wrap : (node) => node;
+const isPrimitive = (value) => value === null || typeof value != "object" && typeof value != "function";
+const isTemplateResult = (value, type) => type === void 0 ? (
+  // This property needs to remain unminified.
+  (value == null ? void 0 : value["_$litType$"]) !== void 0
+) : (value == null ? void 0 : value["_$litType$"]) === type;
+const isCompiledTemplateResult = (value) => {
+  var _a2;
+  return ((_a2 = value == null ? void 0 : value["_$litType$"]) == null ? void 0 : _a2.h) != null;
+};
+const isSingleExpression = (part) => part.strings === void 0;
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const { TemplateInstance, isIterable, resolveDirective, ChildPart, ElementPart } = _$LH;
+const hydrate = (rootValue, container, options = {}) => {
+  if (container["_$litPart$"] !== void 0) {
+    throw new Error("container already contains a live render");
+  }
+  let rootPart = void 0;
+  let rootPartMarker = void 0;
+  let currentChildPart = void 0;
+  const stack = [];
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_COMMENT);
+  let marker;
+  while ((marker = walker.nextNode()) !== null) {
+    const markerText = marker.data;
+    if (markerText.startsWith("lit-part")) {
+      if (stack.length === 0 && rootPart !== void 0) {
+        throw new Error(`There must be only one root part per container. Found a part marker (${marker}) when we already have a root part marker (${rootPartMarker})`);
+      }
+      currentChildPart = openChildPart(rootValue, marker, stack, options);
+      if (rootPart === void 0) {
+        rootPart = currentChildPart;
+      }
+      rootPartMarker ?? (rootPartMarker = marker);
+    } else if (markerText.startsWith("lit-node")) {
+      createAttributeParts(marker, stack, options);
+    } else if (markerText.startsWith("/lit-part")) {
+      if (stack.length === 1 && currentChildPart !== rootPart) {
+        throw new Error("internal error");
+      }
+      currentChildPart = closeChildPart(marker, currentChildPart, stack);
+    }
+  }
+  if (rootPart === void 0) {
+    const elementMessage = container instanceof ShadowRoot ? `{container.host.localName}'s shadow root` : container instanceof DocumentFragment ? "DocumentFragment" : container.localName;
+    console.error(`There should be exactly one root part in a render container, but we didn't find any in ${elementMessage}.`);
+  }
+  container["_$litPart$"] = rootPart;
+};
+const openChildPart = (rootValue, marker, stack, options) => {
+  let value;
+  let part;
+  if (stack.length === 0) {
+    part = new ChildPart(marker, null, void 0, options);
+    value = rootValue;
+  } else {
+    const state = stack[stack.length - 1];
+    if (state.type === "template-instance") {
+      part = new ChildPart(marker, null, state.instance, options);
+      state.instance._$parts.push(part);
+      value = state.result.values[state.instancePartIndex++];
+      state.templatePartIndex++;
+    } else if (state.type === "iterable") {
+      part = new ChildPart(marker, null, state.part, options);
+      const result = state.iterator.next();
+      if (result.done) {
+        value = void 0;
+        state.done = true;
+        throw new Error("Unhandled shorter than expected iterable");
+      } else {
+        value = result.value;
+      }
+      state.part._$committedValue.push(part);
+    } else {
+      part = new ChildPart(marker, null, state.part, options);
+    }
+  }
+  value = resolveDirective(part, value);
+  if (value === noChange) {
+    stack.push({ part, type: "leaf" });
+  } else if (isPrimitive(value)) {
+    stack.push({ part, type: "leaf" });
+    part._$committedValue = value;
+  } else if (isTemplateResult(value)) {
+    if (isCompiledTemplateResult(value)) {
+      throw new Error("compiled templates are not supported");
+    }
+    const markerWithDigest = `lit-part ${digestForTemplateResult(value)}`;
+    if (marker.data === markerWithDigest) {
+      const template = ChildPart.prototype._$getTemplate(value);
+      const instance = new TemplateInstance(template, part);
+      stack.push({
+        type: "template-instance",
+        instance,
+        part,
+        templatePartIndex: 0,
+        instancePartIndex: 0,
+        result: value
+      });
+      part._$committedValue = instance;
+    } else {
+      throw new Error("Hydration value mismatch: Unexpected TemplateResult rendered to part");
+    }
+  } else if (isIterable(value)) {
+    stack.push({
+      part,
+      type: "iterable",
+      value,
+      iterator: value[Symbol.iterator](),
+      done: false
+    });
+    part._$committedValue = [];
+  } else {
+    stack.push({ part, type: "leaf" });
+    part._$committedValue = value == null ? "" : value;
+  }
+  return part;
+};
+const closeChildPart = (marker, part, stack) => {
+  if (part === void 0) {
+    throw new Error("unbalanced part marker");
+  }
+  part._$endNode = marker;
+  const currentState = stack.pop();
+  if (currentState.type === "iterable") {
+    if (!currentState.iterator.next().done) {
+      throw new Error("unexpected longer than expected iterable");
+    }
+  }
+  if (stack.length > 0) {
+    const state = stack[stack.length - 1];
+    return state.part;
+  } else {
+    return void 0;
+  }
+};
+const createAttributeParts = (comment, stack, options) => {
+  const match = /lit-node (\d+)/.exec(comment.data);
+  const nodeIndex = parseInt(match[1]);
+  const node = comment.nextElementSibling;
+  if (node === null) {
+    throw new Error("could not find node for attribute parts");
+  }
+  node.removeAttribute("defer-hydration");
+  const state = stack[stack.length - 1];
+  if (state.type === "template-instance") {
+    const instance = state.instance;
+    while (true) {
+      const templatePart = instance._$template.parts[state.templatePartIndex];
+      if (templatePart === void 0 || templatePart.type !== PartType.ATTRIBUTE && templatePart.type !== PartType.ELEMENT || templatePart.index !== nodeIndex) {
+        break;
+      }
+      if (templatePart.type === PartType.ATTRIBUTE) {
+        const instancePart = new templatePart.ctor(node, templatePart.name, templatePart.strings, state.instance, options);
+        const value = isSingleExpression(instancePart) ? state.result.values[state.instancePartIndex] : state.result.values;
+        const noCommit = !(instancePart.type === PartType.EVENT || instancePart.type === PartType.PROPERTY);
+        instancePart._$setValue(value, instancePart, state.instancePartIndex, noCommit);
+        state.instancePartIndex += templatePart.strings.length - 1;
+        instance._$parts.push(instancePart);
+      } else {
+        const instancePart = new ElementPart(node, state.instance, options);
+        resolveDirective(instancePart, state.result.values[state.instancePartIndex++]);
+        instance._$parts.push(instancePart);
+      }
+      state.templatePartIndex++;
+    }
+  } else {
+    throw new Error(`Hydration value mismatch: Primitive found where TemplateResult expected. This usually occurs due to conditional rendering that resulted in a different value or template being rendered between the server and client.`);
+  }
+};
+const digestSize = 2;
+const digestForTemplateResult = (templateResult) => {
+  const hashes = new Uint32Array(digestSize).fill(5381);
+  for (const s of templateResult.strings) {
+    for (let i = 0; i < s.length; i++) {
+      hashes[i % digestSize] = hashes[i % digestSize] * 33 ^ s.charCodeAt(i);
+    }
+  }
+  const str = String.fromCharCode(...new Uint8Array(hashes.buffer));
+  return btoa(str);
+};
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const w=globalThis,S=w.trustedTypes,k=S?S.createPolicy("lit-html",{createHTML:r=>r}):void 0,U="$lit$",A=`lit$${Math.random().toFixed(9).slice(2)}$`,D="?"+A,et=`<${D}>`,g=document,H=()=>g.createComment(""),P=r=>r===null||typeof r!="object"&&typeof r!="function",B=Array.isArray,G=r=>B(r)||typeof(r==null?void 0:r[Symbol.iterator])=="function",C=`[ 	
-\f\r]`,x=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,L=/-->/g,j=/>/g,f=RegExp(`>|${C}(?:([^\\s"'>=/]+)(${C}*=${C}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`,"g"),V=/'/g,W=/"/g,z=/^(?:script|style|textarea|title)$/i,y=Symbol.for("lit-noChange"),p=Symbol.for("lit-nothing"),F=new WeakMap,m=g.createTreeWalker(g,129);function Y(r,t){if(!B(r)||!r.hasOwnProperty("raw"))throw Error("invalid template strings array");return k!==void 0?k.createHTML(t):t}const Z=(r,t)=>{const e=r.length-1,n=[];let i,o=t===2?"<svg>":t===3?"<math>":"",s=x;for(let h=0;h<e;h++){const l=r[h];let a,d,c=-1,$=0;for(;$<l.length&&(s.lastIndex=$,d=s.exec(l),d!==null);)$=s.lastIndex,s===x?d[1]==="!--"?s=L:d[1]!==void 0?s=j:d[2]!==void 0?(z.test(d[2])&&(i=RegExp("</"+d[2],"g")),s=f):d[3]!==void 0&&(s=f):s===f?d[0]===">"?(s=i??x,c=-1):d[1]===void 0?c=-2:(c=s.lastIndex-d[2].length,a=d[1],s=d[3]===void 0?f:d[3]==='"'?W:V):s===W||s===V?s=f:s===L||s===j?s=x:(s=f,i=void 0);const _=s===f&&r[h+1].startsWith("/>")?" ":"";o+=s===x?l+et:c>=0?(n.push(a),l.slice(0,c)+U+l.slice(c)+A+_):l+A+(c===-2?h:_)}return[Y(r,o+(r[e]||"<?>")+(t===2?"</svg>":t===3?"</math>":"")),n]};class I{constructor({strings:t,_$litType$:e},n){let i;this.parts=[];let o=0,s=0;const h=t.length-1,l=this.parts,[a,d]=Z(t,e);if(this.el=I.createElement(a,n),m.currentNode=this.el.content,e===2||e===3){const c=this.el.content.firstChild;c.replaceWith(...c.childNodes)}for(;(i=m.nextNode())!==null&&l.length<h;){if(i.nodeType===1){if(i.hasAttributes())for(const c of i.getAttributeNames())if(c.endsWith(U)){const $=d[s++],_=i.getAttribute(c).split(A),R=/([.?@])?(.*)/.exec($);l.push({type:1,index:o,name:R[2],strings:_,ctor:R[1]==="."?K:R[1]==="?"?Q:R[1]==="@"?J:N}),i.removeAttribute(c)}else c.startsWith(A)&&(l.push({type:6,index:o}),i.removeAttribute(c));if(z.test(i.tagName)){const c=i.textContent.split(A),$=c.length-1;if($>0){i.textContent=S?S.emptyScript:"";for(let _=0;_<$;_++)i.append(c[_],H()),m.nextNode(),l.push({type:2,index:++o});i.append(c[$],H())}}}else if(i.nodeType===8)if(i.data===D)l.push({type:2,index:o});else{let c=-1;for(;(c=i.data.indexOf(A,c+1))!==-1;)l.push({type:7,index:o}),c+=A.length-1}o++}}static createElement(t,e){const n=g.createElement("template");return n.innerHTML=t,n}}function v(r,t,e=r,n){var s,h;if(t===y)return t;let i=n!==void 0?(s=e.o)==null?void 0:s[n]:e.l;const o=P(t)?void 0:t._$litDirective$;return(i==null?void 0:i.constructor)!==o&&((h=i==null?void 0:i._$AO)==null||h.call(i,!1),o===void 0?i=void 0:(i=new o(r),i._$AT(r,e,n)),n!==void 0?(e.o??(e.o=[]))[n]=i:e.l=i),i!==void 0&&(t=v(r,i._$AS(r,t.values),i,n)),t}class q{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:n}=this._$AD,i=((t==null?void 0:t.creationScope)??g).importNode(e,!0);m.currentNode=i;let o=m.nextNode(),s=0,h=0,l=n[0];for(;l!==void 0;){if(s===l.index){let a;l.type===2?a=new b(o,o.nextSibling,this,t):l.type===1?a=new l.ctor(o,l.name,l.strings,this,t):l.type===6&&(a=new X(o,this,t)),this._$AV.push(a),l=n[++h]}s!==(l==null?void 0:l.index)&&(o=m.nextNode(),s++)}return m.currentNode=g,i}p(t){let e=0;for(const n of this._$AV)n!==void 0&&(n.strings!==void 0?(n._$AI(t,n,e),e+=n.strings.length-2):n._$AI(t[e])),e++}}class b{get _$AU(){var t;return((t=this._$AM)==null?void 0:t._$AU)??this.v}constructor(t,e,n,i){this.type=2,this._$AH=p,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=n,this.options=i,this.v=(i==null?void 0:i.isConnected)??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return e!==void 0&&(t==null?void 0:t.nodeType)===11&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=v(this,t,e),P(t)?t===p||t==null||t===""?(this._$AH!==p&&this._$AR(),this._$AH=p):t!==this._$AH&&t!==y&&this._(t):t._$litType$!==void 0?this.$(t):t.nodeType!==void 0?this.T(t):G(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==p&&P(this._$AH)?this._$AA.nextSibling.data=t:this.T(g.createTextNode(t)),this._$AH=t}$(t){var o;const{values:e,_$litType$:n}=t,i=typeof n=="number"?this._$AC(t):(n.el===void 0&&(n.el=I.createElement(Y(n.h,n.h[0]),this.options)),n);if(((o=this._$AH)==null?void 0:o._$AD)===i)this._$AH.p(e);else{const s=new q(i,this),h=s.u(this.options);s.p(e),this.T(h),this._$AH=s}}_$AC(t){let e=F.get(t.strings);return e===void 0&&F.set(t.strings,e=new I(t)),e}k(t){B(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let n,i=0;for(const o of t)i===e.length?e.push(n=new b(this.O(H()),this.O(H()),this,this.options)):n=e[i],n._$AI(o),i++;i<e.length&&(this._$AR(n&&n._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){var n;for((n=this._$AP)==null?void 0:n.call(this,!1,!0,e);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i}}setConnected(t){var e;this._$AM===void 0&&(this.v=t,(e=this._$AP)==null||e.call(this,t))}}class N{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,n,i,o){this.type=1,this._$AH=p,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=o,n.length>2||n[0]!==""||n[1]!==""?(this._$AH=Array(n.length-1).fill(new String),this.strings=n):this._$AH=p}_$AI(t,e=this,n,i){const o=this.strings;let s=!1;if(o===void 0)t=v(this,t,e,0),s=!P(t)||t!==this._$AH&&t!==y,s&&(this._$AH=t);else{const h=t;let l,a;for(t=o[0],l=0;l<o.length-1;l++)a=v(this,h[n+l],e,l),a===y&&(a=this._$AH[l]),s||(s=!P(a)||a!==this._$AH[l]),a===p?t=p:t!==p&&(t+=(a??"")+o[l+1]),this._$AH[l]=a}s&&!i&&this.j(t)}j(t){t===p?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class K extends N{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===p?void 0:t}}class Q extends N{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==p)}}class J extends N{constructor(t,e,n,i,o){super(t,e,n,i,o),this.type=5}_$AI(t,e=this){if((t=v(this,t,e,0)??p)===y)return;const n=this._$AH,i=t===p&&n!==p||t.capture!==n.capture||t.once!==n.once||t.passive!==n.passive,o=t!==p&&(n===p||i);i&&this.element.removeEventListener(this.name,this,n),o&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){var e;typeof this._$AH=="function"?this._$AH.call(((e=this.options)==null?void 0:e.host)??this.element,t):this._$AH.handleEvent(t)}}class X{constructor(t,e,n){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=n}get _$AU(){return this._$AM._$AU}_$AI(t){v(this,t)}}const u={M:U,P:A,A:D,C:1,L:Z,R:q,D:G,V:v,I:b,H:N,N:Q,U:J,B:K,F:X},O=w.litHtmlPolyfillSupport;O==null||O(I,b),(w.litHtmlVersions??(w.litHtmlVersions=[])).push("3.2.0");const it=(r,t,e)=>{const n=(e==null?void 0:e.renderBefore)??t;let i=n._$litPart$;if(i===void 0){const o=(e==null?void 0:e.renderBefore)??null;n._$litPart$=i=new b(t.insertBefore(H(),o),o,void 0,e??{})}return i._$AI(r),i};/**
- * @license
- * Copyright 2019 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */let M=null;const nt={boundAttributeSuffix:u.M,marker:u.P,markerMatch:u.A,HTML_RESULT:u.C,getTemplateHtml:u.L,overrideDirectiveResolve:(r,t)=>class extends r{_$AS(e,n){return t(this,n)}},patchDirectiveResolve:(r,t)=>{if(r.prototype._$AS!==t){M??(M=r.prototype._$AS.name);for(let e=r.prototype;e!==Object.prototype;e=Object.getPrototypeOf(e))if(e.hasOwnProperty(M))return void(e[M]=t);throw Error("Internal error: It is possible that both dev mode and production mode Lit was mixed together during SSR. Please comment on the issue: https://github.com/lit/lit/issues/4527")}},setDirectiveClass(r,t){r._$litDirective$=t},getAttributePartCommittedValue:(r,t,e)=>{let n=y;return r.j=i=>n=i,r._$AI(t,r,e),n},connectedDisconnectable:r=>({...r,_$AU:!0}),resolveDirective:u.V,AttributePart:u.H,PropertyPart:u.B,BooleanAttributePart:u.N,EventPart:u.U,ElementPart:u.F,TemplateInstance:u.R,isIterable:u.D,ChildPart:u.I};/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */const T={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6};/**
- * @license
- * Copyright 2020 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */const rt=r=>r===null||typeof r!="object"&&typeof r!="function",st=(r,t)=>t===void 0?(r==null?void 0:r._$litType$)!==void 0:(r==null?void 0:r._$litType$)===t,ot=r=>{var t;return((t=r==null?void 0:r._$litType$)==null?void 0:t.h)!=null},lt=r=>r.strings===void 0;/**
- * @license
- * Copyright 2019 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */const{TemplateInstance:at,isIterable:ht,resolveDirective:tt,ChildPart:E,ElementPart:ct}=nt,dt=(r,t,e={})=>{if(t._$litPart$!==void 0)throw Error("container already contains a live render");let n,i,o;const s=[],h=document.createTreeWalker(t,NodeFilter.SHOW_COMMENT);let l;for(;(l=h.nextNode())!==null;){const a=l.data;if(a.startsWith("lit-part")){if(s.length===0&&n!==void 0)throw Error(`There must be only one root part per container. Found a part marker (${l}) when we already have a root part marker (${i})`);o=pt(r,l,s,e),n===void 0&&(n=o),i??(i=l)}else if(a.startsWith("lit-node"))$t(l,s,e);else if(a.startsWith("/lit-part")){if(s.length===1&&o!==n)throw Error("internal error");o=ut(l,o,s)}}if(n===void 0){const a=t instanceof ShadowRoot?"{container.host.localName}'s shadow root":t instanceof DocumentFragment?"DocumentFragment":t.localName;console.error(`There should be exactly one root part in a render container, but we didn't find any in ${a}.`)}t._$litPart$=n},pt=(r,t,e,n)=>{let i,o;if(e.length===0)o=new E(t,null,void 0,n),i=r;else{const s=e[e.length-1];if(s.type==="template-instance")o=new E(t,null,s.instance,n),s.instance._$AV.push(o),i=s.result.values[s.instancePartIndex++],s.templatePartIndex++;else if(s.type==="iterable"){o=new E(t,null,s.part,n);const h=s.iterator.next();if(h.done)throw i=void 0,s.done=!0,Error("Unhandled shorter than expected iterable");i=h.value,s.part._$AH.push(o)}else o=new E(t,null,s.part,n)}if(i=tt(o,i),i===y)e.push({part:o,type:"leaf"});else if(rt(i))e.push({part:o,type:"leaf"}),o._$AH=i;else if(st(i)){if(ot(i))throw Error("compiled templates are not supported");const s="lit-part "+At(i);if(t.data!==s)throw Error("Hydration value mismatch: Unexpected TemplateResult rendered to part");{const h=E.prototype._$AC(i),l=new at(h,o);e.push({type:"template-instance",instance:l,part:o,templatePartIndex:0,instancePartIndex:0,result:i}),o._$AH=l}}else ht(i)?(e.push({part:o,type:"iterable",value:i,iterator:i[Symbol.iterator](),done:!1}),o._$AH=[]):(e.push({part:o,type:"leaf"}),o._$AH=i??"");return o},ut=(r,t,e)=>{if(t===void 0)throw Error("unbalanced part marker");t._$AB=r;const n=e.pop();if(n.type==="iterable"&&!n.iterator.next().done)throw Error("unexpected longer than expected iterable");if(e.length>0)return e[e.length-1].part},$t=(r,t,e)=>{const n=/lit-node (\d+)/.exec(r.data),i=parseInt(n[1]),o=r.nextElementSibling;if(o===null)throw Error("could not find node for attribute parts");o.removeAttribute("defer-hydration");const s=t[t.length-1];if(s.type!=="template-instance")throw Error("Hydration value mismatch: Primitive found where TemplateResult expected. This usually occurs due to conditional rendering that resulted in a different value or template being rendered between the server and client.");{const h=s.instance;for(;;){const l=h._$AD.parts[s.templatePartIndex];if(l===void 0||l.type!==T.ATTRIBUTE&&l.type!==T.ELEMENT||l.index!==i)break;if(l.type===T.ATTRIBUTE){const a=new l.ctor(o,l.name,l.strings,s.instance,e),d=lt(a)?s.result.values[s.instancePartIndex]:s.result.values,c=!(a.type===T.EVENT||a.type===T.PROPERTY);a._$AI(d,a,s.instancePartIndex,c),s.instancePartIndex+=l.strings.length-1,h._$AV.push(a)}else{const a=new ct(o,s.instance,e);tt(a,s.result.values[s.instancePartIndex++]),h._$AV.push(a)}s.templatePartIndex++}}},At=r=>{const t=new Uint32Array(2).fill(5381);for(const n of r.strings)for(let i=0;i<n.length;i++)t[i%2]=33*t[i%2]^n.charCodeAt(i);const e=String.fromCharCode(...new Uint8Array(t.buffer));return btoa(e)};globalThis.litElementHydrateSupport=({LitElement:r})=>{const t=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(r),"observedAttributes").get;Object.defineProperty(r,"observedAttributes",{get(){return[...t.call(this),"defer-hydration"]}});const e=r.prototype.attributeChangedCallback;r.prototype.attributeChangedCallback=function(s,h,l){s==="defer-hydration"&&l===null&&n.call(this),e.call(this,s,h,l)};const n=r.prototype.connectedCallback;r.prototype.connectedCallback=function(){this.hasAttribute("defer-hydration")||n.call(this)};const i=r.prototype.createRenderRoot;r.prototype.createRenderRoot=function(){return this.shadowRoot?(this._$AG=!0,this.shadowRoot):i.call(this)};const o=Object.getPrototypeOf(r.prototype).update;r.prototype.update=function(s){const h=this.render();if(o.call(this,s),this._$AG){this._$AG=!1;for(let l=0;l<this.attributes.length;l++){const a=this.attributes[l];if(a.name.startsWith("hydrate-internals-")){const d=a.name.slice(18);this.removeAttribute(d),this.removeAttribute(a.name)}}dt(h,this.renderRoot,this.renderOptions)}else it(h,this.renderRoot,this.renderOptions)}};console.log("🔧 Lit SSR hydration support loaded");
+ */
+const HYDRATE_INTERNALS_ATTR_PREFIX = "hydrate-internals-";
+globalThis.litElementHydrateSupport = ({ LitElement }) => {
+  const observedAttributes = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(LitElement), "observedAttributes").get;
+  Object.defineProperty(LitElement, "observedAttributes", {
+    get() {
+      return [...observedAttributes.call(this), "defer-hydration"];
+    }
+  });
+  const attributeChangedCallback = LitElement.prototype.attributeChangedCallback;
+  LitElement.prototype.attributeChangedCallback = function(name, old, value) {
+    if (name === "defer-hydration" && value === null) {
+      connectedCallback.call(this);
+    }
+    attributeChangedCallback.call(this, name, old, value);
+  };
+  const connectedCallback = LitElement.prototype.connectedCallback;
+  LitElement.prototype.connectedCallback = function() {
+    if (!this.hasAttribute("defer-hydration")) {
+      connectedCallback.call(this);
+    }
+  };
+  const createRenderRoot = LitElement.prototype.createRenderRoot;
+  LitElement.prototype.createRenderRoot = function() {
+    if (this.shadowRoot) {
+      this._$needsHydration = true;
+      return this.shadowRoot;
+    } else {
+      return createRenderRoot.call(this);
+    }
+  };
+  const update = Object.getPrototypeOf(LitElement.prototype).update;
+  LitElement.prototype.update = function(changedProperties) {
+    const value = this.render();
+    update.call(this, changedProperties);
+    if (this._$needsHydration) {
+      this._$needsHydration = false;
+      for (let i = 0; i < this.attributes.length; i++) {
+        const attr = this.attributes[i];
+        if (attr.name.startsWith(HYDRATE_INTERNALS_ATTR_PREFIX)) {
+          const ariaAttr = attr.name.slice(HYDRATE_INTERNALS_ATTR_PREFIX.length);
+          this.removeAttribute(ariaAttr);
+          this.removeAttribute(attr.name);
+        }
+      }
+      hydrate(value, this.renderRoot, this.renderOptions);
+    } else {
+      render(value, this.renderRoot, this.renderOptions);
+    }
+  };
+};
+console.log("🔧 Lit SSR hydration support loaded");
 //# sourceMappingURL=lit-hydration.js.map

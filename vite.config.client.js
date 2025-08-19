@@ -1,3 +1,4 @@
+import fs from "fs";
 import { resolve } from "path";
 import { defineConfig } from "vite";
 
@@ -5,19 +6,20 @@ export default defineConfig({
     // Build específico para cliente SSR
     build: {
         outDir: "server/public/js",
-        emptyOutDir: false, // No limpiar toda la carpeta public
+        emptyOutDir: true, // Limpiar la carpeta de salida automáticamente
         lib: false, // No es una librería, es un bundle para navegador
         rollupOptions: {
-            input: {
-                // Entry point para hidratación
-                client: resolve(__dirname, "server/client/client.ts"),
-                // Entry point para soporte de hidratación de Lit
-                "lit-hydration": resolve(__dirname, "server/client/lit-hydration.ts"),
-            },
+            input: getInputs(),
             output: {
                 format: "es", // ES modules para navegadores modernos
                 entryFileNames: "[name].js",
-                chunkFileNames: "[name]-[hash].js",
+                chunkFileNames: (chunkInfo) => {
+                    // Nombrar específicamente el chunk que contiene las directivas de Lit
+                    if (chunkInfo.moduleIds.filter((id) => id.includes("lit")).length > 0) {
+                        return "lit-core.js";
+                    }
+                    return "[name].js";
+                },
             },
         },
         // Configuración de minificación para desarrollo
@@ -35,6 +37,19 @@ export default defineConfig({
 
     // Optimizaciones de dependencias
     optimizeDeps: {
-        include: ["lit", "lit/decorators.js", "lit/directives/class-map.js", "lit/directives/style-map.js", "@lit/context", "@lit-labs/ssr-client"],
+        include: ["lit", "lit/decorators.js", "@lit/context", "@lit-labs/ssr-client"],
     },
 });
+
+function getInputs() {
+    const clientDirPath = resolve(__dirname, "server/client");
+
+    const clientDirFiles = fs.readdirSync(clientDirPath).reduce((acc, file) => {
+        if (file.endsWith(".ts")) {
+            acc[file.replace(".ts", "")] = resolve(clientDirPath, file);
+        }
+        return acc;
+    }, {});
+
+    return clientDirFiles;
+}
