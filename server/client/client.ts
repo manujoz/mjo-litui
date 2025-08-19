@@ -5,6 +5,10 @@
 
 console.log("🎨 mjo-litui client components loaded for hydration");
 
+import "../../src/mjo-avatar.js";
+import "../../src/mjo-chip.js";
+import "../../src/mjo-theme.js";
+
 // Función para inicializar tema después de hidratación
 function initializeTheme(): void {
     const savedTheme = localStorage.getItem("mjo-theme") || "light";

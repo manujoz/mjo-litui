@@ -260,7 +260,7 @@ export class AvatarController {
 
             <div class="nav-links">
                 <a href="/">← Volver al inicio</a>
-                <a href="/component/chip">Ver mjo-chip →</a>
+                <a href="/component/mjo-chip">Ver mjo-chip →</a>
             </div>
         `;
 

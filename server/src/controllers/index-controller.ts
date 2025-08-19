@@ -69,7 +69,7 @@ export class IndexController {
                                                 )}
                                             </div>
                                             <a
-                                                href="${component.demoPath}"
+                                                href="${component.path}"
                                                 style="display: inline-flex; align-items: center; gap: 6px; color: #3b82f6; text-decoration: none; font-weight: 500; font-size: 0.9rem;"
                                             >
                                                 Ver demos completos →

@@ -12,7 +12,6 @@ export interface ComponentMetadata {
     description: string;
     category: string;
     path: string;
-    demoPath: string;
     hasVariants: boolean;
     tags: string[];
     isSystemComponent?: boolean;
@@ -77,8 +76,7 @@ function autoGenerateComponentMetadata(): Record<string, ComponentMetadata> {
                 displayName: cleanName.replace(/^\w/, (c) => c.toUpperCase()),
                 description: `Componente ${componentName}`,
                 category: category,
-                path: isSystem ? "" : `/component/${cleanName}`,
-                demoPath: isSystem ? "" : `/component/${cleanName}`,
+                path: isSystem ? "" : `/component/${componentName}`,
                 hasVariants: !isSystem,
                 tags: [cleanName],
                 isSystemComponent: isSystem,

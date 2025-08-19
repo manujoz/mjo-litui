@@ -48,6 +48,8 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     connectedCallback(): void {
         super.connectedCallback();
 
+        console.log("Connected callback");
+
         if (!this.src && this.showFallback) {
             this.#setFallback();
         }

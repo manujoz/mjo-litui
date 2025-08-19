@@ -12,6 +12,7 @@ import { HMRWebSocketManager } from "./websocket-manager.js";
 import { AvatarController } from "./controllers/avatar-controller.js";
 import { ChipController } from "./controllers/chip-controller.js";
 import { IndexController } from "./controllers/index-controller.js";
+import { ROUTES } from "./utils/routes.js";
 
 // Configurar __dirname para ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -127,50 +128,16 @@ function scheduleRestart(): void {
     }, 300);
 }
 
-// RUTAS PRINCIPALES - INTEGRACIÓN COMPLETA DE ITERACIÓN 3
-
-// Ruta principal - Página de índice con navegación completa
-app.get("/", async (_req, res, next) => {
-    try {
-        const html = await indexController.renderIndexPage();
-        res.send(html);
-    } catch (error) {
-        console.error("❌ Error en renderizado de página principal:", error);
-        next(error);
-    }
-});
-
-// Ruta de estado del sistema (JSON)
-app.get("/status", (_req, res) => {
-    try {
-        const status = indexController.getSystemStatus();
-        res.json(status);
-    } catch (error) {
-        console.error("❌ Error obteniendo estado del sistema:", error);
-        res.status(500).json({ error: "Error interno del servidor" });
-    }
-});
-
-// Rutas para mjo-avatar - Demo completo con todas las variantes
-app.get("/component/avatar", async (_req, res, next) => {
-    try {
-        const html = await avatarController.renderAvatarPage();
-        res.send(html);
-    } catch (error) {
-        console.error("❌ Error en renderizado de mjo-avatar:", error);
-        next(error);
-    }
-});
-
-// Rutas para mjo-chip - Demo completo con todas las variantes
-app.get("/component/chip", async (_req, res, next) => {
-    try {
-        const html = await chipController.renderChipPage();
-        res.send(html);
-    } catch (error) {
-        console.error("❌ Error en renderizado de mjo-chip:", error);
-        next(error);
-    }
+ROUTES.forEach((route) => {
+    app.get(route.path, async (_req, res, next) => {
+        try {
+            const html = await route.controller();
+            res.send(html);
+        } catch (error) {
+            console.error(`❌ Error en renderizado de ${route.path}:`, error);
+            next(error);
+        }
+    });
 });
 
 // Función para manejo graceful de shutdown

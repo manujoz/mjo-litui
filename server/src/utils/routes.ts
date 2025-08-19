@@ -12,6 +12,10 @@ export const ROUTES = [
         controller: indexController.renderIndexPage,
     },
     {
+        path: "/status",
+        controller: indexController.getSystemStatus,
+    },
+    {
         path: "/component/mjo-avatar",
         controller: avatarController.renderAvatarPage,
     },
