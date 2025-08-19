@@ -1,6 +1,6 @@
 /**
- * Entry point del cliente para hidratación SSR
- * Importa todos los componentes necesarios para la hidratación
+ * Client entry point for SSR hydration
+ * Imports all components needed for hydration
  */
 
 console.log("🎨 mjo-litui client components loaded for hydration");
@@ -9,7 +9,7 @@ import "../../src/mjo-avatar.js";
 import "../../src/mjo-chip.js";
 import "../../src/mjo-theme.js";
 
-// Función para inicializar tema después de hidratación
+// Function to initialize theme after hydration
 function initializeTheme(): void {
     const savedTheme = localStorage.getItem("mjo-theme") || "light";
     const themeComponent = document.querySelector("mjo-theme");
@@ -25,7 +25,7 @@ function initializeTheme(): void {
     }
 }
 
-// Función global para toggle de tema (llamada desde HTML)
+// Global function to toggle theme (called from HTML)
 (window as any).toggleTheme = function (): void {
     const themeComponent = document.querySelector("mjo-theme");
     if (themeComponent) {
@@ -45,13 +45,13 @@ function initializeTheme(): void {
     }
 };
 
-// Inicializar tema cuando el DOM esté listo
+// Initialize theme when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
     console.log("🚀 DOM ready, initializing theme...");
     initializeTheme();
 });
 
-// También inicializar después de un breve delay para asegurar hidratación
+// Also initialize after a short delay to ensure hydration
 setTimeout(() => {
     initializeTheme();
 }, 100);

@@ -2,7 +2,7 @@ import chokidar from "chokidar";
 import { join, relative } from "path";
 import { fileURLToPath } from "url";
 
-// Configurar __dirname para ES modules
+// Configure __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = join(__filename, "..", "..", "..");
 
@@ -26,11 +26,11 @@ export class FileWatcher {
     }
 
     /**
-     * Inicia el file watcher con la configuración especificada
+     * Starts the file watcher with the specified configuration
      */
     start(onChangeCallback: (files: string[]) => void): void {
         if (this.isWatching) {
-            this.log("⚠️  File watcher ya está activo");
+            this.log("⚠️  File watcher is already active");
             return;
         }
 
@@ -79,11 +79,11 @@ export class FileWatcher {
     }
 
     /**
-     * Detiene el file watcher
+     * Stops the file watcher
      */
     async stop(): Promise<void> {
         if (!this.watcher || !this.isWatching) {
-            this.log("⚠️  File watcher no está activo");
+            this.log("⚠️  File watcher is not active");
             return;
         }
 
@@ -97,14 +97,14 @@ export class FileWatcher {
             this.watcher = null;
             this.isWatching = false;
             this.pendingChanges.clear();
-            this.log("✅ File watcher detenido correctamente");
+            this.log("✅ File watcher stopped successfully");
         } catch (error) {
             this.handleError(error);
         }
     }
 
     /**
-     * Maneja cambios en archivos
+     * Handles file changes
      */
     private handleFileChange(path: string): void {
         this.pendingChanges.add(path);
@@ -112,15 +112,15 @@ export class FileWatcher {
     }
 
     /**
-     * Maneja cambios en directorios
+     * Handles directory changes
      */
     private handleDirectoryChange(path: string, eventType: "created" | "deleted"): void {
         const relativePath = relative(__dirname, path);
-        this.log(`📁 Directorio ${eventType}: ${relativePath}`);
+        this.log(`📁 Directory ${eventType}: ${relativePath}`);
     }
 
     /**
-     * Implementa debouncing para evitar recargas excesivas
+     * Implements debouncing to avoid excessive reloads
      */
     private debounceChange(): void {
         if (this.changeTimeout) {
@@ -138,24 +138,24 @@ export class FileWatcher {
     }
 
     /**
-     * Maneja errores del watcher
+     * Handles watcher errors
      */
     private handleError(error: any): void {
-        console.error("❌ Error en file watcher:", error);
+        console.error("❌ Error in file watcher:", error);
     }
 
     /**
-     * Logger con timestamp
+     * Logger with timestamp
      */
     private log(message: string): void {
         if (this.config.verbose !== false) {
-            const timestamp = new Date().toLocaleTimeString("es-ES");
+            const timestamp = new Date().toLocaleTimeString("en-US");
             console.log(`[${timestamp}] ${message}`);
         }
     }
 
     /**
-     * Verifica si el watcher está activo
+     * Checks if the watcher is active
      */
     get isActive(): boolean {
         return this.isWatching;
@@ -163,7 +163,7 @@ export class FileWatcher {
 }
 
 /**
- * Factory para crear un watcher específico para el proyecto mjo-litui
+ * Factory to create a watcher specific for the mjo-litui project
  */
 export function createMjoLituiWatcher(options?: { debounceDelay?: number; verbose?: boolean }): FileWatcher {
     const config: WatcherConfig = {

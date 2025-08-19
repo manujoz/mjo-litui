@@ -16,7 +16,7 @@ export class TemplateHelper {
     private static baseTemplateCache: string | null = null;
 
     /**
-     * Lee y cachea la plantilla base
+     * Reads and caches the base template
      */
     private static getBaseTemplate(): string {
         if (!this.baseTemplateCache) {
@@ -27,30 +27,30 @@ export class TemplateHelper {
     }
 
     /**
-     * Invalida el cache de la plantilla (útil durante desarrollo)
+     * Invalidates the template cache (useful during development)
      */
     public static invalidateCache(): void {
         this.baseTemplateCache = null;
     }
 
     /**
-     * Renderiza la plantilla base con el contenido y opciones proporcionadas
+     * Renders the base template with the provided content and options
      */
     public static renderTemplate(content: string, options: TemplateOptions = {}): string {
         const { title = "mjo-litui SSR", enableHMR = false, additionalScripts = [], additionalStyles = [] } = options;
 
         let template = this.getBaseTemplate();
 
-        // Reemplazar título
+        // Replace title
         template = template.replace("{{TITLE}}", title);
 
-        // Reemplazar contenido principal
+        // Replace main content
         template = template.replace("{{CONTENT}}", content);
 
-        // Agregar scripts adicionales (antes del cierre del body)
+        // Add additional scripts (before closing body)
         const scripts = [...additionalScripts];
 
-        // Agregar HMR script si está habilitado Y en desarrollo
+        // Add HMR script if enabled AND in development
         if (enableHMR && this.isDevelopment()) {
             scripts.unshift("/public/js/hmr-client.js");
         }
@@ -58,7 +58,7 @@ export class TemplateHelper {
         if (scripts.length > 0) {
             const scriptTags = scripts
                 .map((src) => {
-                    // Detectar si el script necesita ser cargado como módulo
+                    // Detect if the script should be loaded as a module
                     const needsModule = src.includes("client.js") || src.includes("lit-hydration.js");
                     const moduleAttr = needsModule ? ' type="module"' : "";
                     return `        <script src="${src}"${moduleAttr}></script>`;
@@ -67,7 +67,7 @@ export class TemplateHelper {
             template = template.replace("</body>", `${scriptTags}\n    </body>`);
         }
 
-        // Agregar estilos adicionales (en el head)
+        // Add additional styles (in the head)
         if (additionalStyles.length > 0) {
             const styleTags = additionalStyles.map((href) => `        <link rel="stylesheet" href="${href}">`).join("\n");
             template = template.replace("</head>", `${styleTags}\n    </head>`);
@@ -77,14 +77,14 @@ export class TemplateHelper {
     }
 
     /**
-     * Verifica si estamos en modo desarrollo
+     * Checks if we are in development mode
      */
     private static isDevelopment(): boolean {
         return process.env.NODE_ENV === "development" || process.env.NODE_ENV === undefined;
     }
 
     /**
-     * Genera el script inline para HMR (alternativa al archivo externo)
+     * Generates the inline script for HMR (alternative to external file)
      */
     public static getInlineHMRScript(): string {
         if (!this.isDevelopment()) {
@@ -93,7 +93,7 @@ export class TemplateHelper {
 
         return `
         <script>
-            // HMR Client inline - versión simplificada
+            // HMR Client inline - simplified version
             (function() {
                 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
                 const wsUrl = \`\${protocol}//\${window.location.host}/hmr\`;
@@ -107,9 +107,9 @@ export class TemplateHelper {
                         ws = new WebSocket(wsUrl);
                         
                         ws.onopen = () => {
-                            console.log('🔥 HMR conectado');
+                            console.log('🔥 HMR connected');
                             reconnectAttempts = 0;
-                            showNotification('🔥 HMR conectado', 'success');
+                            showNotification('🔥 HMR connected', 'success');
                         };
                         
                         ws.onmessage = (event) => {
@@ -123,10 +123,10 @@ export class TemplateHelper {
                                     setTimeout(() => window.location.reload(), 300);
                                     break;
                                 case 'build-start':
-                                    showNotification('🔨 Compilando...', 'info');
+                                    showNotification('🔨 Building...', 'info');
                                     break;
                                 case 'build-error':
-                                    showNotification('❌ Error de compilación', 'error');
+                                    showNotification('❌ Build error', 'error');
                                     break;
                             }
                         };
@@ -138,7 +138,7 @@ export class TemplateHelper {
                             }
                         };
                     } catch (error) {
-                        console.error('Error WebSocket HMR:', error);
+                        console.error('WebSocket HMR error:', error);
                     }
                 }
                 

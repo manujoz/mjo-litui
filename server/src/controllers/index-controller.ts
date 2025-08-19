@@ -3,17 +3,17 @@ import { componentDiscovery } from "../services/component-discovery.js";
 import { ssrRenderer } from "../services/ssr-renderer.js";
 
 export class IndexController {
-    private hmrManager?: any; // Referencia opcional al HMR manager
+    private hmrManager?: any; // Optional reference to the HMR manager
 
     /**
-     * Establece la referencia al HMR manager
+     * Sets the reference to the HMR manager
      */
     setHMRManager(hmrManager: any): void {
         this.hmrManager = hmrManager;
     }
 
     /**
-     * Renderiza la página principal con índice de componentes
+     * Renders the main page with the component index
      */
     async renderIndexPage(): Promise<string> {
         const navigationIndex = componentDiscovery.generateNavigationIndex();
@@ -23,16 +23,16 @@ export class IndexController {
             <mjo-theme scope="global" theme="light"></mjo-theme>
             <div class="page-header">
                 <h1>mjo-litui SSR Server <span class="status-badge">Auto-Reload ✓</span></h1>
-                <p>Servidor de renderizado del lado del servidor para componentes Lit</p>
+                <p>Server-side rendering server for Lit components</p>
                 <p style="color: #64748b; font-size: 0.9rem; margin-top: 16px;">
-                    ${stats.totalComponents} componentes disponibles • ${stats.componentsWithVariants} con variantes • Última actualización:
+                    ${stats.totalComponents} components available • ${stats.componentsWithVariants} with variants • Last update:
                     ${new Date().toLocaleTimeString("es-ES")}
                 </p>
             </div>
 
             <div class="demo-section">
-                <h2>📋 Componentes Disponibles</h2>
-                <p>Explora los componentes mjo-litui renderizados del lado del servidor con todas sus variantes y casos de uso.</p>
+                <h2>📋 Available Components</h2>
+                <p>Explore mjo-litui components rendered server-side with all their variants and use cases.</p>
 
                 ${navigationIndex.categories.map(
                     (category) => html`
@@ -53,7 +53,7 @@ export class IndexController {
                                                 ${component.hasVariants
                                                     ? html`<span
                                                           style="background: #dbeafe; color: #3b82f6; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;"
-                                                          >Variantes</span
+                                                          >Variants</span
                                                       >`
                                                     : ""}
                                             </div>
@@ -72,7 +72,7 @@ export class IndexController {
                                                 href="${component.path}"
                                                 style="display: inline-flex; align-items: center; gap: 6px; color: #3b82f6; text-decoration: none; font-weight: 500; font-size: 0.9rem;"
                                             >
-                                                Ver demos completos →
+                                                View full demos →
                                             </a>
                                         </div>
                                     `,
@@ -84,10 +84,10 @@ export class IndexController {
             </div>
 
             <div class="demo-section">
-                <h2>🎯 Demos Rápidos</h2>
-                <p>Vista previa de los componentes principales con SSR.</p>
+                <h2>🎯 Quick Demos</h2>
+                <p>Preview of main components with SSR.</p>
 
-                <h3>🧑‍💼 mjo-avatar - Vista Previa</h3>
+                <h3>🧑‍💼 mjo-avatar - Preview</h3>
                 <div class="component-showcase">
                     <mjo-avatar size="small" name="S"></mjo-avatar>
                     <mjo-avatar size="medium" name="M"></mjo-avatar>
@@ -95,7 +95,7 @@ export class IndexController {
                     <mjo-avatar name="AB" bordered nameColoured></mjo-avatar>
                 </div>
 
-                <h3>🏷️ mjo-chip - Vista Previa</h3>
+                <h3>🏷️ mjo-chip - Preview</h3>
                 <div class="component-showcase">
                     <mjo-chip label="Default"></mjo-chip>
                     <mjo-chip label="Primary" color="primary"></mjo-chip>
@@ -105,65 +105,65 @@ export class IndexController {
             </div>
 
             <div class="demo-section">
-                <h2>🔧 Estado del Sistema</h2>
+                <h2>🔧 System Status</h2>
                 <div class="system-status">
                     <div class="status-item">
                         <span>🔍</span>
                         <div>
                             <strong>File Watcher:</strong><br />
-                            <span style="color: #10b981;">Activo y monitoreando cambios</span>
+                            <span style="color: #10b981;">Active and monitoring changes</span>
                         </div>
                     </div>
                     <div class="status-item">
                         <span>♻️</span>
                         <div>
                             <strong>Cache Manager:</strong><br />
-                            <span style="color: #10b981;">Operacional</span>
+                            <span style="color: #10b981;">Operational</span>
                         </div>
                     </div>
                     <div class="status-item">
                         <span>🔄</span>
                         <div>
                             <strong>Auto-Reload:</strong><br />
-                            <span style="color: #10b981;">Habilitado con debouncing</span>
+                            <span style="color: #10b981;">Enabled with debouncing</span>
                         </div>
                     </div>
                     <div class="status-item">
                         <span>🚀</span>
                         <div>
                             <strong>SSR:</strong><br />
-                            <span style="color: #10b981;">Renderizado exitoso</span>
+                            <span style="color: #10b981;">Successful rendering</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="demo-section">
-                <h2>🔗 Navegación</h2>
+                <h2>🔗 Navigation</h2>
                 <div class="nav-links">
-                    <a href="/component/avatar"> 🧑‍💼 Explorar mjo-avatar </a>
-                    <a href="/component/chip"> 🏷️ Explorar mjo-chip </a>
-                    <a href="/status"> 📊 Estado del Sistema </a>
+                    <a href="/component/avatar"> 🧑‍💼 Explore mjo-avatar </a>
+                    <a href="/component/chip"> 🏷️ Explore mjo-chip </a>
+                    <a href="/status"> 📊 System Status </a>
                 </div>
             </div>
 
             <div class="demo-section" style="text-align: center; border-top: 1px solid #e2e8f0; padding-top: 30px;">
-                <h2>📚 Información del Proyecto</h2>
+                <h2>📚 Project Information</h2>
                 <p style="color: #64748b; margin-bottom: 20px;">
-                    Este servidor SSR implementa renderizado del lado del servidor para componentes mjo-litui usando @lit-labs/ssr. Incluye file watching
-                    avanzado, auto-reload inteligente y cache management para una experiencia de desarrollo óptima.
+                    This SSR server implements server-side rendering for mjo-litui components using @lit-labs/ssr. It includes advanced file watching, smart
+                    auto-reload and cache management for an optimal development experience.
                 </p>
                 <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
-                    <div style="color: #64748b; font-size: 0.875rem;"><strong>Tecnologías:</strong> Lit 3, Express, TypeScript, Chokidar</div>
-                    <div style="color: #64748b; font-size: 0.875rem;"><strong>Puerto:</strong> 3000</div>
-                    <div style="color: #64748b; font-size: 0.875rem;"><strong>Modo:</strong> Desarrollo con Hot Reload</div>
+                    <div style="color: #64748b; font-size: 0.875rem;"><strong>Technologies:</strong> Lit 3, Express, TypeScript, Chokidar</div>
+                    <div style="color: #64748b; font-size: 0.875rem;"><strong>Port:</strong> 3000</div>
+                    <div style="color: #64748b; font-size: 0.875rem;"><strong>Mode:</strong> Development with Hot Reload</div>
                 </div>
             </div>
         `;
 
         return ssrRenderer.renderPage(indexTemplate, {
-            title: "mjo-litui SSR Server - Componentes Web con Server-Side Rendering",
-            description: "Servidor de desarrollo SSR para componentes mjo-litui con auto-reload, file watching y renderizado del lado del servidor",
+            title: "mjo-litui SSR Server - Web Components with Server-Side Rendering",
+            description: "SSR development server for mjo-litui components with auto-reload, file watching and server-side rendering",
             meta: [
                 { name: "keywords", content: "mjo-litui, SSR, server-side rendering, lit, web components" },
                 { name: "author", content: "mjo-litui Team" },
@@ -172,7 +172,7 @@ export class IndexController {
     }
 
     /**
-     * Renderiza la página de estado del sistema en JSON para debugging
+     * Renders the system status page in JSON for debugging
      */
     getSystemStatus() {
         const stats = componentDiscovery.getStats();

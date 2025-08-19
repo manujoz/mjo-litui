@@ -4,13 +4,13 @@ import { ssrRenderer } from "../services/ssr-renderer.js";
 
 export class AvatarController {
     /**
-     * Renderiza la página completa de demos para mjo-avatar
+     * Renders the complete demo page for mjo-avatar
      */
     async renderAvatarPage(): Promise<string> {
         const component = componentDiscovery.getComponent("mjo-avatar");
 
         if (!component) {
-            throw new Error("Componente mjo-avatar no encontrado");
+            throw new Error("mjo-avatar component not found");
         }
 
         const avatarTemplate = html`
@@ -75,8 +75,8 @@ export class AvatarController {
             </div>
 
             <div class="demo-section">
-                <h2>📏 Tamaños Disponibles</h2>
-                <p>El componente avatar soporta diferentes tamaños para adaptarse a distintos contextos de uso.</p>
+                <h2>📏 Available Sizes</h2>
+                <p>The avatar component supports different sizes to fit various use cases.</p>
                 <div class="component-showcase hover-effects">
                     <div class="avatar-item">
                         <mjo-avatar size="small" name="SM" class="hover-avatar"></mjo-avatar>
@@ -94,24 +94,24 @@ export class AvatarController {
             </div>
 
             <div class="demo-section">
-                <h2>🎨 Variantes de Estilo</h2>
-                <p>Personaliza la apariencia del avatar con bordes y colores.</p>
+                <h2>🎨 Style Variants</h2>
+                <p>Customize the avatar appearance with borders and colors.</p>
 
-                <h3>Con Bordes</h3>
+                <h3>With Borders</h3>
                 <div class="component-showcase">
                     <mjo-avatar name="AB" bordered class="clickable-avatar" onclick="avatarClick(this)"></mjo-avatar>
                     <mjo-avatar name="CD" bordered size="medium" class="clickable-avatar" onclick="avatarClick(this)"></mjo-avatar>
                     <mjo-avatar name="EF" bordered size="large" class="clickable-avatar" onclick="avatarClick(this)"></mjo-avatar>
                 </div>
 
-                <h3>Con Colores de Nombre</h3>
+                <h3>With Name Colors</h3>
                 <div class="component-showcase">
                     <mjo-avatar name="GH" nameColoured class="clickable-avatar" onclick="avatarClick(this)"></mjo-avatar>
                     <mjo-avatar name="IJ" nameColoured size="medium" class="clickable-avatar" onclick="avatarClick(this)"></mjo-avatar>
                     <mjo-avatar name="KL" nameColoured size="large" class="clickable-avatar" onclick="avatarClick(this)"></mjo-avatar>
                 </div>
 
-                <h3>Combinado (Borde + Color)</h3>
+                <h3>Combined (Border + Color)</h3>
                 <div class="component-showcase">
                     <mjo-avatar name="MN" bordered nameColoured class="clickable-avatar" onclick="avatarClick(this)"></mjo-avatar>
                     <mjo-avatar name="OP" bordered nameColoured size="medium" class="clickable-avatar" onclick="avatarClick(this)"></mjo-avatar>
@@ -121,7 +121,7 @@ export class AvatarController {
 
             <!-- Advanced Use Cases Section -->
             <div class="demo-section">
-                <h2>🚀 Casos de Uso Avanzados</h2>
+                <h2>🚀 Advanced Use Cases</h2>
 
                 <h3>🏢 Team Dashboard</h3>
                 <div class="dashboard-demo">
@@ -233,34 +233,34 @@ export class AvatarController {
             </div>
 
             <div class="demo-section">
-                <h2>🔧 Propiedades Disponibles</h2>
+                <h2>🔧 Available Properties</h2>
                 <div class="properties-table">
                     <div class="property-row">
                         <div class="property-name">name</div>
                         <div class="property-type">string</div>
-                        <div class="property-desc">Texto para mostrar (iniciales)</div>
+                        <div class="property-desc">Text to display (initials)</div>
                     </div>
                     <div class="property-row">
                         <div class="property-name">size</div>
                         <div class="property-type">"small" | "medium" | "large"</div>
-                        <div class="property-desc">Tamaño del avatar</div>
+                        <div class="property-desc">Avatar size</div>
                     </div>
                     <div class="property-row">
                         <div class="property-name">bordered</div>
                         <div class="property-type">boolean</div>
-                        <div class="property-desc">Añade borde al avatar</div>
+                        <div class="property-desc">Adds border to avatar</div>
                     </div>
                     <div class="property-row">
                         <div class="property-name">nameColoured</div>
                         <div class="property-type">boolean</div>
-                        <div class="property-desc">Aplica color de fondo basado en el nombre</div>
+                        <div class="property-desc">Applies background color based on name</div>
                     </div>
                 </div>
             </div>
 
             <div class="nav-links">
-                <a href="/">← Volver al inicio</a>
-                <a href="/component/mjo-chip">Ver mjo-chip →</a>
+                <a href="/">← Back to home</a>
+                <a href="/component/mjo-chip">View mjo-chip →</a>
             </div>
         `;
 

@@ -2,7 +2,7 @@ import { render } from "@lit-labs/ssr";
 import { TemplateResult } from "lit";
 import { TemplateHelper } from "../utils/template-helper.js";
 
-// Importar componentes directamente desde src/ para SSR
+// Import components directly from src/ for SSR
 import "../../../src/mjo-avatar.js";
 import "../../../src/mjo-chip.js";
 import "../../../src/mjo-theme.js";
@@ -17,43 +17,43 @@ export interface RenderOptions {
 
 export class SSRRenderer {
     /**
-     * Renderiza una página completa con SSR incluyendo el componente mjo-theme
+     * Renders a complete page with SSR including the mjo-theme component
      */
     async renderPage(content: TemplateResult, options: RenderOptions = {}): Promise<string> {
-        // Renderizar el contenido Lit a HTML
+        // Render Lit content to HTML
         const ssrResult = Array.from(render(content));
         const renderedContent = ssrResult.join("");
 
-        // Usar template helper para generar HTML con HMR
+        // Use template helper to generate HTML with HMR
         return this.buildHTMLPageWithHMR(renderedContent, options);
     }
 
     /**
-     * Construye la página HTML usando TemplateHelper con soporte HMR
+     * Builds the HTML page using TemplateHelper with HMR support
      */
     private buildHTMLPageWithHMR(content: string, options: RenderOptions): string {
         const title = options.title || "mjo-litui SSR Server";
 
-        // Scripts adicionales para SSR
+        // Additional scripts for SSR
         const ssrScripts = ["/public/js/lit-hydration.js", "/public/js/client.js", ...(options.scripts || [])];
 
-        // Estilos adicionales para SSR
+        // Additional styles for SSR
         const ssrStyles = ["/public/css/ssr-styles.css", ...(options.styles || [])];
 
-        // Contenido completo con elementos adicionales para SSR
+        // Full content with additional elements for SSR
         const fullContent = this.wrapContentWithSSRElements(content, options);
 
-        // Usar TemplateHelper para renderizar con HMR habilitado
+        // Use TemplateHelper to render with HMR enabled
         return TemplateHelper.renderTemplate(fullContent, {
             title,
-            enableHMR: true, // Siempre habilitado en el servidor SSR
+            enableHMR: true, // Always enabled on SSR server
             additionalScripts: ssrScripts,
             additionalStyles: ssrStyles,
         });
     }
 
     /**
-     * Envuelve el contenido con elementos específicos para SSR
+     * Wraps the content with SSR-specific elements
      */
     private wrapContentWithSSRElements(content: string, options: RenderOptions): string {
         const metaTags = options.meta?.map((meta) => `<meta name="${meta.name}" content="${meta.content}">`).join("") || "";
@@ -78,6 +78,6 @@ export class SSRRenderer {
 }
 
 /**
- * Instancia singleton del renderizador SSR
+ * Singleton instance of the SSR renderer
  */
 export const ssrRenderer = new SSRRenderer();

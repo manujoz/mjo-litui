@@ -1,27 +1,27 @@
 /**
- * Cliente HMR mejorado para evitar bucles infinitos
- * Versión 3.0 - Control de estado avanzado y reconexión inteligente
+ * Enhanced HMR client to prevent infinite loops
+ * Version 3.0 - Advanced state control and smart reconnection
  */
 class MjoHMRClient {
     private ws: WebSocket | null = null;
     private reconnectAttempts = 0;
-    private maxReconnectAttempts = 3; // Reducido para evitar spam
-    private reconnectDelay = 2000; // 2 segundos base
+    private maxReconnectAttempts = 3; // Reduced to avoid spam
+    private reconnectDelay = 2000; // 2 seconds base
     private isConnected = false;
     private isReloading = false;
     private buildInProgress = false;
     private lastBuildCompleteTime = 0;
-    private reloadCooldown = 3000; // 3 segundos de cooldown entre reloads
+    private reloadCooldown = 3000; // 3 seconds cooldown between reloads
 
-    // Estados para prevenir bucles
+    // States to prevent loops
     private isShuttingDown = false;
     private hasReloadScheduled = false;
     private notificationTimeout?: number;
 
     constructor() {
-        // Evitar múltiples instancias
+        // Prevent multiple instances
         if (window.mjoHMRClient) {
-            console.log("🔥 Cliente HMR ya existe, reutilizando instancia");
+            console.log("🔥 HMR client already exists, reusing instance");
             return window.mjoHMRClient;
         }
 
@@ -30,11 +30,11 @@ class MjoHMRClient {
     }
 
     private init(): void {
-        console.log("🔥 Iniciando cliente HMR v3.0...");
+        console.log("🔥 Starting HMR client v3.0...");
 
-        // Marcar como inicializado para evitar múltiples instancias
+        // Mark as initialized to avoid multiple instances
         if (window.mjHMRInitialized) {
-            console.log("🔥 HMR ya inicializado, saliendo...");
+            console.log("🔥 HMR already initialized, exiting...");
             return;
         }
         window.mjHMRInitialized = true;
@@ -44,9 +44,9 @@ class MjoHMRClient {
     }
 
     private setupCleanupListeners(): void {
-        // Cleanup al cerrar/recargar la ventana
+        // Cleanup when closing/reloading the window
         window.addEventListener("beforeunload", () => {
-            console.log("🔄 Página cerrándose, limpiando HMR...");
+            console.log("🔄 Page closing, cleaning up HMR...");
             this.isShuttingDown = true;
             this.cleanup();
         });
@@ -56,23 +56,23 @@ class MjoHMRClient {
             this.cleanup();
         });
 
-        // Cleanup cuando la página se oculta (cambio de tab, etc.)
+        // Cleanup when the page is hidden (tab change, etc.)
         document.addEventListener("visibilitychange", () => {
             if (document.hidden && this.isReloading) {
-                console.log("🔄 Página oculta durante reload, limpiando...");
+                console.log("🔄 Page hidden during reload, cleaning up...");
                 this.cleanup();
             }
         });
     }
 
     private cleanup(): void {
-        console.log("🧹 Limpiando cliente HMR...");
+        console.log("🧹 Cleaning up HMR client...");
 
         if (this.ws) {
             try {
                 this.ws.close(1000, "Cleanup");
             } catch (error) {
-                console.log("⚠️ Error cerrando WebSocket:", error);
+                console.log("⚠️ Error closing WebSocket:", error);
             }
             this.ws = null;
         }
@@ -81,27 +81,27 @@ class MjoHMRClient {
     }
 
     private connect(): void {
-        // No conectar si estamos cerrando o ya hay reload programado
+        // Do not connect if shutting down or reload is already scheduled
         if (this.isShuttingDown || this.isReloading || this.hasReloadScheduled) {
-            console.log("🔥 Conexión HMR saltada: estado no válido");
+            console.log("🔥 HMR connection skipped: invalid state");
             return;
         }
 
         if (this.isConnected) {
-            console.log("🔥 Ya conectado a HMR");
+            console.log("🔥 Already connected to HMR");
             return;
         }
 
         const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
         const wsUrl = `${protocol}//${window.location.host}/hmr`;
 
-        console.log("🔌 Conectando a WebSocket HMR:", wsUrl);
+        console.log("🔌 Connecting to HMR WebSocket:", wsUrl);
 
         try {
             this.ws = new WebSocket(wsUrl);
             this.setupEventListeners();
         } catch (error) {
-            console.error("❌ Error creando WebSocket:", error);
+            console.error("❌ Error creating WebSocket:", error);
             this.scheduleReconnect();
         }
     }
@@ -110,10 +110,10 @@ class MjoHMRClient {
         if (!this.ws) return;
 
         this.ws.onopen = () => {
-            console.log("✅ Cliente HMR conectado");
+            console.log("✅ HMR client connected");
             this.isConnected = true;
             this.reconnectAttempts = 0;
-            this.showNotification("🔥 HMR conectado", "success");
+            this.showNotification("🔥 HMR connected", "success");
         };
 
         this.ws.onmessage = (event: MessageEvent) => {
@@ -121,59 +121,59 @@ class MjoHMRClient {
                 const data: HMREventData = JSON.parse(event.data);
                 this.handleHMREvent(data);
             } catch (error) {
-                console.error("❌ Error parsing mensaje HMR:", error);
+                console.error("❌ Error parsing HMR message:", error);
             }
         };
 
         this.ws.onclose = (event: CloseEvent) => {
-            console.log("❌ Conexión WebSocket HMR cerrada:", event.code, event.reason);
+            console.log("❌ HMR WebSocket connection closed:", event.code, event.reason);
             this.isConnected = false;
 
-            // Solo reconectar si no estamos recargando intencionalmente
+            // Only reconnect if not intentionally reloading
             if (!this.isReloading && this.reconnectAttempts < this.maxReconnectAttempts) {
                 this.scheduleReconnect();
             }
         };
 
         this.ws.onerror = (error: Event) => {
-            console.error("⚠️ Error en WebSocket HMR:", error);
+            console.error("⚠️ HMR WebSocket error:", error);
             this.isConnected = false;
         };
     }
 
     private handleHMREvent(event: HMREventData): void {
-        console.log("📡 Evento HMR recibido:", event.type, event.data);
+        console.log("📡 HMR event received:", event.type, event.data);
 
-        // Evitar procesar eventos si ya estamos recargando o cerrando
+        // Avoid processing events if already reloading or shutting down
         if (this.isReloading || this.isShuttingDown || this.hasReloadScheduled) {
-            console.log("🔄 Ignorando evento HMR: estado no válido");
+            console.log("🔄 Ignoring HMR event: invalid state");
             return;
         }
 
         switch (event.type) {
             case "build-start":
                 this.buildInProgress = true;
-                this.showNotification("🔨 Compilando...", "info");
+                this.showNotification("🔨 Building...", "info");
                 break;
 
             case "build-complete":
                 this.buildInProgress = false;
                 this.lastBuildCompleteTime = Date.now();
-                this.showNotification("✅ Compilación completada", "success");
-                // Programar reload con mejor control
+                this.showNotification("✅ Build completed", "success");
+                // Schedule reload with better control
                 this.scheduleReload();
                 break;
 
             case "build-error":
                 this.buildInProgress = false;
-                this.showNotification(`❌ Error: ${event.data?.error || "Error desconocido"}`, "error");
-                // NO recargar en caso de error
+                this.showNotification(`❌ Error: ${event.data?.error || "Unknown error"}`, "error");
+                // DO NOT reload in case of error
                 break;
 
             case "file-changed":
                 if (!this.buildInProgress) {
                     const files = event.data?.files || [];
-                    this.showNotification(`📝 Archivos modificados: ${files.length}`, "info");
+                    this.showNotification(`📝 Files changed: ${files.length}`, "info");
                 }
                 break;
 
@@ -182,34 +182,34 @@ class MjoHMRClient {
                 break;
 
             default:
-                console.log("🤷‍♂️ Evento HMR no manejado:", event.type);
+                console.log("🤷‍♂️ Unhandled HMR event:", event.type);
         }
     }
 
     private scheduleReload(): void {
         if (this.hasReloadScheduled || this.isReloading || this.isShuttingDown) {
-            console.log("🔄 Reload ya programado o en proceso");
+            console.log("🔄 Reload already scheduled or in progress");
             return;
         }
 
-        // Verificar cooldown
+        // Check cooldown
         const timeSinceLastBuild = Date.now() - this.lastBuildCompleteTime;
         if (timeSinceLastBuild > 0 && timeSinceLastBuild < this.reloadCooldown) {
-            console.log(`⏳ Reload en cooldown, esperando ${this.reloadCooldown - timeSinceLastBuild}ms más`);
+            console.log(`⏳ Reload in cooldown, waiting ${this.reloadCooldown - timeSinceLastBuild}ms more`);
             setTimeout(() => this.scheduleReload(), this.reloadCooldown - timeSinceLastBuild);
             return;
         }
 
-        console.log("🔄 Programando reload de la página...");
+        console.log("🔄 Scheduling page reload...");
         this.hasReloadScheduled = true;
         this.isReloading = true;
         this.cleanup();
 
-        this.showNotification("🔄 Recargando página...", "info");
+        this.showNotification("🔄 Reloading page...", "info");
 
-        // Delay para mostrar notificación y limpiar conexiones
+        // Delay to show notification and clean up connections
         setTimeout(() => {
-            console.log("🔄 Ejecutando reload...");
+            console.log("🔄 Executing reload...");
             window.location.reload();
         }, 800);
     }
@@ -217,8 +217,8 @@ class MjoHMRClient {
     private scheduleReconnect(): void {
         if (this.isReloading || this.reconnectAttempts >= this.maxReconnectAttempts) {
             if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-                console.log("❌ Máximo de intentos de reconexión alcanzado");
-                this.showNotification("❌ HMR desconectado permanentemente", "error");
+                console.log("❌ Maximum reconnect attempts reached");
+                this.showNotification("❌ HMR permanently disconnected", "error");
             }
             return;
         }
@@ -226,7 +226,7 @@ class MjoHMRClient {
         this.reconnectAttempts++;
         const delay = this.reconnectDelay * Math.pow(1.5, this.reconnectAttempts - 1);
 
-        console.log(`🔄 Reintentando conexión en ${delay}ms (intento ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+        console.log(`🔄 Retrying connection in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
 
         setTimeout(() => {
             if (!this.isReloading && !this.isConnected) {
@@ -236,7 +236,7 @@ class MjoHMRClient {
     }
 
     private createNotificationContainer(): void {
-        // Crear contenedor de notificaciones si no existe
+        // Create notification container if it does not exist
         if (document.getElementById("hmr-notifications")) return;
 
         const container = document.createElement("div");
@@ -257,7 +257,7 @@ class MjoHMRClient {
         const container = document.getElementById("hmr-notifications");
         if (!container) return;
 
-        // Limpiar notificación anterior
+        // Clear previous notification
         if (this.notificationTimeout) {
             clearTimeout(this.notificationTimeout);
         }
@@ -290,13 +290,13 @@ class MjoHMRClient {
         notification.textContent = message;
         container.appendChild(notification);
 
-        // Animar entrada
+        // Animate entry
         requestAnimationFrame(() => {
             notification.style.transform = "translateX(0)";
         });
 
-        // Auto-hide después de 4 segundos (excepto errores permanentes)
-        if (type !== "error" || message.includes("desconectado permanentemente")) {
+        // Auto-hide after 4 seconds (except permanent errors)
+        if (type !== "error" || message.includes("permanently disconnected")) {
             this.notificationTimeout = window.setTimeout(() => {
                 notification.style.transform = "translateX(100%)";
                 setTimeout(() => {
@@ -307,7 +307,7 @@ class MjoHMRClient {
             }, 4000);
         }
 
-        // Click para cerrar
+        // Click to close
         notification.addEventListener("click", () => {
             notification.style.transform = "translateX(100%)";
             setTimeout(() => {
@@ -319,7 +319,7 @@ class MjoHMRClient {
     }
 }
 
-// Solo inicializar una vez cuando el DOM esté listo
+// Only initialize once when DOM is ready
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
         if (!window.mjoHMRClient) {

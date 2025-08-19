@@ -1,7 +1,7 @@
 // Avatar Interactive Demo TypeScript
-// Esta funcionalidad se carga después de la hidratación del cliente
+// This functionality loads after client hydration
 
-// Variables globales para el estado
+// Global variables for state
 let selectedMembers = new Set<string>();
 let selectedUsers = new Set<string>();
 

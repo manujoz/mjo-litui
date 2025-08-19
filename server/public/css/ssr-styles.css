@@ -1,4 +1,4 @@
-/* CSS Reset Básico */
+/* Basic CSS Reset */
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -29,7 +29,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Estilos base para el SSR Server */
+/* Base styles for SSR Server */
 .container {
     max-width: 1200px;
     margin: 0 auto;

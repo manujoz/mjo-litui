@@ -18,7 +18,7 @@ export interface ComponentMetadata {
 }
 
 /**
- * Detección inteligente de componentes de sistema basada en nombre
+ * Intelligent detection of system components based on name
  */
 function isSystemComponent(componentName: string): boolean {
     const systemKeywords = ["theme", "ionic"];
@@ -26,12 +26,12 @@ function isSystemComponent(componentName: string): boolean {
 }
 
 /**
- * Categorización inteligente basada en nombre del componente
+ * Intelligent categorization based on component name
  */
 function getComponentCategory(componentName: string): string {
     if (isSystemComponent(componentName)) return "System";
 
-    // Categorías basadas en patrones de nombres
+    // Categories based on name patterns
     if (componentName.includes("avatar")) return "Display";
     if (componentName.includes("chip")) return "Input";
     if (componentName.includes("button")) return "Input";
@@ -53,7 +53,7 @@ function getComponentCategory(componentName: string): string {
 }
 
 /**
- * Auto-genera metadatos para componentes basándose en archivos en /src/
+ * Auto-generates metadata for components based on files in /src/
  */
 function autoGenerateComponentMetadata(): Record<string, ComponentMetadata> {
     const srcPath = join(__dirname, "../../../src");
@@ -69,12 +69,12 @@ function autoGenerateComponentMetadata(): Record<string, ComponentMetadata> {
             const isSystem = isSystemComponent(componentName);
             const category = getComponentCategory(componentName);
 
-            // Generar metadata completamente automática
+            // Fully automatic metadata generation
             const baseMetadata: ComponentMetadata = {
                 name: componentName,
                 fileName: file,
                 displayName: cleanName.replace(/^\w/, (c) => c.toUpperCase()),
-                description: `Componente ${componentName}`,
+                description: `Component ${componentName}`,
                 category: category,
                 path: isSystem ? "" : `/component/${componentName}`,
                 hasVariants: !isSystem,
@@ -85,8 +85,8 @@ function autoGenerateComponentMetadata(): Record<string, ComponentMetadata> {
             componentMetadata[componentName] = baseMetadata;
         }
     } catch (error) {
-        console.warn(`⚠️ Error auto-generando componentes: ${error}`);
-        // Fallback mínimo si falla la auto-generación
+        console.warn(`⚠️ Error auto-generating components: ${error}`);
+        // Minimal fallback if auto-generation fails
         return {};
     }
 
@@ -94,7 +94,7 @@ function autoGenerateComponentMetadata(): Record<string, ComponentMetadata> {
 }
 
 /**
- * Metadatos de componentes (completamente auto-generados)
+ * Component metadata (fully auto-generated)
  */
 const COMPONENT_METADATA: Record<string, ComponentMetadata> = autoGenerateComponentMetadata();
 
@@ -106,70 +106,70 @@ export class ComponentDiscovery {
     }
 
     /**
-     * Carga los metadatos de los componentes (auto-generados)
+     * Loads the component metadata (auto-generated)
      */
     private loadComponentMetadata(): void {
         this.components = Object.values(COMPONENT_METADATA);
     }
 
     /**
-     * Obtiene todos los componentes disponibles
+     * Gets all available components
      */
     getComponents(): ComponentMetadata[] {
         return [...this.components];
     }
 
     /**
-     * Obtiene solo componentes UI (excluye componentes de sistema)
+     * Gets only UI components (excludes system components)
      */
     getUIComponents(): ComponentMetadata[] {
         return this.components.filter((c) => !c.isSystemComponent);
     }
 
     /**
-     * Obtiene solo componentes de sistema
+     * Gets only system components
      */
     getSystemComponents(): ComponentMetadata[] {
         return this.components.filter((c) => c.isSystemComponent);
     }
 
     /**
-     * Obtiene un componente específico por nombre
+     * Gets a specific component by name
      */
     getComponent(name: string): ComponentMetadata | undefined {
         return this.components.find((c) => c.name === name);
     }
 
     /**
-     * Obtiene componentes por categoría
+     * Gets components by category
      */
     getComponentsByCategory(category: string): ComponentMetadata[] {
         return this.components.filter((c) => c.category === category);
     }
 
     /**
-     * Busca componentes por etiquetas
+     * Searches components by tags
      */
     searchComponentsByTag(tag: string): ComponentMetadata[] {
         return this.components.filter((c) => c.tags.some((t) => t.toLowerCase().includes(tag.toLowerCase())));
     }
 
     /**
-     * Obtiene todas las categorías disponibles
+     * Gets all available categories
      */
     getCategories(): string[] {
         return [...new Set(this.components.map((c) => c.category))];
     }
 
     /**
-     * Verifica si un componente existe
+     * Checks if a component exists
      */
     hasComponent(name: string): boolean {
         return this.components.some((c) => c.name === name);
     }
 
     /**
-     * Obtiene estadísticas de los componentes
+     * Gets statistics about the components
      */
     getStats(): {
         totalComponents: number;
@@ -190,7 +190,7 @@ export class ComponentDiscovery {
     }
 
     /**
-     * Genera el índice de navegación para la página principal (solo componentes UI)
+     * Generates the navigation index for the main page (UI components only)
      */
     generateNavigationIndex(): {
         categories: Array<{
@@ -214,6 +214,6 @@ export class ComponentDiscovery {
 }
 
 /**
- * Instancia singleton del discovery service
+ * Singleton instance of the discovery service
  */
 export const componentDiscovery = new ComponentDiscovery();
