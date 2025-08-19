@@ -38,7 +38,7 @@ export class SSRRenderer {
         const ssrScripts = ["/public/js/lit-hydration.js", "/public/js/client.js", ...(options.scripts || [])];
 
         // Additional styles for SSR
-        const ssrStyles = ["/public/css/ssr-styles.css", ...(options.styles || [])];
+        const ssrStyles = [...(options.styles || [])];
 
         // Full content with additional elements for SSR
         const fullContent = this.wrapContentWithSSRElements(content, options);

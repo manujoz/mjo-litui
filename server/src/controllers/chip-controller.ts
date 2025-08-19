@@ -1,6 +1,8 @@
 import { html } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { componentDiscovery } from "../services/component-discovery.js";
 import { ssrRenderer } from "../services/ssr-renderer.js";
+import { TemplateHelper } from "../utils/template-helper.js";
 
 export class ChipController {
     /**
@@ -13,14 +15,20 @@ export class ChipController {
             throw new Error("Component mjo-chip not found");
         }
 
-        const chipTemplate = html`
-            <mjo-theme scope="global" theme="light"></mjo-theme>
-            <div class="page-header">
-                <h1>🏷️ ${component.displayName}</h1>
-                <p>${component.description}</p>
-            </div>
+        const nextComponent = componentDiscovery.getNextComponent(component.name);
+        const previousComponent = componentDiscovery.getPreviousComponent(component.name);
 
-            <div class="demo-section">
+        const title = component.displayName;
+        const subtitle = `Component that displays compact, interactive labels for categorization and tagging.`;
+        const headerTemplate = TemplateHelper.getHeaderTemplate(title, subtitle, {
+            next: nextComponent ? nextComponent.path : undefined,
+            previous: previousComponent ? previousComponent.path : undefined,
+        });
+
+        const chipTemplate = html`
+            ${unsafeHTML(headerTemplate)}
+
+            <div class="main-section">
                 <h2>🎨 Basic Colors</h2>
                 <p>The chip component supports different colors for visual categorization.</p>
                 <div class="component-showcase">
@@ -33,7 +41,7 @@ export class ChipController {
                 </div>
             </div>
 
-            <div class="demo-section">
+            <div class="main-section">
                 <h2>📏 Available Sizes</h2>
                 <p>Different sizes to fit various usage contexts.</p>
                 <div class="component-showcase">
@@ -43,7 +51,7 @@ export class ChipController {
                 </div>
             </div>
 
-            <div class="demo-section">
+            <div class="main-section">
                 <h2>🎭 Style Variants</h2>
                 <p>Different visual styles to match your application's design.</p>
 
@@ -72,11 +80,11 @@ export class ChipController {
                 </div>
             </div>
 
-            <div class="demo-section">
+            <div class="main-section">
                 <h2>🏷️ Practical Use Cases</h2>
 
                 <h3>Tag System</h3>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 20px; background: #f8fafc; border-radius: 8px;">
+                <div class="component-showcase">
                     <mjo-chip label="JavaScript" color="primary" variant="solid"></mjo-chip>
                     <mjo-chip label="TypeScript" color="primary" variant="bordered"></mjo-chip>
                     <mjo-chip label="React" color="secondary" variant="light"></mjo-chip>
@@ -87,22 +95,22 @@ export class ChipController {
 
                 <h3>Project Status</h3>
                 <div class="component-grid">
-                    <div style="padding: 15px; background: #f8fafc; border-radius: 8px;">
-                        <h4 style="margin: 0 0 10px 0; color: #1e293b;">Project Alpha</h4>
+                    <div class="card">
+                        <h4 class="card-title">Project Alpha</h4>
                         <mjo-chip label="In Progress" color="warning" variant="solid"></mjo-chip>
                     </div>
-                    <div style="padding: 15px; background: #f8fafc; border-radius: 8px;">
-                        <h4 style="margin: 0 0 10px 0; color: #1e293b;">Project Beta</h4>
+                    <div class="card">
+                        <h4 class="card-title">Project Beta</h4>
                         <mjo-chip label="Completed" color="success" variant="solid"></mjo-chip>
                     </div>
-                    <div style="padding: 15px; background: #f8fafc; border-radius: 8px;">
-                        <h4 style="margin: 0 0 10px 0; color: #1e293b;">Project Gamma</h4>
+                    <div class="card">
+                        <h4 class="card-title">Project Gamma</h4>
                         <mjo-chip label="Pending" variant="bordered"></mjo-chip>
                     </div>
                 </div>
 
                 <h3>Category Filters</h3>
-                <div style="display: flex; flex-wrap: wrap; gap: 12px; padding: 20px; background: #f8fafc; border-radius: 8px;">
+                <div class="component-showcase">
                     <mjo-chip label="All" variant="solid" color="primary"></mjo-chip>
                     <mjo-chip label="Frontend" variant="bordered"></mjo-chip>
                     <mjo-chip label="Backend" variant="bordered"></mjo-chip>
@@ -116,21 +124,6 @@ export class ChipController {
                     <mjo-chip label="Normal" size="medium" color="primary"></mjo-chip>
                     <mjo-chip label="Detail" size="small" variant="light"></mjo-chip>
                 </div>
-            </div>
-
-            <div class="demo-section">
-                <h2>🔧 Available Properties</h2>
-                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; font-family: monospace;">
-                    <div><strong>label:</strong> string - Chip text</div>
-                    <div><strong>color:</strong> "primary" | "secondary" | "success" | "warning" | "info" | "error" - Chip color</div>
-                    <div><strong>size:</strong> "small" | "medium" | "large" - Chip size</div>
-                    <div><strong>variant:</strong> "solid" | "bordered" | "light" - Visual style</div>
-                </div>
-            </div>
-
-            <div class="nav-links">
-                <a href="/">← Back to home</a>
-                <a href="/component/avatar">See mjo-avatar →</a>
             </div>
         `;
 

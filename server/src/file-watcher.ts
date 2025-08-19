@@ -167,7 +167,13 @@ export class FileWatcher {
  */
 export function createMjoLituiWatcher(options?: { debounceDelay?: number; verbose?: boolean }): FileWatcher {
     const config: WatcherConfig = {
-        paths: [join(__dirname, "src"), join(__dirname, "server/src"), join(__dirname, "server/templates")],
+        paths: [
+            join(__dirname, "src"),
+            join(__dirname, "server/src"),
+            join(__dirname, "server/client"),
+            join(__dirname, "server/public/css"),
+            join(__dirname, "server/templates"),
+        ],
         ignored: [
             "**/node_modules/**",
             "**/server/dist/**",

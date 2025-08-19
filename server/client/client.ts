@@ -3,8 +3,6 @@
  * Imports all components needed for hydration
  */
 
-console.log("🎨 mjo-litui client components loaded for hydration");
-
 import "../../src/mjo-avatar.js";
 import "../../src/mjo-chip.js";
 import "../../src/mjo-theme.js";
@@ -16,7 +14,6 @@ function initializeTheme(): void {
 
     if (themeComponent) {
         (themeComponent as any).theme = savedTheme;
-        console.log("🎨 Theme initialized from client:", savedTheme);
     }
 
     const toggleBtn = document.querySelector(".theme-toggle");
@@ -38,8 +35,6 @@ function initializeTheme(): void {
         if (toggleBtn) {
             toggleBtn.textContent = newTheme === "dark" ? "☀️" : "🌙";
         }
-
-        console.log("🎨 Theme changed to:", newTheme);
     } else {
         console.warn("⚠️ mjo-theme component not found");
     }
@@ -47,7 +42,6 @@ function initializeTheme(): void {
 
 // Initialize theme when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("🚀 DOM ready, initializing theme...");
     initializeTheme();
 });
 

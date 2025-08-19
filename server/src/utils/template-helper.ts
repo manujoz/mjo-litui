@@ -26,6 +26,22 @@ export class TemplateHelper {
         return this.baseTemplateCache;
     }
 
+    public static getHeaderTemplate(title: string, subtitle: string, navigation?: { previous?: string; next?: string }): string {
+        const templatePath = join(__dirname, "../../templates/header.html");
+        let headerTemplate = readFileSync(templatePath, "utf-8").replace("{{TITLE}}", title.toLocaleUpperCase()).replace("{{SUBTITLE}}", subtitle);
+        let navigationTemplate = "";
+        if (navigation) {
+            navigationTemplate = readFileSync(join(__dirname, "../../templates/navigation.html"), "utf-8");
+
+            if (navigation.next && navigation.previous) {
+                navigationTemplate = navigationTemplate.replace("{{PREVIOUS_LINK}}", navigation.previous).replace("{{NEXT_LINK}}", navigation.next);
+            }
+        }
+
+        headerTemplate = headerTemplate.replace("{{NAVIGATION}}", navigationTemplate);
+        return headerTemplate;
+    }
+
     /**
      * Invalidates the template cache (useful during development)
      */

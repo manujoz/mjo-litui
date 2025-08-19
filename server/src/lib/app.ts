@@ -40,10 +40,14 @@ export function handleFileChanges(changedFiles: string[]): void {
         // Only src/ at root, not server/src/
         const normalizedFile = file.replace(/\\/g, "/");
         return (
+            normalizedFile.includes("/server/client/") ||
             (normalizedFile.includes("/src/") && !normalizedFile.includes("/server/src/")) ||
             (normalizedFile.startsWith("src/") && !normalizedFile.startsWith("server/"))
         );
     });
+
+    const publicCssChanges = changedFiles.filter((file) => file.includes("/public/css/") || file.includes("\\public\\css\\"));
+
     const distChanges = changedFiles.filter((file) => file.includes("/dist/") || file.includes("\\dist\\"));
     const serverChanges = changedFiles.filter(
         (file) =>
@@ -56,6 +60,11 @@ export function handleFileChanges(changedFiles: string[]): void {
         return;
     }
 
+    if (publicCssChanges.length > 0) {
+        hmrManager?.forceReload();
+        return;
+    }
+
     // Cache invalidation for cacheable files
     const cacheableFiles = filterCacheableFiles(changedFiles);
     if (cacheableFiles.length > 0) {
@@ -65,6 +74,7 @@ export function handleFileChanges(changedFiles: string[]): void {
     // Restart if there are changes in /dist/ or /server/
     const needsRestart = distChanges.length > 0 || serverChanges.length > 0;
     if (needsRestart) {
+        console.log("🔄 Restarting server due to changes in /dist/ or /server/");
         scheduleRestart();
     }
 }

@@ -86,6 +86,7 @@ server.listen(PORT, () => {
     }
 
     console.log("✅ Server listening at: http://localhost:" + PORT);
+
     // Start file watcher after server
     fileWatcher.start(handleFileChanges);
 });

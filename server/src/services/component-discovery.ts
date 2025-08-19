@@ -140,6 +140,16 @@ export class ComponentDiscovery {
         return this.components.find((c) => c.name === name);
     }
 
+    getNextComponent(name: string): ComponentMetadata | undefined {
+        const index = this.components.findIndex((c) => c.name === name);
+        return index >= 0 && index < this.components.length - 1 ? this.components[index + 1] : this.components[0];
+    }
+
+    getPreviousComponent(name: string): ComponentMetadata | undefined {
+        const index = this.components.findIndex((c) => c.name === name);
+        return index > 0 ? this.components[index - 1] : this.components[this.components.length - 1];
+    }
+
     /**
      * Gets components by category
      */

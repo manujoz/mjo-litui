@@ -2409,24 +2409,26 @@ const defaultTheme = {
       dark: "#cccccc"
     },
     borderColor: {
-      default: "#777777",
-      light: "#aaaaaa",
-      dark: "#555555"
+      default: "#555555",
+      low: "#444444",
+      xlow: "#222222",
+      high: "#666666",
+      xhigh: "#888888"
     },
     backgroundColor: {
       hover: "#666666",
       default: "#151515",
-      xlow: "#000000",
-      low: "#090909",
-      high: "#333333",
-      xhigh: "#555555"
+      xlow: "#030303",
+      low: "#111111",
+      high: "#252525",
+      xhigh: "#444444"
     },
     backgroundColorCard: {
       default: "#333333",
       xlow: "#111111",
       low: "#222222",
-      high: "#666666",
-      xhigh: "#888888"
+      high: "#555555",
+      xhigh: "#666666"
     },
     foregroundColor: {
       default: "#f0f0f0",
@@ -2505,8 +2507,10 @@ const defaultTheme = {
     },
     borderColor: {
       default: "#dddddd",
-      light: "#eeeeee",
-      dark: "#cccccc"
+      xlow: "#aaaaaa",
+      low: "#cccccc",
+      high: "#eeeeee",
+      xhigh: "#f0f0f0"
     },
     backgroundColor: {
       hover: "#eeeeee",
@@ -2700,13 +2704,11 @@ __decorateClass([
 MjoTheme = __decorateClass([
   customElement("mjo-theme")
 ], MjoTheme);
-console.log("🎨 mjo-litui client components loaded for hydration");
 function initializeTheme() {
   const savedTheme = localStorage.getItem("mjo-theme") || "light";
   const themeComponent = document.querySelector("mjo-theme");
   if (themeComponent) {
     themeComponent.theme = savedTheme;
-    console.log("🎨 Theme initialized from client:", savedTheme);
   }
   const toggleBtn = document.querySelector(".theme-toggle");
   if (toggleBtn) {
@@ -2724,13 +2726,11 @@ window.toggleTheme = function() {
     if (toggleBtn) {
       toggleBtn.textContent = newTheme === "dark" ? "☀️" : "🌙";
     }
-    console.log("🎨 Theme changed to:", newTheme);
   } else {
     console.warn("⚠️ mjo-theme component not found");
   }
 };
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("🚀 DOM ready, initializing theme...");
   initializeTheme();
 });
 setTimeout(() => {

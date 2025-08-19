@@ -1,5 +1,5 @@
 {
-    "watch": ["server/src"],
+    "watch": ["server/src", "server/public/css"],
     "ext": "ts,js,json,html",
     "ignore": ["server/dist", "dist", "node_modules", "**/*.test.ts", "**/*.spec.ts", ".git"],
     "exec": "tsx server/src/app.ts",

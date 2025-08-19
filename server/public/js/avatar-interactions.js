@@ -165,7 +165,6 @@ function toggleUserSelection(userCard) {
   console.log("Selected users:", Array.from(selectedUsers));
 }
 document.addEventListener("DOMContentLoaded", function() {
-  console.log("🎮 Avatar interactive demo loaded!");
   const playgroundAvatar = document.getElementById("playground-avatar");
   if (playgroundAvatar) {
     playgroundAvatar.style.transition = "all 0.3s ease";

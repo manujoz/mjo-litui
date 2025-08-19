@@ -213,8 +213,6 @@ function toggleUserSelection(userCard: HTMLElement): void {
 
 // Initialize interactions when the page loads
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("🎮 Avatar interactive demo loaded!");
-
     // Set up any additional initialization
     const playgroundAvatar = document.getElementById("playground-avatar");
     if (playgroundAvatar) {
