@@ -1,15 +1,17 @@
 import express from "express";
+import fs from "fs";
+import { createServer } from "http";
 import { join } from "path";
 import { fileURLToPath } from "url";
+
 import { ModuleCacheManager, filterCacheableFiles, restartWithCacheInvalidation } from "./cache-manager.js";
 import { createMjoLituiWatcher } from "./file-watcher.js";
+import { HMRWebSocketManager } from "./websocket-manager.js";
 
 // Importar controladores directamente
 import { AvatarController } from "./controllers/avatar-controller.js";
 import { ChipController } from "./controllers/chip-controller.js";
 import { IndexController } from "./controllers/index-controller.js";
-
-console.log("🚀 SSR Server starting...");
 
 // Configurar __dirname para ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -23,6 +25,9 @@ const fileWatcher = createMjoLituiWatcher({
 
 const cacheManager = new ModuleCacheManager({ verbose: true });
 
+// HMR Manager (solo en desarrollo)
+const hmrManager = process.env.NODE_ENV !== "production" ? new HMRWebSocketManager() : null;
+
 // Inicializar controladores
 const indexController = new IndexController();
 const avatarController = new AvatarController();
@@ -33,25 +38,11 @@ let restartPending = false;
 let lastRestartTime = 0;
 const RESTART_COOLDOWN = 2000;
 
-// Importación directa de componentes desde src/ para SSR
-import "../../src/mjo-avatar.js";
-import "../../src/mjo-chip.js";
-import "../../src/mjo-theme.js";
-
 const app = express();
 const PORT = process.env.PORT || 5748;
 
 // Middleware para archivos estáticos
 app.use("/public", express.static(join(__dirname, "../public")));
-
-// Servir archivos compilados de dist/ para hidratación en el cliente
-app.use("/dist", express.static(join(__dirname, "../../dist")));
-
-// Servir archivos fuente de src/ para imports directos en el cliente
-app.use("/src", express.static(join(__dirname, "../../src")));
-
-// Servir node_modules para las librerías de hidratación de Lit SSR
-app.use("/node_modules", express.static(join(__dirname, "../../node_modules")));
 
 // Función para manejar cambios de archivos
 function handleFileChanges(changedFiles: string[]): void {
@@ -61,9 +52,6 @@ function handleFileChanges(changedFiles: string[]): void {
         console.log("⏳ Reinicio en cooldown, ignorando cambios...");
         return;
     }
-
-    console.log("📁 Archivos modificados detectados:", changedFiles.length);
-    console.log("📋 Archivos:", changedFiles); // Debug: ver paths exactos
 
     // Separar cambios por tipo (normalizar separadores de path)
     const srcChanges = changedFiles.filter((file) => {
@@ -80,36 +68,31 @@ function handleFileChanges(changedFiles: string[]): void {
             file.includes("/server/src/") || file.includes("\\server\\src\\") || file.includes("/server/templates/") || file.includes("\\server\\templates\\"),
     );
 
-    console.log("🔍 Debug paths:");
-    console.log("  srcChanges:", srcChanges);
-    console.log("  distChanges:", distChanges);
-    console.log("  serverChanges:", serverChanges);
-
     // Si hay cambios en /src/, compilar solo cliente (Vite)
     if (srcChanges.length > 0) {
-        console.log("🎨 Cambios en /src/ detectados, compilando cliente...");
-        triggerBuild().catch((error) => console.error("❌ Error en triggerBuild:", error));
-        return; // La compilación activará el reinicio cuando termine
+        triggerBuild(srcChanges).catch((error) => console.error("❌ Error en triggerBuild:", error));
+        return;
     }
 
     // Cache invalidation para archivos cacheable
     const cacheableFiles = filterCacheableFiles(changedFiles);
     if (cacheableFiles.length > 0) {
-        console.log("♻️  Invalidando cache para archivos modificados...");
         cacheManager.invalidateModules(cacheableFiles);
     }
 
     // Reiniciar si hay cambios en /dist/ o /server/
     const needsRestart = distChanges.length > 0 || serverChanges.length > 0;
     if (needsRestart) {
-        console.log("🔄 Cambios detectados que requieren reinicio del servidor...");
         scheduleRestart();
     }
 }
 
 // Función para compilar el cliente con Vite
-async function triggerBuild(): Promise<void> {
-    console.log("🎨 Iniciando compilación del cliente (Vite)...");
+async function triggerBuild(changedFiles: string[] = []): Promise<void> {
+    // Notificar inicio del build a clientes HMR
+    if (hmrManager) {
+        hmrManager.notifyBuildStart(changedFiles);
+    }
 
     const { spawn } = await import("child_process");
 
@@ -122,9 +105,10 @@ async function triggerBuild(): Promise<void> {
 
     clientBuildProcess.on("close", (clientCode: number) => {
         if (clientCode === 0) {
-            console.log("✅ Build cliente completado");
-            console.log("🔄 Reiniciando servidor tras compilación del cliente...");
-            scheduleRestart();
+            // Notificar fin del build a clientes HMR
+            if (hmrManager) {
+                // hmrManager.notifyBuildComplete();
+            }
         } else {
             console.error(`❌ Error en build cliente (código: ${clientCode})`);
         }
@@ -138,11 +122,9 @@ function scheduleRestart(): void {
     restartPending = true;
     lastRestartTime = Date.now();
 
-    console.log("⏱️  Reinicio programado en 1 segundo...");
-
     setTimeout(() => {
         restartWithCacheInvalidation();
-    }, 1000);
+    }, 300);
 }
 
 // RUTAS PRINCIPALES - INTEGRACIÓN COMPLETA DE ITERACIÓN 3
@@ -150,9 +132,7 @@ function scheduleRestart(): void {
 // Ruta principal - Página de índice con navegación completa
 app.get("/", async (_req, res, next) => {
     try {
-        console.log("🎯 Renderizando página principal con SSR...");
         const html = await indexController.renderIndexPage();
-        console.log("✅ SSR renderizado exitoso - Página principal");
         res.send(html);
     } catch (error) {
         console.error("❌ Error en renderizado de página principal:", error);
@@ -174,9 +154,7 @@ app.get("/status", (_req, res) => {
 // Rutas para mjo-avatar - Demo completo con todas las variantes
 app.get("/component/avatar", async (_req, res, next) => {
     try {
-        console.log("🎯 Renderizando demos completos de mjo-avatar...");
         const html = await avatarController.renderAvatarPage();
-        console.log("✅ SSR renderizado exitoso - mjo-avatar demos");
         res.send(html);
     } catch (error) {
         console.error("❌ Error en renderizado de mjo-avatar:", error);
@@ -187,9 +165,7 @@ app.get("/component/avatar", async (_req, res, next) => {
 // Rutas para mjo-chip - Demo completo con todas las variantes
 app.get("/component/chip", async (_req, res, next) => {
     try {
-        console.log("🎯 Renderizando demos completos de mjo-chip...");
         const html = await chipController.renderChipPage();
-        console.log("✅ SSR renderizado exitoso - mjo-chip demos");
         res.send(html);
     } catch (error) {
         console.error("❌ Error en renderizado de mjo-chip:", error);
@@ -200,8 +176,11 @@ app.get("/component/chip", async (_req, res, next) => {
 // Función para manejo graceful de shutdown
 async function shutdownGracefully(): Promise<void> {
     try {
-        console.log("🔄 Deteniendo file watcher...");
         await fileWatcher.stop();
+
+        if (hmrManager) {
+            hmrManager.close();
+        }
 
         console.log("🗑️  Limpiando cache...");
         cacheManager.clearAll();
@@ -216,12 +195,12 @@ async function shutdownGracefully(): Promise<void> {
 
 // Manejo graceful de shutdown
 process.on("SIGTERM", async () => {
-    console.log("🛑 Recibida señal SIGTERM, cerrando servidor...");
+    console.log("🛑 Cerrando servidor...");
     await shutdownGracefully();
 });
 
 process.on("SIGINT", async () => {
-    console.log("🛑 Recibida señal SIGINT, cerrando servidor...");
+    console.log("🛑 Cerrando servidor...");
     await shutdownGracefully();
 });
 
@@ -229,157 +208,40 @@ process.on("SIGINT", async () => {
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     console.error("❌ Error en aplicación:", err);
 
-    const errorHtml = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Error - mjo-litui SSR</title>
-        <style>
-            body { 
-                font-family: 'Segoe UI', sans-serif; 
-                margin: 40px auto; 
-                max-width: 800px; 
-                padding: 20px; 
-                background: #f8fafc; 
-                color: #1e293b; 
-            }
-            .error-container { 
-                background: white; 
-                padding: 40px; 
-                border-radius: 12px; 
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
-                border-left: 4px solid #ef4444; 
-            }
-            h1 { 
-                color: #ef4444; 
-                margin: 0 0 20px 0; 
-                display: flex; 
-                align-items: center; 
-                gap: 10px; 
-            }
-            pre { 
-                background: #f1f5f9; 
-                padding: 20px; 
-                border-radius: 8px; 
-                overflow-x: auto; 
-                font-size: 0.875rem; 
-            }
-            .back-link { 
-                display: inline-block; 
-                margin-top: 20px; 
-                color: #3b82f6; 
-                text-decoration: none; 
-                padding: 10px 15px; 
-                background: #dbeafe; 
-                border-radius: 6px; 
-            }
-            .back-link:hover { 
-                background: #3b82f6; 
-                color: white; 
-            }
-        </style>
-    </head>
-    <body>
-        <div class="error-container">
-            <h1>❌ Error en Servidor SSR</h1>
-            <p><strong>Error:</strong> ${err instanceof Error ? err.message : "Error desconocido"}</p>
-            ${err instanceof Error && err.stack ? `<pre>${err.stack}</pre>` : ""}
-            <a href="/" class="back-link">← Volver al inicio</a>
-        </div>
-    </body>
-    </html>
-    `;
+    let errorHtml = fs.readFileSync(join(__dirname, "pages", "500.html"), "utf-8");
+    errorHtml = errorHtml.replace("${errmsg}", err instanceof Error ? err.message : "Error desconocido");
+    errorHtml = errorHtml.replace("${errstack}", err instanceof Error && err.stack ? `<pre>${err.stack}</pre>` : "");
 
     res.status(500).send(errorHtml);
 });
 
 // Ruta de fallback para 404
 app.use("*", (_req, res) => {
-    const notFoundHtml = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>404 - Página no encontrada</title>
-        <style>
-            body { 
-                font-family: 'Segoe UI', sans-serif; 
-                margin: 40px auto; 
-                max-width: 600px; 
-                padding: 20px; 
-                background: #f8fafc; 
-                color: #1e293b; 
-                text-align: center; 
-            }
-            .not-found-container { 
-                background: white; 
-                padding: 60px 40px; 
-                border-radius: 12px; 
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
-            }
-            h1 { 
-                font-size: 4rem; 
-                margin: 0; 
-                color: #64748b; 
-            }
-            h2 { 
-                color: #1e293b; 
-                margin: 20px 0; 
-            }
-            .nav-links { 
-                margin-top: 30px; 
-                display: flex; 
-                gap: 15px; 
-                justify-content: center; 
-                flex-wrap: wrap; 
-            }
-            .nav-links a { 
-                color: #3b82f6; 
-                text-decoration: none; 
-                padding: 12px 20px; 
-                background: #dbeafe; 
-                border-radius: 8px; 
-                transition: all 0.2s ease; 
-            }
-            .nav-links a:hover { 
-                background: #3b82f6; 
-                color: white; 
-            }
-        </style>
-    </head>
-    <body>
-        <div class="not-found-container">
-            <h1>404</h1>
-            <h2>Página no encontrada</h2>
-            <p>La página que estás buscando no existe en este servidor SSR.</p>
-            <div class="nav-links">
-                <a href="/">🏠 Inicio</a>
-                <a href="/component/avatar">🧑‍💼 Avatar</a>
-                <a href="/component/chip">🏷️ Chip</a>
-            </div>
-        </div>
-    </body>
-    </html>
-    `;
+    const notFoundHtml = fs.readFileSync(join(__dirname, "pages", "404.html"), "utf-8");
 
     res.status(404).send(notFoundHtml);
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-    console.log("🚀 Servidor SSR iniciado en http://localhost:" + PORT);
-    console.log("📁 Sirviendo desde:", __dirname);
-    console.log("🔗 Rutas disponibles:");
-    console.log("   - http://localhost:" + PORT + "/ (Página principal)");
-    console.log("   - http://localhost:" + PORT + "/component/avatar (Demos mjo-avatar)");
-    console.log("   - http://localhost:" + PORT + "/component/chip (Demos mjo-chip)");
-    console.log("   - http://localhost:" + PORT + "/status (Estado del sistema)");
+// Iniciar servidor con soporte para WebSocket
+const server = createServer(app);
+server.listen(PORT, () => {
+    // Inicializar HMR WebSocket
 
+    if (hmrManager) {
+        hmrManager.initialize(server).then(() => {
+            hmrManager.notifyBuildComplete();
+            setTimeout(() => {
+                console.log("🧪 HMR Done");
+            }, 100);
+        });
+
+        // Configurar HMR manager en controladores
+        indexController.setHMRManager(hmrManager);
+    } else {
+    }
+
+    console.log("✅ Server listening in: http://localhost:" + PORT);
     // Iniciar file watcher después del servidor
-    console.log("🔍 Iniciando sistema de file watching...");
     fileWatcher.start(handleFileChanges);
 });
 

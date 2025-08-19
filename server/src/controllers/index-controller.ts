@@ -3,6 +3,15 @@ import { componentDiscovery } from "../services/component-discovery.js";
 import { ssrRenderer } from "../services/ssr-renderer.js";
 
 export class IndexController {
+    private hmrManager?: any; // Referencia opcional al HMR manager
+
+    /**
+     * Establece la referencia al HMR manager
+     */
+    setHMRManager(hmrManager: any): void {
+        this.hmrManager = hmrManager;
+    }
+
     /**
      * Renderiza la página principal con índice de componentes
      */
@@ -176,6 +185,17 @@ export class IndexController {
                 port: process.env.PORT || 3000,
                 timestamp: new Date().toISOString(),
             },
+            hmr: this.hmrManager
+                ? {
+                      isActive: this.hmrManager.getStats().isActive,
+                      connectedClients: this.hmrManager.getStats().connectedClients,
+                      enabled: process.env.NODE_ENV !== "production",
+                  }
+                : {
+                      isActive: false,
+                      connectedClients: 0,
+                      enabled: false,
+                  },
             fileWatcher: {
                 isActive: true,
                 lastCheck: new Date().toISOString(),

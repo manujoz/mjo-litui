@@ -9,9 +9,7 @@ const indexController = new IndexController();
  */
 router.get("/", async (_req, res, next) => {
     try {
-        console.log("🎯 Renderizando página principal con SSR...");
         const html = await indexController.renderIndexPage();
-        console.log("✅ SSR renderizado exitoso - Página principal");
         res.send(html);
     } catch (error) {
         console.error("❌ Error en renderizado de página principal:", error);

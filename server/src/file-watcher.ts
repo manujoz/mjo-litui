@@ -60,22 +60,18 @@ export class FileWatcher {
             },
         };
 
-        this.log("🔍 Iniciando file watcher...");
-        this.log(`📂 Paths monitoreados: ${this.config.paths.join(", ")}`);
-
         try {
             this.watcher = chokidar.watch(this.config.paths, watcherOptions);
 
             this.watcher
-                .on("change", (path: string) => this.handleFileChange(path, "modified"))
-                .on("add", (path: string) => this.handleFileChange(path, "added"))
-                .on("unlink", (path: string) => this.handleFileChange(path, "deleted"))
+                .on("change", (path: string) => this.handleFileChange(path))
+                .on("add", (path: string) => this.handleFileChange(path))
+                .on("unlink", (path: string) => this.handleFileChange(path))
                 .on("addDir", (path: string) => this.handleDirectoryChange(path, "created"))
                 .on("unlinkDir", (path: string) => this.handleDirectoryChange(path, "deleted"))
                 .on("error", (error: any) => this.handleError(error))
                 .on("ready", () => {
                     this.isWatching = true;
-                    this.log("✅ File watcher listo y monitoreando cambios");
                 });
         } catch (error) {
             this.handleError(error);
@@ -96,8 +92,6 @@ export class FileWatcher {
             this.changeTimeout = null;
         }
 
-        this.log("🛑 Deteniendo file watcher...");
-
         try {
             await this.watcher.close();
             this.watcher = null;
@@ -112,10 +106,7 @@ export class FileWatcher {
     /**
      * Maneja cambios en archivos
      */
-    private handleFileChange(path: string, eventType: "modified" | "added" | "deleted"): void {
-        const relativePath = relative(__dirname, path);
-        this.log(`📝 Archivo ${eventType}: ${relativePath}`);
-
+    private handleFileChange(path: string): void {
         this.pendingChanges.add(path);
         this.debounceChange();
     }
@@ -141,7 +132,6 @@ export class FileWatcher {
             this.pendingChanges.clear();
 
             if (changedFiles.length > 0 && this.onChangeCallback) {
-                this.log(`🔄 Procesando ${changedFiles.length} cambios...`);
                 this.onChangeCallback(changedFiles);
             }
         }, this.debounceDelay);
@@ -177,7 +167,7 @@ export class FileWatcher {
  */
 export function createMjoLituiWatcher(options?: { debounceDelay?: number; verbose?: boolean }): FileWatcher {
     const config: WatcherConfig = {
-        paths: [join(__dirname, "src"), join(__dirname, "dist"), join(__dirname, "server/src"), join(__dirname, "server/templates")],
+        paths: [join(__dirname, "src"), join(__dirname, "server/src"), join(__dirname, "server/templates")],
         ignored: [
             "**/node_modules/**",
             "**/server/dist/**",

@@ -1,5 +1,5 @@
 {
-    "watch": ["server/src", "src"],
+    "watch": ["server/src"],
     "ext": "ts,js,json,html",
     "ignore": ["server/dist", "dist", "node_modules", "**/*.test.ts", "**/*.spec.ts", ".git"],
     "exec": "tsx server/src/app.ts",
@@ -7,9 +7,9 @@
         "NODE_ENV": "development"
     },
     "events": {
-        "restart": "echo '🔄 SSR Server restarted due to changes in src/ or server/'",
-        "start": "echo '🚀 SSR Server starting...'",
-        "crash": "echo '💥 SSR Server crashed!'"
+        "restart": "echo 🔄 SSR Server restarted due to changes in src/ or server/",
+        "start": "echo 🚀 SSR Server starting...",
+        "crash": "echo 💥 SSR Server crashed!"
     },
     "delay": 1500,
     "verbose": false,

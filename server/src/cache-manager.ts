@@ -1,9 +1,9 @@
-import { relative, resolve } from "path";
-import { fileURLToPath } from "url";
+import { resolve } from "path";
+// import { fileURLToPath } from "url";
 
 // Configurar __dirname para ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = resolve(__filename, "..", "..", "..");
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = resolve(__filename, "..", "..", "..");
 
 export class ModuleCacheManager {
     private cachedModules: Set<string> = new Set();
@@ -17,11 +17,7 @@ export class ModuleCacheManager {
      * Invalida el cache de módulos específicos
      */
     invalidateModules(filePaths: string[]): void {
-        const invalidatedCount = filePaths.filter((path) => this.invalidateModule(path)).length;
-
-        if (invalidatedCount > 0) {
-            this.log(`🗑️  Cache invalidado para ${invalidatedCount} módulos`);
-        }
+        filePaths.filter((path) => this.invalidateModule(path)).length;
     }
 
     /**
@@ -30,15 +26,11 @@ export class ModuleCacheManager {
     private invalidateModule(filePath: string): boolean {
         try {
             const absolutePath = resolve(filePath);
-            const relativePath = relative(__dirname, absolutePath);
 
             // En Node.js con ES modules, el cache se maneja diferente
             // Para TSX/TS files, necesitamos invalidar posibles transformaciones
             if (this.shouldInvalidate(absolutePath)) {
-                // Invalidar importaciones dinámicas cacheadas si es posible
-                this.invalidateImportCache(absolutePath);
                 this.cachedModules.add(absolutePath);
-                this.log(`♻️  Cache invalidado: ${relativePath}`);
                 return true;
             }
 
@@ -58,21 +50,11 @@ export class ModuleCacheManager {
     }
 
     /**
-     * Invalida cache de importaciones dinámicas
-     * Nota: En ES modules el cache es más complejo de manejar
-     */
-    private invalidateImportCache(filePath: string): void {
-        // En ES modules, el cache no se puede invalidar fácilmente
-        // Esta función es principalmente informativa para logging
-        this.log(`🔄 Preparando invalidación de cache para: ${filePath}`);
-    }
-
-    /**
      * Limpia completamente el cache (para reinicio completo)
      */
     clearAll(): void {
         this.cachedModules.clear();
-        this.log("🗑️  Cache completamente limpiado");
+        this.log("🗑️  Cache cleaned");
     }
 
     /**
@@ -115,8 +97,6 @@ export function filterCacheableFiles(filePaths: string[]): string[] {
  * Útil para reinicios completos del servidor
  */
 export function restartWithCacheInvalidation(): void {
-    console.log("🔄 Reiniciando proceso con cache invalidado...");
-
     // En un entorno con tsx/nodemon, simplemente salir permite que el process manager reinicie
     process.exit(0);
 }

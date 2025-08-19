@@ -3,11 +3,6 @@
  * Importa todos los componentes necesarios para la hidratación
  */
 
-// Importar componentes mjo-litui para hidratación
-import "../../src/mjo-avatar.js";
-import "../../src/mjo-chip.js";
-import "../../src/mjo-theme.js";
-
 console.log("🎨 mjo-litui client components loaded for hydration");
 
 // Función para inicializar tema después de hidratación

@@ -86,8 +86,6 @@ function autoGenerateComponentMetadata(): Record<string, ComponentMetadata> {
 
             componentMetadata[componentName] = baseMetadata;
         }
-
-        console.log(`🔧 Auto-generados ${Object.keys(componentMetadata).length} componentes`);
     } catch (error) {
         console.warn(`⚠️ Error auto-generando componentes: ${error}`);
         // Fallback mínimo si falla la auto-generación
@@ -114,15 +112,6 @@ export class ComponentDiscovery {
      */
     private loadComponentMetadata(): void {
         this.components = Object.values(COMPONENT_METADATA);
-
-        const uiComponents = this.components.filter((c) => !c.isSystemComponent);
-        const systemComponents = this.components.filter((c) => c.isSystemComponent);
-
-        console.log(`🔍 Componentes UI descubiertos: ${uiComponents.map((c) => c.name).join(", ")}`);
-        if (systemComponents.length > 0) {
-            console.log(`🔧 Componentes Sistema: ${systemComponents.map((c) => c.name).join(", ")}`);
-        }
-        console.log(`📊 Total componentes: ${this.components.length} (${uiComponents.length} UI + ${systemComponents.length} Sistema)`);
     }
 
     /**
