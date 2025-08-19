@@ -26,6 +26,8 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     private initial = "";
 
     render() {
+        this.initial = this.name ? this.name[0].toLocaleUpperCase() : "";
+
         return html`<div
             class="container size-${this.size} radius-${this.radius} color-${this.color}"
             ?data-bordered=${this.bordered}
@@ -70,11 +72,6 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
         } else if (nameElement) {
             nameElement.style.backgroundColor = "";
             nameElement.style.color = "";
-        }
-
-        const span = nameElement?.querySelector("span");
-        if (this.name && span) {
-            span.textContent = this.name[0].toUpperCase();
         }
     }
 

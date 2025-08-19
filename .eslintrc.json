@@ -20,7 +20,8 @@
         "node_modules",
         ".dev",
         "dev",
-        "test"
+        "test",
+        "server"
     ],
     "parser": "@typescript-eslint/parser",
     "rules": {
