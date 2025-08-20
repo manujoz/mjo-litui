@@ -444,22 +444,135 @@ export class ExampleAvatarAdvanced extends LitElement {
 }
 ```
 
+## Accessibility Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-avatar";
+import "mjo-litui/mjo-button";
+
+@customElement("example-avatar-accessibility")
+export class ExampleAvatarAccessibility extends LitElement {
+    @state() private selectedUser = "";
+    @state() private users = [
+        { id: "john", name: "John Doe", role: "Manager", online: true },
+        { id: "jane", name: "Jane Smith", role: "Developer", online: false },
+        { id: "bob", name: "Bob Wilson", role: "Designer", online: true },
+    ];
+
+    private handleAvatarClick(event: CustomEvent) {
+        this.selectedUser = event.detail.value;
+    }
+
+    private handleAvatarError(event: CustomEvent) {
+        console.warn("Avatar image failed to load:", event.detail.message);
+    }
+
+    render() {
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div>
+                    <h4>Fully Accessible Avatar List</h4>
+                    <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                        ${this.users.map(
+                            (user) => html`
+                                <div style="text-align: center;">
+                                    <mjo-avatar
+                                        name="${user.name}"
+                                        clickable
+                                        value="${user.id}"
+                                        bordered
+                                        color="${user.online ? "success" : "default"}"
+                                        nameColoured
+                                        aria-label="View ${user.name}'s profile (${user.role})"
+                                        aria-describedby="status-${user.id}"
+                                        tabindex="0"
+                                        @avatar-click="${this.handleAvatarClick}"
+                                        @avatar-error="${this.handleAvatarError}"
+                                    ></mjo-avatar>
+                                    <div id="status-${user.id}" style="font-size: 0.8rem; margin-top: 0.5rem;">
+                                        ${user.name}<br />
+                                        <span style="color: ${user.online ? "green" : "gray"}"> ${user.online ? "Online" : "Offline"} </span>
+                                    </div>
+                                </div>
+                            `,
+                        )}
+                    </div>
+                    ${this.selectedUser
+                        ? html` <p style="margin-top: 1rem;">Selected user: <strong>${this.users.find((u) => u.id === this.selectedUser)?.name}</strong></p> `
+                        : ""}
+                </div>
+
+                <div>
+                    <h4>Keyboard Navigation Test</h4>
+                    <p>Use Tab to navigate between avatars, Enter or Space to activate them.</p>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <mjo-avatar
+                            name="KB1"
+                            clickable
+                            value="keyboard-1"
+                            bordered
+                            color="primary"
+                            aria-label="Keyboard navigation test 1"
+                            tabindex="1"
+                            @avatar-click="${this.handleAvatarClick}"
+                        ></mjo-avatar>
+                        <mjo-avatar
+                            name="KB2"
+                            clickable
+                            value="keyboard-2"
+                            bordered
+                            color="secondary"
+                            aria-label="Keyboard navigation test 2"
+                            tabindex="2"
+                            @avatar-click="${this.handleAvatarClick}"
+                        ></mjo-avatar>
+                        <mjo-avatar
+                            name="Disabled"
+                            clickable
+                            disabled
+                            value="keyboard-disabled"
+                            bordered
+                            color="error"
+                            aria-label="Disabled avatar (not clickable)"
+                        ></mjo-avatar>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+```
+
 ## Attributes / Properties
 
-| Name           | Type                                                                                   | Default     | Reflects | Description                                                              |
-| -------------- | -------------------------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------ |
-| `src`          | `string \| undefined`                                                                  | `undefined` | no       | Image URL to display in the avatar                                       |
-| `alt`          | `string \| undefined`                                                                  | `undefined` | no       | Alternative text for the image (falls back to `name` if not provided)    |
-| `name`         | `string \| undefined`                                                                  | `undefined` | no       | Name used to generate initials when image is not available               |
-| `size`         | `"small" \| "medium" \| "large"`                                                       | `"medium"`  | no       | Controls the overall size of the avatar                                  |
-| `radius`       | `"small" \| "medium" \| "large" \| "full" \| "none"`                                   | `"full"`    | no       | Border radius applied to the avatar (full = circle)                      |
-| `color`        | `"default" \| "primary" \| "secondary" \| "success" \| "warning" \| "info" \| "error"` | `"default"` | no       | Color scheme for borders when `bordered` is true                         |
-| `bordered`     | `boolean`                                                                              | `false`     | yes      | Adds a colored border around the avatar                                  |
-| `disabled`     | `boolean`                                                                              | `false`     | yes      | Applies disabled styling (reduced opacity)                               |
-| `clickable`    | `boolean`                                                                              | `false`     | no       | Makes the avatar clickable and dispatches `avatar-click` events          |
-| `nameColoured` | `boolean`                                                                              | `false`     | no       | Applies automatic color generation based on the first letter of the name |
-| `fallbackIcon` | `string \| undefined`                                                                  | `undefined` | no       | Custom icon to use as fallback when image and name are not available     |
-| `value`        | `string \| undefined`                                                                  | `undefined` | no       | Custom value passed in the `avatar-click` event detail                   |
+| Name              | Type                                                                                   | Default     | Reflects | Description                                                              |
+| ----------------- | -------------------------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------ |
+| `src`             | `string \| undefined`                                                                  | `undefined` | no       | Image URL to display in the avatar                                       |
+| `alt`             | `string \| undefined`                                                                  | `undefined` | no       | Alternative text for the image (falls back to `name` if not provided)    |
+| `name`            | `string \| undefined`                                                                  | `undefined` | no       | Name used to generate initials when image is not available               |
+| `size`            | `"small" \| "medium" \| "large"`                                                       | `"medium"`  | no       | Controls the overall size of the avatar                                  |
+| `radius`          | `"small" \| "medium" \| "large" \| "full" \| "none"`                                   | `"full"`    | no       | Border radius applied to the avatar (full = circle)                      |
+| `color`           | `"default" \| "primary" \| "secondary" \| "success" \| "warning" \| "info" \| "error"` | `"default"` | no       | Color scheme for borders when `bordered` is true                         |
+| `bordered`        | `boolean`                                                                              | `false`     | yes      | Adds a colored border around the avatar                                  |
+| `disabled`        | `boolean`                                                                              | `false`     | yes      | Applies disabled styling (reduced opacity)                               |
+| `clickable`       | `boolean`                                                                              | `false`     | no       | Makes the avatar clickable and dispatches `avatar-click` events          |
+| `nameColoured`    | `boolean`                                                                              | `false`     | no       | Applies automatic color generation based on the first letter of the name |
+| `fallbackIcon`    | `string \| undefined`                                                                  | `undefined` | no       | Custom icon to use as fallback when image and name are not available     |
+| `value`           | `string \| undefined`                                                                  | `undefined` | no       | Custom value passed in the `avatar-click` event detail                   |
+| `ariaDescribedby` | `string \| undefined`                                                                  | `undefined` | no       | References additional descriptive content for screen readers             |
+
+### Accessibility Properties (Native Lit Support)
+
+The component supports standard HTML accessibility attributes through Lit's native property binding:
+
+| Attribute       | Usage                                     | Description                                           |
+| --------------- | ----------------------------------------- | ----------------------------------------------------- |
+| `aria-label`    | `aria-label="Custom avatar description"`  | Provides accessible label for screen readers          |
+| `tabindex`      | `tabindex="0"` or `tabindex="-1"`         | Controls keyboard navigation (automatically managed)  |
+| `role`          | Automatically set based on context        | Dynamic: `"button"`, `"img"`, or `"presentation"`     |
+| `aria-disabled` | Automatically set when `disabled` is true | Communicates disabled state to assistive technologies |
 
 ### Internal State
 
@@ -486,11 +599,12 @@ export class ExampleAvatarAdvanced extends LitElement {
 
 ## Events
 
-| Event          | Detail              | Emitted When                         | Notes                                                             |
-| -------------- | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
-| `avatar-click` | `{ value: string }` | Avatar is clicked (when `clickable`) | Contains `value` prop or `name` prop as fallback, or empty string |
+| Event          | Detail                | Emitted When                         | Notes                                                             |
+| -------------- | --------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `avatar-click` | `{ value: string }`   | Avatar is clicked (when `clickable`) | Contains `value` prop or `name` prop as fallback, or empty string |
+| `avatar-error` | `{ message: string }` | Image fails to load                  | Provides error message for debugging and accessibility purposes   |
 
-**Note**: The component handles image errors internally. The `avatar-click` event is only dispatched when the avatar is clickable and not disabled.
+**Note**: The component handles image errors internally and automatically falls back to alternative content. The `avatar-click` event is only dispatched when the avatar is clickable and not disabled.
 
 ## CSS Variables
 
@@ -536,6 +650,12 @@ The component provides extensive customization through CSS variables with fallba
 | Variable                    | Fallback | Used For         |
 | --------------------------- | -------- | ---------------- |
 | `--mjo-avatar-border-width` | `2px`    | Border thickness |
+
+### Focus and Accessibility Variables
+
+| Variable            | Fallback              | Used For            |
+| ------------------- | --------------------- | ------------------- |
+| `--mjo-focus-color` | `--mjo-primary-color` | Focus outline color |
 
 ### Semantic Border Colors
 
@@ -671,29 +791,64 @@ export class ExampleAvatarList extends LitElement {
 | `container` | The main avatar container   |
 | `image`     | The image/content container |
 
-## Accessibility Notes
+## Accessibility Features
 
--   Always provide meaningful `alt` text for images or use the `name` property as fallback
--   The component automatically uses `name` as `alt` text when `alt` is not provided
--   Ensure sufficient color contrast when using custom themes or `nameColoured` mode
--   Consider adding `role="img"` and `aria-label` for complex avatar implementations
--   For clickable avatars, ensure proper focus management and keyboard accessibility
--   Clickable avatars should have appropriate ARIA labels and keyboard interaction support
+The `mjo-avatar` component includes comprehensive accessibility support:
+
+### Automatic Accessibility Features
+
+-   **Dynamic Roles**: Automatically sets appropriate `role` attributes:
+
+    -   `role="button"` for clickable avatars
+    -   `role="img"` for avatars with images
+    -   `role="presentation"` for purely decorative avatars
+
+-   **ARIA Labels**: Intelligent `aria-label` generation:
+
+    -   Clickable: "Click to interact with [name/value/avatar]"
+    -   Named: "Avatar for [name]"
+    -   Generic: "Avatar"
+
+-   **Keyboard Navigation**: Full keyboard support:
+
+    -   `Enter` and `Space` keys activate clickable avatars
+    -   Automatic `tabindex` management (0 for clickable, -1 for non-clickable)
+    -   Visual focus indicators with `:focus-visible`
+
+-   **State Communication**:
+    -   `aria-disabled="true"` when avatar is disabled
+    -   Proper state changes communicated to screen readers
+
+### Accessibility Best Practices
 
 ```html
-<!-- Example with enhanced accessibility -->
+<!-- Enhanced accessibility example -->
 <mjo-avatar
     src="https://example.com/user.jpg"
     alt="Profile picture of John Doe, Software Engineer"
     name="John Doe"
     clickable
     value="john-doe"
-    role="button"
-    tabindex="0"
     aria-label="Click to view John Doe's profile"
+    aria-describedby="user-description"
     @avatar-click="${this.handleProfileClick}"
 ></mjo-avatar>
+
+<p id="user-description">Senior Software Engineer with 5 years experience. Currently online.</p>
 ```
+
+### Motion and Preference Support
+
+-   **Reduced Motion**: Respects `prefers-reduced-motion` user setting
+-   **Focus Management**: Clear visual focus indicators for keyboard users
+-   **Color Contrast**: Automatic color generation considers readability
+
+### Screen Reader Support
+
+-   Images include meaningful `alt` text (falls back to `name` if not provided)
+-   Error states are announced through `avatar-error` events
+-   Interactive elements properly identified and described
+-   State changes (enabled/disabled) are communicated
 
 ## Performance Considerations
 
@@ -719,7 +874,7 @@ export class ExampleAvatarList extends LitElement {
 
 ## Summary
 
-`<mjo-avatar>` provides a comprehensive solution for displaying user avatars with intelligent fallback handling, automatic color generation, and extensive customization options. The component gracefully handles image loading failures, supports multiple display modes (image, custom fallback icons, initials), and integrates seamlessly with the global design system.
+`<mjo-avatar>` provides a comprehensive solution for displaying user avatars with intelligent fallback handling, automatic color generation, extensive customization options, and full accessibility support. The component gracefully handles image loading failures, supports multiple display modes (image, custom fallback icons, initials), and integrates seamlessly with the global design system.
 
 Key features include:
 
@@ -728,5 +883,16 @@ Key features include:
 -   **Automatic Color Generation**: `nameColoured` creates consistent colors based on initials
 -   **Extensive Customization**: ThemeMixin support for instance-specific styling
 -   **Semantic Color System**: Integrates with the global design tokens
+-   **Full Accessibility Support**: WCAG 2.1 compliant with keyboard navigation, screen reader support, and dynamic ARIA attributes
+-   **Error Handling**: Graceful fallback with `avatar-error` events for debugging
+-   **Motion Preferences**: Respects user's `prefers-reduced-motion` setting
 
-Use ThemeMixin for instance-specific customizations, leverage the semantic color system for consistent styling, and take advantage of the clickable functionality for interactive user interfaces across your application.
+### Accessibility Highlights
+
+-   **Keyboard Navigation**: Full Enter/Space key support for clickable avatars
+-   **Screen Reader Support**: Intelligent ARIA labels and role management
+-   **Focus Management**: Clear visual focus indicators with customizable colors
+-   **State Communication**: Proper disabled state announcements
+-   **Native HTML Support**: Uses standard HTML accessibility attributes through Lit
+
+Use ThemeMixin for instance-specific customizations, leverage the semantic color system for consistent styling, take advantage of the clickable functionality for interactive user interfaces, and rely on the built-in accessibility features for inclusive design across your application.

@@ -3,3 +3,9 @@ export interface MjoAvatarClickEvent extends CustomEvent {
         value: string;
     };
 }
+
+export interface MjoAvatarErrorEvent extends CustomEvent {
+    detail: {
+        message: string;
+    };
+}

@@ -19,6 +19,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) src?: string;
     @property({ type: String }) value?: string;
+    @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
 
     @state() private error = false;
 
@@ -26,15 +27,40 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
 
     private initial = "";
 
+    private get appropriateRole() {
+        if (this.clickable) return "button";
+        if (this.src) return "img";
+        return "presentation";
+    }
+
+    private get computedAriaLabel() {
+        if (this.ariaLabel) return this.ariaLabel;
+
+        if (this.clickable) {
+            const nameOrValue = this.name || this.value || "avatar";
+            return `Click to interact with ${nameOrValue}`;
+        }
+        if (this.name) {
+            return `Avatar for ${this.name}`;
+        }
+        return "Avatar";
+    }
+
     render() {
         this.initial = this.name ? this.name[0].toLocaleUpperCase() : "";
 
         return html`<div
             class="container size-${this.size} radius-${this.radius} color-${this.color}"
+            role=${this.appropriateRole}
+            aria-label=${this.computedAriaLabel}
+            aria-describedby=${ifDefined(this.ariaDescribedby)}
+            aria-disabled=${this.disabled ? "true" : "false"}
+            tabindex=${this.clickable ? this.tabIndex ?? 0 : -1}
             ?data-bordered=${this.bordered}
             ?data-disabled=${this.disabled}
             ?data-clickable=${this.clickable}
-            @click=${this.#handleCLick}
+            @click=${this.#handleClick}
+            @keydown=${this.#handleKeydown}
         >
             ${this.src && !this.error
                 ? html`<div class="image radius-${this.radius}">
@@ -124,7 +150,15 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
         return [backgroundColors[bgindex], foregroundColors[fgindex]];
     }
 
-    async #handleCLick() {
+    #handleKeydown(event: KeyboardEvent) {
+        if (!this.clickable || this.disabled) return;
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            this.#handleClick();
+        }
+    }
+
+    async #handleClick() {
         if (!this.clickable || this.disabled) return;
 
         this.dispatchEvent(new CustomEvent("avatar-click", { detail: { value: this.value || this.name || "" } }));
@@ -138,6 +172,11 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
 
     #handleError() {
         this.error = true;
+        this.dispatchEvent(
+            new CustomEvent("avatar-error", {
+                detail: { message: "Failed to load avatar image" },
+            }),
+        );
     }
 
     static styles = [
@@ -282,6 +321,23 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 cursor: pointer;
                 transition: transform 0.2s ease;
             }
+            .container:focus-visible {
+                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline-offset: 2px;
+            }
+            .container[data-clickable]:focus-visible {
+                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline-offset: 2px;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .container[data-clickable] {
+                    transition: none;
+                }
+                .image {
+                    transition: none;
+                }
+            }
         `,
     ];
 }
@@ -293,5 +349,6 @@ declare global {
 
     interface HTMLElementEventMap {
         "avatar-click": CustomEvent<{ value: string }>;
+        "avatar-error": CustomEvent<{ message: string }>;
     }
 }
