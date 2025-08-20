@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>404 - Page not found</title>
+        <style>
+            body {
+                font-family: "Segoe UI", sans-serif;
+                margin: 40px auto;
+                max-width: 600px;
+                padding: 20px;
+                background: #f8fafc;
+                color: #1e293b;
+                text-align: center;
+            }
+            .not-found-container {
+                background: white;
+                padding: 60px 40px;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                font-size: 4rem;
+                margin: 0;
+                color: #64748b;
+            }
+            h2 {
+                color: #1e293b;
+                margin: 20px 0;
+            }
+            .nav-links {
+                margin-top: 30px;
+                display: flex;
+                gap: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .nav-links a {
+                color: #3b82f6;
+                text-decoration: none;
+                padding: 12px 20px;
+                background: #dbeafe;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+            }
+            .nav-links a:hover {
+                background: #3b82f6;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="not-found-container">
+            <h1>404</h1>
+            <h2>Page not found</h2>
+            <p>The page you are looking for does not exist on this SSR server.</p>
+            <div class="nav-links">
+                <a href="/">🏠 Home</a>
+                <a href="/component/avatar">🧑‍💼 Avatar</a>
+                <a href="/component/chip">🏷️ Chip</a>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+.hover-effects {
+    gap: 30px;
+}
+
+/* Clickable and hover avatars */
+.clickable-avatar,
+.hover-avatar {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.size-label {
+    font-size: 0.875rem;
+    color: var(--mjo-foreground-color-low);
+    font-weight: 500;
+}
+
+.dashboard-demo {
+    background: var(--mjo-background-color-card);
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .team-header,
+    .selection-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}

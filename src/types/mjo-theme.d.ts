@@ -115,7 +115,7 @@ type MjoThemeMode = {
     /** --mjo-secondary-foreground-color */
     secondaryForegroundColor?: MjoThemeColorSmall | string;
     /** --mjo-border-color, --mjo-border-color-light, --mjo-border-color-dark */
-    borderColor?: MjoThemeColorSmall | string;
+    borderColor?: MjoThemeColorContrasts | string;
     /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */
     backgroundColor?: ({ hover: string } & MjoThemeColorContrasts) | string;
     /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */

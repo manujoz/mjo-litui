@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Error - mjo-litui SSR</title>
+        <style>
+            body {
+                font-family: "Segoe UI", sans-serif;
+                margin: 40px auto;
+                max-width: 800px;
+                padding: 20px;
+                background: #f8fafc;
+                color: #1e293b;
+            }
+            .error-container {
+                background: white;
+                padding: 40px;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                border-left: 4px solid #ef4444;
+            }
+            h1 {
+                color: #ef4444;
+                margin: 0 0 20px 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            pre {
+                background: #f1f5f9;
+                padding: 20px;
+                border-radius: 8px;
+                overflow-x: auto;
+                font-size: 0.875rem;
+            }
+            .back-link {
+                display: inline-block;
+                margin-top: 20px;
+                color: #3b82f6;
+                text-decoration: none;
+                padding: 10px 15px;
+                background: #dbeafe;
+                border-radius: 6px;
+            }
+            .back-link:hover {
+                background: #3b82f6;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="error-container">
+            <h1>❌ SSR Server Error</h1>
+            <p><strong>Error:</strong> ${errmsg}</p>
+            ${errstack}
+            <a href="/" class="back-link">← Back to home</a>
+        </div>
+    </body>
+</html>

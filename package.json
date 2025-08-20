@@ -1,6 +1,6 @@
 {
     "name": "mjo-litui",
-    "version": "0.2.6",
+    "version": "0.2.8",
     "description": "A collection of web components for building user interfaces with LitElement.",
     "type": "module",
     "main": "index.js",
@@ -65,7 +65,7 @@
     "homepage": "",
     "repository": {
         "type": "git",
-        "url": "https://github.com/manujoz/mo-litui"
+        "url": "https://github.com/manujoz/mjo-litui"
     },
     "author": "Manu Overa",
     "license": "MIT",
@@ -76,12 +76,15 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
-        "build:public": "npm run build && cd dist && npm publish",
+        "build:publish": "npm run build && cd dist && npm publish",
         "preview": "vite preview",
-        "test": "web-test-runner",
-        "test:watch": "web-test-runner --watch",
-        "test:coverage": "web-test-runner --coverage",
-        "postinstall": "npx playwright install"
+        "test": "npm run build && web-test-runner",
+        "test:watch": "npm run build && web-test-runner --watch",
+        "test:coverage": "npm run build && web-test-runner --coverage",
+        "postinstall": "npx playwright install",
+        "server:dev": " npm run server:build:client && nodemon --exec tsx server/src/app.ts --watch server",
+        "server:dev:debug": "NODE_ENV=development nodemon --exec tsx server/src/app.ts --watch server --verbose",
+        "server:build:client": "vite build --config vite.config.client.js"
     },
     "dependencies": {
         "@lit/context": "^1.1.3",
@@ -93,16 +96,23 @@
         "@commitlint/cli": "^18.4.4",
         "@commitlint/config-conventional": "^18.4.4",
         "@esm-bundle/chai": "^4.3.4-fix.0",
+        "@lit-labs/ssr": "^3.3.1",
+        "@lit-labs/ssr-client": "^1.1.7",
+        "@lit-labs/ssr-dom-shim": "^1.4.0",
         "@lit-labs/testing": "^0.2.7",
         "@open-wc/testing": "^4.0.0",
+        "@types/chokidar": "^1.7.5",
+        "@types/express": "^5.0.3",
         "@types/mocha": "^10.0.10",
         "@types/node": "^20.11.5",
+        "@types/ws": "^8.18.1",
         "@typescript-eslint/eslint-plugin": "^6.19.0",
         "@typescript-eslint/parser": "^6.19.0",
         "@web/dev-server-esbuild": "^1.0.4",
         "@web/test-runner": "^0.20.2",
         "@web/test-runner-mocha": "^0.9.0",
         "@web/test-runner-playwright": "^0.11.1",
+        "chokidar": "^4.0.3",
         "csstype": "^3.1.3",
         "eslint": "^8.56.0",
         "eslint-config-prettier": "^9.1.0",
@@ -112,13 +122,17 @@
         "eslint-plugin-prettier": "^5.1.3",
         "eslint-plugin-storybook": "^0.8.0",
         "eslint-plugin-wc": "^2.0.4",
+        "express": "^4.21.2",
         "husky": "^8.0.3",
         "lint-staged": "^15.2.0",
         "ncp": "^2.0.0",
+        "nodemon": "^3.1.10",
         "prettier": "^3.2.4",
+        "tsx": "^4.20.4",
         "typescript": "^5.2.2",
         "validate-branch-name": "^1.3.0",
         "vite": "^5.0.8",
-        "vite-plugin-svgo": "^1.4.0"
+        "vite-plugin-svgo": "^1.4.0",
+        "ws": "^8.18.3"
     }
 }
