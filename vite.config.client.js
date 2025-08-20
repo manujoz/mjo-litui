@@ -1,5 +1,5 @@
 import fs from "fs";
-import { resolve } from "path";
+import path, { resolve } from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -15,7 +15,13 @@ export default defineConfig({
                 entryFileNames: "[name].js",
                 chunkFileNames: (chunkInfo) => {
                     // Nombrar específicamente el chunk que contiene las directivas de Lit
-                    if (chunkInfo.moduleIds.filter((id) => id.includes("lit")).length > 0) {
+                    if (
+                        chunkInfo.moduleIds.filter((id) => {
+                            const cwd = path.normalize(process.cwd());
+                            const normalizedId = path.normalize(id).replace(cwd, "");
+                            return normalizedId.includes("lit");
+                        }).length > 0
+                    ) {
                         return "lit-core.js";
                     }
                     return "[name].js";

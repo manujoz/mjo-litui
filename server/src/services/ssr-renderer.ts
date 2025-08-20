@@ -11,7 +11,7 @@ export interface RenderOptions {
     title?: string;
     description?: string;
     styles?: string[];
-    scripts?: string[];
+    scripts?: SriptsType[];
     meta?: Array<{ name: string; content: string }>;
 }
 
@@ -35,7 +35,11 @@ export class SSRRenderer {
         const title = options.title || "mjo-litui SSR Server";
 
         // Additional scripts for SSR
-        const ssrScripts = ["/public/js/lit-hydration.js", "/public/js/client.js", ...(options.scripts || [])];
+        const ssrScripts: SriptsType[] = [
+            { src: "/public/js/lit-hydration.js", type: "module" },
+            { src: "/public/js/client.js", type: "module" },
+            ...(options.scripts || []),
+        ];
 
         // Additional styles for SSR
         const ssrStyles = [...(options.styles || [])];
@@ -81,3 +85,8 @@ export class SSRRenderer {
  * Singleton instance of the SSR renderer
  */
 export const ssrRenderer = new SSRRenderer();
+
+interface SriptsType {
+    src: string;
+    type: "module" | "text/javascript";
+}

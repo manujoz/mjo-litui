@@ -2,24 +2,6 @@
     gap: 30px;
 }
 
-.avatar-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: default;
-    gap: 12px;
-    padding: 20px;
-    background: var(--mjo-background-color-card-low);
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
-
-.avatar-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
 /* Clickable and hover avatars */
 .clickable-avatar,
 .hover-avatar {

@@ -1,27 +1,28 @@
-import { LitElement, PropertyValues, TemplateResult, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { LitElement, PropertyValues, css, html } from "lit";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
-
-import { AiOutlineUser } from "mjo-icons/ai";
+import { pause } from "./utils/utils.js";
 
 @customElement("mjo-avatar")
 export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) bordered = false;
     @property({ type: Boolean }) disabled = false;
-    @property({ type: Boolean }) showFallback = false;
+    @property({ type: Boolean }) clickable = false;
     @property({ type: Boolean }) nameColoured = false;
-    @property({ type: String }) fallback?: string;
+    @property({ type: String }) fallbackIcon?: string;
     @property({ type: String }) alt?: string;
     @property({ type: String }) color: "default" | "primary" | "secondary" | "success" | "warning" | "info" | "error" = "default";
     @property({ type: String }) name?: string;
     @property({ type: String }) radius: "small" | "medium" | "large" | "full" | "none" = "full";
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) src?: string;
+    @property({ type: String }) value?: string;
 
-    @state() private fallbackIcon?: TemplateResult<1>;
     @state() private error = false;
+
+    @query(".container") private container!: HTMLElement;
 
     private initial = "";
 
@@ -32,13 +33,15 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             class="container size-${this.size} radius-${this.radius} color-${this.color}"
             ?data-bordered=${this.bordered}
             ?data-disabled=${this.disabled}
+            ?data-clickable=${this.clickable}
+            @click=${this.#handleCLick}
         >
             ${this.src && !this.error
                 ? html`<div class="image radius-${this.radius}">
                       <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${this.#handleError} />
                   </div>`
-                : this.showFallback && this.fallbackIcon
-                  ? html`<div class="image fallback radius-${this.radius} font-size-${this.size}">${this.fallbackIcon}</div>`
+                : this.fallbackIcon
+                  ? html`<div class="image fallback radius-${this.radius} font-size-${this.size}"><mjo-icon src=${this.fallbackIcon}></mjo-icon></div>`
                   : this.name
                     ? html`<div class="image name radius-${this.radius} font-size-${this.size}"><span>${this.initial}</span></div>`
                     : html`<div class="image radius-${this.radius}"></div>`}
@@ -48,10 +51,6 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     connectedCallback(): void {
         super.connectedCallback();
 
-        if (!this.src && this.showFallback) {
-            this.#setFallback();
-        }
-
         if (this.name) {
             this.initial = this.name[0].toUpperCase();
         }
@@ -60,6 +59,10 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     protected updated(_changedProperties: PropertyValues): void {
         if (_changedProperties.has("name")) {
             this.initial = this.name ? this.name[0].toUpperCase() : "";
+        }
+
+        if (_changedProperties.has("src")) {
+            this.error = false;
         }
 
         // Query for nameElement each time to avoid stale references
@@ -121,15 +124,20 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
         return [backgroundColors[bgindex], foregroundColors[fgindex]];
     }
 
-    #handleError() {
-        this.error = true;
-        this.showFallback = true;
-        this.#setFallback();
+    async #handleCLick() {
+        if (!this.clickable || this.disabled) return;
+
+        this.dispatchEvent(new CustomEvent("avatar-click", { detail: { value: this.value || this.name || "" } }));
+
+        this.container.style.transform = "scale(0.9)";
+        await pause(100);
+        this.container.style.transform = "scale(1.1)";
+        await pause(150);
+        this.container.removeAttribute("style");
     }
 
-    #setFallback() {
-        const icon = this.fallback || AiOutlineUser;
-        this.fallbackIcon = html`<mjo-icon src=${icon}></mjo-icon>`;
+    #handleError() {
+        this.error = true;
     }
 
     static styles = [
@@ -142,9 +150,11 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             .container {
                 position: relative;
                 box-sizing: border-box;
+                user-select: none;
             }
             .container[data-disabled] {
                 opacity: 0.5;
+                cursor: default !important;
             }
 
             .image {
@@ -175,23 +185,23 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 color: var(--mjo-avatar-name-auto-foreground-color, var(--mjo-avatar-name-color, var(--mjo-color-gray-100)));
             }
 
-            .font-size-small {
+            .size-small {
                 font-size: var(--mjo-avatar-fallback-size-small, 18px);
             }
-            .font-size-medium {
-                font-size: var(--mjo-avatar-fallback-size-medium, 24px);
+            .size-medium {
+                font-size: var(--mjo-avatar-fallback-size-medium, 28px);
             }
-            .font-size-large {
-                font-size: var(--mjo-avatar-fallback-size-large, 32px);
+            .size-large {
+                font-size: var(--mjo-avatar-fallback-size-large, 40px);
             }
-            .font-size-small mjo-icon {
+            .size-small mjo-icon {
                 font-size: var(--mjo-avatar-fallback-size-small, 18px);
             }
-            .font-size-medium mjo-icon {
-                font-size: var(--mjo-avatar-fallback-size-medium, 24px);
+            .size-medium mjo-icon {
+                font-size: var(--mjo-avatar-fallback-size-medium, 28px);
             }
-            .font-size-large mjo-icon {
-                font-size: var(--mjo-avatar-fallback-size-large, 32px);
+            .size-large mjo-icon {
+                font-size: var(--mjo-avatar-fallback-size-large, 40px);
             }
             .radius-small {
                 border-radius: var(--mjo-avatar-radius-small, 4px);
@@ -210,12 +220,12 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 height: var(--mjo-avatar-size-small, 32px);
             }
             .size-medium {
-                width: var(--mjo-avatar-size-medium, 40px);
-                height: var(--mjo-avatar-size-medium, 40px);
+                width: var(--mjo-avatar-size-medium, 44px);
+                height: var(--mjo-avatar-size-medium, 44px);
             }
             .size-large {
-                width: var(--mjo-avatar-size-large, 48px);
-                height: var(--mjo-avatar-size-large, 48px);
+                width: var(--mjo-avatar-size-large, 54px);
+                height: var(--mjo-avatar-size-large, 54px);
             }
             .color-default {
                 border-color: var(--mjo-avatar-name-auto-background-color, var(--mjo-avatar-border-color, var(--mjo-color-gray-300)));
@@ -244,35 +254,33 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 border-width: var(--mjo-avatar-border-width, 2px);
                 padding: 2px;
             }
-            .container[data-bordered] .size-small {
+            .container[data-bordered].size-small {
                 width: calc(var(--mjo-avatar-size-small, 32px) - var(--mjo-avatar-border-width, 2px));
                 height: calc(var(--mjo-avatar-size-small, 32px) - var(--mjo-avatar-border-width, 2px));
-            }
-            .container[data-bordered] .size-medium {
-                width: calc(var(--mjo-avatar-size-medium, 40px) - var(--mjo-avatar-border-width, 2px));
-                height: calc(var(--mjo-avatar-size-medium, 40px) - var(--mjo-avatar-border-width, 2px));
-            }
-            .container[data-bordered] .size-large {
-                width: calc(var(--mjo-avatar-size-large, 48px) - var(--mjo-avatar-border-width, 2px));
-                height: calc(var(--mjo-avatar-size-large, 48px) - var(--mjo-avatar-border-width, 2px));
-            }
-            .container[data-bordered] .font-size-small {
                 font-size: calc(var(--mjo-avatar-fallback-size-small, 18px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-medium {
-                font-size: calc(var(--mjo-avatar-fallback-size-medium, 24px) - var(--mjo-avatar-border-width, 2px));
+            .container[data-bordered].size-medium {
+                width: calc(var(--mjo-avatar-size-medium, 44px) - var(--mjo-avatar-border-width, 2px));
+                height: calc(var(--mjo-avatar-size-medium, 44px) - var(--mjo-avatar-border-width, 2px));
+                font-size: calc(var(--mjo-avatar-fallback-size-medium, 26px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-large {
-                font-size: calc(var(--mjo-avatar-fallback-size-large, 32px) - var(--mjo-avatar-border-width, 2px));
+            .container[data-bordered].size-large {
+                width: calc(var(--mjo-avatar-size-large, 54px) - var(--mjo-avatar-border-width, 2px));
+                height: calc(var(--mjo-avatar-size-large, 54px) - var(--mjo-avatar-border-width, 2px));
+                font-size: calc(var(--mjo-avatar-fallback-size-large, 36px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-small mjo-icon {
+            .container[data-bordered].size-small mjo-icon {
                 font-size: calc(var(--mjo-avatar-fallback-size-small, 18px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-medium mjo-icon {
-                font-size: calc(var(--mjo-avatar-fallback-size-medium, 24px) - var(--mjo-avatar-border-width, 2px));
+            .container[data-bordered].size-medium mjo-icon {
+                font-size: calc(var(--mjo-avatar-fallback-size-medium, 26px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-large mjo-icon {
-                font-size: calc(var(--mjo-avatar-fallback-size-large, 32px) - var(--mjo-avatar-border-width, 2px));
+            .container[data-bordered].size-large mjo-icon {
+                font-size: calc(var(--mjo-avatar-fallback-size-large, 36px) - var(--mjo-avatar-border-width, 2px));
+            }
+            .container[data-clickable] {
+                cursor: pointer;
+                transition: transform 0.2s ease;
             }
         `,
     ];
@@ -281,5 +289,9 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-avatar": MjoAvatar;
+    }
+
+    interface HTMLElementEventMap {
+        "avatar-click": CustomEvent<{ value: string }>;
     }
 }

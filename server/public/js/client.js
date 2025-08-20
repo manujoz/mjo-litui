@@ -13,6 +13,7 @@ var __privateMethod = (obj, member, method) => {
 };
 var _a, _b;
 import { r as render, n as noChange, a as nothing, h as html, D as Directive, P as PartType, d as directive } from "./lit-core.js";
+import { c as AiFillCloseCircle } from "./index.js";
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -99,22 +100,22 @@ const getCompatibleStyle = supportsAdoptingStyleSheets || NODE_MODE ? (s) => s :
  */
 const { is, defineProperty, getOwnPropertyDescriptor, getOwnPropertyNames, getOwnPropertySymbols, getPrototypeOf } = Object;
 const global = globalThis;
-let issueWarning$2;
+let issueWarning$3;
 const trustedTypes = global.trustedTypes;
 const emptyStringForBooleanAttribute = trustedTypes ? trustedTypes.emptyScript : "";
 const polyfillSupport$1 = global.reactiveElementPolyfillSupportDevMode;
 {
   const issuedWarnings = global.litIssuedWarnings ?? (global.litIssuedWarnings = /* @__PURE__ */ new Set());
-  issueWarning$2 = (code, warning) => {
+  issueWarning$3 = (code, warning) => {
     warning += ` See https://lit.dev/msg/${code} for more information.`;
     if (!issuedWarnings.has(warning)) {
       console.warn(warning);
       issuedWarnings.add(warning);
     }
   };
-  issueWarning$2("dev-mode", `Lit is in dev mode. Not recommended for production!`);
+  issueWarning$3("dev-mode", `Lit is in dev mode. Not recommended for production!`);
   if (((_a = global.ShadyDOM) == null ? void 0 : _a.inUse) && polyfillSupport$1 === void 0) {
-    issueWarning$2("polyfill-support-missing", `Shadow DOM is being polyfilled via \`ShadyDOM\` but the \`polyfill-support\` module has not been loaded.`);
+    issueWarning$3("polyfill-support-missing", `Shadow DOM is being polyfilled via \`ShadyDOM\` but the \`polyfill-support\` module has not been loaded.`);
   }
 }
 const debugLogEvent = (event) => {
@@ -301,7 +302,7 @@ class ReactiveElement extends HTMLElement {
       if ("value" in (getOwnPropertyDescriptor(this.prototype, name) ?? {})) {
         throw new Error(`Field ${JSON.stringify(String(name))} on ${this.name} was declared as a reactive property but it's actually declared as a value on the prototype. Usually this is due to using @property or @state on a method.`);
       }
-      issueWarning$2("reactive-property-without-getter", `Field ${JSON.stringify(String(name))} on ${this.name} was declared as a reactive property but it does not have a getter. This will be an error in a future version of Lit.`);
+      issueWarning$3("reactive-property-without-getter", `Field ${JSON.stringify(String(name))} on ${this.name} was declared as a reactive property but it does not have a getter. This will be an error in a future version of Lit.`);
     }
     return {
       get() {
@@ -401,10 +402,10 @@ class ReactiveElement extends HTMLElement {
     this.elementStyles = this.finalizeStyles(this.styles);
     {
       if (this.hasOwnProperty("createProperty")) {
-        issueWarning$2("no-override-create-property", "Overriding ReactiveElement.createProperty() is deprecated. The override will not be called with standard decorators");
+        issueWarning$3("no-override-create-property", "Overriding ReactiveElement.createProperty() is deprecated. The override will not be called with standard decorators");
       }
       if (this.hasOwnProperty("getPropertyDescriptor")) {
-        issueWarning$2("no-override-get-property-descriptor", "Overriding ReactiveElement.getPropertyDescriptor() is deprecated. The override will not be called with standard decorators");
+        issueWarning$3("no-override-get-property-descriptor", "Overriding ReactiveElement.getPropertyDescriptor() is deprecated. The override will not be called with standard decorators");
       }
     }
   }
@@ -584,7 +585,7 @@ class ReactiveElement extends HTMLElement {
       const converter = ((_a2 = options.converter) == null ? void 0 : _a2.toAttribute) !== void 0 ? options.converter : defaultConverter;
       const attrValue = converter.toAttribute(value, options.type);
       if (this.constructor.enabledWarnings.includes("migration") && attrValue === void 0) {
-        issueWarning$2("undefined-attribute-value", `The attribute value for the ${name} property is undefined on element ${this.localName}. The attribute will be removed, but in the previous version of \`ReactiveElement\`, the attribute would not have changed.`);
+        issueWarning$3("undefined-attribute-value", `The attribute value for the ${name} property is undefined on element ${this.localName}. The attribute will be removed, but in the previous version of \`ReactiveElement\`, the attribute would not have changed.`);
       }
       this.__reflectingProperty = name;
       if (attrValue == null) {
@@ -629,7 +630,7 @@ class ReactiveElement extends HTMLElement {
   requestUpdate(name, oldValue, options) {
     if (name !== void 0) {
       if (name instanceof Event) {
-        issueWarning$2(``, `The requestUpdate() method was called with an Event as the property name. This is probably a mistake caused by binding this.requestUpdate as an event listener. Instead bind a function that will call it with no arguments: () => this.requestUpdate()`);
+        issueWarning$3(``, `The requestUpdate() method was called with an Event as the property name. This is probably a mistake caused by binding this.requestUpdate as an event listener. Instead bind a function that will call it with no arguments: () => this.requestUpdate()`);
       }
       options ?? (options = this.constructor.getPropertyOptions(name));
       const hasChanged = options.hasChanged ?? notEqual;
@@ -691,7 +692,7 @@ class ReactiveElement extends HTMLElement {
   scheduleUpdate() {
     const result = this.performUpdate();
     if (this.constructor.enabledWarnings.includes("async-perform-update") && typeof (result == null ? void 0 : result.then) === "function") {
-      issueWarning$2("async-perform-update", `Element ${this.localName} returned a Promise from performUpdate(). This behavior is deprecated and will be removed in a future version of ReactiveElement.`);
+      issueWarning$3("async-perform-update", `Element ${this.localName} returned a Promise from performUpdate(). This behavior is deprecated and will be removed in a future version of ReactiveElement.`);
     }
     return result;
   }
@@ -795,7 +796,7 @@ class ReactiveElement extends HTMLElement {
     }
     this.updated(changedProperties);
     if (this.isUpdatePending && this.constructor.enabledWarnings.includes("change-in-update")) {
-      issueWarning$2("change-in-update", `Element ${this.localName} scheduled an update (generally because a property was set) after an update completed, causing a new update to be scheduled. This is inefficient and should be avoided unless the next update can only be scheduled as a side effect of the previous update.`);
+      issueWarning$3("change-in-update", `Element ${this.localName} scheduled an update (generally because a property was set) after an update completed, causing a new update to be scheduled. This is inefficient and should be avoided unless the next update can only be scheduled as a side effect of the previous update.`);
     }
   }
   __markUpdated() {
@@ -933,7 +934,7 @@ polyfillSupport$1 == null ? void 0 : polyfillSupport$1({ ReactiveElement });
 }
 (global.reactiveElementVersions ?? (global.reactiveElementVersions = [])).push("2.0.4");
 if (global.reactiveElementVersions.length > 1) {
-  issueWarning$2("multiple-versions", `Multiple versions of Lit loaded. Loading multiple versions is not recommended.`);
+  issueWarning$3("multiple-versions", `Multiple versions of Lit loaded. Loading multiple versions is not recommended.`);
 }
 /**
  * @license
@@ -941,10 +942,10 @@ if (global.reactiveElementVersions.length > 1) {
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const JSCompiler_renameProperty = (prop, _obj) => prop;
-let issueWarning$1;
+let issueWarning$2;
 {
   const issuedWarnings = globalThis.litIssuedWarnings ?? (globalThis.litIssuedWarnings = /* @__PURE__ */ new Set());
-  issueWarning$1 = (code, warning) => {
+  issueWarning$2 = (code, warning) => {
     warning += ` See https://lit.dev/msg/${code} for more information.`;
     if (!issuedWarnings.has(warning)) {
       console.warn(warning);
@@ -1049,7 +1050,7 @@ const polyfillSupport = globalThis.litElementPolyfillSupportDevMode;
 polyfillSupport == null ? void 0 : polyfillSupport({ LitElement });
 (globalThis.litElementVersions ?? (globalThis.litElementVersions = [])).push("4.1.0");
 if (globalThis.litElementVersions.length > 1) {
-  issueWarning$1("multiple-versions", `Multiple versions of Lit loaded. Loading multiple versions is not recommended.`);
+  issueWarning$2("multiple-versions", `Multiple versions of Lit loaded. Loading multiple versions is not recommended.`);
 }
 /**
  * @license
@@ -1070,10 +1071,10 @@ const customElement = (tagName) => (classOrTarget, context) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-let issueWarning;
+let issueWarning$1;
 {
   const issuedWarnings = globalThis.litIssuedWarnings ?? (globalThis.litIssuedWarnings = /* @__PURE__ */ new Set());
-  issueWarning = (code, warning) => {
+  issueWarning$1 = (code, warning) => {
     warning += ` See https://lit.dev/msg/${code} for more information.`;
     if (!issuedWarnings.has(warning)) {
       console.warn(warning);
@@ -1096,7 +1097,7 @@ const defaultPropertyDeclaration = {
 const standardProperty = (options = defaultPropertyDeclaration, target, context) => {
   const { kind, metadata } = context;
   if (metadata == null) {
-    issueWarning("missing-class-metadata", `The class ${target} is missing decorator metadata. This could mean that you're using a compiler that supports decorators but doesn't support decorator metadata, such as TypeScript 5.1. Please update your compiler.`);
+    issueWarning$1("missing-class-metadata", `The class ${target} is missing decorator metadata. This could mean that you're using a compiler that supports decorators but doesn't support decorator metadata, such as TypeScript 5.1. Please update your compiler.`);
   }
   let properties = globalThis.litPropertyMetadata.get(metadata);
   if (properties === void 0) {
@@ -1153,8 +1154,77 @@ function state(options) {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
+const desc = (obj, name, descriptor) => {
+  descriptor.configurable = true;
+  descriptor.enumerable = true;
+  if (
+    // We check for Reflect.decorate each time, in case the zombiefill
+    // is applied via lazy loading some Angular code.
+    Reflect.decorate && typeof name !== "object"
+  ) {
+    Object.defineProperty(obj, name, descriptor);
+  }
+  return descriptor;
+};
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+let issueWarning;
 {
-  globalThis.litIssuedWarnings ?? (globalThis.litIssuedWarnings = /* @__PURE__ */ new Set());
+  const issuedWarnings = globalThis.litIssuedWarnings ?? (globalThis.litIssuedWarnings = /* @__PURE__ */ new Set());
+  issueWarning = (code, warning) => {
+    warning += code ? ` See https://lit.dev/msg/${code} for more information.` : "";
+    if (!issuedWarnings.has(warning)) {
+      console.warn(warning);
+      issuedWarnings.add(warning);
+    }
+  };
+}
+function query(selector, cache) {
+  return (protoOrTarget, nameOrContext, descriptor) => {
+    const doQuery = (el) => {
+      var _a2;
+      const result = ((_a2 = el.renderRoot) == null ? void 0 : _a2.querySelector(selector)) ?? null;
+      if (result === null && cache && !el.hasUpdated) {
+        const name = typeof nameOrContext === "object" ? nameOrContext.name : nameOrContext;
+        issueWarning("", `@query'd field ${JSON.stringify(String(name))} with the 'cache' flag set for selector '${selector}' has been accessed before the first update and returned null. This is expected if the renderRoot tree has not been provided beforehand (e.g. via Declarative Shadow DOM). Therefore the value hasn't been cached.`);
+      }
+      return result;
+    };
+    if (cache) {
+      const { get, set } = typeof nameOrContext === "object" ? protoOrTarget : descriptor ?? (() => {
+        const key = Symbol(`${String(nameOrContext)} (@query() cache)`);
+        return {
+          get() {
+            return this[key];
+          },
+          set(v) {
+            this[key] = v;
+          }
+        };
+      })();
+      return desc(protoOrTarget, nameOrContext, {
+        get() {
+          let result = get.call(this);
+          if (result === void 0) {
+            result = doQuery(this);
+            if (result !== null || this.hasUpdated) {
+              set.call(this, result);
+            }
+          }
+          return result;
+        }
+      });
+    } else {
+      return desc(protoOrTarget, nameOrContext, {
+        get() {
+          return doQuery(this);
+        }
+      });
+    }
+  };
 }
 /**
  * @license
@@ -1214,8 +1284,9 @@ const ThemeMixin = (superClass) => {
   ], ThemeMx.prototype, "theme", 2);
   return ThemeMx;
 };
-const AiFillCloseCircle = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="currentColor" fillRule="evenodd"><path d="M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64Zm127.978 274.82-.034.006c-.023.007-.042.018-.083.059L512 466.745l-127.86-127.86c-.042-.041-.06-.052-.084-.059a.118.118 0 0 0-.07 0c-.022.007-.041.018-.082.059l-45.02 45.019c-.04.04-.05.06-.058.083a.118.118 0 0 0 0 .07l.01.022a.268.268 0 0 0 .049.06L466.745 512l-127.86 127.862c-.041.04-.052.06-.059.083a.118.118 0 0 0 0 .07c.007.022.018.041.059.082l45.019 45.02c.04.04.06.05.083.058a.118.118 0 0 0 .07 0c.022-.007.041-.018.082-.059L512 557.254l127.862 127.861c.04.041.06.052.083.059a.118.118 0 0 0 .07 0c.022-.007.041-.018.082-.059l45.02-45.019c.04-.04.05-.06.058-.083a.118.118 0 0 0 0-.07l-.01-.022a.268.268 0 0 0-.049-.06L557.254 512l127.861-127.86c.041-.042.052-.06.059-.084a.118.118 0 0 0 0-.07c-.007-.022-.018-.041-.059-.082l-45.019-45.02c-.04-.04-.06-.05-.083-.058a.118.118 0 0 0-.07 0Z"></path></svg>`;
-const AiOutlineUser = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path d="M858.5 763.6a374 374 0 0 0-80.6-119.5 375.63 375.63 0 0 0-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 0 0-80.6 119.5A371.7 371.7 0 0 0 136 901.8a8 8 0 0 0 8 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 0 0 8-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"></path></svg>`;
+const pause = async (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 var __defProp$4 = Object.defineProperty;
 var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
 var __decorateClass$4 = (decorators, target, key, kind) => {
@@ -1240,16 +1311,16 @@ var __privateMethod$2 = (obj, member, method) => {
   __accessCheck$2(obj, member, "access private method");
   return method;
 };
-var _colorByInitial, colorByInitial_fn, _handleError, handleError_fn, _setFallback, setFallback_fn;
+var _colorByInitial, colorByInitial_fn, _handleCLick, handleCLick_fn, _handleError, handleError_fn;
 let MjoAvatar = class extends ThemeMixin(LitElement) {
   constructor() {
     super(...arguments);
     __privateAdd$2(this, _colorByInitial);
+    __privateAdd$2(this, _handleCLick);
     __privateAdd$2(this, _handleError);
-    __privateAdd$2(this, _setFallback);
     this.bordered = false;
     this.disabled = false;
-    this.showFallback = false;
+    this.clickable = false;
     this.nameColoured = false;
     this.color = "default";
     this.radius = "full";
@@ -1263,17 +1334,16 @@ let MjoAvatar = class extends ThemeMixin(LitElement) {
             class="container size-${this.size} radius-${this.radius} color-${this.color}"
             ?data-bordered=${this.bordered}
             ?data-disabled=${this.disabled}
+            ?data-clickable=${this.clickable}
+            @click=${__privateMethod$2(this, _handleCLick, handleCLick_fn)}
         >
             ${this.src && !this.error ? html`<div class="image radius-${this.radius}">
                       <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${__privateMethod$2(this, _handleError, handleError_fn)} />
-                  </div>` : this.showFallback && this.fallbackIcon ? html`<div class="image fallback radius-${this.radius} font-size-${this.size}">${this.fallbackIcon}</div>` : this.name ? html`<div class="image name radius-${this.radius} font-size-${this.size}"><span>${this.initial}</span></div>` : html`<div class="image radius-${this.radius}"></div>`}
+                  </div>` : this.fallbackIcon ? html`<div class="image fallback radius-${this.radius} font-size-${this.size}"><mjo-icon src=${this.fallbackIcon}></mjo-icon></div>` : this.name ? html`<div class="image name radius-${this.radius} font-size-${this.size}"><span>${this.initial}</span></div>` : html`<div class="image radius-${this.radius}"></div>`}
         </div>`;
   }
   connectedCallback() {
     super.connectedCallback();
-    if (!this.src && this.showFallback) {
-      __privateMethod$2(this, _setFallback, setFallback_fn).call(this);
-    }
     if (this.name) {
       this.initial = this.name[0].toUpperCase();
     }
@@ -1282,6 +1352,9 @@ let MjoAvatar = class extends ThemeMixin(LitElement) {
     var _a2;
     if (_changedProperties.has("name")) {
       this.initial = this.name ? this.name[0].toUpperCase() : "";
+    }
+    if (_changedProperties.has("src")) {
+      this.error = false;
     }
     const nameElement = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector(".image.name");
     if (this.name && this.nameColoured && nameElement) {
@@ -1338,16 +1411,20 @@ colorByInitial_fn = function() {
   const fgindex = this.initial.charCodeAt(0) % foregroundColors.length;
   return [backgroundColors[bgindex], foregroundColors[fgindex]];
 };
+_handleCLick = /* @__PURE__ */ new WeakSet();
+handleCLick_fn = async function() {
+  if (!this.clickable || this.disabled)
+    return;
+  this.dispatchEvent(new CustomEvent("avatar-click", { detail: { value: this.value || this.name || "" } }));
+  this.container.style.transform = "scale(0.9)";
+  await pause(100);
+  this.container.style.transform = "scale(1.1)";
+  await pause(150);
+  this.container.removeAttribute("style");
+};
 _handleError = /* @__PURE__ */ new WeakSet();
 handleError_fn = function() {
   this.error = true;
-  this.showFallback = true;
-  __privateMethod$2(this, _setFallback, setFallback_fn).call(this);
-};
-_setFallback = /* @__PURE__ */ new WeakSet();
-setFallback_fn = function() {
-  const icon = this.fallback || AiOutlineUser;
-  this.fallbackIcon = html`<mjo-icon src=${icon}></mjo-icon>`;
 };
 MjoAvatar.styles = [
   css`
@@ -1359,9 +1436,11 @@ MjoAvatar.styles = [
             .container {
                 position: relative;
                 box-sizing: border-box;
+                user-select: none;
             }
             .container[data-disabled] {
                 opacity: 0.5;
+                cursor: default !important;
             }
 
             .image {
@@ -1392,23 +1471,23 @@ MjoAvatar.styles = [
                 color: var(--mjo-avatar-name-auto-foreground-color, var(--mjo-avatar-name-color, var(--mjo-color-gray-100)));
             }
 
-            .font-size-small {
+            .size-small {
                 font-size: var(--mjo-avatar-fallback-size-small, 18px);
             }
-            .font-size-medium {
-                font-size: var(--mjo-avatar-fallback-size-medium, 24px);
+            .size-medium {
+                font-size: var(--mjo-avatar-fallback-size-medium, 28px);
             }
-            .font-size-large {
-                font-size: var(--mjo-avatar-fallback-size-large, 32px);
+            .size-large {
+                font-size: var(--mjo-avatar-fallback-size-large, 40px);
             }
-            .font-size-small mjo-icon {
+            .size-small mjo-icon {
                 font-size: var(--mjo-avatar-fallback-size-small, 18px);
             }
-            .font-size-medium mjo-icon {
-                font-size: var(--mjo-avatar-fallback-size-medium, 24px);
+            .size-medium mjo-icon {
+                font-size: var(--mjo-avatar-fallback-size-medium, 28px);
             }
-            .font-size-large mjo-icon {
-                font-size: var(--mjo-avatar-fallback-size-large, 32px);
+            .size-large mjo-icon {
+                font-size: var(--mjo-avatar-fallback-size-large, 40px);
             }
             .radius-small {
                 border-radius: var(--mjo-avatar-radius-small, 4px);
@@ -1427,12 +1506,12 @@ MjoAvatar.styles = [
                 height: var(--mjo-avatar-size-small, 32px);
             }
             .size-medium {
-                width: var(--mjo-avatar-size-medium, 40px);
-                height: var(--mjo-avatar-size-medium, 40px);
+                width: var(--mjo-avatar-size-medium, 44px);
+                height: var(--mjo-avatar-size-medium, 44px);
             }
             .size-large {
-                width: var(--mjo-avatar-size-large, 48px);
-                height: var(--mjo-avatar-size-large, 48px);
+                width: var(--mjo-avatar-size-large, 54px);
+                height: var(--mjo-avatar-size-large, 54px);
             }
             .color-default {
                 border-color: var(--mjo-avatar-name-auto-background-color, var(--mjo-avatar-border-color, var(--mjo-color-gray-300)));
@@ -1461,35 +1540,33 @@ MjoAvatar.styles = [
                 border-width: var(--mjo-avatar-border-width, 2px);
                 padding: 2px;
             }
-            .container[data-bordered] .size-small {
+            .container[data-bordered].size-small {
                 width: calc(var(--mjo-avatar-size-small, 32px) - var(--mjo-avatar-border-width, 2px));
                 height: calc(var(--mjo-avatar-size-small, 32px) - var(--mjo-avatar-border-width, 2px));
-            }
-            .container[data-bordered] .size-medium {
-                width: calc(var(--mjo-avatar-size-medium, 40px) - var(--mjo-avatar-border-width, 2px));
-                height: calc(var(--mjo-avatar-size-medium, 40px) - var(--mjo-avatar-border-width, 2px));
-            }
-            .container[data-bordered] .size-large {
-                width: calc(var(--mjo-avatar-size-large, 48px) - var(--mjo-avatar-border-width, 2px));
-                height: calc(var(--mjo-avatar-size-large, 48px) - var(--mjo-avatar-border-width, 2px));
-            }
-            .container[data-bordered] .font-size-small {
                 font-size: calc(var(--mjo-avatar-fallback-size-small, 18px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-medium {
-                font-size: calc(var(--mjo-avatar-fallback-size-medium, 24px) - var(--mjo-avatar-border-width, 2px));
+            .container[data-bordered].size-medium {
+                width: calc(var(--mjo-avatar-size-medium, 44px) - var(--mjo-avatar-border-width, 2px));
+                height: calc(var(--mjo-avatar-size-medium, 44px) - var(--mjo-avatar-border-width, 2px));
+                font-size: calc(var(--mjo-avatar-fallback-size-medium, 26px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-large {
-                font-size: calc(var(--mjo-avatar-fallback-size-large, 32px) - var(--mjo-avatar-border-width, 2px));
+            .container[data-bordered].size-large {
+                width: calc(var(--mjo-avatar-size-large, 54px) - var(--mjo-avatar-border-width, 2px));
+                height: calc(var(--mjo-avatar-size-large, 54px) - var(--mjo-avatar-border-width, 2px));
+                font-size: calc(var(--mjo-avatar-fallback-size-large, 36px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-small mjo-icon {
+            .container[data-bordered].size-small mjo-icon {
                 font-size: calc(var(--mjo-avatar-fallback-size-small, 18px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-medium mjo-icon {
-                font-size: calc(var(--mjo-avatar-fallback-size-medium, 24px) - var(--mjo-avatar-border-width, 2px));
+            .container[data-bordered].size-medium mjo-icon {
+                font-size: calc(var(--mjo-avatar-fallback-size-medium, 26px) - var(--mjo-avatar-border-width, 2px));
             }
-            .container[data-bordered] .font-size-large mjo-icon {
-                font-size: calc(var(--mjo-avatar-fallback-size-large, 32px) - var(--mjo-avatar-border-width, 2px));
+            .container[data-bordered].size-large mjo-icon {
+                font-size: calc(var(--mjo-avatar-fallback-size-large, 36px) - var(--mjo-avatar-border-width, 2px));
+            }
+            .container[data-clickable] {
+                cursor: pointer;
+                transition: transform 0.2s ease;
             }
         `
 ];
@@ -1501,13 +1578,13 @@ __decorateClass$4([
 ], MjoAvatar.prototype, "disabled", 2);
 __decorateClass$4([
   property({ type: Boolean })
-], MjoAvatar.prototype, "showFallback", 2);
+], MjoAvatar.prototype, "clickable", 2);
 __decorateClass$4([
   property({ type: Boolean })
 ], MjoAvatar.prototype, "nameColoured", 2);
 __decorateClass$4([
   property({ type: String })
-], MjoAvatar.prototype, "fallback", 2);
+], MjoAvatar.prototype, "fallbackIcon", 2);
 __decorateClass$4([
   property({ type: String })
 ], MjoAvatar.prototype, "alt", 2);
@@ -1527,11 +1604,14 @@ __decorateClass$4([
   property({ type: String })
 ], MjoAvatar.prototype, "src", 2);
 __decorateClass$4([
-  state()
-], MjoAvatar.prototype, "fallbackIcon", 2);
+  property({ type: String })
+], MjoAvatar.prototype, "value", 2);
 __decorateClass$4([
   state()
 ], MjoAvatar.prototype, "error", 2);
+__decorateClass$4([
+  query(".container")
+], MjoAvatar.prototype, "container", 2);
 MjoAvatar = __decorateClass$4([
   customElement("mjo-avatar")
 ], MjoAvatar);

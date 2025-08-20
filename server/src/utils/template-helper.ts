@@ -8,7 +8,7 @@ const __dirname = join(__filename, "..");
 export interface TemplateOptions {
     title?: string;
     enableHMR?: boolean;
-    additionalScripts?: string[];
+    additionalScripts?: { src: string; type: "module" | "text/javascript" }[];
     additionalStyles?: string[];
 }
 
@@ -68,16 +68,16 @@ export class TemplateHelper {
 
         // Add HMR script if enabled AND in development
         if (enableHMR && this.isDevelopment()) {
-            scripts.unshift("/public/js/hmr-client.js");
+            scripts.unshift({ src: "/public/js/hmr-client.js", type: "text/javascript" });
         }
 
         if (scripts.length > 0) {
             const scriptTags = scripts
-                .map((src) => {
+                .map((script) => {
                     // Detect if the script should be loaded as a module
-                    const needsModule = src.includes("client.js") || src.includes("lit-hydration.js");
+                    const needsModule = script.type === "module";
                     const moduleAttr = needsModule ? ' type="module"' : "";
-                    return `        <script src="${src}"${moduleAttr}></script>`;
+                    return `        <script src="${script.src}"${moduleAttr}></script>`;
                 })
                 .join("\n");
             template = template.replace("</body>", `${scriptTags}\n    </body>`);

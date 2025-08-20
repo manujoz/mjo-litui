@@ -95,6 +95,16 @@ header .subtitle {
 .main-section {
     margin: 40px 0;
 }
+.main-section > .title {
+    font-size: 1.5em;
+    color: var(--mjo-foreground-color);
+    margin: 15px 0 5px;
+}
+.main-section > .subtitle {
+    color: var(--mjo-foreground-color-low);
+    font-size: 0.9em;
+    margin: 0 0 20px;
+}
 
 /* GRID STYLES */
 
@@ -205,7 +215,7 @@ header .subtitle {
 
 .playground-container {
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr 350px;
     gap: 40px;
     align-items: start;
 }
@@ -214,6 +224,7 @@ header .subtitle {
     display: flex;
     justify-content: center;
     align-items: center;
+    align-self: stretch;
     min-height: 200px;
     background: var(--mjo-background-color-card-high);
     border-radius: 12px;
@@ -229,6 +240,8 @@ header .subtitle {
     background: var(--mjo-background-color-card-low);
     border-radius: 12px;
     padding: 24px;
+    max-height: 90vh;
+    overflow-y: auto;
     border: solid 1px var(--mjo-border-color-low);
     box-shadow: var(--mjo-box-shadow-1);
     user-select: none;
@@ -250,7 +263,8 @@ header .subtitle {
     gap: 8px;
 }
 
-.control-group input {
+.control-group input,
+.control-group select {
     background-color: var(--mjo-background-color-card);
     color: var(--mjo-foreground-color);
     border: solid 1px var(--mjo-border-color);
@@ -286,7 +300,8 @@ header .subtitle {
 
 .toggle-group {
     display: flex;
-    flex-direction: column;
+    flex-flow: row wrap;
+    justify-content: space-between;
     gap: 12px;
 }
 

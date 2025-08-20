@@ -82,7 +82,6 @@ server.listen(PORT, () => {
 
         // Configure HMR manager in controllers
         indexController.setHMRManager(hmrManager);
-    } else {
     }
 
     console.log("✅ Server listening at: http://localhost:" + PORT);
