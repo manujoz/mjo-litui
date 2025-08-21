@@ -220,14 +220,17 @@ export class ExampleAccordionCompact extends LitElement {
 
 ### mjo-accordion-item
 
-| Name           | Type                       | Default          | Reflects | Description                                             |
-| -------------- | -------------------------- | ---------------- | -------- | ------------------------------------------------------- |
-| `itemTitle`    | `string \| TemplateResult` | `""`             | no       | Title text or template for the accordion section header |
-| `itemSubtitle` | `string`                   | `""`             | no       | Subtitle text displayed below the title                 |
-| `expanded`     | `boolean`                  | `false`          | no       | Controls whether the section is expanded or collapsed   |
-| `disabled`     | `boolean`                  | `false`          | no       | Disables interaction with the accordion section         |
-| `compact`      | `boolean`                  | `false`          | no       | Internal property managed by parent accordion           |
-| `icon`         | `string`                   | `AiOutlineRight` | no       | Icon used for the expand/collapse indicator             |
+| Name                | Type                       | Default          | Reflects | Description                                                  |
+| ------------------- | -------------------------- | ---------------- | -------- | ------------------------------------------------------------ |
+| `itemTitle`         | `string \| TemplateResult` | `""`             | no       | Title text or template for the accordion section header      |
+| `itemSubtitle`      | `string`                   | `""`             | no       | Subtitle text displayed below the title                      |
+| `expanded`          | `boolean`                  | `false`          | no       | Controls whether the section is expanded or collapsed        |
+| `disabled`          | `boolean`                  | `false`          | no       | Disables interaction with the accordion section              |
+| `compact`           | `boolean`                  | `false`          | no       | Internal property managed by parent accordion                |
+| `icon`              | `string`                   | `AiOutlineRight` | no       | Icon used for the expand/collapse indicator                  |
+| `animationDuration` | `number`                   | `300`            | no       | Animation duration in milliseconds for expand/collapse       |
+| `animationEasing`   | `string`                   | `"ease-in-out"`  | no       | CSS easing function for animations                           |
+| `ariaDescribedby`   | `string \| undefined`      | `undefined`      | no       | References additional descriptive content for screen readers |
 
 ### Internal State
 
@@ -242,6 +245,29 @@ export class ExampleAccordionCompact extends LitElement {
 -   The `compact` property is propagated from parent to all child items
 -   Smooth animations are applied during expand/collapse transitions
 -   Icons rotate 90 degrees when sections are expanded
+-   Full keyboard navigation support with ARIA attributes
+-   Animations respect `prefers-reduced-motion` user preference
+
+## Methods
+
+### mjo-accordion
+
+| Method                | Parameters                | Returns | Description                                       |
+| --------------------- | ------------------------- | ------- | ------------------------------------------------- |
+| `expandItem(index)`   | `index: number \| string` | `void`  | Expands a specific item by index or id            |
+| `collapseItem(index)` | `index: number \| string` | `void`  | Collapses a specific item by index or id          |
+| `expandAll()`         | -                         | `void`  | Expands all items (only works in `multiple` mode) |
+| `collapseAll()`       | -                         | `void`  | Collapses all items                               |
+| `focusItem(index)`    | `index: number`           | `void`  | Sets focus to a specific item by index            |
+
+### mjo-accordion-item
+
+| Method     | Parameters | Returns | Description                          |
+| ---------- | ---------- | ------- | ------------------------------------ |
+| `open()`   | -          | `void`  | Expands the accordion section        |
+| `close()`  | -          | `void`  | Collapses the accordion section      |
+| `toggle()` | -          | `void`  | Toggles the expanded/collapsed state |
+| `focus()`  | -          | `void`  | Sets focus to the accordion item     |
 
 ## Slots
 
@@ -259,11 +285,25 @@ export class ExampleAccordionCompact extends LitElement {
 
 ## Events
 
+### mjo-accordion
+
+| Event                     | Detail                                                                   | Emitted When                         | Notes                                |
+| ------------------------- | ------------------------------------------------------------------------ | ------------------------------------ | ------------------------------------ |
+| `accordion-toggle`        | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | Any section is expanded or collapsed | Forwarded from accordion-item events |
+| `accordion-will-expand`   | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | Before a section starts expanding    | Cancelable event                     |
+| `accordion-expanded`      | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | After a section finishes expanding   | Animation completed                  |
+| `accordion-will-collapse` | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | Before a section starts collapsing   | Cancelable event                     |
+| `accordion-collapsed`     | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | After a section finishes collapsing  | Animation completed                  |
+
 ### mjo-accordion-item
 
-| Event    | Detail                                          | Emitted When                     | Notes                                                       |
-| -------- | ----------------------------------------------- | -------------------------------- | ----------------------------------------------------------- |
-| `toggle` | `{ item: MjoAccordionItem, expanded: boolean }` | Section is expanded or collapsed | Bubbles to parent accordion for selection mode coordination |
+| Event                     | Detail                                          | Emitted When                      | Notes                                        |
+| ------------------------- | ----------------------------------------------- | --------------------------------- | -------------------------------------------- |
+| `accordion-toggle`        | `{ item: MjoAccordionItem, expanded: boolean }` | Section is expanded or collapsed  | Bubbles to parent accordion                  |
+| `accordion-will-expand`   | `{ item: MjoAccordionItem, expanded: boolean }` | Before section starts expanding   | Cancelable - prevents expansion if cancelled |
+| `accordion-expanded`      | `{ item: MjoAccordionItem, expanded: boolean }` | After section finishes expanding  | Fired when animation completes               |
+| `accordion-will-collapse` | `{ item: MjoAccordionItem, expanded: boolean }` | Before section starts collapsing  | Cancelable - prevents collapse if cancelled  |
+| `accordion-collapsed`     | `{ item: MjoAccordionItem, expanded: boolean }` | After section finishes collapsing | Fired when animation completes               |
 
 ## CSS Variables
 
@@ -282,14 +322,15 @@ The component consumes CSS variables with fallbacks. Custom values can be inject
 
 ### mjo-accordion-item Variables
 
-| Variable                                     | Fallback                     | Used For                                |
-| -------------------------------------------- | ---------------------------- | --------------------------------------- |
-| `--mjo-accordion-item-title-padding`         | `--mjo-space-medium`         | Vertical padding for title container    |
-| `--mjo-accordion-item-title-padding-compact` | `--mjo-space-small`          | Compact vertical padding for title      |
-| `--mjo-accordion-item-content-padding`       | `--mjo-space-medium`         | Bottom padding when content is expanded |
-| `--mjo-accordion-item-title-font-size`       | `1em`                        | Font size for the title                 |
-| `--mjo-accordion-item-title-color`           | `--mjo-foreground-color`     | Color for the title text                |
-| `--mjo-accordion-item-subtitle-color`        | `--mjo-foreground-color-low` | Color for the subtitle text             |
+| Variable                                     | Fallback                     | Used For                                   |
+| -------------------------------------------- | ---------------------------- | ------------------------------------------ |
+| `--mjo-accordion-item-title-padding`         | `--mjo-space-medium`         | Vertical padding for title container       |
+| `--mjo-accordion-item-title-padding-compact` | `--mjo-space-small`          | Compact vertical padding for title         |
+| `--mjo-accordion-item-content-padding`       | `--mjo-space-medium`         | Bottom padding when content is expanded    |
+| `--mjo-accordion-item-title-font-size`       | `1em`                        | Font size for the title                    |
+| `--mjo-accordion-item-title-color`           | `--mjo-foreground-color`     | Color for the title text                   |
+| `--mjo-accordion-item-subtitle-color`        | `--mjo-foreground-color-low` | Color for the subtitle text                |
+| `--mjo-accordion-item-focus-color`           | `--mjo-primary-color`        | Outline color for keyboard focus indicator |
 
 ## ThemeMixin Customization
 
@@ -313,9 +354,12 @@ interface MjoAccordionTheme {
 ```ts
 interface MjoAccordionItemTheme {
     titlePadding?: string;
+    titlePaddingCompact?: string;
     titleFontSize?: string;
     titleColor?: string;
     subtitleColor?: string;
+    contentPadding?: string;
+    focusColor?: string;
 }
 ```
 
@@ -384,6 +428,58 @@ export class ExampleAccordionCustomTitle extends LitElement {
 }
 ```
 
+## Programmatic Control Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import type { MjoAccordion } from "mjo-litui";
+import "mjo-litui/mjo-accordion";
+import "mjo-litui/mjo-button";
+
+@customElement("example-accordion-programmatic")
+export class ExampleAccordionProgrammatic extends LitElement {
+    @query("mjo-accordion") private accordion!: MjoAccordion;
+
+    private expandFirst() {
+        this.accordion.expandItem(0);
+    }
+
+    private collapseAll() {
+        this.accordion.collapseAll();
+    }
+
+    private handleAccordionEvent(event: CustomEvent) {
+        console.log("Accordion event:", event.type, event.detail);
+    }
+
+    render() {
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; gap: 0.5rem;">
+                    <mjo-button @click=${this.expandFirst}>Expand First</mjo-button>
+                    <mjo-button @click=${this.collapseAll}>Collapse All</mjo-button>
+                </div>
+
+                <mjo-accordion
+                    variant="shadow"
+                    selectionMode="multiple"
+                    @accordion-expanded=${this.handleAccordionEvent}
+                    @accordion-collapsed=${this.handleAccordionEvent}
+                >
+                    <mjo-accordion-item itemTitle="Section 1">
+                        <p>Content for section 1</p>
+                    </mjo-accordion-item>
+                    <mjo-accordion-item itemTitle="Section 2" animationDuration="500">
+                        <p>This section has slower animation</p>
+                    </mjo-accordion-item>
+                </mjo-accordion>
+            </div>
+        `;
+    }
+}
+```
+
 ## Dynamic Content Example
 
 ```ts
@@ -429,13 +525,32 @@ export class ExampleAccordionDynamic extends LitElement {
 
 ## Accessibility Notes
 
--   Accordion items are clickable and support keyboard navigation
--   Consider adding appropriate ARIA attributes for screen readers:
-    -   `aria-expanded` on the title container
-    -   `aria-controls` linking to the content area
-    -   `role="button"` on clickable title areas
--   Ensure sufficient color contrast for title and subtitle text
--   The expand/collapse animations respect `prefers-reduced-motion` preferences
+The accordion components include comprehensive accessibility features following WCAG 2.1 guidelines:
+
+### Built-in Accessibility Features
+
+-   **ARIA Structure**: Complete ARIA implementation with `role="button"` on title containers, `aria-expanded`, `aria-controls`, and `role="region"` on content areas
+-   **Keyboard Navigation**: Full keyboard support including:
+    -   **Enter/Space**: Toggle expansion
+    -   **Arrow Up/Down**: Navigate between items
+    -   **Home/End**: Jump to first/last item
+    -   **Escape**: Close expanded section
+-   **Focus Management**: Proper focus indicators with `:focus-visible` support and customizable focus colors
+-   **Screen Reader Support**: Automatic unique IDs and proper labeling relationships
+-   **Reduced Motion**: Respects `prefers-reduced-motion` user preference by disabling animations
+-   **State Communication**: All state changes are properly announced to assistive technologies
+
+### Accessibility Best Practices
+
+```html
+<!-- Enhanced accessibility example -->
+<mjo-accordion variant="shadow" selectionMode="single">
+    <mjo-accordion-item itemTitle="Account Settings" itemSubtitle="Manage your profile and preferences" aria-describedby="account-help">
+        <div id="account-help">Configure your account settings, privacy preferences, and notification options.</div>
+        <p>Account configuration content here...</p>
+    </mjo-accordion-item>
+</mjo-accordion>
+```
 
 ## Performance Considerations
 
@@ -445,4 +560,25 @@ export class ExampleAccordionDynamic extends LitElement {
 
 ## Summary
 
-`<mjo-accordion>` provides a flexible container for organizing content in collapsible sections with multiple visual variants and selection modes. The component consists of a parent `<mjo-accordion>` that manages behavior and child `<mjo-accordion-item>` elements that contain the actual content. Use global theming for consistency and ThemeMixin overrides for specific customizations. The component supports both simple text titles and complex template-based headers for advanced use cases.
+`<mjo-accordion>` provides a flexible, accessible container for organizing content in collapsible sections with multiple visual variants and selection modes. The component consists of a parent `<mjo-accordion>` that manages behavior and child `<mjo-accordion-item>` elements that contain the actual content.
+
+### Key Features
+
+-   **Multiple Variants**: Light, shadow, bordered, and splitted visual styles
+-   **Selection Modes**: Single or multiple section expansion
+-   **Full Accessibility**: WCAG 2.1 compliant with complete keyboard navigation and ARIA support
+-   **Programmatic Control**: Rich API for expanding, collapsing, and focusing items
+-   **Granular Events**: Detailed event system with cancelable before/after events
+-   **Customizable Animations**: Configurable duration and easing with reduced-motion support
+-   **Flexible Content**: Support for both simple text titles and complex template-based headers
+
+### Usage Recommendations
+
+-   Use global theming (`<mjo-theme>`) for consistency across your application
+-   Leverage ThemeMixin for instance-specific customizations
+-   Take advantage of the programmatic API for dynamic content management
+-   Use the granular event system for complex interaction flows
+-   Ensure proper contrast ratios when customizing colors
+-   Test keyboard navigation and screen reader compatibility
+
+The component automatically handles focus management, state synchronization, and accessibility requirements, making it ideal for building inclusive user interfaces with organized, collapsible content sections.

@@ -6,6 +6,7 @@ import type { MjoTheme } from "../../src/mjo-theme.js";
 
 import Cookies from "js-cookie";
 
+import "../../src/mjo-accordion.js";
 import "../../src/mjo-avatar.js";
 import "../../src/mjo-chip.js";
 import "../../src/mjo-theme.js";

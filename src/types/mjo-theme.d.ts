@@ -196,9 +196,12 @@ export interface MjoAccordionTheme {
 
 export interface MjoAccordionItemTheme {
     titlePadding?: string;
+    titlePaddingCompact?: string;
     titleFontSize?: string;
     titleColor?: string;
     subtitleColor?: string;
+    contentPadding?: string;
+    focusColor?: string;
 }
 
 export interface MjoAlertTheme {

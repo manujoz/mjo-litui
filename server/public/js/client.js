@@ -12,8 +12,8 @@ var __privateMethod = (obj, member, method) => {
   return method;
 };
 var _a, _b;
-import { r as render, n as noChange, a as nothing, h as html, D as Directive, P as PartType, d as directive } from "./lit-core.js";
-import { f as AiFillCloseCircle } from "./index.js";
+import { r as render, n as noChange, a as nothing, D as Directive, P as PartType, d as directive, h as html } from "./lit-core.js";
+import { e as AiOutlineRight, l as AiFillCloseCircle } from "./index.js";
 /*! js-cookie v3.0.5 | MIT */
 function assign(target) {
   for (var i = 1; i < arguments.length; i++) {
@@ -1323,21 +1323,15 @@ function query(selector, cache) {
     }
   };
 }
-/**
- * @license
- * Copyright 2018 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */
-const ifDefined = (value) => value ?? nothing;
-var __defProp$5 = Object.defineProperty;
-var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
-var __decorateClass$5 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$5(target, key) : target;
+var __defProp$7 = Object.defineProperty;
+var __getOwnPropDesc$7 = Object.getOwnPropertyDescriptor;
+var __decorateClass$7 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$7(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$5(target, key, result);
+    __defProp$7(target, key, result);
   return result;
 };
 const ThemeMixin = (superClass) => {
@@ -1376,14 +1370,486 @@ const ThemeMixin = (superClass) => {
   kamelCaseToKebabCase_fn = function(str) {
     return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase();
   };
-  __decorateClass$5([
+  __decorateClass$7([
     property({ type: Object })
   ], ThemeMx.prototype, "theme", 2);
   return ThemeMx;
 };
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const ifDefined = (value) => value ?? nothing;
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const HTML_RESULT = 1;
+class UnsafeHTMLDirective extends Directive {
+  constructor(partInfo) {
+    super(partInfo);
+    this._value = nothing;
+    if (partInfo.type !== PartType.CHILD) {
+      throw new Error(`${this.constructor.directiveName}() can only be used in child bindings`);
+    }
+  }
+  render(value) {
+    if (value === nothing || value == null) {
+      this._templateResult = void 0;
+      return this._value = value;
+    }
+    if (value === noChange) {
+      return value;
+    }
+    if (typeof value != "string") {
+      throw new Error(`${this.constructor.directiveName}() called with a non-string value`);
+    }
+    if (value === this._value) {
+      return this._templateResult;
+    }
+    this._value = value;
+    const strings = [value];
+    strings.raw = strings;
+    return this._templateResult = {
+      // Cast to a known set of integers that satisfy ResultType so that we
+      // don't have to export ResultType and possibly encourage this pattern.
+      // This property needs to remain unminified.
+      ["_$litType$"]: this.constructor.resultType,
+      strings,
+      values: []
+    };
+  }
+}
+UnsafeHTMLDirective.directiveName = "unsafeHTML";
+UnsafeHTMLDirective.resultType = HTML_RESULT;
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const SVG_RESULT = 2;
+class UnsafeSVGDirective extends UnsafeHTMLDirective {
+}
+UnsafeSVGDirective.directiveName = "unsafeSVG";
+UnsafeSVGDirective.resultType = SVG_RESULT;
+const unsafeSVG = directive(UnsafeSVGDirective);
+var __defProp$6 = Object.defineProperty;
+var __getOwnPropDesc$6 = Object.getOwnPropertyDescriptor;
+var __decorateClass$6 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$6(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$6(target, key, result);
+  return result;
+};
+let MjoIcon = class extends ThemeMixin(LitElement) {
+  render() {
+    return this.src ? html`${unsafeSVG(this.src)}` : nothing;
+  }
+};
+MjoIcon.styles = [
+  css`
+            :host {
+                position: relative;
+                display: inline-block;
+                font-size: 24px;
+                width: 1em;
+                height: 1em;
+            }
+            svg {
+                position: relative;
+                display: block;
+                width: 1em;
+                height: 1em;
+                fill: currentColor;
+                transition: var(--mjo-icon-transition, all 0.3s);
+            }
+        `
+];
+__decorateClass$6([
+  property({ type: String })
+], MjoIcon.prototype, "src", 2);
+MjoIcon = __decorateClass$6([
+  customElement("mjo-icon")
+], MjoIcon);
 const pause = async (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+var __defProp$5 = Object.defineProperty;
+var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
+var __decorateClass$5 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$5(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$5(target, key, result);
+  return result;
+};
+var __accessCheck$4 = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateGet$2 = (obj, member, getter) => {
+  __accessCheck$4(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd$4 = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateMethod$3 = (obj, member, method) => {
+  __accessCheck$4(obj, member, "access private method");
+  return method;
+};
+var _uniqueId, _handleKeyDown, _navigateToSibling, navigateToSibling_fn, _navigateToEdge, navigateToEdge_fn, _toggleContent, toggleContent_fn, _openContent, openContent_fn, _closeContent, closeContent_fn;
+let MjoAccordionItem = class extends ThemeMixin(LitElement) {
+  constructor() {
+    super(...arguments);
+    __privateAdd$4(this, _navigateToSibling);
+    __privateAdd$4(this, _navigateToEdge);
+    __privateAdd$4(this, _toggleContent);
+    __privateAdd$4(this, _openContent);
+    __privateAdd$4(this, _closeContent);
+    this.itemTitle = "";
+    this.itemSubtitle = "";
+    this.expanded = false;
+    this.disabled = false;
+    this.compact = false;
+    this.icon = AiOutlineRight;
+    this.animationDuration = 300;
+    this.animationEasing = "ease-in-out";
+    this.variant = "light";
+    __privateAdd$4(this, _uniqueId, `accordion-item-${Math.random().toString(36).substring(2, 15)}`);
+    __privateAdd$4(this, _handleKeyDown, (event) => {
+      if (this.disabled)
+        return;
+      const { key } = event;
+      if (key === "Enter" || key === " ") {
+        event.preventDefault();
+        __privateMethod$3(this, _toggleContent, toggleContent_fn).call(this);
+      } else if (key === "ArrowUp" || key === "ArrowDown") {
+        event.preventDefault();
+        __privateMethod$3(this, _navigateToSibling, navigateToSibling_fn).call(this, key === "ArrowUp" ? "previous" : "next");
+      } else if (key === "Home" || key === "End") {
+        event.preventDefault();
+        __privateMethod$3(this, _navigateToEdge, navigateToEdge_fn).call(this, key === "Home" ? "first" : "last");
+      } else if (key === "Escape" && this.expanded) {
+        event.preventDefault();
+        this.close();
+      }
+    });
+  }
+  get computedAriaLabel() {
+    if (typeof this.itemTitle === "string") {
+      return `Toggle ${this.itemTitle}`;
+    }
+    return "Toggle accordion section";
+  }
+  render() {
+    return html`
+            <div class="container" data-variant=${this.variant} ?data-compact=${this.compact} ?data-disabled=${this.disabled}>
+                <div
+                    class="titleContainer"
+                    role="button"
+                    tabindex=${this.disabled ? -1 : 0}
+                    aria-expanded=${this.expanded}
+                    aria-controls=${`${__privateGet$2(this, _uniqueId)}-content`}
+                    aria-label=${this.computedAriaLabel}
+                    aria-describedby=${ifDefined(this.ariaDescribedby)}
+                    aria-disabled=${this.disabled}
+                    @click=${__privateMethod$3(this, _toggleContent, toggleContent_fn)}
+                    @keydown=${__privateGet$2(this, _handleKeyDown)}
+                >
+                    <div class="titleContent" id=${`${__privateGet$2(this, _uniqueId)}-title`}>
+                        ${typeof this.itemTitle === "string" ? html`
+                                  <mjo-typography class="title" tag="h3" size="heading3" weight="medium">${this.itemTitle}</mjo-typography>
+                                  ${this.itemSubtitle ? html`<mjo-typography class="subtitle" tag="p" size="body1" weight="medium"> ${this.itemSubtitle} </mjo-typography>` : nothing}
+                              ` : this.itemTitle}
+                    </div>
+                    <div class="iconContainer">
+                        <mjo-icon src=${this.icon}></mjo-icon>
+                    </div>
+                </div>
+                <div class="content" id=${`${__privateGet$2(this, _uniqueId)}-content`} role="region" aria-labelledby=${`${__privateGet$2(this, _uniqueId)}-title`}>
+                    <slot></slot>
+                </div>
+            </div>
+        `;
+  }
+  updated(_changedProperties) {
+    if (_changedProperties.has("expanded")) {
+      if (this.expanded) {
+        __privateMethod$3(this, _openContent, openContent_fn).call(this);
+      } else {
+        __privateMethod$3(this, _closeContent, closeContent_fn).call(this);
+      }
+    }
+    if (_changedProperties.has("disabled") && this.disabled) {
+      this.close();
+    }
+  }
+  setCompact(compact) {
+    this.compact = compact;
+  }
+  open() {
+    this.expanded = true;
+  }
+  close() {
+    this.expanded = false;
+  }
+  toggle() {
+    this.expanded = !this.expanded;
+  }
+  focus() {
+    var _a2;
+    (_a2 = this.titleContainerEl) == null ? void 0 : _a2.focus();
+  }
+};
+_uniqueId = /* @__PURE__ */ new WeakMap();
+_handleKeyDown = /* @__PURE__ */ new WeakMap();
+_navigateToSibling = /* @__PURE__ */ new WeakSet();
+navigateToSibling_fn = function(direction) {
+  const accordion = this.closest("mjo-accordion");
+  if (!accordion)
+    return;
+  const items = Array.from(accordion.querySelectorAll("mjo-accordion-item"));
+  const currentIndex = items.indexOf(this);
+  const nextIndex = direction === "previous" ? currentIndex - 1 : currentIndex + 1;
+  const targetItem = items[nextIndex];
+  if (targetItem && !targetItem.disabled) {
+    targetItem.focus();
+  }
+};
+_navigateToEdge = /* @__PURE__ */ new WeakSet();
+navigateToEdge_fn = function(edge) {
+  const accordion = this.closest("mjo-accordion");
+  if (!accordion)
+    return;
+  const items = Array.from(accordion.querySelectorAll("mjo-accordion-item"));
+  const targetItem = edge === "first" ? items[0] : items[items.length - 1];
+  if (targetItem && !targetItem.disabled) {
+    targetItem.focus();
+  }
+};
+_toggleContent = /* @__PURE__ */ new WeakSet();
+toggleContent_fn = function() {
+  this.expanded = !this.expanded;
+  this.dispatchEvent(new CustomEvent("accordion-toggle", { detail: { item: this, expanded: this.expanded } }));
+};
+_openContent = /* @__PURE__ */ new WeakSet();
+openContent_fn = async function(tries = 0) {
+  if (this.disabled)
+    return;
+  const scrollHeight = this.contentEl.scrollHeight;
+  if (scrollHeight === 0) {
+    if (tries === 10)
+      return;
+    setTimeout(() => {
+      __privateMethod$3(this, _openContent, openContent_fn).call(this, tries + 1);
+    }, 50);
+    return;
+  }
+  const willEvent = new CustomEvent("accordion-will-expand", {
+    detail: { item: this, expanded: true },
+    cancelable: true
+  });
+  if (!this.dispatchEvent(willEvent)) {
+    return;
+  }
+  this.contentEl.style.transition = `
+            max-height ${this.animationDuration}ms ${this.animationEasing},
+            opacity ${this.animationDuration}ms ${this.animationEasing}
+        `;
+  this.iconEl.style.transition = `transform ${this.animationDuration}ms ${this.animationEasing}`;
+  this.containerEl.style.paddingBottom = "var(--mjo-accordion-item-content-padding, var(--mjo-space-medium))";
+  this.contentEl.style.maxHeight = `${scrollHeight}px`;
+  this.contentEl.style.opacity = "1";
+  this.iconEl.style.transform = "rotate(90deg)";
+  await pause(this.animationDuration);
+  this.dispatchEvent(
+    new CustomEvent("accordion-expanded", {
+      detail: { item: this, expanded: this.expanded }
+    })
+  );
+};
+_closeContent = /* @__PURE__ */ new WeakSet();
+closeContent_fn = async function() {
+  const willEvent = new CustomEvent("accordion-will-collapse", {
+    detail: { item: this, expanded: false },
+    cancelable: true
+  });
+  if (!this.dispatchEvent(willEvent)) {
+    return;
+  }
+  this.containerEl.removeAttribute("style");
+  this.contentEl.removeAttribute("style");
+  this.iconEl.removeAttribute("style");
+  await pause(this.animationDuration);
+  this.dispatchEvent(
+    new CustomEvent("accordion-collapsed", {
+      detail: { item: this, expanded: this.expanded }
+    })
+  );
+};
+MjoAccordionItem.styles = [
+  css`
+            :host {
+                display: block;
+            }
+            .container {
+                position: relative;
+                transition: padding 0.3s ease-in-out;
+            }
+            .container[data-disabled] {
+                pointer-events: none;
+                opacity: 0.7;
+            }
+            .titleContainer {
+                position: relative;
+                display: flex;
+                cursor: pointer;
+                padding-top: var(--mjo-accordion-item-title-padding, var(--mjo-space-medium));
+                padding-bottom: var(--mjo-accordion-item-title-padding, var(--mjo-space-medium));
+            }
+            .container[data-compact] .titleContainer {
+                padding-top: var(--mjo-accordion-item-title-padding-compact, var(--mjo-space-small));
+                padding-bottom: var(--mjo-accordion-item-title-padding-compact, var(--mjo-space-small));
+            }
+            .titleContent {
+                position: relative;
+                flex: 1 1 0;
+            }
+            .iconContainer {
+                position: relative;
+                flex: 0 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+            }
+            .iconContainer mjo-icon {
+                transition: transform 0.3s ease-in-out;
+            }
+            .title {
+                margin: 0;
+                font-size: var(--mjo-accordion-item-title-font-size, 1em);
+                color: var(--mjo-accordion-item-title-color, var(--mjo-foreground-color));
+            }
+            .subtitle {
+                margin: 0;
+                color: var(--mjo-accordion-item-subtitle-color, var(--mjo-foreground-color-low));
+            }
+            .content {
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                box-sizing: border-box;
+                transition:
+                    max-height 0.3s ease-in-out,
+                    opacity 0.3s ease-in-out;
+            }
+            .container[data-variant="shadow"] .titleContainer,
+            .container[data-variant="shadow"] .content {
+                padding-left: var(--mjo-accordion-padding, var(--mjo-space-medium));
+                padding-right: var(--mjo-accordion-padding, var(--mjo-space-medium));
+            }
+            .container[data-variant="shadow"][data-compact] .titleContainer,
+            .container[data-variant="shadow"][data-compact] .content {
+                padding-left: var(--mjo-accordion-padding-compact, var(--mjo-space-small));
+                padding-right: var(--mjo-accordion-padding-compact, var(--mjo-space-small));
+            }
+            .container[data-variant="bordered"] .titleContainer,
+            .container[data-variant="bordered"] .content {
+                padding-left: var(--mjo-accordion-padding, var(--mjo-space-medium));
+                padding-right: var(--mjo-accordion-padding, var(--mjo-space-medium));
+            }
+            .container[data-variant="bordered"][data-compact] .titleContainer,
+            .container[data-variant="bordered"][data-compact] .content {
+                padding-left: var(--mjo-accordion-padding-compact, var(--mjo-space-small));
+                padding-right: var(--mjo-accordion-padding-compact, var(--mjo-space-small));
+            }
+            .container[data-variant="splitted"] .titleContainer,
+            .container[data-variant="splitted"] .content {
+                padding-left: var(--mjo-accordion-padding, var(--mjo-space-medium));
+                padding-right: var(--mjo-accordion-padding, var(--mjo-space-medium));
+            }
+            .container[data-variant="splitted"][data-compact] .titleContainer,
+            .container[data-variant="splitted"][data-compact] .content {
+                padding-left: var(--mjo-accordion-padding-compact, var(--mjo-space-small));
+                padding-right: var(--mjo-accordion-padding-compact, var(--mjo-space-small));
+            }
+
+            /* Accessibility: Respect prefers-reduced-motion */
+            @media (prefers-reduced-motion: reduce) {
+                .content,
+                .iconContainer mjo-icon,
+                .container {
+                    transition: none !important;
+                }
+            }
+
+            /* Focus styles for accessibility */
+            .titleContainer:focus {
+                outline: 2px solid var(--mjo-accordion-item-focus-color, var(--mjo-primary-color));
+                outline-offset: 2px;
+            }
+
+            .titleContainer:focus-visible {
+                outline: 2px solid var(--mjo-accordion-item-focus-color, var(--mjo-primary-color));
+                outline-offset: 2px;
+            }
+        `
+];
+__decorateClass$5([
+  property({ type: String })
+], MjoAccordionItem.prototype, "itemTitle", 2);
+__decorateClass$5([
+  property({ type: String })
+], MjoAccordionItem.prototype, "itemSubtitle", 2);
+__decorateClass$5([
+  property({ type: Boolean })
+], MjoAccordionItem.prototype, "expanded", 2);
+__decorateClass$5([
+  property({ type: Boolean })
+], MjoAccordionItem.prototype, "disabled", 2);
+__decorateClass$5([
+  property({ type: Boolean })
+], MjoAccordionItem.prototype, "compact", 2);
+__decorateClass$5([
+  property({ type: String })
+], MjoAccordionItem.prototype, "icon", 2);
+__decorateClass$5([
+  property({ type: Number })
+], MjoAccordionItem.prototype, "animationDuration", 2);
+__decorateClass$5([
+  property({ type: String })
+], MjoAccordionItem.prototype, "animationEasing", 2);
+__decorateClass$5([
+  property({ type: String, attribute: "aria-describedby" })
+], MjoAccordionItem.prototype, "ariaDescribedby", 2);
+__decorateClass$5([
+  state()
+], MjoAccordionItem.prototype, "variant", 2);
+__decorateClass$5([
+  query(".container")
+], MjoAccordionItem.prototype, "containerEl", 2);
+__decorateClass$5([
+  query(".content")
+], MjoAccordionItem.prototype, "contentEl", 2);
+__decorateClass$5([
+  query(".iconContainer mjo-icon")
+], MjoAccordionItem.prototype, "iconEl", 2);
+__decorateClass$5([
+  query(".titleContainer")
+], MjoAccordionItem.prototype, "titleContainerEl", 2);
+MjoAccordionItem = __decorateClass$5([
+  customElement("mjo-accordion-item")
+], MjoAccordionItem);
 var __defProp$4 = Object.defineProperty;
 var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
 var __decorateClass$4 = (decorators, target, key, kind) => {
@@ -1393,6 +1859,209 @@ var __decorateClass$4 = (decorators, target, key, kind) => {
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
     __defProp$4(target, key, result);
+  return result;
+};
+var __accessCheck$3 = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateGet$1 = (obj, member, getter) => {
+  __accessCheck$3(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd$3 = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateMethod$2 = (obj, member, method) => {
+  __accessCheck$3(obj, member, "access private method");
+  return method;
+};
+var _handleToggle, _mount, mount_fn;
+let MjoAccordion = class extends ThemeMixin(LitElement) {
+  constructor() {
+    super(...arguments);
+    __privateAdd$3(this, _mount);
+    this.variant = "light";
+    this.selectionMode = "single";
+    this.compact = false;
+    this.items = [];
+    __privateAdd$3(this, _handleToggle, (event) => {
+      const customEvent = event;
+      const toggledItem = customEvent.detail.item;
+      if (this.selectionMode === "single") {
+        this.items.forEach((item) => {
+          if (item !== toggledItem && item.expanded) {
+            item.close();
+          }
+        });
+      }
+      this.dispatchEvent(
+        new CustomEvent("accordion-toggle", {
+          detail: {
+            item: toggledItem,
+            expanded: customEvent.detail.expanded,
+            accordion: this
+          }
+        })
+      );
+    });
+  }
+  render() {
+    return html`<div class="container" role="tablist" data-variant=${this.variant} ?data-compact=${this.compact}></div>`;
+  }
+  firstUpdated() {
+    this.items = Array.from(this.querySelectorAll("mjo-accordion-item"));
+    __privateMethod$2(this, _mount, mount_fn).call(this);
+  }
+  updated(_changedProperties) {
+    if (_changedProperties.has("compact")) {
+      this.items.forEach((item) => {
+        item.setCompact(this.compact);
+      });
+    }
+    if (_changedProperties.has("variant")) {
+      this.items.forEach((item) => {
+        item.variant = this.variant;
+      });
+    }
+  }
+  expandItem(index) {
+    const item = typeof index === "number" ? this.items[index] : this.items.find((i) => i.id === index);
+    if (item && !item.disabled) {
+      item.open();
+    }
+  }
+  collapseItem(index) {
+    const item = typeof index === "number" ? this.items[index] : this.items.find((i) => i.id === index);
+    if (item) {
+      item.close();
+    }
+  }
+  expandAll() {
+    if (this.selectionMode === "multiple") {
+      this.items.forEach((item) => {
+        if (!item.disabled)
+          item.open();
+      });
+    }
+  }
+  collapseAll() {
+    this.items.forEach((item) => item.close());
+  }
+  focusItem(index) {
+    if (this.items[index] && !this.items[index].disabled) {
+      this.items[index].focus();
+    }
+  }
+};
+_handleToggle = /* @__PURE__ */ new WeakMap();
+_mount = /* @__PURE__ */ new WeakSet();
+mount_fn = function() {
+  this.items.forEach((item) => {
+    this.containerEl.appendChild(item);
+    item.variant = this.variant;
+    item.addEventListener("accordion-toggle", __privateGet$1(this, _handleToggle));
+    item.addEventListener("accordion-will-expand", (event) => {
+      const customEvent = event;
+      this.dispatchEvent(
+        new CustomEvent("accordion-will-expand", {
+          detail: { ...customEvent.detail, accordion: this },
+          cancelable: true
+        })
+      );
+    });
+    item.addEventListener("accordion-expanded", (event) => {
+      const customEvent = event;
+      this.dispatchEvent(
+        new CustomEvent("accordion-expanded", {
+          detail: { ...customEvent.detail, accordion: this }
+        })
+      );
+    });
+    item.addEventListener("accordion-will-collapse", (event) => {
+      const customEvent = event;
+      this.dispatchEvent(
+        new CustomEvent("accordion-will-collapse", {
+          detail: { ...customEvent.detail, accordion: this },
+          cancelable: true
+        })
+      );
+    });
+    item.addEventListener("accordion-collapsed", (event) => {
+      const customEvent = event;
+      this.dispatchEvent(
+        new CustomEvent("accordion-collapsed", {
+          detail: { ...customEvent.detail, accordion: this }
+        })
+      );
+    });
+  });
+};
+MjoAccordion.styles = [
+  css`
+            :host {
+                display: block;
+                text-align: left;
+            }
+
+            .container {
+                position: relative;
+            }
+            .container[data-variant="shadow"] {
+                border-radius: var(--mjo-accordion-radius, var(--mjo-radius-large));
+                background-color: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
+            }
+            .container[data-variant="bordered"] {
+                border-radius: var(--mjo-accordion-radius, var(--mjo-radius-large));
+                border: 1px solid var(--mjo-accordion-border-color, var(--mjo-border-color));
+            }
+            .container[data-variant="light"] mjo-accordion-item,
+            .container[data-variant="shadow"] mjo-accordion-item,
+            .container[data-variant="bordered"] mjo-accordion-item {
+                border-top: 1px solid var(--mjo-accordion-border-color, var(--mjo-border-color));
+            }
+            .container[data-variant="light"] mjo-accordion-item:first-child,
+            .container[data-variant="shadow"] mjo-accordion-item:first-child,
+            .container[data-variant="bordered"] mjo-accordion-item:first-child {
+                border-top: none;
+            }
+            .container[data-variant="splitted"] {
+                display: flex;
+                flex-direction: column;
+                gap: var(--mjo-accordion-gap, var(--mjo-space-small));
+            }
+            .container[data-variant="splitted"] mjo-accordion-item {
+                border-radius: var(--mjo-accordion-radius, var(--mjo-radius-large));
+                background-color: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
+            }
+        `
+];
+__decorateClass$4([
+  property({ type: String })
+], MjoAccordion.prototype, "variant", 2);
+__decorateClass$4([
+  property({ type: String })
+], MjoAccordion.prototype, "selectionMode", 2);
+__decorateClass$4([
+  property({ type: Boolean })
+], MjoAccordion.prototype, "compact", 2);
+__decorateClass$4([
+  query(".container")
+], MjoAccordion.prototype, "containerEl", 2);
+MjoAccordion = __decorateClass$4([
+  customElement("mjo-accordion")
+], MjoAccordion);
+var __defProp$3 = Object.defineProperty;
+var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
+var __decorateClass$3 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$3(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$3(target, key, result);
   return result;
 };
 var __accessCheck$2 = (obj, member, msg) => {
@@ -1724,149 +2393,54 @@ MjoAvatar.styles = [
             }
         `
 ];
-__decorateClass$4([
+__decorateClass$3([
   property({ type: Boolean })
 ], MjoAvatar.prototype, "bordered", 2);
-__decorateClass$4([
+__decorateClass$3([
   property({ type: Boolean })
 ], MjoAvatar.prototype, "disabled", 2);
-__decorateClass$4([
+__decorateClass$3([
   property({ type: Boolean })
 ], MjoAvatar.prototype, "clickable", 2);
-__decorateClass$4([
+__decorateClass$3([
   property({ type: Boolean })
 ], MjoAvatar.prototype, "nameColoured", 2);
-__decorateClass$4([
-  property({ type: String })
-], MjoAvatar.prototype, "fallbackIcon", 2);
-__decorateClass$4([
-  property({ type: String })
-], MjoAvatar.prototype, "alt", 2);
-__decorateClass$4([
-  property({ type: String })
-], MjoAvatar.prototype, "color", 2);
-__decorateClass$4([
-  property({ type: String })
-], MjoAvatar.prototype, "name", 2);
-__decorateClass$4([
-  property({ type: String })
-], MjoAvatar.prototype, "radius", 2);
-__decorateClass$4([
-  property({ type: String })
-], MjoAvatar.prototype, "size", 2);
-__decorateClass$4([
-  property({ type: String })
-], MjoAvatar.prototype, "src", 2);
-__decorateClass$4([
-  property({ type: String })
-], MjoAvatar.prototype, "value", 2);
-__decorateClass$4([
-  property({ type: String, attribute: "aria-describedby" })
-], MjoAvatar.prototype, "ariaDescribedby", 2);
-__decorateClass$4([
-  state()
-], MjoAvatar.prototype, "error", 2);
-__decorateClass$4([
-  query(".container")
-], MjoAvatar.prototype, "container", 2);
-MjoAvatar = __decorateClass$4([
-  customElement("mjo-avatar")
-], MjoAvatar);
-/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */
-const HTML_RESULT = 1;
-class UnsafeHTMLDirective extends Directive {
-  constructor(partInfo) {
-    super(partInfo);
-    this._value = nothing;
-    if (partInfo.type !== PartType.CHILD) {
-      throw new Error(`${this.constructor.directiveName}() can only be used in child bindings`);
-    }
-  }
-  render(value) {
-    if (value === nothing || value == null) {
-      this._templateResult = void 0;
-      return this._value = value;
-    }
-    if (value === noChange) {
-      return value;
-    }
-    if (typeof value != "string") {
-      throw new Error(`${this.constructor.directiveName}() called with a non-string value`);
-    }
-    if (value === this._value) {
-      return this._templateResult;
-    }
-    this._value = value;
-    const strings = [value];
-    strings.raw = strings;
-    return this._templateResult = {
-      // Cast to a known set of integers that satisfy ResultType so that we
-      // don't have to export ResultType and possibly encourage this pattern.
-      // This property needs to remain unminified.
-      ["_$litType$"]: this.constructor.resultType,
-      strings,
-      values: []
-    };
-  }
-}
-UnsafeHTMLDirective.directiveName = "unsafeHTML";
-UnsafeHTMLDirective.resultType = HTML_RESULT;
-/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */
-const SVG_RESULT = 2;
-class UnsafeSVGDirective extends UnsafeHTMLDirective {
-}
-UnsafeSVGDirective.directiveName = "unsafeSVG";
-UnsafeSVGDirective.resultType = SVG_RESULT;
-const unsafeSVG = directive(UnsafeSVGDirective);
-var __defProp$3 = Object.defineProperty;
-var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
-var __decorateClass$3 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$3(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result)
-    __defProp$3(target, key, result);
-  return result;
-};
-let MjoIcon = class extends ThemeMixin(LitElement) {
-  render() {
-    return this.src ? html`${unsafeSVG(this.src)}` : nothing;
-  }
-};
-MjoIcon.styles = [
-  css`
-            :host {
-                position: relative;
-                display: inline-block;
-                font-size: 24px;
-                width: 1em;
-                height: 1em;
-            }
-            svg {
-                position: relative;
-                display: block;
-                width: 1em;
-                height: 1em;
-                fill: currentColor;
-                transition: var(--mjo-icon-transition, all 0.3s);
-            }
-        `
-];
 __decorateClass$3([
   property({ type: String })
-], MjoIcon.prototype, "src", 2);
-MjoIcon = __decorateClass$3([
-  customElement("mjo-icon")
-], MjoIcon);
+], MjoAvatar.prototype, "fallbackIcon", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoAvatar.prototype, "alt", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoAvatar.prototype, "color", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoAvatar.prototype, "name", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoAvatar.prototype, "radius", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoAvatar.prototype, "size", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoAvatar.prototype, "src", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoAvatar.prototype, "value", 2);
+__decorateClass$3([
+  property({ type: String, attribute: "aria-describedby" })
+], MjoAvatar.prototype, "ariaDescribedby", 2);
+__decorateClass$3([
+  state()
+], MjoAvatar.prototype, "error", 2);
+__decorateClass$3([
+  query(".container")
+], MjoAvatar.prototype, "container", 2);
+MjoAvatar = __decorateClass$3([
+  customElement("mjo-avatar")
+], MjoAvatar);
 var __defProp$2 = Object.defineProperty;
 var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
 var __decorateClass$2 = (decorators, target, key, kind) => {

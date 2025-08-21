@@ -1,4 +1,4 @@
-import { A as AiFillApple, a as AiFillAndroid, b as AiFillWindows } from "./index.js";
+import { f as AiFillApple, g as AiFillAndroid, h as AiFillWindows } from "./index.js";
 function changeAvatarProp(prop, value) {
   const avatar = document.getElementById("playground-avatar");
   if (!avatar)

@@ -226,10 +226,11 @@ header .subtitle {
     align-items: center;
     align-self: stretch;
     min-height: 200px;
-    background: var(--mjo-background-color-card-high);
+    background: var(--mjo-background-color-card);
     border-radius: 12px;
     border: 2px dashed var(--mjo-border-color-high);
     position: relative;
+    padding: 10px;
 }
 
 .interactive-avatar {

@@ -8,7 +8,7 @@ class MjoHMRClient {
     this.isReloading = false;
     this.buildInProgress = false;
     this.lastBuildCompleteTime = 0;
-    this.reloadCooldown = 3e3;
+    this.reloadCooldown = 500;
     this.isShuttingDown = false;
     this.hasReloadScheduled = false;
     if (window.mjoHMRClient) {

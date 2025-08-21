@@ -1,0 +1,174 @@
+/* Accordion specific styles for the demo page */
+
+.accordion-showcase {
+    margin: 20px 0;
+}
+
+.accordion-showcase mjo-accordion {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Rich content examples styling */
+.rich-content-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 0;
+}
+
+.rich-content-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--mjo-foreground-color);
+}
+
+.rich-content-form input {
+    padding: 8px 12px;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: var(--mjo-radius-medium);
+    background-color: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-size: 0.875rem;
+}
+
+.rich-content-form input:focus {
+    outline: none;
+    border-color: var(--mjo-primary-color);
+    box-shadow: 0 0 0 2px var(--mjo-primary-color-alpha-20);
+}
+
+.rich-content-form button {
+    padding: 8px 16px;
+    background-color: var(--mjo-primary-color);
+    color: var(--mjo-primary-foreground-color);
+    border: none;
+    border-radius: var(--mjo-radius-medium);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    align-self: flex-start;
+    transition: background-color 0.2s ease;
+}
+
+.rich-content-form button:hover {
+    background-color: var(--mjo-primary-color-hover);
+}
+
+.rich-content-media {
+    padding: 16px 0;
+}
+
+.rich-content-media img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: var(--mjo-radius-medium);
+    margin-bottom: 12px;
+}
+
+.rich-content-components {
+    padding: 16px 0;
+}
+
+/* Interactive playground specific styles */
+.playground-showcase mjo-accordion {
+    max-width: 100%;
+    width: 100%;
+}
+
+.playground-showcase {
+    transition: transform 0.3s ease;
+}
+
+/* Control panel enhancements */
+.controls-panel .control-group button {
+    padding: 8px 16px;
+    background-color: var(--mjo-primary-color);
+    color: var(--mjo-primary-foreground-color);
+    border: none;
+    border-radius: var(--mjo-radius-medium);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+}
+
+.controls-panel .control-group button:hover {
+    background-color: var(--mjo-primary-color-hover);
+    transform: translateY(-1px);
+}
+
+.controls-panel .control-group button:active {
+    transform: translateY(0);
+}
+
+/* Responsive accordion showcases */
+@media (max-width: 768px) {
+    .accordion-showcase mjo-accordion {
+        max-width: 100%;
+    }
+
+    .rich-content-form {
+        padding: 12px 0;
+    }
+
+    .rich-content-media img {
+        max-width: 150px;
+    }
+}
+
+/* Animation for dynamic items */
+@keyframes slideInAccordion {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.playground-showcase mjo-accordion-item:last-child {
+    animation: slideInAccordion 0.3s ease-out;
+}
+
+/* Hover effects for examples */
+.accordion-showcase mjo-accordion-item {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.accordion-showcase mjo-accordion-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced visual feedback */
+.playground-container {
+    position: relative;
+}
+
+.playground-container::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--mjo-primary-color-alpha-20), var(--mjo-secondary-color-alpha-20));
+    border-radius: var(--mjo-radius-large);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.playground-container:hover::before {
+    opacity: 1;
+}

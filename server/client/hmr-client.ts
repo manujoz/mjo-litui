@@ -11,7 +11,7 @@ class MjoHMRClient {
     private isReloading = false;
     private buildInProgress = false;
     private lastBuildCompleteTime = 0;
-    private reloadCooldown = 3000; // 3 seconds cooldown between reloads
+    private reloadCooldown = 500; // 500 milliseconds cooldown between reloads
 
     // States to prevent loops
     private isShuttingDown = false;

@@ -3,6 +3,7 @@ import { TemplateResult } from "lit";
 import { TemplateHelper } from "../utils/template-helper.js";
 
 // Import components directly from src/ for SSR
+import "../../../src/mjo-accordion.js";
 import "../../../src/mjo-avatar.js";
 import "../../../src/mjo-chip.js";
 import "../../../src/mjo-theme.js";
