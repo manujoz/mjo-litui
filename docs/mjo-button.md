@@ -7,7 +7,7 @@ Fully accessible button component providing multiple variants, semantic colors, 
 ```html
 <mjo-button color="primary" variant="default">Accept</mjo-button>
 <mjo-button color="secondary" variant="ghost">Cancel</mjo-button>
-<mjo-button color="success" variant="flat" start-icon="check">Done</mjo-button>
+<mjo-button color="success" variant="flat" startIcon="check">Done</mjo-button>
 <mjo-button toggleable button-label="Notification settings">Toggle</mjo-button>
 <mjo-button loading>Processing...</mjo-button>
 ```
@@ -25,7 +25,7 @@ export class ExampleButtonBasic extends LitElement {
         return html`
             <mjo-button color="primary">Primary</mjo-button>
             <mjo-button color="secondary" variant="ghost">Ghost Secondary</mjo-button>
-            <mjo-button color="success" variant="flat" start-icon="check">Flat Success</mjo-button>
+            <mjo-button color="success" variant="flat" startIcon="check">Flat Success</mjo-button>
         `;
     }
 }
@@ -161,8 +161,8 @@ export class ExampleButtonStates extends LitElement {
 | `toggleable` | `boolean`                                                                 | `false`     | no       | Enables internal pressed state with aria-pressed when clicked and `type="button"` |
 | `small-caps` | `boolean`                                                                 | `false`     | no       | Applies `font-variant: all-small-caps`                                            |
 | `noink`      | `boolean`                                                                 | `false`     | no       | Hides the ripple effect                                                           |
-| `start-icon` | `string \| undefined`                                                     | `undefined` | no       | Icon name / path prepended to button text                                         |
-| `end-icon`   | `string \| undefined`                                                     | `undefined` | no       | Icon name / path appended to button text                                          |
+| `startIcon`  | `string \| undefined`                                                     | `undefined` | no       | Icon name / path prepended to button text                                         |
+| `endIcon`    | `string \| undefined`                                                     | `undefined` | no       | Icon name / path appended to button text                                          |
 
 ### Accessibility Properties
 
@@ -439,7 +439,7 @@ This component follows WCAG 2.1 guidelines and provides comprehensive accessibil
 <mjo-button color="primary">Save Document</mjo-button>
 
 <!-- Good: Icon with accessible label -->
-<mjo-button rounded start-icon="close" button-label="Close dialog"></mjo-button>
+<mjo-button rounded startIcon="close" button-label="Close dialog"></mjo-button>
 
 <!-- Good: Toggle with clear context -->
 <mjo-button toggleable button-label="Enable notifications"> Notifications </mjo-button>

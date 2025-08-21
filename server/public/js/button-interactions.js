@@ -1,4 +1,95 @@
-import{f as l,g as d,h as r,i as c,j as a,k as s}from"./index.js";function m(o,t){const e=document.getElementById("playground-button");if(!e)return;let n;(o==="startIcon"||o==="endIcon")&&(t==="icon1"?n=l:t==="icon2"?n=d:t==="icon3"?n=r:t==="icon4"?n=c:t==="icon5"?n=a:t==="icon6"&&(n=s),t=n),typeof t=="string"?t===""?e.removeAttribute(o):e.setAttribute(o,t):t?e.setAttribute(o,""):e.removeAttribute(o)}function u(o){const t=document.getElementById("playground-button");t&&(t.textContent=o||"Interactive Button")}document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("mjo-button").forEach(o=>{o.addEventListener("mjo-button-click",t=>{const e=t;console.log("Button clicked:",{element:e.detail.element,toggle:e.detail.toggle,originalEvent:e.detail.originalEvent}),o.id!=="playground-button"&&i(o,"Clicked!")}),o.addEventListener("mjo-button-toggle",t=>{const e=t;console.log("Button toggled:",{element:e.detail.element,pressed:e.detail.pressed,previousState:e.detail.previousState});const n=e.detail.pressed?"ON":"OFF";i(o,`Toggle: ${n}`)}),o.addEventListener("mjo-button-loading-change",t=>{const e=t;console.log("Button loading changed:",{element:e.detail.element,loading:e.detail.loading})})}),document.querySelectorAll('mjo-button[type="submit"]').forEach(o=>{o.addEventListener("mjo-button-click",t=>{t.preventDefault(),i(o,"Form would submit!")})}),document.querySelectorAll('mjo-button[type="reset"]').forEach(o=>{o.addEventListener("mjo-button-click",t=>{t.preventDefault(),i(o,"Form would reset!")})})});function i(o,t){let e=document.querySelector(".button-feedback");e||(e=document.createElement("div"),e.className="button-feedback",e.style.cssText=`
+import { f as AiFillApple, g as AiFillAndroid, h as AiFillWindows, i as AiFillApi, j as AiFillAudio, k as AiFillBackward } from "./index.js";
+function changeButtonProp(prop, value) {
+  const button = document.getElementById("playground-button");
+  if (!button)
+    return;
+  let icon = void 0;
+  if (prop === "startIcon" || prop === "endIcon") {
+    if (value === "icon1") {
+      icon = AiFillApple;
+    } else if (value === "icon2") {
+      icon = AiFillAndroid;
+    } else if (value === "icon3") {
+      icon = AiFillWindows;
+    } else if (value === "icon4") {
+      icon = AiFillApi;
+    } else if (value === "icon5") {
+      icon = AiFillAudio;
+    } else if (value === "icon6") {
+      icon = AiFillBackward;
+    }
+    value = icon;
+  }
+  if (typeof value === "string") {
+    if (value === "") {
+      button.removeAttribute(prop);
+    } else {
+      button.setAttribute(prop, value);
+    }
+  } else {
+    if (value) {
+      button.setAttribute(prop, "");
+    } else {
+      button.removeAttribute(prop);
+    }
+  }
+}
+function changeButtonText(text) {
+  const button = document.getElementById("playground-button");
+  if (!button)
+    return;
+  button.textContent = text || "Interactive Button";
+}
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("mjo-button").forEach((button) => {
+    button.addEventListener("mjo-button-click", (ev) => {
+      const clickEvent = ev;
+      console.log("Button clicked:", {
+        element: clickEvent.detail.element,
+        toggle: clickEvent.detail.toggle,
+        originalEvent: clickEvent.detail.originalEvent
+      });
+      if (button.id !== "playground-button") {
+        showTemporaryFeedback(button, "Clicked!");
+      }
+    });
+    button.addEventListener("mjo-button-toggle", (ev) => {
+      const toggleEvent = ev;
+      console.log("Button toggled:", {
+        element: toggleEvent.detail.element,
+        pressed: toggleEvent.detail.pressed,
+        previousState: toggleEvent.detail.previousState
+      });
+      const state = toggleEvent.detail.pressed ? "ON" : "OFF";
+      showTemporaryFeedback(button, `Toggle: ${state}`);
+    });
+    button.addEventListener("mjo-button-loading-change", (ev) => {
+      const loadingEvent = ev;
+      console.log("Button loading changed:", {
+        element: loadingEvent.detail.element,
+        loading: loadingEvent.detail.loading
+      });
+    });
+  });
+  document.querySelectorAll('mjo-button[type="submit"]').forEach((button) => {
+    button.addEventListener("mjo-button-click", (ev) => {
+      ev.preventDefault();
+      showTemporaryFeedback(button, "Form would submit!");
+    });
+  });
+  document.querySelectorAll('mjo-button[type="reset"]').forEach((button) => {
+    button.addEventListener("mjo-button-click", (ev) => {
+      ev.preventDefault();
+      showTemporaryFeedback(button, "Form would reset!");
+    });
+  });
+});
+function showTemporaryFeedback(element, message) {
+  let feedback = document.querySelector(".button-feedback");
+  if (!feedback) {
+    feedback = document.createElement("div");
+    feedback.className = "button-feedback";
+    feedback.style.cssText = `
             position: fixed;
             top: 50%;
             left: 50%;
@@ -13,5 +104,20 @@ import{f as l,g as d,h as r,i as c,j as a,k as s}from"./index.js";function m(o,t
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
-        `,document.body.appendChild(e)),e.textContent=t,e.style.opacity="1",setTimeout(()=>{e.style.opacity="0",setTimeout(()=>{e.parentNode&&e.parentNode.removeChild(e)},300)},2e3)}window.changeButtonProp=m;window.changeButtonText=u;
+        `;
+    document.body.appendChild(feedback);
+  }
+  feedback.textContent = message;
+  feedback.style.opacity = "1";
+  setTimeout(() => {
+    feedback.style.opacity = "0";
+    setTimeout(() => {
+      if (feedback.parentNode) {
+        feedback.parentNode.removeChild(feedback);
+      }
+    }, 300);
+  }, 2e3);
+}
+window.changeButtonProp = changeButtonProp;
+window.changeButtonText = changeButtonText;
 //# sourceMappingURL=button-interactions.js.map

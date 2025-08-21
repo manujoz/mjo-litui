@@ -5,7 +5,7 @@ module.exports = {
     },
     parserPreset: {
         parserOpts: {
-            headerPattern: /^(\w*)\(([-.\w]*)\)!?:\s(add|fix|update|test|change|remove|panic|close)\s([a-z0-9\s-#@.-_]*)$/,
+            headerPattern: /^(\w*)\(([-.\w]*)\)!?:\s(add|fix|update|test|change|remove|panic|close)\s([a-z0-9\s-#@.-_,]*)$/,
             headerCorrespondence: ["type", "issue-id", "subjectprefix", "subject"],
         },
     },

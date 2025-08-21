@@ -10,4 +10,4 @@ Ten en cuenta que Lit cuenta con soporte nativo para muchos atributos aria como 
 
 No modifiques el código, presentame un plan detallado de lo que vas a hacer y espera mi confirmacion.
 
-No crees documentación para el componente.
+No crees documentación para el componente ni ejemplos del component

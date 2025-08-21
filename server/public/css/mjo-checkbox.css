@@ -1,0 +1,127 @@
+/* mjo-checkbox specific styles for SSR demo */
+
+.checkbox-showcase-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.checkbox-showcase-vertical h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--mjo-foreground-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.checkbox-showcase-vertical mjo-checkbox {
+    width: auto;
+    min-width: 250px;
+}
+
+/* Enhanced playground styles for checkbox */
+.playground-container .controls-panel .control-group input[name="label"],
+.playground-container .controls-panel .control-group input[name="name"],
+.playground-container .controls-panel .control-group input[name="value"],
+.playground-container .controls-panel .control-group input[name="helperText"],
+.playground-container .controls-panel .control-group input[name="checkgroup"],
+.playground-container .controls-panel .control-group input[name="ariaDescribedby"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 0.25rem;
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-size: 0.875rem;
+}
+
+.playground-container .controls-panel .control-group input:focus {
+    outline: 2px solid var(--mjo-primary-color);
+    outline-offset: 2px;
+}
+
+.playground-container .controls-panel .control-group select[name="color"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 0.25rem;
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-size: 0.875rem;
+}
+
+/* Toggle group enhancements for checkbox demo */
+.playground-container .controls-panel .toggle-group .toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease;
+}
+
+.playground-container .controls-panel .toggle-group .toggle:hover {
+    background: var(--mjo-background-color-high);
+}
+
+.playground-container .controls-panel .toggle-group .toggle input[type="checkbox"] {
+    margin: 0;
+    transform: scale(1.1);
+}
+
+.playground-container .controls-panel .toggle-group .toggle span {
+    font-size: 0.875rem;
+    color: var(--mjo-foreground-color);
+    user-select: none;
+}
+
+/* Playground showcase specific for checkbox */
+.playground-showcase mjo-checkbox {
+    width: auto;
+    min-width: 200px;
+}
+
+/* Demo section styling */
+.component-showcase.checkbox-showcase-vertical {
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--mjo-border-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .checkbox-showcase-vertical mjo-checkbox {
+        min-width: unset;
+        width: 100%;
+    }
+
+    .playground-container .controls-panel {
+        gap: 1rem;
+    }
+
+    .playground-container .controls-panel .control-group {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Accessibility enhancements */
+@media (prefers-reduced-motion: reduce) {
+    .playground-container .controls-panel .toggle-group .toggle {
+        transition: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .playground-container .controls-panel .control-group input,
+    .playground-container .controls-panel .control-group select {
+        border-width: 2px;
+    }
+
+    .component-showcase.checkbox-showcase-vertical {
+        border-width: 2px;
+    }
+}

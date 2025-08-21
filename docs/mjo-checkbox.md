@@ -1,6 +1,6 @@
 # mjo-checkbox
 
-Configurable, theme-aware checkbox component with form integration, validation support, and customizable styling through multiple mixins including FormMixin, InputErrorMixin, and ThemeMixin.
+Configurable, theme-aware checkbox component with form integration, validation support, indeterminate state support, and customizable styling through multiple mixins including FormMixin, InputErrorMixin, and ThemeMixin. The component supports accessibility features with proper ARIA attributes and keyboard navigation.
 
 ## HTML Usage
 
@@ -8,6 +8,8 @@ Configurable, theme-aware checkbox component with form integration, validation s
 <mjo-checkbox name="terms" value="accepted" label="I accept the terms and conditions"></mjo-checkbox>
 <mjo-checkbox name="newsletter" value="subscribe" label="Subscribe to newsletter" checked></mjo-checkbox>
 <mjo-checkbox name="notifications" value="enabled" label="Enable notifications" color="secondary"></mjo-checkbox>
+<mjo-checkbox name="partial" value="some" label="Partially selected" indeterminate></mjo-checkbox>
+<mjo-checkbox name="disabled-check" label="Disabled checkbox" disabled></mjo-checkbox>
 ```
 
 ## Basic Example
@@ -44,9 +46,18 @@ import "mjo-litui/mjo-button";
 @customElement("example-checkbox-states")
 export class ExampleCheckboxStates extends LitElement {
     @state() private isDisabled = false;
+    @state() private isIndeterminate = false;
 
     private toggleDisabled() {
         this.isDisabled = !this.isDisabled;
+    }
+
+    private toggleIndeterminate() {
+        const checkbox = this.shadowRoot?.querySelector("#indeterminate-checkbox") as any;
+        if (checkbox) {
+            this.isIndeterminate = !this.isIndeterminate;
+            checkbox.setIndeterminate(this.isIndeterminate);
+        }
     }
 
     render() {
@@ -61,16 +72,148 @@ export class ExampleCheckboxStates extends LitElement {
                 </div>
 
                 <div>
-                    <h4>Interactive States</h4>
+                    <h4>States</h4>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <mjo-checkbox label="Normal checkbox" name="normal" value="1"></mjo-checkbox>
+                        <mjo-checkbox label="Checked checkbox" name="checked" value="1" checked></mjo-checkbox>
+                        <mjo-checkbox
+                            id="indeterminate-checkbox"
+                            label="Indeterminate checkbox"
+                            name="indeterminate"
+                            value="1"
+                            ?indeterminate=${this.isIndeterminate}
+                        >
+                        </mjo-checkbox>
+                        <mjo-checkbox label="Disabled unchecked" name="disabled1" value="1" disabled></mjo-checkbox>
+                        <mjo-checkbox label="Disabled checked" name="disabled2" value="1" disabled checked></mjo-checkbox>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Interactive Controls</h4>
                     <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
                         <mjo-checkbox label="Toggle me" name="interactive1" value="1" ?disabled=${this.isDisabled}></mjo-checkbox>
                         <mjo-checkbox label="I'm checked" name="interactive2" value="1" checked ?disabled=${this.isDisabled}></mjo-checkbox>
                         <mjo-checkbox label="Secondary disabled" name="interactive3" value="1" color="secondary" ?disabled=${this.isDisabled}></mjo-checkbox>
                     </div>
-                    <mjo-button @click=${this.toggleDisabled} variant="ghost"> ${this.isDisabled ? "Enable All" : "Disable All"} </mjo-button>
+                    <div style="display: flex; gap: 1rem;">
+                        <mjo-button @click=${this.toggleDisabled} variant="ghost"> ${this.isDisabled ? "Enable All" : "Disable All"} </mjo-button>
+                        <mjo-button @click=${this.toggleIndeterminate} variant="ghost"> ${this.isIndeterminate ? "Clear" : "Set"} Indeterminate </mjo-button>
+                    </div>
                 </div>
             </div>
         `;
+    }
+}
+```
+
+## Indeterminate State Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-checkbox";
+import "mjo-litui/mjo-button";
+
+@customElement("example-checkbox-indeterminate")
+export class ExampleCheckboxIndeterminate extends LitElement {
+    @state() private parentChecked = false;
+    @state() private child1Checked = false;
+    @state() private child2Checked = false;
+    @state() private child3Checked = false;
+
+    private updateParentState() {
+        const checkedChildren = [this.child1Checked, this.child2Checked, this.child3Checked].filter(Boolean).length;
+        const totalChildren = 3;
+
+        const parentCheckbox = this.shadowRoot?.querySelector("#parent-checkbox") as any;
+        if (parentCheckbox) {
+            if (checkedChildren === 0) {
+                // No children checked
+                this.parentChecked = false;
+                parentCheckbox.checked = false;
+                parentCheckbox.setIndeterminate(false);
+            } else if (checkedChildren === totalChildren) {
+                // All children checked
+                this.parentChecked = true;
+                parentCheckbox.checked = true;
+                parentCheckbox.setIndeterminate(false);
+            } else {
+                // Some children checked
+                this.parentChecked = false;
+                parentCheckbox.checked = false;
+                parentCheckbox.setIndeterminate(true);
+            }
+        }
+    }
+
+    private handleParentChange() {
+        this.parentChecked = !this.parentChecked;
+
+        // Set all children to match parent state
+        this.child1Checked = this.parentChecked;
+        this.child2Checked = this.parentChecked;
+        this.child3Checked = this.parentChecked;
+
+        // Update parent to clear indeterminate state
+        const parentCheckbox = this.shadowRoot?.querySelector("#parent-checkbox") as any;
+        if (parentCheckbox) {
+            parentCheckbox.setIndeterminate(false);
+        }
+
+        this.requestUpdate();
+    }
+
+    private handleChildChange(childProperty: "child1Checked" | "child2Checked" | "child3Checked") {
+        this[childProperty] = !this[childProperty];
+        this.updateParentState();
+        this.requestUpdate();
+    }
+
+    render() {
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
+                <h4>Select All Features</h4>
+
+                <mjo-checkbox id="parent-checkbox" name="allFeatures" label="All Features" value="all" @click=${this.handleParentChange}></mjo-checkbox>
+
+                <div style="margin-left: 2rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                    <mjo-checkbox
+                        name="features"
+                        label="Email Notifications"
+                        value="email"
+                        ?checked=${this.child1Checked}
+                        @click=${() => this.handleChildChange("child1Checked")}
+                    ></mjo-checkbox>
+
+                    <mjo-checkbox
+                        name="features"
+                        label="SMS Notifications"
+                        value="sms"
+                        ?checked=${this.child2Checked}
+                        @click=${() => this.handleChildChange("child2Checked")}
+                    ></mjo-checkbox>
+
+                    <mjo-checkbox
+                        name="features"
+                        label="Push Notifications"
+                        value="push"
+                        ?checked=${this.child3Checked}
+                        @click=${() => this.handleChildChange("child3Checked")}
+                    ></mjo-checkbox>
+                </div>
+
+                <div style="margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 4px;">
+                    <strong>State:</strong><br />
+                    Parent: ${this.parentChecked ? "Checked" : "Unchecked"}<br />
+                    Children: ${[this.child1Checked, this.child2Checked, this.child3Checked].filter(Boolean).length} of 3 selected
+                </div>
+            </div>
+        `;
+    }
+
+    firstUpdated() {
+        this.updateParentState();
     }
 }
 ```
@@ -598,25 +741,51 @@ export class ExampleCheckboxThemes extends LitElement {
 
 ## Attributes / Properties
 
-| Name         | Type                       | Default     | Reflects | Description                                        |
-| ------------ | -------------------------- | ----------- | -------- | -------------------------------------------------- |
-| `color`      | `"primary" \| "secondary"` | `"primary"` | no       | Color scheme for the checkbox when checked         |
-| `checked`    | `boolean`                  | `false`     | yes      | Controls whether the checkbox is checked           |
-| `disabled`   | `boolean`                  | `false`     | yes      | Disables interaction with the checkbox             |
-| `label`      | `string \| undefined`      | `undefined` | no       | Text label displayed next to the checkbox          |
-| `name`       | `string \| undefined`      | `undefined` | no       | Form field name for form submission                |
-| `value`      | `string`                   | `""`        | no       | Value submitted when checkbox is checked           |
-| `checkgroup` | `string \| undefined`      | `undefined` | yes      | Groups checkboxes together for validation purposes |
-| `helperText` | `string \| undefined`      | `undefined` | no       | Helper text displayed below the checkbox           |
-| `hideErrors` | `boolean`                  | `false`     | no       | Hides error messages from InputErrorMixin          |
+| Name              | Type                       | Default     | Reflects | Description                                        |
+| ----------------- | -------------------------- | ----------- | -------- | -------------------------------------------------- |
+| `color`           | `"primary" \| "secondary"` | `"primary"` | no       | Color scheme for the checkbox when checked         |
+| `checked`         | `boolean`                  | `false`     | yes      | Controls whether the checkbox is checked           |
+| `disabled`        | `boolean`                  | `false`     | yes      | Disables interaction with the checkbox             |
+| `indeterminate`   | `boolean`                  | `false`     | yes      | Sets the checkbox to indeterminate/mixed state     |
+| `label`           | `string \| undefined`      | `undefined` | no       | Text label displayed next to the checkbox          |
+| `name`            | `string \| undefined`      | `undefined` | no       | Form field name for form submission                |
+| `value`           | `string`                   | `""`        | no       | Value submitted when checkbox is checked           |
+| `checkgroup`      | `string \| undefined`      | `undefined` | yes      | Groups checkboxes together for validation purposes |
+| `helperText`      | `string \| undefined`      | `undefined` | no       | Helper text displayed below the checkbox           |
+| `hideErrors`      | `boolean`                  | `false`     | no       | Hides error messages from InputErrorMixin          |
+| `ariaDescribedby` | `string \| undefined`      | `undefined` | no       | ARIA describedby attribute for accessibility       |
 
 ### FormMixin Properties
 
-| Name       | Type      | Default     | Description                                                |
-| ---------- | --------- | ----------- | ---------------------------------------------------------- |
-| `required` | `boolean` | `false`     | Makes the checkbox required for form validation            |
-| `mincheck` | `number`  | `undefined` | Minimum number of checkboxes that must be checked in group |
-| `maxcheck` | `number`  | `undefined` | Maximum number of checkboxes that can be checked in group  |
+All validation properties from FormMixin are inherited:
+
+| Name           | Type                                           | Default     | Description                                                    |
+| -------------- | ---------------------------------------------- | ----------- | -------------------------------------------------------------- |
+| `required`     | `boolean`                                      | `false`     | Makes the checkbox required for form validation                |
+| `mincheck`     | `number`                                       | `undefined` | Minimum number of checkboxes that must be checked in group     |
+| `maxcheck`     | `number`                                       | `undefined` | Maximum number of checkboxes that can be checked in group      |
+| `isemail`      | `boolean`                                      | `false`     | Validates email format (not typically used with checkboxes)    |
+| `isurl`        | `boolean`                                      | `false`     | Validates URL format (not typically used with checkboxes)      |
+| `nospaces`     | `boolean`                                      | `false`     | Disallows spaces in value (not typically used with checkboxes) |
+| `rangelength`  | `number[]`                                     | `undefined` | Array with min/max length validation                           |
+| `isnumber`     | `boolean`                                      | `false`     | Validates numeric input (not typically used with checkboxes)   |
+| `range`        | `number[]`                                     | `undefined` | Array with min/max numeric range                               |
+| `domains`      | `string[]`                                     | `undefined` | Allowed email domains (not typically used with checkboxes)     |
+| `isdate`       | `"aaaa-mm-dd" \| "dd-mm-aaaa" \| "mm-dd-aaaa"` | `undefined` | Date format validation (not typically used with checkboxes)    |
+| `dateprevious` | `boolean`                                      | `false`     | Date must be before today (not typically used with checkboxes) |
+| `minage`       | `number`                                       | `undefined` | Minimum age validation (not typically used with checkboxes)    |
+| `maxage`       | `number`                                       | `undefined` | Maximum age validation (not typically used with checkboxes)    |
+| `security`     | `"low" \| "medium" \| "high" \| "very-high"`   | `undefined` | Password security level (not typically used with checkboxes)   |
+| `equalto`      | `string`                                       | `undefined` | Field must equal another field (not typically used)            |
+| `phonenumber`  | `boolean`                                      | `false`     | Validates phone number (not typically used with checkboxes)    |
+| `phonecountry` | `string[]`                                     | `undefined` | Allowed phone countries (not typically used with checkboxes)   |
+| `pattern`      | `string`                                       | `undefined` | Regex pattern validation                                       |
+| `allowed`      | `string[]`                                     | `undefined` | Array of allowed values                                        |
+| `min`          | `number`                                       | `undefined` | Minimum numeric value                                          |
+| `max`          | `number`                                       | `undefined` | Maximum numeric value                                          |
+| `maxlength`    | `number`                                       | `undefined` | Maximum character length                                       |
+| `minlength`    | `number`                                       | `undefined` | Minimum character length                                       |
+| `formIgnore`   | `boolean`                                      | `false`     | Ignores this element in form data collection                   |
 
 ### InputErrorMixin Properties
 
@@ -627,6 +796,12 @@ export class ExampleCheckboxThemes extends LitElement {
 | `success`    | `boolean`             | `false`     | Shows success state styling |
 | `successmsg` | `string \| undefined` | `undefined` | Success message to display  |
 
+### ThemeMixin Properties
+
+| Name    | Type                            | Default     | Description                          |
+| ------- | ------------------------------- | ----------- | ------------------------------------ |
+| `theme` | `MjoCheckboxTheme \| undefined` | `undefined` | Theme object to customize appearance |
+
 ### Internal Properties
 
 | Name   | Type     | Description                               |
@@ -636,10 +811,12 @@ export class ExampleCheckboxThemes extends LitElement {
 ### Behavior Notes
 
 -   Form integration through FormMixin automatically handles form data submission
--   The checkbox uses a custom icon (`AiFillCheckSquare`) with scale animation
+-   The checkbox uses custom icons (`AiFillCheckSquare` for checked, `AiOutlineMinus` for indeterminate)
 -   Clicking anywhere on the label or checkbox toggles the state
 -   Form validation supports required fields and group validation (mincheck/maxcheck)
 -   Error and success states override helper text display
+-   Indeterminate state is cleared when checkbox is clicked
+-   Accessibility features include proper ARIA attributes and keyboard navigation
 
 ## Slots
 
@@ -649,16 +826,60 @@ export class ExampleCheckboxThemes extends LitElement {
 
 ## Events
 
-| Event    | Detail | Emitted When           | Notes                                              |
-| -------- | ------ | ---------------------- | -------------------------------------------------- |
-| `change` | Native | Checkbox state changes | Standard HTML input change event for form handling |
+| Event                               | Detail                                                            | Emitted When                | Notes                                                 |
+| ----------------------------------- | ----------------------------------------------------------------- | --------------------------- | ----------------------------------------------------- |
+| `change`                            | Native event                                                      | Checkbox state changes      | Standard HTML input change event for form handling    |
+| `mjo-checkbox-change`               | `{ element, checked, indeterminate, value, name, previousState }` | Checkbox state changes      | Enhanced custom event with detailed state information |
+| `mjo-checkbox-indeterminate-change` | `{ element, indeterminate, checked }`                             | Indeterminate state changes | Fired when `setIndeterminate()` method is called      |
+| `mjo-checkbox-focus`                | `{ element }`                                                     | Checkbox receives focus     | Custom focus event for advanced interactions          |
+| `mjo-checkbox-blur`                 | `{ element }`                                                     | Checkbox loses focus        | Custom blur event for advanced interactions           |
+
+### Event Details
+
+The `mjo-checkbox-change` event provides comprehensive state information:
+
+```ts
+interface MjoCheckboxChangeEvent extends CustomEvent {
+    detail: {
+        element: MjoCheckbox; // Reference to the checkbox element
+        checked: boolean; // Current checked state
+        indeterminate: boolean; // Current indeterminate state
+        value: string; // Checkbox value
+        name: string; // Checkbox name
+        previousState: {
+            // Previous state before change
+            checked: boolean;
+            indeterminate: boolean;
+        };
+    };
+}
+```
 
 ## Methods
 
-| Method                          | Description                                                |
-| ------------------------------- | ---------------------------------------------------------- |
-| `getValue(): string`            | Returns the checkbox value if checked, empty string if not |
-| `setValue(value: string): void` | Sets the checkbox value property                           |
+| Method                                     | Description                                                            |
+| ------------------------------------------ | ---------------------------------------------------------------------- |
+| `getValue(): string`                       | Returns the checkbox value if checked, empty string if not             |
+| `setValue(value: string): void`            | Sets the checkbox value property                                       |
+| `setIndeterminate(value: boolean): void`   | Sets the indeterminate state and dispatches indeterminate-change event |
+| `reportValidity(): boolean`                | Validates the checkbox and returns validity state                      |
+| `setCustomValidity(message: string): void` | Sets custom validation message                                         |
+
+### Method Details
+
+#### `setIndeterminate(indeterminate: boolean)`
+
+This method programmatically sets the indeterminate state of the checkbox:
+
+```ts
+const checkbox = document.querySelector("mjo-checkbox") as MjoCheckbox;
+checkbox.setIndeterminate(true); // Sets to indeterminate state
+checkbox.setIndeterminate(false); // Clears indeterminate state
+```
+
+-   Updates both the component property and the internal HTML input's indeterminate property
+-   Dispatches the `mjo-checkbox-indeterminate-change` event
+-   Updates form data automatically
 
 ## CSS Variables
 
@@ -666,22 +887,39 @@ The component provides extensive customization through CSS variables with fallba
 
 ### Border and Colors
 
-| Variable                              | Fallback                                       | Used For               |
-| ------------------------------------- | ---------------------------------------------- | ---------------------- |
-| `--mjo-checkbox-border-color`         | `--mjo-foreground-color-low` → `rgb(51,51,51)` | Unchecked border color |
-| `--mjo-checkbox-checked-color`        | `--mjo-primary-color`                          | Checked icon color     |
-| `--mjo-checkbox-checked-border-color` | `--mjo-checkbox-checked-color`                 | Checked border color   |
+| Variable                                        | Fallback                                       | Used For                            |
+| ----------------------------------------------- | ---------------------------------------------- | ----------------------------------- |
+| `--mjo-checkbox-border-color`                   | `--mjo-foreground-color-low` → `rgb(51,51,51)` | Unchecked border color              |
+| `--mjo-checkbox-checked-color`                  | `--mjo-primary-color`                          | Checked icon color                  |
+| `--mjo-checkbox-checked-border-color`           | `--mjo-checkbox-checked-color`                 | Checked border color                |
+| `--mjo-checkbox-checked-background-color`       | `transparent`                                  | Background color when checked       |
+| `--mjo-checkbox-indeterminate-color`            | `--mjo-checkbox-checked-color`                 | Indeterminate icon color            |
+| `--mjo-checkbox-indeterminate-border-color`     | `--mjo-checkbox-indeterminate-color`           | Indeterminate border color          |
+| `--mjo-checkbox-indeterminate-background-color` | `transparent`                                  | Background color when indeterminate |
 
 ### Typography
 
-| Variable                            | Fallback  | Used For                |
-| ----------------------------------- | --------- | ----------------------- |
-| `--mjo-checkbox-label-color`        | `inherit` | Label text color        |
-| `--mjo-checkbox-label-font-size`    | `inherit` | Label font size         |
-| `--mjo-checkbox-label-font-weight`  | `inherit` | Label font weight       |
-| `--mjo-checkbox-helper-color`       | `inherit` | Helper text color       |
-| `--mjo-checkbox-helper-font-size`   | `inherit` | Helper text font size   |
-| `--mjo-checkbox-helper-font-weight` | `inherit` | Helper text font weight |
+| Variable                            | Fallback                     | Used For                |
+| ----------------------------------- | ---------------------------- | ----------------------- |
+| `--mjo-checkbox-label-color`        | `inherit`                    | Label text color        |
+| `--mjo-checkbox-label-font-size`    | `inherit`                    | Label font size         |
+| `--mjo-checkbox-label-font-weight`  | `inherit`                    | Label font weight       |
+| `--mjo-checkbox-helper-color`       | `--mjo-foreground-color-low` | Helper text color       |
+| `--mjo-checkbox-helper-font-size`   | `inherit`                    | Helper text font size   |
+| `--mjo-checkbox-helper-font-weight` | `inherit`                    | Helper text font weight |
+
+### Focus and Accessibility
+
+| Variable                             | Fallback                  | Used For               |
+| ------------------------------------ | ------------------------- | ---------------------- |
+| `--mjo-checkbox-focus-color`         | `rgba(59, 130, 246, 0.1)` | Focus box shadow color |
+| `--mjo-checkbox-focus-outline-color` | `--mjo-primary-color`     | Focus outline color    |
+
+### Disabled State
+
+| Variable                          | Fallback | Used For              |
+| --------------------------------- | -------- | --------------------- |
+| `--mjo-checkbox-disabled-opacity` | `0.5`    | Opacity when disabled |
 
 ### Spacing
 
@@ -802,24 +1040,18 @@ export class ExampleCheckboxAdvancedForm extends LitElement {
 }
 ```
 
-## CSS Parts
-
-| Part            | Description                             |
-| --------------- | --------------------------------------- |
-| `container`     | The main checkbox container             |
-| `flexContainer` | The flex container holding all elements |
-| `box`           | The checkbox visual container           |
-| `checkbox`      | The actual checkbox element             |
-| `label`         | The label text element                  |
-
 ## Accessibility Notes
 
--   The component provides proper keyboard navigation (Space to toggle)
+-   The component provides proper keyboard navigation (Space and Enter keys to toggle)
 -   Uses semantic HTML input element for screen reader compatibility
 -   Label is properly associated with the checkbox for accessibility
--   Consider adding `aria-describedby` for helper text association
--   Error states should be announced to screen readers
--   For required checkboxes, consider adding `aria-required="true"`
+-   ARIA attributes are automatically managed (`aria-checked`, `aria-disabled`, `aria-invalid`)
+-   Computed ARIA labels provide context about state (checked/unchecked/indeterminate)
+-   Error states should be announced to screen readers through `aria-invalid`
+-   For required checkboxes, the required state is announced through computed ARIA labels
+-   Focus management with proper tab order and focus indicators
+-   Support for high contrast mode with enhanced border widths
+-   Reduced motion support for users with motion preferences
 
 ```html
 <!-- Example with enhanced accessibility -->
@@ -828,9 +1060,8 @@ export class ExampleCheckboxAdvancedForm extends LitElement {
     value="subscribe"
     label="Subscribe to newsletter"
     helperText="You can unsubscribe at any time"
-    required
-    aria-required="true"
     aria-describedby="newsletter-help"
+    required
 ></mjo-checkbox>
 ```
 
@@ -838,8 +1069,12 @@ export class ExampleCheckboxAdvancedForm extends LitElement {
 
 -   The component uses efficient event delegation for click handling
 -   Form integration updates are optimized to prevent unnecessary re-renders
--   Icon animations use CSS transforms for optimal performance
+-   Icon animations use CSS transforms for optimal performance with scale transitions
 -   Large checkbox groups should use proper state management to avoid re-rendering all items
+-   Indeterminate state changes are handled efficiently without full component re-renders
+-   ARIA label computation is cached and only updates when relevant properties change
+-   Support for `prefers-reduced-motion` to disable animations for accessibility
+-   Memory-efficient event listeners with proper cleanup in `disconnectedCallback`
 
 ## Best Practices
 
@@ -866,4 +1101,21 @@ export class ExampleCheckboxAdvancedForm extends LitElement {
 
 ## Summary
 
-`<mjo-checkbox>` provides a comprehensive checkbox solution with built-in form integration, validation support, and extensive theming capabilities. The component seamlessly integrates with `mjo-form` for automatic form handling and validation, supports grouping with min/max selection constraints, and offers both individual and batch styling options. Use the FormMixin properties for validation, InputErrorMixin for error states, and ThemeMixin for visual customization. The component handles all standard checkbox behaviors while providing enhanced functionality for modern web applications.
+`<mjo-checkbox>` provides a comprehensive checkbox solution with built-in form integration, validation support, indeterminate state management, and extensive theming capabilities. The component seamlessly integrates with `mjo-form` for automatic form handling and validation, supports grouping with min/max selection constraints, and offers both individual and batch styling options.
+
+### Key Features:
+
+-   **Three-state support**: Unchecked, checked, and indeterminate states
+-   **Advanced accessibility**: Full ARIA support with computed labels and automatic state announcements
+-   **Form integration**: Automatic data collection and validation with FormMixin
+-   **Event system**: Rich event model with detailed state change information
+-   **Theme customization**: Complete visual customization through CSS variables and theme objects
+-   **Keyboard navigation**: Full keyboard support with Space and Enter key handling
+-   **Motion preferences**: Respects user's reduced motion preferences
+-   **High contrast support**: Enhanced visibility for accessibility compliance
+
+The component handles all standard checkbox behaviors while providing enhanced functionality for modern web applications, including parent-child relationships for hierarchical selections and comprehensive form validation capabilities.
+
+```
+
+```
