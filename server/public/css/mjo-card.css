@@ -1,0 +1,88 @@
+/* Styles specific to mjo-card component pages */
+
+.card-content {
+    margin: 0;
+}
+
+.card-content h3,
+.card-content h4,
+.card-content h5 {
+    margin: 0 0 12px 0;
+    color: var(--mjo-text-color-primary);
+}
+
+.card-content p {
+    margin: 0 0 16px 0;
+    color: var(--mjo-text-color-secondary);
+    line-height: 1.5;
+}
+
+.card-content ul {
+    margin: 0;
+    padding-left: 20px;
+    color: var(--mjo-text-color-secondary);
+}
+
+.card-content li {
+    margin-bottom: 4px;
+}
+
+/* Sample button styling for card content */
+.sample-button {
+    background: var(--mjo-color-primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.sample-button:hover {
+    background: var(--mjo-color-primary-dark, #0056b3);
+}
+
+.sample-button.secondary {
+    background: var(--mjo-color-secondary);
+    color: var(--mjo-text-color-primary);
+}
+
+.sample-button.secondary:hover {
+    background: var(--mjo-color-secondary-dark, #e0e0e0);
+}
+
+/* Component showcase grid adjustments for cards */
+.component-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+/* Special styling for nested card example */
+.component-showcase mjo-card {
+    min-height: auto;
+}
+
+/* Playground showcase specific for cards */
+.playground-showcase {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.playground-showcase mjo-card {
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Sample image styling within cards */
+.card-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}

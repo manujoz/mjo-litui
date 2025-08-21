@@ -1,3 +1,5 @@
+import { MjoCardContrast, MjoCardRadius } from "./types/mjo-card.js";
+
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
@@ -5,8 +7,8 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 @customElement("mjo-card")
 export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
-    @property({ type: String, noAccessor: true }) contrast?: "low" | "high" | "normal";
-    @property({ type: String, noAccessor: true }) radius?: "none" | "small" | "medium" | "large" = "medium";
+    @property({ type: String, noAccessor: true }) contrast?: MjoCardContrast;
+    @property({ type: String, noAccessor: true }) radius?: MjoCardRadius = "medium";
 
     render() {
         return html`<div class="content"><slot></slot></div>`;
@@ -24,7 +26,7 @@ export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
         this.setAttribute("contrast", contrast);
     }
 
-    setRadius(radius: "none" | "small" | "medium" | "large") {
+    setRadius(radius: MjoCardRadius) {
         this.radius = radius;
         this.setAttribute("radius", radius);
     }

@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build Server Client",
+			"type": "shell",
+			"command": "npm run server:build:client"
+		},
+		{
+			"label": "Build Full Application",
+			"type": "shell",
+			"command": "npm run build"
+		},
+		{
+			"label": "TypeScript Check",
+			"type": "shell",
+			"command": "tsc --noEmit"
+		},
+		{
+			"label": "TypeScript Check Card Controller",
+			"type": "shell",
+			"command": "npx tsc --noEmit server/src/controllers/card-controller.ts"
+		}
+	]
+}

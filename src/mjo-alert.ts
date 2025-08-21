@@ -250,7 +250,7 @@ export class MjoAlert extends LitElement {
 
         animate.finished.then(() => {
             this.#dispatchEvent("mjo-alert-show");
-            animate.cancel();
+            if (animate) animate.cancel();
             this.isAnimating = false;
         });
     }
