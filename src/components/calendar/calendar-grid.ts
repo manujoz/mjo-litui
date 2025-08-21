@@ -90,7 +90,7 @@ export class CalendarGrid extends LitElement {
                     ${weekDaysAdjusted.map(
                         (day) => html`
                             <div class="week-day">
-                                <mjo-typography tag="none" size="small">${day}</mjo-typography>
+                                <mjo-typography tag="none" size="body1">${day}</mjo-typography>
                             </div>
                         `,
                     )}

@@ -36,7 +36,7 @@
                 "code": 160
             }
         ],
-        "no-console": "error",
+        "no-console": ["error", {"allow": ["warn", "error"]}],
         "lit/binding-positions": "error",
         "lit/no-duplicate-template-bindings": "error",
         "lit/no-invalid-html": "error",

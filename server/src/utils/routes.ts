@@ -12,15 +12,15 @@ export const ROUTES = [
         controller: indexController.renderIndexPage,
     },
     {
-        path: "/status",
-        controller: indexController.getSystemStatus,
-    },
-    {
         path: "/component/mjo-avatar",
         controller: avatarController.renderAvatarPage,
     },
     {
         path: "/component/mjo-chip",
         controller: chipController.renderChipPage,
+    },
+    {
+        path: "/status",
+        controller: indexController.getSystemStatus,
     },
 ];

@@ -1,8 +1,12 @@
+import { MjoThemeModes } from "../../src/types/mjo-theme.js";
+
 import express from "express";
 import fs from "fs";
 import { createServer } from "http";
 import { join } from "path";
 import { fileURLToPath } from "url";
+
+import { createMjoStyleThemeElement } from "../../src/lib/theme.js";
 
 // Import controllers directly
 import { IndexController } from "./controllers/index-controller.js";
@@ -27,7 +31,20 @@ app.use("/public", express.static(join(__dirname, "../public")));
 ROUTES.forEach((route) => {
     app.get(route.path, async (_req, res, next) => {
         try {
-            const html = await route.controller();
+            const cookies = _req.headers.cookie || "";
+            const theme =
+                (cookies
+                    .split("; ")
+                    .find((row) => row.startsWith("mjo-theme="))
+                    ?.split("=")[1] as MjoThemeModes) || "light";
+
+            const styleTag = createMjoStyleThemeElement({ themeMode: theme });
+
+            let html = await route.controller();
+            if (typeof html === "string") {
+                html = html.replace("</head>", `${styleTag}\n</head>`);
+            }
+
             res.send(html);
         } catch (error) {
             console.error(`❌ Rendering error at ${route.path}:`, error);

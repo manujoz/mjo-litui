@@ -2,39 +2,56 @@
  * Client entry point for SSR hydration
  * Imports all components needed for hydration
  */
+import type { MjoTheme } from "../../src/mjo-theme.js";
+
+import Cookies from "js-cookie";
 
 import "../../src/mjo-avatar.js";
 import "../../src/mjo-chip.js";
 import "../../src/mjo-theme.js";
 
 // Function to initialize theme after hydration
-function initializeTheme(): void {
-    const savedTheme = localStorage.getItem("mjo-theme") || "light";
-    const themeComponent = document.querySelector("mjo-theme");
+function initializeTheme(tries = 1): void {
+    const themeComponent = document.querySelector("mjo-theme") as MjoTheme;
+    if (!themeComponent) {
+        if (tries > 5) {
+            console.error("Failed to find mjo-theme component");
+            return;
+        }
 
-    if (themeComponent) {
-        (themeComponent as any).theme = savedTheme;
+        setTimeout(() => {
+            initializeTheme(tries + 1);
+        }, 100);
+        return;
+    }
+
+    let savedTheme = Cookies.get("mjo-theme");
+    if (themeComponent && !savedTheme) {
+        savedTheme = themeComponent.theme || "light";
+    } else if (!savedTheme) {
+        savedTheme = "light";
     }
 
     const toggleBtn = document.querySelector(".theme-toggle");
     if (toggleBtn) {
         toggleBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
     }
+
+    themeComponent.addEventListener("mjo-theme-change", (ev) => {
+        const newTheme = ev.detail.theme;
+        if (toggleBtn) {
+            toggleBtn.textContent = newTheme === "dark" ? "☀️" : "🌙";
+        }
+    });
 }
 
 // Global function to toggle theme (called from HTML)
 (window as any).toggleTheme = function (): void {
-    const themeComponent = document.querySelector("mjo-theme");
+    const themeComponent = document.querySelector("mjo-theme") as MjoTheme;
     if (themeComponent) {
-        const currentTheme = (themeComponent as any).theme;
+        const currentTheme = themeComponent.theme;
         const newTheme = currentTheme === "light" ? "dark" : "light";
-        (themeComponent as any).theme = newTheme;
-        localStorage.setItem("mjo-theme", newTheme);
-
-        const toggleBtn = document.querySelector(".theme-toggle");
-        if (toggleBtn) {
-            toggleBtn.textContent = newTheme === "dark" ? "☀️" : "🌙";
-        }
+        themeComponent.theme = newTheme;
     } else {
         console.warn("⚠️ mjo-theme component not found");
     }
@@ -44,8 +61,3 @@ function initializeTheme(): void {
 document.addEventListener("DOMContentLoaded", () => {
     initializeTheme();
 });
-
-// Also initialize after a short delay to ensure hydration
-setTimeout(() => {
-    initializeTheme();
-}, 100);

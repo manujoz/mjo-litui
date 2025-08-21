@@ -22,6 +22,7 @@ import "mjo-litui/mjo-theme";
 -   **Theme Merging**: Combines default theme with user configurations
 -   **Live Updates**: Reactive theme switching without page reload
 -   **Component-Specific Themes**: Individual theming for each component type
+-   **Automatic Theme Persistence**: Theme preferences are automatically saved in cookies and restored on page load
 
 ## Examples
 
@@ -165,87 +166,184 @@ export class ExampleComponentTheme extends LitElement {
 
 ### Complete Theme Configuration
 
-Example with comprehensive theme customization:
+utils/my-theme.ts
 
 ```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-card";
-import "mjo-litui/mjo-textfield";
-import type { MjoThemeConfig } from "mjo-litui/types/mjo-theme";
-
-const fullTheme: Partial<MjoThemeConfig> = {
-    // Basic properties
-    fontSizeMedium: "14px",
-    fontWeightRegular: "400",
-    spaceMedium: "16px",
-    spaceLarge: "24px",
-    spaceXlarge: "32px",
-    radiusMedium: "8px",
-
-    // Colors
-    colors: {
-        error: "#EF4444",
-        success: "#10B981",
-        warning: "#F59E0B",
-        info: "#3B82F6",
-    },
-
+export const fullTheme: MjoThemeConfig = {
     light: {
-        primaryColor: "#6366F1",
-        secondaryColor: "#EC4899",
-        backgroundColor: "#F8FAFC",
-        foregroundColor: "#1E293B",
-        borderColor: "#E2E8F0",
+        colors: {
+            primary: "#2563eb",
+            secondary: "#64748b",
+            success: "#059669",
+            warning: "#d97706",
+            error: "#dc2626",
+            surface: "#ffffff",
+            background: "#f8fafc",
+            onPrimary: "#ffffff",
+            onSecondary: "#ffffff",
+            onSurface: "#1e293b",
+            onBackground: "#1e293b",
+        },
+        typography: {
+            fontFamily: "Inter, system-ui, sans-serif",
+            fontSize: {
+                xs: "0.75rem",
+                sm: "0.875rem",
+                base: "1rem",
+                lg: "1.125rem",
+                xl: "1.25rem",
+            },
+        },
+        spacing: {
+            xs: "0.25rem",
+            sm: "0.5rem",
+            md: "1rem",
+            lg: "1.5rem",
+            xl: "2rem",
+        },
     },
     dark: {
-        primaryColor: "#818CF8",
-        backgroundColor: "#0F172A",
-        foregroundColor: "#F1F5F9",
-        borderColor: "#334155",
-    },
-
-    components: {
-        mjoButton: {
-            borderRadius: "8px",
-            fontSize: "14px",
-            fontWeight: "500",
-            padding: "10px 20px",
+        colors: {
+            primary: "#3b82f6",
+            secondary: "#94a3b8",
+            success: "#10b981",
+            warning: "#f59e0b",
+            error: "#ef4444",
+            surface: "#1e293b",
+            background: "#0f172a",
+            onPrimary: "#ffffff",
+            onSecondary: "#ffffff",
+            onSurface: "#f1f5f9",
+            onBackground: "#f1f5f9",
         },
-        mjoCard: {
-            radiusMedium: "12px",
-            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-            padding: "24px",
+        typography: {
+            fontFamily: "Inter, system-ui, sans-serif",
+            fontSize: {
+                xs: "0.75rem",
+                sm: "0.875rem",
+                base: "1rem",
+                lg: "1.125rem",
+                xl: "1.25rem",
+            },
+        },
+        spacing: {
+            xs: "0.25rem",
+            sm: "0.5rem",
+            md: "1rem",
+            lg: "1.5rem",
+            xl: "2rem",
+        },
+    },
+    components: {
+        button: {
+            borderRadius: "0.5rem",
+            fontWeight: "600",
+        },
+        textfield: {
+            borderRadius: "0.375rem",
+        },
+        card: {
+            borderRadius: "0.75rem",
+            boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
         },
     },
 };
+```
 
-@customElement("example-full-theme")
-export class ExampleFullTheme extends LitElement {
-    @state() private isDark = false;
+```ts
+import type { MjoThemeConfig } from "mjo-litui/types/mjo-theme";
 
-    private toggleTheme = () => {
-        this.isDark = !this.isDark;
-    };
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
 
+// Your custom theme config
+import { fullTheme } from "utils/my-theme";
+
+import "mjo-litui/mjo-theme";
+import "mjo-litui/mjo-button";
+import "mjo-litui/mjo-textfield";
+import "mjo-litui/mjo-card";
+
+@customElement("example-complete-theme")
+export class ExampleCompleteTheme extends LitElement {
     render() {
         return html`
-            <mjo-theme scope="global" .theme=${this.isDark ? "dark" : "light"} .config=${fullTheme}> </mjo-theme>
+            <mjo-theme .config=${fullTheme} scope="global" theme="light"></mjo-theme>
+            <div style="padding: 2rem;">
+                <mjo-card>
+                    <h2>Complete Theme Example</h2>
+                    <p>This example shows a complete theme configuration with custom colors, typography, and component styles.</p>
 
-            <mjo-card>
-                <h2>Custom Theme Example</h2>
-                <mjo-textfield label="Email" placeholder="Enter your email"> </mjo-textfield>
-                <div style="margin-top: 16px;">
-                    <mjo-button color="primary" @click=${this.toggleTheme}> Toggle to ${this.isDark ? "Light" : "Dark"} </mjo-button>
-                    <mjo-button variant="outline" color="secondary"> Secondary Action </mjo-button>
-                </div>
-            </mjo-card>
+                    <mjo-button variant="primary">Primary Button</mjo-button>
+                    <mjo-button variant="secondary">Secondary Button</mjo-button>
+
+                    <mjo-textfield label="Custom styled input" placeholder="Type something..."></mjo-textfield>
+                </mjo-card>
+            </div>
         `;
     }
 }
 ```
+
+### Server-Side Rendering (SSR)
+
+The `mjo-theme` component works seamlessly with server-side rendering. You can use the `createMjoStyleThemeElement` function to generate theme styles on the server and inject them into your HTML before sending it to the client.
+
+```ts
+import type { MjoThemeModes } from "mjo-litui/types/mjo-theme";
+
+import express from "express";
+import { createMjoStyleThemeElement } from "mjo-litui/lib/theme";
+
+// Your custom theme config
+import { fullTheme } from "utils/my-theme";
+
+const app = express();
+
+app.get("*", (req, res) => {
+    // Extract theme from cookies
+    const cookies = req.headers.cookie || "";
+    const theme =
+        (cookies
+            .split("; ")
+            .find((row) => row.startsWith("mjo-theme="))
+            ?.split("=")[1] as MjoThemeModes) || "light";
+
+    // Generate theme styles for server-side rendering
+    const styleTag = createMjoStyleThemeElement({ userConfig: fullTheme, themeMode: theme });
+
+    // Your HTML template
+    let html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>My App</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+        </head>
+        <body>
+            <mjo-theme scope="global" theme="${theme}"></mjo-theme>
+            <main>
+                <mjo-button>Server-rendered themed button</mjo-button>
+            </main>
+            
+        </body>
+        </html>
+    `;
+
+    // Inject theme styles into the head
+    html = html.replace("</head>", `${styleTag}\n</head>`);
+
+    res.send(html);
+});
+```
+
+**Benefits of SSR with mjo-theme:**
+
+-   **No Flash of Unstyled Content (FOUC)**: Styles are applied immediately on page load
+-   **Cookie Integration**: Automatically respects user's theme preference stored in cookies
+-   **Performance**: Critical theme CSS is inlined, reducing render-blocking requests
+-   **SEO**: Proper styling is available for server-side rendered content
 
 ## Attributes / Properties
 
@@ -262,6 +360,24 @@ export class ExampleFullTheme extends LitElement {
 | `applyTheme` | `()`       | `void`  | Regenerates and applies the current theme configuration |
 
 ## Events
+
+| Name               | Type                                  | Description                  |
+| ------------------ | ------------------------------------- | ---------------------------- |
+| `mjo-theme-change` | `CustomEvent<{theme: MjoThemeModes}>` | Fired when the theme changes |
+
+## Cookie Management
+
+The `mjo-theme` component automatically handles theme persistence using cookies:
+
+-   **Cookie Name**: `mjo-theme`
+-   **Storage Duration**: 365 days
+-   **Behavior**:
+    -   On first load, saves the current theme to the cookie
+    -   On subsequent loads, restores the theme from the cookie
+    -   Automatically updates the cookie when the theme changes
+    -   The cookie value will be either `"light"` or `"dark"`
+
+This means theme preferences persist across browser sessions without any additional configuration.
 
 This component does not emit any custom events.
 
@@ -470,7 +586,7 @@ interface MjoThemeMode {
     primaryForegroundColor?: MjoThemeColorSmall | string; // --mjo-primary-foreground-color
     secondaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string; // --mjo-secondary-color
     secondaryForegroundColor?: MjoThemeColorSmall | string; // --mjo-secondary-foreground-color
-    borderColor?: MjoThemeColorSmall | string; // --mjo-border-color
+    borderColor?: MjoThemeColorContrasts | string; // --mjo-border-color
     backgroundColor?: ({ hover: string } & MjoThemeColorContrasts) | string; // --mjo-background-color
     backgroundColorCard?: MjoThemeColorContrasts | string; // --mjo-background-color-card
     foregroundColor?: MjoThemeColorContrasts | string; // --mjo-foreground-color

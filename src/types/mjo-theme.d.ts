@@ -1,3 +1,11 @@
+export type MjoThemeModes = "light" | "dark";
+
+export interface MjoThemeChangeEvent extends CustomEvent {
+    detail: {
+        theme: MjoThemeModes;
+    };
+}
+
 export interface MjoThemeConfig {
     /** --mjo-radius-large */
     radiusSmall?: string;
