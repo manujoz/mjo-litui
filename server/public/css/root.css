@@ -280,7 +280,8 @@ header .subtitle {
 }
 
 .control-group input,
-.control-group select {
+.control-group select,
+.control-group textarea {
     background-color: var(--mjo-background-color-card);
     color: var(--mjo-foreground-color);
     border: solid 1px var(--mjo-border-color);
@@ -292,6 +293,7 @@ header .subtitle {
     transition: border-color 0.2s ease;
 }
 
+.control-group button,
 .control-btn {
     padding: 8px 16px;
     border: 2px solid var(--mjo-background-color-high);
@@ -303,12 +305,14 @@ header .subtitle {
     transition: all 0.2s ease;
 }
 
+.control-group button:hover,
 .control-btn:hover {
     border-color: var(--mjo-secondary-color-200);
     background: var(--mjo-secondary-color);
     color: var(--mjo-secondary-foreground-color);
 }
 
+.control-group button.active,
 .control-btn.active {
     border-color: var(--mjo-primary-color-200);
     background: var(--mjo-primary-color);

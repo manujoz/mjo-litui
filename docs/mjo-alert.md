@@ -69,6 +69,84 @@ export class ExampleAlertTypes extends LitElement {
 }
 ```
 
+## Auto-Close Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-alert";
+
+@customElement("example-alert-autoclose")
+export class ExampleAlertAutoclose extends LitElement {
+    render() {
+        return html`
+            <mjo-alert
+                type="success"
+                message="Auto-closing alert"
+                detail="This alert will disappear after 3 seconds"
+                autoClose
+                autoCloseDelay="3000"
+            ></mjo-alert>
+        `;
+    }
+}
+```
+
+## Animation Types Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-alert";
+
+@customElement("example-alert-animations")
+export class ExampleAlertAnimations extends LitElement {
+    render() {
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <mjo-alert type="info" message="Fade animation" animation="fade" closable></mjo-alert>
+                <mjo-alert type="success" message="Slide animation" animation="slide" closable></mjo-alert>
+                <mjo-alert type="warning" message="Scale animation" animation="scale" closable></mjo-alert>
+                <mjo-alert type="error" message="No animation" animation="none" closable></mjo-alert>
+            </div>
+        `;
+    }
+}
+```
+
+## Programmatic Control Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import "mjo-litui/mjo-alert";
+import "mjo-litui/mjo-button";
+
+@customElement("example-alert-control")
+export class ExampleAlertControl extends LitElement {
+    @query("mjo-alert") alert!: MjoAlert;
+
+    render() {
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; gap: 0.5rem;">
+                    <mjo-button @click=${() => this.alert.show()} size="small">Show</mjo-button>
+                    <mjo-button @click=${() => this.alert.hide()} size="small">Hide</mjo-button>
+                    <mjo-button @click=${() => this.alert.announce()} size="small">Announce</mjo-button>
+                </div>
+                <mjo-alert
+                    type="info"
+                    message="Programmatically controlled alert"
+                    focusOnShow
+                    @alert-show=${() => console.log("Alert shown")}
+                    @alert-closed=${() => console.log("Alert closed")}
+                ></mjo-alert>
+            </div>
+        `;
+    }
+}
+```
+
 ## Sizes and Rounded Variants Example
 
 ```ts
@@ -251,15 +329,22 @@ export class ExampleAlertDynamic extends LitElement {
 
 ## Attributes / Properties
 
-| Name       | Type                                          | Default    | Reflects | Description                                                 |
-| ---------- | --------------------------------------------- | ---------- | -------- | ----------------------------------------------------------- |
-| `type`     | `"success" \| "info" \| "warning" \| "error"` | `"info"`   | no       | Semantic type that determines color scheme and default icon |
-| `size`     | `"small" \| "medium" \| "large"`              | `"medium"` | no       | Controls font size and padding                              |
-| `rounded`  | `"none" \| "small" \| "medium" \| "large"`    | `"medium"` | no       | Border radius applied to the alert container                |
-| `message`  | `string`                                      | `""`       | no       | Main alert message displayed prominently                    |
-| `detail`   | `string`                                      | `""`       | no       | Additional detail text (supports HTML via `unsafeHTML`)     |
-| `closable` | `boolean`                                     | `false`    | no       | Shows close button and enables dismissal functionality      |
-| `hideIcon` | `boolean`                                     | `false`    | no       | Hides the default type-based icon                           |
+| Name                | Type                                          | Default    | Reflects | Description                                                 |
+| ------------------- | --------------------------------------------- | ---------- | -------- | ----------------------------------------------------------- |
+| `type`              | `"success" \| "info" \| "warning" \| "error"` | `"info"`   | no       | Semantic type that determines color scheme and default icon |
+| `size`              | `"small" \| "medium" \| "large"`              | `"medium"` | no       | Controls font size and padding                              |
+| `rounded`           | `"none" \| "small" \| "medium" \| "large"`    | `"medium"` | no       | Border radius applied to the alert container                |
+| `message`           | `string`                                      | `""`       | no       | Main alert message displayed prominently                    |
+| `detail`            | `string`                                      | `""`       | no       | Additional detail text (supports HTML via `unsafeHTML`)     |
+| `closable`          | `boolean`                                     | `false`    | no       | Shows close button and enables dismissal functionality      |
+| `hideIcon`          | `boolean`                                     | `false`    | no       | Hides the default type-based icon                           |
+| `ariaLive`          | `"polite" \| "assertive" \| "off"`            | `"polite"` | no       | Controls aria-live announcement behavior for screen readers |
+| `focusOnShow`       | `boolean`                                     | `false`    | no       | Automatically focus the alert when shown                    |
+| `autoClose`         | `boolean`                                     | `false`    | no       | Automatically close the alert after a delay                 |
+| `autoCloseDelay`    | `number`                                      | `5000`     | no       | Delay in milliseconds before auto-closing (when enabled)    |
+| `animation`         | `"fade" \| "slide" \| "scale" \| "none"`      | `"fade"`   | no       | Animation type for show/hide transitions                    |
+| `animationDuration` | `number`                                      | `300`      | no       | Animation duration in milliseconds                          |
+| `persistent`        | `boolean`                                     | `false`    | no       | Prevents the alert from being closed manually               |
 
 ### Internal State
 
@@ -278,6 +363,15 @@ export class ExampleAlertDynamic extends LitElement {
 -   Closing animation smoothly transitions height, opacity, and padding before removing the element
 -   The close functionality calls the native `remove()` method to delete the element from DOM
 
+## Public Methods
+
+| Method       | Parameters | Description                                           |
+| ------------ | ---------- | ----------------------------------------------------- |
+| `show()`     | none       | Programmatically show the alert with animations       |
+| `hide()`     | none       | Programmatically hide the alert with animations       |
+| `focus()`    | none       | Focus the alert (close button if available)           |
+| `announce()` | none       | Force screen readers to re-announce the alert content |
+
 ## Slots
 
 | Slot      | Description                                                                     |
@@ -286,11 +380,14 @@ export class ExampleAlertDynamic extends LitElement {
 
 ## Events
 
-| Event   | Detail | Emitted When                  | Notes                                                           |
-| ------- | ------ | ----------------------------- | --------------------------------------------------------------- |
-| `click` | Native | User clicks anywhere on alert | Can be used to detect close button clicks or other interactions |
+| Event              | Detail                  | Emitted When               | Notes                                    |
+| ------------------ | ----------------------- | -------------------------- | ---------------------------------------- |
+| `alert-will-show`  | `{ element: MjoAlert }` | Before the alert is shown  | Can be used to prepare for alert display |
+| `alert-show`       | `{ element: MjoAlert }` | After the alert is shown   | Fired when show animation completes      |
+| `alert-will-close` | `{ element: MjoAlert }` | Before the alert is closed | Can be used to save state or cleanup     |
+| `alert-closed`     | `{ element: MjoAlert }` | After the alert is closed  | Fired when close animation completes     |
 
-**Note**: The component doesn't emit custom events. Close functionality is handled internally via the `close()` method.
+**Note**: All events are custom events that bubble and are composed, making them available across shadow DOM boundaries.
 
 ## CSS Variables
 
@@ -309,13 +406,14 @@ Each alert type uses specific color tokens from the design system:
 
 ### Structure Variables
 
-| Variable              | Fallback              | Used For                                      |
-| --------------------- | --------------------- | --------------------------------------------- |
-| `--mjo-alert-space`   | `--mjo-space-small`   | Internal padding and spacing                  |
-| `--mjo-radius-small`  | Global radius system  | Small border radius option                    |
-| `--mjo-radius-medium` | Global radius system  | Medium border radius (default)                |
-| `--mjo-radius-large`  | Global radius system  | Large border radius option                    |
-| `--mjo-space-xsmall`  | Global spacing system | Gap between icon and text, small size spacing |
+| Variable                         | Fallback              | Used For                                      |
+| -------------------------------- | --------------------- | --------------------------------------------- |
+| `--mjo-alert-space`              | `--mjo-space-small`   | Internal padding and spacing                  |
+| `--mjo-alert-animation-duration` | `300ms`               | Duration for show/hide animations             |
+| `--mjo-radius-small`             | Global radius system  | Small border radius option                    |
+| `--mjo-radius-medium`            | Global radius system  | Medium border radius (default)                |
+| `--mjo-radius-large`             | Global radius system  | Large border radius option                    |
+| `--mjo-space-xsmall`             | Global spacing system | Gap between icon and text, small size spacing |
 
 ### Size-specific Adjustments
 
@@ -341,13 +439,13 @@ interface MjoAlertTheme {
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-alert";
-import "mjo-litui/mjo-icon";
 
 @customElement("example-alert-custom")
 export class ExampleAlertCustom extends LitElement {
     static styles = css`
         .custom-alert {
             --mjo-alert-space: 1.5rem;
+            --mjo-alert-animation-duration: 600ms;
             --mjo-color-success: #2d8f47;
             --mjo-color-green-50: #f0f9f3;
         }
@@ -359,9 +457,10 @@ export class ExampleAlertCustom extends LitElement {
                 class="custom-alert"
                 type="success"
                 message="Custom Styled Alert"
-                detail="This alert uses custom CSS variables for spacing and colors."
+                detail="Uses custom spacing and slower animations."
                 size="large"
-                rounded="large"
+                animation="scale"
+                closable
             ></mjo-alert>
         `;
     }
@@ -433,14 +532,14 @@ export class ExampleAlertForm extends LitElement {
 
 ## Accessibility Notes
 
--   Alert content is announced to screen readers automatically when rendered
--   Consider adding `role="alert"` for important messages that need immediate attention
--   Use appropriate `aria-live` regions for dynamic alerts:
-    -   `aria-live="polite"` for non-critical updates
-    -   `aria-live="assertive"` for important errors or warnings
--   Ensure sufficient color contrast between text and background colors
--   The close button should be focusable and operable via keyboard (Enter/Space)
--   Consider adding `aria-label` to the close button for better accessibility
+-   Alert content is announced to screen readers automatically with appropriate `aria-live` behavior
+-   Important alerts (error/warning) use `aria-live="assertive"` for immediate attention
+-   The component includes proper ARIA attributes: `role="alert"`, `aria-atomic="true"`, and `aria-labelledby`/`aria-describedby`
+-   Close button is fully keyboard accessible (Enter/Space keys) with proper `aria-label`
+-   Focus management: the `focusOnShow` property enables automatic focus for important alerts
+-   Color contrast is maintained across all alert types for accessibility compliance
+-   Animation respects `prefers-reduced-motion` user preferences
+-   Use `announce()` method to force re-announcement for dynamic content changes
 
 ```html
 <!-- Example with enhanced accessibility -->
@@ -449,8 +548,8 @@ export class ExampleAlertForm extends LitElement {
     message="Form validation failed"
     detail="Please correct the errors below and try again."
     closable
-    role="alert"
-    aria-live="assertive"
+    focusOnShow
+    ariaLive="assertive"
 ></mjo-alert>
 ```
 

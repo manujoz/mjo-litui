@@ -1,0 +1,69 @@
+/* mjo-alert specific styles */
+
+.vertical {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.vertical mjo-alert {
+    margin-bottom: 16px;
+}
+
+.vertical mjo-alert:last-child {
+    margin-bottom: 0;
+}
+
+/* Alert demo enhancements */
+.alert-demo {
+    background: var(--mjo-background-color-card);
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.alert-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+/* Action buttons styling */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Enhanced control styling */
+.control-group input[type="number"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: var(--mjo-radius-small);
+    font-size: 0.875rem;
+}
+
+.control-group input[type="number"]:focus {
+    outline: 2px solid var(--mjo-color-primary);
+    outline-offset: 0;
+    border-color: var(--mjo-color-primary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .playground-container {
+        flex-direction: column;
+    }
+
+    .controls-panel {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .action-buttons {
+        justify-content: center;
+    }
+}

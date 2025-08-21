@@ -13,7 +13,7 @@ var __privateMethod = (obj, member, method) => {
 };
 var _a, _b;
 import { r as render, n as noChange, a as nothing, D as Directive, P as PartType, d as directive, h as html } from "./lit-core.js";
-import { e as AiOutlineRight, l as AiFillCloseCircle } from "./index.js";
+import { e as AiOutlineRight, l as AiFillWarning, m as AiFillInfoCircle, n as AiFillCloseCircle, o as AiFillCheckCircle, p as AiOutlineClose } from "./index.js";
 /*! js-cookie v3.0.5 | MIT */
 function assign(target) {
   for (var i = 1; i < arguments.length; i++) {
@@ -1323,15 +1323,15 @@ function query(selector, cache) {
     }
   };
 }
-var __defProp$7 = Object.defineProperty;
-var __getOwnPropDesc$7 = Object.getOwnPropertyDescriptor;
-var __decorateClass$7 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$7(target, key) : target;
+var __defProp$8 = Object.defineProperty;
+var __getOwnPropDesc$8 = Object.getOwnPropertyDescriptor;
+var __decorateClass$8 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$8(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$7(target, key, result);
+    __defProp$8(target, key, result);
   return result;
 };
 const ThemeMixin = (superClass) => {
@@ -1370,7 +1370,7 @@ const ThemeMixin = (superClass) => {
   kamelCaseToKebabCase_fn = function(str) {
     return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase();
   };
-  __decorateClass$7([
+  __decorateClass$8([
     property({ type: Object })
   ], ThemeMx.prototype, "theme", 2);
   return ThemeMx;
@@ -1435,15 +1435,15 @@ class UnsafeSVGDirective extends UnsafeHTMLDirective {
 UnsafeSVGDirective.directiveName = "unsafeSVG";
 UnsafeSVGDirective.resultType = SVG_RESULT;
 const unsafeSVG = directive(UnsafeSVGDirective);
-var __defProp$6 = Object.defineProperty;
-var __getOwnPropDesc$6 = Object.getOwnPropertyDescriptor;
-var __decorateClass$6 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$6(target, key) : target;
+var __defProp$7 = Object.defineProperty;
+var __getOwnPropDesc$7 = Object.getOwnPropertyDescriptor;
+var __decorateClass$7 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$7(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$6(target, key, result);
+    __defProp$7(target, key, result);
   return result;
 };
 let MjoIcon = class extends ThemeMixin(LitElement) {
@@ -1470,52 +1470,52 @@ MjoIcon.styles = [
             }
         `
 ];
-__decorateClass$6([
+__decorateClass$7([
   property({ type: String })
 ], MjoIcon.prototype, "src", 2);
-MjoIcon = __decorateClass$6([
+MjoIcon = __decorateClass$7([
   customElement("mjo-icon")
 ], MjoIcon);
 const pause = async (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
-var __defProp$5 = Object.defineProperty;
-var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
-var __decorateClass$5 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$5(target, key) : target;
+var __defProp$6 = Object.defineProperty;
+var __getOwnPropDesc$6 = Object.getOwnPropertyDescriptor;
+var __decorateClass$6 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$6(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$5(target, key, result);
+    __defProp$6(target, key, result);
   return result;
 };
-var __accessCheck$4 = (obj, member, msg) => {
+var __accessCheck$5 = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
 var __privateGet$2 = (obj, member, getter) => {
-  __accessCheck$4(obj, member, "read from private field");
+  __accessCheck$5(obj, member, "read from private field");
   return getter ? getter.call(obj) : member.get(obj);
 };
-var __privateAdd$4 = (obj, member, value) => {
+var __privateAdd$5 = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$3 = (obj, member, method) => {
-  __accessCheck$4(obj, member, "access private method");
+var __privateMethod$4 = (obj, member, method) => {
+  __accessCheck$5(obj, member, "access private method");
   return method;
 };
 var _uniqueId, _handleKeyDown, _navigateToSibling, navigateToSibling_fn, _navigateToEdge, navigateToEdge_fn, _toggleContent, toggleContent_fn, _openContent, openContent_fn, _closeContent, closeContent_fn;
 let MjoAccordionItem = class extends ThemeMixin(LitElement) {
   constructor() {
     super(...arguments);
-    __privateAdd$4(this, _navigateToSibling);
-    __privateAdd$4(this, _navigateToEdge);
-    __privateAdd$4(this, _toggleContent);
-    __privateAdd$4(this, _openContent);
-    __privateAdd$4(this, _closeContent);
+    __privateAdd$5(this, _navigateToSibling);
+    __privateAdd$5(this, _navigateToEdge);
+    __privateAdd$5(this, _toggleContent);
+    __privateAdd$5(this, _openContent);
+    __privateAdd$5(this, _closeContent);
     this.itemTitle = "";
     this.itemSubtitle = "";
     this.expanded = false;
@@ -1525,20 +1525,20 @@ let MjoAccordionItem = class extends ThemeMixin(LitElement) {
     this.animationDuration = 300;
     this.animationEasing = "ease-in-out";
     this.variant = "light";
-    __privateAdd$4(this, _uniqueId, `accordion-item-${Math.random().toString(36).substring(2, 15)}`);
-    __privateAdd$4(this, _handleKeyDown, (event) => {
+    __privateAdd$5(this, _uniqueId, `accordion-item-${Math.random().toString(36).substring(2, 15)}`);
+    __privateAdd$5(this, _handleKeyDown, (event) => {
       if (this.disabled)
         return;
       const { key } = event;
       if (key === "Enter" || key === " ") {
         event.preventDefault();
-        __privateMethod$3(this, _toggleContent, toggleContent_fn).call(this);
+        __privateMethod$4(this, _toggleContent, toggleContent_fn).call(this);
       } else if (key === "ArrowUp" || key === "ArrowDown") {
         event.preventDefault();
-        __privateMethod$3(this, _navigateToSibling, navigateToSibling_fn).call(this, key === "ArrowUp" ? "previous" : "next");
+        __privateMethod$4(this, _navigateToSibling, navigateToSibling_fn).call(this, key === "ArrowUp" ? "previous" : "next");
       } else if (key === "Home" || key === "End") {
         event.preventDefault();
-        __privateMethod$3(this, _navigateToEdge, navigateToEdge_fn).call(this, key === "Home" ? "first" : "last");
+        __privateMethod$4(this, _navigateToEdge, navigateToEdge_fn).call(this, key === "Home" ? "first" : "last");
       } else if (key === "Escape" && this.expanded) {
         event.preventDefault();
         this.close();
@@ -1563,7 +1563,7 @@ let MjoAccordionItem = class extends ThemeMixin(LitElement) {
                     aria-label=${this.computedAriaLabel}
                     aria-describedby=${ifDefined(this.ariaDescribedby)}
                     aria-disabled=${this.disabled}
-                    @click=${__privateMethod$3(this, _toggleContent, toggleContent_fn)}
+                    @click=${__privateMethod$4(this, _toggleContent, toggleContent_fn)}
                     @keydown=${__privateGet$2(this, _handleKeyDown)}
                 >
                     <div class="titleContent" id=${`${__privateGet$2(this, _uniqueId)}-title`}>
@@ -1585,9 +1585,9 @@ let MjoAccordionItem = class extends ThemeMixin(LitElement) {
   updated(_changedProperties) {
     if (_changedProperties.has("expanded")) {
       if (this.expanded) {
-        __privateMethod$3(this, _openContent, openContent_fn).call(this);
+        __privateMethod$4(this, _openContent, openContent_fn).call(this);
       } else {
-        __privateMethod$3(this, _closeContent, closeContent_fn).call(this);
+        __privateMethod$4(this, _closeContent, closeContent_fn).call(this);
       }
     }
     if (_changedProperties.has("disabled") && this.disabled) {
@@ -1651,7 +1651,7 @@ openContent_fn = async function(tries = 0) {
     if (tries === 10)
       return;
     setTimeout(() => {
-      __privateMethod$3(this, _openContent, openContent_fn).call(this, tries + 1);
+      __privateMethod$4(this, _openContent, openContent_fn).call(this, tries + 1);
     }, 50);
     return;
   }
@@ -1805,89 +1805,89 @@ MjoAccordionItem.styles = [
             }
         `
 ];
-__decorateClass$5([
+__decorateClass$6([
   property({ type: String })
 ], MjoAccordionItem.prototype, "itemTitle", 2);
-__decorateClass$5([
+__decorateClass$6([
   property({ type: String })
 ], MjoAccordionItem.prototype, "itemSubtitle", 2);
-__decorateClass$5([
+__decorateClass$6([
   property({ type: Boolean })
 ], MjoAccordionItem.prototype, "expanded", 2);
-__decorateClass$5([
+__decorateClass$6([
   property({ type: Boolean })
 ], MjoAccordionItem.prototype, "disabled", 2);
-__decorateClass$5([
+__decorateClass$6([
   property({ type: Boolean })
 ], MjoAccordionItem.prototype, "compact", 2);
-__decorateClass$5([
+__decorateClass$6([
   property({ type: String })
 ], MjoAccordionItem.prototype, "icon", 2);
-__decorateClass$5([
+__decorateClass$6([
   property({ type: Number })
 ], MjoAccordionItem.prototype, "animationDuration", 2);
-__decorateClass$5([
+__decorateClass$6([
   property({ type: String })
 ], MjoAccordionItem.prototype, "animationEasing", 2);
-__decorateClass$5([
+__decorateClass$6([
   property({ type: String, attribute: "aria-describedby" })
 ], MjoAccordionItem.prototype, "ariaDescribedby", 2);
-__decorateClass$5([
+__decorateClass$6([
   state()
 ], MjoAccordionItem.prototype, "variant", 2);
-__decorateClass$5([
+__decorateClass$6([
   query(".container")
 ], MjoAccordionItem.prototype, "containerEl", 2);
-__decorateClass$5([
+__decorateClass$6([
   query(".content")
 ], MjoAccordionItem.prototype, "contentEl", 2);
-__decorateClass$5([
+__decorateClass$6([
   query(".iconContainer mjo-icon")
 ], MjoAccordionItem.prototype, "iconEl", 2);
-__decorateClass$5([
+__decorateClass$6([
   query(".titleContainer")
 ], MjoAccordionItem.prototype, "titleContainerEl", 2);
-MjoAccordionItem = __decorateClass$5([
+MjoAccordionItem = __decorateClass$6([
   customElement("mjo-accordion-item")
 ], MjoAccordionItem);
-var __defProp$4 = Object.defineProperty;
-var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
-var __decorateClass$4 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$4(target, key) : target;
+var __defProp$5 = Object.defineProperty;
+var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
+var __decorateClass$5 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$5(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$4(target, key, result);
+    __defProp$5(target, key, result);
   return result;
 };
-var __accessCheck$3 = (obj, member, msg) => {
+var __accessCheck$4 = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
 var __privateGet$1 = (obj, member, getter) => {
-  __accessCheck$3(obj, member, "read from private field");
+  __accessCheck$4(obj, member, "read from private field");
   return getter ? getter.call(obj) : member.get(obj);
 };
-var __privateAdd$3 = (obj, member, value) => {
+var __privateAdd$4 = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$2 = (obj, member, method) => {
-  __accessCheck$3(obj, member, "access private method");
+var __privateMethod$3 = (obj, member, method) => {
+  __accessCheck$4(obj, member, "access private method");
   return method;
 };
 var _handleToggle, _mount, mount_fn;
 let MjoAccordion = class extends ThemeMixin(LitElement) {
   constructor() {
     super(...arguments);
-    __privateAdd$3(this, _mount);
+    __privateAdd$4(this, _mount);
     this.variant = "light";
     this.selectionMode = "single";
     this.compact = false;
     this.items = [];
-    __privateAdd$3(this, _handleToggle, (event) => {
+    __privateAdd$4(this, _handleToggle, (event) => {
       const customEvent = event;
       const toggledItem = customEvent.detail.item;
       if (this.selectionMode === "single") {
@@ -1913,7 +1913,7 @@ let MjoAccordion = class extends ThemeMixin(LitElement) {
   }
   firstUpdated() {
     this.items = Array.from(this.querySelectorAll("mjo-accordion-item"));
-    __privateMethod$2(this, _mount, mount_fn).call(this);
+    __privateMethod$3(this, _mount, mount_fn).call(this);
   }
   updated(_changedProperties) {
     if (_changedProperties.has("compact")) {
@@ -2038,21 +2038,593 @@ MjoAccordion.styles = [
             }
         `
 ];
-__decorateClass$4([
+__decorateClass$5([
   property({ type: String })
 ], MjoAccordion.prototype, "variant", 2);
-__decorateClass$4([
+__decorateClass$5([
   property({ type: String })
 ], MjoAccordion.prototype, "selectionMode", 2);
-__decorateClass$4([
+__decorateClass$5([
   property({ type: Boolean })
 ], MjoAccordion.prototype, "compact", 2);
-__decorateClass$4([
+__decorateClass$5([
   query(".container")
 ], MjoAccordion.prototype, "containerEl", 2);
-MjoAccordion = __decorateClass$4([
+MjoAccordion = __decorateClass$5([
   customElement("mjo-accordion")
 ], MjoAccordion);
+var __defProp$4 = Object.defineProperty;
+var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
+var __decorateClass$4 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$4(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$4(target, key, result);
+  return result;
+};
+var __accessCheck$3 = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateAdd$3 = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateMethod$2 = (obj, member, method) => {
+  __accessCheck$3(obj, member, "access private method");
+  return method;
+};
+var _renderCloseButton, renderCloseButton_fn, _handleCloseKeydown$1, handleCloseKeydown_fn$1, _setupAutoClose, setupAutoClose_fn, _clearAutoCloseTimer, clearAutoCloseTimer_fn, _dispatchEvent, dispatchEvent_fn, _show, show_fn, _hide, hide_fn;
+let MjoAlert = class extends LitElement {
+  constructor() {
+    super(...arguments);
+    __privateAdd$3(this, _renderCloseButton);
+    __privateAdd$3(this, _handleCloseKeydown$1);
+    __privateAdd$3(this, _setupAutoClose);
+    __privateAdd$3(this, _clearAutoCloseTimer);
+    __privateAdd$3(this, _dispatchEvent);
+    __privateAdd$3(this, _show);
+    __privateAdd$3(this, _hide);
+    this.type = "info";
+    this.size = "medium";
+    this.rounded = "medium";
+    this.message = "";
+    this.detail = "";
+    this.closable = false;
+    this.hideIcon = false;
+    this.ariaLive = "polite";
+    this.focusOnShow = false;
+    this.autoClose = false;
+    this.autoCloseDelay = 5e3;
+    this.animation = "fade";
+    this.animationDuration = 300;
+    this.persistent = false;
+    this.icon = "";
+    this.autoCloseTimer = null;
+    this.storeHeight = 0;
+    this.isAnimating = false;
+  }
+  render() {
+    const messageId = `alert-message-${Math.random().toString(36).substring(2, 9)}`;
+    const detailId = `alert-detail-${Math.random().toString(36).substring(2, 9)}`;
+    const isImportant = this.type === "error" || this.type === "warning";
+    return html`
+            <div
+                class="container"
+                data-type=${this.type}
+                data-size=${this.size}
+                data-rounded=${this.rounded}
+                data-animation=${this.animation}
+                role="alert"
+                aria-live=${isImportant ? "assertive" : this.ariaLive}
+                aria-atomic="true"
+                aria-labelledby=${messageId}
+                aria-describedby=${this.detail ? detailId : nothing}
+            >
+                <div class="messageContainer">
+                    ${!this.hideIcon && this.icon ? html`<div class="icon"><mjo-icon src=${this.icon}></mjo-icon></div>` : nothing}
+                    <div class="message" id=${messageId}>${this.message}</div>
+                    ${this.closable && !this.persistent ? __privateMethod$2(this, _renderCloseButton, renderCloseButton_fn).call(this) : nothing}
+                </div>
+                ${this.detail ? html`<div class="detail" id=${detailId} ?data-icon=${!this.hideIcon}>${this.detail}</div>` : nothing}
+            </div>
+        `;
+  }
+  updated(_changedProperties) {
+    if (_changedProperties.has("type")) {
+      if (this.type === "warning") {
+        this.icon = AiFillWarning;
+      } else if (this.type === "info") {
+        this.icon = AiFillInfoCircle;
+      } else if (this.type === "error") {
+        this.icon = AiFillCloseCircle;
+      } else if (this.type === "success") {
+        this.icon = AiFillCheckCircle;
+      } else {
+        this.icon = "";
+      }
+    }
+    if (_changedProperties.has("autoClose") || _changedProperties.has("autoCloseDelay")) {
+      __privateMethod$2(this, _setupAutoClose, setupAutoClose_fn).call(this);
+    }
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.autoClose) {
+      __privateMethod$2(this, _setupAutoClose, setupAutoClose_fn).call(this);
+    }
+    if (this.focusOnShow) {
+      this.updateComplete.then(() => {
+        this.focus();
+      });
+    }
+  }
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    __privateMethod$2(this, _clearAutoCloseTimer, clearAutoCloseTimer_fn).call(this);
+  }
+  show() {
+    if (this.autoClose) {
+      __privateMethod$2(this, _setupAutoClose, setupAutoClose_fn).call(this);
+    }
+    __privateMethod$2(this, _show, show_fn).call(this);
+  }
+  hide() {
+    __privateMethod$2(this, _hide, hide_fn).call(this);
+  }
+  focus() {
+    var _a2;
+    const closeButton = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector(".close-button");
+    if (closeButton) {
+      closeButton.focus();
+    } else {
+      super.focus();
+    }
+  }
+  announce() {
+    var _a2;
+    const container = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector(".container");
+    if (container) {
+      const currentLive = container.getAttribute("aria-live");
+      container.setAttribute("aria-live", "off");
+      setTimeout(() => {
+        container.setAttribute("aria-live", currentLive || this.ariaLive);
+      }, 100);
+    }
+  }
+};
+_renderCloseButton = /* @__PURE__ */ new WeakSet();
+renderCloseButton_fn = function() {
+  return html`
+            <button class="close-button" type="button" aria-label="Close alert" @click=${__privateMethod$2(this, _hide, hide_fn)} @keydown=${__privateMethod$2(this, _handleCloseKeydown$1, handleCloseKeydown_fn$1)}>
+                <mjo-icon src=${AiOutlineClose}></mjo-icon>
+            </button>
+        `;
+};
+_handleCloseKeydown$1 = /* @__PURE__ */ new WeakSet();
+handleCloseKeydown_fn$1 = function(e) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    __privateMethod$2(this, _hide, hide_fn).call(this);
+  }
+};
+_setupAutoClose = /* @__PURE__ */ new WeakSet();
+setupAutoClose_fn = function() {
+  __privateMethod$2(this, _clearAutoCloseTimer, clearAutoCloseTimer_fn).call(this);
+  if (this.autoClose && this.autoCloseDelay > 0) {
+    this.autoCloseTimer = window.setTimeout(() => {
+      __privateMethod$2(this, _hide, hide_fn).call(this);
+    }, this.autoCloseDelay);
+  }
+};
+_clearAutoCloseTimer = /* @__PURE__ */ new WeakSet();
+clearAutoCloseTimer_fn = function() {
+  if (this.autoCloseTimer) {
+    clearTimeout(this.autoCloseTimer);
+    this.autoCloseTimer = null;
+  }
+};
+_dispatchEvent = /* @__PURE__ */ new WeakSet();
+dispatchEvent_fn = function(eventName, detail) {
+  this.dispatchEvent(
+    new CustomEvent(eventName, {
+      detail: { element: this, ...detail },
+      bubbles: true,
+      composed: true
+    })
+  );
+};
+_show = /* @__PURE__ */ new WeakSet();
+show_fn = function() {
+  var _a2;
+  const container = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector(".container");
+  if (!container || container.offsetHeight > 0 || this.isAnimating)
+    return;
+  __privateMethod$2(this, _dispatchEvent, dispatchEvent_fn).call(this, "alert-will-show");
+  if (this.autoClose) {
+    __privateMethod$2(this, _setupAutoClose, setupAutoClose_fn).call(this);
+  }
+  if (this.animation === "none") {
+    this.style.display = "block";
+    __privateMethod$2(this, _dispatchEvent, dispatchEvent_fn).call(this, "alert-show");
+    return;
+  }
+  this.isAnimating = true;
+  let animate = null;
+  switch (this.animation) {
+    case "fade":
+      animate = container.animate(
+        [
+          { opacity: 0, height: "0", display: "none" },
+          { opacity: 1, height: this.storeHeight + "px", display: "block" }
+        ],
+        {
+          duration: this.animationDuration,
+          easing: "ease-in-out",
+          fill: "forwards"
+        }
+      );
+      break;
+    case "slide":
+      animate = container.animate(
+        [
+          { transform: "translateX(-100%)", opacity: 0, height: "0", display: "none" },
+          {
+            transform: "translateX(0)",
+            opacity: 1,
+            height: this.storeHeight + "px",
+            display: "block"
+          }
+        ],
+        {
+          duration: this.animationDuration,
+          easing: "ease-in-out",
+          fill: "forwards"
+        }
+      );
+      break;
+    case "scale":
+      animate = container.animate(
+        [
+          { transform: "scale(0)", opacity: 0, height: "0", display: "none" },
+          {
+            transform: "scale(1)",
+            opacity: 1,
+            height: this.storeHeight + "px",
+            display: "block"
+          }
+        ],
+        {
+          duration: this.animationDuration,
+          easing: "ease-in-out",
+          fill: "forwards"
+        }
+      );
+      break;
+  }
+  animate.finished.then(() => {
+    __privateMethod$2(this, _dispatchEvent, dispatchEvent_fn).call(this, "alert-show");
+    animate.cancel();
+    this.isAnimating = false;
+  });
+};
+_hide = /* @__PURE__ */ new WeakSet();
+hide_fn = function() {
+  var _a2, _b2;
+  const container = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector(".container");
+  if (!container || container.offsetHeight === 0 || this.isAnimating)
+    return;
+  __privateMethod$2(this, _dispatchEvent, dispatchEvent_fn).call(this, "alert-will-close");
+  __privateMethod$2(this, _clearAutoCloseTimer, clearAutoCloseTimer_fn).call(this);
+  const activeElement = document.activeElement;
+  const shouldRestoreFocus = ((_b2 = this.shadowRoot) == null ? void 0 : _b2.contains(activeElement)) || this === activeElement;
+  if (this.animation === "none") {
+    this.style.display = "none";
+    __privateMethod$2(this, _dispatchEvent, dispatchEvent_fn).call(this, "alert-closed");
+    return;
+  }
+  this.isAnimating = true;
+  this.storeHeight = container.offsetHeight;
+  let animate = null;
+  switch (this.animation) {
+    case "fade":
+      animate = container.animate(
+        [
+          { opacity: 1, height: this.storeHeight + "px" },
+          { opacity: 0, height: "0", display: "none" }
+        ],
+        {
+          duration: this.animationDuration,
+          easing: "ease-in-out",
+          fill: "forwards"
+        }
+      );
+      break;
+    case "slide":
+      animate = container.animate(
+        [
+          {
+            transform: "translateX(0)",
+            opacity: 1,
+            height: this.storeHeight + "px"
+          },
+          { transform: "translateX(-100%)", opacity: 0, height: "0", display: "none" }
+        ],
+        {
+          duration: this.animationDuration,
+          easing: "ease-in-out",
+          fill: "forwards"
+        }
+      );
+      break;
+    case "scale":
+      animate = container.animate(
+        [
+          {
+            transform: "scale(1)",
+            opacity: 1,
+            height: this.storeHeight + "px"
+          },
+          { transform: "scale(0)", opacity: 0, height: "0", display: "none" }
+        ],
+        {
+          duration: this.animationDuration,
+          easing: "ease-in-out",
+          fill: "forwards"
+        }
+      );
+      break;
+  }
+  animate == null ? void 0 : animate.finished.then(() => {
+    if (shouldRestoreFocus) {
+      const nextFocusable = this.nextElementSibling || this.previousElementSibling || this.parentElement;
+      if (nextFocusable && nextFocusable instanceof HTMLElement) {
+        nextFocusable.focus();
+      }
+    }
+    this.isAnimating = false;
+    __privateMethod$2(this, _dispatchEvent, dispatchEvent_fn).call(this, "alert-closed");
+  });
+};
+MjoAlert.styles = [
+  css`
+            :host {
+                display: block;
+                position: relative;
+                text-align: left;
+                --mjo-alert-space: var(--mjo-space-small);
+                --mjo-alert-animation-duration: 300ms;
+                overflow: hidden;
+            }
+
+            :host([hidden]) {
+                display: none !important;
+            }
+
+            .container {
+                position: relative;
+                padding: var(--mjo-alert-space);
+                transition: padding var(--mjo-alert-animation-duration);
+                box-sizing: border-box;
+            }
+
+            /* Animation support */
+            .container[data-animation="slide"] {
+                transform-origin: left center;
+            }
+
+            .container[data-animation="scale"] {
+                transform-origin: center center;
+            }
+
+            /* Reduced motion support */
+            @media (prefers-reduced-motion: reduce) {
+                :host {
+                    --mjo-alert-animation-duration: 0ms;
+                }
+                .container {
+                    transition: none;
+                }
+            }
+
+            /* Type-based styling */
+            .container[data-type="success"] {
+                background-color: var(--mjo-color-green-50);
+                border: solid 1px var(--mjo-color-success);
+                color: var(--mjo-color-success);
+            }
+            .container[data-type="error"] {
+                background-color: var(--mjo-color-red-50);
+                border: solid 1px var(--mjo-color-error);
+                color: var(--mjo-color-error);
+            }
+            .container[data-type="warning"] {
+                background-color: var(--mjo-color-yellow-50);
+                border: solid 1px var(--mjo-color-warning);
+                color: var(--mjo-color-warning);
+            }
+            .container[data-type="info"] {
+                background-color: var(--mjo-color-blue-50);
+                border: solid 1px var(--mjo-color-info);
+                color: var(--mjo-color-info);
+            }
+
+            /* Size variants */
+            .container[data-size="small"] {
+                font-size: 0.8em;
+                --mjo-alert-space: var(--mjo-space-xsmall);
+            }
+            .container[data-size="large"] {
+                font-size: 1.2em;
+            }
+
+            /* Border radius */
+            .container[data-rounded="small"] {
+                border-radius: var(--mjo-radius-small);
+            }
+            .container[data-rounded="medium"] {
+                border-radius: var(--mjo-radius-medium);
+            }
+            .container[data-rounded="large"] {
+                border-radius: var(--mjo-radius-large);
+            }
+
+            /* Message container */
+            .messageContainer {
+                position: relative;
+                display: flex;
+                flex-flow: row nowrap;
+                gap: var(--mjo-space-xsmall);
+                align-items: flex-start;
+            }
+
+            .icon {
+                position: relative;
+                flex-grow: 0;
+                flex-basis: auto;
+                align-self: stretch;
+                display: grid;
+                place-content: center;
+            }
+
+            .icon mjo-icon {
+                font-size: 1em;
+            }
+
+            .message {
+                position: relative;
+                flex-grow: 1;
+                flex-basis: 0;
+                align-self: stretch;
+                display: flex;
+                align-items: center;
+                word-wrap: break-word;
+            }
+
+            /* Close button styling */
+            .close-button {
+                background: none;
+                border: none;
+                padding: 0;
+                margin: 0;
+                cursor: pointer;
+                color: inherit;
+                font-size: inherit;
+                display: grid;
+                place-content: center;
+                border-radius: var(--mjo-radius-small);
+                transition: all 0.2s ease;
+                min-width: 1.5em;
+                min-height: 1.5em;
+            }
+
+            .close-button:hover {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+
+            .close-button:focus {
+                outline: 2px solid currentColor;
+                outline-offset: 2px;
+            }
+
+            .close-button:active {
+                transform: scale(0.95);
+            }
+
+            .close-button mjo-icon {
+                font-size: 1em;
+            }
+
+            /* Detail section */
+            .detail {
+                position: relative;
+                padding: var(--mjo-alert-space) 0 0 0;
+                font-size: 0.8em;
+                word-wrap: break-word;
+            }
+
+            .detail[data-icon] {
+                padding-left: calc(1em + var(--mjo-space-xsmall));
+            }
+
+            /* Focus management */
+            :host(:focus) {
+                outline: 2px solid currentColor;
+                outline-offset: 2px;
+            }
+
+            /* High contrast mode support */
+            @media (prefers-contrast: high) {
+                .container {
+                    border-width: 2px;
+                }
+                .close-button:focus {
+                    outline-width: 3px;
+                }
+            }
+
+            /* Dark mode considerations */
+            @media (prefers-color-scheme: dark) {
+                .close-button:hover {
+                    background-color: rgba(255, 255, 255, 0.1);
+                }
+            }
+        `
+];
+__decorateClass$4([
+  property({ type: String })
+], MjoAlert.prototype, "type", 2);
+__decorateClass$4([
+  property({ type: String })
+], MjoAlert.prototype, "size", 2);
+__decorateClass$4([
+  property({ type: String })
+], MjoAlert.prototype, "rounded", 2);
+__decorateClass$4([
+  property({ type: String })
+], MjoAlert.prototype, "message", 2);
+__decorateClass$4([
+  property({ type: String })
+], MjoAlert.prototype, "detail", 2);
+__decorateClass$4([
+  property({ type: Boolean })
+], MjoAlert.prototype, "closable", 2);
+__decorateClass$4([
+  property({ type: Boolean })
+], MjoAlert.prototype, "hideIcon", 2);
+__decorateClass$4([
+  property({ type: String })
+], MjoAlert.prototype, "ariaLive", 2);
+__decorateClass$4([
+  property({ type: Boolean })
+], MjoAlert.prototype, "focusOnShow", 2);
+__decorateClass$4([
+  property({ type: Boolean })
+], MjoAlert.prototype, "autoClose", 2);
+__decorateClass$4([
+  property({ type: Number })
+], MjoAlert.prototype, "autoCloseDelay", 2);
+__decorateClass$4([
+  property({ type: String })
+], MjoAlert.prototype, "animation", 2);
+__decorateClass$4([
+  property({ type: Number })
+], MjoAlert.prototype, "animationDuration", 2);
+__decorateClass$4([
+  property({ type: Boolean })
+], MjoAlert.prototype, "persistent", 2);
+__decorateClass$4([
+  state()
+], MjoAlert.prototype, "icon", 2);
+__decorateClass$4([
+  state()
+], MjoAlert.prototype, "autoCloseTimer", 2);
+MjoAlert = __decorateClass$4([
+  customElement("mjo-alert")
+], MjoAlert);
 var __defProp$3 = Object.defineProperty;
 var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
 var __decorateClass$3 = (decorators, target, key, kind) => {
