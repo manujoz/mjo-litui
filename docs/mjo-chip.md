@@ -64,16 +64,16 @@ export class ExampleChipInteractive extends LitElement {
                 <div>
                     <h4>Clickable Chips</h4>
                     <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip label="Click Me" color="primary" clickable value="clickable-chip" @chip-click=${this.handleChipClick}></mjo-chip>
-                        <mjo-chip label="Filter Active" color="success" clickable startIcon="check" @chip-click=${this.handleChipClick}></mjo-chip>
+                        <mjo-chip label="Click Me" color="primary" clickable value="clickable-chip" @mjo-chip-click=${this.handleChipClick}></mjo-chip>
+                        <mjo-chip label="Filter Active" color="success" clickable startIcon="check" @mjo-chip-click=${this.handleChipClick}></mjo-chip>
                     </div>
                 </div>
 
                 <div>
                     <h4>Closable Chips</h4>
                     <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip label="Remove Me" color="error" closable @chip-close=${this.handleChipClose}></mjo-chip>
-                        <mjo-chip label="Tag: JavaScript" color="info" closable value="javascript-tag" @chip-close=${this.handleChipClose}></mjo-chip>
+                        <mjo-chip label="Remove Me" color="error" closable @mjo-chip-close=${this.handleChipClose}></mjo-chip>
+                        <mjo-chip label="Tag: JavaScript" color="info" closable value="javascript-tag" @mjo-chip-close=${this.handleChipClose}></mjo-chip>
                     </div>
                 </div>
 
@@ -86,8 +86,8 @@ export class ExampleChipInteractive extends LitElement {
                             clickable
                             closable
                             value="interactive-filter"
-                            @chip-click=${this.handleChipClick}
-                            @chip-close=${this.handleChipClose}
+                            @mjo-chip-click=${this.handleChipClick}
+                            @mjo-chip-close=${this.handleChipClose}
                         ></mjo-chip>
                         <mjo-chip
                             label="Smart Tag"
@@ -95,8 +95,8 @@ export class ExampleChipInteractive extends LitElement {
                             clickable
                             closable
                             startIcon="star"
-                            @chip-click=${this.handleChipClick}
-                            @chip-close=${this.handleChipClose}
+                            @mjo-chip-click=${this.handleChipClick}
+                            @mjo-chip-close=${this.handleChipClose}
                         ></mjo-chip>
                     </div>
                 </div>
@@ -714,20 +714,20 @@ export class ExampleChipThemes extends LitElement {
 
 ## Attributes / Properties
 
-| Name              | Type                                                                                   | Default     | Reflects | Description                                                    |
-| ----------------- | -------------------------------------------------------------------------------------- | ----------- | -------- | -------------------------------------------------------------- |
-| `label`           | `string`                                                                               | `""`        | no       | Text content displayed in the chip                             |
-| `color`           | `"primary" \| "secondary" \| "default" \| "success" \| "warning" \| "info" \| "error"` | `"default"` | no       | Semantic color scheme applied to the chip                      |
-| `variant`         | `"solid" \| "bordered" \| "light" \| "flat" \| "faded" \| "shadow" \| "dot"`           | `"solid"`   | no       | Visual styling variant that affects appearance and background  |
-| `size`            | `"small" \| "medium" \| "large"`                                                       | `"medium"`  | no       | Controls the overall size including font size and padding      |
-| `radius`          | `"small" \| "medium" \| "large" \| "full" \| "none"`                                   | `"full"`    | no       | Border radius applied to the chip (full creates pill shape)    |
-| `startIcon`       | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the beginning of the chip content            |
-| `endIcon`         | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the end of the chip content                  |
-| `clickable`       | `boolean`                                                                              | `false`     | no       | Makes the chip clickable and dispatches `chip-click` events    |
-| `closable`        | `boolean`                                                                              | `false`     | no       | Adds a close button that emits `chip-close` event when clicked |
-| `disabled`        | `boolean`                                                                              | `false`     | no       | Disables interaction and applies disabled styling              |
-| `value`           | `string \| undefined`                                                                  | `undefined` | no       | Optional value passed in event details (falls back to label)   |
-| `ariaDescribedby` | `string \| undefined`                                                                  | `undefined` | no       | References additional descriptive content for screen readers   |
+| Name              | Type                                                                                   | Default     | Reflects | Description                                                        |
+| ----------------- | -------------------------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------ |
+| `label`           | `string`                                                                               | `""`        | no       | Text content displayed in the chip                                 |
+| `color`           | `"primary" \| "secondary" \| "default" \| "success" \| "warning" \| "info" \| "error"` | `"default"` | no       | Semantic color scheme applied to the chip                          |
+| `variant`         | `"solid" \| "bordered" \| "light" \| "flat" \| "faded" \| "shadow" \| "dot"`           | `"solid"`   | no       | Visual styling variant that affects appearance and background      |
+| `size`            | `"small" \| "medium" \| "large"`                                                       | `"medium"`  | no       | Controls the overall size including font size and padding          |
+| `radius`          | `"small" \| "medium" \| "large" \| "full" \| "none"`                                   | `"full"`    | no       | Border radius applied to the chip (full creates pill shape)        |
+| `startIcon`       | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the beginning of the chip content                |
+| `endIcon`         | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the end of the chip content                      |
+| `clickable`       | `boolean`                                                                              | `false`     | no       | Makes the chip clickable and dispatches `mjo-chip-click` events    |
+| `closable`        | `boolean`                                                                              | `false`     | no       | Adds a close button that emits `mjo-chip-close` event when clicked |
+| `disabled`        | `boolean`                                                                              | `false`     | no       | Disables interaction and applies disabled styling                  |
+| `value`           | `string \| undefined`                                                                  | `undefined` | no       | Optional value passed in event details (falls back to label)       |
+| `ariaDescribedby` | `string \| undefined`                                                                  | `undefined` | no       | References additional descriptive content for screen readers       |
 
 ### Accessibility Properties (Native Lit Support)
 
@@ -759,12 +759,12 @@ The component supports standard HTML accessibility attributes through Lit's nati
 
 ## Events
 
-| Event        | Detail              | Emitted When                                  | Notes                                                                   |
-| ------------ | ------------------- | --------------------------------------------- | ----------------------------------------------------------------------- |
-| `chip-click` | `{ value: string }` | Chip main area is clicked (when `clickable`)  | Contains `value` prop or `label` prop as fallback; bubbles and composed |
-| `chip-close` | `{ value: string }` | Close button is clicked (closable chips only) | Contains `value` prop or `label` prop as fallback; chip removes itself  |
+| Event            | Detail              | Emitted When                                  | Notes                                                                   |
+| ---------------- | ------------------- | --------------------------------------------- | ----------------------------------------------------------------------- |
+| `mjo-chip-click` | `{ value: string }` | Chip main area is clicked (when `clickable`)  | Contains `value` prop or `label` prop as fallback; bubbles and composed |
+| `mjo-chip-close` | `{ value: string }` | Close button is clicked (closable chips only) | Contains `value` prop or `label` prop as fallback; chip removes itself  |
 
-**Note**: When both `clickable` and `closable` are true, clicking the main chip area triggers `chip-click`, while clicking the close button triggers `chip-close`. The close button click event stops propagation to prevent triggering the main click event.
+**Note**: When both `clickable` and `closable` are true, clicking the main chip area triggers `mjo-chip-click`, while clicking the close button triggers `mjo-chip-close`. The close button click event stops propagation to prevent triggering the main click event.
 
 ## Methods
 
@@ -1079,11 +1079,11 @@ The `mjo-chip` component includes comprehensive accessibility support following 
     color="primary"
     aria-label="JavaScript filter, click to toggle"
     aria-describedby="filter-help"
-    @chip-click="${this.handleFilterToggle}"
+    @mjo-chip-click="${this.handleFilterToggle}"
 ></mjo-chip>
 
 <!-- Closable chip with context -->
-<mjo-chip label="Project Alpha" closable value="project-alpha" aria-describedby="project-description" @chip-close="${this.handleProjectRemove}"></mjo-chip>
+<mjo-chip label="Project Alpha" closable value="project-alpha" aria-describedby="project-description" @mjo-chip-close="${this.handleProjectRemove}"></mjo-chip>
 
 <!-- Both interactive with custom labels -->
 <mjo-chip
@@ -1092,8 +1092,8 @@ The `mjo-chip` component includes comprehensive accessibility support following 
     closable
     value="react-tag"
     aria-label="React technology tag, click to view details or close to remove"
-    @chip-click="${this.viewDetails}"
-    @chip-close="${this.removeTag}"
+    @mjo-chip-click="${this.viewDetails}"
+    @mjo-chip-close="${this.removeTag}"
 ></mjo-chip>
 ```
 
@@ -1162,7 +1162,7 @@ export class ExampleChipAccessibility extends LitElement {
                                     value="${tech.toLowerCase()}"
                                     aria-pressed="${this.selectedFilters.has(tech) ? "true" : "false"}"
                                     aria-describedby="filter-help"
-                                    @chip-click="${this.handleFilterToggle}"
+                                    @mjo-chip-click="${this.handleFilterToggle}"
                                 ></mjo-chip>
                             `,
                         )}
@@ -1181,7 +1181,7 @@ export class ExampleChipAccessibility extends LitElement {
                             color="info"
                             value="frontend"
                             aria-describedby="tag-help"
-                            @chip-close="${this.handleTagClose}"
+                            @mjo-chip-close="${this.handleTagClose}"
                         ></mjo-chip>
                         <mjo-chip
                             label="High Priority"
@@ -1189,7 +1189,7 @@ export class ExampleChipAccessibility extends LitElement {
                             color="error"
                             value="high-priority"
                             aria-describedby="tag-help"
-                            @chip-close="${this.handleTagClose}"
+                            @mjo-chip-close="${this.handleTagClose}"
                         ></mjo-chip>
                         <mjo-chip
                             label="Team Alpha"
@@ -1197,7 +1197,7 @@ export class ExampleChipAccessibility extends LitElement {
                             color="success"
                             value="team-alpha"
                             aria-describedby="tag-help"
-                            @chip-close="${this.handleTagClose}"
+                            @mjo-chip-close="${this.handleTagClose}"
                         ></mjo-chip>
                     </div>
                     <p id="tag-help" style="font-size: 0.9rem; color: #666;">Press the close button or use Escape key to remove tags from the project.</p>

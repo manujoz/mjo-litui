@@ -138,8 +138,8 @@ export class ExampleAlertControl extends LitElement {
                     type="info"
                     message="Programmatically controlled alert"
                     focusOnShow
-                    @alert-show=${() => console.log("Alert shown")}
-                    @alert-closed=${() => console.log("Alert closed")}
+                    @mjo-alert-show=${() => console.log("Alert shown")}
+                    @mjo-alert-closed=${() => console.log("Alert closed")}
                 ></mjo-alert>
             </div>
         `;
@@ -380,12 +380,12 @@ export class ExampleAlertDynamic extends LitElement {
 
 ## Events
 
-| Event              | Detail                  | Emitted When               | Notes                                    |
-| ------------------ | ----------------------- | -------------------------- | ---------------------------------------- |
-| `alert-will-show`  | `{ element: MjoAlert }` | Before the alert is shown  | Can be used to prepare for alert display |
-| `alert-show`       | `{ element: MjoAlert }` | After the alert is shown   | Fired when show animation completes      |
-| `alert-will-close` | `{ element: MjoAlert }` | Before the alert is closed | Can be used to save state or cleanup     |
-| `alert-closed`     | `{ element: MjoAlert }` | After the alert is closed  | Fired when close animation completes     |
+| Event                  | Detail                  | Emitted When               | Notes                                    |
+| ---------------------- | ----------------------- | -------------------------- | ---------------------------------------- |
+| `mjo-alert-will-show`  | `{ element: MjoAlert }` | Before the alert is shown  | Can be used to prepare for alert display |
+| `mjo-alert-show`       | `{ element: MjoAlert }` | After the alert is shown   | Fired when show animation completes      |
+| `mjo-alert-will-close` | `{ element: MjoAlert }` | Before the alert is closed | Can be used to save state or cleanup     |
+| `mjo-alert-closed`     | `{ element: MjoAlert }` | After the alert is closed  | Fired when close animation completes     |
 
 **Note**: All events are custom events that bubble and are composed, making them available across shadow DOM boundaries.
 

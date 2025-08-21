@@ -42,16 +42,16 @@ function announceAlert() {
 }
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll("mjo-alert").forEach((alert) => {
-    alert.addEventListener("alert-will-show", (event) => {
+    alert.addEventListener("mjo-alert-will-show", (event) => {
       console.log("Alert will show:", event.detail);
     });
-    alert.addEventListener("alert-show", (event) => {
+    alert.addEventListener("mjo-alert-show", (event) => {
       console.log("Alert shown:", event.detail);
     });
-    alert.addEventListener("alert-will-close", (event) => {
+    alert.addEventListener("mjo-alert-will-close", (event) => {
       console.log("Alert will close:", event.detail);
     });
-    alert.addEventListener("alert-closed", (event) => {
+    alert.addEventListener("mjo-alert-closed", (event) => {
       console.log("Alert closed:", event.detail);
     });
   });

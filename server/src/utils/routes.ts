@@ -1,12 +1,14 @@
 import { AccordionController } from "../controllers/accordion-controller.js";
 import { AlertController } from "../controllers/alert-controller.js";
 import { AvatarController } from "../controllers/avatar-controller.js";
+import { ButtonController } from "../controllers/button-controller.js";
 import { ChipController } from "../controllers/chip-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
 
 const indexController = new IndexController();
 const alertController = new AlertController();
 const avatarController = new AvatarController();
+const buttonController = new ButtonController();
 const chipController = new ChipController();
 const accordionController = new AccordionController();
 
@@ -26,6 +28,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-avatar",
         controller: avatarController.renderAvatarPage,
+    },
+    {
+        path: "/component/mjo-button",
+        controller: buttonController.renderButtonPage,
     },
     {
         path: "/component/mjo-chip",

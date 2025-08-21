@@ -23,7 +23,7 @@
     margin: 20px 0;
 }
 
-.alert-showcase {
+.mjo-alert-showcase {
     display: flex;
     flex-direction: column;
     gap: 12px;

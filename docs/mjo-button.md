@@ -1,13 +1,15 @@
 # mjo-button
 
-Configurable, theme‑aware button providing multiple variants, semantic colors, interactive states (hover, toggle, loading) and ripple feedback.
+Fully accessible button component providing multiple variants, semantic colors, interactive states, and comprehensive accessibility features including ARIA support, loading states, and toggle functionality.
 
 ## HTML Usage
 
 ```html
 <mjo-button color="primary" variant="default">Accept</mjo-button>
 <mjo-button color="secondary" variant="ghost">Cancel</mjo-button>
-<mjo-button color="success" variant="flat" startIcon="check">Done</mjo-button>
+<mjo-button color="success" variant="flat" start-icon="check">Done</mjo-button>
+<mjo-button toggleable button-label="Notification settings">Toggle</mjo-button>
+<mjo-button loading>Processing...</mjo-button>
 ```
 
 ## Basic Example
@@ -23,8 +25,57 @@ export class ExampleButtonBasic extends LitElement {
         return html`
             <mjo-button color="primary">Primary</mjo-button>
             <mjo-button color="secondary" variant="ghost">Ghost Secondary</mjo-button>
-            <mjo-button color="success" variant="flat" startIcon="check">Flat Success</mjo-button>
+            <mjo-button color="success" variant="flat" start-icon="check">Flat Success</mjo-button>
         `;
+    }
+}
+```
+
+## Accessibility Features Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-button";
+
+@customElement("example-button-accessibility")
+export class ExampleButtonAccessibility extends LitElement {
+    @state() private isLoading = false;
+    @state() private menuExpanded = false;
+
+    render() {
+        return html`
+            <div>
+                <h4>Loading State (uses aria-busy)</h4>
+                <mjo-button .loading=${this.isLoading} @mjo-button-loading-change=${this.handleLoadingChange} @click=${this.simulateLoading}>
+                    ${this.isLoading ? "Loading..." : "Start Task"}
+                </mjo-button>
+            </div>
+
+            <div>
+                <h4>Toggle Button (uses aria-pressed)</h4>
+                <mjo-button toggleable button-label="Toggle notifications" @mjo-button-toggle=${this.handleToggle}> Notifications </mjo-button>
+            </div>
+
+            <div>
+                <h4>Described Button</h4>
+                <mjo-button color="error" described-by="delete-warning"> Delete Item </mjo-button>
+                <div id="delete-warning">This action cannot be undone</div>
+            </div>
+        `;
+    }
+
+    private simulateLoading() {
+        this.isLoading = true;
+        setTimeout(() => (this.isLoading = false), 2000);
+    }
+
+    private handleLoadingChange(e: CustomEvent) {
+        console.log("Loading changed:", e.detail.loading);
+    }
+
+    private handleToggle(e: CustomEvent) {
+        console.log("Toggle state:", e.detail.pressed);
     }
 }
 ```
@@ -97,27 +148,34 @@ export class ExampleButtonStates extends LitElement {
 
 ## Attributes / Properties
 
-| Name         | Type                                                                      | Default     | Reflects | Description                                                                   |
-| ------------ | ------------------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------- |
-| `type`       | `"button" \| "submit" \| "reset" \| "menu"`                               | `"button"`  | no       | Native button type; `submit` triggers form submission (via FormMixin)         |
-| `color`      | `"primary" \| "secondary" \| "success" \| "info" \| "warning" \| "error"` | `"primary"` | no       | Semantic color; maps to theme variables / token palette                       |
-| `variant`    | `"default" \| "ghost" \| "dashed" \| "link" \| "text" \| "flat"`          | `"default"` | no       | Visual styling strategy                                                       |
-| `size`       | `"small" \| "medium" \| "large"`                                          | `"medium"`  | no       | Adjusts padding & font-size                                                   |
-| `fullwidth`  | `boolean`                                                                 | `false`     | yes      | Forces the host to span 100% width                                            |
-| `disabled`   | `boolean`                                                                 | `false`     | yes      | Disables interaction & ripple                                                 |
-| `loading`    | `boolean`                                                                 | `false`     | yes      | Shows loading bar & blocks toggle/ripple                                      |
-| `rounded`    | `boolean`                                                                 | `false`     | yes      | Circular shape (ignores width, uses equal padding)                            |
-| `toggleable` | `boolean`                                                                 | `false`     | no       | Enables internal pressed state (data-toggle) when clicked and `type="button"` |
-| `smallCaps`  | `boolean`                                                                 | `false`     | no       | Applies `font-variant: all-small-caps`                                        |
-| `noink`      | `boolean`                                                                 | `false`     | no       | Hides the ripple effect                                                       |
-| `startIcon`  | `string \| undefined`                                                     | `undefined` | no       | Icon name / path prepended to button text                                     |
-| `endIcon`    | `string \| undefined`                                                     | `undefined` | no       | Icon name / path appended to button text                                      |
+| Name         | Type                                                                      | Default     | Reflects | Description                                                                       |
+| ------------ | ------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------- |
+| `type`       | `"button" \| "submit" \| "reset" \| "menu"`                               | `"button"`  | no       | Native button type; `submit` triggers form submission (via FormMixin)             |
+| `color`      | `"primary" \| "secondary" \| "success" \| "info" \| "warning" \| "error"` | `"primary"` | no       | Semantic color; maps to theme variables / token palette                           |
+| `variant`    | `"default" \| "ghost" \| "dashed" \| "link" \| "text" \| "flat"`          | `"default"` | no       | Visual styling strategy                                                           |
+| `size`       | `"small" \| "medium" \| "large"`                                          | `"medium"`  | no       | Adjusts padding & font-size                                                       |
+| `fullwidth`  | `boolean`                                                                 | `false`     | yes      | Forces the host to span 100% width                                                |
+| `disabled`   | `boolean`                                                                 | `false`     | yes      | Disables interaction & ripple                                                     |
+| `loading`    | `boolean`                                                                 | `false`     | yes      | Shows loading bar & blocks toggle/ripple, sets aria-busy="true"                   |
+| `rounded`    | `boolean`                                                                 | `false`     | yes      | Circular shape (ignores width, uses equal padding)                                |
+| `toggleable` | `boolean`                                                                 | `false`     | no       | Enables internal pressed state with aria-pressed when clicked and `type="button"` |
+| `small-caps` | `boolean`                                                                 | `false`     | no       | Applies `font-variant: all-small-caps`                                            |
+| `noink`      | `boolean`                                                                 | `false`     | no       | Hides the ripple effect                                                           |
+| `start-icon` | `string \| undefined`                                                     | `undefined` | no       | Icon name / path prepended to button text                                         |
+| `end-icon`   | `string \| undefined`                                                     | `undefined` | no       | Icon name / path appended to button text                                          |
+
+### Accessibility Properties
+
+| Name           | Type                  | Default     | Description                                                |
+| -------------- | --------------------- | ----------- | ---------------------------------------------------------- |
+| `button-label` | `string \| undefined` | `undefined` | Custom aria-label for the button                           |
+| `described-by` | `string \| undefined` | `undefined` | ID of element that describes the button (aria-describedby) |
 
 ### Internal State
 
-| Name     | Type      | Description                                                                  |
-| -------- | --------- | ---------------------------------------------------------------------------- |
-| `toggle` | `boolean` | Private `@state` used when `toggleable` is true to add `data-toggle` styling |
+| Name     | Type      | Description                                                                                   |
+| -------- | --------- | --------------------------------------------------------------------------------------------- |
+| `toggle` | `boolean` | Private `@state` used when `toggleable` is true to add `data-toggle` styling and aria-pressed |
 
 ### Behavior Notes
 
@@ -133,9 +191,60 @@ export class ExampleButtonStates extends LitElement {
 
 ## Events
 
-| Event   | Detail              | Emitted When    | Notes                                              |
-| ------- | ------------------- | --------------- | -------------------------------------------------- |
-| `click` | Native `MouseEvent` | User activation | Prevented from toggling if `disabled` or `loading` |
+| Event                       | Detail                                | Emitted When          | Notes                                               |
+| --------------------------- | ------------------------------------- | --------------------- | --------------------------------------------------- |
+| `click`                     | Native `MouseEvent`                   | User activation       | Standard DOM event, prevented when disabled/loading |
+| `mjo-button-click`          | `{ element, toggle?, originalEvent }` | Button is clicked     | Custom event with additional context                |
+| `mjo-button-toggle`         | `{ element, pressed, previousState }` | Toggle state changes  | Only emitted when `toggleable` is true              |
+| `mjo-button-loading-change` | `{ element, loading }`                | Loading state changes | Emitted whenever loading property changes           |
+
+### Event Details
+
+#### MjoButtonClickEvent
+
+-   `element`: Reference to the button instance
+-   `toggle`: Current toggle state (only present if toggleable)
+-   `originalEvent`: The original MouseEvent or KeyboardEvent
+
+#### MjoButtonToggleEvent
+
+-   `element`: Reference to the button instance
+-   `pressed`: New toggle/pressed state
+-   `previousState`: Previous toggle state
+
+#### MjoButtonLoadingChangeEvent
+
+-   `element`: Reference to the button instance
+-   `loading`: New loading state
+
+## Public Methods
+
+| Method            | Parameters               | Returns | Description                                |
+| ----------------- | ------------------------ | ------- | ------------------------------------------ |
+| `focus()`         | `options?: FocusOptions` | `void`  | Sets focus to the button                   |
+| `blur()`          | -                        | `void`  | Removes focus from the button              |
+| `click()`         | -                        | `void`  | Programmatically triggers a click          |
+| `setLoading()`    | `loading: boolean`       | `void`  | Sets the loading/busy state                |
+| `togglePressed()` | -                        | `void`  | Toggles pressed state (only if toggleable) |
+
+### Method Examples
+
+```ts
+// Get reference to button and use methods
+const button = document.querySelector("mjo-button") as MjoButton;
+
+// Focus the button
+button.focus();
+
+// Set loading state
+button.setBusy(true);
+
+// Toggle pressed state (if toggleable)
+button.togglePressed();
+
+// Programmatically click
+button.click();
+```
 
 ## CSS Variables
 
@@ -289,9 +398,58 @@ export class ExampleButtonForm extends LitElement {
 
 ## Accessibility Notes
 
--   Renders a native `<button>`: inherits keyboard accessibility (Enter/Space) automatically.
--   Provide meaningful text or an accessible name if only icons are used (e.g. via `aria-label`).
--   Loading state uses a visual bar; consider adding `aria-busy="true"` manually if needed for assistive tech.
+This component follows WCAG 2.1 guidelines and provides comprehensive accessibility support:
+
+### ARIA Support
+
+-   **aria-busy**: Automatically set to "true" when `loading` is active, informing screen readers that the button is processing
+-   **aria-pressed**: Automatically managed for toggle buttons when `toggleable` is true
+-   **aria-label**: Custom accessible name via `button-label` property
+-   **aria-describedby**: Reference to descriptive text via `described-by` property
+-   **aria-expanded**: Shows popup state via `expanded` property
+
+### Keyboard Navigation
+
+-   Inherits native button keyboard behavior (Space, Enter)
+-   Focus management with visible focus indicators
+-   Proper tab order integration
+
+### Screen Reader Support
+
+-   State changes are announced immediately
+-   Loading states are communicated via aria-busy
+-   Toggle states use appropriate pressed/unpressed announcements
+-   Custom labels override default content when needed
+
+### Motion & Animation
+
+-   Respects `prefers-reduced-motion` setting
+-   Loading animation is replaced with static pattern when motion is reduced
+-   Transitions are disabled for users who prefer reduced motion
+
+### High Contrast Support
+
+-   Enhanced borders and focus indicators in high contrast mode
+-   Maintains readability across different contrast preferences
+
+### Best Practices
+
+```html
+<!-- Good: Descriptive text -->
+<mjo-button color="primary">Save Document</mjo-button>
+
+<!-- Good: Icon with accessible label -->
+<mjo-button rounded start-icon="close" button-label="Close dialog"></mjo-button>
+
+<!-- Good: Toggle with clear context -->
+<mjo-button toggleable button-label="Enable notifications"> Notifications </mjo-button>
+
+<!-- Good: Loading state -->
+<mjo-button loading>Processing payment...</mjo-button>
+
+<!-- Good: Menu button -->
+<mjo-button has-popup="menu" expanded="false"> Options </mjo-button>
+```
 
 ## Performance Considerations
 
@@ -300,4 +458,15 @@ export class ExampleButtonForm extends LitElement {
 
 ## Summary
 
-`<mjo-button>` is a flexible UI primitive supporting multiple visual variants, semantic colors, and interactive states. Start with global theming for consistency and only resort to per-instance ThemeMixin overrides for exceptions. All CSS variables can be layered: global (`<mjo-theme>`), per‑component (ThemeMixin), and inline (author CSS) if absolutely needed.
+`<mjo-button>` is a fully accessible, feature-rich button component that provides:
+
+-   **Complete Accessibility**: WCAG 2.1 compliant with comprehensive ARIA support
+-   **Multiple Variants**: Various visual styles (default, ghost, flat, dashed, link, text)
+-   **Semantic Colors**: Primary, secondary, and status colors (success, info, warning, error)
+-   **Interactive States**: Loading with aria-busy, toggle with aria-pressed, disabled states
+-   **Flexible Theming**: Global theming via `<mjo-theme>` and per-instance via ThemeMixin
+-   **Form Integration**: Seamless form submission via FormMixin
+-   **Motion Respect**: Honors user motion preferences
+-   **High Contrast**: Enhanced visibility in high contrast modes
+
+The component is designed to be the primary interactive element for user actions, providing excellent usability for all users including those using assistive technologies. Start with semantic HTML and enhance with the specific properties needed for your use case.

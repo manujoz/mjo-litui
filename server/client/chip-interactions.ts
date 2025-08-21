@@ -43,8 +43,8 @@ function changeChipProp(prop: string, value: string | boolean): void {
 // Initialize interactions when the page loads
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("mjo-chip").forEach((chip) => {
-        chip.addEventListener("chip-click", clickHandle);
-        chip.addEventListener("chip-close", closeHandle);
+        chip.addEventListener("mjo-chip-click", clickHandle);
+        chip.addEventListener("mjo-chip-close", closeHandle);
     });
 });
 
@@ -92,8 +92,8 @@ const closeHandle = (ev: Event) => {
         if (container) {
             container.textContent = "";
             container.appendChild(chip);
-            chip.addEventListener("chip-click", clickHandle);
-            chip.addEventListener("chip-close", closeHandle);
+            chip.addEventListener("mjo-chip-click", clickHandle);
+            chip.addEventListener("mjo-chip-close", closeHandle);
         }
     }, 1500);
 };

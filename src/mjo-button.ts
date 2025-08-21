@@ -1,5 +1,18 @@
+import type {
+    MjoButtonBlurEvent,
+    MjoButtonClickEvent,
+    MjoButtonColor,
+    MjoButtonFocusEvent,
+    MjoButtonLoadingChangeEvent,
+    MjoButtonSize,
+    MjoButtonToggleEvent,
+    MjoButtonType,
+    MjoButtonVariant,
+} from "./types/mjo-button";
+
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { FormMixin } from "./mixins/form-mixin.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
@@ -9,10 +22,21 @@ import "./mjo-ripple.js";
 import "./mjo-typography.js";
 
 /**
- * An example element.
+ * A fully accessible button component with loading states, toggle functionality, and comprehensive ARIA support.
  *
- * @slot - Text button
- * @csspart button - The button
+ * @fires mjo-button-click - Fired when the button is clicked
+ * @fires mjo-button-toggle - Fired when toggle state changes (only when toggleable=true)
+ * @fires mjo-button-loading-change - Fired when loading state changes
+ *
+ * @slot - Button text content
+ * @csspart button - The native button element
+ *
+ * @example
+ * ```html
+ * <mjo-button variant="primary" size="large">Click me</mjo-button>
+ * <mjo-button toggleable>Toggle Button</mjo-button>
+ * <mjo-button loading>Loading...</mjo-button>
+ * ```
  */
 @customElement("mjo-button")
 export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThemeMixin {
@@ -25,14 +49,21 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     @property({ type: Boolean }) noink = false;
     @property({ type: String }) startIcon?: string;
     @property({ type: String }) endIcon?: string;
-    @property({ type: String }) size: "small" | "medium" | "large" = "medium";
-    @property({ type: String }) color: "primary" | "secondary" | "success" | "info" | "warning" | "error" = "primary";
-    @property({ type: String }) variant: "default" | "ghost" | "dashed" | "link" | "text" | "flat" = "default";
-    @property({ type: String }) type: "button" | "submit" | "reset" | "menu" = "button";
+    @property({ type: String }) size: MjoButtonSize = "medium";
+    @property({ type: String }) color: MjoButtonColor = "primary";
+    @property({ type: String }) variant: MjoButtonVariant = "default";
+    @property({ type: String }) type: MjoButtonType = "button";
+
+    // Accessibility properties
+    @property({ type: String }) buttonLabel?: string;
+    @property({ type: String }) describedBy?: string;
 
     @state() private toggle = false;
 
     render() {
+        const ariaBusy = this.loading ? "true" : "false";
+        const ariaPressed = this.toggleable ? (this.toggle ? "true" : "false") : undefined;
+
         return html`<button
             type=${this.type}
             data-color=${this.color}
@@ -41,37 +72,138 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             ?data-rounded=${this.rounded}
             ?data-toggle=${this.toggle}
             ?data-small-caps=${this.smallCaps}
+            aria-busy=${ariaBusy}
+            aria-pressed=${ifDefined(ariaPressed)}
+            aria-label=${ifDefined(this.buttonLabel)}
+            aria-describedby=${ifDefined(this.describedBy)}
+            ?disabled=${this.disabled || this.loading}
             @click=${this.#handleClick}
         >
             ${this.startIcon && html` <mjo-icon src=${this.startIcon}></mjo-icon>`}
             <mjo-typography tag="none"><slot></slot></mjo-typography>
             ${this.endIcon && html` <mjo-icon src=${this.endIcon}></mjo-icon>`}
             ${!this.noink && !this.disabled && !this.loading ? html`<mjo-ripple></mjo-ripple>` : nothing}
-            ${this.loading ? html`<div class="loading"></div>` : nothing}
+            ${this.loading ? html`<div class="loading" aria-hidden="true"></div>` : nothing}
         </button>`;
     }
 
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
         super.updated(_changedProperties);
 
+        // Reset toggle state when disabled or loading
         if ((this.disabled || this.loading) && this.toggle) {
             this.toggle = false;
         }
+
+        // Dispatch loading change event
+        if (_changedProperties.has("loading")) {
+            this.#dispatchLoadingChangeEvent();
+        }
+
+        // Dispatch toggle event when toggle state changes
+        if (_changedProperties.has("toggle") && this.toggleable) {
+            this.#dispatchToggleEvent(_changedProperties.get("toggle") as boolean);
+        }
     }
 
-    #handleClick() {
+    /**
+     * Sets focus to the button
+     */
+    focus(options?: FocusOptions) {
+        const button = this.shadowRoot?.querySelector("button");
+        button?.focus(options);
+    }
+
+    /**
+     * Removes focus from the button
+     */
+    blur() {
+        const button = this.shadowRoot?.querySelector("button");
+        button?.blur();
+    }
+
+    /**
+     * Simulates a click on the button
+     */
+    click() {
+        const button = this.shadowRoot?.querySelector("button");
+        button?.click();
+    }
+
+    /**
+     * Sets the button as busy/loading
+     */
+    setLoading(loading: boolean) {
+        this.loading = loading;
+    }
+
+    /**
+     * Toggles the button pressed state (only works if toggleable is true)
+     */
+    togglePressed() {
+        if (this.toggleable && !this.disabled && !this.loading) {
+            this.toggle = !this.toggle;
+        }
+    }
+
+    #handleClick(event: MouseEvent) {
+        // Prevent action if disabled or loading
         if (this.disabled || this.loading) {
-            this.toggle = false;
+            event.preventDefault();
+            event.stopPropagation();
             return;
         }
 
+        // Handle toggle functionality
         if (this.toggleable && this.type === "button") {
             this.toggle = !this.toggle;
         }
 
+        // Handle form submission (Note: submiForm is a typo in form-mixin, should be submitForm)
         if (this.form && this.type === "submit") {
             this.submiForm();
         }
+
+        // Dispatch custom click event
+        this.#dispatchClickEvent(event);
+    }
+
+    #dispatchClickEvent(originalEvent: MouseEvent) {
+        const clickEvent: MjoButtonClickEvent = new CustomEvent("mjo-button-click", {
+            detail: {
+                element: this,
+                toggle: this.toggle,
+                originalEvent,
+            },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(clickEvent);
+    }
+
+    #dispatchToggleEvent(previousState: boolean) {
+        const toggleEvent: MjoButtonToggleEvent = new CustomEvent("mjo-button-toggle", {
+            detail: {
+                element: this,
+                pressed: this.toggle,
+                previousState,
+            },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(toggleEvent);
+    }
+
+    #dispatchLoadingChangeEvent() {
+        const loadingEvent: MjoButtonLoadingChangeEvent = new CustomEvent("mjo-button-loading-change", {
+            detail: {
+                element: this,
+                loading: this.loading,
+            },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(loadingEvent);
     }
 
     static styles = [
@@ -104,6 +236,10 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 position: relative;
                 transition: all 0.3s;
                 width: 100%;
+                outline-color: transparent;
+                outline-offset: 2px;
+                outline-width: 2px;
+                outline-style: solid;
             }
             button:hover {
                 background-color: var(--mjo-button-primary-color-hover, var(--mjo-primary-color-hover, #4e9be4));
@@ -111,6 +247,15 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             }
             button:focus {
                 outline-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+            }
+            /* Ensure high contrast mode compatibility */
+            @media (prefers-contrast: high) {
+                button {
+                    border-width: 2px;
+                }
+                button:focus {
+                    outline-width: 3px;
+                }
             }
             button[data-small-caps] {
                 font-variant: all-small-caps;
@@ -205,22 +350,22 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             }
             button[data-variant="flat"] {
                 background-color: var(--mjo-button-flat-primary-background-color, var(--mjo-primary-color-alpha2, #1d7fdb22));
-                color: var(--mjo-button-flat-primary-foreground-color, var(--mjo-primary-foreground-color, #ffffff));
+                color: var(--mjo-button-flat-primary-foreground-color, var(--mjo-primary-color, #1d7fdb));
                 border: none;
             }
             button[data-variant="flat"]:hover {
                 background-color: var(--mjo-button-flat-primary-background-color-hover, var(--mjo-primary-color-alpha1, #1d7fdb22));
-                color: var(--mjo-button-flat-primary-foreground-color-hover, var(--mjo-primary-foreground-color, #ffffff));
+                color: var(--mjo-button-flat-primary-foreground-color-hover, var(--mjo-primary-color, #1d7fdb));
                 border: none;
             }
             button[data-variant="flat"][data-color="secondary"] {
                 background-color: var(--mjo-button-flat-secondary-background-color, var(--mjo-secondary-color-alpha2, #cc3d7422));
-                color: var(--mjo-button-flat-secondary-foreground-color, var(--mjo-secondary-foreground-color, #ffffff));
+                color: var(--mjo-button-flat-secondary-foreground-color, var(--mjo-secondary-color, #cc3d74));
                 border: none;
             }
             button[data-variant="flat"][data-color="secondary"]:hover {
                 background-color: var(--mjo-button-flat-secondary-background-color-hover, var(--mjo-secondary-color-alpha1, #cc3d7422));
-                color: var(--mjo-button-flat-secondary-foreground-color-hover, var(--mjo-secondary-foreground-color, #ffffff));
+                color: var(--mjo-button-flat-secondary-foreground-color-hover, var(--mjo-secondary-color, #cc3d74));
                 border: none;
             }
             button[data-variant="flat"][data-color="success"],
@@ -236,7 +381,6 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 position: absolute;
                 inset: 0;
                 content: "";
-                z-index: -1;
                 opacity: 0.2;
             }
             button[data-variant="flat"][data-color="info"]::before {
@@ -244,7 +388,6 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 position: absolute;
                 inset: 0;
                 content: "";
-                z-index: -1;
                 opacity: 0.2;
             }
             button[data-variant="flat"][data-color="warning"]::before {
@@ -252,7 +395,6 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 position: absolute;
                 inset: 0;
                 content: "";
-                z-index: -1;
                 opacity: 0.2;
             }
             button[data-variant="flat"][data-color="error"]::before {
@@ -260,7 +402,6 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 position: absolute;
                 inset: 0;
                 content: "";
-                z-index: -1;
                 opacity: 0.2;
             }
             button[data-variant="dashed"] {
@@ -512,6 +653,16 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 background-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
                 animation: loading 1.5s infinite;
             }
+            /* Respect user's motion preferences */
+            @media (prefers-reduced-motion: reduce) {
+                .loading {
+                    animation: none;
+                    background: repeating-linear-gradient(90deg, transparent, transparent 0.2em, currentColor 0.2em, currentColor 0.4em);
+                }
+                button {
+                    transition: none;
+                }
+            }
             button[data-color="secondary"] .loading {
                 background-color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
@@ -553,5 +704,13 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-button": MjoButton;
+    }
+
+    interface HTMLElementEventMap {
+        "mjo-button-click": MjoButtonClickEvent;
+        "mjo-button-toggle": MjoButtonToggleEvent;
+        "mjo-button-loading-change": MjoButtonLoadingChangeEvent;
+        "mjo-button-focus": MjoButtonFocusEvent;
+        "mjo-button-blur": MjoButtonBlurEvent;
     }
 }

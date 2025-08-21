@@ -111,7 +111,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         if (!this.clickable || this.disabled) return;
 
         this.dispatchEvent(
-            new CustomEvent("chip-click", {
+            new CustomEvent("mjo-chip-click", {
                 bubbles: true,
                 composed: true,
                 detail: { value: this.value || this.label },
@@ -136,7 +136,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         }
 
         this.dispatchEvent(
-            new CustomEvent("chip-close", {
+            new CustomEvent("mjo-chip-close", {
                 bubbles: true,
                 composed: true,
                 detail: { value: this.value || this.label },
@@ -472,7 +472,7 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "chip-click": MjoChipClickEvent;
-        "chip-close": MjoChipCloseEvent;
+        "mjo-chip-click": MjoChipClickEvent;
+        "mjo-chip-close": MjoChipCloseEvent;
     }
 }

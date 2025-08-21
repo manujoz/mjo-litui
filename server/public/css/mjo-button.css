@@ -1,0 +1,169 @@
+/* Button Component Specific Styles for SSR Server */
+
+/* Enhanced playground showcase for buttons */
+.playground-showcase {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    min-height: 120px;
+    background: var(--mjo-background-color-medium);
+    border-radius: var(--mjo-radius);
+    border: 2px dashed var(--mjo-border-color);
+    position: relative;
+}
+
+/* Button-specific showcase adjustments */
+.component-showcase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-start;
+    margin: 1rem 0;
+}
+
+.component-showcase mjo-button {
+    flex: 0 0 auto;
+}
+
+/* Full width button showcase */
+.component-showcase[style*="width: 100%"] {
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.component-showcase[style*="width: 100%"] mjo-button {
+    width: 100%;
+}
+
+/* Control panel adjustments */
+.controls-panel .control-group {
+    margin-bottom: 1.5rem;
+}
+
+.controls-panel .control-group h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--mjo-text-color);
+    margin-bottom: 0.5rem;
+}
+
+.controls-panel input[type="text"],
+.controls-panel select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: var(--mjo-radius-small);
+    background-color: var(--mjo-background-color);
+    color: var(--mjo-text-color);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.controls-panel input[type="text"]:focus,
+.controls-panel select:focus {
+    outline: none;
+    border-color: var(--mjo-primary-color);
+    box-shadow: 0 0 0 2px var(--mjo-primary-color-alpha2);
+}
+
+/* Toggle group styles */
+.toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.toggle input[type="checkbox"] {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.toggle:hover {
+    color: var(--mjo-primary-color);
+}
+
+/* Interactive demo specific styles */
+.interactive-demo .playground-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .interactive-demo .playground-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .controls-panel {
+        order: 1;
+    }
+
+    .playground-showcase {
+        order: 2;
+    }
+}
+
+/* Button examples grid */
+.component-showcase {
+    padding: 1rem;
+    background: var(--mjo-background-color-low);
+    border-radius: var(--mjo-radius);
+    border: 1px solid var(--mjo-border-color);
+}
+
+/* Special styling for rounded buttons showcase */
+.component-showcase mjo-button[rounded] {
+    margin: 0.25rem;
+}
+
+/* Loading buttons showcase */
+.component-showcase mjo-button[loading] {
+    min-width: 120px;
+}
+
+/* Enhanced visual feedback for interactive elements */
+.playground-showcase mjo-button {
+    transition: transform 0.2s ease;
+}
+
+.playground-showcase mjo-button:active {
+    transform: translateY(0);
+}
+
+/* Status indicators for different button states */
+.control-group input[name="text"] {
+    font-weight: 500;
+}
+
+.control-group select[name="color"] option {
+    padding: 0.25rem;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 480px) {
+    .component-showcase {
+        gap: 0.5rem;
+    }
+
+    .playground-showcase {
+        min-height: 80px;
+        padding: 1rem;
+    }
+
+    .controls-panel {
+        padding: 1rem;
+    }
+}

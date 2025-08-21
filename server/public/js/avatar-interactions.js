@@ -30,7 +30,7 @@ function changeAvatarProp(prop, value) {
 }
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll("mjo-avatar").forEach((avatar) => {
-    avatar.addEventListener("avatar-click", (ev) => {
+    avatar.addEventListener("mjo-avatar-click", (ev) => {
       const value = ev.detail.value;
       alert(value);
     });

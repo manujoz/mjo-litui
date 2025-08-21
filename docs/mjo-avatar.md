@@ -251,7 +251,7 @@ export class ExampleAvatarInteractive extends LitElement {
                             value="user1"
                             bordered
                             color="primary"
-                            @avatar-click=${this.handleAvatarClick}
+                            @mjo-avatar-click=${this.handleAvatarClick}
                         ></mjo-avatar>
                         <mjo-avatar
                             name="John Doe"
@@ -260,7 +260,7 @@ export class ExampleAvatarInteractive extends LitElement {
                             nameColoured
                             bordered
                             color="secondary"
-                            @avatar-click=${this.handleAvatarClick}
+                            @mjo-avatar-click=${this.handleAvatarClick}
                         ></mjo-avatar>
                         <mjo-avatar
                             fallbackIcon="<svg>...</svg>"
@@ -268,7 +268,7 @@ export class ExampleAvatarInteractive extends LitElement {
                             value="star-user"
                             bordered
                             color="warning"
-                            @avatar-click=${this.handleAvatarClick}
+                            @mjo-avatar-click=${this.handleAvatarClick}
                         ></mjo-avatar>
                     </div>
                     ${this.lastClicked ? html`<p>Last clicked: <strong>${this.lastClicked}</strong></p>` : ""}
@@ -284,7 +284,7 @@ export class ExampleAvatarInteractive extends LitElement {
                             value="alice-123"
                             size="small"
                             bordered
-                            @avatar-click=${this.handleAvatarClick}
+                            @mjo-avatar-click=${this.handleAvatarClick}
                         ></mjo-avatar>
                         <mjo-avatar
                             name="Bob"
@@ -293,7 +293,7 @@ export class ExampleAvatarInteractive extends LitElement {
                             value="bob-456"
                             size="medium"
                             bordered
-                            @avatar-click=${this.handleAvatarClick}
+                            @mjo-avatar-click=${this.handleAvatarClick}
                         ></mjo-avatar>
                         <mjo-avatar
                             name="Charlie"
@@ -302,7 +302,7 @@ export class ExampleAvatarInteractive extends LitElement {
                             value="charlie-789"
                             size="large"
                             bordered
-                            @avatar-click=${this.handleAvatarClick}
+                            @mjo-avatar-click=${this.handleAvatarClick}
                         ></mjo-avatar>
                     </div>
                 </div>
@@ -310,7 +310,14 @@ export class ExampleAvatarInteractive extends LitElement {
                 <div>
                     <h4>Mixed Clickable and Non-Clickable</h4>
                     <div style="display: flex; gap: 1rem; align-items: center;">
-                        <mjo-avatar name="Click Me" clickable value="clickable" bordered color="success" @avatar-click=${this.handleAvatarClick}></mjo-avatar>
+                        <mjo-avatar
+                            name="Click Me"
+                            clickable
+                            value="clickable"
+                            bordered
+                            color="success"
+                            @mjo-avatar-click=${this.handleAvatarClick}
+                        ></mjo-avatar>
                         <mjo-avatar name="Static" bordered color="info"></mjo-avatar>
                         <mjo-avatar name="Disabled" clickable disabled bordered color="error"></mjo-avatar>
                     </div>
@@ -488,8 +495,8 @@ export class ExampleAvatarAccessibility extends LitElement {
                                         aria-label="View ${user.name}'s profile (${user.role})"
                                         aria-describedby="status-${user.id}"
                                         tabindex="0"
-                                        @avatar-click="${this.handleAvatarClick}"
-                                        @avatar-error="${this.handleAvatarError}"
+                                        @mjo-avatar-click="${this.handleAvatarClick}"
+                                        @mjo-avatar-error="${this.handleAvatarError}"
                                     ></mjo-avatar>
                                     <div id="status-${user.id}" style="font-size: 0.8rem; margin-top: 0.5rem;">
                                         ${user.name}<br />
@@ -516,7 +523,7 @@ export class ExampleAvatarAccessibility extends LitElement {
                             color="primary"
                             aria-label="Keyboard navigation test 1"
                             tabindex="1"
-                            @avatar-click="${this.handleAvatarClick}"
+                            @mjo-avatar-click="${this.handleAvatarClick}"
                         ></mjo-avatar>
                         <mjo-avatar
                             name="KB2"
@@ -526,7 +533,7 @@ export class ExampleAvatarAccessibility extends LitElement {
                             color="secondary"
                             aria-label="Keyboard navigation test 2"
                             tabindex="2"
-                            @avatar-click="${this.handleAvatarClick}"
+                            @mjo-avatar-click="${this.handleAvatarClick}"
                         ></mjo-avatar>
                         <mjo-avatar
                             name="Disabled"
@@ -557,10 +564,10 @@ export class ExampleAvatarAccessibility extends LitElement {
 | `color`           | `"default" \| "primary" \| "secondary" \| "success" \| "warning" \| "info" \| "error"` | `"default"` | no       | Color scheme for borders when `bordered` is true                         |
 | `bordered`        | `boolean`                                                                              | `false`     | yes      | Adds a colored border around the avatar                                  |
 | `disabled`        | `boolean`                                                                              | `false`     | yes      | Applies disabled styling (reduced opacity)                               |
-| `clickable`       | `boolean`                                                                              | `false`     | no       | Makes the avatar clickable and dispatches `avatar-click` events          |
+| `clickable`       | `boolean`                                                                              | `false`     | no       | Makes the avatar clickable and dispatches `mjo-avatar-click` events      |
 | `nameColoured`    | `boolean`                                                                              | `false`     | no       | Applies automatic color generation based on the first letter of the name |
 | `fallbackIcon`    | `string \| undefined`                                                                  | `undefined` | no       | Custom icon to use as fallback when image and name are not available     |
-| `value`           | `string \| undefined`                                                                  | `undefined` | no       | Custom value passed in the `avatar-click` event detail                   |
+| `value`           | `string \| undefined`                                                                  | `undefined` | no       | Custom value passed in the `mjo-avatar-click` event detail               |
 | `ariaDescribedby` | `string \| undefined`                                                                  | `undefined` | no       | References additional descriptive content for screen readers             |
 
 ### Accessibility Properties (Native Lit Support)
@@ -588,7 +595,7 @@ The component supports standard HTML accessibility attributes through Lit's nati
 -   Image loading errors automatically trigger fallback to custom fallback icon or name initials
 -   The `bordered` property adjusts internal sizing to account for border width
 -   Border colors follow the semantic color system
--   When `clickable` is true, the avatar shows visual feedback on click and dispatches `avatar-click` events
+-   When `clickable` is true, the avatar shows visual feedback on click and dispatches `mjo-avatar-click` events
 -   Disabled avatars cannot be clicked even if `clickable` is true
 
 ## Slots
@@ -599,12 +606,12 @@ The component supports standard HTML accessibility attributes through Lit's nati
 
 ## Events
 
-| Event          | Detail                | Emitted When                         | Notes                                                             |
-| -------------- | --------------------- | ------------------------------------ | ----------------------------------------------------------------- |
-| `avatar-click` | `{ value: string }`   | Avatar is clicked (when `clickable`) | Contains `value` prop or `name` prop as fallback, or empty string |
-| `avatar-error` | `{ message: string }` | Image fails to load                  | Provides error message for debugging and accessibility purposes   |
+| Event              | Detail                | Emitted When                         | Notes                                                             |
+| ------------------ | --------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `mjo-avatar-click` | `{ value: string }`   | Avatar is clicked (when `clickable`) | Contains `value` prop or `name` prop as fallback, or empty string |
+| `mjo-avatar-error` | `{ message: string }` | Image fails to load                  | Provides error message for debugging and accessibility purposes   |
 
-**Note**: The component handles image errors internally and automatically falls back to alternative content. The `avatar-click` event is only dispatched when the avatar is clickable and not disabled.
+**Note**: The component handles image errors internally and automatically falls back to alternative content. The `mjo-avatar-click` event is only dispatched when the avatar is clickable and not disabled.
 
 ## CSS Variables
 
@@ -831,7 +838,7 @@ The `mjo-avatar` component includes comprehensive accessibility support:
     value="john-doe"
     aria-label="Click to view John Doe's profile"
     aria-describedby="user-description"
-    @avatar-click="${this.handleProfileClick}"
+    @mjo-avatar-click="${this.handleProfileClick}"
 ></mjo-avatar>
 
 <p id="user-description">Senior Software Engineer with 5 years experience. Currently online.</p>
@@ -846,7 +853,7 @@ The `mjo-avatar` component includes comprehensive accessibility support:
 ### Screen Reader Support
 
 -   Images include meaningful `alt` text (falls back to `name` if not provided)
--   Error states are announced through `avatar-error` events
+-   Error states are announced through `mjo-avatar-error` events
 -   Interactive elements properly identified and described
 -   State changes (enabled/disabled) are communicated
 
@@ -884,7 +891,7 @@ Key features include:
 -   **Extensive Customization**: ThemeMixin support for instance-specific styling
 -   **Semantic Color System**: Integrates with the global design tokens
 -   **Full Accessibility Support**: WCAG 2.1 compliant with keyboard navigation, screen reader support, and dynamic ARIA attributes
--   **Error Handling**: Graceful fallback with `avatar-error` events for debugging
+-   **Error Handling**: Graceful fallback with `mjo-avatar-error` events for debugging
 -   **Motion Preferences**: Respects user's `prefers-reduced-motion` setting
 
 ### Accessibility Highlights

@@ -6,6 +6,7 @@ import { TemplateHelper } from "../utils/template-helper.js";
 import "../../../src/mjo-accordion.js";
 import "../../../src/mjo-alert.js";
 import "../../../src/mjo-avatar.js";
+import "../../../src/mjo-button.js";
 import "../../../src/mjo-chip.js";
 import "../../../src/mjo-theme.js";
 
