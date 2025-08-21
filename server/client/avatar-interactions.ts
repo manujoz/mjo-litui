@@ -53,6 +53,5 @@ window.changeAvatarProp = changeAvatarProp;
 declare global {
     interface Window {
         changeAvatarProp: (prop: string, value: string | boolean) => void;
-        avatarClick: (avatarElement: HTMLElement) => void;
     }
 }

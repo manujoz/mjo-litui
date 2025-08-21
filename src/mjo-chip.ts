@@ -1,15 +1,19 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { AiFillCloseCircle } from "mjo-icons/ai";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { pause } from "./utils/utils.js";
 
 import "./mjo-icon.js";
 import "./mjo-typography.js";
+import { MjoChipClickEvent, MjoChipCloseEvent } from "./types/mjo-chip.js";
 
 @customElement("mjo-chip")
 export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) closable = false;
+    @property({ type: Boolean }) clickable = false;
     @property({ type: Boolean }) disabled = false;
     @property({ type: String }) color: "primary" | "secondary" | "default" | "success" | "warning" | "info" | "error" = "default";
     @property({ type: String }) endIcon?: string;
@@ -19,29 +23,126 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) startIcon?: string;
     @property({ type: String }) value?: string;
     @property({ type: String }) variant: "solid" | "bordered" | "light" | "flat" | "faded" | "shadow" | "dot" = "solid";
+    @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
+
+    @query(".container") private container!: HTMLElement;
+
+    private get computedAriaLabel() {
+        if (this.ariaLabel) return this.ariaLabel;
+
+        if (this.clickable && this.closable) {
+            return `${this.label}. Clickable chip with close button`;
+        } else if (this.clickable) {
+            return `${this.label}. Click to interact`;
+        } else if (this.closable) {
+            return `${this.label}. Press to close`;
+        }
+
+        return `Chip: ${this.label}`;
+    }
+
+    private get computedTabIndex() {
+        if (this.disabled) return -1;
+        if (this.clickable || this.closable) return this.tabIndex ?? 0;
+        return -1;
+    }
 
     render() {
         return html`<div
             class="container"
+            role=${ifDefined(this.clickable || this.closable ? "button" : undefined)}
+            aria-label=${this.computedAriaLabel}
+            aria-describedby=${ifDefined(this.ariaDescribedby)}
+            aria-disabled=${this.disabled ? "true" : "false"}
+            tabindex=${this.computedTabIndex}
             data-color=${this.color}
             data-size=${this.size}
             data-variant=${this.variant}
             data-radius=${this.radius}
             ?data-closable=${this.closable}
+            ?data-clickable=${this.clickable}
             ?data-disabled=${this.disabled}
+            @click=${this.#handleChipClick}
+            @keydown=${this.#handleKeydown}
         >
             ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
             ${this.startIcon ? html`<mjo-icon src=${this.startIcon}></mjo-icon>` : nothing}
             <mjo-typography tag="span" class="label">${this.label}</mjo-typography>
             ${this.endIcon ? html`<mjo-icon src=${this.endIcon}></mjo-icon>` : nothing}
             ${this.closable
-                ? html`<mjo-icon class="close" src=${AiFillCloseCircle} @click=${this.#hanldeClick} role="button" tabindex="0"></mjo-icon>`
+                ? html`<mjo-icon
+                      class="close"
+                      src=${AiFillCloseCircle}
+                      @click=${this.#handleCloseClick}
+                      @keydown=${this.#handleCloseKeydown}
+                      role="button"
+                      tabindex=${this.disabled ? "-1" : "0"}
+                      aria-label="Close ${this.label}"
+                  ></mjo-icon>`
                 : nothing}
         </div>`;
     }
 
-    #hanldeClick() {
-        this.dispatchEvent(new CustomEvent("close", { bubbles: true, composed: true, detail: { value: this.value } }));
+    #handleKeydown(event: KeyboardEvent) {
+        if (this.disabled) return;
+
+        if (event.key === "Escape" && this.closable) {
+            event.preventDefault();
+            this.#handleCloseClick(event);
+        }
+
+        if ((event.key === "Enter" || event.key === " ") && this.clickable) {
+            event.preventDefault();
+            this.#handleChipClick();
+        }
+    }
+
+    #handleCloseKeydown(event: KeyboardEvent) {
+        if (this.disabled) return;
+
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            event.stopPropagation();
+            this.#handleCloseClick(event);
+        }
+    }
+
+    async #handleChipClick() {
+        if (!this.clickable || this.disabled) return;
+
+        this.dispatchEvent(
+            new CustomEvent("chip-click", {
+                bubbles: true,
+                composed: true,
+                detail: { value: this.value || this.label },
+            }),
+        );
+
+        // Add visual feedback animation
+        if (this.container) {
+            this.container.style.transform = "scale(0.95)";
+            await pause(100);
+            this.container.style.transform = "scale(1.02)";
+            await pause(150);
+            this.container.removeAttribute("style");
+        }
+    }
+
+    #handleCloseClick(event?: Event) {
+        if (this.disabled) return;
+
+        if (event) {
+            event.stopPropagation();
+        }
+
+        this.dispatchEvent(
+            new CustomEvent("chip-close", {
+                bubbles: true,
+                composed: true,
+                detail: { value: this.value || this.label },
+            }),
+        );
+
         this.remove();
     }
 
@@ -120,22 +221,22 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 color: var(--mjo-color-gray-800);
             }
             .container[data-color="primary"] mjo-icon.close {
-                color: var(--mjo-primary-color-200, var(--mjo-secondary-foreground-color));
+                color: var(--mjo-primary-color-300, var(--mjo-secondary-foreground-color));
             }
             .container[data-color="secondary"] mjo-icon.close {
-                color: var(--mjo-secondary-color-200, var(--mjo-secondary-foreground-color));
+                color: var(--mjo-secondary-color-300, var(--mjo-secondary-foreground-color));
             }
             .container[data-color="success"] mjo-icon.close {
-                color: #d8ffd2;
+                color: #ace4a3;
             }
             .container[data-color="warning"] mjo-icon.close {
-                color: #fff2c6;
+                color: #e6d6a2;
             }
             .container[data-color="info"] mjo-icon.close {
-                color: #c8e7ff;
+                color: #94bedf;
             }
             .container[data-color="error"] mjo-icon.close {
-                color: #ffccd2;
+                color: #e29aa2;
             }
             .container[data-radius="none"] {
                 border-radius: 0px;
@@ -247,11 +348,11 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 color: var(--mjo-color-error);
             }
             .container[data-variant="faded"] {
-                background-color: var(--mjo-color-gray-600);
+                background-color: var(--mjo-background-color-card);
                 border-style: solid;
                 border-width: 2px;
-                border-color: var(--mjo-color-gray-200);
-                color: var(--mjo-color-white);
+                border-color: var(--mjo-foreground-color);
+                color: var(--mjo-foreground-color);
             }
             .container[data-variant="faded"][data-color="primary"] {
                 color: var(--mjo-primary-color);
@@ -296,7 +397,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
             .container[data-variant="dot"] {
                 border-style: solid;
                 border-width: 2px;
-                border-color: var(--mjo-color-gray-200);
+                border-color: var(--mjo-foreground-color);
                 background-color: transparent;
                 color: var(--mjo-foreground-color);
             }
@@ -330,6 +431,37 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 opacity: 0.5;
                 pointer-events: none;
             }
+
+            /* Accessibility and interaction styles */
+            .container[data-clickable] {
+                cursor: pointer;
+                transition: transform 0.2s ease-in-out;
+            }
+            .container[data-clickable]:hover:not([data-disabled]) {
+                transform: scale(1.02);
+            }
+            .container:focus-visible {
+                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline-offset: 2px;
+            }
+            .container[data-clickable]:focus-visible {
+                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline-offset: 2px;
+            }
+
+            /* Close button improvements */
+            mjo-icon.close {
+                cursor: pointer;
+                transition: opacity 0.2s ease;
+            }
+            mjo-icon.close:hover:not([aria-disabled="true"]) {
+                opacity: 0.8;
+            }
+            mjo-icon.close:focus-visible {
+                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline-offset: 1px;
+                border-radius: 2px;
+            }
         `,
     ];
 }
@@ -337,5 +469,10 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-chip": MjoChip;
+    }
+
+    interface HTMLElementEventMap {
+        "chip-click": MjoChipClickEvent;
+        "chip-close": MjoChipCloseEvent;
     }
 }

@@ -240,11 +240,26 @@ header .subtitle {
     background: var(--mjo-background-color-card-low);
     border-radius: 12px;
     padding: 24px;
-    max-height: 90vh;
+    max-height: 75vh;
     overflow-y: auto;
     border: solid 1px var(--mjo-border-color-low);
     box-shadow: var(--mjo-box-shadow-1);
     user-select: none;
+}
+.controls-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.controls-panel::-webkit-scrollbar-thumb {
+    background: var(--mjo-border-color);
+    border-radius: 4px;
+}
+.controls-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--mjo-border-color-high);
+}
+.controls-panel {
+    scrollbar-width: thin;
+    scrollbar-color: var(--mjo-border-color) transparent;
 }
 
 .control-group {
@@ -252,7 +267,7 @@ header .subtitle {
 }
 
 .control-group h4 {
-    margin: 0 0 12px 0;
+    margin: 0 0 7px 0;
     font-size: 1rem;
     font-weight: 600;
     color: var(--mjo-foreground-color);
@@ -272,6 +287,7 @@ header .subtitle {
     padding: 10px 12px;
     border-radius: var(--mjo-radius-medium);
     font-size: 0.875rem;
+    margin-top: 5px;
     transition: border-color 0.2s ease;
 }
 

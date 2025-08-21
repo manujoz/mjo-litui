@@ -13,7 +13,7 @@ var __privateMethod = (obj, member, method) => {
 };
 var _a, _b;
 import { r as render, n as noChange, a as nothing, h as html, D as Directive, P as PartType, d as directive } from "./lit-core.js";
-import { c as AiFillCloseCircle } from "./index.js";
+import { f as AiFillCloseCircle } from "./index.js";
 /*! js-cookie v3.0.5 | MIT */
 function assign(target) {
   for (var i = 1; i < arguments.length; i++) {
@@ -1408,12 +1408,12 @@ var __privateMethod$1 = (obj, member, method) => {
   __accessCheck$2(obj, member, "access private method");
   return method;
 };
-var _colorByInitial, colorByInitial_fn, _handleKeydown, handleKeydown_fn, _handleClick, handleClick_fn, _handleError, handleError_fn;
+var _colorByInitial, colorByInitial_fn, _handleKeydown$1, handleKeydown_fn$1, _handleClick, handleClick_fn, _handleError, handleError_fn;
 let MjoAvatar = class extends ThemeMixin(LitElement) {
   constructor() {
     super(...arguments);
     __privateAdd$2(this, _colorByInitial);
-    __privateAdd$2(this, _handleKeydown);
+    __privateAdd$2(this, _handleKeydown$1);
     __privateAdd$2(this, _handleClick);
     __privateAdd$2(this, _handleError);
     this.bordered = false;
@@ -1458,7 +1458,7 @@ let MjoAvatar = class extends ThemeMixin(LitElement) {
             ?data-disabled=${this.disabled}
             ?data-clickable=${this.clickable}
             @click=${__privateMethod$1(this, _handleClick, handleClick_fn)}
-            @keydown=${__privateMethod$1(this, _handleKeydown, handleKeydown_fn)}
+            @keydown=${__privateMethod$1(this, _handleKeydown$1, handleKeydown_fn$1)}
         >
             ${this.src && !this.error ? html`<div class="image radius-${this.radius}">
                       <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${__privateMethod$1(this, _handleError, handleError_fn)} />
@@ -1534,8 +1534,8 @@ colorByInitial_fn = function() {
   const fgindex = this.initial.charCodeAt(0) % foregroundColors.length;
   return [backgroundColors[bgindex], foregroundColors[fgindex]];
 };
-_handleKeydown = /* @__PURE__ */ new WeakSet();
-handleKeydown_fn = function(event) {
+_handleKeydown$1 = /* @__PURE__ */ new WeakSet();
+handleKeydown_fn$1 = function(event) {
   if (!this.clickable || this.disabled)
     return;
   if (event.key === "Enter" || event.key === " ") {
@@ -2009,12 +2009,16 @@ var __privateMethod2 = (obj, member, method) => {
   __accessCheck$1(obj, member, "access private method");
   return method;
 };
-var _hanldeClick, hanldeClick_fn;
+var _handleKeydown, handleKeydown_fn, _handleCloseKeydown, handleCloseKeydown_fn, _handleChipClick, handleChipClick_fn, _handleCloseClick, handleCloseClick_fn;
 let MjoChip = class extends ThemeMixin(LitElement) {
   constructor() {
     super(...arguments);
-    __privateAdd$1(this, _hanldeClick);
+    __privateAdd$1(this, _handleKeydown);
+    __privateAdd$1(this, _handleCloseKeydown);
+    __privateAdd$1(this, _handleChipClick);
+    __privateAdd$1(this, _handleCloseClick);
     this.closable = false;
+    this.clickable = false;
     this.disabled = false;
     this.color = "default";
     this.label = "";
@@ -2022,27 +2026,115 @@ let MjoChip = class extends ThemeMixin(LitElement) {
     this.size = "medium";
     this.variant = "solid";
   }
+  get computedAriaLabel() {
+    if (this.ariaLabel)
+      return this.ariaLabel;
+    if (this.clickable && this.closable) {
+      return `${this.label}. Clickable chip with close button`;
+    } else if (this.clickable) {
+      return `${this.label}. Click to interact`;
+    } else if (this.closable) {
+      return `${this.label}. Press to close`;
+    }
+    return `Chip: ${this.label}`;
+  }
+  get computedTabIndex() {
+    if (this.disabled)
+      return -1;
+    if (this.clickable || this.closable)
+      return this.tabIndex ?? 0;
+    return -1;
+  }
   render() {
     return html`<div
             class="container"
+            role=${ifDefined(this.clickable || this.closable ? "button" : void 0)}
+            aria-label=${this.computedAriaLabel}
+            aria-describedby=${ifDefined(this.ariaDescribedby)}
+            aria-disabled=${this.disabled ? "true" : "false"}
+            tabindex=${this.computedTabIndex}
             data-color=${this.color}
             data-size=${this.size}
             data-variant=${this.variant}
             data-radius=${this.radius}
             ?data-closable=${this.closable}
+            ?data-clickable=${this.clickable}
             ?data-disabled=${this.disabled}
+            @click=${__privateMethod2(this, _handleChipClick, handleChipClick_fn)}
+            @keydown=${__privateMethod2(this, _handleKeydown, handleKeydown_fn)}
         >
             ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
             ${this.startIcon ? html`<mjo-icon src=${this.startIcon}></mjo-icon>` : nothing}
             <mjo-typography tag="span" class="label">${this.label}</mjo-typography>
             ${this.endIcon ? html`<mjo-icon src=${this.endIcon}></mjo-icon>` : nothing}
-            ${this.closable ? html`<mjo-icon class="close" src=${AiFillCloseCircle} @click=${__privateMethod2(this, _hanldeClick, hanldeClick_fn)} role="button" tabindex="0"></mjo-icon>` : nothing}
+            ${this.closable ? html`<mjo-icon
+                      class="close"
+                      src=${AiFillCloseCircle}
+                      @click=${__privateMethod2(this, _handleCloseClick, handleCloseClick_fn)}
+                      @keydown=${__privateMethod2(this, _handleCloseKeydown, handleCloseKeydown_fn)}
+                      role="button"
+                      tabindex=${this.disabled ? "-1" : "0"}
+                      aria-label="Close ${this.label}"
+                  ></mjo-icon>` : nothing}
         </div>`;
   }
 };
-_hanldeClick = /* @__PURE__ */ new WeakSet();
-hanldeClick_fn = function() {
-  this.dispatchEvent(new CustomEvent("close", { bubbles: true, composed: true, detail: { value: this.value } }));
+_handleKeydown = /* @__PURE__ */ new WeakSet();
+handleKeydown_fn = function(event) {
+  if (this.disabled)
+    return;
+  if (event.key === "Escape" && this.closable) {
+    event.preventDefault();
+    __privateMethod2(this, _handleCloseClick, handleCloseClick_fn).call(this, event);
+  }
+  if ((event.key === "Enter" || event.key === " ") && this.clickable) {
+    event.preventDefault();
+    __privateMethod2(this, _handleChipClick, handleChipClick_fn).call(this);
+  }
+};
+_handleCloseKeydown = /* @__PURE__ */ new WeakSet();
+handleCloseKeydown_fn = function(event) {
+  if (this.disabled)
+    return;
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    event.stopPropagation();
+    __privateMethod2(this, _handleCloseClick, handleCloseClick_fn).call(this, event);
+  }
+};
+_handleChipClick = /* @__PURE__ */ new WeakSet();
+handleChipClick_fn = async function() {
+  if (!this.clickable || this.disabled)
+    return;
+  this.dispatchEvent(
+    new CustomEvent("chip-click", {
+      bubbles: true,
+      composed: true,
+      detail: { value: this.value || this.label }
+    })
+  );
+  if (this.container) {
+    this.container.style.transform = "scale(0.95)";
+    await pause(100);
+    this.container.style.transform = "scale(1.02)";
+    await pause(150);
+    this.container.removeAttribute("style");
+  }
+};
+_handleCloseClick = /* @__PURE__ */ new WeakSet();
+handleCloseClick_fn = function(event) {
+  if (this.disabled)
+    return;
+  if (event) {
+    event.stopPropagation();
+  }
+  this.dispatchEvent(
+    new CustomEvent("chip-close", {
+      bubbles: true,
+      composed: true,
+      detail: { value: this.value || this.label }
+    })
+  );
   this.remove();
 };
 MjoChip.styles = [
@@ -2120,22 +2212,22 @@ MjoChip.styles = [
                 color: var(--mjo-color-gray-800);
             }
             .container[data-color="primary"] mjo-icon.close {
-                color: var(--mjo-primary-color-200, var(--mjo-secondary-foreground-color));
+                color: var(--mjo-primary-color-300, var(--mjo-secondary-foreground-color));
             }
             .container[data-color="secondary"] mjo-icon.close {
-                color: var(--mjo-secondary-color-200, var(--mjo-secondary-foreground-color));
+                color: var(--mjo-secondary-color-300, var(--mjo-secondary-foreground-color));
             }
             .container[data-color="success"] mjo-icon.close {
-                color: #d8ffd2;
+                color: #ace4a3;
             }
             .container[data-color="warning"] mjo-icon.close {
-                color: #fff2c6;
+                color: #e6d6a2;
             }
             .container[data-color="info"] mjo-icon.close {
-                color: #c8e7ff;
+                color: #94bedf;
             }
             .container[data-color="error"] mjo-icon.close {
-                color: #ffccd2;
+                color: #e29aa2;
             }
             .container[data-radius="none"] {
                 border-radius: 0px;
@@ -2247,11 +2339,11 @@ MjoChip.styles = [
                 color: var(--mjo-color-error);
             }
             .container[data-variant="faded"] {
-                background-color: var(--mjo-color-gray-600);
+                background-color: var(--mjo-background-color-card);
                 border-style: solid;
                 border-width: 2px;
-                border-color: var(--mjo-color-gray-200);
-                color: var(--mjo-color-white);
+                border-color: var(--mjo-foreground-color);
+                color: var(--mjo-foreground-color);
             }
             .container[data-variant="faded"][data-color="primary"] {
                 color: var(--mjo-primary-color);
@@ -2296,7 +2388,7 @@ MjoChip.styles = [
             .container[data-variant="dot"] {
                 border-style: solid;
                 border-width: 2px;
-                border-color: var(--mjo-color-gray-200);
+                border-color: var(--mjo-foreground-color);
                 background-color: transparent;
                 color: var(--mjo-foreground-color);
             }
@@ -2330,11 +2422,45 @@ MjoChip.styles = [
                 opacity: 0.5;
                 pointer-events: none;
             }
+
+            /* Accessibility and interaction styles */
+            .container[data-clickable] {
+                cursor: pointer;
+                transition: transform 0.2s ease-in-out;
+            }
+            .container[data-clickable]:hover:not([data-disabled]) {
+                transform: scale(1.02);
+            }
+            .container:focus-visible {
+                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline-offset: 2px;
+            }
+            .container[data-clickable]:focus-visible {
+                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline-offset: 2px;
+            }
+
+            /* Close button improvements */
+            mjo-icon.close {
+                cursor: pointer;
+                transition: opacity 0.2s ease;
+            }
+            mjo-icon.close:hover:not([aria-disabled="true"]) {
+                opacity: 0.8;
+            }
+            mjo-icon.close:focus-visible {
+                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline-offset: 1px;
+                border-radius: 2px;
+            }
         `
 ];
 __decorateClass$1([
   property({ type: Boolean })
 ], MjoChip.prototype, "closable", 2);
+__decorateClass$1([
+  property({ type: Boolean })
+], MjoChip.prototype, "clickable", 2);
 __decorateClass$1([
   property({ type: Boolean })
 ], MjoChip.prototype, "disabled", 2);
@@ -2362,6 +2488,12 @@ __decorateClass$1([
 __decorateClass$1([
   property({ type: String })
 ], MjoChip.prototype, "variant", 2);
+__decorateClass$1([
+  property({ type: String, attribute: "aria-describedby" })
+], MjoChip.prototype, "ariaDescribedby", 2);
+__decorateClass$1([
+  query(".container")
+], MjoChip.prototype, "container", 2);
 MjoChip = __decorateClass$1([
   customElement("mjo-chip")
 ], MjoChip);
