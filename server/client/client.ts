@@ -14,6 +14,7 @@ import "../../src/mjo-calendar.js";
 import "../../src/mjo-card.js";
 import "../../src/mjo-checkbox.js";
 import "../../src/mjo-chip.js";
+import "../../src/mjo-color-picker.js";
 import "../../src/mjo-theme.js";
 
 // Function to initialize theme after hydration

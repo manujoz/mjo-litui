@@ -87,8 +87,8 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
                     aria-required=${ifDefined(this.required)}
                     aria-describedby=${ifDefined(this.computedAriaDescribedBy)}
                 />
-                ${this.showValue ? html`<div class="value-display" aria-live="polite">${this.getFormattedValue(this.format)}</div>` : nothing}
             </div>
+            ${this.showValue ? html`<div class="value-display" aria-live="polite">${this.getFormattedValue(this.format)}</div>` : nothing}
             ${this.helperText || this.errormsg || this.successmsg
                 ? html`<input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}>${this.helperText}</input-helper-text>`
                 : nothing}
@@ -123,8 +123,13 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
     }
 
     setValue(value: string) {
-        this.value = value;
-        this.#updateVisualColor();
+        try {
+            this.value = convertColor(value, this.format);
+            this.#updateVisualColor();
+        } catch (error) {
+            console.warn(`Failed to convert color ${this.value} to format ${this.format}:`, error);
+            return this.value;
+        }
     }
 
     getFormattedValue(format: ColorFormat): string {
@@ -159,7 +164,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
     #handleInput(event: InputEvent) {
         const target = event.currentTarget as HTMLInputElement;
         this.colorPicker.style.backgroundColor = target.value;
-        this.value = target.value;
+        this.value = convertColor(target.value, this.format);
         this.updateFormData({ name: this.name || "", value: this.value });
         this.#announceColorChange();
 
@@ -229,10 +234,10 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
 
     #updateVisualColor(): void {
         if (this.colorPicker) {
-            this.colorPicker.style.backgroundColor = this.value;
+            this.colorPicker.style.backgroundColor = this.getFormattedValue("hex");
         }
         if (this.inputElement) {
-            this.inputElement.value = this.value;
+            this.inputElement.value = this.getFormattedValue("hex");
         }
     }
 
@@ -249,6 +254,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
             :host {
                 display: inline-block;
                 text-align: left;
+                min-width: 150px;
             }
             :host([rounded]) {
                 --mjo-input-radius: 50%;
@@ -313,22 +319,14 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
                 pointer-events: none;
             }
             .value-display {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--mjo-color-picker-value-background, var(--mjo-background-color, #ffffff));
-                color: var(--mjo-color-picker-value-color, var(--mjo-text-color, #1f2937));
+                position: relative;
+                color: var(--mjo-color-picker-value-color, var(--mjo-foreground-color-low, #1f2937));
                 font-size: var(--mjo-color-picker-value-font-size, 0.75rem);
                 font-weight: var(--mjo-color-picker-value-font-weight, 500);
-                padding: 4px 6px;
-                border: 1px solid var(--mjo-color-picker-border-color, var(--mjo-input-border-color, var(--mjo-border-color, #dddddd)));
+                padding: 2px 0 0;
+                text-align: left;
                 border-top: none;
-                border-radius: 0 0 var(--mjo-radius, 5px) var(--mjo-radius, 5px);
-                text-align: center;
                 white-space: nowrap;
-                z-index: 1;
-                box-shadow: var(--mjo-color-picker-value-box-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
             }
             /* High contrast mode support */
             @media (prefers-contrast: high) {
