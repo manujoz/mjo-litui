@@ -184,6 +184,11 @@
 			"type": "shell",
 			"command": "npm run test",
 			"isBackground": false
+		},
+		{
+			"label": "Check Date Picker TypeScript",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-date-picker.ts"
 		}
 	]
 }
