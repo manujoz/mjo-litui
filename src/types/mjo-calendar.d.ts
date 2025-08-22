@@ -36,6 +36,35 @@ export interface CalendarEventMarker {
 
 export type CalendarHeaderSide = "single" | "left" | "right";
 
+/**
+ * Options for goToMonth method
+ */
+export interface GoToMonthOptions {
+    month: number; // 1-12 (1 = January, 12 = December)
+    year?: number;
+    side?: CalendarHeaderSide;
+}
+
+/**
+ * Options for goToYear method
+ */
+export interface GoToYearOptions {
+    year: number;
+    side?: CalendarHeaderSide;
+}
+
+/**
+ * Options for goToDate method
+ */
+export interface GoToDateOptions {
+    date: Date | string; // Date object or "YYYY-MM-DD" string
+    side?: CalendarHeaderSide;
+}
+
+/**
+ * Calendar navigation events
+ */
+
 export interface CalendarDateSelectedEvent extends CustomEvent {
     detail: {
         date?: Date;

@@ -24,6 +24,9 @@ import {
     CalendarRangeSelectedEvent,
     CalendarYearPickerEvent,
     CalendarYearSelectedEvent,
+    GoToDateOptions,
+    GoToMonthOptions,
+    GoToYearOptions,
 } from "./types/mjo-calendar.js";
 
 /**
@@ -90,11 +93,13 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     get monthNames() {
-        return this.currentLocale.calendar.months;
+        const locale = this.currentLocale;
+        return locale && locale.calendar ? locale.calendar.months : locales.en.calendar.months;
     }
 
     get weekDays() {
-        return this.currentLocale.calendar.weekdaysShort;
+        const locale = this.currentLocale;
+        return locale && locale.calendar ? locale.calendar.weekdaysShort : locales.en.calendar.weekdaysShort;
     }
 
     get computedAriaLabel() {
@@ -325,14 +330,91 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.displayedMonths = normalized;
     }
 
-    /** Programmatically set a month for the given side . */
-    setMonth(side: CalendarHeaderSide, month: number) {
-        this.#setMonth(month, side);
+    /** Navigate to a specific month with automatic side detection */
+    goToMonth(options: GoToMonthOptions) {
+        if (!options || typeof options !== "object") {
+            throw new Error("Option param expect an object");
+        }
+
+        if (!options.year) {
+            options.year = new Date().getFullYear();
+        }
+
+        const { month, year, side } = options;
+
+        if (typeof month !== "number") {
+            throw new Error("Requires a valid month number. Got: " + typeof month);
+        }
+
+        if (typeof year !== "number") {
+            throw new Error("Requires a valid year number. Got: " + typeof year);
+        }
+
+        // Clamp month to valid range (1-12)
+        const clampedMonth = Math.max(1, Math.min(12, month));
+
+        const targetSide = this.#validateSide(side) || this.#getAutomaticSide();
+        this.#setMonthAndYear(clampedMonth - 1, year, targetSide); // Convert to 0-based for internal use
     }
 
-    /** Programmatically set a year for the given side. */
-    setYear(side: CalendarHeaderSide, year: number) {
-        this.#setYear(year, side);
+    /** Navigate to a specific year with automatic side detection */
+    goToYear(options: GoToYearOptions) {
+        if (!options || typeof options !== "object") {
+            throw new Error("Option param expect an object");
+        }
+
+        const { year, side } = options;
+
+        if (typeof year !== "number" || year < 1000 || year > 9999) {
+            throw new Error("goToYear() requires a valid year (1000-9999). Got: " + year);
+        }
+
+        const targetSide = this.#validateSide(side) || this.#getAutomaticSide();
+        const currentDisplayed = this.getDisplayedMonths();
+
+        // Determine current month based on the target side
+        let currentMonth: number;
+        if (targetSide === "right" && currentDisplayed.length >= 2) {
+            currentMonth = currentDisplayed[1].month;
+        } else if (targetSide === "left" && currentDisplayed.length >= 1) {
+            currentMonth = currentDisplayed[0].month;
+        } else {
+            // Default fallback - use first displayed month or current date
+            currentMonth = currentDisplayed.length > 0 ? currentDisplayed[0].month : new Date().getMonth();
+        }
+
+        this.#setMonthAndYear(currentMonth, year, targetSide);
+    }
+
+    /** Navigate to a specific date (month and year simultaneously) */
+    goToDate(options: GoToDateOptions) {
+        if (!options || typeof options !== "object") {
+            throw new Error("Option param expect an object");
+        }
+
+        const { date, side } = options;
+        let targetDate: Date;
+
+        // Parse date input
+        if (date instanceof Date) {
+            targetDate = new Date(date);
+        } else if (typeof date === "string") {
+            targetDate = new Date(date);
+        } else {
+            throw new Error("Date param expect a Date object or date string. Got: " + typeof date);
+        }
+
+        // Validate parsed date
+        if (isNaN(targetDate.getTime())) {
+            throw new Error("Date param expect a valid date. Got: " + date);
+        }
+
+        const targetSide = this.#validateSide(side) || this.#getAutomaticSide();
+        const targetMonth = targetDate.getMonth();
+        const targetYear = targetDate.getFullYear();
+
+        // Update both month and year in a single operation to avoid multiple re-renders
+        this.#setMonthAndYear(targetMonth, targetYear, targetSide);
     }
 
     /** Reset any current selection (single or range) and displayed months to initial state. */
@@ -698,23 +780,36 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     #setMonth(month: number, side: "single" | "left" | "right") {
         if (this.displayedMonths.length === 0) this.#syncDisplayedMonthsFromState();
 
+        // Defensive check - ensure we have at least one displayedMonth
+        if (this.displayedMonths.length === 0 || !this.displayedMonths[0]) {
+            const today = new Date();
+            this.displayedMonths = [{ month: today.getMonth(), year: today.getFullYear() }];
+        }
+
         if (side === "single") {
-            const year = this.displayedMonths[0].year;
+            const year = this.displayedMonths[0]?.year ?? new Date().getFullYear();
             this.displayedMonths = [{ month, year }];
             return;
         }
 
         if (this.displayedMonths.length < 2) this.#syncDisplayedMonthsFromState();
 
+        // Ensure we have two months for range mode
+        if (this.displayedMonths.length < 2) {
+            const first = this.displayedMonths[0];
+            const d = new Date(first?.year ?? new Date().getFullYear(), (first?.month ?? new Date().getMonth()) + 1, 1);
+            this.displayedMonths = [first ?? { month: new Date().getMonth(), year: new Date().getFullYear() }, { month: d.getMonth(), year: d.getFullYear() }];
+        }
+
         const [left] = this.displayedMonths;
 
         if (side === "left") {
-            const newLeft = { month, year: left.year };
+            const newLeft = { month, year: left?.year ?? new Date().getFullYear() };
             const dRight = new Date(newLeft.year, newLeft.month + 1, 1);
 
             this.displayedMonths = [newLeft, { month: dRight.getMonth(), year: dRight.getFullYear() }];
         } else {
-            const rightYear = this.displayedMonths[1].year;
+            const rightYear = this.displayedMonths[1]?.year ?? new Date().getFullYear();
             const newRight = { month, year: rightYear };
             const dLeft = new Date(newRight.year, newRight.month - 1, 1);
 
@@ -725,20 +820,33 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     #setYear(year: number, side: CalendarHeaderSide) {
         if (this.displayedMonths.length === 0) this.#syncDisplayedMonthsFromState();
 
+        // Defensive check - ensure we have at least one displayedMonth
+        if (this.displayedMonths.length === 0 || !this.displayedMonths[0]) {
+            const today = new Date();
+            this.displayedMonths = [{ month: today.getMonth(), year: today.getFullYear() }];
+        }
+
         if (side === "single") {
-            const month = this.displayedMonths[0].month;
+            const month = this.displayedMonths[0]?.month ?? new Date().getMonth();
             this.displayedMonths = [{ month, year }];
             return;
         }
 
         if (this.displayedMonths.length < 2) this.#syncDisplayedMonthsFromState();
 
+        // Ensure we have two months for range mode
+        if (this.displayedMonths.length < 2) {
+            const first = this.displayedMonths[0];
+            const d = new Date(first.year, first.month + 1, 1);
+            this.displayedMonths = [first, { month: d.getMonth(), year: d.getFullYear() }];
+        }
+
         if (side === "left") {
-            const left = { month: this.displayedMonths[0].month, year };
+            const left = { month: this.displayedMonths[0]?.month ?? new Date().getMonth(), year };
             const rightDate = new Date(year, left.month + 1, 1);
             this.displayedMonths = [left, { month: rightDate.getMonth(), year: rightDate.getFullYear() }];
         } else {
-            const right = { month: this.displayedMonths[1].month, year };
+            const right = { month: this.displayedMonths[1]?.month ?? new Date().getMonth(), year };
             const leftDate = new Date(year, right.month - 1, 1);
             this.displayedMonths = [{ month: leftDate.getMonth(), year: leftDate.getFullYear() }, right];
         }
@@ -867,6 +975,58 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 composed: true,
             }),
         );
+    }
+
+    /**
+     * Determines the automatic side to use for navigation when no side is specified.
+     * Returns the appropriate side based on the current mode and rangeCalendars setting.
+     */
+    #getAutomaticSide(): CalendarHeaderSide {
+        if (this.mode === "single") {
+            return "single";
+        }
+
+        // For range mode
+        if (this.rangeCalendars === "1") {
+            return "single";
+        }
+
+        // For rangeCalendars="2" or autoDual, default to left side
+        return "left";
+    }
+
+    /** Validate side parameter and return it if valid, null if invalid */
+    #validateSide(side: string | undefined): CalendarHeaderSide | null {
+        if (side === "single" || side === "left" || side === "right") {
+            return side;
+        }
+        return null;
+    }
+
+    /**
+     * Sets both month and year simultaneously to avoid multiple re-renders.
+     * This is more efficient than calling setMonth and setYear separately.
+     */
+    #setMonthAndYear(month: number, year: number, side: CalendarHeaderSide) {
+        if (this.displayedMonths.length === 0) this.#syncDisplayedMonthsFromState();
+
+        if (side === "single") {
+            this.displayedMonths = [{ month, year }];
+            return;
+        }
+
+        if (this.displayedMonths.length < 2) this.#syncDisplayedMonthsFromState();
+
+        if (side === "left") {
+            const newLeft = { month, year };
+            const rightDate = new Date(year, month + 1, 1);
+            this.displayedMonths = [newLeft, { month: rightDate.getMonth(), year: rightDate.getFullYear() }];
+        } else {
+            // For right side, set right calendar and calculate left as previous month
+            const newRight = { month, year };
+            const leftDate = new Date(year, month - 1, 1);
+            this.displayedMonths = [{ month: leftDate.getMonth(), year: leftDate.getFullYear() }, newRight];
+        }
     }
 
     /** Add delta months to a reference month/year. */

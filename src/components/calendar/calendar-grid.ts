@@ -34,7 +34,7 @@ export class CalendarGrid extends LitElement {
     @property({ type: Object }) focusedDate?: Date;
 
     get gridLabel() {
-        return `Calendar grid for ${this.weekDays[this.month]} ${this.year}`;
+        return `Calendar grid for ${this.year}-${String(this.month + 1).padStart(2, "0")}`;
     }
 
     render() {
@@ -45,11 +45,15 @@ export class CalendarGrid extends LitElement {
         const daysInMonth = lastDay.getDate();
         const today = new Date();
 
+        // Validate weekDays array before using
+        const safeWeekDays =
+            this.weekDays && Array.isArray(this.weekDays) && this.weekDays.length >= 7 ? this.weekDays : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
         // Adjust week days based on first day of week preference
         const weekDaysAdjusted =
             this.firstDayOfWeek === "monday"
-                ? [this.weekDays[1], this.weekDays[2], this.weekDays[3], this.weekDays[4], this.weekDays[5], this.weekDays[6], this.weekDays[0]]
-                : this.weekDays;
+                ? [safeWeekDays[1], safeWeekDays[2], safeWeekDays[3], safeWeekDays[4], safeWeekDays[5], safeWeekDays[6], safeWeekDays[0]]
+                : safeWeekDays;
 
         const days = [];
 

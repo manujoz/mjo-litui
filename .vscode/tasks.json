@@ -40,6 +40,102 @@
 			"label": "TypeScript Check Calendar",
 			"type": "shell",
 			"command": "npx tsc --noEmit src/mjo-calendar.ts"
+		},
+		{
+			"label": "Run Calendar Tests Only",
+			"type": "shell",
+			"command": "npx web-test-runner test/components/mjo-calendar.test.ts --config web-test-runner.config.js",
+			"group": "test"
+		},
+		{
+			"label": "Run Calendar Tests Direct",
+			"type": "shell",
+			"command": "npx web-test-runner test/components/mjo-calendar.test.ts --config web-test-runner.config.js --watch=false",
+			"group": "test"
+		},
+		{
+			"label": "Full Test Suite with Auto-Compilation",
+			"type": "shell",
+			"command": "npm run test",
+			"isBackground": false
+		},
+		{
+			"label": "Build Only",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false
+		},
+		{
+			"label": "Test After Fixes",
+			"type": "shell",
+			"command": "npm run test",
+			"isBackground": false
+		},
+		{
+			"label": "Calendar Tests Only",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-calendar.test.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Build After Grid Fix",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false
+		},
+		{
+			"label": "Build After Header Fix",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false
+		},
+		{
+			"label": "Clean Build",
+			"type": "shell",
+			"command": "rm -rf dist && npm run build",
+			"isBackground": false
+		},
+		{
+			"label": "Build After Fixes",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false
+		},
+		{
+			"label": "Build and Test Specific",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\" --grep \"should navigate to a specific date with explicit side\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Calendar After Deprecated Fix",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Invalid Side Parameter",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\" --grep \"should handle invalid side parameter gracefully\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Invalid Side Parameter Fixed",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\" --grep \"should handle invalid side parameter gracefully\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Explicit Side Fixed",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\" --grep \"should navigate to a specific date with explicit side\"",
+			"isBackground": false
+		},
+		{
+			"label": "Final Calendar Test Suite",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\"",
+			"isBackground": false
 		}
 	]
 }

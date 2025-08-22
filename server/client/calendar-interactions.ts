@@ -54,6 +54,7 @@ function setToday(): void {
 
     if (mode === "single") {
         calendar.setAttribute("value", today);
+        calendar.goToDate({ date: today });
         logEvent(`Set single date to today: ${today}`);
     } else if (mode === "range") {
         const tomorrow = new Date();
@@ -62,6 +63,7 @@ function setToday(): void {
 
         calendar.setAttribute("startDate", today);
         calendar.setAttribute("endDate", endDate);
+        calendar.goToDate({ date: today });
         logEvent(`Set range to today through next week: ${today} - ${endDate}`);
     }
 }

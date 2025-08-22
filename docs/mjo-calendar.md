@@ -693,12 +693,14 @@ The calendar provides a comprehensive API for programmatic control without direc
 
 ### Navigation Methods
 
-| Method                                          | Description                                                                                            |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `getDisplayedMonths(): {month; year;}[]`        | Returns a shallow copy (length 1 or 2) of the months currently rendered.                               |
-| `setDisplayedMonths(months, enforceAdj = true)` | Sets one or two months. If two and `enforceAdj` is true (default), second is coerced to be next month. |
-| `setMonth(side, month)`                         | Sets the month (0–11) for `"single"`, `"left"`, or `"right"` side, preserving adjacency in range mode. |
-| `setYear(side, year)`                           | Sets the year for the given side, re-normalizing adjacency.                                            |
+| Method                                                                              | Description                                                                                            |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `getDisplayedMonths(): {month; year;}[]`                                            | Returns a shallow copy (length 1 or 2) of the months currently rendered.                               |
+| `setDisplayedMonths(months, enforceAdj = true)`                                     | Sets one or two months. If two and `enforceAdj` is true (default), second is coerced to be next month. |
+| `setMonth(side, month)`                                                             | Sets the month (0–11) for `"single"`, `"left"`, or `"right"` side, preserving adjacency in range mode. |
+| `goToDate({ date: string \| Date, side?: 'single' \| 'left' \| 'right' })`          | Navigate to the specific date for the given side.                                                      |
+| `goToMonth({ month: number, year?: number, side?: 'single' \| 'left' \| 'right' })` | Navigate to the month for the given side.                                                              |
+| `goToYear({ year: number, side?: 'single' \| 'left' \| 'right' })`                  | Navigate to the year for the given side.                                                               |
 
 ### Selection Methods
 

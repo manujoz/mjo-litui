@@ -22,16 +22,36 @@ export class CalendarHeader extends LitElement {
     @property({ type: Boolean }) yearPickerOpen = false;
 
     get previousMonthLabel() {
+        if (!this.monthNames || !Array.isArray(this.monthNames) || this.monthNames.length < 12) {
+            return "Previous month";
+        }
         const prevMonth = new Date(this.year, this.month - 1, 1);
-        return `Go to ${this.monthNames[prevMonth.getMonth()]} ${prevMonth.getFullYear()}`;
+        const monthIndex = prevMonth.getMonth();
+        if (monthIndex < 0 || monthIndex >= this.monthNames.length || !this.monthNames[monthIndex]) {
+            return "Previous month";
+        }
+        return `Go to ${this.monthNames[monthIndex]} ${prevMonth.getFullYear()}`;
     }
 
     get nextMonthLabel() {
+        if (!this.monthNames || !Array.isArray(this.monthNames) || this.monthNames.length < 12) {
+            return "Next month";
+        }
         const nextMonth = new Date(this.year, this.month + 1, 1);
-        return `Go to ${this.monthNames[nextMonth.getMonth()]} ${nextMonth.getFullYear()}`;
+        const monthIndex = nextMonth.getMonth();
+        if (monthIndex < 0 || monthIndex >= this.monthNames.length || !this.monthNames[monthIndex]) {
+            return "Next month";
+        }
+        return `Go to ${this.monthNames[monthIndex]} ${nextMonth.getFullYear()}`;
     }
 
     get currentMonthYearLabel() {
+        if (!this.monthNames || !Array.isArray(this.monthNames) || this.monthNames.length < 12) {
+            return `Month ${this.month + 1} ${this.year}`;
+        }
+        if (this.month < 0 || this.month >= this.monthNames.length || !this.monthNames[this.month]) {
+            return `Month ${this.month + 1} ${this.year}`;
+        }
         return `${this.monthNames[this.month]} ${this.year}`;
     }
 
@@ -62,7 +82,11 @@ export class CalendarHeader extends LitElement {
                             aria-label="Select month"
                             aria-expanded=${this.monthPickerOpen ? "true" : "false"}
                         >
-                            <mjo-typography tag="none">${this.monthNames[this.month]}</mjo-typography>
+                            <mjo-typography tag="none">
+                                ${this.monthNames && Array.isArray(this.monthNames) && this.monthNames[this.month]
+                                    ? this.monthNames[this.month]
+                                    : `Month ${this.month + 1}`}
+                            </mjo-typography>
                         </mjo-button>
                         <mjo-button
                             variant="text"
