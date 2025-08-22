@@ -188,20 +188,15 @@ suite("mjo-avatar Component", () => {
             // Test with name only
             const nameAvatar = await csrFixture(html`<mjo-avatar name="Name Avatar"></mjo-avatar>`, options);
 
-            // Test with fallback
-            const fallbackAvatar = await csrFixture(html`<mjo-avatar showFallback></mjo-avatar>`, options);
-
             // Test with src (will fallback due to 404)
             const srcAvatar = await csrFixture(html`<mjo-avatar src="nonexistent.jpg"></mjo-avatar>`, options);
 
             // All should render successfully
             expect(nameAvatar).to.exist;
-            expect(fallbackAvatar).to.exist;
             expect(srcAvatar).to.exist;
 
             // All should have shadow roots
             assertHasShadowRoot(nameAvatar);
-            assertHasShadowRoot(fallbackAvatar);
             assertHasShadowRoot(srcAvatar);
         });
 
@@ -335,11 +330,6 @@ suite("mjo-avatar Component", () => {
             const nameColouredElement = (await csrFixture(html`<mjo-avatar name="Colored Test" nameColoured></mjo-avatar>`, options)) as MjoAvatar;
 
             expect(nameColouredElement.nameColoured).to.be.true;
-
-            // Test showFallback property
-            const fallbackElement = (await csrFixture(html`<mjo-avatar showFallback></mjo-avatar>`, options)) as MjoAvatar;
-
-            expect(fallbackElement.showFallback).to.be.true;
         });
 
         test("should validate dynamic property updates through static testing", async () => {
@@ -415,9 +405,9 @@ suite("mjo-avatar Component", () => {
             expect(altElement.alt).to.equal("Profile picture of John");
 
             // Test fallback property
-            const fallbackElement = (await csrFixture(html`<mjo-avatar showFallback fallback="custom-icon"></mjo-avatar>`, options)) as MjoAvatar;
+            const fallbackElement = (await csrFixture(html`<mjo-avatar fallbackIcon="custom-icon"></mjo-avatar>`, options)) as MjoAvatar;
 
-            expect(fallbackElement.fallback).to.equal("custom-icon");
+            expect(fallbackElement.fallbackIcon).to.equal("custom-icon");
         });
 
         test("should maintain properties across CSR and SSR modes", async () => {
@@ -449,14 +439,13 @@ suite("mjo-avatar Component", () => {
             // Test all default values according to component definition
             expect(element.bordered).to.be.false;
             expect(element.disabled).to.be.false;
-            expect(element.showFallback).to.be.false;
             expect(element.nameColoured).to.be.false;
             expect(element.color).to.equal("default");
             expect(element.radius).to.equal("full");
             expect(element.size).to.equal("medium");
 
             // Optional properties should be undefined
-            expect(element.fallback).to.be.undefined;
+            expect(element.fallbackIcon).to.be.undefined;
             expect(element.alt).to.be.undefined;
             expect(element.name).to.be.undefined;
             expect(element.src).to.be.undefined;
@@ -487,7 +476,6 @@ suite("mjo-avatar Component", () => {
 
             // No fallback or name should be shown
             expect(srcElement.shadowRoot?.querySelector(".image.name")).to.not.exist;
-            expect(srcElement.shadowRoot?.querySelector(".image.fallback")).to.not.exist;
         });
 
         test("should handle name property and initial generation", async () => {
@@ -530,7 +518,7 @@ suite("mjo-avatar Component", () => {
 
             // Simulate image error by triggering error handler manually
             const img = element.shadowRoot?.querySelector("img");
-            expect(img).to.exist;
+            expect(img, "Image not exist").to.exist;
 
             // Trigger error event
             const errorEvent = new Event("error");
@@ -541,7 +529,7 @@ suite("mjo-avatar Component", () => {
 
             // After error, the img element should no longer be present
             const updatedImg = element.shadowRoot?.querySelector(".image img");
-            expect(updatedImg).to.not.exist;
+            expect(updatedImg, "Updated image not exist").to.not.exist;
 
             // Flexible test for cross-browser compatibility (especially Webkit)
             // After error, component should show either fallback or name based on priority logic
@@ -550,15 +538,15 @@ suite("mjo-avatar Component", () => {
 
             if (fallbackDiv) {
                 // If fallback is displayed (expected behavior)
-                expect(fallbackDiv).to.exist;
+                expect(fallbackDiv, "Fallback not exist").to.exist;
                 const fallbackIcon = fallbackDiv.querySelector("mjo-icon");
                 expect(fallbackIcon, "Expected mjo-icon inside fallback").to.exist;
 
                 // Name should NOT be displayed since fallback has priority
-                expect(nameDiv).to.not.exist;
+                expect(nameDiv, "Name div not exist").to.not.exist;
             } else if (nameDiv) {
                 // If name is displayed instead (Webkit timing issue fallback)
-                expect(nameDiv).to.exist;
+                expect(nameDiv, "Name div exist").to.exist;
                 const initialSpan = nameDiv.querySelector("span");
                 expect(initialSpan?.textContent).to.equal("E");
             } else {
@@ -596,79 +584,12 @@ suite("mjo-avatar Component", () => {
             }
         });
 
-        test("should display fallback icon when showFallback is true", async () => {
-            const options = { modules: [AVATAR_MODULE_PATH] };
-
-            // Test with default fallback (should use AiOutlineUser)
-            const defaultFallbackElement = (await csrFixture(html`<mjo-avatar showFallback></mjo-avatar>`, options)) as MjoAvatar;
-
-            await waitForComponentUpdate(defaultFallbackElement);
-
-            expect(defaultFallbackElement.showFallback).to.be.true;
-
-            // The component should call #setFallback() in connectedCallback and show fallback
-            const fallbackDiv = defaultFallbackElement.shadowRoot?.querySelector(".image.fallback");
-            if (!fallbackDiv) {
-                // If no fallback div, check if #setFallback was called and fallbackIcon exists
-                // Component might need additional trigger to set the fallback
-                (defaultFallbackElement as any).connectedCallback();
-                await waitForComponentUpdate(defaultFallbackElement);
-            }
-
-            // Should eventually contain fallback div or show name instead
-            const fallbackExists = defaultFallbackElement.shadowRoot?.querySelector(".image.fallback");
-            const nameExists = defaultFallbackElement.shadowRoot?.querySelector(".image.name");
-
-            // Either fallback or name should exist (fallback might not show without explicit setup)
-            expect(fallbackExists || nameExists).to.exist;
-
-            // Test with custom fallback
-            const customFallbackElement = (await csrFixture(html`<mjo-avatar showFallback fallback="custom-icon-name"></mjo-avatar>`, options)) as MjoAvatar;
-
-            await waitForComponentUpdate(customFallbackElement);
-
-            expect(customFallbackElement.fallback).to.equal("custom-icon-name");
-
-            const customFallbackDiv = customFallbackElement.shadowRoot?.querySelector(".image.fallback");
-            if (customFallbackDiv) {
-                const customIconElement = customFallbackDiv.querySelector("mjo-icon");
-                expect(customIconElement).to.exist;
-                expect(customIconElement?.getAttribute("src")).to.equal("custom-icon-name");
-            }
-        });
-
-        test("should verify integration with mjo-icon component", async () => {
-            const options = { modules: [AVATAR_MODULE_PATH] };
-
-            const element = (await csrFixture(html`<mjo-avatar showFallback fallback="test-icon"></mjo-avatar>`, options)) as MjoAvatar;
-
-            await waitForComponentUpdate(element);
-
-            // Check that fallback is configured
-            expect(element.fallback).to.equal("test-icon");
-            expect(element.showFallback).to.be.true;
-
-            // The fallback div might not always be created - depends on component logic
-            const fallbackContainer = element.shadowRoot?.querySelector(".image.fallback");
-            if (fallbackContainer) {
-                // If fallback container exists, verify mjo-icon integration
-                const iconElement = fallbackContainer.querySelector("mjo-icon");
-                expect(iconElement).to.exist;
-                expect(iconElement?.getAttribute("src")).to.equal("test-icon");
-            } else {
-                // If no fallback container, the component might be showing name or empty state
-                // This is acceptable behavior based on component logic
-                const container = element.shadowRoot?.querySelector(".container");
-                expect(container).to.exist;
-            }
-        });
-
         test("should handle priority: src > fallback > name > empty", async () => {
             const options = { modules: [AVATAR_MODULE_PATH] };
 
             // Test priority with all options present
             const allOptionsElement = (await csrFixture(
-                html`<mjo-avatar src="test.jpg" name="Priority Test" showFallback fallback="fallback-icon"></mjo-avatar>`,
+                html`<mjo-avatar src="test.jpg" name="Priority Test" fallback="fallback-icon"></mjo-avatar>`,
                 options,
             )) as MjoAvatar;
 
@@ -696,10 +617,7 @@ suite("mjo-avatar Component", () => {
             }
 
             // Test fallback priority (no src) - note: fallback implementation may be incomplete
-            const fallbackElement = (await csrFixture(
-                html`<mjo-avatar name="Priority Test" showFallback fallback="fallback-icon"></mjo-avatar>`,
-                options,
-            )) as MjoAvatar;
+            const fallbackElement = (await csrFixture(html`<mjo-avatar name="Priority Test" fallback="fallback-icon"></mjo-avatar>`, options)) as MjoAvatar;
 
             await waitForComponentUpdate(fallbackElement);
 

@@ -22,8 +22,8 @@ export class CalendarGrid extends LitElement {
     @property({ type: Boolean }) showToday = true;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: Boolean }) disabled = false;
-    @property({ type: String }) minDate?: string;
-    @property({ type: String }) maxDate?: string;
+    @property({ type: String }) minDate: string = "";
+    @property({ type: String }) maxDate: string = "";
     @property({ type: Array }) disabledDates?: string[];
 
     // Selection states
@@ -31,6 +31,11 @@ export class CalendarGrid extends LitElement {
     @property({ type: Object }) selectedStartDate?: Date;
     @property({ type: Object }) selectedEndDate?: Date;
     @property({ type: Object }) hoverDate?: Date;
+    @property({ type: Object }) focusedDate?: Date;
+
+    get gridLabel() {
+        return `Calendar grid for ${this.year}-${String(this.month + 1).padStart(2, "0")}`;
+    }
 
     render() {
         const firstDay = new Date(this.year, this.month, 1);
@@ -40,11 +45,15 @@ export class CalendarGrid extends LitElement {
         const daysInMonth = lastDay.getDate();
         const today = new Date();
 
+        // Validate weekDays array before using
+        const safeWeekDays =
+            this.weekDays && Array.isArray(this.weekDays) && this.weekDays.length >= 7 ? this.weekDays : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
         // Adjust week days based on first day of week preference
         const weekDaysAdjusted =
             this.firstDayOfWeek === "monday"
-                ? [this.weekDays[1], this.weekDays[2], this.weekDays[3], this.weekDays[4], this.weekDays[5], this.weekDays[6], this.weekDays[0]]
-                : this.weekDays;
+                ? [safeWeekDays[1], safeWeekDays[2], safeWeekDays[3], safeWeekDays[4], safeWeekDays[5], safeWeekDays[6], safeWeekDays[0]]
+                : safeWeekDays;
 
         const days = [];
 
@@ -66,16 +75,19 @@ export class CalendarGrid extends LitElement {
 
             days.push(html`
                 <calendar-day
-                    .day=${day}
-                    .isToday=${isToday}
-                    .isSelected=${isSelected}
-                    .isInRange=${isInRange}
-                    .isRangeStart=${isRangeStart}
-                    .isRangeEnd=${isRangeEnd}
-                    .isDisabled=${isDisabled}
-                    .isHovered=${isHovered}
-                    .showToday=${this.showToday}
-                    .size=${this.size}
+                    day=${day}
+                    month=${this.month}
+                    year=${this.year}
+                    ?isToday=${isToday}
+                    ?isSelected=${isSelected}
+                    ?isInRange=${isInRange}
+                    ?isRangeStart=${isRangeStart}
+                    ?isRangeEnd=${isRangeEnd}
+                    ?isDisabled=${isDisabled}
+                    ?isHovered=${isHovered}
+                    ?isFocused=${this.#isFocusedDate(date)}
+                    ?showToday=${this.showToday}
+                    size=${this.size}
                     @day-click=${this.#handleDayClick}
                     @day-hover=${this.#handleDayHover}
                     @day-leave=${this.#handleDayLeave}
@@ -84,12 +96,12 @@ export class CalendarGrid extends LitElement {
         }
 
         return html`
-            <div class="calendar-grid" part="calendar-grid">
+            <div class="calendar-grid" part="calendar-grid" role="grid" aria-label=${this.gridLabel}>
                 <!-- Week day headers -->
-                <div class="week-header">
+                <div class="week-header" role="row">
                     ${weekDaysAdjusted.map(
                         (day) => html`
-                            <div class="week-day">
+                            <div class="week-day" role="columnheader">
                                 <mjo-typography tag="none" size="body1">${day}</mjo-typography>
                             </div>
                         `,
@@ -174,6 +186,11 @@ export class CalendarGrid extends LitElement {
         return date > start && date < end;
     }
 
+    #isFocusedDate(date: Date): boolean {
+        if (!this.focusedDate) return false;
+        return CalendarUtils.isSameDay(date, this.focusedDate);
+    }
+
     static styles = css`
         .calendar-grid {
             width: 100%;
@@ -184,6 +201,7 @@ export class CalendarGrid extends LitElement {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 2px;
+            min-width: max-content;
         }
         .week-header {
             margin-bottom: 8px;
@@ -191,6 +209,7 @@ export class CalendarGrid extends LitElement {
 
         .week-day {
             text-align: center;
+            justify-self: center;
             padding: 8px 4px;
             color: var(--mjo-calendar-week-day-color, var(--mjo-foreground-color-xlow, #666));
             font-weight: var(--mjo-calendar-week-day-font-weight, 600);

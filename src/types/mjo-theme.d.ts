@@ -527,6 +527,28 @@ export interface MjoCalendarTheme {
     selectedColorSecondary?: string;
     rangeBackgroundSecondary?: string;
     rangeColorSecondary?: string;
+    focusOutline?: string;
+    pickerBackground?: string;
+    pickerRadius?: string;
+    pickerShadow?: string;
+    pickerButtonBackground?: string;
+    pickerButtonBorder?: string;
+    pickerButtonRadius?: string;
+    pickerButtonColor?: string;
+    pickerButtonHoverBackground?: string;
+    pickerButtonHoverBorder?: string;
+    pickerButtonFocusOutline?: string;
+    pickerButtonSelectedBackground?: string;
+    pickerButtonSelectedBorder?: string;
+    pickerButtonSelectedColor?: string;
+    navBackground?: string;
+    navBorder?: string;
+    navRadius?: string;
+    navColor?: string;
+    navHoverBackground?: string;
+    navHoverBorder?: string;
+    navFocusOutline?: string;
+    decadeLabelColor?: string;
 }
 
 export interface MjoMenuButtonTheme {

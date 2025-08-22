@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 
 /**
  * Month picker component for calendar
@@ -13,18 +13,24 @@ export class CalendarMonthPicker extends LitElement {
     @property({ type: Array }) monthNames: string[] = [];
     @property({ type: Boolean }) disabled = false;
 
+    @state() private focusedMonth = this.selectedMonth;
+
     render() {
         return html`
-            <div class="month-picker" ?data-disabled=${this.disabled}>
-                <div class="months-grid">
+            <div class="month-picker" ?data-disabled=${this.disabled} role="dialog" aria-label="Select month" @keydown=${this.#handleKeydown}>
+                <div class="months-grid" role="grid" aria-label="Month selection grid">
                     ${this.monthNames.map(
                         (month, index) => html`
                             <button
                                 class="month-button"
+                                role="gridcell"
                                 ?data-selected=${index === this.selectedMonth}
                                 ?disabled=${this.disabled}
                                 @click=${() => this.#selectMonth(index)}
-                                tabindex=${this.disabled ? -1 : 0}
+                                tabindex=${this.disabled ? -1 : index === this.focusedMonth ? 0 : -1}
+                                aria-label=${month}
+                                aria-selected=${index === this.selectedMonth ? "true" : "false"}
+                                @focus=${() => this.#setFocusedMonth(index)}
                             >
                                 ${month}
                             </button>
@@ -46,6 +52,71 @@ export class CalendarMonthPicker extends LitElement {
                 composed: true,
             }),
         );
+    }
+
+    #setFocusedMonth(month: number) {
+        this.focusedMonth = month;
+    }
+
+    #handleKeydown(event: KeyboardEvent) {
+        if (this.disabled) return;
+
+        const key = event.key;
+        let handled = false;
+
+        switch (key) {
+            case "ArrowLeft":
+                this.#moveFocus(-1);
+                handled = true;
+                break;
+            case "ArrowRight":
+                this.#moveFocus(1);
+                handled = true;
+                break;
+            case "ArrowUp":
+                this.#moveFocus(-3);
+                handled = true;
+                break;
+            case "ArrowDown":
+                this.#moveFocus(3);
+                handled = true;
+                break;
+            case "Home":
+                this.#setFocusedMonth(0);
+                handled = true;
+                break;
+            case "End":
+                this.#setFocusedMonth(11);
+                handled = true;
+                break;
+            case "Enter":
+            case " ":
+                this.#selectMonth(this.focusedMonth);
+                handled = true;
+                break;
+            case "Escape":
+                // Let parent handle escape
+                break;
+        }
+
+        if (handled) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }
+
+    #moveFocus(delta: number) {
+        let newFocus = this.focusedMonth + delta;
+        if (newFocus < 0) newFocus = 11;
+        if (newFocus > 11) newFocus = 0;
+        this.#setFocusedMonth(newFocus);
+
+        // Focus the appropriate button
+        this.updateComplete.then(() => {
+            const buttons = this.shadowRoot?.querySelectorAll("button");
+            const targetButton = buttons?.[this.focusedMonth];
+            targetButton?.focus();
+        });
     }
 
     static styles = css`

@@ -34,11 +34,12 @@ export class CalendarUtils {
         return localeMap[locale] || "en-US";
     }
 
-    static isDateDisabled(date: Date, disabled: boolean, minDate?: string, maxDate?: string, disabledDates?: string[]): boolean {
+    static isDateDisabled(date: Date, disabled: boolean, minDate: string, maxDate: string, disabledDates?: string[]): boolean {
         if (disabled) return true;
 
         if (minDate) {
             const min = new Date(minDate);
+            min.setDate(min.getDate() - 1);
             if (date < min) return true;
         }
 
