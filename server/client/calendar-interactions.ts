@@ -1,6 +1,7 @@
 // Calendar Interactive Demo TypeScript
 // This functionality loads after client hydration
 
+import { MjoCalendar } from "../../src/mjo-calendar";
 import type { CalendarDateSelectedEvent, CalendarRangeSelectedEvent } from "../../src/types/mjo-calendar";
 
 // Playground interactions
@@ -45,7 +46,7 @@ function resetCalendar(): void {
 }
 
 function setToday(): void {
-    const calendar = document.getElementById("playground-calendar");
+    const calendar = document.getElementById("playground-calendar") as MjoCalendar;
     if (!calendar) return;
 
     const today = new Date().toISOString().split("T")[0];
@@ -104,14 +105,6 @@ function logEvent(message: string): void {
 
 // Initialize calendar examples with special properties
 function initializeCalendarExamples(): void {
-    // Set up disabled dates example
-    const disabledDatesCalendar = document.getElementById("disabled-dates-example");
-    if (disabledDatesCalendar) {
-        // Set disabled dates programmatically
-        const disabledDates = ["2024-12-25", "2025-01-01", "2024-12-31"];
-        (disabledDatesCalendar as any).disabledDates = disabledDates;
-    }
-
     // Set up event markers example
     const eventMarkersCalendar = document.getElementById("event-markers-example");
     if (eventMarkersCalendar) {

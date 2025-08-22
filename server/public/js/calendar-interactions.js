@@ -80,11 +80,6 @@ function logEvent(message) {
   }
 }
 function initializeCalendarExamples() {
-  const disabledDatesCalendar = document.getElementById("disabled-dates-example");
-  if (disabledDatesCalendar) {
-    const disabledDates = ["2024-12-25", "2025-01-01", "2024-12-31"];
-    disabledDatesCalendar.disabledDates = disabledDates;
-  }
   const eventMarkersCalendar = document.getElementById("event-markers-example");
   if (eventMarkersCalendar) {
     const eventMarkers = [

@@ -25,6 +25,15 @@ export class CalendarController {
             previous: previousComponent ? previousComponent.path : undefined,
         });
 
+        const date = new Date();
+        const disabledDates = [date.setDate(date.getDate() + 1), date.setDate(date.getDate() + 2), date.setDate(date.getDate() + 3)];
+
+        // Format disabled dates to yyyy-mm-dd
+        const formattedDisabledDates = disabledDates.map((d) => {
+            const date = new Date(d);
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+        });
+
         const calendarTemplate = html`
             ${unsafeHTML(headerTemplate)}
 
@@ -147,7 +156,7 @@ export class CalendarController {
                             <h4>Actions</h4>
                             <div class="button-group">
                                 <button onclick="resetCalendar()" class="reset-btn">Reset Calendar</button>
-                                <button onclick="setToday()" class="today-btn">Go to Today</button>
+                                <button onclick="setToday()" class="today-btn">Set to Today</button>
                                 <button onclick="clearSelection()" class="clear-btn">Clear Selection</button>
                             </div>
                         </div>
@@ -241,7 +250,7 @@ export class CalendarController {
                     </div>
                     <div class="calendar-example">
                         <h4>Disabled Dates</h4>
-                        <mjo-calendar mode="single" id="disabled-dates-example"></mjo-calendar>
+                        <mjo-calendar mode="single" id="disabled-dates-example" .disabledDates=${formattedDisabledDates}></mjo-calendar>
                     </div>
                 </div>
 

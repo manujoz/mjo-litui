@@ -61,6 +61,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @property({ type: String }) rangeCalendars: "1" | "2" | "auto" = "auto";
 
     // Enhanced functionality properties
+    // TODO: Implement event markers
     @property({ type: Array }) eventMarkers?: { date: string; color?: string; tooltip?: string }[];
     @property({ type: Boolean }) enableKeyboardNavigation = true;
     @property({ type: Boolean }) announceSelections = true;
