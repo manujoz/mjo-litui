@@ -1,13 +1,20 @@
 # mjo-calendar
 
-A comprehensive calendar component for date selection that supports both single date and date range selection modes. Features intuitive navigation controls, adaptive dual-calendar rendering in range mode, internationalization support for 15 languages, form integration via `FormMixin`, extensive theming capabilities through `ThemeMixin`, and a powerful programmatic API.
+A comprehensive calendar component for date selection that supports both single date and date range selection modes. Features intuitive navigation controls, adaptive dual-calendar rendering in range mode, internationalization support for 15 languages, full accessibility implementation with keyboard navigation and screen reader support, form integration via `FormMixin`, extensive theming capabilities through `ThemeMixin`, and a powerful programmatic API.
 
 ## Key Features
 
 -   **Dual Selection Modes**: Single date or date range selection
--   **Adaptive Layout**: Intelligent dual-calendar layout in range mode based on container# nextButton.addEventListener('click', () => navigateCalendar(calendar, 1));
-
-````
+-   **Adaptive Layout**: Intelligent dual-calendar layout in range mode based on container width
+-   **Full Accessibility**: ARIA roles, keyboard navigation, screen reader announcements, and focus management
+-   **Internationalization**: Support for 15 languages with localized month names and weekdays
+-   **Smart Constraints**: Min/max dates and individual disabled dates support
+-   **Form Integration**: Native form support with validation capabilities
+-   **Advanced Theming**: Extensive customization via CSS variables and ThemeMixin
+-   **Programmatic Control**: Complete API for external date manipulation
+-   **Responsive Design**: Adaptive sizing and responsive dual-calendar behavior
+-   **Event Markers**: Support for custom event indicators on dates (planned feature)
+-   **Keyboard Navigation**: Full keyboard support with arrow keys, Page Up/Down, Home/End, and shortcuts
 
 ## Form Integration
 
@@ -22,14 +29,14 @@ The `mjo-calendar` component integrates seamlessly with `mjo-form` through the `
     <mjo-calendar name="vacationPeriod" mode="range"></mjo-calendar>
     <mjo-button type="submit">Submit</mjo-button>
 </mjo-form>
-````
+```
 
 ### Form Data Format
 
 When integrated with forms, the calendar component submits data in the following formats:
 
 -   **Single mode**: `{ fieldName: "2025-01-15" }` (string in YYYY-MM-DD format)
--   **Range mode**: `{ fieldName: "2025-01-10,2025-01-20" }` (comma-separated string)
+-   **Range mode**: `{ fieldName: "{\"start\":\"2025-01-10\",\"end\":\"2025-01-20\"}" }` (JSON string format)
 
 ### Validation Support
 
@@ -54,8 +61,8 @@ export class CalendarFormExample extends LitElement {
         }
 
         if (formData.vacationPeriod) {
-            const [start, end] = formData.vacationPeriod.split(",");
-            console.log("Vacation:", start, "to", end); // "2025-07-01" to "2025-07-14"
+            const range = JSON.parse(formData.vacationPeriod);
+            console.log("Vacation:", range.start, "to", range.end); // "2025-07-01" to "2025-07-14"
         }
     };
 
@@ -76,21 +83,33 @@ export class CalendarFormExample extends LitElement {
 
 ## Accessibility
 
-The `mjo-calendar` component is designed with accessibility in mind:
+The `mjo-calendar` component is designed with comprehensive accessibility features:
 
 ### Keyboard Navigation
 
--   **Arrow Keys**: Navigate between dates
--   **Enter/Space**: Select date
--   **Tab**: Navigate between interactive elements
--   **Escape**: Close month/year pickers
+-   **Arrow Keys**: Navigate between dates (Left/Right for days, Up/Down for weeks)
+-   **Page Up/Page Down**: Navigate by month (Ctrl+Page Up/Down for year navigation)
+-   **Home/End**: Move to start/end of current week
+-   **Enter/Space**: Select focused date
+-   **Escape**: Close month/year pickers or clear focus
+-   **Tab**: Navigate between interactive elements (month/year buttons, navigation)
+-   **T**: Jump to today's date (quick shortcut)
+
+### ARIA Support
+
+-   **Roles**: Proper semantic structure with `application`, `grid`, `gridcell`, `button`, `dialog` roles
+-   **Labels**: Contextual labels for dates, navigation, and pickers
+-   **States**: `aria-selected`, `aria-current`, `aria-disabled`, `aria-expanded` attributes
+-   **Live Regions**: Screen reader announcements for selection changes and navigation
+-   **Focus Management**: Proper focus indicators and focus trapping in pickers
 
 ### Screen Reader Support
 
--   Proper ARIA labels for dates and navigation
--   Semantic structure for calendar grid
--   Announced selection changes
--   Clear focus indicators
+-   **Date Announcements**: Full date context with day of week, date, and status
+-   **Selection Feedback**: Automatic announcements when dates are selected
+-   **Navigation Context**: Clear indication of current month/year being viewed
+-   **Range Context**: Proper announcement of range start, end, and in-between dates
+-   **Picker Context**: Clear indication when entering/exiting month/year selection mode
 
 ### Best Practices
 
@@ -98,8 +117,19 @@ The `mjo-calendar` component is designed with accessibility in mind:
 <!-- Provide descriptive labels for form integration -->
 <mjo-calendar name="appointmentDate" mode="single" aria-label="Select appointment date"></mjo-calendar>
 
+<!-- Use labelledby for complex labeling -->
+<label id="event-date-label">Event Date (required)</label>
+<mjo-calendar name="eventDate" mode="single" aria-labelledby="event-date-label"></mjo-calendar>
+
+<!-- Add descriptions for complex constraints -->
+<span id="date-help">Select a date between January 1 and December 31, 2025</span>
+<mjo-calendar name="limitedDate" mode="single" min-date="2025-01-01" max-date="2025-12-31" aria-describedby="date-help"></mjo-calendar>
+
 <!-- Use appropriate sizing for touch interfaces -->
 <mjo-calendar size="large" mode="single"></mjo-calendar>
+
+<!-- Enable announcements for better feedback -->
+<mjo-calendar mode="range" announce-selections></mjo-calendar>
 ```
 
 > **Legacy API Note**: Previous versions exposed direct property accessors (`currentMonth`, `leftCalendarYear`, etc.). These have been removed in favor of the new methods for better encapsulation and maintainability.
@@ -110,9 +140,105 @@ The component provides extensive CSS customization through variables with fallba
 
 ### Core Structure
 
-| Variable                     | Fallback            | Purpose     |
-| ---------------------------- | ------------------- | ----------- | --------------------------------------------------------------------------------------------- |
-| `--mjo-calendar-font-family` | `--mjo-font-family` | Font family | ll Internationalization\*\*: Support for 15 languages with localized month names and weekdays |
+| Variable                       | Fallback                       | Purpose                   |
+| ------------------------------ | ------------------------------ | ------------------------- |
+| `--mjo-calendar-font-family`   | `--mjo-font-family`            | Calendar font family      |
+| `--mjo-calendar-background`    | `--mjo-background-color`       | Calendar background       |
+| `--mjo-calendar-border`        | `1px solid --mjo-border-color` | Calendar border           |
+| `--mjo-calendar-border-radius` | `--mjo-radius`                 | Calendar border radius    |
+| `--mjo-calendar-shadow`        | `0 2px 8px rgba(0,0,0,0.1)`    | Calendar shadow           |
+| `--mjo-calendar-padding`       | `16px`                         | Calendar internal padding |
+
+### Week Headers
+
+| Variable                              | Fallback                      | Purpose                      |
+| ------------------------------------- | ----------------------------- | ---------------------------- |
+| `--mjo-calendar-week-day-color`       | `--mjo-foreground-color-xlow` | Week day headers text color  |
+| `--mjo-calendar-week-day-font-weight` | `600`                         | Week day headers font weight |
+
+### Day Cells
+
+| Variable                              | Fallback                      | Purpose                      |
+| ------------------------------------- | ----------------------------- | ---------------------------- |
+| `--mjo-calendar-day-border-radius`    | `4px`                         | Individual day border radius |
+| `--mjo-calendar-day-hover-background` | `--mjo-background-color-high` | Day hover background         |
+| `--mjo-calendar-focus-outline`        | `--mjo-primary-color`         | Focused day outline color    |
+
+### Today's Date
+
+| Variable                          | Fallback                     | Purpose                 |
+| --------------------------------- | ---------------------------- | ----------------------- |
+| `--mjo-calendar-today-background` | `--mjo-primary-color-alpha2` | Today's date background |
+| `--mjo-calendar-today-color`      | `--mjo-primary-color`        | Today's date text color |
+
+### Selected Dates
+
+| Variable                             | Fallback              | Purpose                  |
+| ------------------------------------ | --------------------- | ------------------------ |
+| `--mjo-calendar-selected-background` | `--mjo-primary-color` | Selected date background |
+| `--mjo-calendar-selected-color`      | `white`               | Selected date text color |
+
+### Range Selection
+
+| Variable                                   | Fallback                     | Purpose                       |
+| ------------------------------------------ | ---------------------------- | ----------------------------- |
+| `--mjo-calendar-range-endpoint-background` | `--mjo-primary-color`        | Range start/end background    |
+| `--mjo-calendar-range-endpoint-color`      | `white`                      | Range start/end text color    |
+| `--mjo-calendar-range-background`          | `--mjo-primary-color-alpha1` | Range middle dates background |
+| `--mjo-calendar-range-color`               | `--mjo-primary-color`        | Range middle dates text color |
+
+### Disabled State
+
+| Variable                             | Fallback                          | Purpose                   |
+| ------------------------------------ | --------------------------------- | ------------------------- |
+| `--mjo-calendar-disabled-color`      | `--mjo-disabled-foreground-color` | Disabled dates text color |
+| `--mjo-calendar-disabled-background` | `transparent`                     | Disabled dates background |
+
+### Secondary Color Theme
+
+When `color="secondary"`, these variables apply:
+
+| Variable                                             | Fallback                       | Purpose                          |
+| ---------------------------------------------------- | ------------------------------ | -------------------------------- |
+| `--mjo-calendar-today-background-secondary`          | `--mjo-secondary-color-alpha2` | Today background (secondary)     |
+| `--mjo-calendar-today-color-secondary`               | `--mjo-secondary-color`        | Today text color (secondary)     |
+| `--mjo-calendar-selected-background-secondary`       | `--mjo-secondary-color`        | Selected background (secondary)  |
+| `--mjo-calendar-selected-color-secondary`            | `white`                        | Selected text color (secondary)  |
+| `--mjo-calendar-range-endpoint-background-secondary` | `--mjo-secondary-color`        | Range endpoints (secondary)      |
+| `--mjo-calendar-range-endpoint-color-secondary`      | `white`                        | Range endpoints text (secondary) |
+| `--mjo-calendar-range-background-secondary`          | `--mjo-secondary-color-alpha1` | Range background (secondary)     |
+| `--mjo-calendar-range-color-secondary`               | `--mjo-secondary-color`        | Range text color (secondary)     |
+
+### Month/Year Pickers
+
+| Variable                                           | Fallback                         | Purpose                           |
+| -------------------------------------------------- | -------------------------------- | --------------------------------- |
+| `--mjo-calendar-picker-background`                 | `--mjo-background-color`         | Picker overlay background         |
+| `--mjo-calendar-picker-radius`                     | `--mjo-radius`                   | Picker border radius              |
+| `--mjo-calendar-picker-shadow`                     | `0 4px 12px rgba(0,0,0,0.15)`    | Picker shadow                     |
+| `--mjo-calendar-picker-button-background`          | `transparent`                    | Picker button background          |
+| `--mjo-calendar-picker-button-border`              | `1px solid --mjo-border-color`   | Picker button border              |
+| `--mjo-calendar-picker-button-radius`              | `--mjo-radius`                   | Picker button border radius       |
+| `--mjo-calendar-picker-button-color`               | `--mjo-foreground-color-low`     | Picker button text color          |
+| `--mjo-calendar-picker-button-hover-background`    | `--mjo-primary-color-alpha2`     | Picker button hover background    |
+| `--mjo-calendar-picker-button-hover-border`        | `--mjo-primary-color`            | Picker button hover border        |
+| `--mjo-calendar-picker-button-focus-outline`       | `--mjo-primary-color`            | Picker button focus outline       |
+| `--mjo-calendar-picker-button-selected-background` | `--mjo-primary-color`            | Picker button selected background |
+| `--mjo-calendar-picker-button-selected-border`     | `--mjo-primary-color`            | Picker button selected border     |
+| `--mjo-calendar-picker-button-selected-color`      | `--mjo-primary-foreground-color` | Picker button selected text color |
+
+### Year Picker Navigation
+
+| Variable                              | Fallback                       | Purpose                            |
+| ------------------------------------- | ------------------------------ | ---------------------------------- |
+| `--mjo-calendar-nav-background`       | `transparent`                  | Navigation button background       |
+| `--mjo-calendar-nav-border`           | `1px solid --mjo-border-color` | Navigation button border           |
+| `--mjo-calendar-nav-radius`           | `--mjo-radius`                 | Navigation button border radius    |
+| `--mjo-calendar-nav-color`            | `--mjo-foreground-color`       | Navigation button text color       |
+| `--mjo-calendar-nav-hover-background` | `--mjo-primary-color-alpha2`   | Navigation button hover background |
+| `--mjo-calendar-nav-hover-border`     | `--mjo-primary-color`          | Navigation button hover border     |
+| `--mjo-calendar-nav-focus-outline`    | `--mjo-primary-color`          | Navigation button focus outline    |
+| `--mjo-calendar-decade-label-color`   | `--mjo-foreground-color`       | Decade label text color            |
 
 -   **Smart Constraints**: Min/max dates and individual disabled dates support
 -   **Form Integration**: Native form support with validation capabilities
@@ -146,14 +272,34 @@ The component provides extensive CSS customization through variables with fallba
 <!-- Date constraints -->
 <mjo-calendar mode="single" min-date="2025-01-01" max-date="2025-12-31" disabled-dates='["2025-02-14", "2025-07-04"]'></mjo-calendar>
 
+<!-- Accessibility features -->
+<mjo-calendar mode="single" aria-label="Select appointment date" enable-keyboard-navigation announce-selections></mjo-calendar>
+
+<!-- Advanced accessibility -->
+<label id="birth-date-label">Birth Date</label>
+<span id="birth-date-help">Select your birth date (must be before 2010)</span>
+<mjo-calendar name="birthDate" mode="single" aria-labelledby="birth-date-label" aria-describedby="birth-date-help" max-date="2009-12-31"></mjo-calendar>
+
 <!-- Theming and sizing -->
 <mjo-calendar mode="single" color="secondary" size="large"></mjo-calendar>
+
+<!-- Customization with event markers (visual feature) -->
+<mjo-calendar
+    mode="single"
+    event-markers='[
+        {"date": "2025-01-15", "color": "#ff6b6b", "tooltip": "Important meeting"},
+        {"date": "2025-01-20", "color": "#4ecdc4", "tooltip": "Vacation starts"}
+    ]'
+></mjo-calendar>
 
 <!-- Form integration -->
 <mjo-form>
     <mjo-calendar name="eventDate" mode="single" required></mjo-calendar>
-    <mjo-calendar name="vacationPeriod" mode="range" required></mjo-calendar>
+    <mjo-calendar name="vacationPeriod" mode="range"></mjo-calendar>
 </mjo-form>
+
+<!-- Disable features for controlled environments -->
+<mjo-calendar mode="single" enable-keyboard-navigation="false" announce-selections="false" show-today="false"></mjo-calendar>
 ```
 
 ## Basic Examples
@@ -429,25 +575,31 @@ export class ExampleCalendarCustom extends LitElement {
 
 ## Attributes / Properties
 
-| Name              | Type                             | Default     | Reflects | Description                                         |
-| ----------------- | -------------------------------- | ----------- | -------- | --------------------------------------------------- |
-| `mode`            | `"single" \| "range"`            | `"single"`  | no       | Calendar selection mode                             |
-| `name`            | `string \| undefined`            | `undefined` | no       | Form field name for integration with mjo-form       |
-| `value`           | `string \| undefined`            | `undefined` | no       | Selected date in YYYY-MM-DD format (single mode)    |
-| `startDate`       | `string \| undefined`            | `undefined` | no       | Start date for range selection in YYYY-MM-DD format |
-| `endDate`         | `string \| undefined`            | `undefined` | no       | End date for range selection in YYYY-MM-DD format   |
-| `locale`          | `SupportedLocale`                | `"en"`      | no       | Language locale for months/days translation         |
-| `minDate`         | `string \| undefined`            | `undefined` | no       | Minimum selectable date in YYYY-MM-DD format        |
-| `maxDate`         | `string \| undefined`            | `undefined` | no       | Maximum selectable date in YYYY-MM-DD format        |
-| `disabled`        | `boolean`                        | `false`     | yes      | Disables calendar interaction                       |
-| `size`            | `"small" \| "medium" \| "large"` | `"medium"`  | no       | Calendar size                                       |
-| `color`           | `"primary" \| "secondary"`       | `"primary"` | no       | Color theme                                         |
-| `disabledDates`   | `string[] \| undefined`          | `undefined` | no       | Array of disabled dates in YYYY-MM-DD format        |
-| `showToday`       | `boolean`                        | `true`      | no       | Highlight today's date                              |
-| `showWeekNumbers` | `boolean`                        | `false`     | no       | Show week numbers (not implemented yet)             |
-| `firstDayOfWeek`  | `"sunday" \| "monday"`           | `"monday"`  | no       | First day of the week                               |
-| `range-calendars` | `"1" \| "2" \| "auto"`           | `"auto"`    | no       | Range mode calendar layout strategy (see below)     |
-| `theme`           | `Record<string, string>`         | `undefined` | no       | Theme object for ThemeMixin customization           |
+| Name                       | Type                                                      | Default     | Reflects | Description                                         |
+| -------------------------- | --------------------------------------------------------- | ----------- | -------- | --------------------------------------------------- |
+| `mode`                     | `"single" \| "range"`                                     | `"single"`  | no       | Calendar selection mode                             |
+| `name`                     | `string \| undefined`                                     | `undefined` | no       | Form field name for integration with mjo-form       |
+| `value`                    | `string \| undefined`                                     | `undefined` | no       | Selected date in YYYY-MM-DD format (single mode)    |
+| `startDate`                | `string \| undefined`                                     | `undefined` | no       | Start date for range selection in YYYY-MM-DD format |
+| `endDate`                  | `string \| undefined`                                     | `undefined` | no       | End date for range selection in YYYY-MM-DD format   |
+| `locale`                   | `SupportedLocale`                                         | `"en"`      | no       | Language locale for months/days translation         |
+| `minDate`                  | `string \| undefined`                                     | `undefined` | no       | Minimum selectable date in YYYY-MM-DD format        |
+| `maxDate`                  | `string \| undefined`                                     | `undefined` | no       | Maximum selectable date in YYYY-MM-DD format        |
+| `disabled`                 | `boolean`                                                 | `false`     | yes      | Disables calendar interaction                       |
+| `size`                     | `"small" \| "medium" \| "large"`                          | `"medium"`  | no       | Calendar size                                       |
+| `color`                    | `"primary" \| "secondary"`                                | `"primary"` | no       | Color theme                                         |
+| `disabledDates`            | `string[] \| undefined`                                   | `undefined` | no       | Array of disabled dates in YYYY-MM-DD format        |
+| `showToday`                | `boolean`                                                 | `true`      | no       | Highlight today's date                              |
+| `firstDayOfWeek`           | `"sunday" \| "monday"`                                    | `"monday"`  | no       | First day of the week                               |
+| `rangeCalendars`           | `"1" \| "2" \| "auto"`                                    | `"auto"`    | no       | Range mode calendar layout strategy                 |
+| `ariaLabel`                | `string \| null`                                          | `null`      | no       | Accessible label for the calendar                   |
+| `ariaLabelledby`           | `string \| null`                                          | `null`      | no       | ID of element that labels the calendar              |
+| `ariaDescribedby`          | `string \| null`                                          | `null`      | no       | ID of element that describes the calendar           |
+| `ariaLive`                 | `"polite" \| "assertive" \| "off"`                        | `"polite"`  | no       | Live region politeness for announcements            |
+| `eventMarkers`             | `Array<{date: string; color?: string; tooltip?: string}>` | `undefined` | no       | Event markers for specific dates (visual only)      |
+| `enableKeyboardNavigation` | `boolean`                                                 | `true`      | no       | Enable/disable keyboard navigation                  |
+| `announceSelections`       | `boolean`                                                 | `true`      | no       | Enable/disable selection announcements              |
+| `theme`                    | `Record<string, string>`                                  | `undefined` | no       | Theme object for ThemeMixin customization           |
 
 ### Supported Locales
 
@@ -461,17 +613,17 @@ The `locale` property supports the following languages with full month names, ab
 | `ru` | Русский    | `zh` | 中文      | `ja` | 日本語   |
 | `ko` | 한국어     | `tr` | Türkçe    | `pl` | Polski   |
 
-### Range Calendar Layout (`range-calendars`)
+### Range Calendar Layout (`rangeCalendars`)
 
 Controls how many calendars are shown in **range** mode:
 
-| Value  | Behavior                                                                                            |
-| ------ | --------------------------------------------------------------------------------------------------- |
-| `1`    | Always render a single calendar (still supports selecting start then end)                           |
-| `2`    | Always render two adjacent months (left + right)                                                    |
-| `auto` | (Default) Render two calendars when the host (or parent) width ≥ 720px; otherwise fall back to one. |
+| Value    | Behavior                                                                                            |
+| -------- | --------------------------------------------------------------------------------------------------- |
+| `"1"`    | Always render a single calendar (still supports selecting start then end)                           |
+| `"2"`    | Always render two adjacent months (left + right)                                                    |
+| `"auto"` | (Default) Render two calendars when the host (or parent) width ≥ 720px; otherwise fall back to one. |
 
-The auto mode uses a `ResizeObserver` for responsive adaptation.
+The auto mode uses a `ResizeObserver` for responsive adaptation. The threshold is defined by `MjoCalendar.AUTO_DUAL_THRESHOLD = 720` pixels.
 
 ### Size Variations
 
@@ -786,29 +938,94 @@ mjo-calendar.rounded {
 
 ## ThemeMixin Integration
 
-The component supports `ThemeMixin` for component-specific theming:
+The component supports `ThemeMixin` for component-specific theming through the complete `MjoCalendarTheme` interface.
 
-### Theme Object Properties
+### MjoCalendarTheme Interface
 
-The `theme` property accepts an object with the following keys (automatically prefixed with `--mjo-calendar-`):
+The component exposes a comprehensive theming interface with all available CSS customization properties:
 
-| Theme Key            | CSS Variable                         | Purpose                      |
-| -------------------- | ------------------------------------ | ---------------------------- |
-| `background`         | `--mjo-calendar-background`          | Calendar background          |
-| `selectedBackground` | `--mjo-calendar-selected-background` | Selected date background     |
-| `todayBackground`    | `--mjo-calendar-today-background`    | Today's date background      |
-| `todayColor`         | `--mjo-calendar-today-color`         | Today's date text color      |
-| `borderRadius`       | `--mjo-calendar-border-radius`       | Calendar border radius       |
-| `dayBorderRadius`    | `--mjo-calendar-day-border-radius`   | Individual day border radius |
-| `padding`            | `--mjo-calendar-padding`             | Calendar padding             |
-| `shadow`             | `--mjo-calendar-shadow`              | Calendar shadow              |
+```ts
+export interface MjoCalendarTheme {
+    // Core structure
+    fontFamily?: string; // --mjo-calendar-font-family
+    background?: string; // --mjo-calendar-background
+    border?: string; // --mjo-calendar-border
+    borderRadius?: string; // --mjo-calendar-border-radius
+    shadow?: string; // --mjo-calendar-shadow
+    padding?: string; // --mjo-calendar-padding
 
-### ThemeMixin Usage Example
+    // Week headers
+    weekDayColor?: string; // --mjo-calendar-week-day-color
+    weekDayFontWeight?: string; // --mjo-calendar-week-day-font-weight
+
+    // Day cells
+    dayBorderRadius?: string; // --mjo-calendar-day-border-radius
+    dayHoverBackground?: string; // --mjo-calendar-day-hover-background
+    focusOutline?: string; // --mjo-calendar-focus-outline
+
+    // Today's date
+    todayBackground?: string; // --mjo-calendar-today-background
+    todayColor?: string; // --mjo-calendar-today-color
+
+    // Selected dates
+    selectedBackground?: string; // --mjo-calendar-selected-background
+    selectedColor?: string; // --mjo-calendar-selected-color
+
+    // Range selection
+    rangeEndpointBackground?: string; // --mjo-calendar-range-endpoint-background
+    rangeEndpointColor?: string; // --mjo-calendar-range-endpoint-color
+    rangeBackground?: string; // --mjo-calendar-range-background
+    rangeColor?: string; // --mjo-calendar-range-color
+
+    // Disabled state
+    disabledColor?: string; // --mjo-calendar-disabled-color
+    disabledBackground?: string; // --mjo-calendar-disabled-background
+
+    // Secondary color theme (when color="secondary")
+    todayBackgroundSecondary?: string; // --mjo-calendar-today-background-secondary
+    todayColorSecondary?: string; // --mjo-calendar-today-color-secondary
+    selectedBackgroundSecondary?: string; // --mjo-calendar-selected-background-secondary
+    selectedColorSecondary?: string; // --mjo-calendar-selected-color-secondary
+    rangeBackgroundSecondary?: string; // --mjo-calendar-range-background-secondary
+    rangeColorSecondary?: string; // --mjo-calendar-range-color-secondary
+
+    // Month/Year picker overlay
+    pickerBackground?: string; // --mjo-calendar-picker-background
+    pickerRadius?: string; // --mjo-calendar-picker-radius
+    pickerShadow?: string; // --mjo-calendar-picker-shadow
+
+    // Picker buttons (months/years)
+    pickerButtonBackground?: string; // --mjo-calendar-picker-button-background
+    pickerButtonBorder?: string; // --mjo-calendar-picker-button-border
+    pickerButtonRadius?: string; // --mjo-calendar-picker-button-radius
+    pickerButtonColor?: string; // --mjo-calendar-picker-button-color
+    pickerButtonHoverBackground?: string; // --mjo-calendar-picker-button-hover-background
+    pickerButtonHoverBorder?: string; // --mjo-calendar-picker-button-hover-border
+    pickerButtonFocusOutline?: string; // --mjo-calendar-picker-button-focus-outline
+    pickerButtonSelectedBackground?: string; // --mjo-calendar-picker-button-selected-background
+    pickerButtonSelectedBorder?: string; // --mjo-calendar-picker-button-selected-border
+    pickerButtonSelectedColor?: string; // --mjo-calendar-picker-button-selected-color
+
+    // Year picker navigation
+    navBackground?: string; // --mjo-calendar-nav-background
+    navBorder?: string; // --mjo-calendar-nav-border
+    navRadius?: string; // --mjo-calendar-nav-radius
+    navColor?: string; // --mjo-calendar-nav-color
+    navHoverBackground?: string; // --mjo-calendar-nav-hover-background
+    navHoverBorder?: string; // --mjo-calendar-nav-hover-border
+    navFocusOutline?: string; // --mjo-calendar-nav-focus-outline
+    decadeLabelColor?: string; // --mjo-calendar-decade-label-color
+}
+```
+
+### ThemeMixin Usage Examples
+
+#### Basic Theme Customization
 
 ```ts
 @customElement("themed-calendar-example")
 export class ThemedCalendarExample extends LitElement {
-    private calendarTheme = {
+    private calendarTheme: Partial<MjoCalendarTheme> = {
         background: "#f8fafc",
         selectedBackground: "#8b5cf6",
         todayBackground: "#e5e7eb",
@@ -821,6 +1038,77 @@ export class ThemedCalendarExample extends LitElement {
 
     render() {
         return html` <mjo-calendar mode="single" .theme=${this.calendarTheme}></mjo-calendar> `;
+    }
+}
+```
+
+#### Complete Theme Configuration
+
+```ts
+@customElement("advanced-themed-calendar")
+export class AdvancedThemedCalendar extends LitElement {
+    private darkCalendarTheme: Partial<MjoCalendarTheme> = {
+        // Core structure
+        background: "#1f2937",
+        border: "1px solid #374151",
+        borderRadius: "16px",
+        shadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)",
+        padding: "20px",
+        fontFamily: "'Inter', sans-serif",
+
+        // Week headers
+        weekDayColor: "#9ca3af",
+        weekDayFontWeight: "500",
+
+        // Day cells
+        dayBorderRadius: "8px",
+        dayHoverBackground: "#374151",
+        focusOutline: "#60a5fa",
+
+        // Today's date
+        todayBackground: "#1e40af",
+        todayColor: "#ffffff",
+
+        // Selected dates
+        selectedBackground: "#7c3aed",
+        selectedColor: "#ffffff",
+
+        // Range selection
+        rangeEndpointBackground: "#7c3aed",
+        rangeEndpointColor: "#ffffff",
+        rangeBackground: "#5b21b6",
+        rangeColor: "#e5e7eb",
+
+        // Disabled state
+        disabledColor: "#6b7280",
+        disabledBackground: "transparent",
+
+        // Picker overlay
+        pickerBackground: "#111827",
+        pickerRadius: "12px",
+        pickerShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)",
+
+        // Picker buttons
+        pickerButtonBackground: "#374151",
+        pickerButtonBorder: "1px solid #4b5563",
+        pickerButtonRadius: "6px",
+        pickerButtonColor: "#d1d5db",
+        pickerButtonHoverBackground: "#4b5563",
+        pickerButtonHoverBorder: "#6b7280",
+        pickerButtonSelectedBackground: "#7c3aed",
+        pickerButtonSelectedColor: "#ffffff",
+
+        // Navigation
+        navBackground: "#374151",
+        navBorder: "1px solid #4b5563",
+        navRadius: "6px",
+        navColor: "#d1d5db",
+        navHoverBackground: "#4b5563",
+        decadeLabelColor: "#f9fafb",
+    };
+
+    render() {
+        return html` <mjo-calendar mode="range" .theme=${this.darkCalendarTheme} size="large"></mjo-calendar> `;
     }
 }
 ```
@@ -911,11 +1199,17 @@ const [{ month }] = calendar.getDisplayedMonths();
 -   Check that ResizeObserver is supported (modern browsers)
 -   Verify container width calculations
 
-**Form integration not working**
+**Keyboard navigation not working**
 
--   Add `name` attribute for form integration
--   Ensure the calendar is inside a `mjo-form` element
--   Check that FormMixin is properly initialized
+-   Check that `enableKeyboardNavigation` is `true` (default)
+-   Ensure the calendar has proper focus (click on it or tab to it)
+-   Verify no other elements are preventing keyboard events
+
+**Accessibility announcements not working**
+
+-   Check that `announceSelections` is `true` (default)
+-   Ensure `ariaLive` is set to `"polite"` or `"assertive"`
+-   Verify screen reader is running and configured properly
 
 ### Debug Mode
 
@@ -950,39 +1244,68 @@ const observer = new MutationObserver(() => {
 
 ## Form Integration
 
-When used with `name` attribute, the calendar integrates with `mjo-form`:
+When used with the `name` attribute, the calendar integrates seamlessly with `mjo-form`:
 
--   **Single mode**: Emits the selected date as `value`.
--   **Range mode**: Emits a JSON string `{ "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" }` once both dates are chosen.
+### Data Format
+
+-   **Single mode**: Emits the selected date as a string value (YYYY-MM-DD format)
+-   **Range mode**: Emits a JSON string `{"start":"YYYY-MM-DD","end":"YYYY-MM-DD"}` once both dates are selected
+
+### Integration Example
 
 ```html
 <mjo-form>
-    <!-- Single date -->
-    <mjo-calendar name="event-date" mode="single"></mjo-calendar>
+    <!-- Single date selection -->
+    <mjo-calendar name="event-date" mode="single" required></mjo-calendar>
 
-    <!-- Range dates -->
+    <!-- Range date selection -->
     <mjo-calendar name="vacation-dates" mode="range"></mjo-calendar>
 </mjo-form>
 ```
 
-## Accessibility Notes
+### Form Data Access
 
--   Keyboard navigation: planned (not yet implemented).
--   Interactive elements expose semantic roles and ARIA labels where relevant.
--   Locale-driven labeling (month / weekday names) aids screen reader context.
--   String date formats are stable for assistive tech.
+```ts
+// Form submit handler
+const handleFormSubmit = (e: CustomEvent) => {
+    const formData = e.detail;
 
-## Performance Considerations
+    // Single date access
+    console.log("Event date:", formData["event-date"]); // "2025-01-15"
 
--   Calendar renders efficiently using Lit's reactive updates
--   Range hover effects are optimized to minimize redraws
--   Large date ranges are handled smoothly
+    // Range date access
+    if (formData["vacation-dates"]) {
+        const range = JSON.parse(formData["vacation-dates"]);
+        console.log("Vacation:", range.start, "to", range.end);
+    }
+};
+```
 
 ## Browser Support
 
--   Modern evergreen browsers (Chromium, Firefox, WebKit).
--   Relies on Intl for localized month/weekday names (widely supported in modern engines).
--   Uses CSS Grid & shadow DOM.
+The `mjo-calendar` component is built on modern web standards and supports:
+
+-   **Modern browsers**: Chrome 80+, Firefox 72+, Safari 13+, Edge 80+
+-   **Web Components**: Uses standard Custom Elements v1 and Shadow DOM
+-   **ES2020 features**: Requires modern JavaScript support
+-   **ResizeObserver**: Used for responsive behavior (graceful fallback for older browsers)
+-   **Internationalization**: Relies on `Intl.DateTimeFormat` for localized date formatting
+
+## Performance Notes
+
+-   **Efficient Rendering**: Uses Lit's reactive update system for optimal performance
+-   **Memory Management**: Automatic cleanup of event listeners and observers
+-   **Date Calculations**: Optimized algorithms for calendar generation and navigation
+-   **Range Hover**: Debounced hover effects to minimize unnecessary redraws
+-   **Responsive Layout**: Uses `ResizeObserver` for efficient responsive behavior
+-   **On-Demand Pickers**: Month/year picker components are created only when needed
+
+## Related Components
+
+-   **`mjo-date-picker`**: Input field with calendar popup for form inputs
+-   **`mjo-form`**: Form container with validation and data collection
+-   **`mjo-theme`**: Global theme management component
+-   **`mjo-button`**: Button component used in navigation controls
 
 ## Contributing
 

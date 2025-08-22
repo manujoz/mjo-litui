@@ -15,6 +15,7 @@ export class CalendarYearPicker extends LitElement {
     @property({ type: Number }) maxYear?: number;
 
     @state() private startYear = Math.floor(new Date().getFullYear() / 10) * 10;
+    @state() private focusedYear = new Date().getFullYear();
 
     get years() {
         const years = [];
@@ -34,29 +35,45 @@ export class CalendarYearPicker extends LitElement {
 
     render() {
         return html`
-            <div class="year-picker" ?data-disabled=${this.disabled}>
+            <div class="year-picker" ?data-disabled=${this.disabled} role="dialog" aria-label="Select year" @keydown=${this.#handleKeydown}>
                 <div class="year-navigation">
-                    <button class="nav-button" ?disabled=${this.disabled} @click=${this.#previousDecade} title="Previous decade: ${this.previousDecadeLabel}">
+                    <button
+                        class="nav-button"
+                        ?disabled=${this.disabled}
+                        @click=${this.#previousDecade}
+                        title="Previous decade: ${this.previousDecadeLabel}"
+                        aria-label="Previous decade: ${this.previousDecadeLabel}"
+                    >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                         </svg>
                     </button>
                     <span class="decade-label">${this.startYear} - ${this.startYear + 11}</span>
-                    <button class="nav-button" ?disabled=${this.disabled} @click=${this.#nextDecade} title="Next decade: ${this.nextDecadeLabel}">
+                    <button
+                        class="nav-button"
+                        ?disabled=${this.disabled}
+                        @click=${this.#nextDecade}
+                        title="Next decade: ${this.nextDecadeLabel}"
+                        aria-label="Next decade: ${this.nextDecadeLabel}"
+                    >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
                         </svg>
                     </button>
                 </div>
-                <div class="years-grid">
+                <div class="years-grid" role="grid" aria-label="Year selection grid">
                     ${this.years.map(
                         (year) => html`
                             <button
                                 class="year-button"
+                                role="gridcell"
                                 ?data-selected=${year === this.selectedYear}
                                 ?disabled=${this.disabled || this.#isYearDisabled(year)}
                                 @click=${() => this.#selectYear(year)}
-                                tabindex=${this.disabled || this.#isYearDisabled(year) ? -1 : 0}
+                                tabindex=${this.disabled || this.#isYearDisabled(year) ? -1 : year === this.focusedYear ? 0 : -1}
+                                aria-label=${year.toString()}
+                                aria-selected=${year === this.selectedYear ? "true" : "false"}
+                                @focus=${() => this.#setFocusedYear(year)}
                             >
                                 ${year}
                             </button>
@@ -99,6 +116,87 @@ export class CalendarYearPicker extends LitElement {
         if (this.disabled) return;
 
         this.startYear += 12;
+    }
+
+    #setFocusedYear(year: number) {
+        this.focusedYear = year;
+    }
+
+    #handleKeydown(event: KeyboardEvent) {
+        if (this.disabled) return;
+
+        const key = event.key;
+        let handled = false;
+
+        switch (key) {
+            case "ArrowLeft":
+                this.#moveFocus(-1);
+                handled = true;
+                break;
+            case "ArrowRight":
+                this.#moveFocus(1);
+                handled = true;
+                break;
+            case "ArrowUp":
+                this.#moveFocus(-4);
+                handled = true;
+                break;
+            case "ArrowDown":
+                this.#moveFocus(4);
+                handled = true;
+                break;
+            case "Home":
+                this.#setFocusedYear(this.startYear);
+                handled = true;
+                break;
+            case "End":
+                this.#setFocusedYear(this.startYear + 11);
+                handled = true;
+                break;
+            case "PageUp":
+                this.#previousDecade();
+                this.#setFocusedYear(Math.max(this.startYear, this.focusedYear - 12));
+                handled = true;
+                break;
+            case "PageDown":
+                this.#nextDecade();
+                this.#setFocusedYear(Math.min(this.startYear + 11, this.focusedYear + 12));
+                handled = true;
+                break;
+            case "Enter":
+            case " ":
+                if (!this.#isYearDisabled(this.focusedYear)) {
+                    this.#selectYear(this.focusedYear);
+                    handled = true;
+                }
+                break;
+            case "Escape":
+                // Let parent handle escape
+                break;
+        }
+
+        if (handled) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }
+
+    #moveFocus(delta: number) {
+        let newFocus = this.focusedYear + delta;
+
+        // Keep focus within current decade
+        if (newFocus < this.startYear) newFocus = this.startYear;
+        if (newFocus > this.startYear + 11) newFocus = this.startYear + 11;
+
+        this.#setFocusedYear(newFocus);
+
+        // Focus the appropriate button
+        this.updateComplete.then(() => {
+            const buttons = this.shadowRoot?.querySelectorAll(".year-button");
+            const yearIndex = newFocus - this.startYear;
+            const targetButton = buttons?.[yearIndex] as HTMLButtonElement;
+            targetButton?.focus();
+        });
     }
 
     static styles = css`

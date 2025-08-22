@@ -297,5 +297,4 @@ globalThis.litElementHydrateSupport = ({ LitElement }) => {
     }
   };
 };
-console.log("🔧 Lit SSR hydration support loaded");
 //# sourceMappingURL=lit-hydration.js.map

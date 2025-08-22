@@ -10,6 +10,8 @@ import "../../mjo-typography.js";
 @customElement("calendar-day")
 export class CalendarDay extends LitElement {
     @property({ type: Number }) day!: number;
+    @property({ type: Number }) month!: number;
+    @property({ type: Number }) year!: number;
     @property({ type: Boolean }) isEmpty = false;
     @property({ type: Boolean }) isToday = false;
     @property({ type: Boolean }) isSelected = false;
@@ -18,12 +20,36 @@ export class CalendarDay extends LitElement {
     @property({ type: Boolean }) isRangeEnd = false;
     @property({ type: Boolean }) isDisabled = false;
     @property({ type: Boolean }) isHovered = false;
+    @property({ type: Boolean }) isFocused = false;
     @property({ type: Boolean }) showToday = true;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
 
+    get dateLabel() {
+        if (this.isEmpty || !this.month || !this.year) return "";
+
+        const date = new Date(this.year, this.month, this.day);
+        const formatter = new Intl.DateTimeFormat("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+
+        let label = formatter.format(date);
+
+        if (this.isToday) label += ", Today";
+        if (this.isSelected) label += ", Selected";
+        if (this.isRangeStart) label += ", Range start";
+        if (this.isRangeEnd) label += ", Range end";
+        if (this.isInRange) label += ", In selected range";
+        if (this.isDisabled) label += ", Disabled";
+
+        return label;
+    }
+
     render() {
         if (this.isEmpty) {
-            return html`<div class="day empty"></div>`;
+            return html`<div class="day empty" role="gridcell"></div>`;
         }
 
         const dayClasses = {
@@ -35,12 +61,19 @@ export class CalendarDay extends LitElement {
             "range-end": this.isRangeEnd,
             disabled: this.isDisabled,
             "hovered-range": this.isHovered,
+            focused: this.isFocused,
         };
 
         return html`
             <div
                 class=${classMap(dayClasses)}
                 part="day ${this.isSelected ? "selected" : ""} ${this.isToday ? "today" : ""}"
+                role="gridcell"
+                aria-label=${this.dateLabel}
+                aria-selected=${this.isSelected ? "true" : "false"}
+                aria-current=${this.isToday ? "date" : "false"}
+                aria-disabled=${this.isDisabled ? "true" : "false"}
+                tabindex=${this.isFocused ? 0 : -1}
                 @click=${this.#handleClick}
                 @mouseenter=${this.#handleMouseEnter}
                 @mouseleave=${this.#handleMouseLeave}
@@ -94,7 +127,6 @@ export class CalendarDay extends LitElement {
             border-radius: var(--mjo-calendar-day-border-radius, 4px);
             transition: all 0.2s ease;
             position: relative;
-            min-height: 32px;
             font-size: 1.3em;
         }
 
@@ -119,17 +151,17 @@ export class CalendarDay extends LitElement {
             font-weight: 600;
         }
 
+        .day.in-range,
+        .day.hovered-range {
+            background: var(--mjo-calendar-range-background, var(--mjo-primary-color-alpha1, rgba(29, 127, 219, 0.2)));
+            color: var(--mjo-calendar-range-color, var(--mjo-primary-color, #1d7fdb));
+        }
+
         .day.range-start,
         .day.range-end {
             background: var(--mjo-calendar-range-endpoint-background, var(--mjo-primary-color, #1d7fdb));
             color: var(--mjo-calendar-range-endpoint-color, white);
             font-weight: 600;
-        }
-
-        .day.in-range,
-        .day.hovered-range {
-            background: var(--mjo-calendar-range-background, var(--mjo-primary-color-alpha1, rgba(29, 127, 219, 0.2)));
-            color: var(--mjo-calendar-range-color, var(--mjo-primary-color, #1d7fdb));
         }
 
         .day.disabled {
@@ -140,6 +172,11 @@ export class CalendarDay extends LitElement {
 
         .day.disabled:hover {
             background: var(--mjo-calendar-disabled-background, transparent);
+        }
+
+        .day.focused {
+            outline: 2px solid var(--mjo-calendar-focus-outline, var(--mjo-primary-color, #1d7fdb));
+            outline-offset: 2px;
         }
 
         /* Size variations */

@@ -15,6 +15,23 @@ export interface CalendarDateInfo {
     isRangeEnd: boolean;
     isDisabled: boolean;
     isHovered: boolean;
+    hasEvents?: boolean;
+    tooltip?: string;
+}
+
+// Calendar component types
+export type MjoCalendarMode = "single" | "range" | "multiple";
+export type MjoCalendarSize = "small" | "medium" | "large";
+export type MjoCalendarColor = "primary" | "secondary";
+export type MjoCalendarRangeCalendars = "1" | "2" | "auto";
+export type MjoCalendarFirstDayOfWeek = "sunday" | "monday";
+
+// Calendar event marker interface
+export interface CalendarEventMarker {
+    date: string; // ISO date string
+    color?: string;
+    tooltip?: string;
+    className?: string;
 }
 
 export type CalendarHeaderSide = "single" | "left" | "right";

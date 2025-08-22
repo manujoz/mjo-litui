@@ -12,16 +12,13 @@ class MjoHMRClient {
     this.isShuttingDown = false;
     this.hasReloadScheduled = false;
     if (window.mjoHMRClient) {
-      console.log("🔥 HMR client already exists, reusing instance");
       return window.mjoHMRClient;
     }
     window.mjoHMRClient = this;
     this.init();
   }
   init() {
-    console.log("🔥 Starting HMR client v3.0...");
     if (window.mjHMRInitialized) {
-      console.log("🔥 HMR already initialized, exiting...");
       return;
     }
     window.mjHMRInitialized = true;
@@ -30,7 +27,6 @@ class MjoHMRClient {
   }
   setupCleanupListeners() {
     window.addEventListener("beforeunload", () => {
-      console.log("🔄 Page closing, cleaning up HMR...");
       this.isShuttingDown = true;
       this.cleanup();
     });
@@ -40,18 +36,16 @@ class MjoHMRClient {
     });
     document.addEventListener("visibilitychange", () => {
       if (document.hidden && this.isReloading) {
-        console.log("🔄 Page hidden during reload, cleaning up...");
         this.cleanup();
       }
     });
   }
   cleanup() {
-    console.log("🧹 Cleaning up HMR client...");
     if (this.ws) {
       try {
         this.ws.close(1e3, "Cleanup");
       } catch (error) {
-        console.log("⚠️ Error closing WebSocket:", error);
+        console.warn("⚠️ Error closing WebSocket:", error);
       }
       this.ws = null;
     }
@@ -59,16 +53,13 @@ class MjoHMRClient {
   }
   connect() {
     if (this.isShuttingDown || this.isReloading || this.hasReloadScheduled) {
-      console.log("🔥 HMR connection skipped: invalid state");
       return;
     }
     if (this.isConnected) {
-      console.log("🔥 Already connected to HMR");
       return;
     }
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const wsUrl = `${protocol}//${window.location.host}/hmr`;
-    console.log("🔌 Connecting to HMR WebSocket:", wsUrl);
     try {
       this.ws = new WebSocket(wsUrl);
       this.setupEventListeners();
@@ -81,7 +72,6 @@ class MjoHMRClient {
     if (!this.ws)
       return;
     this.ws.onopen = () => {
-      console.log("✅ HMR client connected");
       this.isConnected = true;
       this.reconnectAttempts = 0;
       this.showNotification("🔥 HMR connected", "success");
@@ -95,7 +85,6 @@ class MjoHMRClient {
       }
     };
     this.ws.onclose = (event) => {
-      console.log("❌ HMR WebSocket connection closed:", event.code, event.reason);
       this.isConnected = false;
       if (!this.isReloading && this.reconnectAttempts < this.maxReconnectAttempts) {
         this.scheduleReconnect();
@@ -108,9 +97,7 @@ class MjoHMRClient {
   }
   handleHMREvent(event) {
     var _a, _b;
-    console.log("📡 HMR event received:", event.type, event.data);
     if (this.isReloading || this.isShuttingDown || this.hasReloadScheduled) {
-      console.log("🔄 Ignoring HMR event: invalid state");
       return;
     }
     switch (event.type) {
@@ -138,41 +125,36 @@ class MjoHMRClient {
         this.scheduleReload();
         break;
       default:
-        console.log("🤷‍♂️ Unhandled HMR event:", event.type);
+        console.warn("🤷‍♂️ Unhandled HMR event:", event.type);
     }
   }
   scheduleReload() {
     if (this.hasReloadScheduled || this.isReloading || this.isShuttingDown) {
-      console.log("🔄 Reload already scheduled or in progress");
       return;
     }
     const timeSinceLastBuild = Date.now() - this.lastBuildCompleteTime;
     if (timeSinceLastBuild > 0 && timeSinceLastBuild < this.reloadCooldown) {
-      console.log(`⏳ Reload in cooldown, waiting ${this.reloadCooldown - timeSinceLastBuild}ms more`);
       setTimeout(() => this.scheduleReload(), this.reloadCooldown - timeSinceLastBuild);
       return;
     }
-    console.log("🔄 Scheduling page reload...");
     this.hasReloadScheduled = true;
     this.isReloading = true;
     this.cleanup();
     this.showNotification("🔄 Reloading page...", "info");
     setTimeout(() => {
-      console.log("🔄 Executing reload...");
       window.location.reload();
     }, 800);
   }
   scheduleReconnect() {
     if (this.isReloading || this.reconnectAttempts >= this.maxReconnectAttempts) {
       if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-        console.log("❌ Maximum reconnect attempts reached");
+        console.warn("❌ Maximum reconnect attempts reached");
         this.showNotification("❌ HMR permanently disconnected", "error");
       }
       return;
     }
     this.reconnectAttempts++;
     const delay = this.reconnectDelay * Math.pow(1.5, this.reconnectAttempts - 1);
-    console.log(`🔄 Retrying connection in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
     setTimeout(() => {
       if (!this.isReloading && !this.isConnected) {
         this.connect();

@@ -20,6 +20,26 @@
 			"label": "TypeScript Check Card Controller",
 			"type": "shell",
 			"command": "npx tsc --noEmit server/src/controllers/card-controller.ts"
+		},
+		{
+			"label": "Build Server Client",
+			"type": "shell",
+			"command": "npm run server:build:client"
+		},
+		{
+			"label": "TypeScript Check with npx",
+			"type": "shell",
+			"command": "npx tsc --noEmit"
+		},
+		{
+			"label": "Calendar TypeScript Check",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-calendar.ts"
+		},
+		{
+			"label": "TypeScript Check Calendar",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-calendar.ts"
 		}
 	]
 }

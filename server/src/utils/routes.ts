@@ -2,6 +2,7 @@ import { AccordionController } from "../controllers/accordion-controller.js";
 import { AlertController } from "../controllers/alert-controller.js";
 import { AvatarController } from "../controllers/avatar-controller.js";
 import { ButtonController } from "../controllers/button-controller.js";
+import { CalendarController } from "../controllers/calendar-controller.js";
 import { CardController } from "../controllers/card-controller.js";
 import { CheckboxController } from "../controllers/checkbox-controller.js";
 import { ChipController } from "../controllers/chip-controller.js";
@@ -11,6 +12,7 @@ const indexController = new IndexController();
 const alertController = new AlertController();
 const avatarController = new AvatarController();
 const buttonController = new ButtonController();
+const calendarController = new CalendarController();
 const cardController = new CardController();
 const checkboxController = new CheckboxController();
 const chipController = new ChipController();
@@ -36,6 +38,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-button",
         controller: buttonController.renderButtonPage,
+    },
+    {
+        path: "/component/mjo-calendar",
+        controller: calendarController.renderCalendarPage,
     },
     {
         path: "/component/mjo-card",

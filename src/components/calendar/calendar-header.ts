@@ -18,11 +18,27 @@ export class CalendarHeader extends LitElement {
     @property({ type: String }) side: CalendarHeaderSide = "single";
     @property({ type: Array }) monthNames!: string[];
     @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean }) monthPickerOpen = false;
+    @property({ type: Boolean }) yearPickerOpen = false;
+
+    get previousMonthLabel() {
+        const prevMonth = new Date(this.year, this.month - 1, 1);
+        return `Go to ${this.monthNames[prevMonth.getMonth()]} ${prevMonth.getFullYear()}`;
+    }
+
+    get nextMonthLabel() {
+        const nextMonth = new Date(this.year, this.month + 1, 1);
+        return `Go to ${this.monthNames[nextMonth.getMonth()]} ${nextMonth.getFullYear()}`;
+    }
+
+    get currentMonthYearLabel() {
+        return `${this.monthNames[this.month]} ${this.year}`;
+    }
 
     render() {
         return html`
-            <div class="calendar-header" part="header">
-                <div class="navigation" part="navigation">
+            <div class="calendar-header" part="header" role="banner">
+                <div class="navigation" part="navigation" role="toolbar" aria-label="Calendar navigation">
                     ${this.side === "single" || this.side === "left"
                         ? html`
                               <mjo-button
@@ -32,15 +48,29 @@ export class CalendarHeader extends LitElement {
                                   startIcon=${FaChevronLeft}
                                   @click=${this.#handlePrevious}
                                   ?disabled=${this.disabled}
+                                  aria-label=${this.previousMonthLabel}
+                                  title=${this.previousMonthLabel}
                               ></mjo-button>
                           `
                         : nothing}
 
-                    <div class="month-year-selectors" part="month-year">
-                        <mjo-button variant="text" @click=${this.#handleMonthClick} ?disabled=${this.disabled}>
+                    <div class="month-year-selectors" part="month-year" role="group" aria-label=${this.currentMonthYearLabel}>
+                        <mjo-button
+                            variant="text"
+                            @click=${this.#handleMonthClick}
+                            ?disabled=${this.disabled}
+                            aria-label="Select month"
+                            aria-expanded=${this.monthPickerOpen ? "true" : "false"}
+                        >
                             <mjo-typography tag="none">${this.monthNames[this.month]}</mjo-typography>
                         </mjo-button>
-                        <mjo-button variant="text" @click=${this.#handleYearClick} ?disabled=${this.disabled}>
+                        <mjo-button
+                            variant="text"
+                            @click=${this.#handleYearClick}
+                            ?disabled=${this.disabled}
+                            aria-label="Select year"
+                            aria-expanded=${this.yearPickerOpen ? "true" : "false"}
+                        >
                             <mjo-typography tag="none">${this.year}</mjo-typography>
                         </mjo-button>
                     </div>
@@ -54,6 +84,8 @@ export class CalendarHeader extends LitElement {
                                   startIcon=${FaChevronRight}
                                   @click=${this.#handleNext}
                                   ?disabled=${this.disabled}
+                                  aria-label=${this.nextMonthLabel}
+                                  title=${this.nextMonthLabel}
                               ></mjo-button>
                           `
                         : nothing}
@@ -113,6 +145,8 @@ export class CalendarHeader extends LitElement {
             align-items: center;
             justify-content: space-between;
             gap: 8px;
+            min-width: max-content;
+            --mjo-button-disabled-background-color: transparent;
         }
 
         .month-year-selectors {

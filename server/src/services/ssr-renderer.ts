@@ -7,6 +7,7 @@ import "../../../src/mjo-accordion.js";
 import "../../../src/mjo-alert.js";
 import "../../../src/mjo-avatar.js";
 import "../../../src/mjo-button.js";
+import "../../../src/mjo-calendar.js";
 import "../../../src/mjo-card.js";
 import "../../../src/mjo-checkbox.js";
 import "../../../src/mjo-chip.js";
