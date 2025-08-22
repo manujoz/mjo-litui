@@ -1,5 +1,124 @@
-function g(i,d){const t=document.getElementById("playground-checkbox");if(t){if(typeof d=="string"?i==="label"?t.setAttribute("label",d||"Interactive Demo"):d.trim()===""?t.removeAttribute(i):t.setAttribute(i,d):d?t.setAttribute(i,""):t.removeAttribute(i),i==="checked"&&d===!0){t.removeAttribute("indeterminate");const s=document.querySelector('input[name="indeterminate"]');s&&(s.checked=!1)}else if(i==="indeterminate"&&d===!0){t.removeAttribute("checked");const s=document.querySelector('input[name="checked"]');s&&(s.checked=!1)}}}document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("mjo-checkbox").forEach(c=>{c.addEventListener("change",n=>{console.log("Standard change event:",n)}),c.addEventListener("mjo-checkbox-change",n=>{const o=n,{element:l,checked:e,indeterminate:r,value:m,name:f,previousState:h}=o.detail;if(console.log("Checkbox changed:",{name:f,value:m,checked:e,indeterminate:r,previousState:h,element:l.tagName}),l.id==="playground-checkbox"){let u=`Checkbox "${f}" changed!`;u+=`
-State: ${r?"indeterminate":e?"checked":"unchecked"}`,u+=`
-Value: ${m}`,u+=`
-Previous: ${h.indeterminate?"indeterminate":h.checked?"checked":"unchecked"}`,alert(u)}}),c.addEventListener("mjo-checkbox-indeterminate-change",n=>{console.log("Checkbox indeterminate changed:",n.detail)}),c.addEventListener("mjo-checkbox-focus",n=>{console.log("Checkbox focused:",n.detail.element.getAttribute("label"))}),c.addEventListener("mjo-checkbox-blur",n=>{console.log("Checkbox blurred:",n.detail.element.getAttribute("label"))})}),document.querySelectorAll('mjo-checkbox[name*="demo"]').forEach(c=>{c.addEventListener("mjo-checkbox-change",n=>{const o=n,{checked:l,name:e,value:r}=o.detail;console.log(l?`Form field "${e}" with value "${r}" was selected`:`Form field "${e}" was deselected`)})});const d=document.querySelectorAll('mjo-checkbox[checkgroup="preferences"]');let t=[];d.forEach(c=>{c.hasAttribute("checked")&&t.push(c.getAttribute("value")||""),c.addEventListener("mjo-checkbox-change",n=>{const o=n,{checked:l,value:e}=o.detail;l&&e?t.includes(e)||t.push(e):e&&(t=t.filter(r=>r!==e)),console.log("Preferences selected:",t)})});const s=document.querySelectorAll('mjo-checkbox[checkgroup="features"]');let a=[];s.forEach(c=>{c.hasAttribute("checked")&&a.push(c.getAttribute("value")||""),c.addEventListener("mjo-checkbox-change",n=>{const o=n,{checked:l,value:e}=o.detail;l&&e?a.includes(e)||a.push(e):e&&(a=a.filter(r=>r!==e)),console.log("Features selected:",a)})})});window.changeCheckboxProp=g;
+function changeCheckboxProp(prop, value) {
+  const checkbox = document.getElementById("playground-checkbox");
+  if (!checkbox)
+    return;
+  if (typeof value === "string") {
+    if (prop === "label") {
+      checkbox.setAttribute("label", value || "Interactive Demo");
+    } else if (value.trim() === "") {
+      checkbox.removeAttribute(prop);
+    } else {
+      checkbox.setAttribute(prop, value);
+    }
+  } else {
+    if (value) {
+      checkbox.setAttribute(prop, "");
+    } else {
+      checkbox.removeAttribute(prop);
+    }
+  }
+  if (prop === "checked" && value === true) {
+    checkbox.removeAttribute("indeterminate");
+    const indeterminateInput = document.querySelector('input[name="indeterminate"]');
+    if (indeterminateInput)
+      indeterminateInput.checked = false;
+  } else if (prop === "indeterminate" && value === true) {
+    checkbox.removeAttribute("checked");
+    const checkedInput = document.querySelector('input[name="checked"]');
+    if (checkedInput)
+      checkedInput.checked = false;
+  }
+}
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("mjo-checkbox").forEach((checkbox) => {
+    checkbox.addEventListener("change", (ev) => {
+      console.log("Standard change event:", ev);
+    });
+    checkbox.addEventListener("mjo-checkbox-change", (ev) => {
+      const event = ev;
+      const { element, checked, indeterminate, value, name, previousState } = event.detail;
+      console.log("Checkbox changed:", {
+        name,
+        value,
+        checked,
+        indeterminate,
+        previousState,
+        element: element.tagName
+      });
+      if (element.id === "playground-checkbox") {
+        let message = `Checkbox "${name}" changed!`;
+        message += `
+State: ${indeterminate ? "indeterminate" : checked ? "checked" : "unchecked"}`;
+        message += `
+Value: ${value}`;
+        message += `
+Previous: ${previousState.indeterminate ? "indeterminate" : previousState.checked ? "checked" : "unchecked"}`;
+        alert(message);
+      }
+    });
+    checkbox.addEventListener("mjo-checkbox-indeterminate-change", (ev) => {
+      const event = ev;
+      console.log("Checkbox indeterminate changed:", event.detail);
+    });
+    checkbox.addEventListener("mjo-checkbox-focus", (ev) => {
+      const event = ev;
+      console.log("Checkbox focused:", event.detail.element.getAttribute("label"));
+    });
+    checkbox.addEventListener("mjo-checkbox-blur", (ev) => {
+      const event = ev;
+      console.log("Checkbox blurred:", event.detail.element.getAttribute("label"));
+    });
+  });
+  const formExamples = document.querySelectorAll('mjo-checkbox[name*="demo"]');
+  formExamples.forEach((checkbox) => {
+    checkbox.addEventListener("mjo-checkbox-change", (ev) => {
+      const event = ev;
+      const { checked, name, value } = event.detail;
+      if (checked) {
+        console.log(`Form field "${name}" with value "${value}" was selected`);
+      } else {
+        console.log(`Form field "${name}" was deselected`);
+      }
+    });
+  });
+  const preferencesGroup = document.querySelectorAll('mjo-checkbox[checkgroup="preferences"]');
+  let preferencesSelected = [];
+  preferencesGroup.forEach((checkbox) => {
+    if (checkbox.hasAttribute("checked")) {
+      preferencesSelected.push(checkbox.getAttribute("value") || "");
+    }
+    checkbox.addEventListener("mjo-checkbox-change", (ev) => {
+      const event = ev;
+      const { checked, value } = event.detail;
+      if (checked && value) {
+        if (!preferencesSelected.includes(value)) {
+          preferencesSelected.push(value);
+        }
+      } else if (value) {
+        preferencesSelected = preferencesSelected.filter((v) => v !== value);
+      }
+      console.log("Preferences selected:", preferencesSelected);
+    });
+  });
+  const featuresGroup = document.querySelectorAll('mjo-checkbox[checkgroup="features"]');
+  let featuresSelected = [];
+  featuresGroup.forEach((checkbox) => {
+    if (checkbox.hasAttribute("checked")) {
+      featuresSelected.push(checkbox.getAttribute("value") || "");
+    }
+    checkbox.addEventListener("mjo-checkbox-change", (ev) => {
+      const event = ev;
+      const { checked, value } = event.detail;
+      if (checked && value) {
+        if (!featuresSelected.includes(value)) {
+          featuresSelected.push(value);
+        }
+      } else if (value) {
+        featuresSelected = featuresSelected.filter((v) => v !== value);
+      }
+      console.log("Features selected:", featuresSelected);
+    });
+  });
+});
+window.changeCheckboxProp = changeCheckboxProp;
 //# sourceMappingURL=checkbox-interactions.js.map

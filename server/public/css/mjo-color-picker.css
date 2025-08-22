@@ -1,0 +1,192 @@
+/* Color Picker Specific Styles */
+
+.color-demo-section {
+    background: var(--mjo-background-color-card);
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.color-showcase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+    padding: 16px 0;
+}
+
+.color-showcase mjo-color-picker {
+    margin-bottom: 8px;
+}
+
+.color-format-demo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.format-example {
+    background: var(--mjo-background-color);
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+}
+
+.format-label {
+    font-size: 0.875rem;
+    color: var(--mjo-foreground-color-low);
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.interactive-demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 20px 0;
+}
+
+.color-palette-demo {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.palette-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.palette-label {
+    min-width: 80px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--mjo-foreground-color);
+}
+
+/* Enhanced playground showcase for color picker */
+.playground-showcase {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px 20px;
+}
+
+/* Controls panel specific to color picker */
+.controls-panel .control-group input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: var(--mjo-radius, 5px);
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-family: inherit;
+    font-size: 0.875rem;
+}
+
+.controls-panel .control-group input[type="text"]:focus {
+    outline: none;
+    border-color: var(--mjo-primary-color);
+    box-shadow: 0 0 0 2px rgba(29, 127, 219, 0.2);
+}
+
+.controls-panel .control-group select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: var(--mjo-radius, 5px);
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-family: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.controls-panel .control-group select:focus {
+    outline: none;
+    border-color: var(--mjo-primary-color);
+    box-shadow: 0 0 0 2px rgba(29, 127, 219, 0.2);
+}
+
+/* Accessibility improvements */
+.color-picker-demo {
+    position: relative;
+}
+
+.color-picker-demo:focus-within {
+    outline: 2px solid var(--mjo-primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .color-demo-section {
+        border-width: 2px;
+    }
+
+    .format-example {
+        border-width: 2px;
+    }
+
+    .controls-panel .control-group input,
+    .controls-panel .control-group select {
+        border-width: 2px;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .interactive-demo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .color-format-demo {
+        grid-template-columns: 1fr;
+    }
+
+    .color-showcase {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .palette-row {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+
+    .palette-label {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .playground-container {
+        flex-direction: column;
+    }
+
+    .controls-panel {
+        width: 100%;
+    }
+}
+
+/* Dark theme specific adjustments */
+@media (prefers-color-scheme: dark) {
+    .color-demo-section {
+        background: var(--mjo-background-color-card, #1f2937);
+        border-color: var(--mjo-border-color, #374151);
+    }
+
+    .format-example {
+        background: var(--mjo-background-color, #111827);
+        border-color: var(--mjo-border-color, #374151);
+    }
+}

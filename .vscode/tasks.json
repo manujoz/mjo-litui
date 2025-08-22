@@ -136,6 +136,16 @@
 			"type": "shell",
 			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\"",
 			"isBackground": false
+		},
+		{
+			"label": "Check Color Picker Only",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-color-picker.ts"
+		},
+		{
+			"label": "TypeScript Build Config Check",
+			"type": "shell",
+			"command": "npx tsc --noEmit -p tsconfig.build.json"
 		}
 	]
 }
