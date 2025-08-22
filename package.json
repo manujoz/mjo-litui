@@ -75,7 +75,9 @@
     },
     "scripts": {
         "dev": "vite",
-        "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
+        "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md && npm run build:minify",
+        "build:minify": "node scripts/minify-dist.js",
+        "build:unminified": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
         "build:publish": "npm run build && cd dist && npm publish",
         "preview": "vite preview",
         "test": "npm run build && web-test-runner",
@@ -130,6 +132,7 @@
         "ncp": "^2.0.0",
         "nodemon": "^3.1.10",
         "prettier": "^3.2.4",
+        "terser": "^5.43.1",
         "tsx": "^4.20.4",
         "typescript": "^5.2.2",
         "validate-branch-name": "^1.3.0",

@@ -146,6 +146,44 @@
 			"label": "TypeScript Build Config Check",
 			"type": "shell",
 			"command": "npx tsc --noEmit -p tsconfig.build.json"
+		},
+		{
+			"label": "Install Terser",
+			"type": "shell",
+			"command": "npm install --save-dev terser@^5.33.0"
+		},
+		{
+			"label": "Test Build With Minification",
+			"type": "shell",
+			"command": "npm run build"
+		},
+		{
+			"label": "Test Avatar After Fix",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-avatar.test.ts\""
+		},
+		{
+			"label": "Test Avatar Clean Build",
+			"type": "shell",
+			"command": "npm run build:unminified && npx web-test-runner --files \"test/components/mjo-avatar.test.ts\""
+		},
+		{
+			"label": "Test Avatar After Role Fix",
+			"type": "shell",
+			"command": "npm run build:unminified && npx web-test-runner --files \"test/components/mjo-avatar.test.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Final Avatar Test Execution",
+			"type": "shell",
+			"command": "npm run build:unminified && npx web-test-runner --files \"test/components/mjo-avatar.test.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Complete Test Suite Verification",
+			"type": "shell",
+			"command": "npm run test",
+			"isBackground": false
 		}
 	]
 }

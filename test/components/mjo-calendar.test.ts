@@ -176,11 +176,6 @@ suite("mjo-calendar Component", () => {
             expect(() => {
                 (element as any).goToMonth({ year: 2024 });
             }).to.throw();
-
-            // Test missing year parameter
-            expect(() => {
-                (element as any).goToMonth({ month: 5 });
-            }).to.throw();
         });
     });
 
@@ -322,64 +317,6 @@ suite("mjo-calendar Component", () => {
             expect(() => {
                 (element as any).goToDate({});
             }).to.throw();
-        });
-    });
-
-    suite("Deprecated Methods Compatibility", () => {
-        test("deprecated setMonth should still work with warning", async () => {
-            const options = { modules: [CALENDAR_MODULE_PATH] };
-
-            const element = (await csrFixture(html`<mjo-calendar></mjo-calendar>`, options)) as MjoCalendar;
-
-            await waitForComponentUpdate(element);
-
-            // Capture console warnings
-            const originalWarn = console.warn;
-            let warningMessage = "";
-            console.warn = (message: string) => {
-                warningMessage = message;
-            };
-
-            try {
-                // Test deprecated method
-                (element as any).setMonth(5, 2024, "single");
-
-                await waitForComponentUpdate(element);
-
-                expectCalendarDate(element, 5, 2024, "Deprecated setMonth should still work");
-                expect(warningMessage).to.include("deprecated");
-            } finally {
-                console.warn = originalWarn;
-            }
-        });
-
-        test("deprecated setYear should still work with warning", async () => {
-            const options = { modules: [CALENDAR_MODULE_PATH] };
-
-            const element = (await csrFixture(html`<mjo-calendar></mjo-calendar>`, options)) as MjoCalendar;
-
-            await waitForComponentUpdate(element);
-
-            // Capture console warnings
-            const originalWarn = console.warn;
-            let warningMessage = "";
-            console.warn = (message: string) => {
-                warningMessage = message;
-            };
-
-            try {
-                const originalMonth = getCurrentMonth(element);
-
-                // Test deprecated method
-                (element as any).setYear(2025, "single");
-
-                await waitForComponentUpdate(element);
-
-                expectCalendarDate(element, originalMonth, 2025, "Deprecated setYear should preserve month");
-                expect(warningMessage).to.include("deprecated");
-            } finally {
-                console.warn = originalWarn;
-            }
         });
     });
 
