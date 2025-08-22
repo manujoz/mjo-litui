@@ -10,6 +10,235 @@ Form-integrated color picker component providing visual color selection with val
 <mjo-color-picker helperText="Choose your preferred color" required></mjo-color-picker>
 ```
 
+## Color Utilities
+
+The `mjo-litui` library includes comprehensive color utility functions that can be used independently of the color picker component. These utilities are available for any color manipulation needs in your application.
+
+### Basic Color Conversion Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import { convertColor, toHex, toRgb, toHsl, isValidColor } from "mjo-litui";
+
+@customElement("example-color-utilities")
+export class ExampleColorUtilities extends LitElement {
+    @state() private inputColor = "#3b82f6";
+    @state() private convertedColors: Record<string, string> = {};
+
+    private convertToAllFormats() {
+        if (!isValidColor(this.inputColor)) {
+            this.convertedColors = { error: "Invalid color format" };
+            return;
+        }
+
+        this.convertedColors = {
+            hex: toHex(this.inputColor),
+            rgb: toRgb(this.inputColor),
+            rgba: convertColor(this.inputColor, "rgba"),
+            hsl: toHsl(this.inputColor),
+            hsla: convertColor(this.inputColor, "hsla"),
+            hwb: convertColor(this.inputColor, "hwb"),
+        };
+    }
+
+    private handleColorInput(event: Event) {
+        const target = event.target as HTMLInputElement;
+        this.inputColor = target.value;
+        this.convertToAllFormats();
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.convertToAllFormats();
+    }
+
+    render() {
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <h4>Color Utility Functions Demo</h4>
+
+                <div>
+                    <label for="color-input">Enter any color (hex, rgb, hsl, etc.):</label>
+                    <input
+                        id="color-input"
+                        type="text"
+                        .value=${this.inputColor}
+                        @input=${this.handleColorInput}
+                        placeholder="e.g., #3b82f6, rgb(59, 130, 246), hsl(217, 91%, 60%)"
+                        style="padding: 0.5rem; margin-top: 0.5rem; width: 300px;"
+                    />
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    ${Object.entries(this.convertedColors).map(
+                        ([format, value]) => html`
+                            <div style="padding: 1rem; border: 1px solid #e5e7eb; border-radius: 8px;">
+                                <h5 style="margin: 0 0 0.5rem 0; text-transform: uppercase;">${format}</h5>
+                                <code style="background: #f3f4f6; padding: 0.25rem 0.5rem; border-radius: 4px; word-break: break-all;"> ${value} </code>
+                                ${format !== "error"
+                                    ? html`
+                                          <div
+                                              style="width: 100%; height: 20px; background: ${value}; margin-top: 0.5rem; border-radius: 4px; border: 1px solid #d1d5db;"
+                                          ></div>
+                                      `
+                                    : ""}
+                            </div>
+                        `,
+                    )}
+                </div>
+            </div>
+        `;
+    }
+}
+```
+
+### Available Color Utility Functions
+
+#### Conversion Functions
+
+-   `convertColor(color: string, targetFormat: ColorFormat, sourceFormat?: ColorFormat, alpha?: number): string`
+-   `toHex(color: string, sourceFormat?: ColorFormat): string`
+-   `toRgb(color: string, sourceFormat?: ColorFormat): string`
+-   `toRgba(color: string, alpha?: number, sourceFormat?: ColorFormat): string`
+-   `toHsl(color: string, sourceFormat?: ColorFormat): string`
+-   `toHsla(color: string, alpha?: number, sourceFormat?: ColorFormat): string`
+-   `toHwb(color: string, sourceFormat?: ColorFormat): string`
+
+#### Validation Functions
+
+-   `isValidColor(color: string, format?: ColorFormat): boolean`
+-   `detectColorFormat(color: string): ColorFormat`
+
+#### Parsing Functions
+
+-   `parseHexToRgb(hex: string): RGBColor`
+-   `parseRgbString(rgbString: string): RGBColor & { a?: number }`
+-   `parseHslString(hslString: string): HSLColor & { a?: number }`
+-   `parseHwbString(hwbString: string): HWBColor`
+
+#### Direct Conversion Functions
+
+-   `rgbToHsl(r: number, g: number, b: number): HSLColor`
+-   `rgbToHwb(r: number, g: number, b: number): HWBColor`
+-   `rgbToHex(r: number, g: number, b: number): string`
+-   `hslToRgb(h: number, s: number, l: number): RGBColor`
+-   `hwbToRgb(h: number, w: number, b: number): RGBColor`
+
+### Advanced Color Utilities Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import { parseHexToRgb, rgbToHsl, hslToRgb, rgbToHex, convertColor, isValidColor, detectColorFormat } from "mjo-litui";
+
+@customElement("example-advanced-color-utilities")
+export class ExampleAdvancedColorUtilities extends LitElement {
+    @state() private baseColor = "#3b82f6";
+
+    private generateColorPalette(baseHex: string) {
+        const rgb = parseHexToRgb(baseHex);
+        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+
+        return [-40, -20, 0, 20, 40].map((offset) => {
+            const newLightness = Math.max(10, Math.min(90, hsl.l + offset));
+            const newRgb = hslToRgb(hsl.h, hsl.s, newLightness);
+            return {
+                name: offset === 0 ? "Base" : offset > 0 ? `+${offset}` : `${offset}`,
+                hex: rgbToHex(newRgb.r, newRgb.g, newRgb.b),
+            };
+        });
+    }
+
+    private generateComplementaryColors(baseHex: string) {
+        const rgb = parseHexToRgb(baseHex);
+        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+
+        return [
+            { name: "Original", hex: baseHex, angle: 0 },
+            { name: "Complementary", hex: rgbToHex(...Object.values(hslToRgb((hsl.h + 180) % 360, hsl.s, hsl.l))), angle: 180 },
+            { name: "Triadic 1", hex: rgbToHex(...Object.values(hslToRgb((hsl.h + 120) % 360, hsl.s, hsl.l))), angle: 120 },
+            { name: "Triadic 2", hex: rgbToHex(...Object.values(hslToRgb((hsl.h + 240) % 360, hsl.s, hsl.l))), angle: 240 },
+        ];
+    }
+
+    render() {
+        const palette = this.generateColorPalette(this.baseColor);
+        const complementary = this.generateComplementaryColors(this.baseColor);
+
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <h4>Advanced Color Utilities</h4>
+
+                <div>
+                    <label>Base Color:</label>
+                    <input
+                        type="color"
+                        .value=${this.baseColor}
+                        @change=${(e: Event) => (this.baseColor = (e.target as HTMLInputElement).value)}
+                        style="margin-left: 1rem; width: 50px; height: 30px;"
+                    />
+                    <span style="margin-left: 1rem;"> ${this.baseColor} (${detectColorFormat(this.baseColor)} format) </span>
+                </div>
+
+                <div>
+                    <h5>Lightness Variations</h5>
+                    <div style="display: flex; gap: 0.5rem;">
+                        ${palette.map(
+                            (variant) => html`
+                                <div style="text-align: center;">
+                                    <div
+                                        style="width: 50px; height: 50px; background: ${variant.hex}; border: 1px solid #ccc; margin-bottom: 0.25rem;"
+                                        title="${variant.hex}"
+                                    ></div>
+                                    <div style="font-size: 0.7rem;">${variant.name}</div>
+                                </div>
+                            `,
+                        )}
+                    </div>
+                </div>
+
+                <div>
+                    <h5>Color Harmony</h5>
+                    <div style="display: flex; gap: 1rem;">
+                        ${complementary.map(
+                            (color) => html`
+                                <div style="text-align: center;">
+                                    <div
+                                        style="width: 60px; height: 60px; background: ${color.hex}; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 0.25rem;"
+                                        title="${color.hex}"
+                                    ></div>
+                                    <div style="font-size: 0.8rem; font-weight: 500;">${color.name}</div>
+                                    <div style="font-size: 0.7rem; color: #666;">${color.hex}</div>
+                                </div>
+                            `,
+                        )}
+                    </div>
+                </div>
+
+                <div>
+                    <h5>Format Conversions</h5>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem;">
+                        ${(["hex", "rgb", "hsl", "hwb"] as const).map(
+                            (format) => html`
+                                <div style="padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 6px; text-align: center;">
+                                    <div style="font-size: 0.7rem; font-weight: 500; text-transform: uppercase; margin-bottom: 0.25rem;">${format}</div>
+                                    <code
+                                        style="font-size: 0.65rem; background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 3px; word-break: break-all;"
+                                    >
+                                        ${convertColor(this.baseColor, format)}
+                                    </code>
+                                </div>
+                            `,
+                        )}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+```
+
 ## Basic Example
 
 ```ts
@@ -79,97 +308,32 @@ export class ExampleColorPickerSizes extends LitElement {
 ```ts
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import type { MjoFormResponse } from "mjo-litui/types";
 import "mjo-litui/mjo-color-picker";
 import "mjo-litui/mjo-form";
-import "mjo-litui/mjo-button";
 import "mjo-litui/mjo-textfield";
 
 @customElement("example-color-picker-form")
 export class ExampleColorPickerForm extends LitElement {
     @state() private formData: Record<string, string> = {};
-    @state() private submitted = false;
 
-    private handleFormSubmit(event: CustomEvent<{ response: MjoFormResponse }>) {
+    private handleFormSubmit(event: CustomEvent) {
         const { response } = event.detail;
-
         if (!response.error) {
             this.formData = response.data || {};
-            this.submitted = true;
-
-            // Simulate async operation
-            setTimeout(() => {
-                const submitButton = response.submitButton;
-                if (submitButton) {
-                    submitButton.loading = false;
-                }
-            }, 1500);
         }
-    }
-
-    private resetForm() {
-        this.formData = {};
-        this.submitted = false;
     }
 
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Theme Configuration Form</h4>
-                    <mjo-form @submit=${this.handleFormSubmit}>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                            <mjo-textfield label="Theme Name" name="themeName" required helperText="Enter a name for your theme"></mjo-textfield>
-
-                            <mjo-color-picker
-                                label="Primary Color"
-                                name="primaryColor"
-                                value="#3b82f6"
-                                required
-                                helperText="Main brand color"
-                            ></mjo-color-picker>
-
-                            <mjo-color-picker label="Secondary Color" name="secondaryColor" color="secondary" value="#6b7280" required></mjo-color-picker>
-
-                            <mjo-color-picker label="Accent Color" name="accentColor" value="#10b981" size="large"></mjo-color-picker>
-
-                            <mjo-color-picker label="Background Color" name="backgroundColor" value="#ffffff" rounded></mjo-color-picker>
-
-                            <mjo-color-picker label="Text Color" name="textColor" value="#1f2937" size="small"></mjo-color-picker>
-                        </div>
-
-                        <div style="display: flex; gap: 0.5rem;">
-                            <mjo-button type="submit" color="primary">Save Theme</mjo-button>
-                            <mjo-button type="button" variant="ghost" @click=${this.resetForm}>Reset</mjo-button>
-                        </div>
-                    </mjo-form>
+            <mjo-form @submit=${this.handleFormSubmit}>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <mjo-textfield label="Theme Name" name="themeName" required></mjo-textfield>
+                    <mjo-color-picker label="Primary Color" name="primaryColor" value="#3b82f6" required></mjo-color-picker>
+                    <mjo-color-picker label="Secondary Color" name="secondaryColor" value="#6b7280"></mjo-color-picker>
+                    <mjo-color-picker label="Accent Color" name="accentColor" value="#10b981"></mjo-color-picker>
                 </div>
-
-                ${this.submitted
-                    ? html`
-                          <div style="padding: 1rem; background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px;">
-                              <h5 style="margin: 0 0 0.5rem 0; color: #0369a1;">Form Submitted Successfully!</h5>
-                              <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.5rem; font-size: 0.9rem;">
-                                  ${Object.entries(this.formData).map(
-                                      ([key, value]) => html`
-                                          <span style="font-weight: 500;">${key}:</span>
-                                          <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                              ${key.includes("Color")
-                                                  ? html`
-                                                        <div
-                                                            style="width: 20px; height: 20px; background-color: ${value}; border: 1px solid #ccc; border-radius: 4px;"
-                                                        ></div>
-                                                    `
-                                                  : ""}
-                                              <span>${value}</span>
-                                          </div>
-                                      `,
-                                  )}
-                              </div>
-                          </div>
-                      `
-                    : ""}
-            </div>
+                <mjo-button type="submit">Save Theme</mjo-button>
+            </mjo-form>
         `;
     }
 }
@@ -181,70 +345,80 @@ export class ExampleColorPickerForm extends LitElement {
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-color-picker";
-import "mjo-litui/mjo-button";
 
 @customElement("example-color-picker-validation")
 export class ExampleColorPickerValidation extends LitElement {
     @state() private selectedColor = "#3b82f6";
     @state() private isDisabled = false;
 
-    private handleColorChange(event: Event) {
-        const target = event.target as HTMLInputElement;
-        this.selectedColor = target.value;
-    }
+    render() {
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <mjo-color-picker label="Required Color" required helperText="This field is required"></mjo-color-picker>
 
-    private toggleDisabled() {
-        this.isDisabled = !this.isDisabled;
+                <mjo-color-picker label="Disabled Picker" ?disabled=${this.isDisabled} value="#ef4444"></mjo-color-picker>
+
+                <mjo-color-picker
+                    label="Interactive Color"
+                    .value=${this.selectedColor}
+                    @change=${(e: Event) => (this.selectedColor = (e.target as HTMLInputElement).value)}
+                ></mjo-color-picker>
+
+                <div style="padding: 1rem; background: ${this.selectedColor}; color: white;">Selected: ${this.selectedColor}</div>
+            </div>
+        `;
+    }
+}
+```
+
+## Color Format and Value Display Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import { convertColor } from "mjo-litui";
+import "mjo-litui/mjo-color-picker";
+import "mjo-litui/mjo-button";
+
+@customElement("example-color-formats")
+export class ExampleColorFormats extends LitElement {
+    @state() private color = "#3b82f6";
+    @state() private format: "hex" | "rgb" | "rgba" | "hsl" | "hsla" | "hwb" = "hex";
+
+    private cycleFormat() {
+        const formats: Array<"hex" | "rgb" | "rgba" | "hsl" | "hsla" | "hwb"> = ["hex", "rgb", "rgba", "hsl", "hsla", "hwb"];
+        const currentIndex = formats.indexOf(this.format);
+        this.format = formats[(currentIndex + 1) % formats.length];
     }
 
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Required Validation</h4>
-                    <div style="display: flex; gap: 1rem; align-items: end;">
-                        <mjo-color-picker label="Required Color" name="requiredColor" required helperText="This field is required"></mjo-color-picker>
-                        <mjo-color-picker label="Optional Color" name="optionalColor" helperText="This field is optional" value="#10b981"></mjo-color-picker>
-                    </div>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <h4>Color Format Demonstration</h4>
+
+                <div style="display: flex; gap: 1rem; align-items: end;">
+                    <mjo-color-picker
+                        label="Color Selector"
+                        .value=${this.color}
+                        .format=${this.format}
+                        show-value
+                        @change=${(e: Event) => (this.color = (e.target as HTMLInputElement).value)}
+                    ></mjo-color-picker>
+
+                    <mjo-button @click=${this.cycleFormat} variant="ghost"> Format: ${this.format.toUpperCase()} </mjo-button>
                 </div>
 
-                <div>
-                    <h4>Disabled State</h4>
-                    <div style="display: flex; gap: 1rem; align-items: end;">
-                        <mjo-color-picker
-                            label="Disabled Color Picker"
-                            ?disabled=${this.isDisabled}
-                            value="#ef4444"
-                            helperText="This picker can be disabled"
-                        ></mjo-color-picker>
-                        <mjo-button @click=${this.toggleDisabled} variant="ghost"> ${this.isDisabled ? "Enable" : "Disable"} </mjo-button>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Interactive Color Selection</h4>
-                    <div style="display: flex; gap: 1rem; align-items: center;">
-                        <mjo-color-picker label="Select Color" .value=${this.selectedColor} @change=${this.handleColorChange} size="large"></mjo-color-picker>
-                        <div
-                            style="padding: 1rem; background-color: ${this
-                                .selectedColor}; color: white; border-radius: 8px; min-width: 120px; text-align: center;"
-                        >
-                            Selected: ${this.selectedColor}
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Helper Text Examples</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <mjo-color-picker label="Brand Color" value="#3b82f6" helperText="Choose your main brand color"></mjo-color-picker>
-                        <mjo-color-picker
-                            label="Accent Color"
-                            value="#10b981"
-                            helperText="Pick a complementary accent color"
-                            color="secondary"
-                        ></mjo-color-picker>
-                    </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                    ${(["hex", "rgb", "rgba", "hsl", "hsla", "hwb"] as const).map(
+                        (fmt) => html`
+                            <div style="padding: 1rem; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb;">
+                                <h6 style="margin: 0 0 0.5rem 0; text-transform: uppercase;">${fmt}</h6>
+                                <code style="font-size: 0.8rem; background: white; padding: 0.25rem 0.5rem; border-radius: 4px; word-break: break-all;">
+                                    ${convertColor(this.color, fmt)}
+                                </code>
+                            </div>
+                        `,
+                    )}
                 </div>
             </div>
         `;
@@ -252,291 +426,100 @@ export class ExampleColorPickerValidation extends LitElement {
 }
 ```
 
-## Real-World Use Cases Example
+## Advanced Accessibility Example
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-color-picker";
-import "mjo-litui/mjo-card";
+import "mjo-litui/mjo-form";
 import "mjo-litui/mjo-button";
 
-@customElement("example-color-picker-use-cases")
-export class ExampleColorPickerUseCases extends LitElement {
-    @state() private uiColors = {
-        primary: "#3b82f6",
-        secondary: "#6b7280",
-        background: "#ffffff",
-        text: "#1f2937",
-        accent: "#10b981",
-    };
-
-    @state() private chartColors = {
-        series1: "#3b82f6",
-        series2: "#ef4444",
-        series3: "#10b981",
-        series4: "#f59e0b",
-    };
-
-    private updateUIColor(property: keyof typeof this.uiColors, value: string) {
-        this.uiColors = { ...this.uiColors, [property]: value };
-    }
-
-    private updateChartColor(property: keyof typeof this.chartColors, value: string) {
-        this.chartColors = { ...this.chartColors, [property]: value };
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 3rem;">
-                <!-- UI Theme Designer -->
-                <div>
-                    <h4>UI Theme Designer</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                        <div>
-                            <h5>Color Configuration</h5>
-                            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                                <mjo-color-picker
-                                    label="Primary Color"
-                                    .value=${this.uiColors.primary}
-                                    @change=${(e: Event) => this.updateUIColor("primary", (e.target as HTMLInputElement).value)}
-                                    helperText="Main brand color"
-                                ></mjo-color-picker>
-                                <mjo-color-picker
-                                    label="Secondary Color"
-                                    .value=${this.uiColors.secondary}
-                                    @change=${(e: Event) => this.updateUIColor("secondary", (e.target as HTMLInputElement).value)}
-                                    color="secondary"
-                                ></mjo-color-picker>
-                                <mjo-color-picker
-                                    label="Background Color"
-                                    .value=${this.uiColors.background}
-                                    @change=${(e: Event) => this.updateUIColor("background", (e.target as HTMLInputElement).value)}
-                                    size="small"
-                                ></mjo-color-picker>
-                                <mjo-color-picker
-                                    label="Text Color"
-                                    .value=${this.uiColors.text}
-                                    @change=${(e: Event) => this.updateUIColor("text", (e.target as HTMLInputElement).value)}
-                                    size="small"
-                                ></mjo-color-picker>
-                                <mjo-color-picker
-                                    label="Accent Color"
-                                    .value=${this.uiColors.accent}
-                                    @change=${(e: Event) => this.updateUIColor("accent", (e.target as HTMLInputElement).value)}
-                                    rounded
-                                ></mjo-color-picker>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h5>Live Preview</h5>
-                            <mjo-card
-                                style="
-                                    background-color: ${this.uiColors.background}; 
-                                    color: ${this.uiColors.text};
-                                    border: 1px solid ${this.uiColors.secondary};
-                                "
-                            >
-                                <div style="padding: 1rem;">
-                                    <h6 style="margin: 0 0 1rem 0; color: ${this.uiColors.primary};">Sample UI Component</h6>
-                                    <p style="margin: 0 0 1rem 0;">This preview shows how your selected colors work together in a real interface.</p>
-                                    <div style="display: flex; gap: 0.5rem;">
-                                        <mjo-button style="--mjo-primary-color: ${this.uiColors.primary};">Primary Button</mjo-button>
-                                        <mjo-button variant="ghost" style="--mjo-secondary-color: ${this.uiColors.secondary};">Secondary</mjo-button>
-                                    </div>
-                                    <div
-                                        style="margin-top: 1rem; padding: 0.5rem; background-color: ${this.uiColors.accent}20; border-left: 3px solid ${this
-                                            .uiColors.accent};"
-                                    >
-                                        <small>Accent color used for highlights and emphasis</small>
-                                    </div>
-                                </div>
-                            </mjo-card>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Chart Color Palette -->
-                <div>
-                    <h4>Chart Color Palette</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                        <div>
-                            <h5>Data Series Colors</h5>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                <mjo-color-picker
-                                    label="Series 1"
-                                    .value=${this.chartColors.series1}
-                                    @change=${(e: Event) => this.updateChartColor("series1", (e.target as HTMLInputElement).value)}
-                                    size="large"
-                                ></mjo-color-picker>
-                                <mjo-color-picker
-                                    label="Series 2"
-                                    .value=${this.chartColors.series2}
-                                    @change=${(e: Event) => this.updateChartColor("series2", (e.target as HTMLInputElement).value)}
-                                    size="large"
-                                ></mjo-color-picker>
-                                <mjo-color-picker
-                                    label="Series 3"
-                                    .value=${this.chartColors.series3}
-                                    @change=${(e: Event) => this.updateChartColor("series3", (e.target as HTMLInputElement).value)}
-                                    size="large"
-                                ></mjo-color-picker>
-                                <mjo-color-picker
-                                    label="Series 4"
-                                    .value=${this.chartColors.series4}
-                                    @change=${(e: Event) => this.updateChartColor("series4", (e.target as HTMLInputElement).value)}
-                                    size="large"
-                                ></mjo-color-picker>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h5>Chart Preview</h5>
-                            <div style="padding: 1rem; background: #f9fafb; border-radius: 8px;">
-                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                    ${Object.entries(this.chartColors).map(([series, color], index) => {
-                                        const width = [85, 65, 45, 75][index];
-                                        return html`
-                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                                <div style="width: 12px; height: 12px; background-color: ${color}; border-radius: 2px;"></div>
-                                                <div style="flex: 1; background: #e5e7eb; height: 20px; border-radius: 4px; overflow: hidden;">
-                                                    <div style="height: 100%; background-color: ${color}; width: ${width}%; transition: all 0.3s ease;"></div>
-                                                </div>
-                                                <span style="font-size: 0.8rem; color: #6b7280; min-width: 40px;">${width}%</span>
-                                            </div>
-                                        `;
-                                    })}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Customization -->
-                <div>
-                    <h4>Product Customization</h4>
-                    <div style="display: flex; gap: 2rem; align-items: start;">
-                        <div style="display: flex; flex-direction: column; gap: 1rem;">
-                            <h5>Customize Your Product</h5>
-                            <mjo-color-picker label="Primary Color" value="#3b82f6" size="large" rounded helperText="Choose the main color"></mjo-color-picker>
-                            <mjo-color-picker label="Accent Color" value="#10b981" size="large" rounded helperText="Pick an accent color"></mjo-color-picker>
-                            <mjo-color-picker label="Text Color" value="#1f2937" size="medium" helperText="Select text color"></mjo-color-picker>
-                        </div>
-
-                        <div style="flex: 1; text-align: center;">
-                            <h5>Product Preview</h5>
-                            <div
-                                style="display: inline-block; padding: 2rem; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 12px; border: 2px solid #e5e7eb;"
-                            >
-                                <div
-                                    style="width: 120px; height: 80px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);"
-                                >
-                                    <span style="font-size: 0.9rem; color: #6b7280;">Product Preview</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Custom Themes Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import type { MjoColorPickerTheme } from "mjo-litui/types";
-import "mjo-litui/mjo-color-picker";
-
-@customElement("example-color-picker-themes")
-export class ExampleColorPickerThemes extends LitElement {
-    private compactTheme: MjoColorPickerTheme = {
-        sizeSmall: "16px",
-        sizeMedium: "24px",
-        sizeLarge: "32px",
-        borderWidth: "1px",
-        radius: "4px",
-    };
-
-    private roundedTheme: MjoColorPickerTheme = {
-        sizeSmall: "24px",
-        sizeMedium: "32px",
-        sizeLarge: "48px",
-        borderWidth: "2px",
-        radius: "50%",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-    };
-
-    private borderTheme: MjoColorPickerTheme = {
-        borderWidth: "3px",
-        borderStyle: "dashed",
-        borderColor: "#6b7280",
-        sizeSmall: "20px",
-        sizeMedium: "28px",
-        sizeLarge: "36px",
-    };
+@customElement("example-accessibility-features")
+export class ExampleAccessibilityFeatures extends LitElement {
+    @state() private themeColors = { primary: "#3b82f6", secondary: "#6b7280", accent: "#10b981" };
 
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Compact Theme</h4>
-                    <div style="display: flex; gap: 1rem; align-items: end;">
-                        <mjo-color-picker label="Small Compact" size="small" value="#ef4444" .theme=${this.compactTheme}></mjo-color-picker>
-                        <mjo-color-picker label="Medium Compact" size="medium" value="#3b82f6" .theme=${this.compactTheme}></mjo-color-picker>
-                        <mjo-color-picker label="Large Compact" size="large" value="#10b981" .theme=${this.compactTheme}></mjo-color-picker>
-                    </div>
-                </div>
+                <h4>Enhanced Accessibility Features</h4>
+                <mjo-form>
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <!-- Comprehensive ARIA support -->
+                        <mjo-color-picker
+                            label="Primary Theme Color"
+                            name="primaryColor"
+                            .value=${this.themeColors.primary}
+                            required
+                            show-value
+                            format="hsl"
+                            helper-text="Main color for buttons and links"
+                            aria-label="Primary theme color selector"
+                            aria-description="Choose the main color for your application theme"
+                            @mjo-color-change=${(e: CustomEvent) => (this.themeColors = { ...this.themeColors, primary: e.detail.value })}
+                        ></mjo-color-picker>
 
-                <div>
-                    <h4>Rounded Shadow Theme</h4>
-                    <div style="display: flex; gap: 1rem; align-items: end;">
-                        <mjo-color-picker label="Small Rounded" size="small" value="#f59e0b" .theme=${this.roundedTheme}></mjo-color-picker>
-                        <mjo-color-picker label="Medium Rounded" size="medium" value="#8b5cf6" .theme=${this.roundedTheme}></mjo-color-picker>
-                        <mjo-color-picker label="Large Rounded" size="large" value="#ec4899" .theme=${this.roundedTheme}></mjo-color-picker>
-                    </div>
-                </div>
+                        <!-- Error state with accessibility -->
+                        <mjo-color-picker
+                            label="Secondary Color"
+                            name="secondaryColor"
+                            .value=${this.themeColors.secondary}
+                            show-value
+                            format="rgb"
+                            color="secondary"
+                            helper-text="Used for secondary UI elements"
+                            aria-describedby="secondary-help"
+                            @mjo-color-change=${(e: CustomEvent) => (this.themeColors = { ...this.themeColors, secondary: e.detail.value })}
+                        ></mjo-color-picker>
+                        <div id="secondary-help" style="font-size: 0.875rem; color: #6b7280;">Should provide good contrast with primary color.</div>
 
-                <div>
-                    <h4>Dashed Border Theme</h4>
-                    <div style="display: flex; gap: 1rem; align-items: end;">
-                        <mjo-color-picker label="Dashed Small" size="small" value="#14b8a6" .theme=${this.borderTheme}></mjo-color-picker>
-                        <mjo-color-picker label="Dashed Medium" size="medium" value="#f97316" .theme=${this.borderTheme}></mjo-color-picker>
-                        <mjo-color-picker label="Dashed Large" size="large" value="#dc2626" .theme=${this.borderTheme}></mjo-color-picker>
-                    </div>
-                </div>
+                        <!-- Format showcase with value display -->
+                        <mjo-color-picker
+                            label="Accent Color"
+                            name="accentColor"
+                            .value=${this.themeColors.accent}
+                            show-value
+                            format="rgba"
+                            size="large"
+                            helper-text="Accent color for highlights"
+                            aria-label="Accent color selector with live value display"
+                            @mjo-color-change=${(e: CustomEvent) => (this.themeColors = { ...this.themeColors, accent: e.detail.value })}
+                        ></mjo-color-picker>
 
+                        <!-- Validation and disabled states -->
+                        <div style="display: flex; gap: 1rem;">
+                            <mjo-color-picker label="Valid Color" value="#22c55e" show-value aria-invalid="false"></mjo-color-picker>
+                            <mjo-color-picker label="Invalid Color" value="#ffff00" show-value error aria-invalid="true"></mjo-color-picker>
+                            <mjo-color-picker label="Disabled" value="#9ca3af" disabled></mjo-color-picker>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <mjo-button type="submit" color="primary">Save Theme Colors</mjo-button>
+                    </div>
+                </mjo-form>
+
+                <!-- Live color preview -->
                 <div>
-                    <h4>Comparison with Default</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Default:</span>
-                            <div style="display: inline-flex; gap: 0.5rem; align-items: center;">
-                                <mjo-color-picker label="Default Small" size="small" value="#3b82f6"></mjo-color-picker>
-                                <mjo-color-picker label="Default Medium" size="medium" value="#10b981"></mjo-color-picker>
-                                <mjo-color-picker label="Default Large" size="large" value="#ef4444"></mjo-color-picker>
-                            </div>
+                    <h5>Theme Preview</h5>
+                    <div
+                        style="padding: 1.5rem; border-radius: 8px; background: linear-gradient(135deg, ${this.themeColors.primary}10, ${this.themeColors
+                            .secondary}10);"
+                        role="region"
+                        aria-label="Theme preview"
+                    >
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            ${Object.entries(this.themeColors).map(
+                                ([name, color]) => html`
+                                    <div
+                                        style="width: 20px; height: 20px; background: ${color}; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
+                                        role="img"
+                                        aria-label="${name} color: ${color}"
+                                    ></div>
+                                `,
+                            )}
                         </div>
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Compact:</span>
-                            <div style="display: inline-flex; gap: 0.5rem; align-items: center;">
-                                <mjo-color-picker label="Compact Small" size="small" value="#3b82f6" .theme=${this.compactTheme}></mjo-color-picker>
-                                <mjo-color-picker label="Compact Medium" size="medium" value="#10b981" .theme=${this.compactTheme}></mjo-color-picker>
-                                <mjo-color-picker label="Compact Large" size="large" value="#ef4444" .theme=${this.compactTheme}></mjo-color-picker>
-                            </div>
-                        </div>
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Rounded:</span>
-                            <div style="display: inline-flex; gap: 0.5rem; align-items: center;">
-                                <mjo-color-picker label="Rounded Small" size="small" value="#3b82f6" .theme=${this.roundedTheme}></mjo-color-picker>
-                                <mjo-color-picker label="Rounded Medium" size="medium" value="#10b981" .theme=${this.roundedTheme}></mjo-color-picker>
-                                <mjo-color-picker label="Rounded Large" size="large" value="#ef4444" .theme=${this.roundedTheme}></mjo-color-picker>
-                            </div>
-                        </div>
+                        <p style="margin: 0; font-size: 0.9rem;">Your selected theme colors create a cohesive and accessible design.</p>
                     </div>
                 </div>
             </div>
@@ -547,17 +530,28 @@ export class ExampleColorPickerThemes extends LitElement {
 
 ## Attributes / Properties
 
-| Name         | Type                             | Default     | Reflects | Description                                                 |
-| ------------ | -------------------------------- | ----------- | -------- | ----------------------------------------------------------- |
-| `color`      | `"primary" \| "secondary"`       | `"primary"` | no       | Semantic color scheme applied to the label                  |
-| `disabled`   | `boolean`                        | `false`     | yes      | Disables the color picker and applies disabled styling      |
-| `helperText` | `string \| undefined`            | `undefined` | no       | Additional descriptive text displayed below the picker      |
-| `label`      | `string \| undefined`            | `undefined` | no       | Text label displayed above the color picker                 |
-| `name`       | `string \| undefined`            | `undefined` | no       | Form field name for form submission and validation          |
-| `value`      | `string`                         | `""`        | no       | Current color value in hexadecimal format (e.g., "#3b82f6") |
-| `hideErrors` | `boolean`                        | `false`     | no       | Prevents display of validation error messages               |
-| `rounded`    | `boolean`                        | `false`     | yes      | Applies circular border radius (50%) to the color picker    |
-| `size`       | `"small" \| "medium" \| "large"` | `"medium"`  | no       | Controls the overall size of the color picker               |
+| Name         | Type                                                   | Default     | Reflects | Description                                                 |
+| ------------ | ------------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------- |
+| `color`      | `"primary" \| "secondary"`                             | `"primary"` | no       | Semantic color scheme applied to the label                  |
+| `disabled`   | `boolean`                                              | `false`     | yes      | Disables the color picker and applies disabled styling      |
+| `helperText` | `string \| undefined`                                  | `undefined` | no       | Additional descriptive text displayed below the picker      |
+| `label`      | `string \| undefined`                                  | `undefined` | no       | Text label displayed above the color picker                 |
+| `name`       | `string \| undefined`                                  | `undefined` | no       | Form field name for form submission and validation          |
+| `value`      | `string`                                               | `""`        | no       | Current color value in hexadecimal format (e.g., "#3b82f6") |
+| `hideErrors` | `boolean`                                              | `false`     | no       | Prevents display of validation error messages               |
+| `rounded`    | `boolean`                                              | `false`     | yes      | Applies circular border radius (50%) to the color picker    |
+| `size`       | `"small" \| "medium" \| "large"`                       | `"medium"`  | no       | Controls the overall size of the color picker               |
+| `format`     | `"hex" \| "rgb" \| "rgba" \| "hsl" \| "hsla" \| "hwb"` | `"hex"`     | no       | Output format for color values                              |
+| `showValue`  | `boolean`                                              | `false`     | no       | Displays the current color value below the picker           |
+
+### ARIA Properties for Enhanced Accessibility
+
+| Name              | Type                                                   | Default | Description                                     |
+| ----------------- | ------------------------------------------------------ | ------- | ----------------------------------------------- |
+| `ariaLabel`       | `string \| null`                                       | `null`  | Accessible label for screen readers             |
+| `ariaDescription` | `string \| null`                                       | `null`  | Detailed description of the color picker        |
+| `ariaInvalid`     | `"true" \| "false" \| "grammar" \| "spelling" \| null` | `null`  | Indicates validation state for screen readers   |
+| `ariaDescribedBy` | `string \| null`                                       | `null`  | IDs of elements that describe this color picker |
 
 ### Form Validation Properties (inherited from FormMixin)
 
@@ -569,8 +563,11 @@ export class ExampleColorPickerThemes extends LitElement {
 
 -   The `value` property automatically updates when user selects a color
 -   Form integration is automatic when placed inside `<mjo-form>`
--   The component dispatches standard `change` events when color changes
+-   The component dispatches both standard and custom events when color changes
+-   Color format conversion happens automatically based on the `format` property
+-   Screen reader announcements occur when colors change
 -   Validation errors are displayed automatically if `hideErrors` is false
+-   Focus management follows accessibility best practices
 
 ## Slots
 
@@ -580,17 +577,23 @@ export class ExampleColorPickerThemes extends LitElement {
 
 ## Events
 
-| Event    | Detail | Emitted When                           | Notes                               |
-| -------- | ------ | -------------------------------------- | ----------------------------------- |
-| `change` | None   | User selects a new color               | Standard HTML change event, bubbles |
-| `input`  | None   | Color value changes during interaction | Standard HTML input event, bubbles  |
+| Event                     | Detail                                       | Emitted When                           | Notes                               |
+| ------------------------- | -------------------------------------------- | -------------------------------------- | ----------------------------------- |
+| `change`                  | None                                         | User selects a new color               | Standard HTML change event, bubbles |
+| `input`                   | None                                         | Color value changes during interaction | Standard HTML input event, bubbles  |
+| `mjo-color-change`        | `{ element, value, format, originalEvent }`  | User selects a new color               | Custom event with detailed info     |
+| `mjo-color-input`         | `{ element, value, format, originalEvent }`  | Color value changes during interaction | Custom event with detailed info     |
+| `mjo-color-format-change` | `{ element, format, previousFormat, value }` | Color format changes                   | Custom event for format tracking    |
+| `mjo-color-focus`         | `{ element }`                                | Color picker receives focus            | Custom focus event                  |
+| `mjo-color-blur`          | `{ element }`                                | Color picker loses focus               | Custom blur event                   |
 
 ## Methods
 
-| Method     | Parameters      | Return Type | Description                           |
-| ---------- | --------------- | ----------- | ------------------------------------- |
-| `getValue` | None            | `string`    | Returns the current color value       |
-| `setValue` | `value: string` | `void`      | Sets the color value programmatically |
+| Method              | Parameters               | Return Type | Description                               |
+| ------------------- | ------------------------ | ----------- | ----------------------------------------- |
+| `getValue`          | None                     | `string`    | Returns the current color value           |
+| `setValue`          | `value: string`          | `void`      | Sets the color value programmatically     |
+| `getFormattedValue` | `format: MjoColorFormat` | `string`    | Returns the color in the specified format |
 
 ## CSS Variables
 
@@ -606,13 +609,16 @@ The component provides extensive customization through CSS variables with fallba
 
 ### Border and Appearance
 
-| Variable                          | Fallback                                                          | Used For          |
-| --------------------------------- | ----------------------------------------------------------------- | ----------------- |
-| `--mjo-color-picker-border-style` | `var(--mjo-input-border-style, solid)`                            | Border style      |
-| `--mjo-color-picker-border-width` | `var(--mjo-input-border-width, 1px)`                              | Border width      |
-| `--mjo-color-picker-border-color` | `var(--mjo-input-border-color, var(--mjo-border-color, #dddddd))` | Border color      |
-| `--mjo-color-picker-radius`       | `var(--mjo-input-radius, var(--mjo-radius, 5px))`                 | Border radius     |
-| `--mjo-color-picker-box-shadow`   | `var(--mjo-input-box-shadow, none)`                               | Box shadow effect |
+| Variable                                | Fallback                                                                 | Used For           |
+| --------------------------------------- | ------------------------------------------------------------------------ | ------------------ |
+| `--mjo-color-picker-border-style`       | `var(--mjo-input-border-style, solid)`                                   | Border style       |
+| `--mjo-color-picker-border-width`       | `var(--mjo-input-border-width, 1px)`                                     | Border width       |
+| `--mjo-color-picker-border-color`       | `var(--mjo-input-border-color, var(--mjo-border-color, #dddddd))`        | Border color       |
+| `--mjo-color-picker-border-color-focus` | `var(--mjo-input-border-color-focus, var(--mjo-primary-color, #1d7fdb))` | Focus border color |
+| `--mjo-color-picker-radius`             | `var(--mjo-input-radius, var(--mjo-radius, 5px))`                        | Border radius      |
+| `--mjo-color-picker-box-shadow`         | `var(--mjo-input-box-shadow, none)`                                      | Box shadow effect  |
+| `--mjo-color-picker-box-shadow-focus`   | `var(--mjo-input-box-shadow-focus, 0 0 0 2px rgba(29, 127, 219, 0.2))`   | Focus box shadow   |
+| `--mjo-color-picker-transition`         | `border-color 0.2s ease, box-shadow 0.2s ease`                           | Transition effects |
 
 ### Label Styling
 
@@ -622,6 +628,16 @@ The component provides extensive customization through CSS variables with fallba
 | `--mjo-color-picker-label-font-size`   | `inherit` | Label font size   |
 | `--mjo-color-picker-label-font-weight` | `inherit` | Label font weight |
 
+### Value Display Styling (when showValue is true)
+
+| Variable                               | Fallback                               | Used For                       |
+| -------------------------------------- | -------------------------------------- | ------------------------------ |
+| `--mjo-color-picker-value-background`  | `var(--mjo-background-color, #ffffff)` | Value display background color |
+| `--mjo-color-picker-value-color`       | `var(--mjo-text-color, #1f2937)`       | Value display text color       |
+| `--mjo-color-picker-value-font-size`   | `0.75rem`                              | Value display font size        |
+| `--mjo-color-picker-value-font-weight` | `500`                                  | Value display font weight      |
+| `--mjo-color-picker-value-box-shadow`  | `0 2px 4px rgba(0, 0, 0, 0.1)`         | Value display box shadow       |
+
 ### Global Integration
 
 The component inherits from the global design system:
@@ -629,7 +645,14 @@ The component inherits from the global design system:
 -   `--mjo-input-*` variables for consistent form styling
 -   `--mjo-border-color` for default borders
 -   `--mjo-radius` for consistent border radius
--   Primary and secondary color schemes for labels
+-   `--mjo-primary-color` and `--mjo-secondary-color` for focus states and labels
+-   `--mjo-background-color` and `--mjo-text-color` for value display
+
+### Accessibility Features
+
+-   High contrast mode support with increased border widths
+-   Reduced motion support for users with motion sensitivities
+-   Focus indicators that meet accessibility contrast requirements
 
 ## ThemeMixin Customization
 
@@ -639,18 +662,40 @@ This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to c
 
 ```ts
 interface MjoColorPickerTheme {
-    height?: string;
+    // Size variables
     sizeSmall?: string;
     sizeMedium?: string;
     sizeLarge?: string;
+
+    // Border and appearance
     borderStyle?: string;
     borderWidth?: string;
     borderColor?: string;
+    borderColorFocus?: string;
+    borderColorError?: string;
     radius?: string;
     boxShadow?: string;
+    boxShadowFocus?: string;
+    transition?: string;
+
+    // Label styling
     labelColor?: string;
     labelFontSize?: string;
     labelFontWeight?: string;
+    labelColorFocus?: string;
+    labelColorError?: string;
+
+    // Helper text styling
+    helperColor?: string;
+    helperFontSize?: string;
+    helperFontWeight?: string;
+
+    // Value display styling
+    valueColor?: string;
+    valueFontSize?: string;
+    valueFontWeight?: string;
+    valueBackground?: string;
+    valueBoxShadow?: string;
 }
 ```
 
@@ -664,19 +709,46 @@ import "mjo-litui/mjo-color-picker";
 
 @customElement("example-color-picker-themed")
 export class ExampleColorPickerThemed extends LitElement {
-    private customTheme: MjoColorPickerTheme = {
-        sizeMedium: "32px",
+    private compactTheme: MjoColorPickerTheme = {
+        sizeSmall: "16px",
+        sizeMedium: "24px",
+        sizeLarge: "32px",
+        borderWidth: "1px",
+        radius: "4px",
+    };
+
+    private roundedTheme: MjoColorPickerTheme = {
         borderWidth: "2px",
-        borderColor: "#3b82f6",
-        radius: "8px",
-        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        radius: "50%",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
     };
 
     render() {
         return html`
-            <div style="display: flex; gap: 1rem;">
-                <mjo-color-picker label="Custom Theme" value="#3b82f6" .theme=${this.customTheme}></mjo-color-picker>
-                <mjo-color-picker label="Default Theme" value="#10b981"></mjo-color-picker>
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div>
+                    <h4>Theme Variations</h4>
+                    <div style="display: flex; gap: 1rem; align-items: end;">
+                        <!-- Default -->
+                        <mjo-color-picker label="Default" value="#3b82f6"></mjo-color-picker>
+
+                        <!-- Compact Theme -->
+                        <mjo-color-picker label="Compact" value="#10b981" .theme=${this.compactTheme}></mjo-color-picker>
+
+                        <!-- Rounded Theme -->
+                        <mjo-color-picker label="Rounded" value="#ef4444" .theme=${this.roundedTheme}></mjo-color-picker>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Size Comparison</h4>
+                    <div style="display: flex; gap: 1rem; align-items: end;">
+                        <mjo-color-picker label="Small Default" size="small" value="#f59e0b"></mjo-color-picker>
+                        <mjo-color-picker label="Small Compact" size="small" value="#f59e0b" .theme=${this.compactTheme}></mjo-color-picker>
+                        <mjo-color-picker label="Medium Default" size="medium" value="#8b5cf6"></mjo-color-picker>
+                        <mjo-color-picker label="Medium Rounded" size="medium" value="#8b5cf6" .theme=${this.roundedTheme}></mjo-color-picker>
+                    </div>
+                </div>
             </div>
         `;
     }
@@ -769,11 +841,30 @@ export class ExampleColorPickerFormValidation extends LitElement {
 
 ## Accessibility Notes
 
--   **Keyboard Navigation**: Full keyboard support through native HTML5 color input
--   **Screen Readers**: Proper labeling with `aria-label` and `aria-errormessage`
--   **Color Contrast**: Labels follow semantic color schemes for proper contrast
--   **Required Fields**: `aria-required` attribute for form validation
--   **Error Messages**: Associated error messages via `aria-errormessage`
+The `mjo-color-picker` component follows WCAG 2.1 AA guidelines and includes comprehensive accessibility features:
+
+### Screen Reader Support
+
+-   **Dynamic Announcements**: Color changes are announced to screen readers using live regions
+-   **Descriptive Labels**: Automatic and customizable aria-label generation
+-   **State Information**: `aria-invalid` and `aria-required` attributes reflect validation state
+-   **Contextual Descriptions**: Support for `aria-description` and `aria-describedby`
+
+### Keyboard Navigation
+
+-   **Full Keyboard Support**: Complete navigation using keyboard only
+-   **Focus Management**: Proper focus indicators and keyboard event handling
+-   **Tab Order**: Logical tab sequence within forms
+
+### Visual Accessibility
+
+-   **High Contrast Support**: Enhanced borders and focus indicators in high contrast mode
+-   **Reduced Motion**: Respects `prefers-reduced-motion` for users with vestibular disorders
+-   **Color Independence**: Does not rely solely on color to convey information
+
+### ARIA Properties
+
+The component uses native Lit ARIA properties for optimal screen reader compatibility:
 
 ```html
 <!-- Example with enhanced accessibility -->
@@ -783,8 +874,18 @@ export class ExampleColorPickerFormValidation extends LitElement {
     required
     helperText="Choose your main brand color (required)"
     aria-label="Primary brand color selector"
+    aria-description="Use this to select the primary color for your brand theme"
+    show-value
 ></mjo-color-picker>
 ```
+
+### Best Practices for Accessibility
+
+1. **Always provide labels**: Use either `label` or `aria-label`
+2. **Add descriptions for complex use cases**: Use `aria-description` for detailed explanations
+3. **Include helper text**: Provide context about color selection purpose
+4. **Show color values**: Enable `showValue` to display selected color information
+5. **Test with screen readers**: Verify functionality with assistive technology
 
 ## Performance Considerations
 
@@ -826,4 +927,42 @@ export class ExampleColorPickerFormValidation extends LitElement {
 
 ## Summary
 
-`<mjo-color-picker>` provides a robust, form-integrated color selection component with comprehensive theming capabilities. The component supports validation, accessibility standards, and seamless integration with the mjo-form system. Use it for theme customization, UI configuration, data visualization setup, and any scenario requiring user color input. The component's flexibility makes it suitable for both simple color selection and complex color configuration interfaces while maintaining consistent styling and form behavior.
+`<mjo-color-picker>` provides a comprehensive, accessible color selection component with advanced features:
+
+### Key Features
+
+-   **Multiple Color Formats**: Support for hex, rgb, rgba, hsl, hsla, and hwb formats
+-   **Enhanced Accessibility**: Full WCAG 2.1 AA compliance with screen reader support
+-   **Real-time Value Display**: Optional live display of selected color values
+-   **Form Integration**: Seamless integration with mjo-form system and validation
+-   **Custom Events**: Detailed event system for color changes and format switching
+-   **Theme Customization**: Extensive CSS variable support and ThemeMixin integration
+-   **Responsive Design**: Multiple size options and responsive behavior
+-   **High Contrast Support**: Enhanced visibility for users with visual impairments
+
+### Perfect For
+
+-   **Theme Configuration**: Building color customization interfaces
+-   **Design Tools**: Creating color picker components for design applications
+-   **Form Inputs**: Collecting color preferences in forms and surveys
+-   **Data Visualization**: Setting up color palettes for charts and graphs
+-   **Accessibility-First Applications**: Where screen reader support is critical
+-   **Multi-format Color Systems**: Applications requiring different color format outputs
+
+### Accessibility Highlights
+
+-   Dynamic screen reader announcements for color changes
+-   Comprehensive ARIA attribute support
+-   High contrast and reduced motion support
+-   Full keyboard navigation
+-   Descriptive labeling and contextual help
+
+### Development Benefits
+
+-   **TypeScript Support**: Full type definitions for all properties and events
+-   **Custom Events**: Rich event system with detailed information
+-   **Format Conversion**: Built-in color format conversion utilities
+-   **Theme Integration**: Works seamlessly with the mjo-litui design system
+-   **Performance Optimized**: Efficient rendering and minimal DOM updates
+
+Use `<mjo-color-picker>` when you need a robust, accessible color selection component that integrates perfectly with forms, provides multiple output formats, and meets the highest accessibility standards while maintaining excellent user experience across all devices and assistive technologies.
