@@ -7,6 +7,7 @@ import { CardController } from "../controllers/card-controller.js";
 import { CheckboxController } from "../controllers/checkbox-controller.js";
 import { ChipController } from "../controllers/chip-controller.js";
 import { ColorPickerController } from "../controllers/color-picker-controller.js";
+import { DatePickerController } from "../controllers/date-picker-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
 
 const indexController = new IndexController();
@@ -18,6 +19,7 @@ const cardController = new CardController();
 const checkboxController = new CheckboxController();
 const chipController = new ChipController();
 const colorPickerController = new ColorPickerController();
+const datePickerController = new DatePickerController();
 const accordionController = new AccordionController();
 
 export const ROUTES = [
@@ -60,6 +62,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-color-picker",
         controller: colorPickerController.renderColorPickerPage,
+    },
+    {
+        path: "/component/mjo-date-picker",
+        controller: datePickerController.renderDatePickerPage,
     },
     {
         path: "/status",

@@ -1,0 +1,115 @@
+/* Date Picker specific styles for SSR demos */
+
+.component-showcase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: flex-end;
+}
+
+.component-showcase mjo-date-picker {
+    min-width: 200px;
+}
+
+/* Form example specific styles */
+.form-example {
+    display: block !important;
+}
+
+.form-example mjo-form {
+    display: grid;
+    gap: 16px;
+    max-width: 400px;
+    padding: 24px;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    background: var(--mjo-surface-color, var(--mjo-background-color));
+}
+
+.form-example mjo-button {
+    justify-self: start;
+    margin-top: 8px;
+}
+
+/* Enhanced playground controls for date picker */
+.playground-container .controls-panel .control-group input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 4px;
+    background: var(--mjo-background-color);
+    color: var(--mjo-text-color);
+    font-family: inherit;
+    margin-bottom: 4px;
+}
+
+.playground-container .controls-panel .control-group input[type="date"]:focus {
+    outline: 2px solid var(--mjo-focus-ring-color, #0066cc);
+    outline-offset: 2px;
+}
+
+/* Accessibility examples styling */
+.component-showcase small {
+    display: block;
+    margin-top: 8px;
+    color: var(--mjo-text-secondary-color);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* Date picker specific showcase adjustments */
+.component-showcase mjo-date-picker {
+    flex: 0 0 auto;
+}
+
+/* Range mode indicators */
+.component-showcase mjo-date-picker[range]::after {
+    content: "Range";
+    position: absolute;
+    top: -20px;
+    left: 0;
+    font-size: 10px;
+    color: var(--mjo-text-secondary-color);
+    background: var(--mjo-surface-color, var(--mjo-background-color));
+    padding: 2px 6px;
+    border-radius: 10px;
+    border: 1px solid var(--mjo-border-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .component-showcase {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .component-showcase mjo-date-picker {
+        min-width: unset;
+        width: 100%;
+    }
+    
+    .form-example mjo-form {
+        max-width: unset;
+    }
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+    .playground-container .controls-panel .control-group input[type="date"] {
+        color-scheme: dark;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .component-showcase mjo-date-picker {
+        outline: 1px solid;
+    }
+    
+    .form-example mjo-form {
+        border-width: 2px;
+    }
+}
+
+/* Notification styles are handled inline in the interactions file */
