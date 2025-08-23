@@ -170,7 +170,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
 
         // Dispatch custom input event
         this.dispatchEvent(
-            new CustomEvent("mjo-color-input", {
+            new CustomEvent("mjo-color-picker:input", {
                 detail: {
                     element: this,
                     value: this.value,
@@ -189,7 +189,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
 
         // Dispatch custom change event
         this.dispatchEvent(
-            new CustomEvent("mjo-color-change", {
+            new CustomEvent("mjo-color-picker:change", {
                 detail: {
                     element: this,
                     value: this.value,
@@ -202,7 +202,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
 
     #handleFocus() {
         this.dispatchEvent(
-            new CustomEvent("mjo-color-focus", {
+            new CustomEvent("mjo-color-picker:focues", {
                 detail: { element: this },
                 bubbles: true,
             }),
@@ -211,7 +211,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
 
     #handleBlur() {
         this.dispatchEvent(
-            new CustomEvent("mjo-color-blur", {
+            new CustomEvent("mjo-color-picker:blur", {
                 detail: { element: this },
                 bubbles: true,
             }),
@@ -220,7 +220,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
 
     #handleFormatChange(previousFormat: ColorFormat): void {
         this.dispatchEvent(
-            new CustomEvent("mjo-color-format-change", {
+            new CustomEvent("mjo-color-picker:format-change", {
                 detail: {
                     element: this,
                     format: this.format,
@@ -356,10 +356,10 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-color-input": MjoColorPickerInputEvent;
-        "mjo-color-change": MjoColorPickerChangeEvent;
-        "mjo-color-focus": MjoColorPickerFocusEvent;
-        "mjo-color-blur": MjoColorPickerBlurEvent;
-        "mjo-color-format-change": MjoColorPickerFormatChangeEvent;
+        "mjo-color-picker:input": MjoColorPickerInputEvent;
+        "mjo-color-picker:change": MjoColorPickerChangeEvent;
+        "mjo-color-picker:focues": MjoColorPickerFocusEvent;
+        "mjo-color-picker:blur": MjoColorPickerBlurEvent;
+        "mjo-color-picker:format-change": MjoColorPickerFormatChangeEvent;
     }
 }

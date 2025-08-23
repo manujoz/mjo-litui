@@ -225,6 +225,56 @@
 			"label": "TypeScript Check Grid Only",
 			"type": "shell",
 			"command": "npx tsc --noEmit src/mjo-grid.ts"
+		},
+		{
+			"label": "Check MjoIcon TypeScript",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-icon.ts"
+		},
+		{
+			"label": "TypeScript Check MJO Icon Final",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-icon.ts"
+		},
+		{
+			"label": "TypeScript Build Config Check Final",
+			"type": "shell",
+			"command": "npx tsc --noEmit -p tsconfig.build.json"
+		},
+		{
+			"label": "Build Full Application Fixed",
+			"type": "shell",
+			"command": "npm run build"
+		},
+		{
+			"label": "Build After Ionic Fix",
+			"type": "shell",
+			"command": "npm run build"
+		},
+		{
+			"label": "Test CSS Minification Script",
+			"type": "shell",
+			"command": "node scripts/test-css-minification.js"
+		},
+		{
+			"label": "Test Enhanced CSS and JS Minification",
+			"type": "shell",
+			"command": "node scripts/minify-dist-enhanced.js"
+		},
+		{
+			"label": "Test Complete Build Pipeline with CSS Minification",
+			"type": "shell",
+			"command": "npm run build"
+		},
+		{
+			"label": "Test CSS Only Minification",
+			"type": "shell",
+			"command": "node scripts/minify-css.js"
+		},
+		{
+			"label": "Final CSS Minification Test",
+			"type": "shell",
+			"command": "node scripts/minify-css.js"
 		}
 	]
 }

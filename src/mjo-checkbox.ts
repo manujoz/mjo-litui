@@ -179,7 +179,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
 
         // Also dispatch custom event
         this.dispatchEvent(
-            new CustomEvent<MjoCheckboxChangeEvent["detail"]>("mjo-checkbox-change", {
+            new CustomEvent<MjoCheckboxChangeEvent["detail"]>("mjo-checkbox:change", {
                 detail: {
                     element: this,
                     checked: this.checked,
@@ -365,7 +365,7 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-checkbox-change": MjoCheckboxChangeEvent;
+        "mjo-checkbox:change": MjoCheckboxChangeEvent;
         "mjo-checkbox:indeterminate-change": MjoCheckboxIndeterminateChangeEvent;
         "mjo-checkbox:focus": MjoCheckboxFocusEvent;
         "mjo-checkbox:blur": MjoCheckboxBlurEvent;

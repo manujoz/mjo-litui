@@ -11,6 +11,7 @@ import { DatePickerController } from "../controllers/date-picker-controller.js";
 import { DrawerController } from "../controllers/drawer-controller.js";
 import { DropdownController } from "../controllers/dropdown-controller.js";
 import { GridController } from "../controllers/grid-controller.js";
+import { IconController } from "../controllers/icon-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
 
@@ -27,6 +28,7 @@ const datePickerController = new DatePickerController();
 const drawerController = new DrawerController();
 const dropdownController = new DropdownController();
 const gridController = new GridController();
+const iconController = new IconController();
 const accordionController = new AccordionController();
 const textfieldController = new TextfieldController();
 
@@ -86,6 +88,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-grid",
         controller: gridController.renderGridPage,
+    },
+    {
+        path: "/component/mjo-icon",
+        controller: iconController.renderIconPage,
     },
     {
         path: "/component/mjo-textfield",

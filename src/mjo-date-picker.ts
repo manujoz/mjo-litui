@@ -316,7 +316,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         if (this.name) this.updateFormData({ name: this.name, value });
 
         this.dispatchEvent(
-            new CustomEvent("mjo-date-picker-change", {
+            new CustomEvent("mjo-date-picker:change", {
                 detail: {
                     value,
                     date,
@@ -404,6 +404,6 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-date-picker-change": DatePickerChangeEvent;
+        "mjo-date-picker:change": DatePickerChangeEvent;
     }
 }

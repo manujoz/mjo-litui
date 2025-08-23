@@ -1,0 +1,150 @@
+/* mjo-icon specific styles for SSR demo */
+
+.icon-showcase mjo-icon {
+    transition: all 0.3s ease;
+}
+
+/* Interactive examples styling */
+.interactive-heart {
+    --mjo-icon-clickable-hover-scale: 1.2;
+    color: #e74c3c;
+}
+
+.interactive-heart:hover {
+    color: #c0392b;
+}
+
+.interactive-star {
+    --mjo-icon-clickable-hover-scale: 1.15;
+    color: #f39c12;
+}
+
+.interactive-star:hover {
+    color: #d68910;
+}
+
+.interactive-settings {
+    --mjo-icon-clickable-hover-scale: 1.1;
+    color: #3498db;
+}
+
+.interactive-settings:hover {
+    color: #2980b9;
+}
+
+/* Controls panel specific for icon */
+.controls-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-group h4 {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--mjo-color-on-surface-variant);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Toggle group styling */
+.toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--mjo-color-on-surface);
+    transition: color 0.2s ease;
+}
+
+.toggle:hover {
+    color: var(--mjo-color-primary);
+}
+
+.toggle input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--mjo-color-primary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .icon-showcase {
+        gap: 1rem;
+        padding: 0.75rem;
+        justify-content: center;
+    }
+
+    .controls-panel {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .playground-showcase {
+        min-height: 100px;
+    }
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+    .color-variations {
+        background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+    }
+}
+
+/* Animation showcase enhancements */
+.icon-showcase mjo-icon[animation="spin"]:hover {
+    --mjo-icon-loading-spin-duration: 0.5s;
+}
+
+.icon-showcase mjo-icon[animation="pulse"]:hover {
+    animation-duration: 1s;
+}
+
+.icon-showcase mjo-icon[animation="rotate"]:hover {
+    animation-duration: 1s;
+}
+
+/* Loading state showcase */
+.icon-showcase mjo-icon[loading] {
+    opacity: 0.8;
+}
+
+/* Focus states for accessibility */
+.icon-showcase mjo-icon[clickable]:focus {
+    outline: 2px solid var(--mjo-color-primary);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+}
+
+/* Hover effects for interactive examples */
+.interactive-heart[clickable]:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 4px 8px rgba(231, 76, 60, 0.3));
+}
+
+.interactive-star[clickable]:hover {
+    transform: scale(1.15) rotate(15deg);
+    filter: drop-shadow(0 4px 8px rgba(243, 156, 18, 0.3));
+}
+
+.interactive-settings[clickable]:hover {
+    filter: drop-shadow(0 4px 8px rgba(52, 152, 219, 0.3));
+}

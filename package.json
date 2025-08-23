@@ -75,8 +75,9 @@
     },
     "scripts": {
         "dev": "vite",
-        "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md && npm run build:minify",
+        "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md && npm run build:minify && npm run build:minify-css",
         "build:minify": "node scripts/minify-dist.js",
+        "build:minify-css": "node scripts/minify-css.js",
         "build:unminified": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
         "build:publish": "npm run build && cd dist && npm publish",
         "preview": "vite preview",

@@ -53,7 +53,7 @@ function changeDatePickerProp(prop: string, value: string | boolean): void {
 document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners to all date pickers
     document.querySelectorAll("mjo-date-picker").forEach((datePicker) => {
-        datePicker.addEventListener("mjo-date-picker-change", (ev: Event) => {
+        datePicker.addEventListener("mjo-date-picker:change", (ev: Event) => {
             const event = ev as DatePickerChangeEvent;
             const { value, date, startDate, endDate } = event.detail;
 

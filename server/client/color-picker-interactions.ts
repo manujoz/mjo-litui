@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners to all color pickers
     document.querySelectorAll("mjo-color-picker").forEach((colorPicker) => {
         // Input event
-        colorPicker.addEventListener("mjo-color-input", (ev: Event) => {
+        colorPicker.addEventListener("mjo-color-picker:input", (ev: Event) => {
             const event = ev as MjoColorPickerInputEvent;
             console.log("🎨 Color input:", {
                 value: event.detail.value,
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Change event
-        colorPicker.addEventListener("mjo-color-change", (ev: Event) => {
+        colorPicker.addEventListener("mjo-color-picker:change", (ev: Event) => {
             const event = ev as MjoColorPickerChangeEvent;
             console.log("🔄 Color changed:", {
                 value: event.detail.value,
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Focus event
-        colorPicker.addEventListener("mjo-color-focus", (ev: Event) => {
+        colorPicker.addEventListener("mjo-color-picker:focues", (ev: Event) => {
             const event = ev as MjoColorPickerFocusEvent;
             console.log("🔍 Color picker focused:", {
                 element: event.detail.element,
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Blur event
-        colorPicker.addEventListener("mjo-color-blur", (ev: Event) => {
+        colorPicker.addEventListener("mjo-color-picker:blur", (ev: Event) => {
             const event = ev as MjoColorPickerBlurEvent;
             console.log("🔍 Color picker blurred:", {
                 element: event.detail.element,
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Format change event
-        colorPicker.addEventListener("mjo-color-format-change", (ev: Event) => {
+        colorPicker.addEventListener("mjo-color-picker:format-change", (ev: Event) => {
             const event = ev as MjoColorPickerFormatChangeEvent;
             console.log("📝 Format changed:", {
                 format: event.detail.format,
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Special handling for interactive examples
     const interactiveExamples = document.querySelectorAll(".interactive-example");
     interactiveExamples.forEach((example) => {
-        example.addEventListener("mjo-color-change", (ev: Event) => {
+        example.addEventListener("mjo-color-picker:change", (ev: Event) => {
             const event = ev as MjoColorPickerChangeEvent;
 
             // Show a notification for interactive examples

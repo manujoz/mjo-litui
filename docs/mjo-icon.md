@@ -1,11 +1,13 @@
 # mjo-icon
 
-Flexible SVG icon component with theme support and smooth transitions. Renders SVG icons from string sources with automatic sizing, color inheritance, and customizable animations.
+Accessible SVG icon component with enhanced interaction capabilities, loading states, and comprehensive theming support. Renders SVG icons with automatic sizing, color inheritance, validation, and customizable animations.
 
 ## HTML Usage
 
 ```html
-<mjo-icon src="<svg>...</svg>"></mjo-icon> <mjo-icon src="${iconString}" style="font-size: 32px; color: blue;"></mjo-icon>
+<mjo-icon src="<svg>...</svg>"></mjo-icon>
+<mjo-icon src="${iconString}" size="large" clickable></mjo-icon>
+<mjo-icon src="${iconString}" animation="spin" loading aria-label="Loading"></mjo-icon>
 ```
 
 ## Basic Example
@@ -22,110 +24,135 @@ export class ExampleIconBasic extends LitElement {
         return html`
             <div style="display: flex; gap: 1rem; align-items: center;">
                 <mjo-icon src=${AiFillHeart}></mjo-icon>
-                <mjo-icon src=${AiOutlineUser}></mjo-icon>
-                <mjo-icon src=${AiFillStar}></mjo-icon>
+                <mjo-icon src=${AiOutlineUser} size="medium" aria-label="User profile"></mjo-icon>
+                <mjo-icon src=${AiFillStar} clickable @mjo-icon:click=${this.handleStarClick}></mjo-icon>
             </div>
         `;
+    }
+
+    private handleStarClick(event: CustomEvent) {
+        console.log("Star clicked!", event.detail);
     }
 }
 ```
 
-## Sizing & Colors Example
+## Accessibility Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import { AiFillClose, AiFillInfo, AiFillWarning } from "mjo-icons/ai";
+import "mjo-litui/mjo-icon";
+
+@customElement("example-icon-accessibility")
+export class ExampleIconAccessibility extends LitElement {
+    render() {
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Decorative icon (no ARIA label needed) -->
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <mjo-icon src=${AiFillInfo} size="small" aria-hidden="true"></mjo-icon>
+                    <span>Information text with decorative icon</span>
+                </div>
+
+                <!-- Interactive icon with proper ARIA -->
+                <button style="display: flex; align-items: center; gap: 0.5rem;">
+                    <mjo-icon src=${AiFillClose} clickable aria-label="Close dialog" role="button" @mjo-icon:click=${this.handleClose}> </mjo-icon>
+                    Close
+                </button>
+
+                <!-- Status icon with description -->
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <mjo-icon src=${AiFillWarning} size="medium" aria-describedby="warning-text" style="color: orange;"> </mjo-icon>
+                    <span id="warning-text">Warning: Please review your input</span>
+                </div>
+            </div>
+        `;
+    }
+
+    private handleClose() {
+        console.log("Dialog closed");
+    }
+}
+```
+
+## Size Variants & Loading States Example
 
 ```ts
 import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import { AiFillCheckCircle, AiFillWarning, AiFillCloseCircle } from "mjo-icons/ai";
+import { customElement, state } from "lit/decorators.js";
+import { AiFillCheckCircle, AiFillWarning, AiFillCloseCircle, AiOutlineLoading } from "mjo-icons/ai";
 import "mjo-litui/mjo-icon";
 
-@customElement("example-icon-sizing")
-export class ExampleIconSizing extends LitElement {
+@customElement("example-icon-variants")
+export class ExampleIconVariants extends LitElement {
+    @state() private loading = false;
+
+    private simulateLoading() {
+        this.loading = true;
+        setTimeout(() => {
+            this.loading = false;
+        }, 3000);
+    }
+
     render() {
         return html`
-            <div class="icon-grid">
-                <!-- Different sizes -->
-                <div class="size-section">
-                    <h4>Sizes</h4>
-                    <mjo-icon src=${AiFillCheckCircle} class="small"></mjo-icon>
-                    <mjo-icon src=${AiFillCheckCircle} class="medium"></mjo-icon>
-                    <mjo-icon src=${AiFillCheckCircle} class="large"></mjo-icon>
-                    <mjo-icon src=${AiFillCheckCircle} class="xl"></mjo-icon>
-                </div>
+            <div class="icon-variants">
+                <!-- Size variants -->
+                <section>
+                    <h4>Size Variants</h4>
+                    <div class="size-row">
+                        <mjo-icon src=${AiFillCheckCircle} size="small"></mjo-icon>
+                        <mjo-icon src=${AiFillCheckCircle} size="medium"></mjo-icon>
+                        <mjo-icon src=${AiFillCheckCircle} size="large"></mjo-icon>
+                        <mjo-icon src=${AiFillCheckCircle} size="xl"></mjo-icon>
+                    </div>
+                    <div class="size-labels">
+                        <span>Small</span>
+                        <span>Medium</span>
+                        <span>Large</span>
+                        <span>XL</span>
+                    </div>
+                </section>
 
-                <!-- Different colors -->
-                <div class="color-section">
-                    <h4>Colors</h4>
-                    <mjo-icon src=${AiFillCheckCircle} class="success"></mjo-icon>
-                    <mjo-icon src=${AiFillWarning} class="warning"></mjo-icon>
-                    <mjo-icon src=${AiFillCloseCircle} class="error"></mjo-icon>
-                    <mjo-icon src=${AiFillCheckCircle} class="primary"></mjo-icon>
-                </div>
+                <!-- Loading states -->
+                <section>
+                    <h4>Loading States</h4>
+                    <div class="loading-examples">
+                        <mjo-icon src=${AiOutlineLoading} size="medium" animation="spin" loading aria-label="Loading"> </mjo-icon>
+                        <button @click=${this.simulateLoading}>
+                            ${this.loading
+                                ? html`<mjo-icon src=${AiOutlineLoading} animation="spin" loading size="small"></mjo-icon> Loading...`
+                                : "Start Loading"}
+                        </button>
+                    </div>
+                </section>
 
-                <!-- Inline sizing -->
-                <div class="inline-section">
-                    <h4>Inline with Text</h4>
-                    <p>
-                        This is text with a
-                        <mjo-icon src=${AiFillCheckCircle} style="color: green;"></mjo-icon>
-                        checkmark icon inline.
-                    </p>
-                    <p style="font-size: 1.5rem;">
-                        Larger text with
-                        <mjo-icon src=${AiFillWarning} style="color: orange;"></mjo-icon>
-                        warning icon.
-                    </p>
-                </div>
+                <!-- Animation variants -->
+                <section>
+                    <h4>Animations</h4>
+                    <div class="animation-row">
+                        <mjo-icon src=${AiFillCheckCircle} animation="bounce"></mjo-icon>
+                        <mjo-icon src=${AiFillWarning} animation="pulse"></mjo-icon>
+                        <mjo-icon src=${AiFillCloseCircle} animation="shake"></mjo-icon>
+                    </div>
+                </section>
             </div>
         `;
     }
 
     static styles = css`
-        .icon-grid {
+        .icon-variants {
             display: flex;
             flex-direction: column;
             gap: 2rem;
+            padding: 1rem;
         }
 
-        .size-section,
-        .color-section,
-        .inline-section {
+        section {
             display: flex;
             flex-direction: column;
             gap: 1rem;
-        }
-
-        .size-section > mjo-icon,
-        .color-section > mjo-icon {
-            display: inline-block;
-            margin-right: 1rem;
-        }
-
-        /* Size variations */
-        .small {
-            font-size: 16px;
-        }
-        .medium {
-            font-size: 24px;
-        }
-        .large {
-            font-size: 32px;
-        }
-        .xl {
-            font-size: 48px;
-        }
-
-        /* Color variations */
-        .success {
-            color: #059669;
-        }
-        .warning {
-            color: #d97706;
-        }
-        .error {
-            color: #dc2626;
-        }
-        .primary {
-            color: #3b82f6;
         }
 
         h4 {
@@ -135,17 +162,57 @@ export class ExampleIconSizing extends LitElement {
             font-weight: 600;
         }
 
-        p {
-            margin: 0;
+        .size-row {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 1rem;
+        }
+
+        .size-labels {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-left: 0.5rem;
+        }
+
+        .size-labels span {
+            text-align: center;
+            min-width: 3rem;
+        }
+
+        .loading-examples {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .animation-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        button:hover {
+            background: #f9fafb;
         }
     `;
 }
 ```
 
-## Interactive Icons Example
+## Interactive & Clickable Icons Example
 
 ```ts
 import { LitElement, html, css } from "lit";
@@ -159,55 +226,79 @@ export class ExampleIconInteractive extends LitElement {
     @state() private starred = false;
     @state() private visible = true;
 
-    private toggleLike() {
+    private handleLikeClick(event: CustomEvent) {
         this.liked = !this.liked;
+        console.log("Like clicked:", event.detail);
     }
 
-    private toggleStar() {
+    private handleStarClick(event: CustomEvent) {
         this.starred = !this.starred;
+        console.log("Star clicked:", event.detail);
     }
 
-    private toggleVisibility() {
+    private handleVisibilityClick(event: CustomEvent) {
         this.visible = !this.visible;
+        console.log("Visibility toggled:", event.detail);
     }
 
     render() {
         return html`
             <div class="interactive-icons">
-                <h4>Interactive Icons</h4>
+                <h4>Clickable Icons</h4>
 
                 <div class="icon-buttons">
-                    <button class="icon-btn ${this.liked ? "liked" : ""}" @click=${this.toggleLike} title="Toggle like">
-                        <mjo-icon src=${this.liked ? AiFillHeart : AiOutlineHeart}></mjo-icon>
-                        ${this.liked ? "Liked" : "Like"}
-                    </button>
+                    <div class="icon-group">
+                        <mjo-icon
+                            src=${this.liked ? AiFillHeart : AiOutlineHeart}
+                            clickable
+                            size="large"
+                            class=${this.liked ? "liked" : ""}
+                            aria-label=${this.liked ? "Unlike" : "Like"}
+                            role="button"
+                            tabindex="0"
+                            @mjo-icon:click=${this.handleLikeClick}
+                        >
+                        </mjo-icon>
+                        <span>${this.liked ? "Liked" : "Like"}</span>
+                    </div>
 
-                    <button class="icon-btn ${this.starred ? "starred" : ""}" @click=${this.toggleStar} title="Toggle star">
-                        <mjo-icon src=${this.starred ? AiFillStar : AiOutlineStar}></mjo-icon>
-                        ${this.starred ? "Starred" : "Star"}
-                    </button>
+                    <div class="icon-group">
+                        <mjo-icon
+                            src=${this.starred ? AiFillStar : AiOutlineStar}
+                            clickable
+                            size="large"
+                            class=${this.starred ? "starred" : ""}
+                            aria-label=${this.starred ? "Unstar" : "Star"}
+                            role="button"
+                            tabindex="0"
+                            @mjo-icon:click=${this.handleStarClick}
+                        >
+                        </mjo-icon>
+                        <span>${this.starred ? "Starred" : "Star"}</span>
+                    </div>
 
-                    <button class="icon-btn" @click=${this.toggleVisibility} title="Toggle visibility">
-                        <mjo-icon src=${this.visible ? AiFillEye : AiFillEyeInvisible}></mjo-icon>
-                        ${this.visible ? "Hide" : "Show"}
-                    </button>
+                    <div class="icon-group">
+                        <mjo-icon
+                            src=${this.visible ? AiFillEye : AiFillEyeInvisible}
+                            clickable
+                            size="large"
+                            aria-label=${this.visible ? "Hide" : "Show"}
+                            role="button"
+                            tabindex="0"
+                            @mjo-icon:click=${this.handleVisibilityClick}
+                        >
+                        </mjo-icon>
+                        <span>${this.visible ? "Hide" : "Show"}</span>
+                    </div>
                 </div>
 
-                <div class="hover-icons">
-                    <h5>Hover Effects</h5>
-                    <div class="hover-grid">
-                        <div class="hover-icon scale">
-                            <mjo-icon src=${AiFillHeart}></mjo-icon>
-                            <span>Scale</span>
-                        </div>
-                        <div class="hover-icon rotate">
-                            <mjo-icon src=${AiFillStar}></mjo-icon>
-                            <span>Rotate</span>
-                        </div>
-                        <div class="hover-icon bounce">
-                            <mjo-icon src=${AiFillCheckCircle}></mjo-icon>
-                            <span>Bounce</span>
-                        </div>
+                <div class="hover-section">
+                    <h5>Hover & Focus Effects</h5>
+                    <div class="hover-icons">
+                        <mjo-icon src=${AiFillHeart} clickable size="large" class="hover-scale" aria-label="Heart icon with scale effect" tabindex="0">
+                        </mjo-icon>
+                        <mjo-icon src=${AiFillStar} clickable size="large" class="hover-rotate" aria-label="Star icon with rotate effect" tabindex="0">
+                        </mjo-icon>
                     </div>
                 </div>
             </div>
@@ -224,111 +315,73 @@ export class ExampleIconInteractive extends LitElement {
 
         .icon-buttons {
             display: flex;
-            gap: 1rem;
+            gap: 2rem;
             flex-wrap: wrap;
         }
 
-        .icon-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.875rem;
-        }
-
-        .icon-btn:hover {
-            background: #f9fafb;
-            border-color: #9ca3af;
-        }
-
-        .icon-btn.liked {
-            color: #dc2626;
-            border-color: #dc2626;
-            background: #fef2f2;
-        }
-
-        .icon-btn.starred {
-            color: #d97706;
-            border-color: #d97706;
-            background: #fffbeb;
-        }
-
-        .hover-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 1rem;
-        }
-
-        .hover-icon {
+        .icon-group {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
-            padding: 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .hover-icon mjo-icon {
-            font-size: 24px;
+        .icon-group span {
+            font-size: 0.875rem;
             color: #6b7280;
-            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
-        .hover-icon span {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        .hover-section h5 {
+            margin: 0 0 1rem 0;
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: 600;
         }
 
-        .hover-icon.scale:hover mjo-icon {
-            transform: scale(1.3);
-            color: #3b82f6;
+        .hover-icons {
+            display: flex;
+            gap: 2rem;
         }
 
-        .hover-icon.rotate:hover mjo-icon {
-            transform: rotate(180deg);
-            color: #059669;
+        /* Clickable icon states */
+        mjo-icon[clickable] {
+            cursor: pointer;
+            transition: transform 0.2s ease;
         }
 
-        .hover-icon.bounce:hover mjo-icon {
-            animation: bounce 0.6s ease-in-out;
+        mjo-icon[clickable]:hover {
+            transform: scale(1.1);
+        }
+
+        mjo-icon[clickable]:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .liked {
             color: #dc2626;
         }
 
-        @keyframes bounce {
-            0%,
-            20%,
-            50%,
-            80%,
-            100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
+        .starred {
+            color: #f59e0b;
         }
 
-        h4,
-        h5 {
+        .hover-scale:hover {
+            transform: scale(1.3) !important;
+            color: #3b82f6;
+        }
+
+        .hover-rotate:hover {
+            transform: rotate(180deg) !important;
+            color: #059669;
+        }
+
+        h4 {
             margin: 0;
-            color: #374151;
-        }
-
-        h5 {
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
+            color: #1f2937;
+            font-size: 1.125rem;
         }
     `;
 }
@@ -755,16 +808,40 @@ export class ExampleIconThemed extends LitElement {
 
 ## Attributes / Properties
 
-| Name  | Type                  | Default     | Reflects | Description                          |
-| ----- | --------------------- | ----------- | -------- | ------------------------------------ |
-| `src` | `string \| undefined` | `undefined` | no       | SVG string content to render as icon |
+| Name        | Type                            | Default     | Reflects | Description                                               |
+| ----------- | ------------------------------- | ----------- | -------- | --------------------------------------------------------- |
+| `src`       | `string \| undefined`           | `undefined` | no       | SVG string content to render as icon                      |
+| `size`      | `MjoIconSize`                   | `"medium"`  | yes      | Predefined size variant: "small", "medium", "large", "xl" |
+| `animation` | `MjoIconAnimation \| undefined` | `undefined` | yes      | Animation type: "spin", "bounce", "pulse", "shake"        |
+| `clickable` | `boolean`                       | `false`     | yes      | Makes icon clickable with proper ARIA and interaction     |
+| `loading`   | `boolean`                       | `false`     | yes      | Shows loading state with appropriate ARIA attributes      |
+| `disabled`  | `boolean`                       | `false`     | yes      | Disables interaction and applies disabled styling         |
+| `ariaLabel` | `string \| undefined`           | `undefined` | no       | Accessible label for screen readers                       |
+| `role`      | `string \| undefined`           | `undefined` | no       | ARIA role for semantic meaning                            |
+
+### Size Values
+
+-   `"small"`: 16px icon size
+-   `"medium"`: 24px icon size (default)
+-   `"large"`: 32px icon size
+-   `"xl"`: 40px icon size
+
+### Animation Values
+
+-   `"spin"`: Continuous rotation (ideal for loading states)
+-   `"bounce"`: Bounce animation with scaling
+-   `"pulse"`: Pulsing opacity animation
+-   `"shake"`: Horizontal shake animation
 
 ### Behavior Notes
 
--   If `src` is undefined or empty, nothing is rendered
--   SVG content is rendered using `unsafeSVG` directive for performance
--   Icon automatically inherits text color via `fill: currentColor`
--   Size is controlled by `font-size` CSS property (default: 24px)
+-   If `src` is undefined, empty, or invalid SVG, nothing is rendered
+-   SVG content is validated before rendering for security
+-   Invalid SVG triggers `mjo-icon:error` event
+-   Icons automatically inherit text color via `currentColor`
+-   Size can be controlled by `size` property or CSS `font-size`
+-   Clickable icons have hover/focus states and emit click events
+-   Loading state automatically applies `aria-label="Loading"` if not provided
 -   Component uses `display: inline-block` for easy inline usage
 
 ## Slots
@@ -773,111 +850,260 @@ This component does not use slots. Content is provided via the `src` property.
 
 ## Events
 
-This component does not emit any custom events.
+The component emits the following custom events:
+
+| Event Name       | Detail Type         | Bubbles | Cancelable | Description                              |
+| ---------------- | ------------------- | ------- | ---------- | ---------------------------------------- |
+| `mjo-icon:click` | `MjoIconClickEvent` | yes     | yes        | Fired when clickable icon is clicked     |
+| `mjo-icon:load`  | `MjoIconLoadEvent`  | yes     | no         | Fired when SVG is successfully validated |
+| `mjo-icon:error` | `MjoIconErrorEvent` | yes     | no         | Fired when SVG validation fails          |
+
+### Event Details
+
+```ts
+interface MjoIconClickEvent {
+    element: MjoIcon;
+    originalEvent: MouseEvent | KeyboardEvent;
+}
+
+interface MjoIconLoadEvent {
+    element: MjoIcon;
+    src: string;
+}
+
+interface MjoIconErrorEvent {
+    element: MjoIcon;
+    src: string;
+    error: string;
+}
+```
+
+### Event Handling Example
+
+```ts
+html`
+  <mjo-icon
+    src=${iconSrc}
+    clickable
+    @mjo-icon:click=${this.handleClick}
+    @mjo-icon:load=${this.handleLoad}
+    @mjo-icon:error=${this.handleError}>
+  </mjo-icon>
+`;
+
+private handleClick(event: CustomEvent<MjoIconClickEvent>) {
+  console.log('Icon clicked:', event.detail);
+}
+
+private handleLoad(event: CustomEvent<MjoIconLoadEvent>) {
+  console.log('Icon loaded:', event.detail.src);
+}
+
+private handleError(event: CustomEvent<MjoIconErrorEvent>) {
+  console.error('Icon error:', event.detail.error);
+}
+```
 
 ## CSS Variables
 
-The component supports CSS custom properties for styling and animations:
+The component supports comprehensive CSS custom properties for styling and theming:
 
-### Core Styling
+### Theme Variables (Inherited from Global Theme)
 
-| Variable                | Default    | Used For                            |
-| ----------------------- | ---------- | ----------------------------------- |
-| `--mjo-icon-transition` | `all 0.3s` | Transition effects for SVG elements |
+| Variable                             | Default                                       | Used For                                  |
+| ------------------------------------ | --------------------------------------------- | ----------------------------------------- |
+| `--mjo-icon-size-small`              | `16px`                                        | Small size variant                        |
+| `--mjo-icon-size-medium`             | `24px`                                        | Medium size variant (default)             |
+| `--mjo-icon-size-large`              | `32px`                                        | Large size variant                        |
+| `--mjo-icon-size-xl`                 | `40px`                                        | Extra large size variant                  |
+| `--mjo-icon-transition`              | `all 0.2s ease`                               | Base transition for all animations        |
+| `--mjo-icon-disabled-opacity`        | `0.5`                                         | Opacity when disabled                     |
+| `--mjo-icon-clickable-hover-scale`   | `1.05`                                        | Scale factor on hover for clickable icons |
+| `--mjo-icon-clickable-focus-outline` | `2px solid var(--mjo-color-primary, #3b82f6)` | Focus ring for clickable icons            |
+| `--mjo-icon-loading-spin-duration`   | `1s`                                          | Duration for loading spin animation       |
+
+### Animation Variables
+
+| Variable                     | Default | Used For                  |
+| ---------------------------- | ------- | ------------------------- |
+| `--mjo-icon-spin-duration`   | `1s`    | Spin animation duration   |
+| `--mjo-icon-bounce-duration` | `0.6s`  | Bounce animation duration |
+| `--mjo-icon-pulse-duration`  | `2s`    | Pulse animation duration  |
+| `--mjo-icon-shake-duration`  | `0.5s`  | Shake animation duration  |
+
+### State-Specific Variables
+
+| Variable                    | Default   | Used For                           |
+| --------------------------- | --------- | ---------------------------------- |
+| `--mjo-icon-hover-color`    | `inherit` | Color on hover for clickable icons |
+| `--mjo-icon-focus-color`    | `inherit` | Color on focus for clickable icons |
+| `--mjo-icon-disabled-color` | `inherit` | Color when disabled                |
+| `--mjo-icon-loading-color`  | `inherit` | Color when in loading state        |
 
 ### Custom CSS Examples
 
 ```css
-/* Custom transition timing */
-mjo-icon {
-    --mjo-icon-transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+/* Size customization */
+.custom-sizes {
+    --mjo-icon-size-small: 14px;
+    --mjo-icon-size-medium: 20px;
+    --mjo-icon-size-large: 28px;
+    --mjo-icon-size-xl: 36px;
 }
 
-/* Size variations */
-.icon-small {
-    font-size: 16px;
-}
-.icon-medium {
-    font-size: 24px;
-}
-.icon-large {
-    font-size: 32px;
-}
-.icon-xl {
-    font-size: 48px;
+/* Animation timing */
+.slow-animations {
+    --mjo-icon-transition: all 0.5s ease;
+    --mjo-icon-spin-duration: 2s;
+    --mjo-icon-bounce-duration: 1s;
 }
 
-/* Color variations */
-.icon-primary {
-    color: #3b82f6;
-}
-.icon-success {
-    color: #059669;
-}
-.icon-warning {
-    color: #d97706;
-}
-.icon-error {
-    color: #dc2626;
+/* Clickable customization */
+.enhanced-clickable {
+    --mjo-icon-clickable-hover-scale: 1.2;
+    --mjo-icon-clickable-focus-outline: 3px solid #f59e0b;
+    --mjo-icon-hover-color: #3b82f6;
 }
 
-/* Interactive states */
-.icon-hover:hover {
-    transform: scale(1.1);
-    color: #3b82f6;
+/* Loading state */
+.custom-loading {
+    --mjo-icon-loading-spin-duration: 0.8s;
+    --mjo-icon-loading-color: #6366f1;
 }
 
-/* Custom animations */
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.icon-spin {
-    animation: spin 1s linear infinite;
+/* Disabled state */
+.custom-disabled {
+    --mjo-icon-disabled-opacity: 0.3;
+    --mjo-icon-disabled-color: #9ca3af;
 }
 ```
 
 ## ThemeMixin Customization
 
-This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to customize specific instances. Properties are automatically converted from camelCase to CSS variables with the pattern: `--mjo-icon-{property-name}`.
+This component extends `ThemeMixin`, allowing you to pass a `theme` object to customize specific instances. Properties are automatically converted from camelCase to CSS variables with the pattern: `--mjo-icon-{property-name}`.
 
 ### MjoIconTheme Interface
 
 ```ts
 interface MjoIconTheme {
+    // Size variants
+    sizeSmall?: string;
+    sizeMedium?: string;
+    sizeLarge?: string;
+    sizeXl?: string;
+
+    // Transitions and animations
     transition?: string;
+    spinDuration?: string;
+    bounceDuration?: string;
+    pulseDuration?: string;
+    shakeDuration?: string;
+
+    // Interaction states
+    disabledOpacity?: string;
+    clickableHoverScale?: string;
+    clickableFocusOutline?: string;
+    loadingSpinDuration?: string;
+
+    // State colors
+    hoverColor?: string;
+    focusColor?: string;
+    disabledColor?: string;
+    loadingColor?: string;
 }
 ```
 
-### ThemeMixin Example
+### ThemeMixin Examples
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { AiFillStar } from "mjo-icons/ai";
+import { AiFillStar, AiOutlineLoading } from "mjo-icons/ai";
 import "mjo-litui/mjo-icon";
 
-@customElement("example-icon-themed-simple")
-export class ExampleIconThemedSimple extends LitElement {
-    private customTransition = {
+@customElement("example-icon-themed")
+export class ExampleIconThemed extends LitElement {
+    private customTheme = {
         transition: "all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        clickableHoverScale: "1.3",
+        hoverColor: "#f59e0b",
+        spinDuration: "0.5s",
+    };
+
+    private loadingTheme = {
+        loadingSpinDuration: "2s",
+        loadingColor: "#6366f1",
+        sizeMedium: "28px",
     };
 
     render() {
         return html`
-            <mjo-icon
-                src=${AiFillStar}
-                .theme=${this.customTransition}
-                style="font-size: 32px; color: #f59e0b; cursor: pointer;"
-                onmouseover="this.style.transform = 'rotate(72deg) scale(1.2)'"
-                onmouseout="this.style.transform = 'rotate(0deg) scale(1)'"
-            ></mjo-icon>
+            <div style="display: flex; gap: 2rem; align-items: center;">
+                <!-- Custom themed clickable icon -->
+                <mjo-icon src=${AiFillStar} clickable size="large" .theme=${this.customTheme} aria-label="Themed star icon"> </mjo-icon>
+
+                <!-- Custom themed loading icon -->
+                <mjo-icon src=${AiOutlineLoading} loading animation="spin" .theme=${this.loadingTheme} aria-label="Custom loading"> </mjo-icon>
+            </div>
         `;
+    }
+}
+```
+
+### Advanced Theming
+
+```ts
+@customElement("example-icon-advanced-theme")
+export class ExampleIconAdvancedTheme extends LitElement {
+    private buttonTheme = {
+        transition: "all 0.3s ease",
+        clickableHoverScale: "1.1",
+        clickableFocusOutline: "2px solid #10b981",
+        hoverColor: "#059669",
+        focusColor: "#047857",
+    };
+
+    private statusTheme = {
+        transition: "opacity 0.5s ease",
+        pulseDuration: "1.5s",
+        sizeMedium: "20px",
+    };
+
+    render() {
+        return html`
+            <div class="theme-examples">
+                <!-- Button-style themed icons -->
+                <div class="button-icons">
+                    ${["save", "edit", "delete"].map(
+                        (action) => html`
+                            <mjo-icon
+                                src=${this.getActionIcon(action)}
+                                clickable
+                                .theme=${this.buttonTheme}
+                                aria-label=${action}
+                                @mjo-icon:click=${() => this.handleAction(action)}
+                            >
+                            </mjo-icon>
+                        `,
+                    )}
+                </div>
+
+                <!-- Status indicator themed icons -->
+                <div class="status-icons">
+                    <mjo-icon src=${this.getStatusIcon()} animation="pulse" .theme=${this.statusTheme} aria-label="Status indicator"> </mjo-icon>
+                </div>
+            </div>
+        `;
+    }
+
+    private getActionIcon(action: string) {
+        /* ... */
+    }
+    private getStatusIcon() {
+        /* ... */
+    }
+    private handleAction(action: string) {
+        console.log(`${action} clicked`);
     }
 }
 ```
@@ -916,7 +1142,7 @@ html`
 ```ts
 html`
     <button style="display: flex; align-items: center; gap: 0.5rem;">
-        <mjo-icon src=${AiFillPlus} style="font-size: 16px;"></mjo-icon>
+        <mjo-icon src=${AiFillPlus} size="small"></mjo-icon>
         Add Item
     </button>
 `;
@@ -927,8 +1153,8 @@ html`
 ```ts
 html`
     <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <mjo-icon src=${AiFillCheckCircle} style="color: green;"></mjo-icon>
-        <span>Success</span>
+        <mjo-icon src=${AiFillCheckCircle} size="small" style="color: green;" aria-label="Success"> </mjo-icon>
+        <span>Operation completed</span>
     </div>
 `;
 ```
@@ -943,11 +1169,11 @@ const menuItems = [
 ];
 
 html`
-    <nav>
+    <nav role="navigation">
         ${menuItems.map(
             (item) => html`
-                <a href=${item.path} style="display: flex; align-items: center; gap: 0.5rem;">
-                    <mjo-icon src=${item.icon}></mjo-icon>
+                <a href=${item.path} style="display: flex; align-items: center; gap: 0.5rem;" aria-label=${item.label}>
+                    <mjo-icon src=${item.icon} size="small" aria-hidden="true"> </mjo-icon>
                     ${item.label}
                 </a>
             `,
@@ -959,24 +1185,165 @@ html`
 ### Loading Spinner
 
 ```ts
-html` <mjo-icon src=${AiOutlineLoading} style="animation: spin 1s linear infinite;"></mjo-icon> `;
+html` <mjo-icon src=${AiOutlineLoading} animation="spin" loading size="medium" aria-label="Loading content"> </mjo-icon> `;
 ```
 
-## Accessibility Notes
+### Interactive Toggle
 
--   Icons inherit color from parent text for better contrast compliance
--   For decorative icons, no additional ARIA attributes needed
--   For functional icons, add appropriate `aria-label` or `title` to parent element
--   Icons used as buttons should be wrapped in focusable elements with proper labels
--   Consider providing text alternatives for critical information conveyed by icons
+```ts
+@customElement("icon-toggle")
+class IconToggle extends LitElement {
+    @state() private active = false;
+
+    private handleToggle(event: CustomEvent) {
+        this.active = !this.active;
+        this.dispatchEvent(
+            new CustomEvent("toggle", {
+                detail: { active: this.active },
+            }),
+        );
+    }
+
+    render() {
+        return html`
+            <mjo-icon
+                src=${this.active ? AiFillHeart : AiOutlineHeart}
+                clickable
+                size="large"
+                style="color: ${this.active ? "#dc2626" : "inherit"}"
+                aria-label=${this.active ? "Remove from favorites" : "Add to favorites"}
+                role="button"
+                tabindex="0"
+                @mjo-icon:click=${this.handleToggle}
+            >
+            </mjo-icon>
+        `;
+    }
+}
+```
+
+## Accessibility Guidelines
+
+### Screen Reader Support
+
+```ts
+// Decorative icons (purely visual)
+html`
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <mjo-icon src=${AiFillStar} aria-hidden="true"></mjo-icon>
+        <span>5 star rating</span>
+    </div>
+`;
+
+// Functional icons (convey information)
+html` <mjo-icon src=${AiFillWarning} size="small" style="color: orange;" aria-label="Warning: Review your input" role="img"> </mjo-icon> `;
+
+// Interactive icons (clickable)
+html`
+    <mjo-icon src=${AiFillClose} clickable size="medium" aria-label="Close dialog" role="button" tabindex="0" @mjo-icon:click=${this.handleClose}> </mjo-icon>
+`;
+```
+
+### Keyboard Navigation
+
+-   Clickable icons are automatically focusable with `tabindex="0"`
+-   Press Enter or Space to activate clickable icons
+-   Focus indicators are automatically provided
+-   Custom focus styling via CSS variables
+
+### Color and Contrast
+
+-   Icons inherit color from parent for better contrast compliance
+-   Use sufficient color contrast ratios (4.5:1 for normal text)
+-   Don't rely solely on color to convey information
+-   Consider providing text labels alongside icons
+
+### Loading States
+
+-   Loading icons automatically get `aria-label="Loading"` if not provided
+-   Use loading state for long-running operations
+-   Announce status changes to screen readers
+
+```ts
+html` <mjo-icon src=${AiOutlineLoading} loading animation="spin" aria-label="Loading user data"> </mjo-icon> `;
+```
+
+### Best Practices
+
+-   Use semantic HTML around icons when possible
+-   Provide text alternatives for critical information
+-   Test with keyboard navigation and screen readers
+-   Use appropriate ARIA roles (`img`, `button`, `presentation`)
+-   Consider reduced motion preferences for animations
+
+```css
+@media (prefers-reduced-motion: reduce) {
+    mjo-icon {
+        --mjo-icon-transition: none;
+        --mjo-icon-spin-duration: 0s;
+        --mjo-icon-bounce-duration: 0s;
+        --mjo-icon-pulse-duration: 0s;
+        --mjo-icon-shake-duration: 0s;
+    }
+}
+```
 
 ## Performance Considerations
 
--   Uses `unsafeSVG` directive for optimal rendering performance
--   SVG content is rendered directly without additional DOM parsing
--   Icons are lightweight and don't impact bundle size significantly
--   Consider icon sprite sheets for very large icon collections
--   CSS transitions are hardware-accelerated for smooth animations
+-   **SVG Validation**: Content is validated before rendering for security and performance
+-   **Error Handling**: Invalid SVG gracefully handled with error events
+-   **Direct Rendering**: SVG content is rendered directly without additional DOM parsing
+-   **CSS Transitions**: Hardware-accelerated animations for smooth performance
+-   **Lightweight Bundle**: Icons don't significantly impact bundle size
+-   **Optimized Re-renders**: Changes to properties trigger efficient updates only
+
+### Performance Tips
+
+```ts
+// Preload frequently used icons
+const commonIcons = {
+    home: AiFillHome,
+    user: AiFillUser,
+    settings: AiFillSetting,
+};
+
+// Use size prop instead of CSS font-size when possible
+html`<mjo-icon src=${icon} size="large"></mjo-icon>`;
+
+// Minimize animation usage on mobile devices
+html`<mjo-icon src=${icon} animation=${isMobile ? undefined : "bounce"}></mjo-icon>`;
+```
+
+## Browser Support
+
+-   **SVG Support**: All modern browsers (IE 11+)
+-   **CSS Custom Properties**: All modern browsers (IE 11 with limitations)
+-   **CSS Animations**: All modern browsers
+-   **Event Listeners**: All modern browsers
+-   **ARIA Support**: All modern browsers with screen reader compatibility
+
+## Security Considerations
+
+-   **SVG Validation**: All SVG content is validated before rendering
+-   **XSS Prevention**: Malicious SVG content is rejected with error events
+-   **Content Sanitization**: Only valid SVG elements and attributes are allowed
+-   **Safe Rendering**: No unsafe DOM operations or script execution
+
+```ts
+// Error handling for invalid/malicious content
+html`
+    <mjo-icon
+        src=${untrustedSVG}
+        @mjo-icon:error=${this.handleInvalidSVG}>
+    </mjo-icon>
+`;
+
+private handleInvalidSVG(event: CustomEvent) {
+    console.warn('Invalid SVG content detected:', event.detail.error);
+    // Fallback to safe default icon
+    this.iconSrc = this.getDefaultIcon();
+}
+```
 
 ## Browser Support
 
@@ -986,4 +1353,36 @@ html` <mjo-icon src=${AiOutlineLoading} style="animation: spin 1s linear infinit
 
 ## Summary
 
-`<mjo-icon>` provides a simple yet powerful way to render SVG icons with automatic sizing, color inheritance, and smooth transitions. It integrates seamlessly with the mjo-icons library and supports theme customization through ThemeMixin. The component is designed for maximum flexibility while maintaining excellent performance and accessibility standards. Use it for any scenario requiring scalable, customizable icons in your application.
+`<mjo-icon>` provides a comprehensive, accessible SVG icon solution with enhanced interaction capabilities, validation, and theming support. Key features include:
+
+-   **Accessibility First**: Built-in ARIA support, keyboard navigation, and screen reader compatibility
+-   **Interactive Capabilities**: Clickable icons with proper focus management and event handling
+-   **Loading States**: Built-in loading indicators with appropriate ARIA labels
+-   **Size Variants**: Predefined size options (`small`, `medium`, `large`, `xl`) plus custom sizing
+-   **Animations**: Built-in animations (`spin`, `bounce`, `pulse`, `shake`) with customizable timing
+-   **SVG Validation**: Secure rendering with validation and error handling
+-   **Theme Integration**: Comprehensive theming via CSS variables and ThemeMixin
+-   **Event System**: Custom events for click, load, and error states
+-   **Performance Optimized**: Efficient rendering and hardware-accelerated animations
+-   **Security Focused**: SVG content validation prevents XSS vulnerabilities
+
+The component integrates seamlessly with the `mjo-icons` library and supports extensive customization while maintaining excellent performance, accessibility, and security standards. Use it for any scenario requiring scalable, interactive, and accessible icons in your application.
+
+### Quick Integration
+
+```ts
+import "mjo-litui/mjo-icon";
+import { AiFillHeart } from "mjo-icons/ai";
+
+// Basic usage
+html`<mjo-icon src=${AiFillHeart}></mjo-icon>`;
+
+// Interactive usage
+html`<mjo-icon src=${AiFillHeart} clickable @mjo-icon:click=${this.handleClick}></mjo-icon>`;
+
+// Loading state
+html`<mjo-icon src=${loadingIcon} loading animation="spin"></mjo-icon>`;
+
+// Themed usage
+html`<mjo-icon src=${icon} .theme=${{ transition: "all 0.5s ease" }}></mjo-icon>`;
+```

@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Custom checkbox change event
-        checkbox.addEventListener("mjo-checkbox-change", (ev: Event) => {
+        checkbox.addEventListener("mjo-checkbox:change", (ev: Event) => {
             const event = ev as MjoCheckboxChangeEvent;
             const { element, checked, indeterminate, value, name, previousState } = event.detail;
 
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Handle form demonstrations
     const formExamples = document.querySelectorAll('mjo-checkbox[name*="demo"]');
     formExamples.forEach((checkbox) => {
-        checkbox.addEventListener("mjo-checkbox-change", (ev: Event) => {
+        checkbox.addEventListener("mjo-checkbox:change", (ev: Event) => {
             const event = ev as MjoCheckboxChangeEvent;
             const { checked, name, value } = event.detail;
 
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
             preferencesSelected.push(checkbox.getAttribute("value") || "");
         }
 
-        checkbox.addEventListener("mjo-checkbox-change", (ev: Event) => {
+        checkbox.addEventListener("mjo-checkbox:change", (ev: Event) => {
             const event = ev as MjoCheckboxChangeEvent;
             const { checked, value } = event.detail;
 
@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
             featuresSelected.push(checkbox.getAttribute("value") || "");
         }
 
-        checkbox.addEventListener("mjo-checkbox-change", (ev: Event) => {
+        checkbox.addEventListener("mjo-checkbox:change", (ev: Event) => {
             const event = ev as MjoCheckboxChangeEvent;
             const { checked, value } = event.detail;
 

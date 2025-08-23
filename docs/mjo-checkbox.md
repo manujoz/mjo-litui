@@ -829,14 +829,14 @@ All validation properties from FormMixin are inherited:
 | Event                               | Detail                                                            | Emitted When                | Notes                                                 |
 | ----------------------------------- | ----------------------------------------------------------------- | --------------------------- | ----------------------------------------------------- |
 | `change`                            | Native event                                                      | Checkbox state changes      | Standard HTML input change event for form handling    |
-| `mjo-checkbox-change`               | `{ element, checked, indeterminate, value, name, previousState }` | Checkbox state changes      | Enhanced custom event with detailed state information |
+| `mjo-checkbox:change`               | `{ element, checked, indeterminate, value, name, previousState }` | Checkbox state changes      | Enhanced custom event with detailed state information |
 | `mjo-checkbox:indeterminate-change` | `{ element, indeterminate, checked }`                             | Indeterminate state changes | Fired when `setIndeterminate()` method is called      |
 | `mjo-checkbox:focus`                | `{ element }`                                                     | Checkbox receives focus     | Custom focus event for advanced interactions          |
 | `mjo-checkbox:blur`                 | `{ element }`                                                     | Checkbox loses focus        | Custom blur event for advanced interactions           |
 
 ### Event Details
 
-The `mjo-checkbox-change` event provides comprehensive state information:
+The `mjo-checkbox:change` event provides comprehensive state information:
 
 ```ts
 interface MjoCheckboxChangeEvent extends CustomEvent {

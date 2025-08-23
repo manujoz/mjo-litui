@@ -11,29 +11,29 @@ const __dirname = dirname(__filename);
 const DIST_PATH = join(__dirname, "..", "dist");
 const VERBOSE = process.argv.includes("--verbose") || process.argv.includes("-v");
 
-// Configuración de Terser optimizada para web components
+// Terser configuration optimized for web components
 const terserOptions = {
-    module: true, // Para ES modules
+    module: true, // For ES modules
     compress: {
-        drop_console: false, // Mantener console.log para debugging
+        drop_console: false, // Keep console.log for debugging
         drop_debugger: false,
         pure_funcs: [],
-        keep_fargs: false, // Optimizar nombres de argumentos
-        passes: 2, // Dos pasadas para mejor optimización
+        keep_fargs: false, // Optimize argument names
+        passes: 2, // Two passes for better optimization
     },
     mangle: {
-        keep_classnames: true, // Importante para web components
-        keep_fnames: false, // Minificar nombres de funciones privadas
+        keep_classnames: true, // Important for web components
+        keep_fnames: false, // Minify private function names
         reserved: ["customElements", "HTMLElement", "LitElement", "CSSResult"],
         properties: {
-            regex: /^_/, // Minificar propiedades privadas que empiecen con _
+            regex: /^_/, // Minify private properties starting with _
         },
     },
     format: {
-        comments: false, // Eliminar comentarios
+        comments: false, // Remove comments
         preserve_annotations: false,
     },
-    sourceMap: false, // No generar source maps adicionales
+    sourceMap: false, // Do not generate additional source maps
 };
 
 async function isDirectory(path) {

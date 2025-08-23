@@ -456,7 +456,7 @@ export class ExampleAccessibilityFeatures extends LitElement {
                             helper-text="Main color for buttons and links"
                             aria-label="Primary theme color selector"
                             aria-description="Choose the main color for your application theme"
-                            @mjo-color-change=${(e: CustomEvent) => (this.themeColors = { ...this.themeColors, primary: e.detail.value })}
+                            @mjo-color-picker:change=${(e: CustomEvent) => (this.themeColors = { ...this.themeColors, primary: e.detail.value })}
                         ></mjo-color-picker>
 
                         <!-- Error state with accessibility -->
@@ -469,7 +469,7 @@ export class ExampleAccessibilityFeatures extends LitElement {
                             color="secondary"
                             helper-text="Used for secondary UI elements"
                             aria-describedby="secondary-help"
-                            @mjo-color-change=${(e: CustomEvent) => (this.themeColors = { ...this.themeColors, secondary: e.detail.value })}
+                            @mjo-color-picker:change=${(e: CustomEvent) => (this.themeColors = { ...this.themeColors, secondary: e.detail.value })}
                         ></mjo-color-picker>
                         <div id="secondary-help" style="font-size: 0.875rem; color: #6b7280;">Should provide good contrast with primary color.</div>
 
@@ -483,7 +483,7 @@ export class ExampleAccessibilityFeatures extends LitElement {
                             size="large"
                             helper-text="Accent color for highlights"
                             aria-label="Accent color selector with live value display"
-                            @mjo-color-change=${(e: CustomEvent) => (this.themeColors = { ...this.themeColors, accent: e.detail.value })}
+                            @mjo-color-picker:change=${(e: CustomEvent) => (this.themeColors = { ...this.themeColors, accent: e.detail.value })}
                         ></mjo-color-picker>
 
                         <!-- Validation and disabled states -->
@@ -577,15 +577,15 @@ export class ExampleAccessibilityFeatures extends LitElement {
 
 ## Events
 
-| Event                     | Detail                                       | Emitted When                           | Notes                               |
-| ------------------------- | -------------------------------------------- | -------------------------------------- | ----------------------------------- |
-| `change`                  | None                                         | User selects a new color               | Standard HTML change event, bubbles |
-| `input`                   | None                                         | Color value changes during interaction | Standard HTML input event, bubbles  |
-| `mjo-color-change`        | `{ element, value, format, originalEvent }`  | User selects a new color               | Custom event with detailed info     |
-| `mjo-color-input`         | `{ element, value, format, originalEvent }`  | Color value changes during interaction | Custom event with detailed info     |
-| `mjo-color-format-change` | `{ element, format, previousFormat, value }` | Color format changes                   | Custom event for format tracking    |
-| `mjo-color-focus`         | `{ element }`                                | Color picker receives focus            | Custom focus event                  |
-| `mjo-color-blur`          | `{ element }`                                | Color picker loses focus               | Custom blur event                   |
+| Event                            | Detail                                       | Emitted When                           | Notes                               |
+| -------------------------------- | -------------------------------------------- | -------------------------------------- | ----------------------------------- |
+| `change`                         | None                                         | User selects a new color               | Standard HTML change event, bubbles |
+| `input`                          | None                                         | Color value changes during interaction | Standard HTML input event, bubbles  |
+| `mjo-color-picker:change`        | `{ element, value, format, originalEvent }`  | User selects a new color               | Custom event with detailed info     |
+| `mjo-color-picker:input`         | `{ element, value, format, originalEvent }`  | Color value changes during interaction | Custom event with detailed info     |
+| `mjo-color-picker:format-change` | `{ element, format, previousFormat, value }` | Color format changes                   | Custom event for format tracking    |
+| `mjo-color-picker:focues`        | `{ element }`                                | Color picker receives focus            | Custom focus event                  |
+| `mjo-color-picker:blur`          | `{ element }`                                | Color picker loses focus               | Custom blur event                   |
 
 ## Methods
 

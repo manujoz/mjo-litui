@@ -284,6 +284,14 @@ export interface MjoDropdownTheme {
 
 export interface MjoIconTheme {
     transition?: string;
+    sizeSmall?: string;
+    sizeMedium?: string;
+    sizeLarge?: string;
+    sizeXl?: string;
+    disabledOpacity?: string;
+    clickableHoverScale?: string;
+    clickableFocusOutline?: string;
+    loadingSpinDuration?: string;
 }
 
 export interface MjoImageTheme {
