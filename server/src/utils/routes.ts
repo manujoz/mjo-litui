@@ -12,6 +12,7 @@ import { DrawerController } from "../controllers/drawer-controller.js";
 import { DropdownController } from "../controllers/dropdown-controller.js";
 import { GridController } from "../controllers/grid-controller.js";
 import { IconController } from "../controllers/icon-controller.js";
+import { ImageController } from "../controllers/image-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
 
@@ -29,6 +30,7 @@ const drawerController = new DrawerController();
 const dropdownController = new DropdownController();
 const gridController = new GridController();
 const iconController = new IconController();
+const imageController = new ImageController();
 const accordionController = new AccordionController();
 const textfieldController = new TextfieldController();
 
@@ -92,6 +94,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-icon",
         controller: iconController.renderIconPage,
+    },
+    {
+        path: "/component/mjo-image",
+        controller: imageController.renderImagePage,
     },
     {
         path: "/component/mjo-textfield",

@@ -1,18 +1,4 @@
 import { SupportedLocale } from "./types/locales.js";
-
-import { LitElement, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
-import { ifDefined } from "lit/directives/if-defined.js";
-
-import { locales } from "./locales/locales.js";
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
-import { CalendarUtils } from "./utils/calendar.js";
-
-import "./components/calendar/calendar-grid.js";
-import "./components/calendar/calendar-header.js";
-import "./components/calendar/calendar-month-picker.js";
-import "./components/calendar/calendar-year-picker.js";
 import {
     CalendarDateClickEvent,
     CalendarDateHoverEvent,
@@ -28,6 +14,20 @@ import {
     GoToMonthOptions,
     GoToYearOptions,
 } from "./types/mjo-calendar.js";
+
+import { LitElement, css, html, nothing } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { ifDefined } from "lit/directives/if-defined.js";
+
+import { locales } from "./locales/locales.js";
+import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
+import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { CalendarUtils } from "./utils/calendar.js";
+
+import "./components/calendar/calendar-grid.js";
+import "./components/calendar/calendar-header.js";
+import "./components/calendar/calendar-month-picker.js";
+import "./components/calendar/calendar-year-picker.js";
 
 /**
  * A configurable calendar component for date selection.

@@ -1,0 +1,207 @@
+/* Image Component Demo Styles */
+
+.playground-showcase mjo-image {
+    width: 400px;
+    height: 300px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.playground-showcase mjo-image:hover {
+    transform: translateY(-2px);
+}
+
+/* Quick sources buttons */
+.quick-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.quick-sources button {
+    padding: 8px 12px;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 6px;
+    background: var(--mjo-background-color-card);
+    color: var(--mjo-foreground-color);
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.quick-sources button:hover {
+    background: var(--mjo-primary-color);
+    color: var(--mjo-primary-foreground-color);
+    border-color: var(--mjo-primary-color);
+}
+
+/* Image grid for object-fit examples */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin: 20px 0;
+}
+
+.image-example {
+    text-align: center;
+}
+
+.image-example h4 {
+    margin: 0 0 12px 0;
+    font-size: 0.875rem;
+    color: var(--mjo-foreground-color-low);
+    font-weight: 500;
+}
+
+.image-example mjo-image {
+    width: 200px;
+    height: 150px;
+    border-radius: 8px;
+    border: 2px solid var(--mjo-border-color);
+}
+
+/* Size examples */
+.size-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    align-items: flex-start;
+    margin: 20px 0;
+}
+
+.size-example {
+    text-align: center;
+}
+
+.size-example h4 {
+    margin: 0 0 12px 0;
+    font-size: 0.875rem;
+    color: var(--mjo-foreground-color-low);
+    font-weight: 500;
+}
+
+.image-container {
+    border: 2px solid var(--mjo-border-color);
+    border-radius: 8px;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.image-container.small {
+    width: 100px;
+    height: 75px;
+}
+
+.image-container.medium {
+    width: 200px;
+    height: 150px;
+}
+
+.image-container.large {
+    width: 300px;
+    height: 225px;
+}
+
+.image-container mjo-image {
+    width: 100%;
+    height: 100%;
+}
+
+/* Lazy loading demo */
+.lazy-loading-demo {
+    margin: 40px 0;
+}
+
+.lazy-loading-demo .spacer {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mjo-foreground-color-low);
+    font-style: italic;
+}
+
+.lazy-loading-demo .spacer::before {
+    content: "⬇️ Scroll down to see lazy-loaded images ⬇️";
+}
+
+.lazy-loading-demo .component-showcase {
+    margin-top: 50px;
+}
+
+.lazy-loading-demo mjo-image {
+    width: 200px;
+    height: 150px;
+    border-radius: 8px;
+    border: 2px solid var(--mjo-border-color);
+}
+
+/* Component showcase improvements for images */
+.component-showcase mjo-image {
+    width: 200px;
+    height: 150px;
+    border-radius: 8px;
+    border: 1px solid var(--mjo-border-color);
+    transition: all 0.2s ease;
+}
+
+.component-showcase mjo-image:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Image notification styles (handled in JS but defined here for consistency) */
+.image-notification {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .image-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .size-examples {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .playground-showcase mjo-image {
+        width: 300px;
+        height: 225px;
+    }
+
+    .quick-sources {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .component-showcase mjo-image,
+    .image-example mjo-image {
+        width: 150px;
+        height: 112px;
+    }
+
+    .playground-showcase mjo-image {
+        width: 250px;
+        height: 187px;
+    }
+
+    .quick-sources button {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}
+
+/* Focus styles for accessibility */
+.component-showcase mjo-image[clickable]:focus-visible,
+.playground-showcase mjo-image[clickable]:focus-visible {
+    outline: 2px solid var(--mjo-primary-color);
+    outline-offset: 2px;
+}

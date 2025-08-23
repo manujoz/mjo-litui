@@ -297,6 +297,13 @@ export interface MjoIconTheme {
 export interface MjoImageTheme {
     errorBackgroundColor?: string;
     errorRadius?: string;
+    loadingBackgroundColor?: string;
+    loadingSize?: string;
+    loadingColor?: string;
+    focusOutline?: string;
+    disabledOpacity?: string;
+    clickableHoverScale?: string;
+    clickableCursor?: string;
 }
 
 export interface MjoIonicTheme {

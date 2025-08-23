@@ -25,3 +25,4 @@ node_modules
 /actions-plan
 /server/public/js/*.js
 /server/public/js/*.js.map
+/server/src/restart.trigger

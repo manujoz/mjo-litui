@@ -1,4 +1,5 @@
-import { join } from "path";
+import fs from "fs";
+import path, { join } from "path";
 import { fileURLToPath } from "url";
 
 import { filterCacheableFiles, ModuleCacheManager, restartWithCacheInvalidation } from "../cache-manager";
@@ -119,11 +120,19 @@ async function triggerBuild(changedFiles: string[] = []): Promise<void> {
         cwd: join(__dirname, "../.."),
     });
 
+    const normalizedFiles = changedFiles.map((file) => file.replace(process.cwd(), "").replace(/\\/g, "/"));
+
+    const needRestart = normalizedFiles.some((file) => file.startsWith("/src/"));
     clientBuildProcess.on("close", (clientCode: number) => {
         if (clientCode === 0) {
             // Notificar fin del build a clientes HMR
-            if (hmrManager) {
+            if (hmrManager && !needRestart) {
                 hmrManager.notifyBuildComplete();
+                return;
+            }
+
+            if (needRestart) {
+                forceRestart();
             }
         } else {
             console.error(`❌ Error en build cliente (código: ${clientCode})`);
@@ -143,4 +152,9 @@ function scheduleRestart(): void {
     setTimeout(() => {
         restartWithCacheInvalidation();
     }, 300);
+}
+
+function forceRestart(): void {
+    const tempFile = path.join(process.cwd(), "server", "src", "restart.trigger");
+    fs.writeFileSync(tempFile, Date.now().toString());
 }

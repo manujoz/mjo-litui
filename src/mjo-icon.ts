@@ -30,7 +30,7 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 @customElement("mjo-icon")
 export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) src?: string;
-    @property({ type: String }) size: MjoIconSize = "medium";
+    @property({ type: String }) size?: MjoIconSize;
     @property({ type: String }) animation: MjoIconAnimation = "none";
     @property({ type: Boolean }) clickable = false;
     @property({ type: Boolean }) disabled = false;
@@ -52,7 +52,7 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
     }
 
     render() {
-        if (!this.src || this.hasError) {
+        if ((!this.src && !this.loading) || this.hasError) {
             return nothing;
         }
 
@@ -141,18 +141,37 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
         if (this.clickable) classes.push("clickable");
         if (this.disabled) classes.push("disabled");
         if (this.animation !== "none") classes.push(`animate-${this.animation}`);
-        classes.push(`size-${this.size}`);
+        if (this.size) classes.push(`size-${this.size}`);
 
         return classes.join(" ");
     }
 
     #renderLoadingSpinner() {
+        const size = this.size ? `size-${this.size}` : "size-medium";
+
         return html`
-            <div class="loading-spinner size-${this.size}" part="icon">
+            <div class="loading-spinner ${size}" part="icon">
                 <svg viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-dasharray="31.416" stroke-dashoffset="31.416">
-                        <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite" />
-                        <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite" />
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-dasharray="15.708"
+                        stroke-dashoffset="62.832"
+                        fill="none"
+                    >
+                        <animateTransform
+                            attributeName="transform"
+                            attributeType="XML"
+                            type="rotate"
+                            from="0 12 12"
+                            to="360 12 12"
+                            dur="1s"
+                            repeatCount="indefinite"
+                        />
                     </circle>
                 </svg>
             </div>
@@ -220,9 +239,6 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
             :host {
                 position: relative;
                 display: inline-block;
-                font-size: var(--mjo-icon-size-medium, 24px);
-                width: 1em;
-                height: 1em;
                 color: currentColor;
             }
 

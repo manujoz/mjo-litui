@@ -1,6 +1,6 @@
 {
     "watch": ["server/src", "server/public/css"],
-    "ext": "ts,js,json,html",
+    "ext": "ts,js,json,html,trigger",
     "ignore": ["server/dist", "server/public/js", "server/client", "dist", "node_modules", "**/*.test.ts", "**/*.spec.ts", ".git"],
     "exec": "tsx server/src/app.ts",
     "env": {
@@ -11,7 +11,7 @@
         "start": "echo 🚀 SSR Server starting...",
         "crash": "echo 💥 SSR Server crashed!"
     },
-    "delay": 1500,
+    "delay": 500,
     "verbose": false,
     "legacyWatch": false
 }
