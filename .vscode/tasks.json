@@ -275,6 +275,11 @@
 			"label": "Final CSS Minification Test",
 			"type": "shell",
 			"command": "node scripts/minify-css.js"
+		},
+		{
+			"label": "TypeScript Check Menu Button Only",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-menu-button.ts"
 		}
 	]
 }

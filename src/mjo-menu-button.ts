@@ -17,6 +17,7 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
     @property({ type: Boolean }) noink = false;
     @property({ type: Boolean }) disabled = false;
 
+    // ARIA properties - ariaControls remains custom, ariaLabel uses Lit native
     @property({ type: String, attribute: "aria-controls" }) ariaControls?: string;
 
     @query(".container") container!: HTMLButtonElement;
@@ -31,8 +32,9 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
                 class="container"
                 @click=${this.#handleClick}
                 data-color=${this.color}
-                aria-label=${this.ariaLabel || this.isOpen ? "Close menu" : "Open menu"}
+                aria-label=${this.ariaLabel || (this.isOpen ? "Close menu" : "Open menu")}
                 aria-expanded=${this.isOpen ? "true" : "false"}
+                aria-haspopup=${this.ariaControls ? "menu" : "false"}
                 aria-controls=${this.ariaControls || nothing}
                 ?disabled=${this.disabled}
                 type="button"
@@ -66,13 +68,27 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         }
     }
 
+    /**
+     * Sets focus to the menu button
+     */
+    focus(options?: FocusOptions): void {
+        this.container?.focus(options);
+    }
+
+    /**
+     * Removes focus from the menu button
+     */
+    blur(): void {
+        this.container?.blur();
+    }
+
     close() {
         if (this.isAnimated || this.disabled) return;
 
         this.isOpen = false;
 
         this.dispatchEvent(
-            new CustomEvent("menu-button-close", {
+            new CustomEvent("mjo-menu-button:close", {
                 detail: { isOpen: this.isOpen },
                 bubbles: true,
                 composed: true,
@@ -86,7 +102,7 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         this.isOpen = true;
 
         this.dispatchEvent(
-            new CustomEvent("menu-button-open", {
+            new CustomEvent("mjo-menu-button:open", {
                 detail: { isOpen: this.isOpen },
                 bubbles: true,
                 composed: true,
@@ -100,7 +116,7 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         this.isOpen = !this.isOpen;
 
         this.dispatchEvent(
-            new CustomEvent("menu-button-toggle", {
+            new CustomEvent("mjo-menu-button:toggle", {
                 detail: { isOpen: this.isOpen },
                 bubbles: true,
                 composed: true,
@@ -513,9 +529,30 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
             }
 
             /* Focus styles for better accessibility */
-            .container:focus-visible {
+            .container:focus-visible,
+            .container:focus {
                 outline: 2px solid var(--mjo-primary-color, #1d7fdb);
                 outline-offset: 2px;
+            }
+            .container[data-color="secondary"]:focus,
+            .container[data-color="secondary"]:focus-visible {
+                outline: 2px solid var(--mjo-secondary-color, #cc3d74);
+            }
+            .container[data-color="success"]:focus,
+            .container[data-color="success"]:focus-visible {
+                outline: 2px solid var(--mjo-color-success, #20d338);
+            }
+            .container[data-color="info"]:focus,
+            .container[data-color="info"]:focus-visible {
+                outline: 2px solid var(--mjo-color-info, #2065cc);
+            }
+            .container[data-color="warning"]:focus,
+            .container[data-color="warning"]:focus-visible {
+                outline: 2px solid var(--mjo-color-warning, #df950c);
+            }
+            .container[data-color="error"]:focus,
+            .container[data-color="error"]:focus-visible {
+                outline: 2px solid var(--mjo-color-error, #cf2a2a);
             }
 
             /* Disabled state */
@@ -593,8 +630,8 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "menu-button-toggle": MjoMenuButtonToggleEvent;
-        "menu-button-open": MjoMenuButtonOpenEvent;
-        "menu-button-close": MjoMenuButtonCloseEvent;
+        "mjo-menu-button:toggle": MjoMenuButtonToggleEvent;
+        "mjo-menu-button:open": MjoMenuButtonOpenEvent;
+        "mjo-menu-button:close": MjoMenuButtonCloseEvent;
     }
 }

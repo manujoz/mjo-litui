@@ -14,6 +14,7 @@ import { GridController } from "../controllers/grid-controller.js";
 import { IconController } from "../controllers/icon-controller.js";
 import { ImageController } from "../controllers/image-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
+import { MenuButtonController } from "../controllers/menu-button-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
 
 const indexController = new IndexController();
@@ -32,6 +33,7 @@ const gridController = new GridController();
 const iconController = new IconController();
 const imageController = new ImageController();
 const accordionController = new AccordionController();
+const menuButtonController = new MenuButtonController();
 const textfieldController = new TextfieldController();
 
 export const ROUTES = [
@@ -98,6 +100,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-image",
         controller: imageController.renderImagePage,
+    },
+    {
+        path: "/component/mjo-menu-button",
+        controller: menuButtonController.renderMenuButtonPage,
     },
     {
         path: "/component/mjo-textfield",

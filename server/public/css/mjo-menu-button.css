@@ -1,0 +1,128 @@
+/* Menu Button Component Specific Styles */
+
+.navigation-demo {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    border: 1px solid var(--mjo-color-border, #e5e7eb);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.nav-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.nav-menu {
+    background: white;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-menu[hidden] {
+    display: none;
+}
+
+.nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-menu li {
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.nav-menu li:last-child {
+    border-bottom: none;
+}
+
+.nav-menu a {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: #374151;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.nav-menu a:hover {
+    background-color: #f9fafb;
+    color: #1f2937;
+}
+
+/* Action buttons in playground */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Enhanced component showcase for menu buttons */
+.component-showcase .navigation-demo {
+    margin: 0;
+}
+
+/* Control group styling improvements */
+.control-group h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Toggle group styles */
+.toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .component-showcase {
+        justify-content: center;
+    }
+
+    .navigation-demo {
+        max-width: 100%;
+    }
+
+    .action-buttons {
+        justify-content: center;
+    }
+
+    .playground-showcase {
+        padding: 1rem;
+        min-height: 80px;
+    }
+}
+
+/* Animation state indicator */
+.playground-showcase mjo-menu-button[is-open] {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+}
+
+/* Focus enhancement for demo */
+.playground-showcase mjo-menu-button:focus-visible {
+    outline: 3px solid var(--mjo-primary-color, #1d7fdb);
+    outline-offset: 4px;
+}
