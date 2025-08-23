@@ -1,12 +1,199 @@
-class o{constructor(){if(this.ws=null,this.reconnectAttempts=0,this.maxReconnectAttempts=3,this.reconnectDelay=2e3,this.isConnected=!1,this.isReloading=!1,this.buildInProgress=!1,this.lastBuildCompleteTime=0,this.reloadCooldown=500,this.isShuttingDown=!1,this.hasReloadScheduled=!1,window.mjoHMRClient)return window.mjoHMRClient;window.mjoHMRClient=this,this.init()}init(){window.mjHMRInitialized||(window.mjHMRInitialized=!0,this.setupCleanupListeners(),this.connect())}setupCleanupListeners(){window.addEventListener("beforeunload",()=>{this.isShuttingDown=!0,this.cleanup()}),window.addEventListener("unload",()=>{this.isShuttingDown=!0,this.cleanup()}),document.addEventListener("visibilitychange",()=>{document.hidden&&this.isReloading&&this.cleanup()})}cleanup(){if(this.ws){try{this.ws.close(1e3,"Cleanup")}catch(e){console.warn("⚠️ Error closing WebSocket:",e)}this.ws=null}this.isConnected=!1}connect(){if(this.isShuttingDown||this.isReloading||this.hasReloadScheduled||this.isConnected)return;const i=`${window.location.protocol==="https:"?"wss:":"ws:"}//${window.location.host}/hmr`;try{this.ws=new WebSocket(i),this.setupEventListeners()}catch(n){console.error("❌ Error creating WebSocket:",n),this.scheduleReconnect()}}setupEventListeners(){this.ws&&(this.ws.onopen=()=>{this.isConnected=!0,this.reconnectAttempts=0,this.showNotification("🔥 HMR connected","success")},this.ws.onmessage=e=>{try{const i=JSON.parse(e.data);this.handleHMREvent(i)}catch(i){console.error("❌ Error parsing HMR message:",i)}},this.ws.onclose=e=>{this.isConnected=!1,!this.isReloading&&this.reconnectAttempts<this.maxReconnectAttempts&&this.scheduleReconnect()},this.ws.onerror=e=>{console.error("⚠️ HMR WebSocket error:",e),this.isConnected=!1})}handleHMREvent(e){var i,n;if(!(this.isReloading||this.isShuttingDown||this.hasReloadScheduled))switch(e.type){case"build-start":this.buildInProgress=!0,this.showNotification("🔨 Building...","info");break;case"build-complete":this.buildInProgress=!1,this.lastBuildCompleteTime=Date.now(),this.showNotification("✅ Build completed","success"),this.scheduleReload();break;case"build-error":this.buildInProgress=!1,this.showNotification(`❌ Error: ${((i=e.data)==null?void 0:i.error)||"Unknown error"}`,"error");break;case"file-changed":if(!this.buildInProgress){const t=((n=e.data)==null?void 0:n.files)||[];this.showNotification(`📝 Files changed: ${t.length}`,"info")}break;case"reload":this.scheduleReload();break;default:console.warn("🤷‍♂️ Unhandled HMR event:",e.type)}}scheduleReload(){if(this.hasReloadScheduled||this.isReloading||this.isShuttingDown)return;const e=Date.now()-this.lastBuildCompleteTime;if(e>0&&e<this.reloadCooldown){setTimeout(()=>this.scheduleReload(),this.reloadCooldown-e);return}this.hasReloadScheduled=!0,this.isReloading=!0,this.cleanup(),this.showNotification("🔄 Reloading page...","info"),setTimeout(()=>{window.location.reload()},800)}scheduleReconnect(){if(this.isReloading||this.reconnectAttempts>=this.maxReconnectAttempts){this.reconnectAttempts>=this.maxReconnectAttempts&&(console.warn("❌ Maximum reconnect attempts reached"),this.showNotification("❌ HMR permanently disconnected","error"));return}this.reconnectAttempts++;const e=this.reconnectDelay*Math.pow(1.5,this.reconnectAttempts-1);setTimeout(()=>{!this.isReloading&&!this.isConnected&&this.connect()},e)}createNotificationContainer(){if(document.getElementById("hmr-notifications"))return;const e=document.createElement("div");e.id="hmr-notifications",e.style.cssText=`
+class MjoHMRClient {
+  constructor() {
+    this.ws = null;
+    this.reconnectAttempts = 0;
+    this.maxReconnectAttempts = 3;
+    this.reconnectDelay = 2e3;
+    this.isConnected = false;
+    this.isReloading = false;
+    this.buildInProgress = false;
+    this.lastBuildCompleteTime = 0;
+    this.reloadCooldown = 500;
+    this.isShuttingDown = false;
+    this.hasReloadScheduled = false;
+    if (window.mjoHMRClient) {
+      return window.mjoHMRClient;
+    }
+    window.mjoHMRClient = this;
+    this.init();
+  }
+  init() {
+    if (window.mjHMRInitialized) {
+      return;
+    }
+    window.mjHMRInitialized = true;
+    this.setupCleanupListeners();
+    this.connect();
+  }
+  setupCleanupListeners() {
+    window.addEventListener("beforeunload", () => {
+      this.isShuttingDown = true;
+      this.cleanup();
+    });
+    window.addEventListener("unload", () => {
+      this.isShuttingDown = true;
+      this.cleanup();
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && this.isReloading) {
+        this.cleanup();
+      }
+    });
+  }
+  cleanup() {
+    if (this.ws) {
+      try {
+        this.ws.close(1e3, "Cleanup");
+      } catch (error) {
+        console.warn("⚠️ Error closing WebSocket:", error);
+      }
+      this.ws = null;
+    }
+    this.isConnected = false;
+  }
+  connect() {
+    if (this.isShuttingDown || this.isReloading || this.hasReloadScheduled) {
+      return;
+    }
+    if (this.isConnected) {
+      return;
+    }
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const wsUrl = `${protocol}//${window.location.host}/hmr`;
+    try {
+      this.ws = new WebSocket(wsUrl);
+      this.setupEventListeners();
+    } catch (error) {
+      console.error("❌ Error creating WebSocket:", error);
+      this.scheduleReconnect();
+    }
+  }
+  setupEventListeners() {
+    if (!this.ws)
+      return;
+    this.ws.onopen = () => {
+      this.isConnected = true;
+      this.reconnectAttempts = 0;
+      this.showNotification("🔥 HMR connected", "success");
+    };
+    this.ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        this.handleHMREvent(data);
+      } catch (error) {
+        console.error("❌ Error parsing HMR message:", error);
+      }
+    };
+    this.ws.onclose = (event) => {
+      this.isConnected = false;
+      if (!this.isReloading && this.reconnectAttempts < this.maxReconnectAttempts) {
+        this.scheduleReconnect();
+      }
+    };
+    this.ws.onerror = (error) => {
+      console.error("⚠️ HMR WebSocket error:", error);
+      this.isConnected = false;
+    };
+  }
+  handleHMREvent(event) {
+    var _a, _b;
+    if (this.isReloading || this.isShuttingDown || this.hasReloadScheduled) {
+      return;
+    }
+    switch (event.type) {
+      case "build-start":
+        this.buildInProgress = true;
+        this.showNotification("🔨 Building...", "info");
+        break;
+      case "build-complete":
+        this.buildInProgress = false;
+        this.lastBuildCompleteTime = Date.now();
+        this.showNotification("✅ Build completed", "success");
+        this.scheduleReload();
+        break;
+      case "build-error":
+        this.buildInProgress = false;
+        this.showNotification(`❌ Error: ${((_a = event.data) == null ? void 0 : _a.error) || "Unknown error"}`, "error");
+        break;
+      case "file-changed":
+        if (!this.buildInProgress) {
+          const files = ((_b = event.data) == null ? void 0 : _b.files) || [];
+          this.showNotification(`📝 Files changed: ${files.length}`, "info");
+        }
+        break;
+      case "reload":
+        this.scheduleReload();
+        break;
+      default:
+        console.warn("🤷‍♂️ Unhandled HMR event:", event.type);
+    }
+  }
+  scheduleReload() {
+    if (this.hasReloadScheduled || this.isReloading || this.isShuttingDown) {
+      return;
+    }
+    const timeSinceLastBuild = Date.now() - this.lastBuildCompleteTime;
+    if (timeSinceLastBuild > 0 && timeSinceLastBuild < this.reloadCooldown) {
+      setTimeout(() => this.scheduleReload(), this.reloadCooldown - timeSinceLastBuild);
+      return;
+    }
+    this.hasReloadScheduled = true;
+    this.isReloading = true;
+    this.cleanup();
+    this.showNotification("🔄 Reloading page...", "info");
+    setTimeout(() => {
+      window.location.reload();
+    }, 800);
+  }
+  scheduleReconnect() {
+    if (this.isReloading || this.reconnectAttempts >= this.maxReconnectAttempts) {
+      if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+        console.warn("❌ Maximum reconnect attempts reached");
+        this.showNotification("❌ HMR permanently disconnected", "error");
+      }
+      return;
+    }
+    this.reconnectAttempts++;
+    const delay = this.reconnectDelay * Math.pow(1.5, this.reconnectAttempts - 1);
+    setTimeout(() => {
+      if (!this.isReloading && !this.isConnected) {
+        this.connect();
+      }
+    }, delay);
+  }
+  createNotificationContainer() {
+    if (document.getElementById("hmr-notifications"))
+      return;
+    const container = document.createElement("div");
+    container.id = "hmr-notifications";
+    container.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 10000;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             pointer-events: none;
-        `,document.body.appendChild(e)}showNotification(e,i="info"){this.createNotificationContainer();const n=document.getElementById("hmr-notifications");if(!n)return;this.notificationTimeout&&clearTimeout(this.notificationTimeout),n.innerHTML="";const t=document.createElement("div"),s={info:"#3b82f6",success:"#10b981",error:"#ef4444",warning:"#f59e0b"};t.style.cssText=`
-            background: ${s[i]||s.info};
+        `;
+    document.body.appendChild(container);
+  }
+  showNotification(message, type = "info") {
+    this.createNotificationContainer();
+    const container = document.getElementById("hmr-notifications");
+    if (!container)
+      return;
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
+    }
+    container.innerHTML = "";
+    const notification = document.createElement("div");
+    const colors = {
+      info: "#3b82f6",
+      success: "#10b981",
+      error: "#ef4444",
+      warning: "#f59e0b"
+    };
+    notification.style.cssText = `
+            background: ${colors[type] || colors.info};
             color: white;
             padding: 12px 16px;
             border-radius: 6px;
@@ -18,5 +205,41 @@ class o{constructor(){if(this.ws=null,this.reconnectAttempts=0,this.maxReconnect
             transition: transform 0.3s ease;
             pointer-events: auto;
             cursor: pointer;
-        `,t.textContent=e,n.appendChild(t),requestAnimationFrame(()=>{t.style.transform="translateX(0)"}),(i!=="error"||e.includes("permanently disconnected"))&&(this.notificationTimeout=window.setTimeout(()=>{t.style.transform="translateX(100%)",setTimeout(()=>{t.parentNode&&t.parentNode.removeChild(t)},300)},4e3)),t.addEventListener("click",()=>{t.style.transform="translateX(100%)",setTimeout(()=>{t.parentNode&&t.parentNode.removeChild(t)},300)})}}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",()=>{window.mjoHMRClient||new o}):window.mjoHMRClient||new o;
+        `;
+    notification.textContent = message;
+    container.appendChild(notification);
+    requestAnimationFrame(() => {
+      notification.style.transform = "translateX(0)";
+    });
+    if (type !== "error" || message.includes("permanently disconnected")) {
+      this.notificationTimeout = window.setTimeout(() => {
+        notification.style.transform = "translateX(100%)";
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 4e3);
+    }
+    notification.addEventListener("click", () => {
+      notification.style.transform = "translateX(100%)";
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 300);
+    });
+  }
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!window.mjoHMRClient) {
+      new MjoHMRClient();
+    }
+  });
+} else {
+  if (!window.mjoHMRClient) {
+    new MjoHMRClient();
+  }
+}
 //# sourceMappingURL=hmr-client.js.map

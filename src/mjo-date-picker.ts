@@ -378,12 +378,6 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                 border: 0;
             }
 
-            /* Enhanced focus states for accessibility */
-            :host(:focus-within) {
-                outline: var(--mjo-date-picker-focus-ring-width, 2px) solid var(--mjo-date-picker-focus-ring-color, var(--mjo-focus-ring-color, #0066cc));
-                outline-offset: var(--mjo-date-picker-focus-ring-offset, 2px);
-            }
-
             /* High contrast mode support */
             @media (prefers-contrast: high) {
                 .panel {

@@ -11,11 +11,17 @@ export class InputHelperText extends LitElement {
     @property({ type: String }) successmsg?: string;
 
     render() {
-        return html`<div class="container">
+        return html`<div class="container" role="region" aria-live="polite">
             ${this.errormsg
-                ? html`<div class="error"><mjo-icon src=${AiFillCloseCircle}></mjo-icon>${this.errormsg}</div>`
+                ? html`<div class="error" role="alert" aria-live="assertive">
+                      <mjo-icon src=${AiFillCloseCircle} aria-hidden="true"></mjo-icon>
+                      ${this.errormsg}
+                  </div>`
                 : this.successmsg
-                  ? html`<div class="success"><mjo-icon src=${AiFillCheckCircle}></mjo-icon>${this.successmsg}</div>`
+                  ? html`<div class="success" role="status" aria-live="polite">
+                        <mjo-icon src=${AiFillCheckCircle} aria-hidden="true"></mjo-icon>
+                        ${this.successmsg}
+                    </div>`
                   : html`<mjo-typography tag="none"><slot></slot></mjo-typography>`}
         </div>`;
     }
@@ -44,7 +50,10 @@ export class InputHelperText extends LitElement {
                     --mjo-radio-helper-color,
                     var(
                         --mjo-checkbox-helper-color,
-                        var(--mjo-switch-helper-color, var(--mjo-textarea-helper-color, var(--mjo-input-helper-color, currentColor)))
+                        var(
+                            --mjo-switch-helper-color,
+                            var(--mjo-textarea-helper-color, var(--mjo-input-helper-color, var(--mjo-foreground-color-low, currentColor)))
+                        )
                     )
                 );
                 line-height: calc(1em * 1.2);

@@ -9,6 +9,7 @@ import { ChipController } from "../controllers/chip-controller.js";
 import { ColorPickerController } from "../controllers/color-picker-controller.js";
 import { DatePickerController } from "../controllers/date-picker-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
+import { TextfieldController } from "../controllers/textfield-controller.js";
 
 const indexController = new IndexController();
 const alertController = new AlertController();
@@ -21,6 +22,7 @@ const chipController = new ChipController();
 const colorPickerController = new ColorPickerController();
 const datePickerController = new DatePickerController();
 const accordionController = new AccordionController();
+const textfieldController = new TextfieldController();
 
 export const ROUTES = [
     {
@@ -66,6 +68,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-date-picker",
         controller: datePickerController.renderDatePickerPage,
+    },
+    {
+        path: "/component/mjo-textfield",
+        controller: textfieldController.renderTextfieldPage,
     },
     {
         path: "/status",

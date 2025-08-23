@@ -1,0 +1,185 @@
+/* Textfield-specific styles for SSR demo pages */
+
+.textfield-showcase {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    max-width: 600px;
+}
+
+.textfield-showcase mjo-textfield {
+    max-width: 100%;
+}
+
+/* Interactive demo specific styles */
+.playground-showcase {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.playground-showcase mjo-textfield {
+    min-width: 300px;
+    max-width: 400px;
+}
+
+/* Controls panel styling */
+.controls-panel {
+    background: var(--mjo-background-color-card);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-group h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--mjo-foreground-color);
+}
+
+.control-group input,
+.control-group select {
+    padding: 8px 12px;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 4px;
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-family: inherit;
+    font-size: 0.875rem;
+}
+
+.control-group input:focus,
+.control-group select:focus {
+    outline: 2px solid var(--mjo-primary-color);
+    outline-offset: -2px;
+}
+
+.toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--mjo-foreground-color);
+    user-select: none;
+}
+
+.toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.toggle:hover {
+    color: var(--mjo-primary-color);
+}
+
+/* Form examples styling */
+.form-example {
+    background: var(--mjo-background-color-card);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-example h4 {
+    margin: 0 0 16px 0;
+    color: var(--mjo-foreground-color);
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.form-row mjo-textfield {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .textfield-showcase {
+        max-width: 100%;
+    }
+
+    .playground-showcase mjo-textfield {
+        min-width: 250px;
+        max-width: 300px;
+    }
+
+    .controls-panel {
+        max-height: 400px;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-row mjo-textfield {
+        min-width: auto;
+    }
+}
+
+/* Error state demo styles */
+.error-demo {
+    border: 1px solid var(--mjo-color-error);
+    background: color-mix(in srgb, var(--mjo-color-error) 5%, transparent);
+    border-radius: 6px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.success-demo {
+    border: 1px solid var(--mjo-color-success);
+    background: color-mix(in srgb, var(--mjo-color-success) 5%, transparent);
+    border-radius: 6px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.validation-examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.validation-example {
+    background: var(--mjo-background-color-card);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.validation-example h5 {
+    margin: 0 0 12px 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--mjo-foreground-color);
+}

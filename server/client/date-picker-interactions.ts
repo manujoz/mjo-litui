@@ -26,11 +26,11 @@ function changeDatePickerProp(prop: string, value: string | boolean): void {
     if (prop === "range") {
         // Clear value when switching modes to avoid format conflicts
         datePicker.removeAttribute("value");
-        
+
         // Update placeholder based on mode
         const placeholder = value ? "Select start and end dates..." : "Choose a date...";
         datePicker.setAttribute("placeholder", placeholder);
-        
+
         // Update the placeholder input field
         const placeholderInput = document.querySelector('input[placeholder="Enter placeholder..."]') as HTMLInputElement;
         if (placeholderInput) {
@@ -53,24 +53,24 @@ function changeDatePickerProp(prop: string, value: string | boolean): void {
 document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners to all date pickers
     document.querySelectorAll("mjo-date-picker").forEach((datePicker) => {
-        datePicker.addEventListener("date-picker-change", (ev: Event) => {
+        datePicker.addEventListener("change", (ev: Event) => {
             const event = ev as DatePickerChangeEvent;
             const { value, date, startDate, endDate } = event.detail;
-            
+
             let message = `Date picker changed!\nValue: ${value}`;
-            
+
             if (startDate && endDate) {
                 message += `\nStart: ${startDate.toLocaleDateString()}`;
                 message += `\nEnd: ${endDate.toLocaleDateString()}`;
-                
+
                 const days = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
                 message += `\nDuration: ${days} days`;
             } else if (date) {
                 message += `\nSelected: ${date.toLocaleDateString()}`;
             }
-            
+
             console.log(message);
-            
+
             // Show notification for playground component
             if (datePicker.id === "playground-date-picker") {
                 showNotification(message);
@@ -84,14 +84,14 @@ document.addEventListener("DOMContentLoaded", function () {
         form.addEventListener("submit", (ev: Event) => {
             const event = ev as CustomEvent;
             const { response } = event.detail;
-            
+
             if (response.error) {
                 console.error("Form validation error:", response.errmsg);
                 alert("Form validation failed: " + response.errmsg.join(", "));
             } else {
                 console.log("Form submitted successfully:", response.data);
                 alert("Form submitted!\n" + JSON.stringify(response.data, null, 2));
-                
+
                 // Reset loading state
                 setTimeout(() => {
                     if (response.submitButton) {
@@ -130,7 +130,7 @@ function showNotification(message: string): void {
         font-size: 14px;
         animation: slideIn 0.3s ease-out;
     `;
-    
+
     notification.textContent = message;
     document.body.appendChild(notification);
 

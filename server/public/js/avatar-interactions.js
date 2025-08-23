@@ -1,2 +1,40 @@
-import{f as a,g as o,h as r}from"./index.js";function c(e,t){const i=document.getElementById("playground-avatar");if(!i)return;let n;e==="fallbackIcon"&&(t==="icon1"?n=a:t==="icon2"?n=o:t==="icon3"&&(n=r),t=n),typeof t=="string"?e==="name"?i.setAttribute("name",t||"Interactive Demo"):i.setAttribute(e,t):t?i.setAttribute(e,""):i.removeAttribute(e)}document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("mjo-avatar").forEach(e=>{e.addEventListener("mjo-avatar-click",t=>{const i=t.detail.value;alert(i)})})});window.changeAvatarProp=c;
+import { f as AiFillApple, g as AiFillAndroid, h as AiFillWindows } from "./index.js";
+function changeAvatarProp(prop, value) {
+  const avatar = document.getElementById("playground-avatar");
+  if (!avatar)
+    return;
+  let icon = void 0;
+  if (prop === "fallbackIcon") {
+    if (value === "icon1") {
+      icon = AiFillApple;
+    } else if (value === "icon2") {
+      icon = AiFillAndroid;
+    } else if (value === "icon3") {
+      icon = AiFillWindows;
+    }
+    value = icon;
+  }
+  if (typeof value === "string") {
+    if (prop === "name") {
+      avatar.setAttribute("name", value || "Interactive Demo");
+    } else {
+      avatar.setAttribute(prop, value);
+    }
+  } else {
+    if (value) {
+      avatar.setAttribute(prop, "");
+    } else {
+      avatar.removeAttribute(prop);
+    }
+  }
+}
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("mjo-avatar").forEach((avatar) => {
+    avatar.addEventListener("mjo-avatar-click", (ev) => {
+      const value = ev.detail.value;
+      alert(value);
+    });
+  });
+});
+window.changeAvatarProp = changeAvatarProp;
 //# sourceMappingURL=avatar-interactions.js.map

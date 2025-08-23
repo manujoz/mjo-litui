@@ -1,11 +1,10 @@
-/**
- * Client entry point for SSR hydration
- * Imports all components needed for hydration
- */
 import type { MjoTheme } from "../../src/mjo-theme.js";
 
 import Cookies from "js-cookie";
 
+/**
+ * Client entry point for SSR hydration
+ */
 import "../../src/mjo-accordion.js";
 import "../../src/mjo-alert.js";
 import "../../src/mjo-avatar.js";
@@ -17,6 +16,7 @@ import "../../src/mjo-chip.js";
 import "../../src/mjo-color-picker.js";
 import "../../src/mjo-date-picker.js";
 import "../../src/mjo-form.js";
+import "../../src/mjo-textfield.js";
 import "../../src/mjo-theme.js";
 
 // Function to initialize theme after hydration
