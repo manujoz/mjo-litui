@@ -17,7 +17,7 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
     @query(".container") container!: HTMLDivElement;
 
     render() {
-        return html`<div class="container" data-position=${this.position}></div>`;
+        return html`<div class="container" data-position=${this.position} role="log" aria-live="polite" aria-label="Notification messages"></div>`;
     }
 
     async show({ message, type, time, title, onClose }: NotificationShowParams) {
@@ -47,7 +47,22 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
         return notificationItem;
     }
 
+    clearAll() {
+        const notificationItems = this.container.querySelectorAll("notification-item");
+        notificationItems.forEach((item) => {
+            (item as NotificationItem).close();
+        });
+    }
+
     async #showItem(item: NotificationItem) {
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (prefersReducedMotion) {
+            item.style.position = "relative";
+            item.style.opacity = "1";
+            return;
+        }
+
         const margin = this.position.includes("top") ? parseInt(getComputedStyle(item).marginTop) : parseInt(getComputedStyle(item).marginBottom);
         const height = item.offsetHeight;
 
@@ -58,7 +73,8 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
         }
 
         item.style.transform = this.position.includes("right") ? "translateX(110%)" : "translateX(-110%)";
-        item.style.transition = "margin 0.3s, opacity 0.3s, transform 0.3s";
+        const duration = "var(--mjo-notification-animation-duration, 0.3s)";
+        item.style.transition = `margin ${duration}, opacity ${duration}, transform ${duration}`;
 
         setTimeout(() => {
             item.style.position = "relative";
@@ -114,6 +130,13 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
             .container[data-position="bottom-right"] {
                 bottom: var(--mjo-notification-space-vertical, 0);
                 right: var(--mjo-notification-space-horizontal, 15px);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                notification-item {
+                    transition: none !important;
+                    animation: none !important;
+                }
             }
         `,
     ];

@@ -176,12 +176,7 @@ The component includes comprehensive accessibility support:
 
 ```html
 <!-- Accessibility configuration -->
-<mjo-notification 
-    position="top-right"
-    aria-live="polite"
-    aria-label="System notifications"
-    disable-animations="false">
-</mjo-notification>
+<mjo-notification position="top-right" aria-live="polite" aria-label="System notifications" disable-animations="false"> </mjo-notification>
 ```
 
 ### Screen Reader Support
@@ -239,9 +234,7 @@ export class AppContent extends LitElement {
     }
 
     render() {
-        return html`
-            <mjo-button @click=${this.showNotification}>Notify</mjo-button>
-        `;
+        return html` <mjo-button @click=${this.showNotification}>Notify</mjo-button> `;
     }
 }
 ```
@@ -300,13 +293,13 @@ export class ThemedNotification extends ThemeMixin(LitElement) {
 
 ## Properties
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `position` | `NotificationPositions` | `"top-right"` | Notification position: `"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"` |
-| `threshold` | `number` | `4` | Maximum number of notifications displayed simultaneously |
-| `ariaLive` | `"polite" \| "assertive" \| "off"` | `"polite"` | ARIA live region politeness setting |
-| `ariaLabel` | `string` | `"Notifications"` | ARIA label for the notification region |
-| `disableAnimations` | `boolean` | `false` | Disable all notification animations |
+| Property            | Type                               | Default           | Description                                                                           |
+| ------------------- | ---------------------------------- | ----------------- | ------------------------------------------------------------------------------------- |
+| `position`          | `NotificationPositions`            | `"top-right"`     | Notification position: `"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"` |
+| `threshold`         | `number`                           | `4`               | Maximum number of notifications displayed simultaneously                              |
+| `ariaLive`          | `"polite" \| "assertive" \| "off"` | `"polite"`        | ARIA live region politeness setting                                                   |
+| `ariaLabel`         | `string`                           | `"Notifications"` | ARIA label for the notification region                                                |
+| `disableAnimations` | `boolean`                          | `false`           | Disable all notification animations                                                   |
 
 ## Controller Methods
 
@@ -316,13 +309,13 @@ Shows a new notification and returns the notification item instance.
 
 #### Parameters
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `message` | `string \| TemplateResult<1>` | - | The notification message content |
-| `title` | `string` | - | Optional notification title |
-| `type` | `NotificationTypes` | - | Notification type: `"info"`, `"success"`, `"warning"`, `"error"` |
-| `time` | `number` | `0` | Auto-close time in milliseconds (0 = manual close only) |
-| `onClose` | `() => void` | - | Callback function executed when notification closes |
+| Parameter | Type                          | Default | Description                                                      |
+| --------- | ----------------------------- | ------- | ---------------------------------------------------------------- |
+| `message` | `string \| TemplateResult<1>` | -       | The notification message content                                 |
+| `title`   | `string`                      | -       | Optional notification title                                      |
+| `type`    | `NotificationTypes`           | -       | Notification type: `"info"`, `"success"`, `"warning"`, `"error"` |
+| `time`    | `number`                      | `0`     | Auto-close time in milliseconds (0 = manual close only)          |
+| `onClose` | `() => void`                  | -       | Callback function executed when notification closes              |
 
 ### `clearAll(): void`
 
@@ -366,22 +359,22 @@ interface NotificationAccessibilityOptions {
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--mjo-notification-background-color` | `var(--mjo-background-color-low, #ffffff)` | Background color for notification items |
-| `--mjo-notification-box-shadow` | `var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1))` | Box shadow for notification items |
-| `--mjo-notification-radius` | `var(--mjo-radius-large, 4px)` | Border radius for notification items |
-| `--mjo-notification-margin` | `15px` | Margin between notification items |
-| `--mjo-notification-space-vertical` | `0` | Vertical spacing from screen edge |
-| `--mjo-notification-space-horizontal` | `15px` | Horizontal spacing from screen edge |
-| `--mjo-notification-title-font-size` | `1em` | Font size for notification titles |
-| `--mjo-notification-title-font-weight` | `500` | Font weight for notification titles |
-| `--mjo-notification-title-color` | - | Color for notification titles |
-| `--mjo-notification-message-font-size` | `0.9em` | Font size for notification messages |
-| `--mjo-notification-message-color` | - | Color for notification messages |
-| `--mjo-notification-close-hover-background-color` | `var(--mjo-background-color-high, #f5f5f5)` | Close button hover background color |
-| `--mjo-notification-animation-duration` | `0.3s` | Duration of notification animations |
-| `--mjo-notification-focus-outline` | `2px solid var(--mjo-primary-color, #007acc)` | Focus outline for interactive elements |
+| Property                                          | Default                                                | Description                             |
+| ------------------------------------------------- | ------------------------------------------------------ | --------------------------------------- |
+| `--mjo-notification-background-color`             | `var(--mjo-background-color-low, #ffffff)`             | Background color for notification items |
+| `--mjo-notification-box-shadow`                   | `var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1))` | Box shadow for notification items       |
+| `--mjo-notification-radius`                       | `var(--mjo-radius-large, 4px)`                         | Border radius for notification items    |
+| `--mjo-notification-margin`                       | `15px`                                                 | Margin between notification items       |
+| `--mjo-notification-space-vertical`               | `0`                                                    | Vertical spacing from screen edge       |
+| `--mjo-notification-space-horizontal`             | `15px`                                                 | Horizontal spacing from screen edge     |
+| `--mjo-notification-title-font-size`              | `1em`                                                  | Font size for notification titles       |
+| `--mjo-notification-title-font-weight`            | `500`                                                  | Font weight for notification titles     |
+| `--mjo-notification-title-color`                  | -                                                      | Color for notification titles           |
+| `--mjo-notification-message-font-size`            | `0.9em`                                                | Font size for notification messages     |
+| `--mjo-notification-message-color`                | -                                                      | Color for notification messages         |
+| `--mjo-notification-close-hover-background-color` | `var(--mjo-background-color-high, #f5f5f5)`            | Close button hover background color     |
+| `--mjo-notification-animation-duration`           | `0.3s`                                                 | Duration of notification animations     |
+| `--mjo-notification-focus-outline`                | `2px solid var(--mjo-primary-color, #007acc)`          | Focus outline for interactive elements  |
 
 ### Theme Interface
 
@@ -406,32 +399,32 @@ interface MjoNotificationTheme {
 
 ## Accessibility
 
-- **ARIA Support**: Proper ARIA attributes including `aria-live`, `aria-label`, and `role`
-- **Screen Reader Friendly**: Notifications are announced to screen readers
-- **Keyboard Navigation**: Close buttons are keyboard accessible
-- **Focus Management**: Proper focus handling for interactive notifications
-- **Motion Preferences**: Respects `prefers-reduced-motion` settings
-- **High Contrast**: Support for high contrast themes
-- **Color Independence**: Icons and text provide information beyond color
+-   **ARIA Support**: Proper ARIA attributes including `aria-live`, `aria-label`, and `role`
+-   **Screen Reader Friendly**: Notifications are announced to screen readers
+-   **Keyboard Navigation**: Close buttons are keyboard accessible
+-   **Focus Management**: Proper focus handling for interactive notifications
+-   **Motion Preferences**: Respects `prefers-reduced-motion` settings
+-   **High Contrast**: Support for high contrast themes
+-   **Color Independence**: Icons and text provide information beyond color
 
 ## Technical Notes
 
-- **Global Container**: Notifications render in containers appended to `document.body`
-- **Z-Index Management**: Container inherits z-index from host component
-- **Queue Management**: Automatically manages notification threshold
-- **Animation System**: Smooth animations with position-aware directions
-- **Content Flexibility**: Supports HTML strings and Lit templates
-- **Theme Inheritance**: Container inherits theme from host component
+-   **Global Container**: Notifications render in containers appended to `document.body`
+-   **Z-Index Management**: Container inherits z-index from host component
+-   **Queue Management**: Automatically manages notification threshold
+-   **Animation System**: Smooth animations with position-aware directions
+-   **Content Flexibility**: Supports HTML strings and Lit templates
+-   **Theme Inheritance**: Container inherits theme from host component
 
 ## Best Practices
 
-- Use appropriate notification types to convey correct urgency levels
-- Keep notification content concise and actionable
-- Provide longer duration for important notifications
-- Use callbacks for notifications requiring user acknowledgment
-- Consider threshold limits to avoid overwhelming users
-- Place notification components at appropriate application levels
-- Use context sharing for large applications
-- Test with screen readers and keyboard navigation
+-   Use appropriate notification types to convey correct urgency levels
+-   Keep notification content concise and actionable
+-   Provide longer duration for important notifications
+-   Use callbacks for notifications requiring user acknowledgment
+-   Consider threshold limits to avoid overwhelming users
+-   Place notification components at appropriate application levels
+-   Use context sharing for large applications
+-   Test with screen readers and keyboard navigation
 
 For additional theming options, see the [Theming Guide](./theming.md).

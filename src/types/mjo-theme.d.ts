@@ -493,6 +493,10 @@ export interface MjoNotificationTheme {
     closeHoverBackgroundColor?: string;
     messageFontSize?: string;
     messageColor?: string;
+    animationDuration?: string;
+    focusOutline?: string;
+    spaceVertical?: string;
+    spaceHorizontal?: string;
 }
 
 export interface MjoCardTheme {

@@ -29,6 +29,10 @@ export class NotificationController implements ReactiveController {
         this.notificationContainer.position = position;
     }
 
+    clearAll() {
+        this.notificationContainer.clearAll();
+    }
+
     #createNotificationElement() {
         this.notificationContainer = document.createElement("notification-container") as NotificationContainer;
         this.notificationContainer.setAttribute("threshold", (this.host as MjoNotification).threshold.toString());

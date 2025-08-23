@@ -22,6 +22,7 @@ import "../../../src/mjo-image.js";
 import "../../../src/mjo-menu-button.js";
 import "../../../src/mjo-message.js";
 import "../../../src/mjo-modal.js";
+import "../../../src/mjo-notification.js";
 import "../../../src/mjo-textfield.js";
 import "../../../src/mjo-theme.js";
 

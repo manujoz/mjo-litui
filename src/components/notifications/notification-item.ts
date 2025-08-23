@@ -18,10 +18,11 @@ export class NotificationItem extends LitElement {
     removing = false;
 
     render() {
+        const uniqueId = `notification-${Math.random().toString(36).substring(2, 9)}`;
         return html`
             ${this.type
                 ? html`
-                      <div class="icon" data-type=${this.type}>
+                      <div class="icon" data-type=${this.type} aria-hidden="true">
                           <mjo-icon
                               src=${this.type === "info"
                                   ? AiFillInfoCircle
@@ -35,11 +36,11 @@ export class NotificationItem extends LitElement {
                   `
                 : nothing}
             <div class="container">
-                ${this.notificationTitle ? html`<div class="title">${this.notificationTitle}</div>` : nothing}
-                <div class="close" @click=${this.#removeNotification}>
+                ${this.notificationTitle ? html`<div class="title" id=${uniqueId}>${this.notificationTitle}</div>` : nothing}
+                <div class="close" @click=${this.#removeNotification} role="button" tabindex="0" aria-label="Close notification" title="Close notification">
                     <mjo-icon src=${AiOutlineClose}></mjo-icon>
                 </div>
-                <div class="message">${this.message}</div>
+                <div class="message" role="alert" aria-describedby=${this.notificationTitle ? uniqueId : nothing}>${this.message}</div>
             </div>
         `;
     }
@@ -66,6 +67,15 @@ export class NotificationItem extends LitElement {
         if (this.removing) return;
 
         this.removing = true;
+
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (prefersReducedMotion) {
+            if (typeof this.onClose === "function") this.onClose();
+            this.remove();
+            return;
+        }
+
         this.style.transform = this.position?.includes("right") ? "translateX(110%)" : "translateX(-110%)";
 
         setTimeout(() => {
@@ -159,12 +169,25 @@ export class NotificationItem extends LitElement {
                 background-color: var(--mjo-notification-close-hover-background-color, var(--mjo-background-color-high, #f5f5f5));
                 border-radius: 3px;
             }
+            .close:focus-visible {
+                outline: var(--mjo-notification-focus-outline, 2px solid var(--mjo-primary-color, #007acc));
+                outline-offset: 2px;
+                border-radius: 3px;
+            }
             .message {
                 position: relative;
                 flex: 1 1 0;
                 max-width: calc(100% - 28px);
                 color: var(--mjo-notification-message-color);
                 font-size: var(--mjo-notification-message-font-size, 0.9em);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                :host {
+                    transition: none !important;
+                    transform: none !important;
+                    animation: none !important;
+                }
             }
         `,
     ];
