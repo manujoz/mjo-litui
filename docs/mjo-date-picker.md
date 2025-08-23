@@ -57,7 +57,7 @@ export class ExampleDatePickerBasic extends LitElement {
 
     render() {
         return html`
-            <mjo-date-picker label="Select date" @date-picker-change=${this.onChange}></mjo-date-picker>
+            <mjo-date-picker label="Select date" @mjo-date-picker-change=${this.onChange}></mjo-date-picker>
             <p>Value: ${this.value || "(none)"}</p>
         `;
     }
@@ -83,7 +83,7 @@ export class ExampleDatePickerRange extends LitElement {
 
     render() {
         return html`
-            <mjo-date-picker range label="Report range" clearabled @date-picker-change=${this.onChange}></mjo-date-picker>
+            <mjo-date-picker range label="Report range" clearabled @mjo-date-picker-change=${this.onChange}></mjo-date-picker>
             <p>Range: ${this.value || "(not selected)"}</p>
             ${this.rangeDetails ? html`<p><small>${this.rangeDetails}</small></p>` : ""}
         `;
@@ -145,7 +145,7 @@ export class ExampleDatePickerAccessible extends LitElement {
     render() {
         return html`
             <!-- Basic accessibility with screen reader support -->
-            <mjo-date-picker label="Meeting Date" aria-describedby="meeting-help" announce-selections @date-picker-change=${this.onSelectionChange}>
+            <mjo-date-picker label="Meeting Date" aria-describedby="meeting-help" announce-selections @mjo-date-picker-change=${this.onSelectionChange}>
             </mjo-date-picker>
             <small id="meeting-help">Select a date for the team meeting. Use arrow keys to open the calendar.</small>
 
@@ -157,7 +157,7 @@ export class ExampleDatePickerAccessible extends LitElement {
                 aria-live="polite"
                 announce-selections
                 clearabled
-                @date-picker-change=${this.onRangeChange}
+                @mjo-date-picker-change=${this.onRangeChange}
             >
             </mjo-date-picker>
             <small id="timeline-help">Select start and end dates for the project phase.</small>
@@ -289,10 +289,10 @@ Inherits all validation properties from `FormMixin`:
 
 ## Events
 
-| Event                | Detail (shape)                                                                                                     | Emitted When                                   |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
-| `date-picker-change` | `{ value: string, date?: Date, startDate?: Date, endDate?: Date, startDateValue?: string, endDateValue?: string }` | Value changes (single date or completed range) |
-| `change`             | Native bubbling `Event` (no extra detail)                                                                          | Fired alongside `date-picker-change` for forms |
+| Event                    | Detail (shape)                                                                                                     | Emitted When                                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `mjo-date-picker-change` | `{ value: string, date?: Date, startDate?: Date, endDate?: Date, startDateValue?: string, endDateValue?: string }` | Value changes (single date or completed range) |
+| `change`                 | Native bubbling `Event` (no extra detail)                                                                          | Fired alongside `date-picker-change` for forms |
 
 ### Event Detail Properties
 
@@ -313,7 +313,7 @@ Inherits all validation properties from `FormMixin`:
 
 -   In range mode, partial selection (only start date) does not emit change events until end date is selected
 -   Events are emitted after internal state is fully updated
--   Both `date-picker-change` and `change` are fired for form compatibility
+-   Both `mjo-date-picker-change` and `change` are fired for form compatibility
 
 ## Methods (Public)
 
@@ -561,7 +561,7 @@ export class ExampleAdvancedRange extends LitElement {
 
     render() {
         return html`
-            <mjo-date-picker range label="Project Timeline" clearabled @date-picker-change=${this.handleRangeChange}></mjo-date-picker>
+            <mjo-date-picker range label="Project Timeline" clearabled @mjo-date-picker-change=${this.handleRangeChange}></mjo-date-picker>
 
             ${this.duration > 0
                 ? html`
@@ -598,7 +598,7 @@ export class ExampleConditionalConstraints extends LitElement {
     render() {
         return html`
             <div style="display: grid; gap: 16px;">
-                <mjo-date-picker label="Start Date" max-date="2025-12-31" @date-picker-change=${this.handleStartChange}></mjo-date-picker>
+                <mjo-date-picker label="Start Date" max-date="2025-12-31" @mjo-date-picker-change=${this.handleStartChange}></mjo-date-picker>
 
                 <mjo-date-picker
                     label="End Date"

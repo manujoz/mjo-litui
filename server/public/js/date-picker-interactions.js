@@ -35,7 +35,7 @@ function changeDatePickerProp(prop, value) {
 }
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll("mjo-date-picker").forEach((datePicker) => {
-    datePicker.addEventListener("change", (ev) => {
+    datePicker.addEventListener("mjo-date-picker-change", (ev) => {
       const event = ev;
       const { value, date, startDate, endDate } = event.detail;
       let message = `Date picker changed!
@@ -65,10 +65,8 @@ Selected: ${date.toLocaleDateString()}`;
       const { response } = event.detail;
       if (response.error) {
         console.error("Form validation error:", response.errmsg);
-        alert("Form validation failed: " + response.errmsg.join(", "));
       } else {
-        console.log("Form submitted successfully:", response.data);
-        alert("Form submitted!\n" + JSON.stringify(response.data, null, 2));
+        console.log("Form submitted successfully:", response);
         setTimeout(() => {
           if (response.submitButton) {
             response.submitButton.loading = false;

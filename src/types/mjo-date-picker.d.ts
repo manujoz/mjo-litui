@@ -19,9 +19,3 @@ export interface DatePickerAccessibilityConfig {
     openedAnnouncement?: string;
     closedAnnouncement?: string;
 }
-
-declare global {
-    interface HTMLElementEventMap {
-        "date-picker-change": DatePickerChangeEvent;
-    }
-}

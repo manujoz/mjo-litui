@@ -53,7 +53,7 @@ function changeDatePickerProp(prop: string, value: string | boolean): void {
 document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners to all date pickers
     document.querySelectorAll("mjo-date-picker").forEach((datePicker) => {
-        datePicker.addEventListener("change", (ev: Event) => {
+        datePicker.addEventListener("mjo-date-picker-change", (ev: Event) => {
             const event = ev as DatePickerChangeEvent;
             const { value, date, startDate, endDate } = event.detail;
 
@@ -87,10 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.error) {
                 console.error("Form validation error:", response.errmsg);
-                alert("Form validation failed: " + response.errmsg.join(", "));
             } else {
-                console.log("Form submitted successfully:", response.data);
-                alert("Form submitted!\n" + JSON.stringify(response.data, null, 2));
+                console.log("Form submitted successfully:", response);
 
                 // Reset loading state
                 setTimeout(() => {

@@ -25,6 +25,8 @@ export class DatePickerController {
             previous: previousComponent ? previousComponent.path : undefined,
         });
 
+        const today = new Date().toISOString().split("T")[0];
+
         const datePickerTemplate = html`
             ${unsafeHTML(headerTemplate)}
 
@@ -46,7 +48,12 @@ export class DatePickerController {
 
                         <div class="control-group">
                             <h4>Placeholder</h4>
-                            <input type="text" placeholder="Enter placeholder..." oninput="changeDatePickerProp('placeholder', this.value)" value="Choose a date..." />
+                            <input
+                                type="text"
+                                placeholder="Enter placeholder..."
+                                oninput="changeDatePickerProp('placeholder', this.value)"
+                                value="Choose a date..."
+                            />
                         </div>
 
                         <div class="control-group">
@@ -174,32 +181,45 @@ export class DatePickerController {
 
                 <h3>Display Modes</h3>
                 <div class="component-showcase">
-                    <mjo-date-picker label="ISO Format" display-mode="iso" value="2025-03-15" placeholder="ISO format"></mjo-date-picker>
-                    <mjo-date-picker label="Localized" display-mode="localized" locale="es" value="2025-03-15" placeholder="Formato localizado"></mjo-date-picker>
-                    <mjo-date-picker label="Range ISO" range display-mode="iso" value="2025-03-15/2025-03-20" placeholder="ISO range"></mjo-date-picker>
-                    <mjo-date-picker label="Range Localized" range display-mode="localized" locale="fr" value="2025-03-15/2025-03-20" placeholder="Plage localisée"></mjo-date-picker>
+                    <mjo-date-picker label="ISO Format" displayMode="iso" value="2025-03-15" placeholder="ISO format"></mjo-date-picker>
+                    <mjo-date-picker
+                        label="Localized"
+                        displayMode="localized"
+                        locale="es"
+                        value="2025-03-15"
+                        placeholder="Formato localizado"
+                    ></mjo-date-picker>
+                    <mjo-date-picker label="Range ISO" range displayMode="iso" value="2025-03-15/2025-03-20" placeholder="ISO range"></mjo-date-picker>
+                    <mjo-date-picker
+                        label="Range Localized"
+                        range
+                        displayMode="localized"
+                        locale="fr"
+                        value="2025-03-15/2025-03-20"
+                        placeholder="Plage localisée"
+                    ></mjo-date-picker>
                 </div>
 
                 <h3>Localization</h3>
                 <div class="component-showcase">
-                    <mjo-date-picker label="English" locale="en" display-mode="localized" placeholder="Select date"></mjo-date-picker>
-                    <mjo-date-picker label="Español" locale="es" display-mode="localized" placeholder="Seleccionar fecha"></mjo-date-picker>
-                    <mjo-date-picker label="Français" locale="fr" display-mode="localized" placeholder="Sélectionner une date"></mjo-date-picker>
-                    <mjo-date-picker label="Deutsch" locale="de" display-mode="localized" placeholder="Datum auswählen"></mjo-date-picker>
+                    <mjo-date-picker label="English" locale="en" displayMode="localized" placeholder="Select date"></mjo-date-picker>
+                    <mjo-date-picker label="Español" locale="es" displayMode="localized" placeholder="Seleccionar fecha"></mjo-date-picker>
+                    <mjo-date-picker label="Français" locale="fr" displayMode="localized" placeholder="Sélectionner une date"></mjo-date-picker>
+                    <mjo-date-picker label="Deutsch" locale="de" displayMode="localized" placeholder="Datum auswählen"></mjo-date-picker>
                 </div>
 
                 <h3>Date Constraints</h3>
                 <div class="component-showcase">
-                    <mjo-date-picker label="Future Only" min-date="2025-01-01" placeholder="Only future dates"></mjo-date-picker>
-                    <mjo-date-picker label="This Year" min-date="2025-01-01" max-date="2025-12-31" placeholder="Only 2025"></mjo-date-picker>
-                    <mjo-date-picker label="Past Only" max-date="2024-12-31" placeholder="Only past dates"></mjo-date-picker>
+                    <mjo-date-picker label="Future Only" minDate=${today} placeholder="Only future dates"></mjo-date-picker>
+                    <mjo-date-picker label="This Year" minDate="2025-01-01" maxDate="2025-12-31" placeholder="Only 2025"></mjo-date-picker>
+                    <mjo-date-picker label="Past Only" maxDate=${today} placeholder="Only past dates"></mjo-date-picker>
                 </div>
 
                 <h3>Accessibility Features</h3>
                 <div class="component-showcase">
-                    <mjo-date-picker label="With Announcements" announce-selections aria-describedby="help1" placeholder="Announces selections"></mjo-date-picker>
-                    <mjo-date-picker label="Assertive Live Region" aria-live="assertive" announce-selections placeholder="Assertive announcements"></mjo-date-picker>
-                    <mjo-date-picker label="Range with Announcements" range announce-selections aria-describedby="help2" placeholder="Range with announcements"></mjo-date-picker>
+                    <mjo-date-picker label="With Announcements" aria-describedby="help1" placeholder="Announces selections"></mjo-date-picker>
+                    <mjo-date-picker label="Assertive Live Region" aria-live="assertive" placeholder="Assertive announcements"></mjo-date-picker>
+                    <mjo-date-picker label="Range with Announcements" range aria-describedby="help2" placeholder="Range with announcements"></mjo-date-picker>
                 </div>
                 <small id="help1">This date picker will announce selections to screen readers.</small>
                 <br />

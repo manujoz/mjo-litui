@@ -55,6 +55,8 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
     @query("mjo-dropdown") private dropdown!: MjoDropdown;
 
     calendarRef = createRef<MjoCalendar>();
+    type = "date";
+    inputElement?: HTMLInputElement = undefined;
 
     render() {
         const isOpen = this.dropdown?.isOpen ?? false;
@@ -102,6 +104,16 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         super.firstUpdated(args);
 
         if (this.name) this.updateFormData({ name: this.name, value: this.value });
+
+        this.#setInputElement();
+    }
+
+    async #setInputElement() {
+        const textfield = this.shadowRoot?.querySelector("mjo-textfield");
+        if (textfield) {
+            await textfield.updateComplete;
+            this.inputElement = textfield.inputElement;
+        }
     }
 
     focus() {
@@ -304,7 +316,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         if (this.name) this.updateFormData({ name: this.name, value });
 
         this.dispatchEvent(
-            new CustomEvent("date-picker-change", {
+            new CustomEvent("mjo-date-picker-change", {
                 detail: {
                     value,
                     date,
@@ -317,8 +329,6 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                 cancelable: true,
             }),
         );
-
-        this.dispatchEvent(new Event("change", { bubbles: true, cancelable: true }));
     }
 
     #onKeydown = (ev: KeyboardEvent) => {
@@ -394,6 +404,6 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "date-picker-change": DatePickerChangeEvent;
+        "mjo-date-picker-change": DatePickerChangeEvent;
     }
 }

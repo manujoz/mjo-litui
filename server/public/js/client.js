@@ -10200,10 +10200,11 @@ var __privateMethod$1 = (obj, member, method) => {
   __accessCheck$2(obj, member, "access private method");
   return method;
 };
-var _handleClear, handleClear_fn, _announceToScreenReader, announceToScreenReader_fn, _formatDateForAnnouncement, formatDateForAnnouncement_fn, _calendarTemplate, calendarTemplate_fn, _displayValue, displayValue_fn, _onDateSelected, _onRangeSelected, _emitChange, emitChange_fn, _onKeydown;
+var _setInputElement, setInputElement_fn, _handleClear, handleClear_fn, _announceToScreenReader, announceToScreenReader_fn, _formatDateForAnnouncement, formatDateForAnnouncement_fn, _calendarTemplate, calendarTemplate_fn, _displayValue, displayValue_fn, _onDateSelected, _onRangeSelected, _emitChange, emitChange_fn, _onKeydown;
 let MjoDatePicker = class extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) {
   constructor() {
     super(...arguments);
+    __privateAdd$2(this, _setInputElement);
     __privateAdd$2(this, _handleClear);
     __privateAdd$2(this, _announceToScreenReader);
     __privateAdd$2(this, _formatDateForAnnouncement);
@@ -10226,6 +10227,8 @@ let MjoDatePicker = class extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
     this.announcementText = "";
     this.calendarInstanceId = 0;
     this.calendarRef = createRef();
+    this.type = "date";
+    this.inputElement = void 0;
     __privateAdd$2(this, _onDateSelected, (ev) => {
       const detail = ev.detail;
       if (this.isRange)
@@ -10337,6 +10340,7 @@ let MjoDatePicker = class extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
     super.firstUpdated(args);
     if (this.name)
       this.updateFormData({ name: this.name, value: this.value });
+    __privateMethod$1(this, _setInputElement, setInputElement_fn).call(this);
   }
   focus() {
     var _a2;
@@ -10381,6 +10385,15 @@ let MjoDatePicker = class extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
   }
   setValue(value) {
     this.value = value;
+  }
+};
+_setInputElement = /* @__PURE__ */ new WeakSet();
+setInputElement_fn = async function() {
+  var _a2;
+  const textfield = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector("mjo-textfield");
+  if (textfield) {
+    await textfield.updateComplete;
+    this.inputElement = textfield.inputElement;
   }
 };
 _handleClear = /* @__PURE__ */ new WeakSet();
@@ -10469,7 +10482,7 @@ emitChange_fn = function({
   if (this.name)
     this.updateFormData({ name: this.name, value });
   this.dispatchEvent(
-    new CustomEvent("date-picker-change", {
+    new CustomEvent("mjo-date-picker-change", {
       detail: {
         value,
         date,
@@ -10482,7 +10495,6 @@ emitChange_fn = function({
       cancelable: true
     })
   );
-  this.dispatchEvent(new Event("change", { bubbles: true, cancelable: true }));
 };
 _onKeydown = /* @__PURE__ */ new WeakMap();
 MjoDatePicker.styles = [
