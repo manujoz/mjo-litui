@@ -835,13 +835,43 @@ export class ExampleTextfieldAdvanced extends LitElement {
 
 ## Events
 
-| Name     | Type            | Description                                                |
-| -------- | --------------- | ---------------------------------------------------------- |
-| `input`  | `InputEvent`    | Fired when the value changes during user input             |
-| `change` | `Event`         | Fired when the value changes and the textfield loses focus |
-| `focus`  | `FocusEvent`    | Fired when the textfield gains focus                       |
-| `blur`   | `FocusEvent`    | Fired when the textfield loses focus                       |
-| `keyup`  | `KeyboardEvent` | Fired when a key is released (Enter key submits form)      |
+All events are dispatched with enhanced detail data for better form integration and accessibility.
+
+| Name                            | Type                              | Description                                                    |
+| ------------------------------- | --------------------------------- | -------------------------------------------------------------- |
+| `mjo-textfield-input`           | `MjoTextfieldInputEvent`          | Enhanced input event with value, validation and metadata       |
+| `mjo-textfield-change`          | `MjoTextfieldChangeEvent`         | Enhanced change event fired when value changes and loses focus |
+| `mjo-textfield-focus`           | `MjoTextfieldFocusEvent`          | Enhanced focus event with element state information            |
+| `mjo-textfield-blur`            | `MjoTextfieldBlurEvent`           | Enhanced blur event with validation and value information      |
+| `mjo-textfield-keyup`           | `MjoTextfieldKeyupEvent`          | Enhanced keyup event (Enter key submits form)                  |
+| `mjo-textfield-clear`           | `MjoTextfieldClearEvent`          | Fired when the clear button is clicked                         |
+| `mjo-textfield-password-toggle` | `MjoTextfieldPasswordToggleEvent` | Fired when password visibility is toggled                      |
+
+### Event Details
+
+Each event includes comprehensive detail information:
+
+```ts
+// Example: mjo-input event detail
+{
+    value: string; // Current input value
+    previousValue: string; // Previous value before change
+    length: number; // Character length of value
+    isEmpty: boolean; // Whether input is empty
+    validity: {
+        // Validation state
+        valid: boolean;
+        valueMissing: boolean;
+        typeMismatch: boolean;
+        tooLong: boolean;
+        tooShort: boolean;
+        rangeUnderflow: boolean;
+        rangeOverflow: boolean;
+        stepMismatch: boolean;
+    }
+    formData: FormData; // Current form data if in form
+}
+```
 
 ## Methods
 
@@ -969,13 +999,108 @@ export class ExampleTextfieldCustomTheme extends LitElement {
 
 ## Accessibility
 
-The textfield component follows accessibility best practices:
+The textfield component follows WCAG accessibility guidelines and includes comprehensive accessibility features:
 
--   Uses semantic `<input>` element with proper types
--   Supports ARIA attributes for labels and descriptions
--   Maintains proper focus management and keyboard navigation
--   Error states are announced to assistive technologies
--   Password visibility toggle is keyboard accessible
+### ARIA Support
+
+-   **aria-labelledby**: Automatically connects to associated labels
+-   **aria-describedby**: Links to helper text, error messages, and character counter
+-   **aria-invalid**: Set to `true` when in error state for screen readers
+-   **aria-required**: Indicates required fields
+-   **role**: Proper semantic roles for all interactive elements
+
+### Keyboard Navigation
+
+-   **Tab**: Navigate to/from the textfield
+-   **Enter**: Submit parent form (if applicable)
+-   **Escape**: Clear field when clearable is enabled
+-   **Tab/Shift+Tab**: Navigate between clear button, password toggle, etc.
+
+### Screen Reader Support
+
+-   Labels are properly associated with inputs
+-   Error messages are announced when validation fails
+-   Success messages provide positive feedback
+-   Helper text provides additional context
+-   Character counter updates are announced
+-   Password visibility changes are announced
+
+### Interactive Elements
+
+-   Clear button has proper `aria-label` and keyboard support
+-   Password toggle button includes descriptive `aria-label`
+-   All interactive icons are converted to proper `<button>` elements
+-   Focus management maintains logical tab order
+
+### Error Handling
+
+-   Error states use `role="alert"` for immediate announcement
+-   Error messages are connected via `aria-describedby`
+-   Visual error indicators are supplemented with screen reader text
+
+### Usage Example with Enhanced Accessibility
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-textfield";
+
+@customElement("example-textfield-accessibility")
+export class ExampleTextfieldAccessibility extends LitElement {
+    @state() email = "";
+    @state() password = "";
+
+    render() {
+        return html`
+            <form @submit=${this.#handleSubmit}>
+                <fieldset>
+                    <legend>Login Information</legend>
+
+                    <mjo-textfield
+                        name="email"
+                        label="Email Address"
+                        type="email"
+                        required
+                        placeholder="your@email.com"
+                        .value=${this.email}
+                        @mjo-input=${this.#handleEmailInput}
+                        helperText="We'll never share your email address"
+                        clearabled
+                        aria-describedby="email-help"
+                    ></mjo-textfield>
+
+                    <mjo-textfield
+                        name="password"
+                        label="Password"
+                        type="password"
+                        required
+                        minlength="8"
+                        .value=${this.password}
+                        @mjo-input=${this.#handlePasswordInput}
+                        helperText="Password must be at least 8 characters"
+                        aria-describedby="password-help"
+                    ></mjo-textfield>
+
+                    <button type="submit">Sign In</button>
+                </fieldset>
+            </form>
+        `;
+    }
+
+    #handleEmailInput(e: CustomEvent) {
+        this.email = e.detail.value;
+    }
+
+    #handlePasswordInput(e: CustomEvent) {
+        this.password = e.detail.value;
+    }
+
+    #handleSubmit(e: Event) {
+        e.preventDefault();
+        console.log("Form submitted with accessibility support");
+    }
+}
+```
 
 ## Browser Compatibility
 
@@ -993,6 +1118,12 @@ The textfield component follows accessibility best practices:
 -   Enter key in textfield submits the parent form automatically
 -   Component inherits styling from the input theme system
 -   Form validation integrates seamlessly with `mjo-form`
+-   **Enhanced Accessibility**: Full ARIA support with proper labelledby and describedby associations
+-   **Shadow DOM Compatible**: All ID relationships work properly within shadow boundaries
+-   **Improved Events**: All events include comprehensive detail objects for better integration
+-   **Interactive Icons**: Icons are converted to proper semantic buttons with accessibility labels
+-   **Screen Reader Support**: Error states, success messages, and counter updates are announced
+-   **Keyboard Navigation**: Full keyboard support including Tab, Enter, and Escape keys
 
 ## Related Components
 

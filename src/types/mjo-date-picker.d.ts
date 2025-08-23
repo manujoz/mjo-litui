@@ -11,8 +11,11 @@ export interface DatePickerDateSelectedEvent extends CustomEvent {
 
 export interface DatePickerChangeEvent extends DatePickerDateSelectedEvent {}
 
-declare global {
-    interface HTMLElementEventMap {
-        "date-picker-change": DatePickerChangeEvent;
-    }
+// New accessibility-related types
+export interface DatePickerAccessibilityConfig {
+    announceSelections?: boolean;
+    ariaLive?: "polite" | "assertive" | "off";
+    calendarLabel?: string;
+    openedAnnouncement?: string;
+    closedAnnouncement?: string;
 }

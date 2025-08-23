@@ -21,6 +21,8 @@ Excepto para los atributos relacionados con accesibilidad (**aria**) nunca utili
 - Correcto: `@property({ type: String }) nameAttr?: string;`
 - Correcto: `@property({ type: String, attribute: "aria-label" }) ariaLabel?: string;`
 
+Añade al final del componente el `HTMLElementEventMap` con el mapa de los custom events del componente. La definición de tipos de los eventos debe estar en el archivo de tipos correspondiente.
+
 No modifiques el código, presentame un plan detallado de lo que vas a hacer y espera mi confirmacion. 
 
 ## Documentación
@@ -28,3 +30,5 @@ No modifiques el código, presentame un plan detallado de lo que vas a hacer y e
 Analiza en profundidad el componente y su documentación y actualiza la documentación del componente para reflejar los nuevos cambios. Elimina de la documentación propiedades o métodos que ya no existan en el componente, añade a la documentación cualquier nueva propiedad o método que se haya introducido.
 
 Compara todas las variables CSS del componente y de sus componentes relacionados con las variables que hay en la documentación para que estas estén correctamente documentadas. Las variables del componente son las que empiezan con el prefijo `--mjo-component-xxxx` por ejemplo, para `mjo-avatar` la variable sería `--mjo-avatar`, para el `mjo-color-picker` sería `--mjo-color-picker`.
+
+No crear tests del componente.

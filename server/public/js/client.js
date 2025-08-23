@@ -11,9 +11,9 @@ var __privateMethod = (obj, member, method) => {
   __accessCheck(obj, member, "access private method");
   return method;
 };
-var _a, _b;
-import { r as render, n as noChange, a as nothing, D as Directive, P as PartType, d as directive, h as html } from "./lit-core.js";
-import { e as AiOutlineRight, l as AiFillWarning, m as AiFillInfoCircle, n as AiFillCloseCircle, o as AiFillCheckCircle, p as AiOutlineClose, q as AiOutlineMinus, r as AiFillCheckSquare } from "./index.js";
+var _a, _b, _ageCalculator, ageCalculator_fn, _defaultMessages, defaultMessages_fn, _getErrorMessage, getErrorMessage_fn, _getInputValue, getInputValue_fn, _setInputError, setInputError_fn, _phoneNumberFormat, phoneNumberFormat_fn, _setInputValue, setInputValue_fn, _validateIsEmail, validateIsEmail_fn, _validateIsUrl, validateIsUrl_fn, _validateIsRequired, validateIsRequired_fn, _validateNoSpaces, validateNoSpaces_fn, _validateIsMinLength, validateIsMinLength_fn, _validateIsMaxLength, validateIsMaxLength_fn, _validateIsRangeLength, validateIsRangeLength_fn, _validateIsNumber, validateIsNumber_fn, _validateIsMin, validateIsMin_fn, _validateIsMax, validateIsMax_fn, _validateIsRange, validateIsRange_fn, _validateDomains, validateDomains_fn, _validateIsDate, validateIsDate_fn, _validateIsDateprevius, validateIsDateprevius_fn, _validateIsMinage, validateIsMinage_fn, _validateIsMaxage, validateIsMaxage_fn, _validateSecurity, validateSecurity_fn, _validateEqualTo, validateEqualTo_fn, _validatePhonenumber, validatePhonenumber_fn, _validatePhonecountry, validatePhonecountry_fn, _validatePattern, validatePattern_fn, _validateAllowed, validateAllowed_fn, _validateMincheck, validateMincheck_fn, _validateMaxcheck, validateMaxcheck_fn;
+import { r as render, n as noChange, a as nothing, D as Directive, P as PartType, d as directive, h as html, i as isSingleExpression, s as setCommittedValue } from "./lit-core.js";
+import { e as AiOutlineRight, l as AiFillWarning, m as AiFillInfoCircle, n as AiFillCloseCircle, o as AiFillCheckCircle, p as AiOutlineClose, q as AiOutlineMinus, r as AiFillCheckSquare, s as AiFillEye, t as AiFillEyeInvisible } from "./index.js";
 /*! js-cookie v3.0.5 | MIT */
 function assign(target) {
   for (var i = 1; i < arguments.length; i++) {
@@ -1323,15 +1323,15 @@ function query(selector, cache) {
     }
   };
 }
-var __defProp$o = Object.defineProperty;
-var __getOwnPropDesc$o = Object.getOwnPropertyDescriptor;
-var __decorateClass$o = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$o(target, key) : target;
+var __defProp$u = Object.defineProperty;
+var __getOwnPropDesc$u = Object.getOwnPropertyDescriptor;
+var __decorateClass$u = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$u(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$o(target, key, result);
+    __defProp$u(target, key, result);
   return result;
 };
 const ThemeMixin = (superClass) => {
@@ -1370,7 +1370,7 @@ const ThemeMixin = (superClass) => {
   kamelCaseToKebabCase_fn = function(str) {
     return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase();
   };
-  __decorateClass$o([
+  __decorateClass$u([
     property({ type: Object })
   ], ThemeMx.prototype, "theme", 2);
   return ThemeMx;
@@ -1435,15 +1435,15 @@ class UnsafeSVGDirective extends UnsafeHTMLDirective {
 UnsafeSVGDirective.directiveName = "unsafeSVG";
 UnsafeSVGDirective.resultType = SVG_RESULT;
 const unsafeSVG = directive(UnsafeSVGDirective);
-var __defProp$n = Object.defineProperty;
-var __getOwnPropDesc$n = Object.getOwnPropertyDescriptor;
-var __decorateClass$n = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$n(target, key) : target;
+var __defProp$t = Object.defineProperty;
+var __getOwnPropDesc$t = Object.getOwnPropertyDescriptor;
+var __decorateClass$t = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$t(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$n(target, key, result);
+    __defProp$t(target, key, result);
   return result;
 };
 let MjoIcon = class extends ThemeMixin(LitElement) {
@@ -1470,52 +1470,52 @@ MjoIcon.styles = [
             }
         `
 ];
-__decorateClass$n([
+__decorateClass$t([
   property({ type: String })
 ], MjoIcon.prototype, "src", 2);
-MjoIcon = __decorateClass$n([
+MjoIcon = __decorateClass$t([
   customElement("mjo-icon")
 ], MjoIcon);
 const pause = async (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
-var __defProp$m = Object.defineProperty;
-var __getOwnPropDesc$m = Object.getOwnPropertyDescriptor;
-var __decorateClass$m = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$m(target, key) : target;
+var __defProp$s = Object.defineProperty;
+var __getOwnPropDesc$s = Object.getOwnPropertyDescriptor;
+var __decorateClass$s = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$s(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$m(target, key, result);
+    __defProp$s(target, key, result);
   return result;
 };
-var __accessCheck$e = (obj, member, msg) => {
+var __accessCheck$k = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateGet$3 = (obj, member, getter) => {
-  __accessCheck$e(obj, member, "read from private field");
+var __privateGet$7 = (obj, member, getter) => {
+  __accessCheck$k(obj, member, "read from private field");
   return getter ? getter.call(obj) : member.get(obj);
 };
-var __privateAdd$e = (obj, member, value) => {
+var __privateAdd$k = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$d = (obj, member, method) => {
-  __accessCheck$e(obj, member, "access private method");
+var __privateMethod$j = (obj, member, method) => {
+  __accessCheck$k(obj, member, "access private method");
   return method;
 };
 var _uniqueId, _handleKeyDown, _navigateToSibling, navigateToSibling_fn, _navigateToEdge, navigateToEdge_fn, _toggleContent, toggleContent_fn, _openContent, openContent_fn, _closeContent, closeContent_fn;
 let MjoAccordionItem = class extends ThemeMixin(LitElement) {
   constructor() {
     super(...arguments);
-    __privateAdd$e(this, _navigateToSibling);
-    __privateAdd$e(this, _navigateToEdge);
-    __privateAdd$e(this, _toggleContent);
-    __privateAdd$e(this, _openContent);
-    __privateAdd$e(this, _closeContent);
+    __privateAdd$k(this, _navigateToSibling);
+    __privateAdd$k(this, _navigateToEdge);
+    __privateAdd$k(this, _toggleContent);
+    __privateAdd$k(this, _openContent);
+    __privateAdd$k(this, _closeContent);
     this.itemTitle = "";
     this.itemSubtitle = "";
     this.expanded = false;
@@ -1525,20 +1525,20 @@ let MjoAccordionItem = class extends ThemeMixin(LitElement) {
     this.animationDuration = 300;
     this.animationEasing = "ease-in-out";
     this.variant = "light";
-    __privateAdd$e(this, _uniqueId, `accordion-item-${Math.random().toString(36).substring(2, 15)}`);
-    __privateAdd$e(this, _handleKeyDown, (event) => {
+    __privateAdd$k(this, _uniqueId, `accordion-item-${Math.random().toString(36).substring(2, 15)}`);
+    __privateAdd$k(this, _handleKeyDown, (event) => {
       if (this.disabled)
         return;
       const { key } = event;
       if (key === "Enter" || key === " ") {
         event.preventDefault();
-        __privateMethod$d(this, _toggleContent, toggleContent_fn).call(this);
+        __privateMethod$j(this, _toggleContent, toggleContent_fn).call(this);
       } else if (key === "ArrowUp" || key === "ArrowDown") {
         event.preventDefault();
-        __privateMethod$d(this, _navigateToSibling, navigateToSibling_fn).call(this, key === "ArrowUp" ? "previous" : "next");
+        __privateMethod$j(this, _navigateToSibling, navigateToSibling_fn).call(this, key === "ArrowUp" ? "previous" : "next");
       } else if (key === "Home" || key === "End") {
         event.preventDefault();
-        __privateMethod$d(this, _navigateToEdge, navigateToEdge_fn).call(this, key === "Home" ? "first" : "last");
+        __privateMethod$j(this, _navigateToEdge, navigateToEdge_fn).call(this, key === "Home" ? "first" : "last");
       } else if (key === "Escape" && this.expanded) {
         event.preventDefault();
         this.close();
@@ -1559,14 +1559,14 @@ let MjoAccordionItem = class extends ThemeMixin(LitElement) {
                     role="button"
                     tabindex=${this.disabled ? -1 : 0}
                     aria-expanded=${this.expanded}
-                    aria-controls=${`${__privateGet$3(this, _uniqueId)}-content`}
+                    aria-controls=${`${__privateGet$7(this, _uniqueId)}-content`}
                     aria-label=${this.computedAriaLabel}
                     aria-describedby=${ifDefined(this.ariaDescribedby)}
                     aria-disabled=${this.disabled}
-                    @click=${__privateMethod$d(this, _toggleContent, toggleContent_fn)}
-                    @keydown=${__privateGet$3(this, _handleKeyDown)}
+                    @click=${__privateMethod$j(this, _toggleContent, toggleContent_fn)}
+                    @keydown=${__privateGet$7(this, _handleKeyDown)}
                 >
-                    <div class="titleContent" id=${`${__privateGet$3(this, _uniqueId)}-title`}>
+                    <div class="titleContent" id=${`${__privateGet$7(this, _uniqueId)}-title`}>
                         ${typeof this.itemTitle === "string" ? html`
                                   <mjo-typography class="title" tag="h3" size="heading3" weight="medium">${this.itemTitle}</mjo-typography>
                                   ${this.itemSubtitle ? html`<mjo-typography class="subtitle" tag="p" size="body1" weight="medium"> ${this.itemSubtitle} </mjo-typography>` : nothing}
@@ -1576,7 +1576,7 @@ let MjoAccordionItem = class extends ThemeMixin(LitElement) {
                         <mjo-icon src=${this.icon}></mjo-icon>
                     </div>
                 </div>
-                <div class="content" id=${`${__privateGet$3(this, _uniqueId)}-content`} role="region" aria-labelledby=${`${__privateGet$3(this, _uniqueId)}-title`}>
+                <div class="content" id=${`${__privateGet$7(this, _uniqueId)}-content`} role="region" aria-labelledby=${`${__privateGet$7(this, _uniqueId)}-title`}>
                     <slot></slot>
                 </div>
             </div>
@@ -1585,9 +1585,9 @@ let MjoAccordionItem = class extends ThemeMixin(LitElement) {
   updated(_changedProperties) {
     if (_changedProperties.has("expanded")) {
       if (this.expanded) {
-        __privateMethod$d(this, _openContent, openContent_fn).call(this);
+        __privateMethod$j(this, _openContent, openContent_fn).call(this);
       } else {
-        __privateMethod$d(this, _closeContent, closeContent_fn).call(this);
+        __privateMethod$j(this, _closeContent, closeContent_fn).call(this);
       }
     }
     if (_changedProperties.has("disabled") && this.disabled) {
@@ -1651,7 +1651,7 @@ openContent_fn = async function(tries = 0) {
     if (tries === 10)
       return;
     setTimeout(() => {
-      __privateMethod$d(this, _openContent, openContent_fn).call(this, tries + 1);
+      __privateMethod$j(this, _openContent, openContent_fn).call(this, tries + 1);
     }, 50);
     return;
   }
@@ -1805,89 +1805,89 @@ MjoAccordionItem.styles = [
             }
         `
 ];
-__decorateClass$m([
+__decorateClass$s([
   property({ type: String })
 ], MjoAccordionItem.prototype, "itemTitle", 2);
-__decorateClass$m([
+__decorateClass$s([
   property({ type: String })
 ], MjoAccordionItem.prototype, "itemSubtitle", 2);
-__decorateClass$m([
+__decorateClass$s([
   property({ type: Boolean })
 ], MjoAccordionItem.prototype, "expanded", 2);
-__decorateClass$m([
+__decorateClass$s([
   property({ type: Boolean })
 ], MjoAccordionItem.prototype, "disabled", 2);
-__decorateClass$m([
+__decorateClass$s([
   property({ type: Boolean })
 ], MjoAccordionItem.prototype, "compact", 2);
-__decorateClass$m([
+__decorateClass$s([
   property({ type: String })
 ], MjoAccordionItem.prototype, "icon", 2);
-__decorateClass$m([
+__decorateClass$s([
   property({ type: Number })
 ], MjoAccordionItem.prototype, "animationDuration", 2);
-__decorateClass$m([
+__decorateClass$s([
   property({ type: String })
 ], MjoAccordionItem.prototype, "animationEasing", 2);
-__decorateClass$m([
+__decorateClass$s([
   property({ type: String, attribute: "aria-describedby" })
 ], MjoAccordionItem.prototype, "ariaDescribedby", 2);
-__decorateClass$m([
+__decorateClass$s([
   state()
 ], MjoAccordionItem.prototype, "variant", 2);
-__decorateClass$m([
+__decorateClass$s([
   query(".container")
 ], MjoAccordionItem.prototype, "containerEl", 2);
-__decorateClass$m([
+__decorateClass$s([
   query(".content")
 ], MjoAccordionItem.prototype, "contentEl", 2);
-__decorateClass$m([
+__decorateClass$s([
   query(".iconContainer mjo-icon")
 ], MjoAccordionItem.prototype, "iconEl", 2);
-__decorateClass$m([
+__decorateClass$s([
   query(".titleContainer")
 ], MjoAccordionItem.prototype, "titleContainerEl", 2);
-MjoAccordionItem = __decorateClass$m([
+MjoAccordionItem = __decorateClass$s([
   customElement("mjo-accordion-item")
 ], MjoAccordionItem);
-var __defProp$l = Object.defineProperty;
-var __getOwnPropDesc$l = Object.getOwnPropertyDescriptor;
-var __decorateClass$l = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$l(target, key) : target;
+var __defProp$r = Object.defineProperty;
+var __getOwnPropDesc$r = Object.getOwnPropertyDescriptor;
+var __decorateClass$r = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$r(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$l(target, key, result);
+    __defProp$r(target, key, result);
   return result;
 };
-var __accessCheck$d = (obj, member, msg) => {
+var __accessCheck$j = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateGet$2 = (obj, member, getter) => {
-  __accessCheck$d(obj, member, "read from private field");
+var __privateGet$6 = (obj, member, getter) => {
+  __accessCheck$j(obj, member, "read from private field");
   return getter ? getter.call(obj) : member.get(obj);
 };
-var __privateAdd$d = (obj, member, value) => {
+var __privateAdd$j = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$c = (obj, member, method) => {
-  __accessCheck$d(obj, member, "access private method");
+var __privateMethod$i = (obj, member, method) => {
+  __accessCheck$j(obj, member, "access private method");
   return method;
 };
 var _handleToggle, _mount, mount_fn;
 let MjoAccordion = class extends ThemeMixin(LitElement) {
   constructor() {
     super(...arguments);
-    __privateAdd$d(this, _mount);
+    __privateAdd$j(this, _mount);
     this.variant = "light";
     this.selectionMode = "single";
     this.compact = false;
     this.items = [];
-    __privateAdd$d(this, _handleToggle, (event) => {
+    __privateAdd$j(this, _handleToggle, (event) => {
       const customEvent = event;
       const toggledItem = customEvent.detail.item;
       if (this.selectionMode === "single") {
@@ -1913,7 +1913,7 @@ let MjoAccordion = class extends ThemeMixin(LitElement) {
   }
   firstUpdated() {
     this.items = Array.from(this.querySelectorAll("mjo-accordion-item"));
-    __privateMethod$c(this, _mount, mount_fn).call(this);
+    __privateMethod$i(this, _mount, mount_fn).call(this);
   }
   updated(_changedProperties) {
     if (_changedProperties.has("compact")) {
@@ -1962,7 +1962,7 @@ mount_fn = function() {
   this.items.forEach((item) => {
     this.containerEl.appendChild(item);
     item.variant = this.variant;
-    item.addEventListener("mjo-accordion-toggle", __privateGet$2(this, _handleToggle));
+    item.addEventListener("mjo-accordion-toggle", __privateGet$6(this, _handleToggle));
     item.addEventListener("mjo-accordion-will-expand", (event) => {
       const customEvent = event;
       this.dispatchEvent(
@@ -2046,56 +2046,56 @@ MjoAccordion.styles = [
             }
         `
 ];
-__decorateClass$l([
+__decorateClass$r([
   property({ type: String })
 ], MjoAccordion.prototype, "variant", 2);
-__decorateClass$l([
+__decorateClass$r([
   property({ type: String })
 ], MjoAccordion.prototype, "selectionMode", 2);
-__decorateClass$l([
+__decorateClass$r([
   property({ type: Boolean })
 ], MjoAccordion.prototype, "compact", 2);
-__decorateClass$l([
+__decorateClass$r([
   query(".container")
 ], MjoAccordion.prototype, "containerEl", 2);
-MjoAccordion = __decorateClass$l([
+MjoAccordion = __decorateClass$r([
   customElement("mjo-accordion")
 ], MjoAccordion);
-var __defProp$k = Object.defineProperty;
-var __getOwnPropDesc$k = Object.getOwnPropertyDescriptor;
-var __decorateClass$k = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$k(target, key) : target;
+var __defProp$q = Object.defineProperty;
+var __getOwnPropDesc$q = Object.getOwnPropertyDescriptor;
+var __decorateClass$q = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$q(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$k(target, key, result);
+    __defProp$q(target, key, result);
   return result;
 };
-var __accessCheck$c = (obj, member, msg) => {
+var __accessCheck$i = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$c = (obj, member, value) => {
+var __privateAdd$i = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$b = (obj, member, method) => {
-  __accessCheck$c(obj, member, "access private method");
+var __privateMethod$h = (obj, member, method) => {
+  __accessCheck$i(obj, member, "access private method");
   return method;
 };
 var _renderCloseButton, renderCloseButton_fn, _handleCloseKeydown$1, handleCloseKeydown_fn$1, _setupAutoClose, setupAutoClose_fn, _clearAutoCloseTimer, clearAutoCloseTimer_fn, _dispatchEvent, dispatchEvent_fn, _show, show_fn, _hide, hide_fn;
 let MjoAlert = class extends LitElement {
   constructor() {
     super(...arguments);
-    __privateAdd$c(this, _renderCloseButton);
-    __privateAdd$c(this, _handleCloseKeydown$1);
-    __privateAdd$c(this, _setupAutoClose);
-    __privateAdd$c(this, _clearAutoCloseTimer);
-    __privateAdd$c(this, _dispatchEvent);
-    __privateAdd$c(this, _show);
-    __privateAdd$c(this, _hide);
+    __privateAdd$i(this, _renderCloseButton);
+    __privateAdd$i(this, _handleCloseKeydown$1);
+    __privateAdd$i(this, _setupAutoClose);
+    __privateAdd$i(this, _clearAutoCloseTimer);
+    __privateAdd$i(this, _dispatchEvent);
+    __privateAdd$i(this, _show);
+    __privateAdd$i(this, _hide);
     this.type = "info";
     this.size = "medium";
     this.rounded = "medium";
@@ -2135,7 +2135,7 @@ let MjoAlert = class extends LitElement {
                 <div class="messageContainer">
                     ${!this.hideIcon && this.icon ? html`<div class="icon"><mjo-icon src=${this.icon}></mjo-icon></div>` : nothing}
                     <div class="message" id=${messageId}>${this.message}</div>
-                    ${this.closable && !this.persistent ? __privateMethod$b(this, _renderCloseButton, renderCloseButton_fn).call(this) : nothing}
+                    ${this.closable && !this.persistent ? __privateMethod$h(this, _renderCloseButton, renderCloseButton_fn).call(this) : nothing}
                 </div>
                 ${this.detail ? html`<div class="detail" id=${detailId} ?data-icon=${!this.hideIcon}>${this.detail}</div>` : nothing}
             </div>
@@ -2156,13 +2156,13 @@ let MjoAlert = class extends LitElement {
       }
     }
     if (_changedProperties.has("autoClose") || _changedProperties.has("autoCloseDelay")) {
-      __privateMethod$b(this, _setupAutoClose, setupAutoClose_fn).call(this);
+      __privateMethod$h(this, _setupAutoClose, setupAutoClose_fn).call(this);
     }
   }
   connectedCallback() {
     super.connectedCallback();
     if (this.autoClose) {
-      __privateMethod$b(this, _setupAutoClose, setupAutoClose_fn).call(this);
+      __privateMethod$h(this, _setupAutoClose, setupAutoClose_fn).call(this);
     }
     if (this.focusOnShow) {
       this.updateComplete.then(() => {
@@ -2172,16 +2172,16 @@ let MjoAlert = class extends LitElement {
   }
   disconnectedCallback() {
     super.disconnectedCallback();
-    __privateMethod$b(this, _clearAutoCloseTimer, clearAutoCloseTimer_fn).call(this);
+    __privateMethod$h(this, _clearAutoCloseTimer, clearAutoCloseTimer_fn).call(this);
   }
   show() {
     if (this.autoClose) {
-      __privateMethod$b(this, _setupAutoClose, setupAutoClose_fn).call(this);
+      __privateMethod$h(this, _setupAutoClose, setupAutoClose_fn).call(this);
     }
-    __privateMethod$b(this, _show, show_fn).call(this);
+    __privateMethod$h(this, _show, show_fn).call(this);
   }
   hide() {
-    __privateMethod$b(this, _hide, hide_fn).call(this);
+    __privateMethod$h(this, _hide, hide_fn).call(this);
   }
   focus() {
     var _a2;
@@ -2207,7 +2207,7 @@ let MjoAlert = class extends LitElement {
 _renderCloseButton = /* @__PURE__ */ new WeakSet();
 renderCloseButton_fn = function() {
   return html`
-            <button class="close-button" type="button" aria-label="Close alert" @click=${__privateMethod$b(this, _hide, hide_fn)} @keydown=${__privateMethod$b(this, _handleCloseKeydown$1, handleCloseKeydown_fn$1)}>
+            <button class="close-button" type="button" aria-label="Close alert" @click=${__privateMethod$h(this, _hide, hide_fn)} @keydown=${__privateMethod$h(this, _handleCloseKeydown$1, handleCloseKeydown_fn$1)}>
                 <mjo-icon src=${AiOutlineClose}></mjo-icon>
             </button>
         `;
@@ -2216,15 +2216,15 @@ _handleCloseKeydown$1 = /* @__PURE__ */ new WeakSet();
 handleCloseKeydown_fn$1 = function(e) {
   if (e.key === "Enter" || e.key === " ") {
     e.preventDefault();
-    __privateMethod$b(this, _hide, hide_fn).call(this);
+    __privateMethod$h(this, _hide, hide_fn).call(this);
   }
 };
 _setupAutoClose = /* @__PURE__ */ new WeakSet();
 setupAutoClose_fn = function() {
-  __privateMethod$b(this, _clearAutoCloseTimer, clearAutoCloseTimer_fn).call(this);
+  __privateMethod$h(this, _clearAutoCloseTimer, clearAutoCloseTimer_fn).call(this);
   if (this.autoClose && this.autoCloseDelay > 0) {
     this.autoCloseTimer = window.setTimeout(() => {
-      __privateMethod$b(this, _hide, hide_fn).call(this);
+      __privateMethod$h(this, _hide, hide_fn).call(this);
     }, this.autoCloseDelay);
   }
 };
@@ -2251,13 +2251,13 @@ show_fn = function() {
   const container = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector(".container");
   if (!container || container.offsetHeight > 0 || this.isAnimating)
     return;
-  __privateMethod$b(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-will-show");
+  __privateMethod$h(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-will-show");
   if (this.autoClose) {
-    __privateMethod$b(this, _setupAutoClose, setupAutoClose_fn).call(this);
+    __privateMethod$h(this, _setupAutoClose, setupAutoClose_fn).call(this);
   }
   if (this.animation === "none") {
     this.style.display = "block";
-    __privateMethod$b(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-show");
+    __privateMethod$h(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-show");
     return;
   }
   this.isAnimating = true;
@@ -2314,7 +2314,7 @@ show_fn = function() {
       break;
   }
   animate.finished.then(() => {
-    __privateMethod$b(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-show");
+    __privateMethod$h(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-show");
     if (animate)
       animate.cancel();
     this.isAnimating = false;
@@ -2326,13 +2326,13 @@ hide_fn = function() {
   const container = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector(".container");
   if (!container || container.offsetHeight === 0 || this.isAnimating)
     return;
-  __privateMethod$b(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-will-close");
-  __privateMethod$b(this, _clearAutoCloseTimer, clearAutoCloseTimer_fn).call(this);
+  __privateMethod$h(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-will-close");
+  __privateMethod$h(this, _clearAutoCloseTimer, clearAutoCloseTimer_fn).call(this);
   const activeElement = document.activeElement;
   const shouldRestoreFocus = ((_b2 = this.shadowRoot) == null ? void 0 : _b2.contains(activeElement)) || this === activeElement;
   if (this.animation === "none") {
     this.style.display = "none";
-    __privateMethod$b(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-closed");
+    __privateMethod$h(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-closed");
     return;
   }
   this.isAnimating = true;
@@ -2395,7 +2395,7 @@ hide_fn = function() {
       }
     }
     this.isAnimating = false;
-    __privateMethod$b(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-closed");
+    __privateMethod$h(this, _dispatchEvent, dispatchEvent_fn).call(this, "mjo-alert-closed");
   });
 };
 MjoAlert.styles = [
@@ -2583,89 +2583,89 @@ MjoAlert.styles = [
             }
         `
 ];
-__decorateClass$k([
+__decorateClass$q([
   property({ type: String })
 ], MjoAlert.prototype, "type", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: String })
 ], MjoAlert.prototype, "size", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: String })
 ], MjoAlert.prototype, "rounded", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: String })
 ], MjoAlert.prototype, "message", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: String })
 ], MjoAlert.prototype, "detail", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: Boolean })
 ], MjoAlert.prototype, "closable", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: Boolean })
 ], MjoAlert.prototype, "hideIcon", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: String })
 ], MjoAlert.prototype, "ariaLive", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: Boolean })
 ], MjoAlert.prototype, "focusOnShow", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: Boolean })
 ], MjoAlert.prototype, "autoClose", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: Number })
 ], MjoAlert.prototype, "autoCloseDelay", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: String })
 ], MjoAlert.prototype, "animation", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: Number })
 ], MjoAlert.prototype, "animationDuration", 2);
-__decorateClass$k([
+__decorateClass$q([
   property({ type: Boolean })
 ], MjoAlert.prototype, "persistent", 2);
-__decorateClass$k([
+__decorateClass$q([
   state()
 ], MjoAlert.prototype, "icon", 2);
-__decorateClass$k([
+__decorateClass$q([
   state()
 ], MjoAlert.prototype, "autoCloseTimer", 2);
-MjoAlert = __decorateClass$k([
+MjoAlert = __decorateClass$q([
   customElement("mjo-alert")
 ], MjoAlert);
-var __defProp$j = Object.defineProperty;
-var __getOwnPropDesc$j = Object.getOwnPropertyDescriptor;
-var __decorateClass$j = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$j(target, key) : target;
+var __defProp$p = Object.defineProperty;
+var __getOwnPropDesc$p = Object.getOwnPropertyDescriptor;
+var __decorateClass$p = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$p(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$j(target, key, result);
+    __defProp$p(target, key, result);
   return result;
 };
-var __accessCheck$b = (obj, member, msg) => {
+var __accessCheck$h = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$b = (obj, member, value) => {
+var __privateAdd$h = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$a = (obj, member, method) => {
-  __accessCheck$b(obj, member, "access private method");
+var __privateMethod$g = (obj, member, method) => {
+  __accessCheck$h(obj, member, "access private method");
   return method;
 };
 var _colorByInitial, colorByInitial_fn, _handleKeydown$5, handleKeydown_fn$5, _handleClick$3, handleClick_fn$3, _handleError, handleError_fn;
 let MjoAvatar = class extends ThemeMixin(LitElement) {
   constructor() {
     super(...arguments);
-    __privateAdd$b(this, _colorByInitial);
-    __privateAdd$b(this, _handleKeydown$5);
-    __privateAdd$b(this, _handleClick$3);
-    __privateAdd$b(this, _handleError);
+    __privateAdd$h(this, _colorByInitial);
+    __privateAdd$h(this, _handleKeydown$5);
+    __privateAdd$h(this, _handleClick$3);
+    __privateAdd$h(this, _handleError);
     this.bordered = false;
     this.disabled = false;
     this.clickable = false;
@@ -2707,11 +2707,11 @@ let MjoAvatar = class extends ThemeMixin(LitElement) {
             ?data-bordered=${this.bordered}
             ?data-disabled=${this.disabled}
             ?data-clickable=${this.clickable}
-            @click=${__privateMethod$a(this, _handleClick$3, handleClick_fn$3)}
-            @keydown=${__privateMethod$a(this, _handleKeydown$5, handleKeydown_fn$5)}
+            @click=${__privateMethod$g(this, _handleClick$3, handleClick_fn$3)}
+            @keydown=${__privateMethod$g(this, _handleKeydown$5, handleKeydown_fn$5)}
         >
             ${this.src && !this.error ? html`<div class="image radius-${this.radius}">
-                      <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${__privateMethod$a(this, _handleError, handleError_fn)} />
+                      <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${__privateMethod$g(this, _handleError, handleError_fn)} />
                   </div>` : this.fallbackIcon ? html`<div class="image fallback radius-${this.radius} font-size-${this.size}"><mjo-icon src=${this.fallbackIcon}></mjo-icon></div>` : this.name ? html`<div class="image name radius-${this.radius} font-size-${this.size}"><span>${this.initial}</span></div>` : html`<div class="image radius-${this.radius}"></div>`}
         </div>`;
   }
@@ -2731,7 +2731,7 @@ let MjoAvatar = class extends ThemeMixin(LitElement) {
     }
     const nameElement = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector(".image.name");
     if (this.name && this.nameColoured && nameElement) {
-      const [bg, fg] = __privateMethod$a(this, _colorByInitial, colorByInitial_fn).call(this);
+      const [bg, fg] = __privateMethod$g(this, _colorByInitial, colorByInitial_fn).call(this);
       nameElement.style.backgroundColor = bg;
       nameElement.style.color = fg;
     } else if (nameElement) {
@@ -2790,7 +2790,7 @@ handleKeydown_fn$5 = function(event) {
     return;
   if (event.key === "Enter" || event.key === " ") {
     event.preventDefault();
-    __privateMethod$a(this, _handleClick$3, handleClick_fn$3).call(this);
+    __privateMethod$g(this, _handleClick$3, handleClick_fn$3).call(this);
   }
 };
 _handleClick$3 = /* @__PURE__ */ new WeakSet();
@@ -2974,52 +2974,52 @@ MjoAvatar.styles = [
             }
         `
 ];
-__decorateClass$j([
+__decorateClass$p([
   property({ type: Boolean })
 ], MjoAvatar.prototype, "bordered", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: Boolean })
 ], MjoAvatar.prototype, "disabled", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: Boolean })
 ], MjoAvatar.prototype, "clickable", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: Boolean })
 ], MjoAvatar.prototype, "nameColoured", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: String })
 ], MjoAvatar.prototype, "fallbackIcon", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: String })
 ], MjoAvatar.prototype, "alt", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: String })
 ], MjoAvatar.prototype, "color", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: String })
 ], MjoAvatar.prototype, "name", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: String })
 ], MjoAvatar.prototype, "radius", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: String })
 ], MjoAvatar.prototype, "size", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: String })
 ], MjoAvatar.prototype, "src", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: String })
 ], MjoAvatar.prototype, "value", 2);
-__decorateClass$j([
+__decorateClass$p([
   property({ type: String, attribute: "aria-describedby" })
 ], MjoAvatar.prototype, "ariaDescribedby", 2);
-__decorateClass$j([
+__decorateClass$p([
   state()
 ], MjoAvatar.prototype, "error", 2);
-__decorateClass$j([
+__decorateClass$p([
   query(".container")
 ], MjoAvatar.prototype, "container", 2);
-MjoAvatar = __decorateClass$j([
+MjoAvatar = __decorateClass$p([
   customElement("mjo-avatar")
 ], MjoAvatar);
 const searchClosestElement = (element, selector) => {
@@ -3049,15 +3049,15 @@ const querySelectorShadowRoot = (selector, element) => {
   }
   return null;
 };
-var __defProp$i = Object.defineProperty;
-var __getOwnPropDesc$i = Object.getOwnPropertyDescriptor;
-var __decorateClass$i = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$i(target, key) : target;
+var __defProp$o = Object.defineProperty;
+var __getOwnPropDesc$o = Object.getOwnPropertyDescriptor;
+var __decorateClass$o = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$o(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$i(target, key, result);
+    __defProp$o(target, key, result);
   return result;
 };
 const FormMixin = (superClass) => {
@@ -3118,92 +3118,92 @@ const FormMixin = (superClass) => {
       return;
     ev.formData.set(this.dataFormMixin.name, this.dataFormMixin.value);
   };
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Boolean })
   ], FormClass.prototype, "isemail", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Boolean })
   ], FormClass.prototype, "isurl", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Boolean })
   ], FormClass.prototype, "required", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Boolean })
   ], FormClass.prototype, "nospaces", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Array })
   ], FormClass.prototype, "rangelength", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Boolean })
   ], FormClass.prototype, "isnumber", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Array })
   ], FormClass.prototype, "range", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Array })
   ], FormClass.prototype, "domains", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: String })
   ], FormClass.prototype, "isdate", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Boolean })
   ], FormClass.prototype, "dateprevious", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Number })
   ], FormClass.prototype, "minage", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Number })
   ], FormClass.prototype, "maxage", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: String })
   ], FormClass.prototype, "security", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: String })
   ], FormClass.prototype, "equalto", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Boolean })
   ], FormClass.prototype, "phonenumber", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Array })
   ], FormClass.prototype, "phonecountry", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: String })
   ], FormClass.prototype, "pattern", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Array })
   ], FormClass.prototype, "allowed", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Number })
   ], FormClass.prototype, "mincheck", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Number })
   ], FormClass.prototype, "maxcheck", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Number })
   ], FormClass.prototype, "max", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Number })
   ], FormClass.prototype, "min", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Number })
   ], FormClass.prototype, "maxlength", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Number })
   ], FormClass.prototype, "minlength", 2);
-  __decorateClass$i([
+  __decorateClass$o([
     property({ type: Boolean, attribute: "form-ignore" })
   ], FormClass.prototype, "formIgnore", 2);
   return FormClass;
 };
-var __defProp$h = Object.defineProperty;
-var __getOwnPropDesc$h = Object.getOwnPropertyDescriptor;
-var __decorateClass$h = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$h(target, key) : target;
+var __defProp$n = Object.defineProperty;
+var __getOwnPropDesc$n = Object.getOwnPropertyDescriptor;
+var __decorateClass$n = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$n(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$h(target, key, result);
+    __defProp$n(target, key, result);
   return result;
 };
 let MjoRipple = class extends ThemeMixin(LitElement) {
@@ -3286,18 +3286,18 @@ MjoRipple.styles = [
             }
         `
 ];
-MjoRipple = __decorateClass$h([
+MjoRipple = __decorateClass$n([
   customElement("mjo-ripple")
 ], MjoRipple);
-var __defProp$g = Object.defineProperty;
-var __getOwnPropDesc$g = Object.getOwnPropertyDescriptor;
-var __decorateClass$g = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$g(target, key) : target;
+var __defProp$m = Object.defineProperty;
+var __getOwnPropDesc$m = Object.getOwnPropertyDescriptor;
+var __decorateClass$m = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$m(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$g(target, key, result);
+    __defProp$m(target, key, result);
   return result;
 };
 let MjoTypography = class extends ThemeMixin(LitElement) {
@@ -3395,50 +3395,50 @@ MjoTypography.styles = [
             }
         `
 ];
-__decorateClass$g([
+__decorateClass$m([
   property({ type: String })
 ], MjoTypography.prototype, "tag", 2);
-__decorateClass$g([
+__decorateClass$m([
   property({ type: String })
 ], MjoTypography.prototype, "size", 2);
-__decorateClass$g([
+__decorateClass$m([
   property({ type: String })
 ], MjoTypography.prototype, "weight", 2);
-MjoTypography = __decorateClass$g([
+MjoTypography = __decorateClass$m([
   customElement("mjo-typography")
 ], MjoTypography);
-var __defProp$f = Object.defineProperty;
-var __getOwnPropDesc$f = Object.getOwnPropertyDescriptor;
-var __decorateClass$f = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$f(target, key) : target;
+var __defProp$l = Object.defineProperty;
+var __getOwnPropDesc$l = Object.getOwnPropertyDescriptor;
+var __decorateClass$l = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$l(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$f(target, key, result);
+    __defProp$l(target, key, result);
   return result;
 };
-var __accessCheck$a = (obj, member, msg) => {
+var __accessCheck$g = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$a = (obj, member, value) => {
+var __privateAdd$g = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$9 = (obj, member, method) => {
-  __accessCheck$a(obj, member, "access private method");
+var __privateMethod$f = (obj, member, method) => {
+  __accessCheck$g(obj, member, "access private method");
   return method;
 };
 var _handleClick$2, handleClick_fn$2, _dispatchClickEvent, dispatchClickEvent_fn, _dispatchToggleEvent, dispatchToggleEvent_fn, _dispatchLoadingChangeEvent, dispatchLoadingChangeEvent_fn;
 let MjoButton = class extends ThemeMixin(FormMixin(LitElement)) {
   constructor() {
     super(...arguments);
-    __privateAdd$a(this, _handleClick$2);
-    __privateAdd$a(this, _dispatchClickEvent);
-    __privateAdd$a(this, _dispatchToggleEvent);
-    __privateAdd$a(this, _dispatchLoadingChangeEvent);
+    __privateAdd$g(this, _handleClick$2);
+    __privateAdd$g(this, _dispatchClickEvent);
+    __privateAdd$g(this, _dispatchToggleEvent);
+    __privateAdd$g(this, _dispatchLoadingChangeEvent);
     this.fullwidth = false;
     this.disabled = false;
     this.loading = false;
@@ -3468,7 +3468,7 @@ let MjoButton = class extends ThemeMixin(FormMixin(LitElement)) {
             aria-label=${ifDefined(this.buttonLabel)}
             aria-describedby=${ifDefined(this.describedBy)}
             ?disabled=${this.disabled || this.loading}
-            @click=${__privateMethod$9(this, _handleClick$2, handleClick_fn$2)}
+            @click=${__privateMethod$f(this, _handleClick$2, handleClick_fn$2)}
         >
             ${this.startIcon && html` <mjo-icon src=${this.startIcon}></mjo-icon>`}
             <mjo-typography tag="none"><slot></slot></mjo-typography>
@@ -3483,10 +3483,10 @@ let MjoButton = class extends ThemeMixin(FormMixin(LitElement)) {
       this.toggle = false;
     }
     if (_changedProperties.has("loading")) {
-      __privateMethod$9(this, _dispatchLoadingChangeEvent, dispatchLoadingChangeEvent_fn).call(this);
+      __privateMethod$f(this, _dispatchLoadingChangeEvent, dispatchLoadingChangeEvent_fn).call(this);
     }
     if (_changedProperties.has("toggle") && this.toggleable) {
-      __privateMethod$9(this, _dispatchToggleEvent, dispatchToggleEvent_fn).call(this, _changedProperties.get("toggle"));
+      __privateMethod$f(this, _dispatchToggleEvent, dispatchToggleEvent_fn).call(this, _changedProperties.get("toggle"));
     }
   }
   /**
@@ -3541,7 +3541,7 @@ handleClick_fn$2 = function(event) {
   if (this.form && this.type === "submit") {
     this.submiForm();
   }
-  __privateMethod$9(this, _dispatchClickEvent, dispatchClickEvent_fn).call(this, event);
+  __privateMethod$f(this, _dispatchClickEvent, dispatchClickEvent_fn).call(this, event);
 };
 _dispatchClickEvent = /* @__PURE__ */ new WeakSet();
 dispatchClickEvent_fn = function(originalEvent) {
@@ -4074,55 +4074,55 @@ MjoButton.styles = [
             }
         `
 ];
-__decorateClass$f([
+__decorateClass$l([
   property({ type: Boolean, reflect: true })
 ], MjoButton.prototype, "fullwidth", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: Boolean, reflect: true })
 ], MjoButton.prototype, "disabled", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: Boolean, reflect: true })
 ], MjoButton.prototype, "loading", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: Boolean, reflect: true })
 ], MjoButton.prototype, "rounded", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: Boolean })
 ], MjoButton.prototype, "toggleable", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: Boolean })
 ], MjoButton.prototype, "smallCaps", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: Boolean })
 ], MjoButton.prototype, "noink", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: String })
 ], MjoButton.prototype, "startIcon", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: String })
 ], MjoButton.prototype, "endIcon", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: String })
 ], MjoButton.prototype, "size", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: String })
 ], MjoButton.prototype, "color", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: String })
 ], MjoButton.prototype, "variant", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: String })
 ], MjoButton.prototype, "type", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: String })
 ], MjoButton.prototype, "buttonLabel", 2);
-__decorateClass$f([
+__decorateClass$l([
   property({ type: String })
 ], MjoButton.prototype, "describedBy", 2);
-__decorateClass$f([
+__decorateClass$l([
   state()
 ], MjoButton.prototype, "toggle", 2);
-MjoButton = __decorateClass$f([
+MjoButton = __decorateClass$l([
   customElement("mjo-button")
 ], MjoButton);
 const locales = {
@@ -4381,37 +4381,37 @@ class ClassMapDirective extends Directive {
   }
 }
 const classMap = directive(ClassMapDirective);
-var __defProp$e = Object.defineProperty;
-var __getOwnPropDesc$e = Object.getOwnPropertyDescriptor;
-var __decorateClass$e = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$e(target, key) : target;
+var __defProp$k = Object.defineProperty;
+var __getOwnPropDesc$k = Object.getOwnPropertyDescriptor;
+var __decorateClass$k = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$k(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$e(target, key, result);
+    __defProp$k(target, key, result);
   return result;
 };
-var __accessCheck$9 = (obj, member, msg) => {
+var __accessCheck$f = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$9 = (obj, member, value) => {
+var __privateAdd$f = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$8 = (obj, member, method) => {
-  __accessCheck$9(obj, member, "access private method");
+var __privateMethod$e = (obj, member, method) => {
+  __accessCheck$f(obj, member, "access private method");
   return method;
 };
 var _handleClick$1, handleClick_fn$1, _handleMouseEnter, handleMouseEnter_fn, _handleMouseLeave, handleMouseLeave_fn;
 let CalendarDay = class extends LitElement {
   constructor() {
     super(...arguments);
-    __privateAdd$9(this, _handleClick$1);
-    __privateAdd$9(this, _handleMouseEnter);
-    __privateAdd$9(this, _handleMouseLeave);
+    __privateAdd$f(this, _handleClick$1);
+    __privateAdd$f(this, _handleMouseEnter);
+    __privateAdd$f(this, _handleMouseLeave);
     this.isEmpty = false;
     this.isToday = false;
     this.isSelected = false;
@@ -4474,9 +4474,9 @@ let CalendarDay = class extends LitElement {
                 aria-current=${this.isToday ? "date" : "false"}
                 aria-disabled=${this.isDisabled ? "true" : "false"}
                 tabindex=${this.isFocused ? 0 : -1}
-                @click=${__privateMethod$8(this, _handleClick$1, handleClick_fn$1)}
-                @mouseenter=${__privateMethod$8(this, _handleMouseEnter, handleMouseEnter_fn)}
-                @mouseleave=${__privateMethod$8(this, _handleMouseLeave, handleMouseLeave_fn)}
+                @click=${__privateMethod$e(this, _handleClick$1, handleClick_fn$1)}
+                @mouseenter=${__privateMethod$e(this, _handleMouseEnter, handleMouseEnter_fn)}
+                @mouseleave=${__privateMethod$e(this, _handleMouseLeave, handleMouseLeave_fn)}
             >
                 <mjo-typography tag="none">${this.day}</mjo-typography>
             </div>
@@ -4588,88 +4588,88 @@ CalendarDay.styles = css`
             min-height: 40px;
         }
     `;
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Number })
 ], CalendarDay.prototype, "day", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Number })
 ], CalendarDay.prototype, "month", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Number })
 ], CalendarDay.prototype, "year", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "isEmpty", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "isToday", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "isSelected", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "isInRange", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "isRangeStart", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "isRangeEnd", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "isDisabled", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "isHovered", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "isFocused", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: Boolean })
 ], CalendarDay.prototype, "showToday", 2);
-__decorateClass$e([
+__decorateClass$k([
   property({ type: String })
 ], CalendarDay.prototype, "size", 2);
-CalendarDay = __decorateClass$e([
+CalendarDay = __decorateClass$k([
   customElement("calendar-day")
 ], CalendarDay);
-var __defProp$d = Object.defineProperty;
-var __getOwnPropDesc$d = Object.getOwnPropertyDescriptor;
-var __decorateClass$d = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$d(target, key) : target;
+var __defProp$j = Object.defineProperty;
+var __getOwnPropDesc$j = Object.getOwnPropertyDescriptor;
+var __decorateClass$j = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$j(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$d(target, key, result);
+    __defProp$j(target, key, result);
   return result;
 };
-var __accessCheck$8 = (obj, member, msg) => {
+var __accessCheck$e = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$8 = (obj, member, value) => {
+var __privateAdd$e = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$7 = (obj, member, method) => {
-  __accessCheck$8(obj, member, "access private method");
+var __privateMethod$d = (obj, member, method) => {
+  __accessCheck$e(obj, member, "access private method");
   return method;
 };
 var _handleDayClick, handleDayClick_fn, _handleDayHover, handleDayHover_fn, _handleDayLeave, handleDayLeave_fn, _isSelectedDate, isSelectedDate_fn, _isInRange, isInRange_fn, _isRangeStart, isRangeStart_fn, _isRangeEnd, isRangeEnd_fn, _isHoveredInRange, isHoveredInRange_fn, _isFocusedDate, isFocusedDate_fn;
 let CalendarGrid = class extends LitElement {
   constructor() {
     super(...arguments);
-    __privateAdd$8(this, _handleDayClick);
-    __privateAdd$8(this, _handleDayHover);
-    __privateAdd$8(this, _handleDayLeave);
-    __privateAdd$8(this, _isSelectedDate);
-    __privateAdd$8(this, _isInRange);
-    __privateAdd$8(this, _isRangeStart);
-    __privateAdd$8(this, _isRangeEnd);
-    __privateAdd$8(this, _isHoveredInRange);
-    __privateAdd$8(this, _isFocusedDate);
+    __privateAdd$e(this, _handleDayClick);
+    __privateAdd$e(this, _handleDayHover);
+    __privateAdd$e(this, _handleDayLeave);
+    __privateAdd$e(this, _isSelectedDate);
+    __privateAdd$e(this, _isInRange);
+    __privateAdd$e(this, _isRangeStart);
+    __privateAdd$e(this, _isRangeEnd);
+    __privateAdd$e(this, _isHoveredInRange);
+    __privateAdd$e(this, _isFocusedDate);
     this.side = "single";
     this.firstDayOfWeek = "monday";
     this.mode = "single";
@@ -4697,12 +4697,12 @@ let CalendarGrid = class extends LitElement {
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(this.year, this.month, day);
       const isToday = CalendarUtils.isSameDay(date, today);
-      const isSelected = __privateMethod$7(this, _isSelectedDate, isSelectedDate_fn).call(this, date);
-      const isInRange = this.mode === "range" && __privateMethod$7(this, _isInRange, isInRange_fn).call(this, date);
-      const isRangeStart = this.mode === "range" && __privateMethod$7(this, _isRangeStart, isRangeStart_fn).call(this, date);
-      const isRangeEnd = this.mode === "range" && __privateMethod$7(this, _isRangeEnd, isRangeEnd_fn).call(this, date);
+      const isSelected = __privateMethod$d(this, _isSelectedDate, isSelectedDate_fn).call(this, date);
+      const isInRange = this.mode === "range" && __privateMethod$d(this, _isInRange, isInRange_fn).call(this, date);
+      const isRangeStart = this.mode === "range" && __privateMethod$d(this, _isRangeStart, isRangeStart_fn).call(this, date);
+      const isRangeEnd = this.mode === "range" && __privateMethod$d(this, _isRangeEnd, isRangeEnd_fn).call(this, date);
       const isDisabled = CalendarUtils.isDateDisabled(date, this.disabled, this.minDate, this.maxDate, this.disabledDates);
-      const isHovered = this.mode === "range" && __privateMethod$7(this, _isHoveredInRange, isHoveredInRange_fn).call(this, date);
+      const isHovered = this.mode === "range" && __privateMethod$d(this, _isHoveredInRange, isHoveredInRange_fn).call(this, date);
       days.push(html`
                 <calendar-day
                     day=${day}
@@ -4715,12 +4715,12 @@ let CalendarGrid = class extends LitElement {
                     ?isRangeEnd=${isRangeEnd}
                     ?isDisabled=${isDisabled}
                     ?isHovered=${isHovered}
-                    ?isFocused=${__privateMethod$7(this, _isFocusedDate, isFocusedDate_fn).call(this, date)}
+                    ?isFocused=${__privateMethod$d(this, _isFocusedDate, isFocusedDate_fn).call(this, date)}
                     ?showToday=${this.showToday}
                     size=${this.size}
-                    @day-click=${__privateMethod$7(this, _handleDayClick, handleDayClick_fn)}
-                    @day-hover=${__privateMethod$7(this, _handleDayHover, handleDayHover_fn)}
-                    @day-leave=${__privateMethod$7(this, _handleDayLeave, handleDayLeave_fn)}
+                    @day-click=${__privateMethod$d(this, _handleDayClick, handleDayClick_fn)}
+                    @day-hover=${__privateMethod$d(this, _handleDayHover, handleDayHover_fn)}
+                    @day-leave=${__privateMethod$d(this, _handleDayLeave, handleDayLeave_fn)}
                 ></calendar-day>
             `);
     }
@@ -4843,94 +4843,94 @@ CalendarGrid.styles = css`
             width: 3em;
         }
     `;
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Number })
 ], CalendarGrid.prototype, "month", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Number })
 ], CalendarGrid.prototype, "year", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: String })
 ], CalendarGrid.prototype, "side", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Array })
 ], CalendarGrid.prototype, "weekDays", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: String })
 ], CalendarGrid.prototype, "firstDayOfWeek", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: String })
 ], CalendarGrid.prototype, "mode", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Boolean })
 ], CalendarGrid.prototype, "showToday", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: String })
 ], CalendarGrid.prototype, "size", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Boolean })
 ], CalendarGrid.prototype, "disabled", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: String })
 ], CalendarGrid.prototype, "minDate", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: String })
 ], CalendarGrid.prototype, "maxDate", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Array })
 ], CalendarGrid.prototype, "disabledDates", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Object })
 ], CalendarGrid.prototype, "selectedDate", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Object })
 ], CalendarGrid.prototype, "selectedStartDate", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Object })
 ], CalendarGrid.prototype, "selectedEndDate", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Object })
 ], CalendarGrid.prototype, "hoverDate", 2);
-__decorateClass$d([
+__decorateClass$j([
   property({ type: Object })
 ], CalendarGrid.prototype, "focusedDate", 2);
-CalendarGrid = __decorateClass$d([
+CalendarGrid = __decorateClass$j([
   customElement("calendar-grid")
 ], CalendarGrid);
 const FaChevronLeft = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg>`;
 const FaChevronRight = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>`;
-var __defProp$c = Object.defineProperty;
-var __getOwnPropDesc$c = Object.getOwnPropertyDescriptor;
-var __decorateClass$c = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$c(target, key) : target;
+var __defProp$i = Object.defineProperty;
+var __getOwnPropDesc$i = Object.getOwnPropertyDescriptor;
+var __decorateClass$i = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$i(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$c(target, key, result);
+    __defProp$i(target, key, result);
   return result;
 };
-var __accessCheck$7 = (obj, member, msg) => {
+var __accessCheck$d = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$7 = (obj, member, value) => {
+var __privateAdd$d = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$6 = (obj, member, method) => {
-  __accessCheck$7(obj, member, "access private method");
+var __privateMethod$c = (obj, member, method) => {
+  __accessCheck$d(obj, member, "access private method");
   return method;
 };
 var _handlePrevious, handlePrevious_fn, _handleNext, handleNext_fn, _handleMonthClick, handleMonthClick_fn, _handleYearClick, handleYearClick_fn;
 let CalendarHeader = class extends LitElement {
   constructor() {
     super(...arguments);
-    __privateAdd$7(this, _handlePrevious);
-    __privateAdd$7(this, _handleNext);
-    __privateAdd$7(this, _handleMonthClick);
-    __privateAdd$7(this, _handleYearClick);
+    __privateAdd$d(this, _handlePrevious);
+    __privateAdd$d(this, _handleNext);
+    __privateAdd$d(this, _handleMonthClick);
+    __privateAdd$d(this, _handleYearClick);
     this.side = "single";
     this.disabled = false;
     this.monthPickerOpen = false;
@@ -4977,7 +4977,7 @@ let CalendarHeader = class extends LitElement {
                                   size="small"
                                   rounded
                                   startIcon=${FaChevronLeft}
-                                  @click=${__privateMethod$6(this, _handlePrevious, handlePrevious_fn)}
+                                  @click=${__privateMethod$c(this, _handlePrevious, handlePrevious_fn)}
                                   ?disabled=${this.disabled}
                                   aria-label=${this.previousMonthLabel}
                                   title=${this.previousMonthLabel}
@@ -4987,7 +4987,7 @@ let CalendarHeader = class extends LitElement {
                     <div class="month-year-selectors" part="month-year" role="group" aria-label=${this.currentMonthYearLabel}>
                         <mjo-button
                             variant="text"
-                            @click=${__privateMethod$6(this, _handleMonthClick, handleMonthClick_fn)}
+                            @click=${__privateMethod$c(this, _handleMonthClick, handleMonthClick_fn)}
                             ?disabled=${this.disabled}
                             aria-label="Select month"
                             aria-expanded=${this.monthPickerOpen ? "true" : "false"}
@@ -4998,7 +4998,7 @@ let CalendarHeader = class extends LitElement {
                         </mjo-button>
                         <mjo-button
                             variant="text"
-                            @click=${__privateMethod$6(this, _handleYearClick, handleYearClick_fn)}
+                            @click=${__privateMethod$c(this, _handleYearClick, handleYearClick_fn)}
                             ?disabled=${this.disabled}
                             aria-label="Select year"
                             aria-expanded=${this.yearPickerOpen ? "true" : "false"}
@@ -5013,7 +5013,7 @@ let CalendarHeader = class extends LitElement {
                                   size="small"
                                   rounded
                                   startIcon=${FaChevronRight}
-                                  @click=${__privateMethod$6(this, _handleNext, handleNext_fn)}
+                                  @click=${__privateMethod$c(this, _handleNext, handleNext_fn)}
                                   ?disabled=${this.disabled}
                                   aria-label=${this.nextMonthLabel}
                                   title=${this.nextMonthLabel}
@@ -5085,62 +5085,62 @@ CalendarHeader.styles = css`
             gap: 4px;
         }
     `;
-__decorateClass$c([
+__decorateClass$i([
   property({ type: Number })
 ], CalendarHeader.prototype, "month", 2);
-__decorateClass$c([
+__decorateClass$i([
   property({ type: Number })
 ], CalendarHeader.prototype, "year", 2);
-__decorateClass$c([
+__decorateClass$i([
   property({ type: String })
 ], CalendarHeader.prototype, "side", 2);
-__decorateClass$c([
+__decorateClass$i([
   property({ type: Array })
 ], CalendarHeader.prototype, "monthNames", 2);
-__decorateClass$c([
+__decorateClass$i([
   property({ type: Boolean })
 ], CalendarHeader.prototype, "disabled", 2);
-__decorateClass$c([
+__decorateClass$i([
   property({ type: Boolean })
 ], CalendarHeader.prototype, "monthPickerOpen", 2);
-__decorateClass$c([
+__decorateClass$i([
   property({ type: Boolean })
 ], CalendarHeader.prototype, "yearPickerOpen", 2);
-CalendarHeader = __decorateClass$c([
+CalendarHeader = __decorateClass$i([
   customElement("calendar-header")
 ], CalendarHeader);
-var __defProp$b = Object.defineProperty;
-var __getOwnPropDesc$b = Object.getOwnPropertyDescriptor;
-var __decorateClass$b = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$b(target, key) : target;
+var __defProp$h = Object.defineProperty;
+var __getOwnPropDesc$h = Object.getOwnPropertyDescriptor;
+var __decorateClass$h = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$h(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$b(target, key, result);
+    __defProp$h(target, key, result);
   return result;
 };
-var __accessCheck$6 = (obj, member, msg) => {
+var __accessCheck$c = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$6 = (obj, member, value) => {
+var __privateAdd$c = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$5 = (obj, member, method) => {
-  __accessCheck$6(obj, member, "access private method");
+var __privateMethod$b = (obj, member, method) => {
+  __accessCheck$c(obj, member, "access private method");
   return method;
 };
 var _selectMonth, selectMonth_fn, _setFocusedMonth, setFocusedMonth_fn, _handleKeydown$4, handleKeydown_fn$4, _moveFocus$1, moveFocus_fn$1;
 let CalendarMonthPicker = class extends LitElement {
   constructor() {
     super(...arguments);
-    __privateAdd$6(this, _selectMonth);
-    __privateAdd$6(this, _setFocusedMonth);
-    __privateAdd$6(this, _handleKeydown$4);
-    __privateAdd$6(this, _moveFocus$1);
+    __privateAdd$c(this, _selectMonth);
+    __privateAdd$c(this, _setFocusedMonth);
+    __privateAdd$c(this, _handleKeydown$4);
+    __privateAdd$c(this, _moveFocus$1);
     this.selectedMonth = (/* @__PURE__ */ new Date()).getMonth();
     this.monthNames = [];
     this.disabled = false;
@@ -5148,7 +5148,7 @@ let CalendarMonthPicker = class extends LitElement {
   }
   render() {
     return html`
-            <div class="month-picker" ?data-disabled=${this.disabled} role="dialog" aria-label="Select month" @keydown=${__privateMethod$5(this, _handleKeydown$4, handleKeydown_fn$4)}>
+            <div class="month-picker" ?data-disabled=${this.disabled} role="dialog" aria-label="Select month" @keydown=${__privateMethod$b(this, _handleKeydown$4, handleKeydown_fn$4)}>
                 <div class="months-grid" role="grid" aria-label="Month selection grid">
                     ${this.monthNames.map(
       (month, index) => html`
@@ -5157,11 +5157,11 @@ let CalendarMonthPicker = class extends LitElement {
                                 role="gridcell"
                                 ?data-selected=${index === this.selectedMonth}
                                 ?disabled=${this.disabled}
-                                @click=${() => __privateMethod$5(this, _selectMonth, selectMonth_fn).call(this, index)}
+                                @click=${() => __privateMethod$b(this, _selectMonth, selectMonth_fn).call(this, index)}
                                 tabindex=${this.disabled ? -1 : index === this.focusedMonth ? 0 : -1}
                                 aria-label=${month}
                                 aria-selected=${index === this.selectedMonth ? "true" : "false"}
-                                @focus=${() => __privateMethod$5(this, _setFocusedMonth, setFocusedMonth_fn).call(this, index)}
+                                @focus=${() => __privateMethod$b(this, _setFocusedMonth, setFocusedMonth_fn).call(this, index)}
                             >
                                 ${month}
                             </button>
@@ -5197,32 +5197,32 @@ handleKeydown_fn$4 = function(event) {
   let handled = false;
   switch (key) {
     case "ArrowLeft":
-      __privateMethod$5(this, _moveFocus$1, moveFocus_fn$1).call(this, -1);
+      __privateMethod$b(this, _moveFocus$1, moveFocus_fn$1).call(this, -1);
       handled = true;
       break;
     case "ArrowRight":
-      __privateMethod$5(this, _moveFocus$1, moveFocus_fn$1).call(this, 1);
+      __privateMethod$b(this, _moveFocus$1, moveFocus_fn$1).call(this, 1);
       handled = true;
       break;
     case "ArrowUp":
-      __privateMethod$5(this, _moveFocus$1, moveFocus_fn$1).call(this, -3);
+      __privateMethod$b(this, _moveFocus$1, moveFocus_fn$1).call(this, -3);
       handled = true;
       break;
     case "ArrowDown":
-      __privateMethod$5(this, _moveFocus$1, moveFocus_fn$1).call(this, 3);
+      __privateMethod$b(this, _moveFocus$1, moveFocus_fn$1).call(this, 3);
       handled = true;
       break;
     case "Home":
-      __privateMethod$5(this, _setFocusedMonth, setFocusedMonth_fn).call(this, 0);
+      __privateMethod$b(this, _setFocusedMonth, setFocusedMonth_fn).call(this, 0);
       handled = true;
       break;
     case "End":
-      __privateMethod$5(this, _setFocusedMonth, setFocusedMonth_fn).call(this, 11);
+      __privateMethod$b(this, _setFocusedMonth, setFocusedMonth_fn).call(this, 11);
       handled = true;
       break;
     case "Enter":
     case " ":
-      __privateMethod$5(this, _selectMonth, selectMonth_fn).call(this, this.focusedMonth);
+      __privateMethod$b(this, _selectMonth, selectMonth_fn).call(this, this.focusedMonth);
       handled = true;
       break;
   }
@@ -5238,7 +5238,7 @@ moveFocus_fn$1 = function(delta) {
     newFocus = 11;
   if (newFocus > 11)
     newFocus = 0;
-  __privateMethod$5(this, _setFocusedMonth, setFocusedMonth_fn).call(this, newFocus);
+  __privateMethod$b(this, _setFocusedMonth, setFocusedMonth_fn).call(this, newFocus);
   this.updateComplete.then(() => {
     var _a2;
     const buttons = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelectorAll("button");
@@ -5300,56 +5300,56 @@ CalendarMonthPicker.styles = css`
             pointer-events: none;
         }
     `;
-__decorateClass$b([
+__decorateClass$h([
   property({ type: Number })
 ], CalendarMonthPicker.prototype, "selectedMonth", 2);
-__decorateClass$b([
+__decorateClass$h([
   property({ type: Array })
 ], CalendarMonthPicker.prototype, "monthNames", 2);
-__decorateClass$b([
+__decorateClass$h([
   property({ type: Boolean })
 ], CalendarMonthPicker.prototype, "disabled", 2);
-__decorateClass$b([
+__decorateClass$h([
   state()
 ], CalendarMonthPicker.prototype, "focusedMonth", 2);
-CalendarMonthPicker = __decorateClass$b([
+CalendarMonthPicker = __decorateClass$h([
   customElement("calendar-month-picker")
 ], CalendarMonthPicker);
-var __defProp$a = Object.defineProperty;
-var __getOwnPropDesc$a = Object.getOwnPropertyDescriptor;
-var __decorateClass$a = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$a(target, key) : target;
+var __defProp$g = Object.defineProperty;
+var __getOwnPropDesc$g = Object.getOwnPropertyDescriptor;
+var __decorateClass$g = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$g(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$a(target, key, result);
+    __defProp$g(target, key, result);
   return result;
 };
-var __accessCheck$5 = (obj, member, msg) => {
+var __accessCheck$b = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$5 = (obj, member, value) => {
+var __privateAdd$b = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$4 = (obj, member, method) => {
-  __accessCheck$5(obj, member, "access private method");
+var __privateMethod$a = (obj, member, method) => {
+  __accessCheck$b(obj, member, "access private method");
   return method;
 };
 var _isYearDisabled, isYearDisabled_fn, _selectYear, selectYear_fn, _previousDecade, previousDecade_fn, _nextDecade, nextDecade_fn, _setFocusedYear, setFocusedYear_fn, _handleKeydown$3, handleKeydown_fn$3, _moveFocus, moveFocus_fn;
 let CalendarYearPicker = class extends LitElement {
   constructor() {
     super(...arguments);
-    __privateAdd$5(this, _isYearDisabled);
-    __privateAdd$5(this, _selectYear);
-    __privateAdd$5(this, _previousDecade);
-    __privateAdd$5(this, _nextDecade);
-    __privateAdd$5(this, _setFocusedYear);
-    __privateAdd$5(this, _handleKeydown$3);
-    __privateAdd$5(this, _moveFocus);
+    __privateAdd$b(this, _isYearDisabled);
+    __privateAdd$b(this, _selectYear);
+    __privateAdd$b(this, _previousDecade);
+    __privateAdd$b(this, _nextDecade);
+    __privateAdd$b(this, _setFocusedYear);
+    __privateAdd$b(this, _handleKeydown$3);
+    __privateAdd$b(this, _moveFocus);
     this.selectedYear = (/* @__PURE__ */ new Date()).getFullYear();
     this.disabled = false;
     this.startYear = Math.floor((/* @__PURE__ */ new Date()).getFullYear() / 10) * 10;
@@ -5370,12 +5370,12 @@ let CalendarYearPicker = class extends LitElement {
   }
   render() {
     return html`
-            <div class="year-picker" ?data-disabled=${this.disabled} role="dialog" aria-label="Select year" @keydown=${__privateMethod$4(this, _handleKeydown$3, handleKeydown_fn$3)}>
+            <div class="year-picker" ?data-disabled=${this.disabled} role="dialog" aria-label="Select year" @keydown=${__privateMethod$a(this, _handleKeydown$3, handleKeydown_fn$3)}>
                 <div class="year-navigation">
                     <button
                         class="nav-button"
                         ?disabled=${this.disabled}
-                        @click=${__privateMethod$4(this, _previousDecade, previousDecade_fn)}
+                        @click=${__privateMethod$a(this, _previousDecade, previousDecade_fn)}
                         title="Previous decade: ${this.previousDecadeLabel}"
                         aria-label="Previous decade: ${this.previousDecadeLabel}"
                     >
@@ -5387,7 +5387,7 @@ let CalendarYearPicker = class extends LitElement {
                     <button
                         class="nav-button"
                         ?disabled=${this.disabled}
-                        @click=${__privateMethod$4(this, _nextDecade, nextDecade_fn)}
+                        @click=${__privateMethod$a(this, _nextDecade, nextDecade_fn)}
                         title="Next decade: ${this.nextDecadeLabel}"
                         aria-label="Next decade: ${this.nextDecadeLabel}"
                     >
@@ -5403,12 +5403,12 @@ let CalendarYearPicker = class extends LitElement {
                                 class="year-button"
                                 role="gridcell"
                                 ?data-selected=${year === this.selectedYear}
-                                ?disabled=${this.disabled || __privateMethod$4(this, _isYearDisabled, isYearDisabled_fn).call(this, year)}
-                                @click=${() => __privateMethod$4(this, _selectYear, selectYear_fn).call(this, year)}
-                                tabindex=${this.disabled || __privateMethod$4(this, _isYearDisabled, isYearDisabled_fn).call(this, year) ? -1 : year === this.focusedYear ? 0 : -1}
+                                ?disabled=${this.disabled || __privateMethod$a(this, _isYearDisabled, isYearDisabled_fn).call(this, year)}
+                                @click=${() => __privateMethod$a(this, _selectYear, selectYear_fn).call(this, year)}
+                                tabindex=${this.disabled || __privateMethod$a(this, _isYearDisabled, isYearDisabled_fn).call(this, year) ? -1 : year === this.focusedYear ? 0 : -1}
                                 aria-label=${year.toString()}
                                 aria-selected=${year === this.selectedYear ? "true" : "false"}
-                                @focus=${() => __privateMethod$4(this, _setFocusedYear, setFocusedYear_fn).call(this, year)}
+                                @focus=${() => __privateMethod$a(this, _setFocusedYear, setFocusedYear_fn).call(this, year)}
                             >
                                 ${year}
                             </button>
@@ -5429,7 +5429,7 @@ isYearDisabled_fn = function(year) {
 };
 _selectYear = /* @__PURE__ */ new WeakSet();
 selectYear_fn = function(year) {
-  if (this.disabled || __privateMethod$4(this, _isYearDisabled, isYearDisabled_fn).call(this, year))
+  if (this.disabled || __privateMethod$a(this, _isYearDisabled, isYearDisabled_fn).call(this, year))
     return;
   this.selectedYear = year;
   this.dispatchEvent(
@@ -5464,43 +5464,43 @@ handleKeydown_fn$3 = function(event) {
   let handled = false;
   switch (key) {
     case "ArrowLeft":
-      __privateMethod$4(this, _moveFocus, moveFocus_fn).call(this, -1);
+      __privateMethod$a(this, _moveFocus, moveFocus_fn).call(this, -1);
       handled = true;
       break;
     case "ArrowRight":
-      __privateMethod$4(this, _moveFocus, moveFocus_fn).call(this, 1);
+      __privateMethod$a(this, _moveFocus, moveFocus_fn).call(this, 1);
       handled = true;
       break;
     case "ArrowUp":
-      __privateMethod$4(this, _moveFocus, moveFocus_fn).call(this, -4);
+      __privateMethod$a(this, _moveFocus, moveFocus_fn).call(this, -4);
       handled = true;
       break;
     case "ArrowDown":
-      __privateMethod$4(this, _moveFocus, moveFocus_fn).call(this, 4);
+      __privateMethod$a(this, _moveFocus, moveFocus_fn).call(this, 4);
       handled = true;
       break;
     case "Home":
-      __privateMethod$4(this, _setFocusedYear, setFocusedYear_fn).call(this, this.startYear);
+      __privateMethod$a(this, _setFocusedYear, setFocusedYear_fn).call(this, this.startYear);
       handled = true;
       break;
     case "End":
-      __privateMethod$4(this, _setFocusedYear, setFocusedYear_fn).call(this, this.startYear + 11);
+      __privateMethod$a(this, _setFocusedYear, setFocusedYear_fn).call(this, this.startYear + 11);
       handled = true;
       break;
     case "PageUp":
-      __privateMethod$4(this, _previousDecade, previousDecade_fn).call(this);
-      __privateMethod$4(this, _setFocusedYear, setFocusedYear_fn).call(this, Math.max(this.startYear, this.focusedYear - 12));
+      __privateMethod$a(this, _previousDecade, previousDecade_fn).call(this);
+      __privateMethod$a(this, _setFocusedYear, setFocusedYear_fn).call(this, Math.max(this.startYear, this.focusedYear - 12));
       handled = true;
       break;
     case "PageDown":
-      __privateMethod$4(this, _nextDecade, nextDecade_fn).call(this);
-      __privateMethod$4(this, _setFocusedYear, setFocusedYear_fn).call(this, Math.min(this.startYear + 11, this.focusedYear + 12));
+      __privateMethod$a(this, _nextDecade, nextDecade_fn).call(this);
+      __privateMethod$a(this, _setFocusedYear, setFocusedYear_fn).call(this, Math.min(this.startYear + 11, this.focusedYear + 12));
       handled = true;
       break;
     case "Enter":
     case " ":
-      if (!__privateMethod$4(this, _isYearDisabled, isYearDisabled_fn).call(this, this.focusedYear)) {
-        __privateMethod$4(this, _selectYear, selectYear_fn).call(this, this.focusedYear);
+      if (!__privateMethod$a(this, _isYearDisabled, isYearDisabled_fn).call(this, this.focusedYear)) {
+        __privateMethod$a(this, _selectYear, selectYear_fn).call(this, this.focusedYear);
         handled = true;
       }
       break;
@@ -5517,7 +5517,7 @@ moveFocus_fn = function(delta) {
     newFocus = this.startYear;
   if (newFocus > this.startYear + 11)
     newFocus = this.startYear + 11;
-  __privateMethod$4(this, _setFocusedYear, setFocusedYear_fn).call(this, newFocus);
+  __privateMethod$a(this, _setFocusedYear, setFocusedYear_fn).call(this, newFocus);
   this.updateComplete.then(() => {
     var _a2;
     const buttons = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelectorAll(".year-button");
@@ -5623,110 +5623,110 @@ CalendarYearPicker.styles = css`
             pointer-events: none;
         }
     `;
-__decorateClass$a([
+__decorateClass$g([
   property({ type: Number })
 ], CalendarYearPicker.prototype, "selectedYear", 2);
-__decorateClass$a([
+__decorateClass$g([
   property({ type: Boolean })
 ], CalendarYearPicker.prototype, "disabled", 2);
-__decorateClass$a([
+__decorateClass$g([
   property({ type: Number })
 ], CalendarYearPicker.prototype, "minYear", 2);
-__decorateClass$a([
+__decorateClass$g([
   property({ type: Number })
 ], CalendarYearPicker.prototype, "maxYear", 2);
-__decorateClass$a([
+__decorateClass$g([
   state()
 ], CalendarYearPicker.prototype, "startYear", 2);
-__decorateClass$a([
+__decorateClass$g([
   state()
 ], CalendarYearPicker.prototype, "focusedYear", 2);
-CalendarYearPicker = __decorateClass$a([
+CalendarYearPicker = __decorateClass$g([
   customElement("calendar-year-picker")
 ], CalendarYearPicker);
-var __defProp$9 = Object.defineProperty;
-var __getOwnPropDesc$9 = Object.getOwnPropertyDescriptor;
-var __decorateClass$9 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$9(target, key) : target;
+var __defProp$f = Object.defineProperty;
+var __getOwnPropDesc$f = Object.getOwnPropertyDescriptor;
+var __decorateClass$f = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$f(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$9(target, key, result);
+    __defProp$f(target, key, result);
   return result;
 };
-var __accessCheck$4 = (obj, member, msg) => {
+var __accessCheck$a = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateGet$1 = (obj, member, getter) => {
-  __accessCheck$4(obj, member, "read from private field");
+var __privateGet$5 = (obj, member, getter) => {
+  __accessCheck$a(obj, member, "read from private field");
   return getter ? getter.call(obj) : member.get(obj);
 };
-var __privateAdd$4 = (obj, member, value) => {
+var __privateAdd$a = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateSet$1 = (obj, member, value, setter) => {
-  __accessCheck$4(obj, member, "write to private field");
+var __privateSet$2 = (obj, member, value, setter) => {
+  __accessCheck$a(obj, member, "write to private field");
   setter ? setter.call(obj, value) : member.set(obj, value);
   return value;
 };
-var __privateMethod$3 = (obj, member, method) => {
-  __accessCheck$4(obj, member, "access private method");
+var __privateMethod$9 = (obj, member, method) => {
+  __accessCheck$a(obj, member, "access private method");
   return method;
 };
 var _debounceTimer, _renderRangeMode, renderRangeMode_fn, _renderSingleMode, renderSingleMode_fn, _renderSingleCalendar, renderSingleCalendar_fn, _renderRangeCalendar, renderRangeCalendar_fn, _renderCalendarSide, renderCalendarSide_fn, _setupResizeObserver, setupResizeObserver_fn, _shouldRenderDualRange, shouldRenderDualRange_fn, _evaluateAutoDual, evaluateAutoDual_fn, _evaluateAutoDualDebounced, evaluateAutoDualDebounced_fn, _doEvaluateAutoDual, doEvaluateAutoDual_fn, _handleAutoDualChange, handleAutoDualChange_fn, _handleWindowResize, _handleKeydown$2, handleKeydown_fn$2, _navigateDate, navigateDate_fn, _navigateMonthByKeyboard, navigateMonthByKeyboard_fn, _navigateToStartOfWeek, navigateToStartOfWeek_fn, _navigateToEndOfWeek, navigateToEndOfWeek_fn, _navigateToToday, navigateToToday_fn, _setFocusedDate, setFocusedDate_fn, _handleEscape, handleEscape_fn, _announceText, announceText_fn, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn, _initializeDates, initializeDates_fn, _handleNavigate, handleNavigate_fn, _handleMonthPicker, handleMonthPicker_fn, _handleYearPicker, handleYearPicker_fn, _handleDateClick, handleDateClick_fn, _handleDateHover, handleDateHover_fn, _handleDateLeave, handleDateLeave_fn, _handleMonthSelected, handleMonthSelected_fn, _handleYearSelected, handleYearSelected_fn, _openPicker, openPicker_fn, _closePicker, closePicker_fn, _calendarIndexForSide, calendarIndexForSide_fn, _sideForCalendarIndex, sideForCalendarIndex_fn, _navigateMonth, navigateMonth_fn, _setMonth, setMonth_fn, _setYear, setYear_fn, _doFullReset, doFullReset_fn, _selectDate, selectDate_fn, _updateFormData, updateFormData_fn, _dispatchDateSelected, dispatchDateSelected_fn, _dispatchRangeSelected, dispatchRangeSelected_fn, _getAutomaticSide, getAutomaticSide_fn, _validateSide, validateSide_fn, _setMonthAndYear, setMonthAndYear_fn, _addMonth, addMonth_fn;
 let MjoCalendar = class extends ThemeMixin(FormMixin(LitElement)) {
   constructor() {
     super(...arguments);
-    __privateAdd$4(this, _renderRangeMode);
-    __privateAdd$4(this, _renderSingleMode);
-    __privateAdd$4(this, _renderSingleCalendar);
-    __privateAdd$4(this, _renderRangeCalendar);
-    __privateAdd$4(this, _renderCalendarSide);
-    __privateAdd$4(this, _setupResizeObserver);
-    __privateAdd$4(this, _shouldRenderDualRange);
-    __privateAdd$4(this, _evaluateAutoDual);
-    __privateAdd$4(this, _evaluateAutoDualDebounced);
-    __privateAdd$4(this, _doEvaluateAutoDual);
-    __privateAdd$4(this, _handleAutoDualChange);
-    __privateAdd$4(this, _handleKeydown$2);
-    __privateAdd$4(this, _navigateDate);
-    __privateAdd$4(this, _navigateMonthByKeyboard);
-    __privateAdd$4(this, _navigateToStartOfWeek);
-    __privateAdd$4(this, _navigateToEndOfWeek);
-    __privateAdd$4(this, _navigateToToday);
-    __privateAdd$4(this, _setFocusedDate);
-    __privateAdd$4(this, _handleEscape);
-    __privateAdd$4(this, _announceText);
-    __privateAdd$4(this, _syncDisplayedMonthsFromState);
-    __privateAdd$4(this, _initializeDates);
-    __privateAdd$4(this, _handleNavigate);
-    __privateAdd$4(this, _handleMonthPicker);
-    __privateAdd$4(this, _handleYearPicker);
-    __privateAdd$4(this, _handleDateClick);
-    __privateAdd$4(this, _handleDateHover);
-    __privateAdd$4(this, _handleDateLeave);
-    __privateAdd$4(this, _handleMonthSelected);
-    __privateAdd$4(this, _handleYearSelected);
-    __privateAdd$4(this, _openPicker);
-    __privateAdd$4(this, _closePicker);
-    __privateAdd$4(this, _calendarIndexForSide);
-    __privateAdd$4(this, _sideForCalendarIndex);
-    __privateAdd$4(this, _navigateMonth);
-    __privateAdd$4(this, _setMonth);
-    __privateAdd$4(this, _setYear);
-    __privateAdd$4(this, _doFullReset);
-    __privateAdd$4(this, _selectDate);
-    __privateAdd$4(this, _updateFormData);
-    __privateAdd$4(this, _dispatchDateSelected);
-    __privateAdd$4(this, _dispatchRangeSelected);
-    __privateAdd$4(this, _getAutomaticSide);
-    __privateAdd$4(this, _validateSide);
-    __privateAdd$4(this, _setMonthAndYear);
-    __privateAdd$4(this, _addMonth);
+    __privateAdd$a(this, _renderRangeMode);
+    __privateAdd$a(this, _renderSingleMode);
+    __privateAdd$a(this, _renderSingleCalendar);
+    __privateAdd$a(this, _renderRangeCalendar);
+    __privateAdd$a(this, _renderCalendarSide);
+    __privateAdd$a(this, _setupResizeObserver);
+    __privateAdd$a(this, _shouldRenderDualRange);
+    __privateAdd$a(this, _evaluateAutoDual);
+    __privateAdd$a(this, _evaluateAutoDualDebounced);
+    __privateAdd$a(this, _doEvaluateAutoDual);
+    __privateAdd$a(this, _handleAutoDualChange);
+    __privateAdd$a(this, _handleKeydown$2);
+    __privateAdd$a(this, _navigateDate);
+    __privateAdd$a(this, _navigateMonthByKeyboard);
+    __privateAdd$a(this, _navigateToStartOfWeek);
+    __privateAdd$a(this, _navigateToEndOfWeek);
+    __privateAdd$a(this, _navigateToToday);
+    __privateAdd$a(this, _setFocusedDate);
+    __privateAdd$a(this, _handleEscape);
+    __privateAdd$a(this, _announceText);
+    __privateAdd$a(this, _syncDisplayedMonthsFromState);
+    __privateAdd$a(this, _initializeDates);
+    __privateAdd$a(this, _handleNavigate);
+    __privateAdd$a(this, _handleMonthPicker);
+    __privateAdd$a(this, _handleYearPicker);
+    __privateAdd$a(this, _handleDateClick);
+    __privateAdd$a(this, _handleDateHover);
+    __privateAdd$a(this, _handleDateLeave);
+    __privateAdd$a(this, _handleMonthSelected);
+    __privateAdd$a(this, _handleYearSelected);
+    __privateAdd$a(this, _openPicker);
+    __privateAdd$a(this, _closePicker);
+    __privateAdd$a(this, _calendarIndexForSide);
+    __privateAdd$a(this, _sideForCalendarIndex);
+    __privateAdd$a(this, _navigateMonth);
+    __privateAdd$a(this, _setMonth);
+    __privateAdd$a(this, _setYear);
+    __privateAdd$a(this, _doFullReset);
+    __privateAdd$a(this, _selectDate);
+    __privateAdd$a(this, _updateFormData);
+    __privateAdd$a(this, _dispatchDateSelected);
+    __privateAdd$a(this, _dispatchRangeSelected);
+    __privateAdd$a(this, _getAutomaticSide);
+    __privateAdd$a(this, _validateSide);
+    __privateAdd$a(this, _setMonthAndYear);
+    __privateAdd$a(this, _addMonth);
     this.mode = "single";
     this.locale = "en";
     this.disabled = false;
@@ -5744,8 +5744,8 @@ let MjoCalendar = class extends ThemeMixin(FormMixin(LitElement)) {
     this.autoDual = false;
     this.displayedMonths = [];
     this.announcementText = "";
-    __privateAdd$4(this, _debounceTimer, void 0);
-    __privateAdd$4(this, _handleWindowResize, () => __privateMethod$3(this, _evaluateAutoDualDebounced, evaluateAutoDualDebounced_fn).call(this));
+    __privateAdd$a(this, _debounceTimer, void 0);
+    __privateAdd$a(this, _handleWindowResize, () => __privateMethod$9(this, _evaluateAutoDualDebounced, evaluateAutoDualDebounced_fn).call(this));
   }
   get currentLocale() {
     return locales[this.locale] || locales.en;
@@ -5781,34 +5781,34 @@ let MjoCalendar = class extends ThemeMixin(FormMixin(LitElement)) {
                 aria-describedby=${ifDefined(this.ariaDescribedby || void 0)}
                 aria-live=${this.announcementText ? this.ariaLive : "off"}
                 tabindex=${this.disabled ? -1 : 0}
-                @keydown=${this.enableKeyboardNavigation ? __privateMethod$3(this, _handleKeydown$2, handleKeydown_fn$2) : nothing}
+                @keydown=${this.enableKeyboardNavigation ? __privateMethod$9(this, _handleKeydown$2, handleKeydown_fn$2) : nothing}
             >
-                ${this.mode === "range" ? __privateMethod$3(this, _renderRangeMode, renderRangeMode_fn).call(this) : __privateMethod$3(this, _renderSingleMode, renderSingleMode_fn).call(this)}
+                ${this.mode === "range" ? __privateMethod$9(this, _renderRangeMode, renderRangeMode_fn).call(this) : __privateMethod$9(this, _renderSingleMode, renderSingleMode_fn).call(this)}
                 ${this.announcementText ? html`<div class="sr-only" aria-live=${this.ariaLive}>${this.announcementText}</div>` : nothing}
             </div>
         `;
   }
   connectedCallback() {
     super.connectedCallback();
-    __privateMethod$3(this, _initializeDates, initializeDates_fn).call(this);
-    __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+    __privateMethod$9(this, _initializeDates, initializeDates_fn).call(this);
+    __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
     this.updateComplete.then(() => {
-      __privateMethod$3(this, _setupResizeObserver, setupResizeObserver_fn).call(this);
+      __privateMethod$9(this, _setupResizeObserver, setupResizeObserver_fn).call(this);
     });
   }
   willUpdate(changedProperties) {
     super.willUpdate(changedProperties);
     if (changedProperties.has("value") || changedProperties.has("startDate") || changedProperties.has("endDate") || changedProperties.has("mode")) {
-      __privateMethod$3(this, _initializeDates, initializeDates_fn).call(this);
-      __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+      __privateMethod$9(this, _initializeDates, initializeDates_fn).call(this);
+      __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
     }
   }
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener("resize", __privateGet$1(this, _handleWindowResize));
-    if (__privateGet$1(this, _debounceTimer)) {
-      clearTimeout(__privateGet$1(this, _debounceTimer));
-      __privateSet$1(this, _debounceTimer, void 0);
+    window.removeEventListener("resize", __privateGet$5(this, _handleWindowResize));
+    if (__privateGet$5(this, _debounceTimer)) {
+      clearTimeout(__privateGet$5(this, _debounceTimer));
+      __privateSet$2(this, _debounceTimer, void 0);
     }
   }
   /** Returns a shallow copy of the currently displayed months (length 1 or 2). */
@@ -5827,7 +5827,7 @@ let MjoCalendar = class extends ThemeMixin(FormMixin(LitElement)) {
     const normalized = months.map((m) => ({ month: m.month, year: m.year }));
     if (normalized.length === 2 && enforceAdjacency) {
       const first = normalized[0];
-      const expected = __privateMethod$3(this, _addMonth, addMonth_fn).call(this, first, 1);
+      const expected = __privateMethod$9(this, _addMonth, addMonth_fn).call(this, first, 1);
       const second = normalized[1];
       if (second.month !== expected.month || second.year !== expected.year) {
         normalized[1] = expected;
@@ -5851,8 +5851,8 @@ let MjoCalendar = class extends ThemeMixin(FormMixin(LitElement)) {
       throw new Error("Requires a valid year number. Got: " + typeof year);
     }
     const clampedMonth = Math.max(1, Math.min(12, month));
-    const targetSide = __privateMethod$3(this, _validateSide, validateSide_fn).call(this, side) || __privateMethod$3(this, _getAutomaticSide, getAutomaticSide_fn).call(this);
-    __privateMethod$3(this, _setMonthAndYear, setMonthAndYear_fn).call(this, clampedMonth - 1, year, targetSide);
+    const targetSide = __privateMethod$9(this, _validateSide, validateSide_fn).call(this, side) || __privateMethod$9(this, _getAutomaticSide, getAutomaticSide_fn).call(this);
+    __privateMethod$9(this, _setMonthAndYear, setMonthAndYear_fn).call(this, clampedMonth - 1, year, targetSide);
   }
   /** Navigate to a specific year with automatic side detection */
   goToYear(options) {
@@ -5863,7 +5863,7 @@ let MjoCalendar = class extends ThemeMixin(FormMixin(LitElement)) {
     if (typeof year !== "number" || year < 1e3 || year > 9999) {
       throw new Error("goToYear() requires a valid year (1000-9999). Got: " + year);
     }
-    const targetSide = __privateMethod$3(this, _validateSide, validateSide_fn).call(this, side) || __privateMethod$3(this, _getAutomaticSide, getAutomaticSide_fn).call(this);
+    const targetSide = __privateMethod$9(this, _validateSide, validateSide_fn).call(this, side) || __privateMethod$9(this, _getAutomaticSide, getAutomaticSide_fn).call(this);
     const currentDisplayed = this.getDisplayedMonths();
     let currentMonth;
     if (targetSide === "right" && currentDisplayed.length >= 2) {
@@ -5873,7 +5873,7 @@ let MjoCalendar = class extends ThemeMixin(FormMixin(LitElement)) {
     } else {
       currentMonth = currentDisplayed.length > 0 ? currentDisplayed[0].month : (/* @__PURE__ */ new Date()).getMonth();
     }
-    __privateMethod$3(this, _setMonthAndYear, setMonthAndYear_fn).call(this, currentMonth, year, targetSide);
+    __privateMethod$9(this, _setMonthAndYear, setMonthAndYear_fn).call(this, currentMonth, year, targetSide);
   }
   /** Navigate to a specific date (month and year simultaneously) */
   goToDate(options) {
@@ -5892,18 +5892,18 @@ let MjoCalendar = class extends ThemeMixin(FormMixin(LitElement)) {
     if (isNaN(targetDate.getTime())) {
       throw new Error("Date param expect a valid date. Got: " + date);
     }
-    const targetSide = __privateMethod$3(this, _validateSide, validateSide_fn).call(this, side) || __privateMethod$3(this, _getAutomaticSide, getAutomaticSide_fn).call(this);
+    const targetSide = __privateMethod$9(this, _validateSide, validateSide_fn).call(this, side) || __privateMethod$9(this, _getAutomaticSide, getAutomaticSide_fn).call(this);
     const targetMonth = targetDate.getMonth();
     const targetYear = targetDate.getFullYear();
-    __privateMethod$3(this, _setMonthAndYear, setMonthAndYear_fn).call(this, targetMonth, targetYear, targetSide);
+    __privateMethod$9(this, _setMonthAndYear, setMonthAndYear_fn).call(this, targetMonth, targetYear, targetSide);
   }
   /** Reset any current selection (single or range) and displayed months to initial state. */
   resetSelection() {
-    __privateMethod$3(this, _doFullReset, doFullReset_fn).call(this);
+    __privateMethod$9(this, _doFullReset, doFullReset_fn).call(this);
   }
   /** Full controlled reset API: clears selection, months, pickers and forces fresh today-based view. */
   reset() {
-    __privateMethod$3(this, _doFullReset, doFullReset_fn).call(this);
+    __privateMethod$9(this, _doFullReset, doFullReset_fn).call(this);
   }
   /**
    * Programmatic date selection helper.
@@ -5911,16 +5911,16 @@ let MjoCalendar = class extends ThemeMixin(FormMixin(LitElement)) {
    * shadow DOM event wiring. Mirrors a user clicking a date cell.
    */
   selectDate(date) {
-    __privateMethod$3(this, _selectDate, selectDate_fn).call(this, date);
+    __privateMethod$9(this, _selectDate, selectDate_fn).call(this, date);
   }
 };
 _debounceTimer = /* @__PURE__ */ new WeakMap();
 _renderRangeMode = /* @__PURE__ */ new WeakSet();
 renderRangeMode_fn = function() {
-  if (__privateMethod$3(this, _shouldRenderDualRange, shouldRenderDualRange_fn).call(this)) {
-    return __privateMethod$3(this, _renderRangeCalendar, renderRangeCalendar_fn).call(this);
+  if (__privateMethod$9(this, _shouldRenderDualRange, shouldRenderDualRange_fn).call(this)) {
+    return __privateMethod$9(this, _renderRangeCalendar, renderRangeCalendar_fn).call(this);
   }
-  return __privateMethod$3(this, _renderSingleCalendar, renderSingleCalendar_fn).call(
+  return __privateMethod$9(this, _renderSingleCalendar, renderSingleCalendar_fn).call(
     this,
     /*rangeMode*/
     true
@@ -5928,7 +5928,7 @@ renderRangeMode_fn = function() {
 };
 _renderSingleMode = /* @__PURE__ */ new WeakSet();
 renderSingleMode_fn = function() {
-  return __privateMethod$3(this, _renderSingleCalendar, renderSingleCalendar_fn).call(this);
+  return __privateMethod$9(this, _renderSingleCalendar, renderSingleCalendar_fn).call(this);
 };
 _renderSingleCalendar = /* @__PURE__ */ new WeakSet();
 renderSingleCalendar_fn = function(isRangeMode = false) {
@@ -5939,7 +5939,7 @@ renderSingleCalendar_fn = function(isRangeMode = false) {
   const dm = this.displayedMonths[0];
   return html`
             <div class="calendar-container" part="calendar" data-size=${this.size} data-color=${this.color} ?data-disabled=${this.disabled}>
-                ${__privateMethod$3(this, _renderCalendarSide, renderCalendarSide_fn).call(this, {
+                ${__privateMethod$9(this, _renderCalendarSide, renderCalendarSide_fn).call(this, {
     month: dm.month,
     year: dm.year,
     side: "single",
@@ -5967,15 +5967,15 @@ renderRangeCalendar_fn = function() {
   const months = this.displayedMonths;
   return html`
             <div class="calendar-range-container" part="calendar" data-size=${this.size} data-color=${this.color} ?data-disabled=${this.disabled}>
-                ${__privateMethod$3(this, _renderCalendarSide, renderCalendarSide_fn).call(this, { month: months[0].month, year: months[0].year, side: "left" })}
-                ${__privateMethod$3(this, _renderCalendarSide, renderCalendarSide_fn).call(this, { month: months[1].month, year: months[1].year, side: "right" })}
+                ${__privateMethod$9(this, _renderCalendarSide, renderCalendarSide_fn).call(this, { month: months[0].month, year: months[0].year, side: "left" })}
+                ${__privateMethod$9(this, _renderCalendarSide, renderCalendarSide_fn).call(this, { month: months[1].month, year: months[1].year, side: "right" })}
             </div>
         `;
 };
 _renderCalendarSide = /* @__PURE__ */ new WeakSet();
 renderCalendarSide_fn = function(args) {
   const { month, year, side, forceMode } = args;
-  const calendarIndex = __privateMethod$3(this, _calendarIndexForSide, calendarIndexForSide_fn).call(this, side);
+  const calendarIndex = __privateMethod$9(this, _calendarIndexForSide, calendarIndexForSide_fn).call(this, side);
   const isPickerSide = this.picker.open && this.picker.index === calendarIndex;
   const mode = forceMode ?? this.mode;
   return html`
@@ -5988,9 +5988,9 @@ renderCalendarSide_fn = function(args) {
                     ?monthPickerOpen=${this.picker.open && this.picker.type === "month" && isPickerSide}
                     ?yearPickerOpen=${this.picker.open && this.picker.type === "year" && isPickerSide}
                     side=${side}
-                    @navigate=${__privateMethod$3(this, _handleNavigate, handleNavigate_fn)}
-                    @month-picker=${__privateMethod$3(this, _handleMonthPicker, handleMonthPicker_fn)}
-                    @year-picker=${__privateMethod$3(this, _handleYearPicker, handleYearPicker_fn)}
+                    @navigate=${__privateMethod$9(this, _handleNavigate, handleNavigate_fn)}
+                    @month-picker=${__privateMethod$9(this, _handleMonthPicker, handleMonthPicker_fn)}
+                    @year-picker=${__privateMethod$9(this, _handleYearPicker, handleYearPicker_fn)}
                 ></calendar-header>
                 <calendar-grid
                     month=${month}
@@ -6010,23 +6010,23 @@ renderCalendarSide_fn = function(args) {
                     .hoverDate=${this.hoverDate}
                     .focusedDate=${this.focusedDate}
                     side=${side}
-                    @date-click=${__privateMethod$3(this, _handleDateClick, handleDateClick_fn)}
-                    @date-hover=${__privateMethod$3(this, _handleDateHover, handleDateHover_fn)}
-                    @date-leave=${__privateMethod$3(this, _handleDateLeave, handleDateLeave_fn)}
+                    @date-click=${__privateMethod$9(this, _handleDateClick, handleDateClick_fn)}
+                    @date-hover=${__privateMethod$9(this, _handleDateHover, handleDateHover_fn)}
+                    @date-leave=${__privateMethod$9(this, _handleDateLeave, handleDateLeave_fn)}
                 ></calendar-grid>
                 ${this.picker.open && this.picker.type === "month" && isPickerSide ? html`
                           <calendar-month-picker
                               selectedMonth=${month}
                               .monthNames=${this.monthNames}
                               ?disabled=${this.disabled}
-                              @month-selected=${__privateMethod$3(this, _handleMonthSelected, handleMonthSelected_fn)}
+                              @month-selected=${__privateMethod$9(this, _handleMonthSelected, handleMonthSelected_fn)}
                               @click=${(e) => e.stopPropagation()}
                           ></calendar-month-picker>
                       ` : this.picker.open && this.picker.type === "year" && isPickerSide ? html`
                             <calendar-year-picker
                                 selectedYear=${year}
                                 ?disabled=${this.disabled}
-                                @year-selected=${__privateMethod$3(this, _handleYearSelected, handleYearSelected_fn)}
+                                @year-selected=${__privateMethod$9(this, _handleYearSelected, handleYearSelected_fn)}
                                 @click=${(e) => e.stopPropagation()}
                             ></calendar-year-picker>
                         ` : nothing}
@@ -6035,8 +6035,8 @@ renderCalendarSide_fn = function(args) {
 };
 _setupResizeObserver = /* @__PURE__ */ new WeakSet();
 setupResizeObserver_fn = function() {
-  window.addEventListener("resize", __privateGet$1(this, _handleWindowResize));
-  __privateMethod$3(this, _evaluateAutoDualDebounced, evaluateAutoDualDebounced_fn).call(this);
+  window.addEventListener("resize", __privateGet$5(this, _handleWindowResize));
+  __privateMethod$9(this, _evaluateAutoDualDebounced, evaluateAutoDualDebounced_fn).call(this);
 };
 _shouldRenderDualRange = /* @__PURE__ */ new WeakSet();
 shouldRenderDualRange_fn = function() {
@@ -6057,15 +6057,15 @@ evaluateAutoDual_fn = function() {
   const parentWidth = (_a2 = this.parentElement) == null ? void 0 : _a2.getBoundingClientRect().width;
   const hostRect = this.getBoundingClientRect();
   const width = parentWidth || hostRect.width || window.innerWidth;
-  __privateMethod$3(this, _doEvaluateAutoDual, doEvaluateAutoDual_fn).call(this, width);
+  __privateMethod$9(this, _doEvaluateAutoDual, doEvaluateAutoDual_fn).call(this, width);
 };
 _evaluateAutoDualDebounced = /* @__PURE__ */ new WeakSet();
 evaluateAutoDualDebounced_fn = function() {
-  if (__privateGet$1(this, _debounceTimer)) {
-    clearTimeout(__privateGet$1(this, _debounceTimer));
+  if (__privateGet$5(this, _debounceTimer)) {
+    clearTimeout(__privateGet$5(this, _debounceTimer));
   }
-  __privateSet$1(this, _debounceTimer, window.setTimeout(() => {
-    __privateMethod$3(this, _evaluateAutoDual, evaluateAutoDual_fn).call(this);
+  __privateSet$2(this, _debounceTimer, window.setTimeout(() => {
+    __privateMethod$9(this, _evaluateAutoDual, evaluateAutoDual_fn).call(this);
   }, 16));
 };
 _doEvaluateAutoDual = /* @__PURE__ */ new WeakSet();
@@ -6073,7 +6073,7 @@ doEvaluateAutoDual_fn = function(width) {
   const shouldDual = width >= MjoCalendar.AUTO_DUAL_THRESHOLD;
   if (shouldDual !== this.autoDual) {
     this.autoDual = shouldDual;
-    __privateMethod$3(this, _handleAutoDualChange, handleAutoDualChange_fn).call(this);
+    __privateMethod$9(this, _handleAutoDualChange, handleAutoDualChange_fn).call(this);
     this.requestUpdate();
   }
 };
@@ -6099,52 +6099,52 @@ handleKeydown_fn$2 = function(event) {
   const currentDate = this.focusedDate || this.selectedDate || /* @__PURE__ */ new Date();
   switch (key) {
     case "ArrowLeft":
-      __privateMethod$3(this, _navigateDate, navigateDate_fn).call(this, currentDate, -1);
+      __privateMethod$9(this, _navigateDate, navigateDate_fn).call(this, currentDate, -1);
       handled = true;
       break;
     case "ArrowRight":
-      __privateMethod$3(this, _navigateDate, navigateDate_fn).call(this, currentDate, 1);
+      __privateMethod$9(this, _navigateDate, navigateDate_fn).call(this, currentDate, 1);
       handled = true;
       break;
     case "ArrowUp":
-      __privateMethod$3(this, _navigateDate, navigateDate_fn).call(this, currentDate, -7);
+      __privateMethod$9(this, _navigateDate, navigateDate_fn).call(this, currentDate, -7);
       handled = true;
       break;
     case "ArrowDown":
-      __privateMethod$3(this, _navigateDate, navigateDate_fn).call(this, currentDate, 7);
+      __privateMethod$9(this, _navigateDate, navigateDate_fn).call(this, currentDate, 7);
       handled = true;
       break;
     case "Home":
-      __privateMethod$3(this, _navigateToStartOfWeek, navigateToStartOfWeek_fn).call(this, currentDate);
+      __privateMethod$9(this, _navigateToStartOfWeek, navigateToStartOfWeek_fn).call(this, currentDate);
       handled = true;
       break;
     case "End":
-      __privateMethod$3(this, _navigateToEndOfWeek, navigateToEndOfWeek_fn).call(this, currentDate);
+      __privateMethod$9(this, _navigateToEndOfWeek, navigateToEndOfWeek_fn).call(this, currentDate);
       handled = true;
       break;
     case "PageUp":
-      event.ctrlKey ? __privateMethod$3(this, _navigateMonthByKeyboard, navigateMonthByKeyboard_fn).call(this, currentDate, -12) : __privateMethod$3(this, _navigateMonthByKeyboard, navigateMonthByKeyboard_fn).call(this, currentDate, -1);
+      event.ctrlKey ? __privateMethod$9(this, _navigateMonthByKeyboard, navigateMonthByKeyboard_fn).call(this, currentDate, -12) : __privateMethod$9(this, _navigateMonthByKeyboard, navigateMonthByKeyboard_fn).call(this, currentDate, -1);
       handled = true;
       break;
     case "PageDown":
-      event.ctrlKey ? __privateMethod$3(this, _navigateMonthByKeyboard, navigateMonthByKeyboard_fn).call(this, currentDate, 12) : __privateMethod$3(this, _navigateMonthByKeyboard, navigateMonthByKeyboard_fn).call(this, currentDate, 1);
+      event.ctrlKey ? __privateMethod$9(this, _navigateMonthByKeyboard, navigateMonthByKeyboard_fn).call(this, currentDate, 12) : __privateMethod$9(this, _navigateMonthByKeyboard, navigateMonthByKeyboard_fn).call(this, currentDate, 1);
       handled = true;
       break;
     case "Enter":
     case " ":
       if (this.focusedDate) {
-        __privateMethod$3(this, _selectDate, selectDate_fn).call(this, this.focusedDate);
+        __privateMethod$9(this, _selectDate, selectDate_fn).call(this, this.focusedDate);
         handled = true;
       }
       break;
     case "Escape":
-      __privateMethod$3(this, _handleEscape, handleEscape_fn).call(this);
+      __privateMethod$9(this, _handleEscape, handleEscape_fn).call(this);
       handled = true;
       break;
     case "t":
     case "T":
       if (!event.ctrlKey && !event.altKey && !event.metaKey) {
-        __privateMethod$3(this, _navigateToToday, navigateToToday_fn).call(this);
+        __privateMethod$9(this, _navigateToToday, navigateToToday_fn).call(this);
         handled = true;
       }
       break;
@@ -6158,13 +6158,13 @@ _navigateDate = /* @__PURE__ */ new WeakSet();
 navigateDate_fn = function(from, days) {
   const newDate = new Date(from);
   newDate.setDate(newDate.getDate() + days);
-  __privateMethod$3(this, _setFocusedDate, setFocusedDate_fn).call(this, newDate);
+  __privateMethod$9(this, _setFocusedDate, setFocusedDate_fn).call(this, newDate);
 };
 _navigateMonthByKeyboard = /* @__PURE__ */ new WeakSet();
 navigateMonthByKeyboard_fn = function(from, months) {
   const newDate = new Date(from);
   newDate.setMonth(newDate.getMonth() + months);
-  __privateMethod$3(this, _setFocusedDate, setFocusedDate_fn).call(this, newDate);
+  __privateMethod$9(this, _setFocusedDate, setFocusedDate_fn).call(this, newDate);
 };
 _navigateToStartOfWeek = /* @__PURE__ */ new WeakSet();
 navigateToStartOfWeek_fn = function(from) {
@@ -6172,7 +6172,7 @@ navigateToStartOfWeek_fn = function(from) {
   const day = newDate.getDay();
   const diff = this.firstDayOfWeek === "monday" ? day === 0 ? 6 : day - 1 : day;
   newDate.setDate(newDate.getDate() - diff);
-  __privateMethod$3(this, _setFocusedDate, setFocusedDate_fn).call(this, newDate);
+  __privateMethod$9(this, _setFocusedDate, setFocusedDate_fn).call(this, newDate);
 };
 _navigateToEndOfWeek = /* @__PURE__ */ new WeakSet();
 navigateToEndOfWeek_fn = function(from) {
@@ -6180,12 +6180,12 @@ navigateToEndOfWeek_fn = function(from) {
   const day = newDate.getDay();
   const diff = this.firstDayOfWeek === "monday" ? day === 0 ? 0 : 7 - day : 6 - day;
   newDate.setDate(newDate.getDate() + diff);
-  __privateMethod$3(this, _setFocusedDate, setFocusedDate_fn).call(this, newDate);
+  __privateMethod$9(this, _setFocusedDate, setFocusedDate_fn).call(this, newDate);
 };
 _navigateToToday = /* @__PURE__ */ new WeakSet();
 navigateToToday_fn = function() {
   const today = /* @__PURE__ */ new Date();
-  __privateMethod$3(this, _setFocusedDate, setFocusedDate_fn).call(this, today);
+  __privateMethod$9(this, _setFocusedDate, setFocusedDate_fn).call(this, today);
   this.displayedMonths = [{ month: today.getMonth(), year: today.getFullYear() }];
 };
 _setFocusedDate = /* @__PURE__ */ new WeakSet();
@@ -6199,13 +6199,13 @@ setFocusedDate_fn = function(date) {
   }
   if (this.announceSelections) {
     const dateString = CalendarUtils.formatDate(date);
-    __privateMethod$3(this, _announceText, announceText_fn).call(this, `Focused on ${dateString}`);
+    __privateMethod$9(this, _announceText, announceText_fn).call(this, `Focused on ${dateString}`);
   }
 };
 _handleEscape = /* @__PURE__ */ new WeakSet();
 handleEscape_fn = function() {
   if (this.picker.open) {
-    __privateMethod$3(this, _closePicker, closePicker_fn).call(this);
+    __privateMethod$9(this, _closePicker, closePicker_fn).call(this);
   } else {
     this.focusedDate = void 0;
   }
@@ -6233,7 +6233,7 @@ syncDisplayedMonthsFromState_fn = function() {
       this.displayedMonths = [{ month: today.getMonth(), year: today.getFullYear() }];
     }
   }
-  if (this.mode === "range" && __privateMethod$3(this, _shouldRenderDualRange, shouldRenderDualRange_fn).call(this) && this.displayedMonths.length === 1) {
+  if (this.mode === "range" && __privateMethod$9(this, _shouldRenderDualRange, shouldRenderDualRange_fn).call(this) && this.displayedMonths.length === 1) {
     const first = this.displayedMonths[0];
     const d = new Date(first.year, first.month + 1, 1);
     this.displayedMonths = [first, { month: d.getMonth(), year: d.getFullYear() }];
@@ -6255,22 +6255,22 @@ initializeDates_fn = function() {
 _handleNavigate = /* @__PURE__ */ new WeakSet();
 handleNavigate_fn = function(event) {
   const { direction, side } = event.detail;
-  __privateMethod$3(this, _navigateMonth, navigateMonth_fn).call(this, direction, side);
+  __privateMethod$9(this, _navigateMonth, navigateMonth_fn).call(this, direction, side);
 };
 _handleMonthPicker = /* @__PURE__ */ new WeakSet();
 handleMonthPicker_fn = function(event) {
   const { side } = event.detail;
-  __privateMethod$3(this, _openPicker, openPicker_fn).call(this, "month", side);
+  __privateMethod$9(this, _openPicker, openPicker_fn).call(this, "month", side);
 };
 _handleYearPicker = /* @__PURE__ */ new WeakSet();
 handleYearPicker_fn = function(event) {
   const { side } = event.detail;
-  __privateMethod$3(this, _openPicker, openPicker_fn).call(this, "year", side);
+  __privateMethod$9(this, _openPicker, openPicker_fn).call(this, "year", side);
 };
 _handleDateClick = /* @__PURE__ */ new WeakSet();
 handleDateClick_fn = function(event) {
   const { date } = event.detail;
-  __privateMethod$3(this, _selectDate, selectDate_fn).call(this, date);
+  __privateMethod$9(this, _selectDate, selectDate_fn).call(this, date);
 };
 _handleDateHover = /* @__PURE__ */ new WeakSet();
 handleDateHover_fn = function(event) {
@@ -6286,20 +6286,20 @@ handleDateLeave_fn = function() {
 _handleMonthSelected = /* @__PURE__ */ new WeakSet();
 handleMonthSelected_fn = function(event) {
   const { month } = event.detail;
-  const side = __privateMethod$3(this, _sideForCalendarIndex, sideForCalendarIndex_fn).call(this, this.picker.index);
-  __privateMethod$3(this, _setMonth, setMonth_fn).call(this, month, side);
-  __privateMethod$3(this, _closePicker, closePicker_fn).call(this);
+  const side = __privateMethod$9(this, _sideForCalendarIndex, sideForCalendarIndex_fn).call(this, this.picker.index);
+  __privateMethod$9(this, _setMonth, setMonth_fn).call(this, month, side);
+  __privateMethod$9(this, _closePicker, closePicker_fn).call(this);
 };
 _handleYearSelected = /* @__PURE__ */ new WeakSet();
 handleYearSelected_fn = function(event) {
   const { year } = event.detail;
-  const side = __privateMethod$3(this, _sideForCalendarIndex, sideForCalendarIndex_fn).call(this, this.picker.index);
-  __privateMethod$3(this, _setYear, setYear_fn).call(this, year, side);
-  __privateMethod$3(this, _closePicker, closePicker_fn).call(this);
+  const side = __privateMethod$9(this, _sideForCalendarIndex, sideForCalendarIndex_fn).call(this, this.picker.index);
+  __privateMethod$9(this, _setYear, setYear_fn).call(this, year, side);
+  __privateMethod$9(this, _closePicker, closePicker_fn).call(this);
 };
 _openPicker = /* @__PURE__ */ new WeakSet();
 openPicker_fn = function(type, side) {
-  this.picker = { open: true, type, index: __privateMethod$3(this, _calendarIndexForSide, calendarIndexForSide_fn).call(this, side) };
+  this.picker = { open: true, type, index: __privateMethod$9(this, _calendarIndexForSide, calendarIndexForSide_fn).call(this, side) };
 };
 _closePicker = /* @__PURE__ */ new WeakSet();
 closePicker_fn = function() {
@@ -6328,7 +6328,7 @@ navigateMonth_fn = function(direction, side) {
     return;
   }
   if (this.displayedMonths.length < 2)
-    __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+    __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
   const [left, right] = this.displayedMonths;
   if (side === "left") {
     const newLeft = new Date(left.year, left.month + direction, 1);
@@ -6350,7 +6350,7 @@ _setMonth = /* @__PURE__ */ new WeakSet();
 setMonth_fn = function(month, side) {
   var _a2, _b2;
   if (this.displayedMonths.length === 0)
-    __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+    __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
   if (this.displayedMonths.length === 0 || !this.displayedMonths[0]) {
     const today = /* @__PURE__ */ new Date();
     this.displayedMonths = [{ month: today.getMonth(), year: today.getFullYear() }];
@@ -6361,7 +6361,7 @@ setMonth_fn = function(month, side) {
     return;
   }
   if (this.displayedMonths.length < 2)
-    __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+    __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
   if (this.displayedMonths.length < 2) {
     const first = this.displayedMonths[0];
     const d = new Date((first == null ? void 0 : first.year) ?? (/* @__PURE__ */ new Date()).getFullYear(), ((first == null ? void 0 : first.month) ?? (/* @__PURE__ */ new Date()).getMonth()) + 1, 1);
@@ -6383,7 +6383,7 @@ _setYear = /* @__PURE__ */ new WeakSet();
 setYear_fn = function(year, side) {
   var _a2, _b2, _c;
   if (this.displayedMonths.length === 0)
-    __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+    __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
   if (this.displayedMonths.length === 0 || !this.displayedMonths[0]) {
     const today = /* @__PURE__ */ new Date();
     this.displayedMonths = [{ month: today.getMonth(), year: today.getFullYear() }];
@@ -6394,7 +6394,7 @@ setYear_fn = function(year, side) {
     return;
   }
   if (this.displayedMonths.length < 2)
-    __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+    __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
   if (this.displayedMonths.length < 2) {
     const first = this.displayedMonths[0];
     const d = new Date(first.year, first.month + 1, 1);
@@ -6422,7 +6422,7 @@ doFullReset_fn = function() {
   this.picker = { open: false, type: void 0, index: 0 };
   this.displayedMonths = [];
   this.autoDual = false;
-  __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+  __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
 };
 _selectDate = /* @__PURE__ */ new WeakSet();
 selectDate_fn = function(date) {
@@ -6431,8 +6431,8 @@ selectDate_fn = function(date) {
   if (this.mode === "single") {
     this.selectedDate = date;
     this.value = CalendarUtils.formatDate(date);
-    __privateMethod$3(this, _updateFormData, updateFormData_fn).call(this);
-    __privateMethod$3(this, _dispatchDateSelected, dispatchDateSelected_fn).call(this);
+    __privateMethod$9(this, _updateFormData, updateFormData_fn).call(this);
+    __privateMethod$9(this, _dispatchDateSelected, dispatchDateSelected_fn).call(this);
   } else if (this.mode === "range") {
     if (!this.selectedStartDate || this.selectedStartDate && this.selectedEndDate) {
       this.selectedStartDate = date;
@@ -6449,8 +6449,8 @@ selectDate_fn = function(date) {
         this.selectedEndDate = date;
         this.endDate = CalendarUtils.formatDate(date);
       }
-      __privateMethod$3(this, _updateFormData, updateFormData_fn).call(this);
-      __privateMethod$3(this, _dispatchRangeSelected, dispatchRangeSelected_fn).call(this);
+      __privateMethod$9(this, _updateFormData, updateFormData_fn).call(this);
+      __privateMethod$9(this, _dispatchRangeSelected, dispatchRangeSelected_fn).call(this);
     }
   }
 };
@@ -6473,10 +6473,10 @@ dispatchDateSelected_fn = function() {
   };
   if (this.announceSelections && this.value) {
     const dateString = CalendarUtils.formatDate(new Date(this.value));
-    __privateMethod$3(this, _announceText, announceText_fn).call(this, `Selected ${dateString}`);
+    __privateMethod$9(this, _announceText, announceText_fn).call(this, `Selected ${dateString}`);
   }
   this.dispatchEvent(
-    new CustomEvent("date-selected", {
+    new CustomEvent("mjo-calendar-date-selected", {
       detail: eventDetail,
       bubbles: true,
       composed: true
@@ -6501,10 +6501,10 @@ dispatchRangeSelected_fn = function() {
   if (this.announceSelections && this.startDate && this.endDate) {
     const startString = CalendarUtils.formatDate(new Date(this.startDate));
     const endString = CalendarUtils.formatDate(new Date(this.endDate));
-    __privateMethod$3(this, _announceText, announceText_fn).call(this, `Selected date range from ${startString} to ${endString}`);
+    __privateMethod$9(this, _announceText, announceText_fn).call(this, `Selected date range from ${startString} to ${endString}`);
   }
   this.dispatchEvent(
-    new CustomEvent("range-selected", {
+    new CustomEvent("mjo-calendar-range-selected", {
       detail: eventDetail,
       bubbles: true,
       composed: true
@@ -6538,13 +6538,13 @@ validateSide_fn = function(side) {
 _setMonthAndYear = /* @__PURE__ */ new WeakSet();
 setMonthAndYear_fn = function(month, year, side) {
   if (this.displayedMonths.length === 0)
-    __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+    __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
   if (side === "single") {
     this.displayedMonths = [{ month, year }];
     return;
   }
   if (this.displayedMonths.length < 2)
-    __privateMethod$3(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
+    __privateMethod$9(this, _syncDisplayedMonthsFromState, syncDisplayedMonthsFromState_fn).call(this);
   if (side === "left") {
     const newLeft = { month, year };
     const rightDate = new Date(year, month + 1, 1);
@@ -6556,9 +6556,9 @@ setMonthAndYear_fn = function(month, year, side) {
   }
 };
 _addMonth = /* @__PURE__ */ new WeakSet();
-addMonth_fn = function(ref, delta) {
-  let m = ref.month + delta;
-  let y = ref.year;
+addMonth_fn = function(ref2, delta) {
+  let m = ref2.month + delta;
+  let y = ref2.year;
   while (m > 11) {
     m -= 12;
     y++;
@@ -6666,108 +6666,108 @@ MjoCalendar.styles = [
             }
         `
 ];
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "mode", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "name", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "value", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "startDate", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "endDate", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "locale", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "minDate", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "maxDate", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: Boolean, reflect: true })
 ], MjoCalendar.prototype, "disabled", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "size", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "color", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: Array })
 ], MjoCalendar.prototype, "disabledDates", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: Boolean })
 ], MjoCalendar.prototype, "showToday", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "firstDayOfWeek", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String })
 ], MjoCalendar.prototype, "rangeCalendars", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: Array })
 ], MjoCalendar.prototype, "eventMarkers", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: Boolean })
 ], MjoCalendar.prototype, "enableKeyboardNavigation", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: Boolean })
 ], MjoCalendar.prototype, "announceSelections", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String, attribute: "aria-labelledby" })
 ], MjoCalendar.prototype, "ariaLabelledby", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String, attribute: "aria-describedby" })
 ], MjoCalendar.prototype, "ariaDescribedby", 2);
-__decorateClass$9([
+__decorateClass$f([
   property({ type: String, attribute: "aria-live" })
 ], MjoCalendar.prototype, "ariaLive", 2);
-__decorateClass$9([
+__decorateClass$f([
   state()
 ], MjoCalendar.prototype, "selectedDate", 2);
-__decorateClass$9([
+__decorateClass$f([
   state()
 ], MjoCalendar.prototype, "selectedStartDate", 2);
-__decorateClass$9([
+__decorateClass$f([
   state()
 ], MjoCalendar.prototype, "selectedEndDate", 2);
-__decorateClass$9([
+__decorateClass$f([
   state()
 ], MjoCalendar.prototype, "hoverDate", 2);
-__decorateClass$9([
+__decorateClass$f([
   state()
 ], MjoCalendar.prototype, "picker", 2);
-__decorateClass$9([
+__decorateClass$f([
   state()
 ], MjoCalendar.prototype, "autoDual", 2);
-__decorateClass$9([
+__decorateClass$f([
   state()
 ], MjoCalendar.prototype, "displayedMonths", 2);
-__decorateClass$9([
+__decorateClass$f([
   state()
 ], MjoCalendar.prototype, "focusedDate", 2);
-__decorateClass$9([
+__decorateClass$f([
   state()
 ], MjoCalendar.prototype, "announcementText", 2);
-MjoCalendar = __decorateClass$9([
+MjoCalendar = __decorateClass$f([
   customElement("mjo-calendar")
 ], MjoCalendar);
-var __defProp$8 = Object.defineProperty;
-var __getOwnPropDesc$8 = Object.getOwnPropertyDescriptor;
-var __decorateClass$8 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$8(target, key) : target;
+var __defProp$e = Object.defineProperty;
+var __getOwnPropDesc$e = Object.getOwnPropertyDescriptor;
+var __decorateClass$e = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$e(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$8(target, key, result);
+    __defProp$e(target, key, result);
   return result;
 };
 let MjoCard = class extends ThemeMixin(LitElement) {
@@ -6819,24 +6819,24 @@ MjoCard.styles = [
             }
         `
 ];
-__decorateClass$8([
+__decorateClass$e([
   property({ type: String, noAccessor: true })
 ], MjoCard.prototype, "contrast", 2);
-__decorateClass$8([
+__decorateClass$e([
   property({ type: String, noAccessor: true })
 ], MjoCard.prototype, "radius", 2);
-MjoCard = __decorateClass$8([
+MjoCard = __decorateClass$e([
   customElement("mjo-card")
 ], MjoCard);
-var __defProp$7 = Object.defineProperty;
-var __getOwnPropDesc$7 = Object.getOwnPropertyDescriptor;
-var __decorateClass$7 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$7(target, key) : target;
+var __defProp$d = Object.defineProperty;
+var __getOwnPropDesc$d = Object.getOwnPropertyDescriptor;
+var __decorateClass$d = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$d(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$7(target, key, result);
+    __defProp$d(target, key, result);
   return result;
 };
 const InputErrorMixin = (superClass) => {
@@ -6847,35 +6847,41 @@ const InputErrorMixin = (superClass) => {
       this.success = false;
     }
   }
-  __decorateClass$7([
+  __decorateClass$d([
     property({ type: Boolean })
   ], InputError.prototype, "error", 2);
-  __decorateClass$7([
+  __decorateClass$d([
     property({ type: String })
   ], InputError.prototype, "errormsg", 2);
-  __decorateClass$7([
+  __decorateClass$d([
     property({ type: Boolean })
   ], InputError.prototype, "success", 2);
-  __decorateClass$7([
+  __decorateClass$d([
     property({ type: String })
   ], InputError.prototype, "successmsg", 2);
   return InputError;
 };
-var __defProp$6 = Object.defineProperty;
-var __getOwnPropDesc$6 = Object.getOwnPropertyDescriptor;
-var __decorateClass$6 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$6(target, key) : target;
+var __defProp$c = Object.defineProperty;
+var __getOwnPropDesc$c = Object.getOwnPropertyDescriptor;
+var __decorateClass$c = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$c(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$6(target, key, result);
+    __defProp$c(target, key, result);
   return result;
 };
 let InputHelperText = class extends LitElement {
   render() {
-    return html`<div class="container">
-            ${this.errormsg ? html`<div class="error"><mjo-icon src=${AiFillCloseCircle}></mjo-icon>${this.errormsg}</div>` : this.successmsg ? html`<div class="success"><mjo-icon src=${AiFillCheckCircle}></mjo-icon>${this.successmsg}</div>` : html`<mjo-typography tag="none"><slot></slot></mjo-typography>`}
+    return html`<div class="container" role="region" aria-live="polite">
+            ${this.errormsg ? html`<div class="error" role="alert" aria-live="assertive">
+                      <mjo-icon src=${AiFillCloseCircle} aria-hidden="true"></mjo-icon>
+                      ${this.errormsg}
+                  </div>` : this.successmsg ? html`<div class="success" role="status" aria-live="polite">
+                        <mjo-icon src=${AiFillCheckCircle} aria-hidden="true"></mjo-icon>
+                        ${this.successmsg}
+                    </div>` : html`<mjo-typography tag="none"><slot></slot></mjo-typography>`}
         </div>`;
   }
 };
@@ -6903,7 +6909,10 @@ InputHelperText.styles = [
                     --mjo-radio-helper-color,
                     var(
                         --mjo-checkbox-helper-color,
-                        var(--mjo-switch-helper-color, var(--mjo-textarea-helper-color, var(--mjo-input-helper-color, currentColor)))
+                        var(
+                            --mjo-switch-helper-color,
+                            var(--mjo-textarea-helper-color, var(--mjo-input-helper-color, var(--mjo-foreground-color-low, currentColor)))
+                        )
                     )
                 );
                 line-height: calc(1em * 1.2);
@@ -6932,47 +6941,47 @@ InputHelperText.styles = [
             }
         `
 ];
-__decorateClass$6([
+__decorateClass$c([
   property({ type: String })
 ], InputHelperText.prototype, "errormsg", 2);
-__decorateClass$6([
+__decorateClass$c([
   property({ type: String })
 ], InputHelperText.prototype, "successmsg", 2);
-InputHelperText = __decorateClass$6([
+InputHelperText = __decorateClass$c([
   customElement("input-helper-text")
 ], InputHelperText);
-var __defProp$5 = Object.defineProperty;
-var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
-var __decorateClass$5 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$5(target, key) : target;
+var __defProp$b = Object.defineProperty;
+var __getOwnPropDesc$b = Object.getOwnPropertyDescriptor;
+var __decorateClass$b = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$b(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$5(target, key, result);
+    __defProp$b(target, key, result);
   return result;
 };
-var __accessCheck$3 = (obj, member, msg) => {
+var __accessCheck$9 = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$3 = (obj, member, value) => {
+var __privateAdd$9 = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$2 = (obj, member, method) => {
-  __accessCheck$3(obj, member, "access private method");
+var __privateMethod$8 = (obj, member, method) => {
+  __accessCheck$9(obj, member, "access private method");
   return method;
 };
-var _handleClick, handleClick_fn, _handleKeydown$1, handleKeydown_fn$1, _handleFocus$1, handleFocus_fn$1, _handleBlur$1, handleBlur_fn$1;
+var _handleClick, handleClick_fn, _handleKeydown$1, handleKeydown_fn$1, _handleFocus$2, handleFocus_fn$1, _handleBlur$2, handleBlur_fn$2;
 let MjoCheckbox = class extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) {
   constructor() {
     super(...arguments);
-    __privateAdd$3(this, _handleClick);
-    __privateAdd$3(this, _handleKeydown$1);
-    __privateAdd$3(this, _handleFocus$1);
-    __privateAdd$3(this, _handleBlur$1);
+    __privateAdd$9(this, _handleClick);
+    __privateAdd$9(this, _handleKeydown$1);
+    __privateAdd$9(this, _handleFocus$2);
+    __privateAdd$9(this, _handleBlur$2);
     this.color = "primary";
     this.checked = false;
     this.disabled = false;
@@ -7017,10 +7026,10 @@ let MjoCheckbox = class extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)
                 aria-disabled=${this.disabled ? "true" : "false"}
                 aria-invalid=${this.error ? "true" : "false"}
                 tabindex=${this.computedTabIndex}
-                @click=${__privateMethod$2(this, _handleClick, handleClick_fn)}
-                @keydown=${__privateMethod$2(this, _handleKeydown$1, handleKeydown_fn$1)}
-                @focus=${__privateMethod$2(this, _handleFocus$1, handleFocus_fn$1)}
-                @blur=${__privateMethod$2(this, _handleBlur$1, handleBlur_fn$1)}
+                @click=${__privateMethod$8(this, _handleClick, handleClick_fn)}
+                @keydown=${__privateMethod$8(this, _handleKeydown$1, handleKeydown_fn$1)}
+                @focus=${__privateMethod$8(this, _handleFocus$2, handleFocus_fn$1)}
+                @blur=${__privateMethod$8(this, _handleBlur$2, handleBlur_fn$2)}
             >
                 <div class="box">
                     <div class="checkbox" ?data-checked=${this.checked} ?data-indeterminate=${this.indeterminate}>
@@ -7127,10 +7136,10 @@ handleKeydown_fn$1 = function(event) {
     return;
   if (event.key === " " || event.key === "Enter") {
     event.preventDefault();
-    __privateMethod$2(this, _handleClick, handleClick_fn).call(this);
+    __privateMethod$8(this, _handleClick, handleClick_fn).call(this);
   }
 };
-_handleFocus$1 = /* @__PURE__ */ new WeakSet();
+_handleFocus$2 = /* @__PURE__ */ new WeakSet();
 handleFocus_fn$1 = function() {
   if (this.disabled)
     return;
@@ -7144,8 +7153,8 @@ handleFocus_fn$1 = function() {
     })
   );
 };
-_handleBlur$1 = /* @__PURE__ */ new WeakSet();
-handleBlur_fn$1 = function() {
+_handleBlur$2 = /* @__PURE__ */ new WeakSet();
+handleBlur_fn$2 = function() {
   this.dispatchEvent(
     new CustomEvent("mjo-checkbox-blur", {
       detail: {
@@ -7283,80 +7292,80 @@ MjoCheckbox.styles = [
             }
         `
 ];
-__decorateClass$5([
+__decorateClass$b([
   property({ type: String })
 ], MjoCheckbox.prototype, "color", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: Boolean, reflect: true })
 ], MjoCheckbox.prototype, "checked", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: Boolean, reflect: true })
 ], MjoCheckbox.prototype, "disabled", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: Boolean, reflect: true })
 ], MjoCheckbox.prototype, "indeterminate", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: String })
 ], MjoCheckbox.prototype, "helperText", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: String })
 ], MjoCheckbox.prototype, "label", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: String })
 ], MjoCheckbox.prototype, "name", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: String })
 ], MjoCheckbox.prototype, "value", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: String, reflect: true })
 ], MjoCheckbox.prototype, "checkgroup", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: Boolean })
 ], MjoCheckbox.prototype, "hideErrors", 2);
-__decorateClass$5([
+__decorateClass$b([
   property({ type: String, attribute: "aria-describedby" })
 ], MjoCheckbox.prototype, "ariaDescribedby", 2);
-__decorateClass$5([
+__decorateClass$b([
   query("input#mjoCheckboxInput")
 ], MjoCheckbox.prototype, "inputElement", 2);
-__decorateClass$5([
+__decorateClass$b([
   query(".checkbox-container")
 ], MjoCheckbox.prototype, "checkboxContainer", 2);
-MjoCheckbox = __decorateClass$5([
+MjoCheckbox = __decorateClass$b([
   customElement("mjo-checkbox")
 ], MjoCheckbox);
-var __defProp$4 = Object.defineProperty;
-var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
-var __decorateClass$4 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$4(target, key) : target;
+var __defProp$a = Object.defineProperty;
+var __getOwnPropDesc$a = Object.getOwnPropertyDescriptor;
+var __decorateClass$a = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$a(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$4(target, key, result);
+    __defProp$a(target, key, result);
   return result;
 };
-var __accessCheck$2 = (obj, member, msg) => {
+var __accessCheck$8 = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$2 = (obj, member, value) => {
+var __privateAdd$8 = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod$1 = (obj, member, method) => {
-  __accessCheck$2(obj, member, "access private method");
+var __privateMethod$7 = (obj, member, method) => {
+  __accessCheck$8(obj, member, "access private method");
   return method;
 };
 var _handleKeydown, handleKeydown_fn, _handleCloseKeydown, handleCloseKeydown_fn, _handleChipClick, handleChipClick_fn, _handleCloseClick, handleCloseClick_fn;
 let MjoChip = class extends ThemeMixin(LitElement) {
   constructor() {
     super(...arguments);
-    __privateAdd$2(this, _handleKeydown);
-    __privateAdd$2(this, _handleCloseKeydown);
-    __privateAdd$2(this, _handleChipClick);
-    __privateAdd$2(this, _handleCloseClick);
+    __privateAdd$8(this, _handleKeydown);
+    __privateAdd$8(this, _handleCloseKeydown);
+    __privateAdd$8(this, _handleChipClick);
+    __privateAdd$8(this, _handleCloseClick);
     this.closable = false;
     this.clickable = false;
     this.disabled = false;
@@ -7400,8 +7409,8 @@ let MjoChip = class extends ThemeMixin(LitElement) {
             ?data-closable=${this.closable}
             ?data-clickable=${this.clickable}
             ?data-disabled=${this.disabled}
-            @click=${__privateMethod$1(this, _handleChipClick, handleChipClick_fn)}
-            @keydown=${__privateMethod$1(this, _handleKeydown, handleKeydown_fn)}
+            @click=${__privateMethod$7(this, _handleChipClick, handleChipClick_fn)}
+            @keydown=${__privateMethod$7(this, _handleKeydown, handleKeydown_fn)}
         >
             ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
             ${this.startIcon ? html`<mjo-icon src=${this.startIcon}></mjo-icon>` : nothing}
@@ -7410,8 +7419,8 @@ let MjoChip = class extends ThemeMixin(LitElement) {
             ${this.closable ? html`<mjo-icon
                       class="close"
                       src=${AiFillCloseCircle}
-                      @click=${__privateMethod$1(this, _handleCloseClick, handleCloseClick_fn)}
-                      @keydown=${__privateMethod$1(this, _handleCloseKeydown, handleCloseKeydown_fn)}
+                      @click=${__privateMethod$7(this, _handleCloseClick, handleCloseClick_fn)}
+                      @keydown=${__privateMethod$7(this, _handleCloseKeydown, handleCloseKeydown_fn)}
                       role="button"
                       tabindex=${this.disabled ? "-1" : "0"}
                       aria-label="Close ${this.label}"
@@ -7425,11 +7434,11 @@ handleKeydown_fn = function(event) {
     return;
   if (event.key === "Escape" && this.closable) {
     event.preventDefault();
-    __privateMethod$1(this, _handleCloseClick, handleCloseClick_fn).call(this, event);
+    __privateMethod$7(this, _handleCloseClick, handleCloseClick_fn).call(this, event);
   }
   if ((event.key === "Enter" || event.key === " ") && this.clickable) {
     event.preventDefault();
-    __privateMethod$1(this, _handleChipClick, handleChipClick_fn).call(this);
+    __privateMethod$7(this, _handleChipClick, handleChipClick_fn).call(this);
   }
 };
 _handleCloseKeydown = /* @__PURE__ */ new WeakSet();
@@ -7439,7 +7448,7 @@ handleCloseKeydown_fn = function(event) {
   if (event.key === "Enter" || event.key === " ") {
     event.preventDefault();
     event.stopPropagation();
-    __privateMethod$1(this, _handleCloseClick, handleCloseClick_fn).call(this, event);
+    __privateMethod$7(this, _handleCloseClick, handleCloseClick_fn).call(this, event);
   }
 };
 _handleChipClick = /* @__PURE__ */ new WeakSet();
@@ -7795,46 +7804,46 @@ MjoChip.styles = [
             }
         `
 ];
-__decorateClass$4([
+__decorateClass$a([
   property({ type: Boolean })
 ], MjoChip.prototype, "closable", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: Boolean })
 ], MjoChip.prototype, "clickable", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: Boolean })
 ], MjoChip.prototype, "disabled", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: String })
 ], MjoChip.prototype, "color", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: String })
 ], MjoChip.prototype, "endIcon", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: String })
 ], MjoChip.prototype, "label", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: String })
 ], MjoChip.prototype, "radius", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: String })
 ], MjoChip.prototype, "size", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: String })
 ], MjoChip.prototype, "startIcon", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: String })
 ], MjoChip.prototype, "value", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: String })
 ], MjoChip.prototype, "variant", 2);
-__decorateClass$4([
+__decorateClass$a([
   property({ type: String, attribute: "aria-describedby" })
 ], MjoChip.prototype, "ariaDescribedby", 2);
-__decorateClass$4([
+__decorateClass$a([
   query(".container")
 ], MjoChip.prototype, "container", 2);
-MjoChip = __decorateClass$4([
+MjoChip = __decorateClass$a([
   customElement("mjo-chip")
 ], MjoChip);
 function parseHexToRgb(hex) {
@@ -8160,15 +8169,15 @@ function detectColorFormat(color) {
   }
   throw new Error(`Cannot detect color format for: ${color}`);
 }
-var __defProp$3 = Object.defineProperty;
-var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
-var __decorateClass$3 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$3(target, key) : target;
+var __defProp$9 = Object.defineProperty;
+var __getOwnPropDesc$9 = Object.getOwnPropertyDescriptor;
+var __decorateClass$9 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$9(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$3(target, key, result);
+    __defProp$9(target, key, result);
   return result;
 };
 let MjoTextNowrap = class extends LitElement {
@@ -8201,18 +8210,18 @@ MjoTextNowrap.styles = [
             }
         `
 ];
-MjoTextNowrap = __decorateClass$3([
+MjoTextNowrap = __decorateClass$9([
   customElement("mjo-text-nowrap")
 ], MjoTextNowrap);
-var __defProp$2 = Object.defineProperty;
-var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
-var __decorateClass$2 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$2(target, key) : target;
+var __defProp$8 = Object.defineProperty;
+var __getOwnPropDesc$8 = Object.getOwnPropertyDescriptor;
+var __decorateClass$8 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$8(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$2(target, key, result);
+    __defProp$8(target, key, result);
   return result;
 };
 let InputLabel = class extends LitElement {
@@ -8280,57 +8289,57 @@ InputLabel.styles = [
             }
         `
 ];
-__decorateClass$2([
+__decorateClass$8([
   property({ type: Boolean })
 ], InputLabel.prototype, "focused", 2);
-__decorateClass$2([
+__decorateClass$8([
   property({ type: Boolean })
 ], InputLabel.prototype, "error", 2);
-__decorateClass$2([
+__decorateClass$8([
   property({ type: String })
 ], InputLabel.prototype, "label", 2);
-__decorateClass$2([
+__decorateClass$8([
   property({ type: String })
 ], InputLabel.prototype, "color", 2);
-InputLabel = __decorateClass$2([
+InputLabel = __decorateClass$8([
   customElement("input-label")
 ], InputLabel);
-var __defProp$1 = Object.defineProperty;
-var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
-var __decorateClass$1 = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$1(target, key) : target;
+var __defProp$7 = Object.defineProperty;
+var __getOwnPropDesc$7 = Object.getOwnPropertyDescriptor;
+var __decorateClass$7 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$7(target, key) : target;
   for (var i = decorators.length - 1, decorator; i >= 0; i--)
     if (decorator = decorators[i])
       result = (kind ? decorator(target, key, result) : decorator(result)) || result;
   if (kind && result)
-    __defProp$1(target, key, result);
+    __defProp$7(target, key, result);
   return result;
 };
-var __accessCheck$1 = (obj, member, msg) => {
+var __accessCheck$7 = (obj, member, msg) => {
   if (!member.has(obj))
     throw TypeError("Cannot " + msg);
 };
-var __privateAdd$1 = (obj, member, value) => {
+var __privateAdd$7 = (obj, member, value) => {
   if (member.has(obj))
     throw TypeError("Cannot add the same private member more than once");
   member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
 };
-var __privateMethod2 = (obj, member, method) => {
-  __accessCheck$1(obj, member, "access private method");
+var __privateMethod$6 = (obj, member, method) => {
+  __accessCheck$7(obj, member, "access private method");
   return method;
 };
-var _announceColorChange, announceColorChange_fn, _handleInput, handleInput_fn, _handleChange, handleChange_fn, _handleFocus, handleFocus_fn, _handleBlur, handleBlur_fn, _handleFormatChange, handleFormatChange_fn, _updateVisualColor, updateVisualColor_fn, _updateAriaInvalid, updateAriaInvalid_fn;
+var _announceColorChange, announceColorChange_fn, _handleInput$1, handleInput_fn, _handleChange, handleChange_fn, _handleFocus$1, handleFocus_fn, _handleBlur$1, handleBlur_fn$1, _handleFormatChange, handleFormatChange_fn, _updateVisualColor, updateVisualColor_fn, _updateAriaInvalid, updateAriaInvalid_fn;
 let MjoColorPicker = class extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) {
   constructor() {
     super(...arguments);
-    __privateAdd$1(this, _announceColorChange);
-    __privateAdd$1(this, _handleInput);
-    __privateAdd$1(this, _handleChange);
-    __privateAdd$1(this, _handleFocus);
-    __privateAdd$1(this, _handleBlur);
-    __privateAdd$1(this, _handleFormatChange);
-    __privateAdd$1(this, _updateVisualColor);
-    __privateAdd$1(this, _updateAriaInvalid);
+    __privateAdd$7(this, _announceColorChange);
+    __privateAdd$7(this, _handleInput$1);
+    __privateAdd$7(this, _handleChange);
+    __privateAdd$7(this, _handleFocus$1);
+    __privateAdd$7(this, _handleBlur$1);
+    __privateAdd$7(this, _handleFormatChange);
+    __privateAdd$7(this, _updateVisualColor);
+    __privateAdd$7(this, _updateAriaInvalid);
     this.color = "primary";
     this.disabled = false;
     this.value = "";
@@ -8370,10 +8379,10 @@ let MjoColorPicker = class extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
             <div class="container" ?data-rounded=${this.rounded} data-size=${this.size} ?data-disabled=${this.disabled}>
                 <div class="color-picker" role="presentation" aria-hidden="true"></div>
                 <input
-                    @change=${__privateMethod2(this, _handleChange, handleChange_fn)}
-                    @input=${__privateMethod2(this, _handleInput, handleInput_fn)}
-                    @focus=${__privateMethod2(this, _handleFocus, handleFocus_fn)}
-                    @blur=${__privateMethod2(this, _handleBlur, handleBlur_fn)}
+                    @change=${__privateMethod$6(this, _handleChange, handleChange_fn)}
+                    @input=${__privateMethod$6(this, _handleInput$1, handleInput_fn)}
+                    @focus=${__privateMethod$6(this, _handleFocus$1, handleFocus_fn)}
+                    @blur=${__privateMethod$6(this, _handleBlur$1, handleBlur_fn$1)}
                     type="color"
                     name=${ifDefined(this.name)}
                     ?disabled=${this.disabled}
@@ -8400,11 +8409,11 @@ let MjoColorPicker = class extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
   updated(changedProperties) {
     super.updated(changedProperties);
     if (changedProperties.has("format") && changedProperties.get("format") !== void 0) {
-      __privateMethod2(this, _handleFormatChange, handleFormatChange_fn).call(this, changedProperties.get("format"));
+      __privateMethod$6(this, _handleFormatChange, handleFormatChange_fn).call(this, changedProperties.get("format"));
     }
     if (changedProperties.has("value")) {
       this.colorPicker.style.backgroundColor = this.value;
-      __privateMethod2(this, _updateAriaInvalid, updateAriaInvalid_fn).call(this);
+      __privateMethod$6(this, _updateAriaInvalid, updateAriaInvalid_fn).call(this);
     }
   }
   getValue() {
@@ -8413,7 +8422,7 @@ let MjoColorPicker = class extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
   setValue(value) {
     try {
       this.value = convertColor(value, this.format);
-      __privateMethod2(this, _updateVisualColor, updateVisualColor_fn).call(this);
+      __privateMethod$6(this, _updateVisualColor, updateVisualColor_fn).call(this);
     } catch (error) {
       console.warn(`Failed to convert color ${this.value} to format ${this.format}:`, error);
       return this.value;
@@ -8447,13 +8456,13 @@ announceColorChange_fn = function() {
   document.body.appendChild(liveRegion);
   setTimeout(() => document.body.removeChild(liveRegion), 1e3);
 };
-_handleInput = /* @__PURE__ */ new WeakSet();
+_handleInput$1 = /* @__PURE__ */ new WeakSet();
 handleInput_fn = function(event) {
   const target = event.currentTarget;
   this.colorPicker.style.backgroundColor = target.value;
   this.value = convertColor(target.value, this.format);
   this.updateFormData({ name: this.name || "", value: this.value });
-  __privateMethod2(this, _announceColorChange, announceColorChange_fn).call(this);
+  __privateMethod$6(this, _announceColorChange, announceColorChange_fn).call(this);
   this.dispatchEvent(
     new CustomEvent("mjo-color-input", {
       detail: {
@@ -8467,7 +8476,7 @@ handleInput_fn = function(event) {
 };
 _handleChange = /* @__PURE__ */ new WeakSet();
 handleChange_fn = function() {
-  __privateMethod2(this, _updateAriaInvalid, updateAriaInvalid_fn).call(this);
+  __privateMethod$6(this, _updateAriaInvalid, updateAriaInvalid_fn).call(this);
   this.dispatchEvent(new Event("change"));
   this.dispatchEvent(
     new CustomEvent("mjo-color-change", {
@@ -8480,7 +8489,7 @@ handleChange_fn = function() {
     })
   );
 };
-_handleFocus = /* @__PURE__ */ new WeakSet();
+_handleFocus$1 = /* @__PURE__ */ new WeakSet();
 handleFocus_fn = function() {
   this.dispatchEvent(
     new CustomEvent("mjo-color-focus", {
@@ -8489,8 +8498,8 @@ handleFocus_fn = function() {
     })
   );
 };
-_handleBlur = /* @__PURE__ */ new WeakSet();
-handleBlur_fn = function() {
+_handleBlur$1 = /* @__PURE__ */ new WeakSet();
+handleBlur_fn$1 = function() {
   this.dispatchEvent(
     new CustomEvent("mjo-color-blur", {
       detail: { element: this },
@@ -8628,51 +8637,3267 @@ MjoColorPicker.styles = [
             }
         `
 ];
-__decorateClass$1([
+__decorateClass$7([
   property({ type: String })
 ], MjoColorPicker.prototype, "color", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: Boolean, reflect: true })
 ], MjoColorPicker.prototype, "disabled", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: String })
 ], MjoColorPicker.prototype, "helperText", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: String })
 ], MjoColorPicker.prototype, "label", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: String })
 ], MjoColorPicker.prototype, "name", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: String })
 ], MjoColorPicker.prototype, "value", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: Boolean })
 ], MjoColorPicker.prototype, "hideErrors", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: Boolean })
 ], MjoColorPicker.prototype, "rounded", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: String })
 ], MjoColorPicker.prototype, "size", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: String })
 ], MjoColorPicker.prototype, "format", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: Boolean })
 ], MjoColorPicker.prototype, "showValue", 2);
-__decorateClass$1([
+__decorateClass$7([
   property({ type: String, attribute: "aria-describedby" })
 ], MjoColorPicker.prototype, "ariaDescribedBy", 2);
-__decorateClass$1([
+__decorateClass$7([
   query("input")
 ], MjoColorPicker.prototype, "inputElement", 2);
-__decorateClass$1([
+__decorateClass$7([
   query(".color-picker")
 ], MjoColorPicker.prototype, "colorPicker", 2);
-MjoColorPicker = __decorateClass$1([
+MjoColorPicker = __decorateClass$7([
   customElement("mjo-color-picker")
 ], MjoColorPicker);
+const PiCalendarDotsLight = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,34H182V24a6,6,0,0,0-12,0V34H86V24a6,6,0,0,0-12,0V34H48A14,14,0,0,0,34,48V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V48A14,14,0,0,0,208,34ZM48,46H74V56a6,6,0,0,0,12,0V46h84V56a6,6,0,0,0,12,0V46h26a2,2,0,0,1,2,2V82H46V48A2,2,0,0,1,48,46ZM208,210H48a2,2,0,0,1-2-2V94H210V208A2,2,0,0,1,208,210Zm-70-78a10,10,0,1,1-10-10A10,10,0,0,1,138,132Zm44,0a10,10,0,1,1-10-10A10,10,0,0,1,182,132ZM94,172a10,10,0,1,1-10-10A10,10,0,0,1,94,172Zm44,0a10,10,0,1,1-10-10A10,10,0,0,1,138,172Zm44,0a10,10,0,1,1-10-10A10,10,0,0,1,182,172Z"></path></svg>`;
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const notifyChildrenConnectedChanged = (parent, isConnected) => {
+  var _a2;
+  const children = parent._$disconnectableChildren;
+  if (children === void 0) {
+    return false;
+  }
+  for (const obj of children) {
+    (_a2 = obj["_$notifyDirectiveConnectionChanged"]) == null ? void 0 : _a2.call(obj, isConnected, false);
+    notifyChildrenConnectedChanged(obj, isConnected);
+  }
+  return true;
+};
+const removeDisconnectableFromParent = (obj) => {
+  let parent, children;
+  do {
+    if ((parent = obj._$parent) === void 0) {
+      break;
+    }
+    children = parent._$disconnectableChildren;
+    children.delete(obj);
+    obj = parent;
+  } while ((children == null ? void 0 : children.size) === 0);
+};
+const addDisconnectableToParent = (obj) => {
+  for (let parent; parent = obj._$parent; obj = parent) {
+    let children = parent._$disconnectableChildren;
+    if (children === void 0) {
+      parent._$disconnectableChildren = children = /* @__PURE__ */ new Set();
+    } else if (children.has(obj)) {
+      break;
+    }
+    children.add(obj);
+    installDisconnectAPI(parent);
+  }
+};
+function reparentDisconnectables(newParent) {
+  if (this._$disconnectableChildren !== void 0) {
+    removeDisconnectableFromParent(this);
+    this._$parent = newParent;
+    addDisconnectableToParent(this);
+  } else {
+    this._$parent = newParent;
+  }
+}
+function notifyChildPartConnectedChanged(isConnected, isClearingValue = false, fromPartIndex = 0) {
+  const value = this._$committedValue;
+  const children = this._$disconnectableChildren;
+  if (children === void 0 || children.size === 0) {
+    return;
+  }
+  if (isClearingValue) {
+    if (Array.isArray(value)) {
+      for (let i = fromPartIndex; i < value.length; i++) {
+        notifyChildrenConnectedChanged(value[i], false);
+        removeDisconnectableFromParent(value[i]);
+      }
+    } else if (value != null) {
+      notifyChildrenConnectedChanged(value, false);
+      removeDisconnectableFromParent(value);
+    }
+  } else {
+    notifyChildrenConnectedChanged(this, isConnected);
+  }
+}
+const installDisconnectAPI = (obj) => {
+  if (obj.type == PartType.CHILD) {
+    obj._$notifyConnectionChanged ?? (obj._$notifyConnectionChanged = notifyChildPartConnectedChanged);
+    obj._$reparentDisconnectables ?? (obj._$reparentDisconnectables = reparentDisconnectables);
+  }
+};
+class AsyncDirective extends Directive {
+  constructor() {
+    super(...arguments);
+    this._$disconnectableChildren = void 0;
+  }
+  /**
+   * Initialize the part with internal fields
+   * @param part
+   * @param parent
+   * @param attributeIndex
+   */
+  _$initialize(part, parent, attributeIndex) {
+    super._$initialize(part, parent, attributeIndex);
+    addDisconnectableToParent(this);
+    this.isConnected = part._$isConnected;
+  }
+  // This property needs to remain unminified.
+  /**
+   * Called from the core code when a directive is going away from a part (in
+   * which case `shouldRemoveFromParent` should be true), and from the
+   * `setChildrenConnected` helper function when recursively changing the
+   * connection state of a tree (in which case `shouldRemoveFromParent` should
+   * be false).
+   *
+   * @param isConnected
+   * @param isClearingDirective - True when the directive itself is being
+   *     removed; false when the tree is being disconnected
+   * @internal
+   */
+  ["_$notifyDirectiveConnectionChanged"](isConnected, isClearingDirective = true) {
+    var _a2, _b2;
+    if (isConnected !== this.isConnected) {
+      this.isConnected = isConnected;
+      if (isConnected) {
+        (_a2 = this.reconnected) == null ? void 0 : _a2.call(this);
+      } else {
+        (_b2 = this.disconnected) == null ? void 0 : _b2.call(this);
+      }
+    }
+    if (isClearingDirective) {
+      notifyChildrenConnectedChanged(this, isConnected);
+      removeDisconnectableFromParent(this);
+    }
+  }
+  /**
+   * Sets the value of the directive's Part outside the normal `update`/`render`
+   * lifecycle of a directive.
+   *
+   * This method should not be called synchronously from a directive's `update`
+   * or `render`.
+   *
+   * @param directive The directive to update
+   * @param value The value to set
+   */
+  setValue(value) {
+    if (isSingleExpression(this.__part)) {
+      this.__part._$setValue(value, this);
+    } else {
+      if (this.__attributeIndex === void 0) {
+        throw new Error(`Expected this.__attributeIndex to be a number`);
+      }
+      const newValues = [...this.__part._$committedValue];
+      newValues[this.__attributeIndex] = value;
+      this.__part._$setValue(newValues, this, 0);
+    }
+  }
+  /**
+   * User callbacks for implementing logic to release any resources/subscriptions
+   * that may have been retained by this directive. Since directives may also be
+   * re-connected, `reconnected` should also be implemented to restore the
+   * working state of the directive prior to the next render.
+   */
+  disconnected() {
+  }
+  reconnected() {
+  }
+}
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const createRef = () => new Ref();
+class Ref {
+}
+const lastElementForContextAndCallback = /* @__PURE__ */ new WeakMap();
+class RefDirective extends AsyncDirective {
+  render(_ref) {
+    return nothing;
+  }
+  update(part, [ref2]) {
+    var _a2;
+    const refChanged = ref2 !== this._ref;
+    if (refChanged && this._ref !== void 0) {
+      this._updateRefValue(void 0);
+    }
+    if (refChanged || this._lastElementForRef !== this._element) {
+      this._ref = ref2;
+      this._context = (_a2 = part.options) == null ? void 0 : _a2.host;
+      this._updateRefValue(this._element = part.element);
+    }
+    return nothing;
+  }
+  _updateRefValue(element) {
+    if (!this.isConnected) {
+      element = void 0;
+    }
+    if (typeof this._ref === "function") {
+      const context = this._context ?? globalThis;
+      let lastElementForCallback = lastElementForContextAndCallback.get(context);
+      if (lastElementForCallback === void 0) {
+        lastElementForCallback = /* @__PURE__ */ new WeakMap();
+        lastElementForContextAndCallback.set(context, lastElementForCallback);
+      }
+      if (lastElementForCallback.get(this._ref) !== void 0) {
+        this._ref.call(this._context, void 0);
+      }
+      lastElementForCallback.set(this._ref, element);
+      if (element !== void 0) {
+        this._ref.call(this._context, element);
+      }
+    } else {
+      this._ref.value = element;
+    }
+  }
+  get _lastElementForRef() {
+    var _a2, _b2;
+    return typeof this._ref === "function" ? (_a2 = lastElementForContextAndCallback.get(this._context ?? globalThis)) == null ? void 0 : _a2.get(this._ref) : (_b2 = this._ref) == null ? void 0 : _b2.value;
+  }
+  disconnected() {
+    if (this._lastElementForRef === this._element) {
+      this._updateRefValue(void 0);
+    }
+  }
+  reconnected() {
+    this._updateRefValue(this._element);
+  }
+}
+const ref = directive(RefDirective);
+const DROPDOWN_MARGIN = 15;
+const getTopInTopPosition = ({ dropDown, container }) => {
+  let top = container.getBoundingClientRect().top + window.scrollY - dropDown.offsetHeight - 5;
+  if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
+    dropDown.style.maxHeight = `${window.innerHeight - DROPDOWN_MARGIN * 2}px`;
+    return window.scrollY + DROPDOWN_MARGIN;
+  } else {
+    dropDown.style.maxHeight = "";
+  }
+  if (top < window.scrollY) {
+    top = container.getBoundingClientRect().top + window.scrollY + container.offsetHeight + 5;
+    if (top + dropDown.offsetHeight > window.innerHeight + window.scrollY) {
+      return window.scrollY + DROPDOWN_MARGIN;
+    }
+    return getTopInBottomPosition({ dropDown, container });
+  }
+  return top;
+};
+const getTopInBottomPosition = ({ dropDown, container }) => {
+  let top = container.getBoundingClientRect().top + window.scrollY + container.offsetHeight + 5;
+  if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
+    dropDown.style.maxHeight = `${window.innerHeight - DROPDOWN_MARGIN * 2}px`;
+    return window.scrollY + DROPDOWN_MARGIN;
+  } else {
+    dropDown.style.maxHeight = "";
+  }
+  if (top + dropDown.offsetHeight > window.innerHeight + window.scrollY) {
+    top = container.getBoundingClientRect().top + window.scrollY - dropDown.offsetHeight - 5;
+    if (top < window.scrollY) {
+      return window.scrollY + DROPDOWN_MARGIN;
+    }
+    return getTopInTopPosition({ dropDown, container });
+  }
+  return top;
+};
+const getTopInMiddlePosition = ({ dropDown, container }) => {
+  const top = container.getBoundingClientRect().top + window.scrollY + container.offsetHeight / 2 - dropDown.offsetHeight / 2;
+  if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
+    dropDown.style.maxHeight = `${window.innerHeight - DROPDOWN_MARGIN * 2}px`;
+    return window.scrollY + DROPDOWN_MARGIN;
+  } else {
+    dropDown.style.maxHeight = "";
+  }
+  if (top < window.scrollY)
+    return 0;
+  if (top + dropDown.offsetHeight > window.innerHeight + window.scrollY) {
+    return window.innerHeight + window.scrollY - dropDown.offsetHeight;
+  }
+  return top;
+};
+const getLeftInLeftPosition = ({ dropDown, container }) => {
+  let left = container.getBoundingClientRect().left + window.scrollX - dropDown.offsetWidth - 5;
+  if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2)
+    return DROPDOWN_MARGIN;
+  if (left < window.scrollX) {
+    left = container.getBoundingClientRect().left + window.scrollX + container.offsetWidth + 5;
+    if (left + dropDown.offsetWidth > window.innerWidth + window.scrollX) {
+      return DROPDOWN_MARGIN;
+    }
+    return getLeftInRightPosition({ dropDown, container });
+  }
+  return left;
+};
+const getLeftInCenterPOsition = ({ dropDown, container }) => {
+  const left = container.getBoundingClientRect().left + window.scrollX + container.offsetWidth / 2 - dropDown.offsetWidth / 2;
+  if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2)
+    return DROPDOWN_MARGIN;
+  if (left < window.scrollX)
+    return 0;
+  if (left + dropDown.offsetWidth > window.innerWidth + window.scrollX) {
+    return window.innerWidth - dropDown.offsetWidth;
+  }
+  return left;
+};
+const getLeftInRightPosition = ({ dropDown, container }) => {
+  let left = container.getBoundingClientRect().left + window.scrollX + container.offsetWidth + 5;
+  if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2)
+    return DROPDOWN_MARGIN;
+  if (left + dropDown.offsetWidth > window.innerWidth + window.scrollX) {
+    left = container.getBoundingClientRect().left + window.scrollX - dropDown.offsetWidth - 5;
+    if (left < window.scrollX) {
+      return DROPDOWN_MARGIN;
+    }
+    return getLeftInLeftPosition({ dropDown, container });
+  }
+  return left;
+};
+var __defProp$6 = Object.defineProperty;
+var __getOwnPropDesc$6 = Object.getOwnPropertyDescriptor;
+var __decorateClass$6 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$6(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$6(target, key, result);
+  return result;
+};
+var __accessCheck$6 = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateGet$4 = (obj, member, getter) => {
+  __accessCheck$6(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd$6 = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateSet$1 = (obj, member, value, setter) => {
+  __accessCheck$6(obj, member, "write to private field");
+  setter ? setter.call(obj, value) : member.set(obj, value);
+  return value;
+};
+var __privateMethod$5 = (obj, member, method) => {
+  __accessCheck$6(obj, member, "access private method");
+  return method;
+};
+var _scrollElements, _listeners$1, _addPreventScroll, addPreventScroll_fn, _removePreventScroll, removePreventScroll_fn, _handleScroll, handleScroll_fn, _preventWheel, preventWheel_fn, _getScrollbarElements, getScrollbarElements_fn;
+let DropdowContainer = class extends ThemeMixin(LitElement) {
+  constructor() {
+    super(...arguments);
+    __privateAdd$6(this, _addPreventScroll);
+    __privateAdd$6(this, _removePreventScroll);
+    __privateAdd$6(this, _handleScroll);
+    __privateAdd$6(this, _preventWheel);
+    __privateAdd$6(this, _getScrollbarElements);
+    this.position = "center-bottom";
+    this.preventScroll = false;
+    __privateAdd$6(this, _scrollElements, []);
+    __privateAdd$6(this, _listeners$1, {
+      scroll: (ev) => {
+        __privateMethod$5(this, _handleScroll, handleScroll_fn).call(this, ev);
+      },
+      wheel: (ev) => {
+        __privateMethod$5(this, _preventWheel, preventWheel_fn).call(this, ev);
+      },
+      resize: () => {
+        this.updatePosition();
+      }
+    });
+  }
+  render() {
+    return html`${this.css ? html`<style type="text/css">
+                  ${this.css.toString().replace(/\s+/g, " ")}
+              </style>` : nothing}${this.html ? html`<div class="container">${this.html}</div>` : nothing}`;
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.height)
+      this.style.maxHeight = this.height;
+    window.addEventListener("resize", __privateGet$4(this, _listeners$1).resize);
+  }
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener("resize", __privateGet$4(this, _listeners$1).resize);
+  }
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (this.offsetHeight > 0)
+      this.updatePosition();
+  }
+  close() {
+    __privateSet$1(this, _scrollElements, []);
+    __privateMethod$5(this, _removePreventScroll, removePreventScroll_fn).call(this);
+    this.style.transform = "scale(0.7)";
+    this.style.opacity = "0";
+    setTimeout(() => {
+      this.style.display = "";
+      this.style.transition = "";
+      this.style.transform = "";
+    }, 210);
+  }
+  open() {
+    __privateMethod$5(this, _addPreventScroll, addPreventScroll_fn).call(this);
+    this.style.display = "block";
+    this.style.transition = "opacity 0.1s ease-in, transform 0.1s ease-in";
+    this.style.transform = "scale(0.7)";
+    if (this.width)
+      this.style.minWidth = this.width;
+    setTimeout(() => {
+      this.updatePosition();
+      this.style.transform = "scale(1)";
+      this.style.opacity = "1";
+    }, 5);
+  }
+  scrollToTop(top) {
+    this.scrollTo({
+      top
+    });
+  }
+  getScroll() {
+    return {
+      top: this.scrollTop,
+      left: this.scrollLeft
+    };
+  }
+  updatePosition() {
+    if (this.offsetHeight === 0 || !this.host)
+      return;
+    const container = this.host;
+    const [x, y] = this.position.split("-");
+    const left = x === "left" ? getLeftInLeftPosition({ dropDown: this, container }) : x === "center" ? getLeftInCenterPOsition({ dropDown: this, container }) : getLeftInRightPosition({ dropDown: this, container });
+    const top = y === "bottom" ? getTopInBottomPosition({ dropDown: this, container }) : y === "middle" ? getTopInMiddlePosition({ dropDown: this, container }) : getTopInTopPosition({ dropDown: this, container });
+    this.style.top = `${top}px`;
+    this.style.left = `${left}px`;
+  }
+};
+_scrollElements = /* @__PURE__ */ new WeakMap();
+_listeners$1 = /* @__PURE__ */ new WeakMap();
+_addPreventScroll = /* @__PURE__ */ new WeakSet();
+addPreventScroll_fn = function() {
+  __privateMethod$5(this, _getScrollbarElements, getScrollbarElements_fn).call(this);
+  __privateGet$4(this, _scrollElements).forEach(({ element }) => {
+    element.addEventListener("scroll", __privateGet$4(this, _listeners$1).scroll);
+  });
+  if (this.preventScroll)
+    document.addEventListener("wheel", __privateGet$4(this, _listeners$1).wheel, { passive: false });
+};
+_removePreventScroll = /* @__PURE__ */ new WeakSet();
+removePreventScroll_fn = function() {
+  __privateGet$4(this, _scrollElements).forEach(({ element }) => {
+    element.removeEventListener("scroll", __privateGet$4(this, _listeners$1).scroll);
+  });
+  document.removeEventListener("wheel", __privateGet$4(this, _listeners$1).wheel);
+};
+_handleScroll = /* @__PURE__ */ new WeakSet();
+handleScroll_fn = function(ev) {
+  const target = ev.currentTarget;
+  if (this.preventScroll) {
+    for (const { element, scrollTop } of __privateGet$4(this, _scrollElements)) {
+      if (element !== target)
+        continue;
+      if (element === window) {
+        window.scrollTo(0, scrollTop);
+      } else {
+        element.scrollTop = scrollTop;
+      }
+    }
+  } else {
+    this.updatePosition();
+  }
+};
+_preventWheel = /* @__PURE__ */ new WeakSet();
+preventWheel_fn = function(ev) {
+  if (ev.target !== this)
+    ev.preventDefault();
+};
+_getScrollbarElements = /* @__PURE__ */ new WeakSet();
+getScrollbarElements_fn = function() {
+  var _a2;
+  __privateSet$1(this, _scrollElements, []);
+  let element = this.host;
+  while (element) {
+    if (element.scrollHeight > element.clientHeight) {
+      if (element.tagName === "HTML") {
+        element = window;
+        __privateGet$4(this, _scrollElements).push({ element, scrollTop: element.scrollY });
+      } else {
+        __privateGet$4(this, _scrollElements).push({ element, scrollTop: element.scrollTop });
+      }
+    }
+    element = ((_a2 = element.parentNode) == null ? void 0 : _a2.host) ?? element.parentNode;
+  }
+};
+DropdowContainer.styles = [
+  css`
+            :host {
+                display: none;
+                position: absolute;
+                transition: all 0.3s;
+                opacity: 0;
+                transform-origin: top center;
+                max-width: calc(100vw - 20px);
+                box-shadow: var(--mjo-dropdown-box-shadow, var(--mjo-box-shadow, 0px 0px 7px rgba(0, 0, 0, 0.5)));
+                border-radius: var(--mjo-dropdown-radius, var(--mjo-radius-medium, 5px));
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+            .container {
+                background-color: var(--dropdow-container-background-color, var(--mjo-dropdown-background-color, var(--mjo-background-color, white)));
+                overflow: hidden;
+            }
+        `
+];
+__decorateClass$6([
+  property({ type: Object })
+], DropdowContainer.prototype, "css", 2);
+__decorateClass$6([
+  property({ type: Object })
+], DropdowContainer.prototype, "html", 2);
+__decorateClass$6([
+  property({ type: String })
+], DropdowContainer.prototype, "position", 2);
+__decorateClass$6([
+  property({ type: Boolean })
+], DropdowContainer.prototype, "preventScroll", 2);
+__decorateClass$6([
+  property({ type: String })
+], DropdowContainer.prototype, "width", 2);
+__decorateClass$6([
+  property({ type: String })
+], DropdowContainer.prototype, "height", 2);
+DropdowContainer = __decorateClass$6([
+  customElement("dropdow-container")
+], DropdowContainer);
+var __defProp$5 = Object.defineProperty;
+var __getOwnPropDesc$5 = Object.getOwnPropertyDescriptor;
+var __decorateClass$5 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$5(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$5(target, key, result);
+  return result;
+};
+var __accessCheck$5 = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateGet$3 = (obj, member, getter) => {
+  __accessCheck$5(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd$5 = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateMethod$4 = (obj, member, method) => {
+  __accessCheck$5(obj, member, "access private method");
+  return method;
+};
+var _listeners, _setListeners, setListeners_fn, _removeListeners, removeListeners_fn, _open, open_fn, _close, close_fn, _createDropdown, createDropdown_fn;
+const convertToPx = (value) => {
+  if (value === null)
+    return value;
+  return isNaN(Number(value)) ? value : `${value}px`;
+};
+let MjoDropdown = class extends ThemeMixin(LitElement) {
+  constructor() {
+    super(...arguments);
+    __privateAdd$5(this, _setListeners);
+    __privateAdd$5(this, _removeListeners);
+    __privateAdd$5(this, _open);
+    __privateAdd$5(this, _close);
+    __privateAdd$5(this, _createDropdown);
+    this.fullwidth = false;
+    this.disabled = false;
+    this.preventScroll = false;
+    this.isOpen = false;
+    this.behaviour = "hover";
+    this.preventCloseOnInnerClick = false;
+    this.openTimestamp = 0;
+    __privateAdd$5(this, _listeners, {
+      open: (ev) => {
+        var _a2;
+        if (this.behaviour === "click" && (ev == null ? void 0 : ev.type) === "click" && ((_a2 = this.suppressOpenSelectors) == null ? void 0 : _a2.length)) {
+          const path = ev.composedPath();
+          if (path.some((n) => {
+            const el = n;
+            if (!el || !el.matches)
+              return false;
+            return this.suppressOpenSelectors.some((sel) => {
+              try {
+                return el.matches(sel);
+              } catch {
+                return false;
+              }
+            });
+          })) {
+            return;
+          }
+        }
+        this.open();
+      },
+      close: (ev) => {
+        this.close(ev);
+      }
+    });
+  }
+  render() {
+    return html`<slot></slot>`;
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    __privateMethod$4(this, _createDropdown, createDropdown_fn).call(this);
+  }
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    __privateMethod$4(this, _removeListeners, removeListeners_fn).call(this);
+  }
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has("html") && this.html) {
+      if (!this.dropdownContainer)
+        return;
+      this.dropdownContainer.html = this.html;
+    }
+    if (changedProperties.has("css") && this.css) {
+      if (!this.dropdownContainer)
+        return;
+      this.dropdownContainer.css = this.css;
+    }
+    if (changedProperties.has("preventScroll") && this.preventScroll) {
+      if (!this.dropdownContainer)
+        return;
+      this.dropdownContainer.preventScroll = this.preventScroll;
+    }
+    if (changedProperties.has("width") && this.width !== void 0) {
+      if (!this.dropdownContainer)
+        return;
+      this.dropdownContainer.style.display = this.width;
+    }
+    if (changedProperties.has("behaviour") && this.behaviour !== void 0) {
+      __privateMethod$4(this, _removeListeners, removeListeners_fn).call(this);
+      __privateMethod$4(this, _setListeners, setListeners_fn).call(this);
+    }
+  }
+  open() {
+    __privateMethod$4(this, _open, open_fn).call(this);
+  }
+  close(ev) {
+    __privateMethod$4(this, _close, close_fn).call(this, ev);
+  }
+  updatePosition() {
+    var _a2;
+    (_a2 = this.dropdownContainer) == null ? void 0 : _a2.updatePosition();
+  }
+  scrollToTop(top) {
+    var _a2;
+    (_a2 = this.dropdownContainer) == null ? void 0 : _a2.scrollToTop(top);
+  }
+  getScroll() {
+    var _a2;
+    return ((_a2 = this.dropdownContainer) == null ? void 0 : _a2.getScroll()) ?? { top: 0, left: 0 };
+  }
+  getHeigth() {
+    var _a2;
+    return ((_a2 = this.dropdownContainer) == null ? void 0 : _a2.offsetHeight) ?? 0;
+  }
+};
+_listeners = /* @__PURE__ */ new WeakMap();
+_setListeners = /* @__PURE__ */ new WeakSet();
+setListeners_fn = function() {
+  var _a2;
+  if (this.behaviour === "hover") {
+    this.addEventListener("mouseenter", __privateGet$3(this, _listeners).open);
+    (_a2 = this.dropdownContainer) == null ? void 0 : _a2.addEventListener("mouseleave", __privateGet$3(this, _listeners).close);
+  } else {
+    this.addEventListener("click", __privateGet$3(this, _listeners).open);
+  }
+  document.addEventListener("click", __privateGet$3(this, _listeners).close);
+};
+_removeListeners = /* @__PURE__ */ new WeakSet();
+removeListeners_fn = function() {
+  var _a2;
+  this.removeEventListener("mouseenter", __privateGet$3(this, _listeners).open);
+  (_a2 = this.dropdownContainer) == null ? void 0 : _a2.removeEventListener("mouseleave", __privateGet$3(this, _listeners).close);
+  this.removeEventListener("click", __privateGet$3(this, _listeners).open);
+  document.removeEventListener("click", __privateGet$3(this, _listeners).close);
+};
+_open = /* @__PURE__ */ new WeakSet();
+open_fn = function() {
+  var _a2;
+  if (this.isOpen || this.disabled)
+    return;
+  if (this.fullwidth && this.dropdownContainer) {
+    this.dropdownContainer.width = `${this.offsetWidth}px`;
+  }
+  if (this.height && this.dropdownContainer) {
+    this.dropdownContainer.height = this.height;
+  }
+  this.isOpen = true;
+  (_a2 = this.dropdownContainer) == null ? void 0 : _a2.open();
+  this.openTimestamp = Date.now();
+  this.dispatchEvent(new CustomEvent("open"));
+};
+_close = /* @__PURE__ */ new WeakSet();
+close_fn = function(ev) {
+  var _a2;
+  if (!this.isOpen)
+    return;
+  const path = ev == null ? void 0 : ev.composedPath();
+  const insideHost = !!(path == null ? void 0 : path.includes(this));
+  const insideContainer = !!(this.dropdownContainer && (path == null ? void 0 : path.includes(this.dropdownContainer)));
+  if (insideHost && this.behaviour === "click" && Date.now() - this.openTimestamp < 100)
+    return;
+  if (insideContainer && this.preventCloseOnInnerClick)
+    return;
+  if (insideHost && !insideContainer)
+    return;
+  this.isOpen = false;
+  (_a2 = this.dropdownContainer) == null ? void 0 : _a2.close();
+  this.openTimestamp = 0;
+  this.dispatchEvent(new CustomEvent("close"));
+};
+_createDropdown = /* @__PURE__ */ new WeakSet();
+createDropdown_fn = function() {
+  const themeElement = searchClosestElement(this, "mjo-theme");
+  this.dropdownContainer = document.createElement("dropdow-container");
+  this.dropdownContainer.host = this;
+  this.dropdownContainer.html = this.html;
+  this.dropdownContainer.css = this.css;
+  this.dropdownContainer.preventScroll = this.preventScroll;
+  if (this.theme)
+    this.dropdownContainer.theme = this.theme;
+  if (this.width)
+    this.dropdownContainer.style.width = this.width;
+  if (themeElement) {
+    const themeClone = document.createElement("mjo-theme");
+    themeClone.config = themeElement.config;
+    themeClone.theme = themeElement.theme;
+    themeClone.scope = "local";
+    themeClone.appendChild(this.dropdownContainer);
+    document.body.appendChild(themeClone);
+  } else {
+    document.body.appendChild(this.dropdownContainer);
+  }
+};
+MjoDropdown.styles = [
+  css`
+            :host {
+                display: inline-block;
+            }
+        `
+];
+__decorateClass$5([
+  property({ type: Boolean })
+], MjoDropdown.prototype, "fullwidth", 2);
+__decorateClass$5([
+  property({ type: Boolean })
+], MjoDropdown.prototype, "disabled", 2);
+__decorateClass$5([
+  property({ type: Boolean })
+], MjoDropdown.prototype, "preventScroll", 2);
+__decorateClass$5([
+  property({ type: Boolean, reflect: true })
+], MjoDropdown.prototype, "isOpen", 2);
+__decorateClass$5([
+  property({ type: Object })
+], MjoDropdown.prototype, "css", 2);
+__decorateClass$5([
+  property({ type: Object })
+], MjoDropdown.prototype, "html", 2);
+__decorateClass$5([
+  property({ type: String })
+], MjoDropdown.prototype, "behaviour", 2);
+__decorateClass$5([
+  property({ type: String, converter: convertToPx })
+], MjoDropdown.prototype, "width", 2);
+__decorateClass$5([
+  property({ type: String, converter: convertToPx })
+], MjoDropdown.prototype, "height", 2);
+__decorateClass$5([
+  property({ type: Boolean })
+], MjoDropdown.prototype, "preventCloseOnInnerClick", 2);
+__decorateClass$5([
+  property({ type: Array })
+], MjoDropdown.prototype, "suppressOpenSelectors", 2);
+MjoDropdown = __decorateClass$5([
+  customElement("mjo-dropdown")
+], MjoDropdown);
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+class LiveDirective extends Directive {
+  constructor(partInfo) {
+    super(partInfo);
+    if (!(partInfo.type === PartType.PROPERTY || partInfo.type === PartType.ATTRIBUTE || partInfo.type === PartType.BOOLEAN_ATTRIBUTE)) {
+      throw new Error("The `live` directive is not allowed on child or event bindings");
+    }
+    if (!isSingleExpression(partInfo)) {
+      throw new Error("`live` bindings can only contain a single expression");
+    }
+  }
+  render(value) {
+    return value;
+  }
+  update(part, [value]) {
+    if (value === noChange || value === nothing) {
+      return value;
+    }
+    const element = part.element;
+    const name = part.name;
+    if (part.type === PartType.PROPERTY) {
+      if (value === element[name]) {
+        return noChange;
+      }
+    } else if (part.type === PartType.BOOLEAN_ATTRIBUTE) {
+      if (!!value === element.hasAttribute(name)) {
+        return noChange;
+      }
+    } else if (part.type === PartType.ATTRIBUTE) {
+      if (element.getAttribute(name) === String(value)) {
+        return noChange;
+      }
+    }
+    setCommittedValue(part);
+    return value;
+  }
+}
+const live = directive(LiveDirective);
+var __defProp$4 = Object.defineProperty;
+var __getOwnPropDesc$4 = Object.getOwnPropertyDescriptor;
+var __decorateClass$4 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$4(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$4(target, key, result);
+  return result;
+};
+var __accessCheck$4 = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateAdd$4 = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateMethod$3 = (obj, member, method) => {
+  __accessCheck$4(obj, member, "access private method");
+  return method;
+};
+var _setValue, setValue_fn;
+let InputCounter = class extends LitElement {
+  constructor() {
+    super(...arguments);
+    __privateAdd$4(this, _setValue);
+    this.count = 0;
+    this.regressive = false;
+  }
+  render() {
+    return html`<span role="status" aria-live="polite">
+            <mjo-typography tag="none">${__privateMethod$3(this, _setValue, setValue_fn).call(this)}</mjo-typography>
+        </span>`;
+  }
+};
+_setValue = /* @__PURE__ */ new WeakSet();
+setValue_fn = function() {
+  let value = "0";
+  if (this.regressive && this.max) {
+    value = String(this.max - this.count);
+  } else if (this.max) {
+    value = `${this.count}/${this.max}`;
+  } else {
+    value = String(this.count);
+  }
+  return value;
+};
+InputCounter.styles = [
+  css`
+            :host {
+                display: block;
+                font-size: var(--mjo-textarea-helper-font-size, var(--mjo-input-helper-font-size, calc(1em * 0.8)));
+                font-weight: var(--mjo-textarea-helper-font-weight, var(--mjo-input-helper-font-weight, normal));
+                color: var(--mjo-textarea-helper-color, var(--mjo-input-helper-color, var(--mjo-foreground-color-low, currentColor)));
+                line-height: calc(1em * 1.2);
+                transition: color 0.3s;
+            }
+        `
+];
+__decorateClass$4([
+  property({ type: Number })
+], InputCounter.prototype, "count", 2);
+__decorateClass$4([
+  property({ type: Number })
+], InputCounter.prototype, "max", 2);
+__decorateClass$4([
+  property({ type: Boolean })
+], InputCounter.prototype, "regressive", 2);
+InputCounter = __decorateClass$4([
+  customElement("input-counter")
+], InputCounter);
+var __defProp$3 = Object.defineProperty;
+var __getOwnPropDesc$3 = Object.getOwnPropertyDescriptor;
+var __decorateClass$3 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$3(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$3(target, key, result);
+  return result;
+};
+var __accessCheck$3 = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateGet$2 = (obj, member, getter) => {
+  __accessCheck$3(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd$3 = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateMethod$2 = (obj, member, method) => {
+  __accessCheck$3(obj, member, "access private method");
+  return method;
+};
+var _handleBlur, handleBlur_fn, _handleClearabled, handleClearabled_fn, _handleFocus, _handleInput, _handleKeyup, _handlePassword, handlePassword_fn;
+let MjoTextfield = class extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) {
+  constructor() {
+    super(...arguments);
+    __privateAdd$3(this, _handleBlur);
+    __privateAdd$3(this, _handleClearabled);
+    __privateAdd$3(this, _handlePassword);
+    this.autoFocus = false;
+    this.disabled = false;
+    this.fullwidth = false;
+    this.readonly = false;
+    this.type = "text";
+    this.value = "";
+    this.size = "medium";
+    this.color = "primary";
+    this.counter = false;
+    this.selectOnFocus = false;
+    this.clearabled = false;
+    this.nospiners = false;
+    this.isFocused = false;
+    this.valueLength = 0;
+    this.uniqueId = `mjo-textfield-${Math.random().toString(36).substr(2, 9)}`;
+    this.isPassword = false;
+    __privateAdd$3(this, _handleFocus, () => {
+      this.isFocused = true;
+      this.dispatchEvent(
+        new CustomEvent("mjo-textfield-focus", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            element: this,
+            value: this.value
+          }
+        })
+      );
+      if (this.selectOnFocus) {
+        this.inputElement.select();
+        return;
+      }
+      setTimeout(() => {
+        if (!this.inputElement)
+          return;
+        const oldTyoe = this.inputElement.type;
+        this.inputElement.type = oldTyoe !== "password" ? "text" : "password";
+        this.inputElement.setSelectionRange(this.value.length, this.value.length);
+        this.inputElement.type = oldTyoe;
+      }, 10);
+    });
+    __privateAdd$3(this, _handleInput, (ev) => {
+      const previousValue = this.value;
+      this.value = ev.currentTarget.value;
+      this.valueLength = this.value.length;
+      this.dispatchEvent(
+        new CustomEvent("mjo-textfield-input", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            element: this,
+            value: this.value,
+            previousValue,
+            inputType: ev.inputType || ""
+          }
+        })
+      );
+      if (ev.type === "change") {
+        this.dispatchEvent(
+          new CustomEvent("mjo-textfield-change", {
+            bubbles: true,
+            composed: true,
+            detail: {
+              element: this,
+              value: this.value,
+              previousValue
+            }
+          })
+        );
+      }
+      this.updateFormData({ name: this.name || "", value: this.value });
+    });
+    __privateAdd$3(this, _handleKeyup, (ev) => {
+      this.dispatchEvent(
+        new CustomEvent("mjo-textfield-keyup", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            element: this,
+            key: ev.key,
+            code: ev.code,
+            value: this.value,
+            originalEvent: ev
+          }
+        })
+      );
+      if (ev.key === "Enter" && this.form) {
+        this.submiForm();
+      }
+    });
+  }
+  render() {
+    if (this.type === "password" && !this.isPassword)
+      this.isPassword = true;
+    const helperTextId = this.helperText || this.errormsg || this.successmsg ? `${this.uniqueId}-helper` : void 0;
+    const labelId = this.label ? `${this.uniqueId}-label` : void 0;
+    return html`${this.label ? html`<input-label
+                      id=${ifDefined(labelId)}
+                      color=${this.color}
+                      label=${this.label}
+                      ?focused=${this.isFocused}
+                      ?error=${this.error}
+                      ?data-disabled=${this.disabled}
+                  ></input-label>` : nothing}
+            <div
+                class="container"
+                data-color=${this.color}
+                ?data-focused=${this.isFocused}
+                data-size=${this.size}
+                ?data-error=${this.error}
+                ?data-disabled=${this.disabled}
+            >
+                ${this.prefixText ? html`<div class="prefixText">${this.prefixText}</div>` : nothing}
+                ${this.startIcon && html`<div class="icon startIcon" aria-hidden="true"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
+                ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
+                <input
+                    id=${ifDefined(this.id)}
+                    autocapitalize=${ifDefined(this.autoCapitalize)}
+                    autocomplete=${ifDefined(this.autoComplete)}
+                    ?disabled=${this.disabled}
+                    name=${ifDefined(this.name)}
+                    max=${ifDefined(this.max)}
+                    min=${ifDefined(this.min)}
+                    maxlength=${ifDefined(this.maxlength)}
+                    minlength=${ifDefined(this.minlength)}
+                    placeholder=${ifDefined(this.placeholder)}
+                    ?readonly=${this.readonly}
+                    step=${ifDefined(this.step)}
+                    type=${this.type}
+                    .value=${live(this.value)}
+                    @focus=${__privateGet$2(this, _handleFocus)}
+                    @blur=${__privateMethod$2(this, _handleBlur, handleBlur_fn)}
+                    @input=${__privateGet$2(this, _handleInput)}
+                    @keyup=${__privateGet$2(this, _handleKeyup)}
+                    @change=${__privateGet$2(this, _handleInput)}
+                    aria-label=${this.ariaLabel || nothing}
+                    aria-labelledby=${labelId || nothing}
+                    aria-describedby=${helperTextId || nothing}
+                    aria-errormessage=${ifDefined(this.errormsg ? helperTextId : void 0)}
+                    aria-invalid=${this.error ? "true" : "false"}
+                    aria-required=${ifDefined(this.required)}
+                    ?data-nospiners=${this.nospiners}
+                />
+                ${this.clearabled ? html`<button
+                          type="button"
+                          class="icon endIcon clearabled"
+                          data-dropdown-noopen
+                          ?data-visible=${this.value.length > 0}
+                          @click=${__privateMethod$2(this, _handleClearabled, handleClearabled_fn)}
+                          aria-label="Clear input"
+                          tabindex="-1"
+                      >
+                          <mjo-icon src=${AiFillCloseCircle} aria-hidden="true"></mjo-icon>
+                      </button>` : nothing}
+                ${this.endIcon && !this.clearabled && this.type !== "password" ? html`<div class="icon endIcon" aria-hidden="true"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
+                ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Input image" /></div>` : nothing}
+                ${this.isPassword ? this.type === "password" ? html`<button type="button" class="icon endIcon passIcon" @click=${__privateMethod$2(this, _handlePassword, handlePassword_fn)} aria-label="Show password" tabindex="-1">
+                              <mjo-icon src=${AiFillEye} aria-hidden="true"></mjo-icon>
+                          </button>` : html`<button type="button" class="icon endIcon passIcon" @click=${__privateMethod$2(this, _handlePassword, handlePassword_fn)} aria-label="Hide password" tabindex="-1">
+                              <mjo-icon src=${AiFillEyeInvisible} aria-hidden="true"></mjo-icon>
+                          </button>` : nothing}
+                ${this.suffixText ? html`<div class="prefixText">${this.suffixText}</div>` : nothing}
+            </div>
+            <div class="helper" ?data-disabled=${this.disabled}>
+                ${this.helperText || this.errormsg || this.successmsg ? html`<input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                          >${this.helperText}</input-helper-text
+                      >` : nothing}
+                ${this.counter ? html`<input-counter
+                          count=${this.valueLength}
+                          max=${ifDefined(this.maxlength)}
+                          regressive
+                          ?data-error=${this.error}
+                          ?data-focused=${this.isFocused}
+                          data-color=${this.color}
+                      ></input-counter>` : nothing}
+            </div>`;
+  }
+  connectedCallback() {
+    var _a2;
+    super.connectedCallback();
+    (_a2 = document.querySelector("input")) == null ? void 0 : _a2.autocomplete;
+    this.updateFormData({ name: this.name || "", value: this.value });
+  }
+  firstUpdated(_changedProperties) {
+    super.firstUpdated(_changedProperties);
+    if (_changedProperties.has("autoFocus") && this.autoFocus) {
+      setTimeout(() => {
+        this.focus();
+      }, 50);
+    }
+  }
+  blur() {
+    this.inputElement.blur();
+  }
+  clear(focus = false) {
+    this.setValue("");
+    if (focus)
+      this.focus();
+  }
+  focus() {
+    this.inputElement.focus();
+  }
+  getError() {
+    return this.errormsg;
+  }
+  getForm() {
+    return this.form;
+  }
+  getValue() {
+    return this.value;
+  }
+  removeError() {
+    this.error = false;
+    this.errormsg = "";
+  }
+  setError(errormsg) {
+    this.error = true;
+    this.errormsg = errormsg;
+  }
+  setValue(value) {
+    this.value = value;
+  }
+};
+_handleBlur = /* @__PURE__ */ new WeakSet();
+handleBlur_fn = function() {
+  this.isFocused = false;
+  this.dispatchEvent(
+    new CustomEvent("mjo-textfield-blur", {
+      bubbles: true,
+      composed: true,
+      detail: {
+        element: this,
+        value: this.value
+      }
+    })
+  );
+};
+_handleClearabled = /* @__PURE__ */ new WeakSet();
+handleClearabled_fn = function() {
+  const previousValue = this.value;
+  this.value = "";
+  this.valueLength = 0;
+  this.dispatchEvent(
+    new CustomEvent("mjo-textfield-clear", {
+      bubbles: true,
+      composed: true,
+      detail: {
+        element: this,
+        previousValue
+      }
+    })
+  );
+};
+_handleFocus = /* @__PURE__ */ new WeakMap();
+_handleInput = /* @__PURE__ */ new WeakMap();
+_handleKeyup = /* @__PURE__ */ new WeakMap();
+_handlePassword = /* @__PURE__ */ new WeakSet();
+handlePassword_fn = function() {
+  const wasPassword = this.type === "password";
+  this.type = this.type === "password" ? "text" : "password";
+  this.dispatchEvent(
+    new CustomEvent("mjo-textfield-password-toggle", {
+      bubbles: true,
+      composed: true,
+      detail: {
+        element: this,
+        visible: !wasPassword,
+        type: this.type
+      }
+    })
+  );
+};
+MjoTextfield.styles = [
+  css`
+            :host {
+                display: inline-flex;
+                flex-flow: column nowrap;
+                position: relative;
+                max-width: 100%;
+            }
+            :host([fullwidth]) {
+                width: 100%;
+            }
+            .container {
+                border-radius: var(--mjo-input-radius, var(--mjo-radius, 5px));
+                border: solid 1px;
+                border-style: var(--mjo-input-border-style, solid);
+                border-width: var(--mjo-input-border-width, 1px);
+                border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
+                background-color: var(--mjo-input-background-color, var(--mjo-background-color-high, #ffffff));
+                box-shadow: var(--mjo-input-box-shadow, none);
+                display: flex;
+                flex-flow: row nowrap;
+                overflow: hidden;
+                position: relative;
+                transition: border-color 0.3s;
+            }
+            .container:hover {
+                border-style: var(--mjo-input-border-style-hover, solid);
+                border-width: var(--mjo-input-border-width-hover, 1px);
+                border-color: var(--mjo-input-border-color-hover, #cccccc);
+            }
+            .container[data-disabled] {
+                border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
+                opacity: 0.5;
+            }
+            input-label[data-disabled],
+            .helper[data-disabled] {
+                opacity: 0.5;
+            }
+            .container[data-focused] {
+                border-style: var(--mjo-input-border-style-focus, solid);
+                border-width: var(--mjo-input-border-width-focus, 1px);
+                border-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+            }
+            .container[data-focused][data-color="secondary"] {
+                border-style: var(--mjo-input-border-style-focus, solid);
+                border-width: var(--mjo-input-border-width-focus, 1px);
+                border-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            .container[data-error],
+            .container[data-error][data-color="secondary"] {
+                border-color: var(--mjo-color-error, #d31616);
+            }
+            input {
+                background-color: transparent;
+                border: none;
+                padding: var(--mjo-input-padding, calc(1em / 2 - 3px) calc(1em / 2 - 2px) calc(1em / 2 - 4px));
+                font-size: var(--mjo-input-font-size, 1em);
+                font-weight: var(--mjo-input-font-weight, normal);
+                font-family: var(--mjo-input-font-family, inherit);
+                line-height: var(--mjo-input-font-size, 1em);
+                color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
+                box-sizing: border-box;
+                flex: 1 1 0;
+                width: 100%;
+                min-width: 0;
+            }
+            input:focus {
+                outline: none;
+            }
+            input:-webkit-autofill {
+                box-shadow: 0 0 0px 1000px white inset !important;
+                -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+                -webkit-text-fill-color: var(--mo-input-color, #111111);
+            }
+            input::-ms-reveal,
+            input::-ms-clear {
+                display: none !important;
+            }
+            input[data-nospiners]::-webkit-inner-spin-button,
+            input[data-nospiners]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            .container[data-size="small"] input {
+                padding: var(--mjo-input-padding-small, calc(1em / 2 - 4px) calc(1em / 2));
+                font-size: 0.8em;
+            }
+            .container[data-size="large"] input {
+                padding: var(--mjo-input-padding-large, calc(1em / 2 - 2px) calc(1em / 2 + 3px) calc(1em / 2 - 3px));
+                font-size: 1.2em;
+            }
+            .prefixText {
+                position: relative;
+                font-weight: var(--mjo-input-font-weight, normal);
+                font-family: var(--mjo-input-font-family, inherit);
+                line-height: var(--mjo-input-font-size, 1em);
+                padding: calc(1em / 2 - 2px);
+                background-color: var(--mjo-input-prefix-text-background-color, rgba(220, 220, 220, 0.5));
+                color: var(--mjo-input-prefix-text-color, currentColor);
+                display: grid;
+                place-items: center;
+                transition: color 0.3s;
+            }
+            .container[data-focused].prefixText {
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+            }
+            .container[data-focused][data-color="secondary"] .prefixText {
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            .icon {
+                position: relative;
+                display: grid;
+                place-items: center;
+                color: var(--mjo-input-color, var(--mjo-foreground-color, #222222));
+            }
+            mjo-icon {
+                font-size: var(--mjo-input-font-size, 1em);
+            }
+            .container[data-focused] mjo-icon {
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+            }
+            .container[data-focused][data-color="secondary"] mjo-icon {
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            .container[data-error] mjo-icon,
+            .container[data-error][data-color="secondary"] mjo-icon {
+                color: var(--mjo-color-error, #d31616);
+            }
+            .image {
+                position: relative;
+                display: grid;
+                place-items: center;
+            }
+            .image img {
+                width: 1em;
+                height: 1em;
+                object-fit: contain;
+            }
+            .startIcon,
+            .startImage {
+                padding-left: calc(1em / 2 - 4px);
+            }
+            .endIcon,
+            .endImage {
+                padding-right: calc(1em / 2 - 4px);
+            }
+            .passIcon,
+            .clearabled {
+                cursor: pointer;
+                background: none;
+                border: none;
+                margin: 0;
+                color: inherit;
+                font-size: inherit;
+                transition: opacity 0.3s;
+            }
+            .clearabled[data-visible] {
+                opacity: 1;
+                cursor: pointer;
+            }
+            .container .passIcon mjo-icon,
+            .container .clearabled mjo-icon {
+                color: #999999 !important;
+            }
+            .container .passIcon:hover mjo-icon,
+            .container .clearabled:hover mjo-icon {
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)) !important;
+            }
+            .container[data-color="secondary"] .passIcon:hover mjo-icon,
+            .container[data-color="secondary"] .clearabled:hover mjo-icon {
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)) !important;
+            }
+            .helper {
+                position: relative;
+                display: flex;
+                justify-content: flex-end;
+                gap: 5px;
+            }
+            input-helper-text {
+                flex: 1 1 0;
+            }
+            input-counter {
+                flex: 0 0 auto;
+            }
+            input-counter[data-focused] {
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+            }
+            input-counter[data-focused][data-color="secondary"] {
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+            }
+            input-counter[data-error],
+            input-counter[data-error][data-color="secondary"] {
+                color: var(--mjo-color-error, #d31616);
+            }
+        `
+];
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "autoCapitalize", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "autoComplete", 2);
+__decorateClass$3([
+  property({ type: Boolean })
+], MjoTextfield.prototype, "autoFocus", 2);
+__decorateClass$3([
+  property({ type: Boolean, reflect: true })
+], MjoTextfield.prototype, "disabled", 2);
+__decorateClass$3([
+  property({ type: Boolean })
+], MjoTextfield.prototype, "fullwidth", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "name", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "placeholder", 2);
+__decorateClass$3([
+  property({ type: Boolean })
+], MjoTextfield.prototype, "readonly", 2);
+__decorateClass$3([
+  property({ type: Number })
+], MjoTextfield.prototype, "step", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "type", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "value", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "label", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "size", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "color", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "startIcon", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "endIcon", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "startImage", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "endImage", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "prefixText", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "suffixText", 2);
+__decorateClass$3([
+  property({ type: String })
+], MjoTextfield.prototype, "helperText", 2);
+__decorateClass$3([
+  property({ type: Boolean })
+], MjoTextfield.prototype, "counter", 2);
+__decorateClass$3([
+  property({ type: Boolean })
+], MjoTextfield.prototype, "selectOnFocus", 2);
+__decorateClass$3([
+  property({ type: Boolean })
+], MjoTextfield.prototype, "clearabled", 2);
+__decorateClass$3([
+  property({ type: Boolean })
+], MjoTextfield.prototype, "nospiners", 2);
+__decorateClass$3([
+  state()
+], MjoTextfield.prototype, "isFocused", 2);
+__decorateClass$3([
+  state()
+], MjoTextfield.prototype, "valueLength", 2);
+__decorateClass$3([
+  state()
+], MjoTextfield.prototype, "uniqueId", 2);
+__decorateClass$3([
+  query("input")
+], MjoTextfield.prototype, "inputElement", 2);
+MjoTextfield = __decorateClass$3([
+  customElement("mjo-textfield")
+], MjoTextfield);
+var __defProp$2 = Object.defineProperty;
+var __getOwnPropDesc$2 = Object.getOwnPropertyDescriptor;
+var __decorateClass$2 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$2(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$2(target, key, result);
+  return result;
+};
+var __accessCheck$2 = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateGet$1 = (obj, member, getter) => {
+  __accessCheck$2(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd$2 = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateMethod$1 = (obj, member, method) => {
+  __accessCheck$2(obj, member, "access private method");
+  return method;
+};
+var _setInputElement, setInputElement_fn, _handleClear, handleClear_fn, _announceToScreenReader, announceToScreenReader_fn, _formatDateForAnnouncement, formatDateForAnnouncement_fn, _calendarTemplate, calendarTemplate_fn, _displayValue, displayValue_fn, _onDateSelected, _onRangeSelected, _emitChange, emitChange_fn, _onKeydown;
+let MjoDatePicker = class extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) {
+  constructor() {
+    super(...arguments);
+    __privateAdd$2(this, _setInputElement);
+    __privateAdd$2(this, _handleClear);
+    __privateAdd$2(this, _announceToScreenReader);
+    __privateAdd$2(this, _formatDateForAnnouncement);
+    __privateAdd$2(this, _calendarTemplate);
+    __privateAdd$2(this, _displayValue);
+    __privateAdd$2(this, _emitChange);
+    this.value = "";
+    this.isRange = false;
+    this.locale = "en";
+    this.disabled = false;
+    this.size = "medium";
+    this.color = "primary";
+    this.clearabled = false;
+    this.closeOnSelect = true;
+    this.required = false;
+    this.displayMode = "iso";
+    this.ariaLive = "polite";
+    this.disabledAnnounceSelections = false;
+    this.calendarId = `mjo-calendar-${Math.random().toString(36).substring(2, 9)}`;
+    this.announcementText = "";
+    this.calendarInstanceId = 0;
+    this.calendarRef = createRef();
+    this.type = "date";
+    this.inputElement = void 0;
+    __privateAdd$2(this, _onDateSelected, (ev) => {
+      const detail = ev.detail;
+      if (this.isRange)
+        return;
+      if (detail.value) {
+        this.value = detail.value;
+        __privateMethod$1(this, _emitChange, emitChange_fn).call(this, { value: this.value, date: detail.date });
+        if (!this.disabledAnnounceSelections && detail.date) {
+          const formattedDate = __privateMethod$1(this, _formatDateForAnnouncement, formatDateForAnnouncement_fn).call(this, detail.date);
+          __privateMethod$1(this, _announceToScreenReader, announceToScreenReader_fn).call(this, `Selected ${formattedDate}`);
+        }
+        if (this.closeOnSelect)
+          this.closePicker();
+      }
+    });
+    __privateAdd$2(this, _onRangeSelected, (ev) => {
+      if (!this.isRange)
+        return;
+      const detail = ev.detail;
+      if (detail.startDateValue && detail.endDateValue) {
+        const value = `${detail.startDateValue}/${detail.endDateValue}`;
+        this.value = value;
+        __privateMethod$1(this, _emitChange, emitChange_fn).call(this, {
+          value,
+          startDate: detail.startDate,
+          endDate: detail.endDate,
+          startDateValue: detail.startDateValue,
+          endDateValue: detail.endDateValue
+        });
+        if (!this.disabledAnnounceSelections && detail.startDate && detail.endDate) {
+          const startFormatted = __privateMethod$1(this, _formatDateForAnnouncement, formatDateForAnnouncement_fn).call(this, detail.startDate);
+          const endFormatted = __privateMethod$1(this, _formatDateForAnnouncement, formatDateForAnnouncement_fn).call(this, detail.endDate);
+          __privateMethod$1(this, _announceToScreenReader, announceToScreenReader_fn).call(this, `Selected date range from ${startFormatted} to ${endFormatted}`);
+        }
+        if (this.closeOnSelect)
+          this.closePicker();
+      }
+    });
+    __privateAdd$2(this, _onKeydown, (ev) => {
+      var _a2;
+      if (this.disabled)
+        return;
+      const isOpen = ((_a2 = this.dropdown) == null ? void 0 : _a2.isOpen) ?? false;
+      switch (ev.key) {
+        case "Enter":
+        case " ":
+          ev.preventDefault();
+          if (!isOpen) {
+            this.openPicker();
+          }
+          break;
+        case "ArrowDown":
+        case "ArrowUp":
+          ev.preventDefault();
+          if (!isOpen) {
+            this.openPicker();
+          }
+          break;
+        case "Escape":
+          if (isOpen) {
+            ev.preventDefault();
+            this.closePicker();
+          }
+          break;
+      }
+    });
+  }
+  render() {
+    var _a2;
+    const isOpen = ((_a2 = this.dropdown) == null ? void 0 : _a2.isOpen) ?? false;
+    const computedAriaLabel = this.ariaLabel || this.label || (this.isRange ? "Date range picker" : "Date picker");
+    return html`
+            <!-- Accessibility announcements region -->
+            <div aria-live=${this.ariaLive} aria-atomic="true" class="sr-only" .textContent=${this.announcementText}></div>
+
+            <mjo-dropdown
+                behaviour="click"
+                preventCloseOnInnerClick
+                .suppressOpenSelectors=${[".clearabled", "[data-dropdown-noopen]"]}
+                .html=${__privateMethod$1(this, _calendarTemplate, calendarTemplate_fn).call(this)}
+            >
+                <mjo-textfield
+                    form-ignore
+                    role="combobox"
+                    aria-expanded=${isOpen ? "true" : "false"}
+                    aria-haspopup="dialog"
+                    aria-controls=${this.calendarId}
+                    aria-label=${computedAriaLabel}
+                    aria-describedby=${ifDefined(this.ariaDescribedby)}
+                    value=${__privateMethod$1(this, _displayValue, displayValue_fn).call(this)}
+                    size=${this.size}
+                    color=${this.color}
+                    ?disabled=${this.disabled}
+                    label=${this.label ?? ""}
+                    placeholder=${this.placeholder ?? ""}
+                    readonly
+                    startIcon=${PiCalendarDotsLight}
+                    ?clearabled=${this.clearabled}
+                    @keydown=${__privateGet$1(this, _onKeydown)}
+                    @clear=${__privateMethod$1(this, _handleClear, handleClear_fn)}
+                ></mjo-textfield>
+            </mjo-dropdown>
+        `;
+  }
+  connectedCallback() {
+    super.connectedCallback();
+  }
+  firstUpdated(args) {
+    super.firstUpdated(args);
+    if (this.name)
+      this.updateFormData({ name: this.name, value: this.value });
+    __privateMethod$1(this, _setInputElement, setInputElement_fn).call(this);
+  }
+  focus() {
+    var _a2;
+    (_a2 = this.textfield) == null ? void 0 : _a2.focus();
+  }
+  clear() {
+    var _a2;
+    if (this.disabled)
+      return;
+    this.value = "";
+    __privateMethod$1(this, _emitChange, emitChange_fn).call(this, { value: this.value });
+    if (this.name)
+      this.updateFormData({ name: this.name, value: this.value });
+    (_a2 = this.calendarRef.value) == null ? void 0 : _a2.reset();
+    if (!this.disabledAnnounceSelections) {
+      __privateMethod$1(this, _announceToScreenReader, announceToScreenReader_fn).call(this, this.isRange ? "Date range cleared" : "Date cleared");
+    }
+  }
+  openPicker() {
+    if (this.disabled)
+      return;
+    this.dropdown.open();
+    if (!this.disabledAnnounceSelections) {
+      __privateMethod$1(this, _announceToScreenReader, announceToScreenReader_fn).call(this, this.isRange ? "Date range picker opened" : "Date picker opened");
+    }
+    requestAnimationFrame(() => {
+      if (this.calendarRef.value) {
+        this.calendarRef.value.focus();
+      }
+    });
+  }
+  closePicker() {
+    var _a2;
+    this.dropdown.close();
+    if (!this.disabledAnnounceSelections) {
+      __privateMethod$1(this, _announceToScreenReader, announceToScreenReader_fn).call(this, this.isRange ? "Date range picker closed" : "Date picker closed");
+    }
+    (_a2 = this.textfield) == null ? void 0 : _a2.focus();
+  }
+  getValue() {
+    return this.value;
+  }
+  setValue(value) {
+    this.value = value;
+  }
+};
+_setInputElement = /* @__PURE__ */ new WeakSet();
+setInputElement_fn = async function() {
+  var _a2;
+  const textfield = (_a2 = this.shadowRoot) == null ? void 0 : _a2.querySelector("mjo-textfield");
+  if (textfield) {
+    await textfield.updateComplete;
+    this.inputElement = textfield.inputElement;
+  }
+};
+_handleClear = /* @__PURE__ */ new WeakSet();
+handleClear_fn = function() {
+  this.clear();
+};
+_announceToScreenReader = /* @__PURE__ */ new WeakSet();
+announceToScreenReader_fn = function(message) {
+  this.announcementText = message;
+  setTimeout(() => {
+    this.announcementText = "";
+  }, 1e3);
+};
+_formatDateForAnnouncement = /* @__PURE__ */ new WeakSet();
+formatDateForAnnouncement_fn = function(date) {
+  try {
+    const formatter = new Intl.DateTimeFormat(this.locale, {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+    return formatter.format(date);
+  } catch {
+    return date.toLocaleDateString(this.locale);
+  }
+};
+_calendarTemplate = /* @__PURE__ */ new WeakSet();
+calendarTemplate_fn = function() {
+  const resetKey = `${this.calendarInstanceId}-${this.value || (this.isRange ? "range-empty" : "single-empty")}`;
+  const startDate = this.isRange && this.value ? this.value.split("/")[0] : void 0;
+  const endDate = this.isRange && this.value ? this.value.split("/")[1] : void 0;
+  const value = !this.isRange && this.value ? this.value : void 0;
+  return html`<div class="panel">
+            <mjo-calendar
+                ${ref(this.calendarRef)}
+                id=${this.calendarId}
+                data-reset-key=${resetKey}
+                mode=${this.isRange ? "range" : "single"}
+                locale=${this.locale}
+                aria-label=${this.isRange ? "Date range calendar" : "Date selection calendar"}
+                value=${ifDefined(value)}
+                startDate=${ifDefined(startDate)}
+                endDate=${ifDefined(endDate)}
+                minDate=${ifDefined(this.minDate)}
+                maxDate=${ifDefined(this.maxDate)}
+                .disabledDates=${this.disabledDates}
+                @mjo-calendar-date-selected=${__privateGet$1(this, _onDateSelected)}
+                @mjo-calendar-range-selected=${__privateGet$1(this, _onRangeSelected)}
+            ></mjo-calendar>
+        </div>`;
+};
+_displayValue = /* @__PURE__ */ new WeakSet();
+displayValue_fn = function() {
+  if (!this.value)
+    return "";
+  const format = (iso) => {
+    if (this.displayMode === "iso")
+      return iso;
+    const [y, m, d] = iso.split("-").map((v) => Number(v));
+    if (!y || !m || !d)
+      return iso;
+    try {
+      const dtf = new Intl.DateTimeFormat(this.locale, { dateStyle: "medium" });
+      return dtf.format(new Date(y, m - 1, d));
+    } catch {
+      return iso;
+    }
+  };
+  if (!this.isRange)
+    return format(this.value);
+  const [start, end] = this.value.split("/");
+  return `${format(start)} – ${format(end)}`;
+};
+_onDateSelected = /* @__PURE__ */ new WeakMap();
+_onRangeSelected = /* @__PURE__ */ new WeakMap();
+_emitChange = /* @__PURE__ */ new WeakSet();
+emitChange_fn = function({
+  value,
+  date,
+  startDate,
+  endDate,
+  startDateValue,
+  endDateValue
+}) {
+  if (this.name)
+    this.updateFormData({ name: this.name, value });
+  this.dispatchEvent(
+    new CustomEvent("mjo-date-picker-change", {
+      detail: {
+        value,
+        date,
+        startDate,
+        endDate,
+        startDateValue,
+        endDateValue
+      },
+      bubbles: true,
+      cancelable: true
+    })
+  );
+};
+_onKeydown = /* @__PURE__ */ new WeakMap();
+MjoDatePicker.styles = [
+  css`
+            :host {
+                display: inline-block;
+            }
+
+            .panel {
+                padding: var(--mjo-date-picker-panel-padding, var(--mjo-space-small, 8px));
+                background: var(--mjo-date-picker-panel-background-color, var(--mjo-background-color));
+                border-radius: var(--mjo-date-picker-panel-radius, var(--mjo-radius, 8px));
+                box-shadow: var(--mjo-date-picker-panel-box-shadow, var(--mjo-box-shadow, 0 2px 6px rgba(0, 0, 0, 0.15)));
+            }
+
+            /* Screen reader only content */
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
+
+            /* High contrast mode support */
+            @media (prefers-contrast: high) {
+                .panel {
+                    border: var(--mjo-date-picker-high-contrast-border, 1px solid);
+                }
+            }
+        `
+];
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "name", 2);
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "value", 2);
+__decorateClass$2([
+  property({ type: Boolean, attribute: "range" })
+], MjoDatePicker.prototype, "isRange", 2);
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "locale", 2);
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "minDate", 2);
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "maxDate", 2);
+__decorateClass$2([
+  property({ type: Array })
+], MjoDatePicker.prototype, "disabledDates", 2);
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "label", 2);
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "placeholder", 2);
+__decorateClass$2([
+  property({ type: Boolean, reflect: true })
+], MjoDatePicker.prototype, "disabled", 2);
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "size", 2);
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "color", 2);
+__decorateClass$2([
+  property({ type: Boolean })
+], MjoDatePicker.prototype, "clearabled", 2);
+__decorateClass$2([
+  property({ type: Boolean })
+], MjoDatePicker.prototype, "closeOnSelect", 2);
+__decorateClass$2([
+  property({ type: Boolean })
+], MjoDatePicker.prototype, "required", 2);
+__decorateClass$2([
+  property({ type: String })
+], MjoDatePicker.prototype, "displayMode", 2);
+__decorateClass$2([
+  property({ type: String, attribute: "aria-describedby" })
+], MjoDatePicker.prototype, "ariaDescribedby", 2);
+__decorateClass$2([
+  property({ type: String, attribute: "aria-live" })
+], MjoDatePicker.prototype, "ariaLive", 2);
+__decorateClass$2([
+  property({ type: Boolean })
+], MjoDatePicker.prototype, "disabledAnnounceSelections", 2);
+__decorateClass$2([
+  state()
+], MjoDatePicker.prototype, "calendarId", 2);
+__decorateClass$2([
+  state()
+], MjoDatePicker.prototype, "announcementText", 2);
+__decorateClass$2([
+  query("mjo-textfield")
+], MjoDatePicker.prototype, "textfield", 2);
+__decorateClass$2([
+  query("mjo-dropdown")
+], MjoDatePicker.prototype, "dropdown", 2);
+MjoDatePicker = __decorateClass$2([
+  customElement("mjo-date-picker")
+], MjoDatePicker);
+const validatorMessages = {
+  en: {
+    allowed: "Allowed files {data0}",
+    dateprevious: "Date must be earlier than today",
+    domains: "None of the domains are allowed",
+    equalto: "Is not equal to {data0}",
+    isdate: "Not valid date",
+    isemail: "Not valid email address",
+    isnumber: "The value entered must be a number",
+    isurl: "Not valid url",
+    max: "Required numerical value, maximum {data0}",
+    maxage: "You must be less than {data0} years of age",
+    maxcheck: "You have to check at most {data0} boxes",
+    maxlength: "The text entered cannot be longer than {data0} characters",
+    min: "Required numerical value, minimum {data0}",
+    minage: "You must be older than {data0} years old",
+    mincheck: "You have to check at least {data0} boxes",
+    minlength: "The text entered must be at least {data0} characters long",
+    nospaces: "The entered value cannot contain spaces",
+    pattern: "Invalid pattern",
+    phonecountry: "The phone number entered is not correct",
+    phonenumber: "The phone number entered is not correct",
+    range: "The value must be between {data0} and {data1}",
+    rangelength: "The length must be between {data0} and {data1} characters.",
+    required: "This field is required",
+    security: "{data0}"
+  },
+  es: {
+    allowed: "Archivos permitidos {data0}",
+    dateprevious: "La fecha debe ser anterior a hoy",
+    domains: "Ninguno de los dominios son permitidos",
+    equalto: "No es igual a {data0}",
+    isdate: "No es una fecha válida",
+    isemail: "No es una dirección de correo válida",
+    isnumber: "El valor ingresado debe ser un número",
+    isurl: "No es una url válida",
+    max: "Valor numérico requerido, máximo {data0}",
+    maxage: "Debes tener menos de {data0} años",
+    maxcheck: "Tienes que marcar como máximo {data0} casillas",
+    maxlength: "El texto ingresado no puede ser más largo que {data0} caracteres",
+    min: "Valor numérico requerido, mínimo {data0}",
+    minage: "Debes tener más de {data0} años",
+    mincheck: "Tienes que marcar como mínimo {data0} casillas",
+    minlength: "El texto ingresado debe tener al menos {data0} caracteres",
+    nospaces: "El valor ingresado no puede contener espacios",
+    pattern: "Patrón inválido",
+    phonecountry: "El número de teléfono ingresado no es correcto",
+    phonenumber: "El número de teléfono ingresado no es correcto",
+    range: "El valor debe estar entre {data0} y {data1}",
+    rangelength: "La longitud debe estar entre {data0} y {data1} caracteres.",
+    required: "Este campo es requerido",
+    security: "{data0}"
+  },
+  fr: {
+    allowed: "Fichiers autorisés {data0}",
+    dateprevious: "La date doit être antérieure à aujourd'hui",
+    domains: "Aucun des domaines n'est autorisé",
+    equalto: "N’est pas égal à {data0}",
+    isdate: "Date non valide",
+    isemail: "Adresse e-mail non valide",
+    isnumber: "La valeur saisie doit être un nombre",
+    isurl: "URL non valide",
+    max: "Valeur numérique requise, maximum {data0}",
+    maxage: "Vous devez avoir moins de {data0} ans",
+    maxcheck: "Vous devez cocher au maximum {data0} cases",
+    maxlength: "Le texte saisi ne peut pas dépasser {data0} caractères",
+    min: "Valeur numérique requise, minimum {data0}",
+    minage: "Vous devez avoir plus de {data0} ans",
+    mincheck: "Vous devez cocher au moins {data0} cases",
+    minlength: "Le texte saisi doit comporter au moins {data0} caractères",
+    nospaces: "La valeur saisie ne peut pas contenir d'espaces",
+    pattern: "Motif invalide",
+    phonecountry: "Le numéro de téléphone saisi n'est pas correct",
+    phonenumber: "Le numéro de téléphone saisi n'est pas correct",
+    range: "La valeur doit être comprise entre {data0} et {data1}",
+    rangelength: "La longueur doit être comprise entre {data0} et {data1} caractères.",
+    required: "Ce champ est obligatoire",
+    security: "{data0}"
+  },
+  pt: {
+    allowed: "Arquivos permitidos {data0}",
+    dateprevious: "A data deve ser anterior a hoje",
+    domains: "Nenhum dos domínios é permitido",
+    equalto: "Não é igual a {data0}",
+    isdate: "Não é uma data válida",
+    isemail: "Não é um endereço de e-mail válido",
+    isnumber: "O valor inserido deve ser um número",
+    isurl: "Não é um url válido",
+    max: "Valor numérico necessário, máximo {data0}",
+    maxage: "Você deve ter menos de {data0} anos",
+    maxcheck: "Você deve marcar no máximo {data0} caixas",
+    maxlength: "O texto inserido não pode ter mais de {data0} caracteres",
+    min: "Valor numérico necessário, mínimo {data0}",
+    minage: "Você deve ter mais de {data0} anos",
+    mincheck: "Você deve marcar pelo menos {data0} caixas",
+    minlength: "O texto inserido deve ter pelo menos {data0} caracteres",
+    nospaces: "O valor inserido não pode conter espaços",
+    pattern: "Padrão inválido",
+    phonecountry: "O número de telefone inserido não está correto",
+    phonenumber: "O número de telefone inserido não está correto",
+    range: "O valor deve estar entre {data0} e {data1}",
+    rangelength: "O comprimento deve estar entre {data0} e {data1} caracteres.",
+    required: "Este campo é obrigatório",
+    security: "{data0}"
+  },
+  it: {
+    allowed: "File consentite {data0}",
+    dateprevious: "La data deve essere precedente a oggi",
+    domains: "Nessuno dei domini è consentito",
+    equalto: "Non è uguale a {data0}",
+    isdate: "Non è una data valida",
+    isemail: "Non è un indirizzo email valido",
+    isnumber: "Il valore inserito deve essere un numero",
+    isurl: "Non è un url valido",
+    max: "Valore numerico richiesto, massimo {data0}",
+    maxage: "Devi avere meno di {data0} anni",
+    maxcheck: "Devi spuntare al massimo {data0} caselle",
+    maxlength: "Il testo inserito non può superare {data0} caratteri",
+    min: "Valore numerico richiesto, minimo {data0}",
+    minage: "Devi avere più di {data0} anni",
+    mincheck: "Devi spuntare almeno {data0} caselle",
+    minlength: "Il testo inserito deve essere lungo almeno {data0} caratteri",
+    nospaces: "Il valore inserito non può contenere spazi",
+    pattern: "Modello non valido",
+    phonecountry: "Il numero di telefono inserito non è corretto",
+    phonenumber: "Il numero di telefono inserito non è corretto",
+    range: "Il valore deve essere compreso tra {data0} e {data1}",
+    rangelength: "La lunghezza deve essere compresa tra {data0} e {data1} caratteri.",
+    required: "Questo campo è obbligatorio",
+    security: "{data0}"
+  },
+  de: {
+    allowed: "Erlaubte Dateien {data0}",
+    dateprevious: "Das Datum muss früher als heute sein",
+    domains: "Keine der Domains ist erlaubt",
+    equalto: "Ist nicht gleich {data0}",
+    isdate: "Kein gültiges Datum",
+    isemail: "Keine gültige E-Mail-Adresse",
+    isnumber: "Der eingegebene Wert muss eine Zahl sein",
+    isurl: "Keine gültige URL",
+    max: "Numerischer Wert erforderlich, maximal {data0}",
+    maxage: "Sie müssen jünger als {data0} Jahre sein",
+    maxcheck: "Sie müssen höchstens {data0} Kästchen ankreuzen",
+    maxlength: "Der eingegebene Text darf nicht länger als {data0} Zeichen sein",
+    min: "Numerischer Wert erforderlich, mindestens {data0}",
+    minage: "Sie müssen älter als {data0} Jahre sein",
+    mincheck: "Sie müssen mindestens {data0} Kästchen ankreuzen",
+    minlength: "Der eingegebene Text muss mindestens {data0} Zeichen lang sein",
+    nospaces: "Der eingegebene Wert darf keine Leerzeichen enthalten",
+    pattern: "Ungültiges Muster",
+    phonecountry: "Die eingegebene Telefonnummer ist nicht korrekt",
+    phonenumber: "Die eingegebene Telefonnummer ist nicht korrekt",
+    range: "Der Wert muss zwischen {data0} und {data1} liegen",
+    rangelength: "Die Länge muss zwischen {data0} und {data1} Zeichen liegen.",
+    required: "Dieses Feld ist erforderlich",
+    security: "{data0}"
+  },
+  nl: {
+    allowed: "Toegestane bestanden {data0}",
+    dateprevious: "De datum moet eerder zijn dan vandaag",
+    domains: "Geen van de domeinen is toegestaan",
+    equalto: "Is niet gelijk aan {data0}",
+    isdate: "Geen geldige datum",
+    isemail: "Geen geldig e-mailadres",
+    isnumber: "De ingevoerde waarde moet een getal zijn",
+    isurl: "Geen geldige URL",
+    max: "Numerieke waarde vereist, maximaal {data0}",
+    maxage: "Je moet jonger zijn dan {data0} jaar",
+    maxcheck: "Je moet maximaal {data0} vakjes aanvinken",
+    maxlength: "De ingevoerde tekst mag niet langer zijn dan {data0} tekens",
+    min: "Numerieke waarde vereist, minimaal {data0}",
+    minage: "Je moet ouder zijn dan {data0} jaar",
+    mincheck: "Je moet minimaal {data0} vakjes aanvinken",
+    minlength: "De ingevoerde tekst moet minimaal {data0} tekens lang zijn",
+    nospaces: "De ingevoerde waarde mag geen spaties bevatten",
+    pattern: "Ongeldig patroon",
+    phonecountry: "Het ingevoerde telefoonnummer is niet correct",
+    phonenumber: "Het ingevoerde telefoonnummer is niet correct",
+    range: "De waarde moet tussen {data0} en {data1} liggen",
+    rangelength: "De lengte moet tussen {data0} en {data1} tekens zijn.",
+    required: "Dit veld is verplicht",
+    security: "{data0}"
+  },
+  bg: {
+    allowed: "Позволени файлове {data0}",
+    dateprevious: "Дата трябва да бъде преди днес",
+    domains: "Нито един от домейните не е разрешен",
+    equalto: "Не е равно на {data0}",
+    isdate: "Невалидна дата",
+    isemail: "Невалиден имейл адрес",
+    isnumber: "Въведената стойност трябва да бъде число",
+    isurl: "Невалиден URL адрес",
+    max: "Изисква се числова стойност, максимум {data0}",
+    maxage: "Трябва да сте на {data0} години или по-малко",
+    maxcheck: "Трябва да отметнете най-много {data0} кутии",
+    maxlength: "Въведеният текст не може да бъде по-дълъг от {data0} символа",
+    min: "Изисква се числова стойност, минимум {data0}",
+    minage: "Трябва да сте на {data0} години или повече",
+    mincheck: "Трябва да отметнете поне {data0} кутии",
+    minlength: "Въведеният текст трябва да бъде поне {data0} символа",
+    nospaces: "Въведената стойност не може да съдържа интервали",
+    pattern: "Невалиден шаблон",
+    phonecountry: "Въведеният телефонен номер не е правилен",
+    phonenumber: "Въведеният телефонен номер не е правилен",
+    range: "Стойността трябва да бъде между {data0} и {data1}",
+    rangelength: "Дължината трябва да бъде между {data0} и {data1} символа.",
+    required: "Това поле е задължително",
+    security: "{data0}"
+  },
+  sr: {
+    allowed: "Дозвољени фајлови {data0}",
+    dateprevious: "Датум мора бити пре данас",
+    domains: "Ниједан од домена није дозвољен",
+    equalto: "Није једнако {data0}",
+    isdate: "Није важећи датум",
+    isemail: "Није важећа адреса е-поште",
+    isnumber: "Унесена вредност мора бити број",
+    isurl: "Није важећи URL",
+    max: "Потребна је нумеричка вредност, максимум {data0}",
+    maxage: "Морате бити млађи од {data0} година",
+    maxcheck: "Морате проверити највише {data0} поља",
+    maxlength: "Унесени текст не може бити дужи од {data0} карактера",
+    min: "Потребна је нумеричка вредност, минимум {data0}",
+    minage: "Морате бити старији од {data0} година",
+    mincheck: "Морате проверити најмање {data0} поља",
+    minlength: "Унесени текст мора имати најмање {data0} карактера",
+    nospaces: "Унесена вредност не може садржати размаке",
+    pattern: "Неважећи узорак",
+    phonecountry: "Унесени број телефона није исправан",
+    phonenumber: "Унесени број телефона није исправан",
+    range: "Вредност мора бити између {data0} и {data1}",
+    rangelength: "Дужина мора бити између {data0} и {data1} карактера.",
+    required: "Ово поље је обавезно",
+    security: "{data0}"
+  },
+  ru: {
+    allowed: "Разрешенные файлы {data0}",
+    dateprevious: "Дата должна быть раньше сегодня",
+    domains: "Ни один из доменов не разрешен",
+    equalto: "Не равно {data0}",
+    isdate: "Неверная дата",
+    isemail: "Неверный адрес электронной почты",
+    isnumber: "Введенное значение должно быть числом",
+    isurl: "Неверный URL",
+    max: "Требуется числовое значение, максимум {data0}",
+    maxage: "Вам должно быть меньше {data0} лет",
+    maxcheck: "Вы должны отметить не более {data0} полей",
+    maxlength: "Введенный текст не может быть длиннее {data0} символов",
+    min: "Требуется числовое значение, минимум {data0}",
+    minage: "Вам должно быть больше {data0} лет",
+    mincheck: "Вы должны отметить не менее {data0} полей",
+    minlength: "Введенный текст должен содержать не менее {data0} символов",
+    nospaces: "Введенное значение не может содержать пробелы",
+    pattern: "Неверный шаблон",
+    phonecountry: "Введенный номер телефона неверен",
+    phonenumber: "Введенный номер телефона неверен",
+    range: "Значение должно быть между {data0} и {data1}",
+    rangelength: "Длина должна быть от {data0} до {data1} символов.",
+    required: "Это поле обязательно для заполнения",
+    security: "{data0}"
+  },
+  zh: {
+    allowed: "允许的文件 {data0}",
+    dateprevious: "日期必须早于今天",
+    domains: "不允许任何域",
+    equalto: "不等于 {data0}",
+    isdate: "无效日期",
+    isemail: "无效的电子邮件地址",
+    isnumber: "输入的值必须是数字",
+    isurl: "无效网址",
+    max: "需要数字值，最大值 {data0}",
+    maxage: "您必须小于 {data0} 岁",
+    maxcheck: "您最多只能勾选 {data0} 个框",
+    maxlength: "输入的文本长度不能超过 {data0} 个字符",
+    min: "需要数字值，最小值 {data0}",
+    minage: "您必须大于 {data0} 岁",
+    mincheck: "您至少要勾选 {data0} 个框",
+    minlength: "输入的文本长度必须至少为 {data0} 个字符",
+    nospaces: "输入的值不能包含空格",
+    pattern: "无效模式",
+    phonecountry: "输入的电话号码不正确",
+    phonenumber: "输入的电话号码不正确",
+    range: "值必须在 {data0} 和 {data1} 之间",
+    rangelength: "长度必须在 {data0} 和 {data1} 个字符之间。",
+    required: "此字段为必填项",
+    security: "{data0}"
+  },
+  ja: {
+    allowed: "許可されたファイル {data0}",
+    dateprevious: "日付は今日より前でなければなりません",
+    domains: "ドメインのいずれも許可されていません",
+    equalto: "{data0} と等しくなければなりません",
+    isdate: "無効な日付",
+    isemail: "無効なメールアドレス",
+    isnumber: "入力された値は数値である必要があります",
+    isurl: "無効なURL",
+    max: "数値が必要です、最大 {data0}",
+    maxage: "あなたは {data0} 歳未満でなければなりません",
+    maxcheck: "チェックできるのは最大 {data0} 個です",
+    maxlength: "入力されたテキストは {data0} 文字を超えることはできません",
+    min: "数値が必要です、最小 {data0}",
+    minage: "あなたは {data0} 歳以上でなければなりません",
+    mincheck: "チェックできるのは最小 {data0} 個です",
+    minlength: "入力されたテキストは {data0} 文字以上でなければなりません",
+    nospaces: "入力された値にはスペースを含めることはできません",
+    pattern: "無効なパターン",
+    phonecountry: "入力された電話番号は正しくありません",
+    phonenumber: "入力された電話番号は正しくありません",
+    range: "値は {data0} と {data1} の間でなければなりません",
+    rangelength: "長さは {data0} から {data1} 文字の間でなければなりません。",
+    required: "このフィールドは必須です",
+    security: "{data0}"
+  },
+  ko: {
+    allowed: "허용 된 파일 {data0}",
+    dateprevious: "날짜는 오늘보다 이전이어야합니다.",
+    domains: "도메인 중 하나도 허용되지 않습니다.",
+    equalto: "이 필드는 {data0}과 일치해야합니다.",
+    isdate: "유효하지 않은 날짜",
+    isemail: "유효하지 않은 이메일 주소",
+    isnumber: "입력 한 값은 숫자 여야합니다.",
+    isurl: "유효하지 않은 URL",
+    max: "숫자 값이 필요합니다. 최대 {data0}",
+    maxage: "당신은 {data0} 세 미만이어야합니다.",
+    maxcheck: "최대 {data0} 개의 상자를 선택해야합니다.",
+    maxlength: "입력 한 텍스트는 {data0} 자를 초과 할 수 없습니다.",
+    min: "숫자 값이 필요합니다. 최소 {data0}",
+    minage: "당신은 {data0} 세 이상이어야합니다.",
+    mincheck: "최소 {data0} 개의 상자를 선택해야합니다.",
+    minlength: "입력 한 텍스트는 {data0} 자 이상이어야합니다.",
+    nospaces: "입력 한 값에는 공백을 포함 할 수 없습니다.",
+    pattern: "잘못된 패턴",
+    phonecountry: "입력 한 전화 번호가 올바르지 않습니다.",
+    phonenumber: "입력 한 전화 번호가 올바르지 않습니다.",
+    range: "값은 {data0}과 {data1} 사이 여야합니다.",
+    rangelength: "길이는 {data0}에서 {data1} 문자 사이 여야합니다.",
+    required: "이 필드는 필수입니다",
+    security: "{data0}"
+  },
+  tr: {
+    allowed: "İzin verilen dosyalar {data0}",
+    dateprevious: "Tarih bugünden önce olmalıdır",
+    domains: "Alan adlarının hiçbiri izin verilmez",
+    equalto: "{data0} ile eşit olmalıdır",
+    isdate: "Geçersiz tarih",
+    isemail: "Geçersiz e-posta adresi",
+    isnumber: "Girilen değer bir sayı olmalıdır",
+    isurl: "Geçersiz url",
+    max: "Sayısal değer gerekli, maksimum {data0}",
+    maxage: "Yaşınız {data0} yaşından küçük olmalıdır",
+    maxcheck: "En fazla {data0} kutuyu işaretlemelisiniz",
+    maxlength: "Girilen metin {data0} karakterden uzun olamaz",
+    min: "Sayısal değer gerekli, minimum {data0}",
+    minage: "Yaşınız {data0} yaşından büyük olmalıdır",
+    mincheck: "En az {data0} kutuyu işaretlemelisiniz",
+    minlength: "Girilen metin en az {data0} karakter uzunluğunda olmalıdır",
+    nospaces: "Girilen değer boşluk içeremez",
+    pattern: "Geçersiz desen",
+    phonecountry: "Girilen telefon numarası doğru değil",
+    phonenumber: "Girilen telefon numarası doğru değil",
+    range: "Değer {data0} ve {data1} arasında olmalıdır",
+    rangelength: "Uzunluk {data0} ve {data1} karakter arasında olmalıdır.",
+    required: "Bu alan gereklidir",
+    security: "{data0}"
+  },
+  pl: {
+    allowed: "Dozwolone pliki {data0}",
+    dateprevious: "Data musi być wcześniejsza niż dzisiaj",
+    domains: "Żaden z domen nie jest dozwolony",
+    equalto: "Nie jest równe {data0}",
+    isdate: "Nieprawidłowa data",
+    isemail: "Nieprawidłowy adres e-mail",
+    isnumber: "Wprowadzona wartość musi być liczbą",
+    isurl: "Nieprawidłowy adres URL",
+    max: "Wymagana wartość liczbową, maksimum {data0}",
+    maxage: "Musisz mieć mniej niż {data0} lat",
+    maxcheck: "Musisz zaznaczyć maksymalnie {data0} pól",
+    maxlength: "Wprowadzony tekst nie może być dłuższy niż {data0} znaków",
+    min: "Wymagana wartość liczbową, minimum {data0}",
+    minage: "Musisz mieć więcej niż {data0} lat",
+    mincheck: "Musisz zaznaczyć co najmniej {data0} pól",
+    minlength: "Wprowadzony tekst musi mieć co najmniej {data0} znaków",
+    nospaces: "Wprowadzona wartość nie może zawierać spacji",
+    pattern: "Nieprawidłowy wzór",
+    phonecountry: "Wprowadzony numer telefonu jest nieprawidłowy",
+    phonenumber: "Wprowadzony numer telefonu jest nieprawidłowy",
+    range: "Wartość musi być między {data0} a {data1}",
+    rangelength: "Długość musi mieć od {data0} do {data1} znaków.",
+    required: "To pole jest wymagane",
+    security: "{data0}"
+  }
+};
+class MjoValidator {
+  constructor() {
+    __privateAdd(this, _ageCalculator);
+    __privateAdd(this, _defaultMessages);
+    __privateAdd(this, _getErrorMessage);
+    __privateAdd(this, _getInputValue);
+    __privateAdd(this, _setInputError);
+    __privateAdd(this, _phoneNumberFormat);
+    __privateAdd(this, _setInputValue);
+    __privateAdd(this, _validateIsEmail);
+    __privateAdd(this, _validateIsUrl);
+    __privateAdd(this, _validateIsRequired);
+    __privateAdd(this, _validateNoSpaces);
+    __privateAdd(this, _validateIsMinLength);
+    __privateAdd(this, _validateIsMaxLength);
+    __privateAdd(this, _validateIsRangeLength);
+    __privateAdd(this, _validateIsNumber);
+    __privateAdd(this, _validateIsMin);
+    __privateAdd(this, _validateIsMax);
+    __privateAdd(this, _validateIsRange);
+    __privateAdd(this, _validateDomains);
+    __privateAdd(this, _validateIsDate);
+    __privateAdd(this, _validateIsDateprevius);
+    __privateAdd(this, _validateIsMinage);
+    __privateAdd(this, _validateIsMaxage);
+    __privateAdd(this, _validateSecurity);
+    __privateAdd(this, _validateEqualTo);
+    __privateAdd(this, _validatePhonenumber);
+    __privateAdd(this, _validatePhonecountry);
+    __privateAdd(this, _validatePattern);
+    __privateAdd(this, _validateAllowed);
+    __privateAdd(this, _validateMincheck);
+    __privateAdd(this, _validateMaxcheck);
+  }
+  validateForm({ elements, form }) {
+    for (const input of elements) {
+      const { errmsg, error, rule } = this.validateInput({ input, form, elements });
+      if (error) {
+        return {
+          error,
+          errmsg,
+          rule,
+          errInput: input
+        };
+      }
+    }
+    return {
+      error: false,
+      errmsg: "",
+      rule: null,
+      errInput: null
+    };
+  }
+  validateInput({ input, form, elements }) {
+    const response = {
+      error: false,
+      errmsg: "",
+      rule: null
+    };
+    if (input.required) {
+      response.error = !__privateMethod(this, _validateIsRequired, validateIsRequired_fn).call(this, input, form);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "required") : "";
+      response.rule = "required";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.type === "email" || input.isemail) {
+      response.error = !__privateMethod(this, _validateIsEmail, validateIsEmail_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "isemail") : "";
+      response.rule = "isemail";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.type === "url" || input.isurl) {
+      response.error = !__privateMethod(this, _validateIsUrl, validateIsUrl_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "isurl") : "";
+      response.rule = "isurl";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.nospaces) {
+      response.error = !__privateMethod(this, _validateNoSpaces, validateNoSpaces_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "nospaces") : "";
+      response.rule = "nospaces";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.minlength !== void 0) {
+      response.error = !__privateMethod(this, _validateIsMinLength, validateIsMinLength_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "minlength") : "";
+      response.rule = "minlength";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.maxlength !== void 0) {
+      response.error = !__privateMethod(this, _validateIsMaxLength, validateIsMaxLength_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "maxlength") : "";
+      response.rule = "maxlength";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.rangelength) {
+      response.error = !__privateMethod(this, _validateIsRangeLength, validateIsRangeLength_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "rangelength") : "";
+      response.rule = "rangelength";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.isnumber) {
+      response.error = !__privateMethod(this, _validateIsNumber, validateIsNumber_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "isnumber") : "";
+      response.rule = "isnumber";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.min !== void 0) {
+      response.error = !__privateMethod(this, _validateIsMin, validateIsMin_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "min") : "";
+      response.rule = "min";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.max !== void 0) {
+      response.error = !__privateMethod(this, _validateIsMax, validateIsMax_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "max") : "";
+      response.rule = "max";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.range) {
+      response.error = !__privateMethod(this, _validateIsRange, validateIsRange_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "range") : "";
+      response.rule = "range";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.domains) {
+      response.error = !__privateMethod(this, _validateDomains, validateDomains_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "domains") : "";
+      response.rule = "domains";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.isdate) {
+      response.error = !__privateMethod(this, _validateIsDate, validateIsDate_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "isdate") : "";
+      response.rule = "isdate";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.isdate && input.dateprevious) {
+      response.error = !__privateMethod(this, _validateIsDateprevius, validateIsDateprevius_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "dateprevious") : "";
+      response.rule = "dateprevious";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.isdate && input.minage) {
+      response.error = !__privateMethod(this, _validateIsMinage, validateIsMinage_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "minage") : "";
+      response.rule = "minage";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.isdate && input.maxage) {
+      response.error = !__privateMethod(this, _validateIsMaxage, validateIsMaxage_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "maxage") : "";
+      response.rule = "maxage";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.security) {
+      response.error = !__privateMethod(this, _validateSecurity, validateSecurity_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "security") : "";
+      response.rule = "security";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.equalto) {
+      const equalToElement = elements.find((el) => el.name === input.equalto);
+      const variable = (equalToElement == null ? void 0 : equalToElement.label) ?? input.equalto;
+      response.error = !__privateMethod(this, _validateEqualTo, validateEqualTo_fn).call(this, input, elements);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "equalto", [variable]) : "";
+      response.rule = "equalto";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.phonenumber) {
+      response.error = !__privateMethod(this, _validatePhonenumber, validatePhonenumber_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "phonenumber") : "";
+      response.rule = "phonenumber";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.phonenumber && input.phonecountry) {
+      response.error = !__privateMethod(this, _validatePhonecountry, validatePhonecountry_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "phonecountry") : "";
+      response.rule = "phonecountry";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.pattern) {
+      response.error = !__privateMethod(this, _validatePattern, validatePattern_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "pattern") : "";
+      response.rule = "pattern";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.allowed) {
+      response.error = !__privateMethod(this, _validateAllowed, validateAllowed_fn).call(this, input);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "allowed") : "";
+      response.rule = "allowed";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.mincheck !== void 0) {
+      response.error = !__privateMethod(this, _validateMincheck, validateMincheck_fn).call(this, input, form);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "mincheck") : "";
+      response.rule = "mincheck";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    if (input.maxcheck !== void 0) {
+      response.error = !__privateMethod(this, _validateMaxcheck, validateMaxcheck_fn).call(this, input, form);
+      response.errmsg = response.error ? __privateMethod(this, _getErrorMessage, getErrorMessage_fn).call(this, input, "maxcheck") : "";
+      response.rule = "maxcheck";
+      __privateMethod(this, _setInputError, setInputError_fn).call(this, input, response.errmsg);
+      if (response.error)
+        return response;
+    }
+    input.success = true;
+    input.error = false;
+    input.errormsg = "";
+    return response;
+  }
+}
+_ageCalculator = new WeakSet();
+ageCalculator_fn = function(date, format) {
+  let year = null;
+  let month = null;
+  let day = null;
+  date = date.toString();
+  date = date.replace(new RegExp("/", "g"), "-");
+  const arrDate = date.split("-");
+  if (format === "aaaa-mm-dd") {
+    year = parseInt(arrDate[0]);
+    month = parseInt(arrDate[1]);
+    day = parseInt(arrDate[2]);
+  } else if (format === "dd-mm-aaaa") {
+    year = parseInt(arrDate[2]);
+    month = parseInt(arrDate[1]);
+    day = parseInt(arrDate[0]);
+  } else {
+    year = parseInt(arrDate[2]);
+    month = parseInt(arrDate[0]);
+    day = parseInt(arrDate[1]);
+  }
+  const dateAct = /* @__PURE__ */ new Date();
+  const actualyear = dateAct.getFullYear();
+  const actualMonth = dateAct.getMonth() + 1;
+  const actualDay = dateAct.getDate();
+  let age = actualyear + 1900 - year;
+  if (actualMonth < month)
+    age--;
+  if (month === actualMonth && day > actualDay)
+    age--;
+  if (age > 1900)
+    age -= 1900;
+  return age;
+};
+_defaultMessages = new WeakSet();
+defaultMessages_fn = function(lang = "en") {
+  const messages = validatorMessages[lang] ?? validatorMessages["en"];
+  return messages;
+};
+_getErrorMessage = new WeakSet();
+getErrorMessage_fn = function(input, rule, data) {
+  var _a2, _b2, _c, _d;
+  const name = input.name;
+  if (name && this.inputsMessages && this.inputsMessages[name] && ((_a2 = this.inputsMessages[name]) == null ? void 0 : _a2[rule])) {
+    let message2 = (_b2 = this.inputsMessages[name]) == null ? void 0 : _b2[rule];
+    if (Array.isArray(data) && message2) {
+      data.forEach((d, k) => {
+        message2 = message2 == null ? void 0 : message2.replace(`{data${k}}`, d);
+      });
+    }
+    if (message2)
+      return message2;
+  }
+  if (name && this.messages && this.messages[rule]) {
+    let message2 = this.messages[rule];
+    if (Array.isArray(data) && message2) {
+      data.forEach((d, k) => {
+        message2 = message2 == null ? void 0 : message2.replace(`{data${k}}`, d);
+      });
+    }
+    if (message2)
+      return message2;
+  }
+  const lang = ((_d = (_c = document.querySelector("html")) == null ? void 0 : _c.getAttribute("lang")) == null ? void 0 : _d.split("-")[0]) || "en";
+  const defaultMessages = __privateMethod(this, _defaultMessages, defaultMessages_fn).call(this, lang);
+  let message = defaultMessages[rule];
+  if (Array.isArray(data)) {
+    data.forEach((d, k) => {
+      message = message.replace(`{data${k}}`, d);
+    });
+  }
+  return message;
+};
+_getInputValue = new WeakSet();
+getInputValue_fn = function(input) {
+  return input.getValue();
+};
+_setInputError = new WeakSet();
+setInputError_fn = function(input, errmsg) {
+  input.error = true;
+  input.errormsg = errmsg;
+  input.focus();
+};
+_phoneNumberFormat = new WeakSet();
+phoneNumberFormat_fn = function(phone, country) {
+  if (country === "es") {
+    phone = phone.toString();
+    phone = phone.replace(new RegExp(" ", "g"), "");
+    if (phone.length === 13) {
+      if (phone[4] === "9") {
+        phone = `${phone[0]}${phone[1]}${phone[2]}${phone[3]} ${phone[4]} ${phone[5]} `;
+        phone += `${phone[6]}${phone[7]}${phone[8]} ${phone[9]}${phone[10]} ${phone[11]}${phone[12]}`;
+      } else {
+        phone = `${phone[0]}${phone[1]}${phone[2]}${phone[3]} ${phone[4]} ${phone[5]}${phone[6]} `;
+        phone += `${phone[7]}${phone[8]}${phone[9]} ${phone[10]}${phone[11]}${phone[12]}`;
+      }
+    } else if (phone.length === 12) {
+      if (phone[3] === "9") {
+        phone = `${phone[0]}${phone[1]}${phone[2]} ${phone[3]}${phone[4]} ${phone[5]}${phone[6]}${phone[7]} `;
+        phone += `${phone[8]}${phone[9]} ${phone[10]}${phone[11]}`;
+      } else {
+        phone = `${phone[0]}${phone[1]}${phone[2]} ${phone[3]}${phone[4]}${phone[5]} `;
+        phone += `${phone[6]}${phone[7]}${phone[8]} ${phone[9]}${phone[10]}${phone[11]}`;
+      }
+    } else if (phone[0] === "9") {
+      phone = `${phone[0]}${phone[1]} ${phone[2]}${phone[3]}${phone[4]} ${phone[5]}${phone[6]} ${phone[7]}${phone[8]}`;
+    } else {
+      phone = `${phone[0]}${phone[1]}${phone[2]} ${phone[3]}${phone[4]}${phone[5]} ${phone[6]}${phone[7]}${phone[8]}`;
+    }
+  }
+  return phone;
+};
+_setInputValue = new WeakSet();
+setInputValue_fn = function(input, value) {
+  input.setValue(value);
+};
+_validateIsEmail = new WeakSet();
+validateIsEmail_fn = function(input) {
+  const email = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  const se = email.split("@");
+  if (!se[1])
+    return false;
+  if (email.indexOf("@", 0) === -1 || se[1].indexOf(".", 0) === -1)
+    return false;
+  return true;
+};
+_validateIsUrl = new WeakSet();
+validateIsUrl_fn = function(input) {
+  let url = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  if (!/^(http|https|ftp):\/\//.test(url) && url)
+    url = "http://" + url;
+  const regexp = /^(http|https|ftp):\/\/[a-z0-9.-]+\.[a-z]{2,4}/gi;
+  if (!regexp.test(url) && url)
+    return false;
+  return true;
+};
+_validateIsRequired = new WeakSet();
+validateIsRequired_fn = function(input, form) {
+  if (!input.inputElement)
+    return false;
+  if (input.tagName !== "MJO-CHECKBOX" && input.tagName !== "MJO-RADIO") {
+    const value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+    if (!value)
+      return false;
+    return true;
+  }
+  const inputRef = input.inputElement;
+  let { checked } = inputRef;
+  if (inputRef.type === "checkbox" || inputRef.type === "radio") {
+    checked = false;
+    if (inputRef.hasAttribute("checked"))
+      checked = true;
+  }
+  if (inputRef.type === "radio") {
+    let checkedRadio = false;
+    for (let i = 0; i < form.elements.length; i++) {
+      if (form[i].checked) {
+        checkedRadio = true;
+        break;
+      }
+    }
+    if (checkedRadio)
+      checked = true;
+  }
+  return checked;
+};
+_validateNoSpaces = new WeakSet();
+validateNoSpaces_fn = function(input) {
+  const attr = input.getAttribute("nospaces");
+  let value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  const regexp = /\s/;
+  if (attr !== "autodel" && regexp.test(value))
+    return false;
+  value = value.split(" ").join("");
+  __privateMethod(this, _setInputValue, setInputValue_fn).call(this, input, value);
+  return true;
+};
+_validateIsMinLength = new WeakSet();
+validateIsMinLength_fn = function(input) {
+  const minlength = parseInt(input.getAttribute("minlength") ?? "0");
+  const value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  if (value.length < minlength)
+    return false;
+  return true;
+};
+_validateIsMaxLength = new WeakSet();
+validateIsMaxLength_fn = function(input) {
+  const maxlength = parseInt(input.getAttribute("maxlength") ?? "0");
+  const value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  if (value.length > maxlength)
+    return false;
+  return true;
+};
+_validateIsRangeLength = new WeakSet();
+validateIsRangeLength_fn = function(input) {
+  const rangelength = input.getAttribute("rangelength");
+  if (typeof rangelength !== "string")
+    return false;
+  const rls = rangelength.split("|");
+  const value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  if (value.length < parseInt(rls[0]) || value.length > parseInt(rls[1]))
+    return false;
+  return true;
+};
+_validateIsNumber = new WeakSet();
+validateIsNumber_fn = function(input) {
+  const value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  if (isNaN(Number(value)))
+    return false;
+  return true;
+};
+_validateIsMin = new WeakSet();
+validateIsMin_fn = function(input) {
+  const min = input.min;
+  const valor = parseFloat(__privateMethod(this, _getInputValue, getInputValue_fn).call(this, input));
+  if (isNaN(valor))
+    return false;
+  if (valor < min)
+    return false;
+  return true;
+};
+_validateIsMax = new WeakSet();
+validateIsMax_fn = function(input) {
+  const max = input.max;
+  const valor = parseFloat(__privateMethod(this, _getInputValue, getInputValue_fn).call(this, input));
+  if (isNaN(valor))
+    return false;
+  if (valor > max)
+    return false;
+  return true;
+};
+_validateIsRange = new WeakSet();
+validateIsRange_fn = function(input) {
+  if (!input.hasAttribute("range"))
+    return true;
+  const value = parseInt(__privateMethod(this, _getInputValue, getInputValue_fn).call(this, input));
+  const range = input.getAttribute("range");
+  if (typeof range !== "string")
+    return false;
+  const rgs = range.split("|");
+  if (isNaN(value))
+    return false;
+  else if (value < parseInt(rgs[0]) || value > parseInt(rgs[1]))
+    return false;
+  return true;
+};
+_validateDomains = new WeakSet();
+validateDomains_fn = function(input) {
+  if (!input.hasAttribute("domains"))
+    return true;
+  const domains = input.getAttribute("domains");
+  if (typeof domains !== "string")
+    return false;
+  const dms = domains.split("|");
+  const value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  let find = false;
+  for (let i = 0; i < dms.length; i++) {
+    const regexp = new RegExp(dms[i], "g");
+    if (regexp.test(value)) {
+      find = true;
+      break;
+    }
+  }
+  if (!find)
+    return false;
+  return true;
+};
+_validateIsDate = new WeakSet();
+validateIsDate_fn = function(input) {
+  const value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  if (!value)
+    return true;
+  let date = value;
+  date = date.toString();
+  date = date.replace(new RegExp("/", "g"), "-");
+  let format = "aaaa-mm-dd";
+  if (input.hasAttribute("isdate"))
+    format = input.getAttribute("isdate") ?? "aaaa-mm-dd";
+  const splittedDate = date.split(" ");
+  const arrDate = splittedDate[0].split("-");
+  const arrHour = splittedDate[1] ? splittedDate[1].split(":") : null;
+  let year = null;
+  let month = null;
+  let day = null;
+  if (format === "aaaa-mm-dd")
+    [year, month, day] = arrDate;
+  else if (format === "dd-mm-aaaa")
+    [day, month, year] = arrDate;
+  else if (format === "mm-dd-aaaa")
+    [month, day, year] = arrDate;
+  const template = new Date(Number(year), Number(month) - 1, Number(day));
+  if (!template || template.getFullYear() !== Number(year) && template.getMonth() !== Number(month) - 1 && template.getDate() !== Number(day)) {
+    return false;
+  }
+  if (arrHour) {
+    const hour = parseInt(arrHour[0]);
+    const minute = parseInt(arrHour[1]);
+    if (hour > 24 || minute > 60)
+      return false;
+  }
+  return true;
+};
+_validateIsDateprevius = new WeakSet();
+validateIsDateprevius_fn = function(input) {
+  let date = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  date = date.toString();
+  date = date.replace(new RegExp("/", "g"), "-");
+  const format = input.getAttribute("isdate") ?? "aaaa-mm-dd";
+  const dateSplitted = date.split(" ");
+  const arrDate = dateSplitted[0].split("-");
+  let year = null;
+  let month = null;
+  let day = null;
+  if (format === "aaaa-mm-dd")
+    [year, month, day] = arrDate;
+  else if (format === "dd-mm-aaaa")
+    [day, month, year] = arrDate;
+  else if (format === "mm-dd-aaaa")
+    [month, day, year] = arrDate;
+  const x = /* @__PURE__ */ new Date();
+  x.setFullYear(Number(year), Number(month) - 1, Number(day));
+  const today = /* @__PURE__ */ new Date();
+  if (x >= today)
+    return false;
+  return true;
+};
+_validateIsMinage = new WeakSet();
+validateIsMinage_fn = function(input) {
+  const minage = parseInt(input.getAttribute("minage") ?? "0");
+  const format = input.getAttribute("isdate") ?? "aaaa-mm-dd";
+  let date = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  date = date.toString();
+  date = date.replace(new RegExp("/", "g"), "-");
+  if (minage > __privateMethod(this, _ageCalculator, ageCalculator_fn).call(this, date, format))
+    return false;
+  return true;
+};
+_validateIsMaxage = new WeakSet();
+validateIsMaxage_fn = function(input) {
+  const maxage = parseInt(input.getAttribute("maxage") ?? "0");
+  const format = input.getAttribute("isdate") ?? "aaaa-mm-dd";
+  let date = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  date = date.toString();
+  date = date.replace(new RegExp("/", "g"), "-");
+  if (maxage < __privateMethod(this, _ageCalculator, ageCalculator_fn).call(this, date, format))
+    return false;
+  return true;
+};
+_validateSecurity = new WeakSet();
+validateSecurity_fn = function(input) {
+  const pass = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  let security = input.getAttribute("security");
+  if (security !== "low" && security !== "medium" && security !== "high" && security !== "very-high")
+    security = "medium";
+  let regexp = null;
+  if ((security === "very-high" || security === "high") && pass.length < 8)
+    return false;
+  else if (pass.length < 6)
+    return false;
+  if (security === "very-high") {
+    regexp = /[@$*&#\-_+./;()[\]{}\\ºª%!¿?¡^~·¬]+/;
+    if (!regexp.test(pass))
+      return false;
+  }
+  if (security === "very-high" || security === "high") {
+    regexp = /[0-9]+/;
+    if (!regexp.test(pass))
+      return false;
+  }
+  if (security === "very-high" || security === "high" || security === "medium") {
+    regexp = /[a-z]+/;
+    if (!regexp.test(pass))
+      return false;
+    regexp = /[A-Z]+/;
+    if (!regexp.test(pass))
+      return false;
+  }
+  return true;
+};
+_validateEqualTo = new WeakSet();
+validateEqualTo_fn = function(input, elements) {
+  const equalto = input.getAttribute("equalto");
+  const inputEq = elements.find((el) => el.name === equalto);
+  const value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  if (!inputEq)
+    return false;
+  if (value !== __privateMethod(this, _getInputValue, getInputValue_fn).call(this, inputEq))
+    return false;
+  return true;
+};
+_validatePhonenumber = new WeakSet();
+validatePhonenumber_fn = function(input) {
+  let phoneNumber = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  phoneNumber = phoneNumber.toString();
+  phoneNumber = phoneNumber.replace(new RegExp(" ", "g"), "");
+  phoneNumber = phoneNumber.replace(new RegExp("-", "g"), "");
+  phoneNumber = phoneNumber.replace(new RegExp("\\.", "g"), "");
+  phoneNumber = phoneNumber.replace(new RegExp("\\/", "g"), "");
+  const regexp = /^((\+\d{1,3})|(00\d{1,3}))?(\(\d{1,3}\))?([\d]){7,11}$/;
+  if (phoneNumber && (!regexp.test(phoneNumber) || phoneNumber.length < 8))
+    return false;
+  return true;
+};
+_validatePhonecountry = new WeakSet();
+validatePhonecountry_fn = function(input) {
+  let phoneNumber = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  let valid = false;
+  if (!phoneNumber)
+    return true;
+  const countries = input.getAttribute("phonecountry");
+  if (typeof countries !== "string")
+    return false;
+  const ctrs = countries.split("|");
+  let regexp = null;
+  let regexp2 = null;
+  let regexp3 = null;
+  for (let i = 0; i < ctrs.length; i++) {
+    const country = ctrs[i];
+    if (country === "es") {
+      phoneNumber = phoneNumber.toString();
+      phoneNumber = phoneNumber.replace(new RegExp(" ", "g"), "");
+      regexp = /^((\+34)|(0034))?(6|7|8|9)(\d){8}$/;
+      if (regexp.test(phoneNumber)) {
+        valid = country;
+        break;
+      }
+    }
+    if (country === "uk") {
+      phoneNumber = phoneNumber.toString();
+      phoneNumber = phoneNumber.replace(new RegExp(" ", "g"), "");
+      phoneNumber = phoneNumber.replace(new RegExp("-", "g"), "");
+      regexp = /^((\+44(\(0\))?(1|2|3|7|8))|(0044(\(0\))?(1|2|7))|(0(1|2|7)))\d{9}$/;
+      if (regexp.test(phoneNumber)) {
+        valid = country;
+        break;
+      }
+    }
+    if (country === "it") {
+      phoneNumber = phoneNumber.toString();
+      phoneNumber = phoneNumber.replace(new RegExp(" ", "g"), "");
+      phoneNumber = phoneNumber.replace(new RegExp("-", "g"), "");
+      regexp = /^((\+39)|(0039))?(0)(\d){5,9}$/;
+      regexp2 = /^((\+39)|(0039))?(3)(\d){9}$/;
+      regexp3 = /^((\+39)|(0039))?(80)(\d){7}$/;
+      if (regexp.test(phoneNumber) || regexp2.test(phoneNumber) || regexp3.test(phoneNumber)) {
+        valid = country;
+        break;
+      }
+    }
+    if (country === "pt") {
+      phoneNumber = phoneNumber.toString();
+      phoneNumber = phoneNumber.replace(new RegExp(" ", "g"), "");
+      phoneNumber = phoneNumber.replace(new RegExp("-", "g"), "");
+      regexp = /^((\+351)|(00351))?(2|7|8|9)(\d){8}$/;
+      if (regexp.test(phoneNumber)) {
+        valid = country;
+        break;
+      }
+    }
+    if (country === "fr") {
+      phoneNumber = phoneNumber.toString();
+      phoneNumber = phoneNumber.replace(new RegExp(" ", "g"), "");
+      phoneNumber = phoneNumber.replace(new RegExp("-", "g"), "");
+      regexp = /^((\+33)|(0033))?(0)?(1|2|3|4|5|6|8)\d{8}$/;
+      if (regexp.test(phoneNumber)) {
+        valid = country;
+        break;
+      }
+    }
+    if (country === "us") {
+      phoneNumber = phoneNumber.toString();
+      phoneNumber = phoneNumber.replace(new RegExp(" ", "g"), "");
+      phoneNumber = phoneNumber.replace(new RegExp("-", "g"), "");
+      phoneNumber = phoneNumber.replace(new RegExp("\\.", "g"), "");
+      phoneNumber = phoneNumber.replace(new RegExp("\\/", "g"), "");
+      regexp = /^((\+1)|(001))?(1?((\(\d{3}\))|(\d{3})))?\d{7}$/;
+      if (regexp.test(phoneNumber)) {
+        valid = country;
+        break;
+      }
+    }
+  }
+  if (!valid)
+    return false;
+  __privateMethod(this, _setInputValue, setInputValue_fn).call(this, input, __privateMethod(this, _phoneNumberFormat, phoneNumberFormat_fn).call(this, phoneNumber, valid));
+  return true;
+};
+_validatePattern = new WeakSet();
+validatePattern_fn = function(input) {
+  const pattern = input.getAttribute("pattern");
+  if (!pattern)
+    return false;
+  const regExp = new RegExp(pattern);
+  const value = __privateMethod(this, _getInputValue, getInputValue_fn).call(this, input);
+  if (value && !regExp.test(value))
+    return false;
+  return true;
+};
+_validateAllowed = new WeakSet();
+validateAllowed_fn = function(input) {
+  const allowed = input.getAttribute("allowed");
+  if (!allowed)
+    return false;
+  const alls = allowed.split("|");
+  const files = [];
+  let valid = true;
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const extspl = file.name.split(".");
+    const ext = extspl[extspl.length - 1];
+    let find = false;
+    for (let o = 0; o < alls.length; o++) {
+      if (alls[o] === ext) {
+        find = true;
+        break;
+      }
+    }
+    if (!find) {
+      valid = false;
+      break;
+    }
+  }
+  return valid;
+};
+_validateMincheck = new WeakSet();
+validateMincheck_fn = function(input, form) {
+  const mincheck = parseInt(input.getAttribute("mincheck") ?? "0");
+  const checkgroup = input.getAttribute("checkgroup");
+  const checkboxs = [...form.querySelectorAll("input[type=checkbox]"), ...form.querySelectorAll("mo-checkbox")];
+  let checkeds = 0;
+  for (let i = 0; i < checkboxs.length; i++) {
+    if (checkboxs[i].getAttribute("checkgroup") === checkgroup && checkboxs[i].hasAttribute("checked"))
+      checkeds++;
+  }
+  if (mincheck > checkeds)
+    return false;
+  return true;
+};
+_validateMaxcheck = new WeakSet();
+validateMaxcheck_fn = function(input, form) {
+  const maxcheck = parseInt(input.getAttribute("maxcheck") ?? "0");
+  const checkgroup = input.getAttribute("checkgroup");
+  const checkboxs = [...form.querySelectorAll("input[type=checkbox]"), ...form.querySelectorAll("mo-checkbox")];
+  let checkeds = 0;
+  for (let i = 0; i < checkboxs.length; i++) {
+    if (checkboxs[i].getAttribute("checkgroup") === checkgroup && checkboxs[i].hasAttribute("checked"))
+      checkeds++;
+  }
+  if (maxcheck < checkeds)
+    return false;
+  return true;
+};
+var __defProp$1 = Object.defineProperty;
+var __getOwnPropDesc$1 = Object.getOwnPropertyDescriptor;
+var __decorateClass$1 = (decorators, target, key, kind) => {
+  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc$1(target, key) : target;
+  for (var i = decorators.length - 1, decorator; i >= 0; i--)
+    if (decorator = decorators[i])
+      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+  if (kind && result)
+    __defProp$1(target, key, result);
+  return result;
+};
+var __accessCheck$1 = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateAdd$1 = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateMethod2 = (obj, member, method) => {
+  __accessCheck$1(obj, member, "access private method");
+  return method;
+};
+var _handleSubmit, handleSubmit_fn, _parseFormData, parseFormData_fn;
+let MjoForm = class extends LitElement {
+  constructor() {
+    super(...arguments);
+    __privateAdd$1(this, _handleSubmit);
+    __privateAdd$1(this, _parseFormData);
+    this.noValidate = false;
+    this.errmessages = {};
+    this.inputsErrmessages = {};
+    this.formRef = createRef();
+    this.elements = [];
+    this.submitButton = null;
+    this.validator = new MjoValidator();
+  }
+  render() {
+    return html`<form ${ref(this.formRef)} enctype="multipart/form-data" @submit=${__privateMethod2(this, _handleSubmit, handleSubmit_fn)}>
+            <slot></slot>
+        </form>`;
+  }
+};
+_handleSubmit = /* @__PURE__ */ new WeakSet();
+handleSubmit_fn = function(event) {
+  event.preventDefault();
+  if (!this.formRef.value)
+    return;
+  this.validator.messages = this.errmessages;
+  this.validator.inputsMessages = this.inputsErrmessages;
+  const formData = new FormData(this.formRef.value);
+  const validatorResponse = this.validator.validateForm({ elements: this.elements, form: this.formRef.value });
+  const response = {
+    elements: this.elements,
+    data: __privateMethod2(this, _parseFormData, parseFormData_fn).call(this, formData),
+    form: this,
+    submitButton: this.submitButton,
+    ...validatorResponse
+  };
+  if (!response.error && this.submitButton) {
+    this.submitButton.loading = true;
+  }
+  this.dispatchEvent(new CustomEvent("submit", { detail: { formData, event, response }, bubbles: true, cancelable: true }));
+};
+_parseFormData = /* @__PURE__ */ new WeakSet();
+parseFormData_fn = function(formData) {
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = value.toString();
+  });
+  return data;
+};
+MjoForm.styles = [
+  css`
+            :host {
+                display: block;
+            }
+        `
+];
+__decorateClass$1([
+  property({ type: Boolean })
+], MjoForm.prototype, "noValidate", 2);
+__decorateClass$1([
+  property({ type: Object })
+], MjoForm.prototype, "errmessages", 2);
+__decorateClass$1([
+  property({ type: Object })
+], MjoForm.prototype, "inputsErrmessages", 2);
+MjoForm = __decorateClass$1([
+  customElement("mjo-form")
+], MjoForm);
 const defaultTheme = {
   radiusLarge: "10px",
   radiusMedium: "5px",

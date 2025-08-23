@@ -1,7 +1,7 @@
 {
     "watch": ["server/src", "server/public/css"],
     "ext": "ts,js,json,html",
-    "ignore": ["server/dist", "dist", "node_modules", "**/*.test.ts", "**/*.spec.ts", ".git"],
+    "ignore": ["server/dist", "server/public/js", "server/client", "dist", "node_modules", "**/*.test.ts", "**/*.spec.ts", ".git"],
     "exec": "tsx server/src/app.ts",
     "env": {
         "NODE_ENV": "development"

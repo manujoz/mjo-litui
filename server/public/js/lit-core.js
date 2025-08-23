@@ -3,7 +3,7 @@
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-var _a, _b;
+var _a, _b, _c, _d;
 const global = globalThis;
 const debugLogEvent = (event) => {
   const shouldEmit = global.emitLitDebugLogEvents;
@@ -52,7 +52,7 @@ const markerMatch = "?" + marker;
 const nodeMarker = `<${markerMatch}>`;
 const d = document;
 const createMarker = () => d.createComment("");
-const isPrimitive = (value) => value === null || typeof value != "object" && typeof value != "function";
+const isPrimitive$1 = (value) => value === null || typeof value != "object" && typeof value != "function";
 const isArray = Array.isArray;
 const isIterable = (value) => isArray(value) || // eslint-disable-next-line @typescript-eslint/no-explicit-any
 typeof (value == null ? void 0 : value[Symbol.iterator]) === "function";
@@ -301,7 +301,7 @@ function resolveDirective(part, value, parent = part, attributeIndex) {
     return value;
   }
   let currentDirective = attributeIndex !== void 0 ? (_a2 = parent.__directives) == null ? void 0 : _a2[attributeIndex] : parent.__directive;
-  const nextDirectiveConstructor = isPrimitive(value) ? void 0 : (
+  const nextDirectiveConstructor = isPrimitive$1(value) ? void 0 : (
     // This property needs to remain unminified.
     value["_$litDirective$"]
   );
@@ -458,7 +458,7 @@ class ChildPart {
       throw new Error(`This \`ChildPart\` has no \`parentNode\` and therefore cannot accept a value. This likely means the element containing the part was manipulated in an unsupported way outside of Lit's control such that the part's marker nodes were ejected from DOM. For example, setting the element's \`innerHTML\` or \`textContent\` can do this.`);
     }
     value = resolveDirective(this, value, directiveParent);
-    if (isPrimitive(value)) {
+    if (isPrimitive$1(value)) {
       if (value === nothing || value == null || value === "") {
         if (this._$committedValue !== nothing) {
           debugLogEvent && debugLogEvent({
@@ -521,7 +521,7 @@ class ChildPart {
     }
   }
   _commitText(value) {
-    if (this._$committedValue !== nothing && isPrimitive(this._$committedValue)) {
+    if (this._$committedValue !== nothing && isPrimitive$1(this._$committedValue)) {
       const node = wrap(this._$startNode).nextSibling;
       {
         if (this._textSanitizer === void 0) {
@@ -716,7 +716,7 @@ class AttributePart {
     let change = false;
     if (strings === void 0) {
       value = resolveDirective(this, value, directiveParent, 0);
-      change = !isPrimitive(value) || value !== this._$committedValue && value !== noChange;
+      change = !isPrimitive$1(value) || value !== this._$committedValue && value !== noChange;
       if (change) {
         this._$committedValue = value;
       }
@@ -729,7 +729,7 @@ class AttributePart {
         if (v === noChange) {
           v = this._$committedValue[i];
         }
-        change || (change = !isPrimitive(v) || v !== this._$committedValue[i]);
+        change || (change = !isPrimitive$1(v) || v !== this._$committedValue[i]);
         if (v === nothing) {
           value = nothing;
         } else if (value !== nothing) {
@@ -972,14 +972,37 @@ class Directive {
     return this.render(...props);
   }
 }
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+((_c = window.ShadyDOM) == null ? void 0 : _c.inUse) && ((_d = window.ShadyDOM) == null ? void 0 : _d.noPatch) === true ? window.ShadyDOM.wrap : (node) => node;
+const isPrimitive = (value) => value === null || typeof value != "object" && typeof value != "function";
+const isTemplateResult = (value, type) => type === void 0 ? (
+  // This property needs to remain unminified.
+  (value == null ? void 0 : value["_$litType$"]) !== void 0
+) : (value == null ? void 0 : value["_$litType$"]) === type;
+const isCompiledTemplateResult = (value) => {
+  var _a2;
+  return ((_a2 = value == null ? void 0 : value["_$litType$"]) == null ? void 0 : _a2.h) != null;
+};
+const isSingleExpression = (part) => part.strings === void 0;
+const RESET_VALUE = {};
+const setCommittedValue = (part, value = RESET_VALUE) => part._$committedValue = value;
 export {
   Directive as D,
   PartType as P,
   _$LH as _,
   nothing as a,
+  isPrimitive as b,
+  isTemplateResult as c,
   directive as d,
+  isCompiledTemplateResult as e,
   html as h,
+  isSingleExpression as i,
   noChange as n,
-  render as r
+  render as r,
+  setCommittedValue as s
 };
 //# sourceMappingURL=lit-core.js.map

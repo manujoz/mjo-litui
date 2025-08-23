@@ -1,5 +1,4 @@
-var _a, _b;
-import { _ as _$LH$1, n as noChange, P as PartType, r as render } from "./lit-core.js";
+import { _ as _$LH$1, n as noChange, b as isPrimitive, c as isTemplateResult, e as isCompiledTemplateResult, P as PartType, i as isSingleExpression, r as render } from "./lit-core.js";
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -52,22 +51,6 @@ const _$LH = {
   isIterable: _$LH$1._isIterable,
   ChildPart: _$LH$1._ChildPart
 };
-/**
- * @license
- * Copyright 2020 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */
-((_a = window.ShadyDOM) == null ? void 0 : _a.inUse) && ((_b = window.ShadyDOM) == null ? void 0 : _b.noPatch) === true ? window.ShadyDOM.wrap : (node) => node;
-const isPrimitive = (value) => value === null || typeof value != "object" && typeof value != "function";
-const isTemplateResult = (value, type) => type === void 0 ? (
-  // This property needs to remain unminified.
-  (value == null ? void 0 : value["_$litType$"]) !== void 0
-) : (value == null ? void 0 : value["_$litType$"]) === type;
-const isCompiledTemplateResult = (value) => {
-  var _a2;
-  return ((_a2 = value == null ? void 0 : value["_$litType$"]) == null ? void 0 : _a2.h) != null;
-};
-const isSingleExpression = (part) => part.strings === void 0;
 /**
  * @license
  * Copyright 2019 Google LLC

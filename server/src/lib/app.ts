@@ -123,7 +123,7 @@ async function triggerBuild(changedFiles: string[] = []): Promise<void> {
         if (clientCode === 0) {
             // Notificar fin del build a clientes HMR
             if (hmrManager) {
-                // hmrManager.notifyBuildComplete();
+                hmrManager.notifyBuildComplete();
             }
         } else {
             console.error(`❌ Error en build cliente (código: ${clientCode})`);

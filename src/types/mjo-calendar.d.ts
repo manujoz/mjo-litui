@@ -146,10 +146,3 @@ export interface CalendarDayLeaveEvent extends CustomEvent {
         day: number;
     };
 }
-
-declare global {
-    interface HTMLElementEventMap {
-        "date-selected": CalendarDateSelectedEvent;
-        "range-selected": CalendarRangeSelectedEvent;
-    }
-}

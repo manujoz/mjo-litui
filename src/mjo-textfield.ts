@@ -1,3 +1,17 @@
+import type {
+    MjoTextfieldAutoCapitalize,
+    MjoTextfieldBlurEvent,
+    MjoTextfieldChangeEvent,
+    MjoTextfieldClearEvent,
+    MjoTextfieldColor,
+    MjoTextfieldFocusEvent,
+    MjoTextfieldInputEvent,
+    MjoTextfieldKeyupEvent,
+    MjoTextfieldPasswordToggleEvent,
+    MjoTextfieldSize,
+    MjoTextfieldType,
+} from "./types/mjo-textfield.js";
+
 import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -15,7 +29,7 @@ import "./mjo-icon.js";
 
 @customElement("mjo-textfield")
 export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
-    @property({ type: String }) autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
+    @property({ type: String }) autoCapitalize?: MjoTextfieldAutoCapitalize;
     @property({ type: String }) autoComplete?: AutoFillContactField;
     @property({ type: Boolean }) autoFocus = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
@@ -24,11 +38,11 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
     @property({ type: String }) placeholder?: string;
     @property({ type: Boolean }) readonly: boolean = false;
     @property({ type: Number }) step?: number;
-    @property({ type: String }) type: "text" | "password" | "email" | "number" | "tel" | "url" = "text";
+    @property({ type: String }) type: MjoTextfieldType = "text";
     @property({ type: String }) value: string = "";
     @property({ type: String }) label?: string;
-    @property({ type: String }) size: "small" | "medium" | "large" = "medium";
-    @property({ type: String }) color: "primary" | "secondary" = "primary";
+    @property({ type: String }) size: MjoTextfieldSize = "medium";
+    @property({ type: String }) color: MjoTextfieldColor = "primary";
     @property({ type: String }) startIcon?: string;
     @property({ type: String }) endIcon?: string;
     @property({ type: String }) startImage?: string;
@@ -43,13 +57,21 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
 
     @state() private isFocused = false;
     @state() private valueLength = 0;
+    @state() private uniqueId = `mjo-textfield-${Math.random().toString(36).substr(2, 9)}`;
 
-    @query("input#mjoTextfiedlInput") inputElement!: HTMLInputElement;
+    @query("input") inputElement!: HTMLInputElement;
+
     isPassword = false;
 
     render() {
+        if (this.type === "password" && !this.isPassword) this.isPassword = true;
+
+        const helperTextId = this.helperText || this.errormsg || this.successmsg ? `${this.uniqueId}-helper` : undefined;
+        const labelId = this.label ? `${this.uniqueId}-label` : undefined;
+
         return html`${this.label
                 ? html`<input-label
+                      id=${ifDefined(labelId)}
                       color=${this.color}
                       label=${this.label}
                       ?focused=${this.isFocused}
@@ -66,10 +88,10 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                 ?data-disabled=${this.disabled}
             >
                 ${this.prefixText ? html`<div class="prefixText">${this.prefixText}</div>` : nothing}
-                ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
+                ${this.startIcon && html`<div class="icon startIcon" aria-hidden="true"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
                 ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
                 <input
-                    id="mjoTextfiedlInput"
+                    id=${ifDefined(this.id)}
                     autocapitalize=${ifDefined(this.autoCapitalize)}
                     autocomplete=${ifDefined(this.autoComplete)}
                     ?disabled=${this.disabled}
@@ -88,30 +110,45 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                     @input=${this.#handleInput}
                     @keyup=${this.#handleKeyup}
                     @change=${this.#handleInput}
-                    aria-label=${this.label || this.ariaLabel || nothing}
-                    aria-errormessage=${this.errormsg || nothing}
+                    aria-label=${this.ariaLabel || nothing}
+                    aria-labelledby=${labelId || nothing}
+                    aria-describedby=${helperTextId || nothing}
+                    aria-errormessage=${ifDefined(this.errormsg ? helperTextId : undefined)}
+                    aria-invalid=${this.error ? "true" : "false"}
                     aria-required=${ifDefined(this.required)}
                     ?data-nospiners=${this.nospiners}
                 />
                 ${this.clearabled
-                    ? html`<div class="icon endIcon clearabled" data-dropdown-noopen ?data-visible=${this.value.length > 0} @click=${this.#handleClearabled}>
-                          <mjo-icon src=${AiFillCloseCircle}></mjo-icon>
-                      </div>`
+                    ? html`<button
+                          type="button"
+                          class="icon endIcon clearabled"
+                          data-dropdown-noopen
+                          ?data-visible=${this.value.length > 0}
+                          @click=${this.#handleClearabled}
+                          aria-label="Clear input"
+                          tabindex="-1"
+                      >
+                          <mjo-icon src=${AiFillCloseCircle} aria-hidden="true"></mjo-icon>
+                      </button>`
                     : nothing}
                 ${this.endIcon && !this.clearabled && this.type !== "password"
-                    ? html`<div class="icon endIcon"><mjo-icon src=${this.endIcon}></mjo-icon></div>`
+                    ? html`<div class="icon endIcon" aria-hidden="true"><mjo-icon src=${this.endIcon}></mjo-icon></div>`
                     : nothing}
                 ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Input image" /></div>` : nothing}
                 ${this.isPassword
                     ? this.type === "password"
-                        ? html`<div class="icon endIcon passIcon" @click=${this.#handlePassword}><mjo-icon src=${AiFillEye}></mjo-icon></div>`
-                        : html`<div class="icon endIcon passIcon" @click=${this.#handlePassword}><mjo-icon src=${AiFillEyeInvisible}></mjo-icon></div>`
+                        ? html`<button type="button" class="icon endIcon passIcon" @click=${this.#handlePassword} aria-label="Show password" tabindex="-1">
+                              <mjo-icon src=${AiFillEye} aria-hidden="true"></mjo-icon>
+                          </button>`
+                        : html`<button type="button" class="icon endIcon passIcon" @click=${this.#handlePassword} aria-label="Hide password" tabindex="-1">
+                              <mjo-icon src=${AiFillEyeInvisible} aria-hidden="true"></mjo-icon>
+                          </button>`
                     : nothing}
                 ${this.suffixText ? html`<div class="prefixText">${this.suffixText}</div>` : nothing}
             </div>
             <div class="helper" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
-                    ? html`<input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                    ? html`<input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
                           >${this.helperText}</input-helper-text
                       >`
                     : nothing}
@@ -132,10 +169,6 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         super.connectedCallback();
 
         document.querySelector("input")?.autocomplete;
-
-        if (this.type === "password" && !this.isPassword) {
-            this.isPassword = true;
-        }
 
         this.updateFormData({ name: this.name || "", value: this.value });
     }
@@ -192,17 +225,49 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
 
     #handleBlur() {
         this.isFocused = false;
+
+        this.dispatchEvent(
+            new CustomEvent("mjo-textfield-blur", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    element: this,
+                    value: this.value,
+                },
+            }),
+        );
     }
 
     #handleClearabled() {
+        const previousValue = this.value;
         this.value = "";
         this.valueLength = 0;
 
-        this.dispatchEvent(new CustomEvent("clear", { bubbles: true, composed: true }));
+        this.dispatchEvent(
+            new CustomEvent("mjo-textfield-clear", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    element: this,
+                    previousValue,
+                },
+            }),
+        );
     }
 
     #handleFocus = () => {
         this.isFocused = true;
+
+        this.dispatchEvent(
+            new CustomEvent("mjo-textfield-focus", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    element: this,
+                    value: this.value,
+                },
+            }),
+        );
 
         if (this.selectOnFocus) {
             this.inputElement.select();
@@ -219,24 +284,75 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
     };
 
     #handleInput = (ev: InputEvent) => {
+        const previousValue = this.value;
         this.value = (ev.currentTarget as HTMLInputElement).value;
         this.valueLength = this.value.length;
 
+        this.dispatchEvent(
+            new CustomEvent("mjo-textfield-input", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    element: this,
+                    value: this.value,
+                    previousValue,
+                    inputType: ev.inputType || "",
+                },
+            }),
+        );
+
         if (ev.type === "change") {
-            this.dispatchEvent(new Event("change"));
+            this.dispatchEvent(
+                new CustomEvent("mjo-textfield-change", {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        element: this,
+                        value: this.value,
+                        previousValue,
+                    },
+                }),
+            );
         }
 
         this.updateFormData({ name: this.name || "", value: this.value });
     };
 
     #handleKeyup = (ev: KeyboardEvent) => {
+        this.dispatchEvent(
+            new CustomEvent("mjo-textfield-keyup", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    element: this,
+                    key: ev.key,
+                    code: ev.code,
+                    value: this.value,
+                    originalEvent: ev,
+                },
+            }),
+        );
+
         if (ev.key === "Enter" && this.form) {
             this.submiForm();
         }
     };
 
     #handlePassword() {
+        const wasPassword = this.type === "password";
         this.type = this.type === "password" ? "text" : "password";
+
+        this.dispatchEvent(
+            new CustomEvent("mjo-textfield-password-toggle", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    element: this,
+                    visible: !wasPassword,
+                    type: this.type,
+                },
+            }),
+        );
     }
 
     static styles = [
@@ -385,24 +501,29 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
             .endImage {
                 padding-right: calc(1em / 2 - 4px);
             }
-            .passIcon {
-                cursor: pointer;
-            }
+            .passIcon,
             .clearabled {
-                opacity: 0;
-                font-size: calc(var(--mjo-input-font-size, 1em) * 0.8);
+                cursor: pointer;
+                background: none;
+                border: none;
+                margin: 0;
+                color: inherit;
+                font-size: inherit;
                 transition: opacity 0.3s;
             }
             .clearabled[data-visible] {
                 opacity: 1;
                 cursor: pointer;
             }
+            .container .passIcon mjo-icon,
             .container .clearabled mjo-icon {
                 color: #999999 !important;
             }
+            .container .passIcon:hover mjo-icon,
             .container .clearabled:hover mjo-icon {
                 color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)) !important;
             }
+            .container[data-color="secondary"] .passIcon:hover mjo-icon,
             .container[data-color="secondary"] .clearabled:hover mjo-icon {
                 color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)) !important;
             }
@@ -435,5 +556,15 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-textfield": MjoTextfield;
+    }
+
+    interface HTMLElementEventMap {
+        "mjo-textfield-clear": MjoTextfieldClearEvent;
+        "mjo-textfield-password-toggle": MjoTextfieldPasswordToggleEvent;
+        "mjo-textfield-input": MjoTextfieldInputEvent;
+        "mjo-textfield-change": MjoTextfieldChangeEvent;
+        "mjo-textfield-focus": MjoTextfieldFocusEvent;
+        "mjo-textfield-blur": MjoTextfieldBlurEvent;
+        "mjo-textfield-keyup": MjoTextfieldKeyupEvent;
     }
 }

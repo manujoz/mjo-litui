@@ -94,7 +94,7 @@ function initializeCalendarExamples() {
 document.addEventListener("DOMContentLoaded", function() {
   initializeCalendarExamples();
   document.querySelectorAll("mjo-calendar").forEach((calendar) => {
-    calendar.addEventListener("date-selected", (ev) => {
+    calendar.addEventListener("mjo-calendar-date-selected", (ev) => {
       const event = ev;
       const value = event.detail.value;
       const date = event.detail.date;
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       }
     });
-    calendar.addEventListener("range-selected", (ev) => {
+    calendar.addEventListener("mjo-calendar-range-selected", (ev) => {
       const event = ev;
       const startDate = event.detail.startDate;
       const endDate = event.detail.endDate;

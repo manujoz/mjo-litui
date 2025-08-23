@@ -184,6 +184,22 @@
 			"type": "shell",
 			"command": "npm run test",
 			"isBackground": false
+		},
+		{
+			"label": "Check Date Picker TypeScript",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-date-picker.ts"
+		},
+		{
+			"label": "TypeScript Check Textfield",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-textfield.ts"
+		},
+		{
+			"label": "Test MjoTextfield Component Only",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-textfield.test.ts\"",
+			"isBackground": false
 		}
 	]
 }
