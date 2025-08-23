@@ -16,8 +16,12 @@ export class MessageItem extends LitElement {
     removing = false;
 
     render() {
+        const isUrgent = this.type === "error" || this.type === "warning";
+        const messageRole = isUrgent ? "alert" : "status";
+        const ariaLive = isUrgent ? "assertive" : "polite";
+
         return html`
-            <div class="icon" data-type=${this.type}>
+            <div class="icon" data-type=${this.type} aria-hidden="true">
                 <mjo-icon
                     src=${this.type === "info"
                         ? AiFillInfoCircle
@@ -26,9 +30,10 @@ export class MessageItem extends LitElement {
                           : this.type === "error"
                             ? AiFillCloseCircle
                             : AiFillCheckCircle}
+                    aria-hidden="true"
                 ></mjo-icon>
             </div>
-            <div class="message">${this.message}</div>
+            <div class="message" role=${messageRole} aria-live=${ariaLive} aria-atomic="true">${this.message}</div>
         `;
     }
 

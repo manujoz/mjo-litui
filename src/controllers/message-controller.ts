@@ -14,7 +14,7 @@ export class MessageController implements ReactiveController {
     }
 
     async show({ message, type = "info", time, onClose }: MessageShowParams) {
-        return await this.messageContainer.show({ message, type, time, onClose });
+        return await this.messageContainer.show({ message, type, time, onClose }, (this.host as MjoMessage).maxMessages);
     }
 
     hostConnected(): void {
@@ -31,6 +31,16 @@ export class MessageController implements ReactiveController {
 
         const theme = (this.host as MjoMessage).theme as Record<string, string>;
         if (theme) this.messageContainer.theme = theme;
+
+        // Apply accessibility properties from host
+        const hostMessage = this.host as MjoMessage;
+        const container = this.messageContainer.shadowRoot?.querySelector(".container");
+        if (container && hostMessage.regionLabel) {
+            container.setAttribute("aria-label", hostMessage.regionLabel);
+        }
+        if (container && hostMessage.ariaLive) {
+            container.setAttribute("aria-live", hostMessage.ariaLive);
+        }
 
         document.body.appendChild(this.messageContainer);
     }

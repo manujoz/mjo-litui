@@ -280,6 +280,11 @@
 			"label": "TypeScript Check Menu Button Only",
 			"type": "shell",
 			"command": "npx tsc --noEmit src/mjo-menu-button.ts"
+		},
+		{
+			"label": "TypeScript Check Message Only",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-message.ts src/components/messages/message-container.ts src/components/messages/message-item.ts src/controllers/message-controller.ts"
 		}
 	]
 }

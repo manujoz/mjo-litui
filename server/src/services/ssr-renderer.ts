@@ -20,6 +20,7 @@ import "../../../src/mjo-grid.js";
 import "../../../src/mjo-icon.js";
 import "../../../src/mjo-image.js";
 import "../../../src/mjo-menu-button.js";
+import "../../../src/mjo-message.js";
 import "../../../src/mjo-textfield.js";
 import "../../../src/mjo-theme.js";
 
