@@ -54,21 +54,21 @@ function announceAlert(): void {
 document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners for all alert events
     document.querySelectorAll("mjo-alert").forEach((alert) => {
-        alert.addEventListener("mjo-alert-will-show", (event: any) => {
+        alert.addEventListener("mjo-alert:will-show", (event: any) => {
             console.log("Alert will show:", event.detail);
         });
 
-        alert.addEventListener("mjo-alert-show", (event: any) => {
+        alert.addEventListener("mjo-alert:opened", (event: any) => {
             console.log("Alert shown:", event.detail);
         });
 
-        alert.addEventListener("mjo-alert-will-close", (event: any) => {
+        alert.addEventListener("mjo-alert:will-close", (event: any) => {
             console.log("Alert will close:", event.detail);
             // You can prevent closing by calling event.preventDefault()
             // Example: if (someCondition) event.preventDefault();
         });
 
-        alert.addEventListener("mjo-alert-closed", (event: any) => {
+        alert.addEventListener("mjo-alert:closed", (event: any) => {
             console.log("Alert closed:", event.detail);
         });
     });

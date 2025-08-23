@@ -4,7 +4,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
 
 import "./mjo-icon.js";
-import { MjoAlertClosedEvent, MjoAlertShowEvent, MjoAlertWillCloseEvent, MjoAlertWillShowEvent } from "./types/mjo-alert.js";
+import { MjoAlertClosedEvent, MjoAlertOpenedEvent, MjoAlertWillCloseEvent, MjoAlertWillShowEvent } from "./types/mjo-alert.js";
 
 @customElement("mjo-alert")
 export class MjoAlert extends LitElement {
@@ -181,7 +181,7 @@ export class MjoAlert extends LitElement {
         const container = this.shadowRoot?.querySelector(".container") as HTMLElement;
         if (!container || container.offsetHeight > 0 || this.isAnimating) return;
 
-        this.#dispatchEvent("mjo-alert-will-show");
+        this.#dispatchEvent("mjo-alert:will-show");
 
         if (this.autoClose) {
             this.#setupAutoClose();
@@ -189,7 +189,7 @@ export class MjoAlert extends LitElement {
 
         if (this.animation === "none") {
             this.style.display = "block";
-            this.#dispatchEvent("mjo-alert-show");
+            this.#dispatchEvent("mjo-alert:opened");
             return;
         }
 
@@ -249,7 +249,7 @@ export class MjoAlert extends LitElement {
         }
 
         animate.finished.then(() => {
-            this.#dispatchEvent("mjo-alert-show");
+            this.#dispatchEvent("mjo-alert:opened");
             if (animate) animate.cancel();
             this.isAnimating = false;
         });
@@ -260,7 +260,7 @@ export class MjoAlert extends LitElement {
         if (!container || container.offsetHeight === 0 || this.isAnimating) return;
 
         // Dispatch cancel event
-        this.#dispatchEvent("mjo-alert-will-close");
+        this.#dispatchEvent("mjo-alert:will-close");
 
         // Clear auto-close timer
         this.#clearAutoCloseTimer();
@@ -271,7 +271,7 @@ export class MjoAlert extends LitElement {
 
         if (this.animation === "none") {
             this.style.display = "none";
-            this.#dispatchEvent("mjo-alert-closed");
+            this.#dispatchEvent("mjo-alert:closed");
             return;
         }
 
@@ -339,7 +339,7 @@ export class MjoAlert extends LitElement {
             }
 
             this.isAnimating = false;
-            this.#dispatchEvent("mjo-alert-closed");
+            this.#dispatchEvent("mjo-alert:closed");
         });
     }
 
@@ -536,9 +536,9 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-alert-will-show": MjoAlertWillShowEvent;
-        "mjo-alert-will-close": MjoAlertWillCloseEvent;
-        "mjo-alert-closed": MjoAlertClosedEvent;
-        "mjo-alert-show": MjoAlertShowEvent;
+        "mjo-alert:will-show": MjoAlertWillShowEvent;
+        "mjo-alert:will-close": MjoAlertWillCloseEvent;
+        "mjo-alert:closed": MjoAlertClosedEvent;
+        "mjo-alert:opened": MjoAlertOpenedEvent;
     }
 }

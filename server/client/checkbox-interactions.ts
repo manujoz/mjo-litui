@@ -67,18 +67,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Indeterminate change event
-        checkbox.addEventListener("mjo-checkbox-indeterminate-change", (ev: Event) => {
+        checkbox.addEventListener("mjo-checkbox:indeterminate-change", (ev: Event) => {
             const event = ev as MjoCheckboxIndeterminateChangeEvent;
             console.log("Checkbox indeterminate changed:", event.detail);
         });
 
         // Focus events
-        checkbox.addEventListener("mjo-checkbox-focus", (ev: Event) => {
+        checkbox.addEventListener("mjo-checkbox:focus", (ev: Event) => {
             const event = ev as MjoCheckboxFocusEvent;
             console.log("Checkbox focused:", event.detail.element.getAttribute("label"));
         });
 
-        checkbox.addEventListener("mjo-checkbox-blur", (ev: Event) => {
+        checkbox.addEventListener("mjo-checkbox:blur", (ev: Event) => {
             const event = ev as MjoCheckboxBlurEvent;
             console.log("Checkbox blurred:", event.detail.element.getAttribute("label"));
         });

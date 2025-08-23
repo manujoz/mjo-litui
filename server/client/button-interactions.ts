@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners to all buttons on the page
     document.querySelectorAll("mjo-button").forEach((button) => {
         // Button click event
-        button.addEventListener("mjo-button-click", (ev: Event) => {
+        button.addEventListener("mjo-button:click", (ev: Event) => {
             const clickEvent = ev as MjoButtonClickEvent;
             console.log("Button clicked:", {
                 element: clickEvent.detail.element,
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Button toggle event
-        button.addEventListener("mjo-button-toggle", (ev: Event) => {
+        button.addEventListener("mjo-button:toggle", (ev: Event) => {
             const toggleEvent = ev as MjoButtonToggleEvent;
             console.log("Button toggled:", {
                 element: toggleEvent.detail.element,
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Button loading change event
-        button.addEventListener("mjo-button-loading-change", (ev: Event) => {
+        button.addEventListener("mjo-button:loading-change", (ev: Event) => {
             const loadingEvent = ev as MjoButtonLoadingChangeEvent;
             console.log("Button loading changed:", {
                 element: loadingEvent.detail.element,
@@ -96,14 +96,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add special handling for form buttons
     document.querySelectorAll('mjo-button[type="submit"]').forEach((button) => {
-        button.addEventListener("mjo-button-click", (ev: Event) => {
+        button.addEventListener("mjo-button:click", (ev: Event) => {
             ev.preventDefault(); // Prevent actual form submission in demo
             showTemporaryFeedback(button, "Form would submit!");
         });
     });
 
     document.querySelectorAll('mjo-button[type="reset"]').forEach((button) => {
-        button.addEventListener("mjo-button-click", (ev: Event) => {
+        button.addEventListener("mjo-button:click", (ev: Event) => {
             ev.preventDefault(); // Prevent actual form reset in demo
             showTemporaryFeedback(button, "Form would reset!");
         });

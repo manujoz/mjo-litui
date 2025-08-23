@@ -16,6 +16,7 @@ import "../../src/mjo-chip.js";
 import "../../src/mjo-color-picker.js";
 import "../../src/mjo-date-picker.js";
 import "../../src/mjo-drawer.js";
+import "../../src/mjo-dropdown.js";
 import "../../src/mjo-form.js";
 import "../../src/mjo-textfield.js";
 import "../../src/mjo-theme.js";

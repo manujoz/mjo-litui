@@ -1,4 +1,5 @@
-import { type MjoDropdown } from "../../mjo-dropdown";
+import type { MjoDropdown } from "../../mjo-dropdown";
+import type { MjoDropdownPosition } from "../../types/mjo-dropdown.d.ts";
 
 import { LitElement, TemplateResult, css, html, nothing, type CSSResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -14,11 +15,11 @@ import {
     getTopInTopPosition,
 } from "../../utils/dropdown.js";
 
-@customElement("dropdow-container")
-export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("dropdown-container")
+export class DropdownContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Object }) css?: CSSResult;
     @property({ type: Object }) html?: TemplateResult<1>;
-    @property({ type: String }) position: DropdownPositions = "center-bottom";
+    @property({ type: String }) position: MjoDropdownPosition = "center-bottom";
     @property({ type: Boolean }) preventScroll = false;
     @property({ type: String }) width?: string;
     @property({ type: String }) height?: string;
@@ -26,24 +27,13 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
     host?: MjoDropdown;
 
     #scrollElements: { element: HTMLElement; scrollTop: number }[] = [];
-    #listeners = {
-        scroll: (ev: Event) => {
-            this.#handleScroll(ev);
-        },
-        wheel: (ev: WheelEvent) => {
-            this.#preventWheel(ev);
-        },
-        resize: () => {
-            this.updatePosition();
-        },
-    };
 
     render() {
         return html`${this.css
             ? html`<style type="text/css">
                   ${this.css.toString().replace(/\s+/g, " ")}
               </style>`
-            : nothing}${this.html ? html`<div class="container">${this.html}</div>` : nothing}`;
+            : nothing}${this.html ? html`<div class="container" role="dialog" aria-modal="false">${this.html}</div>` : nothing}`;
     }
 
     connectedCallback(): void {
@@ -51,13 +41,13 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
 
         if (this.height) this.style.maxHeight = this.height;
 
-        window.addEventListener("resize", this.#listeners.resize);
+        window.addEventListener("resize", this.#handleResize);
     }
 
     disconnectedCallback(): void {
         super.disconnectedCallback();
 
-        window.removeEventListener("resize", this.#listeners.resize);
+        window.removeEventListener("resize", this.#handleResize);
     }
 
     protected updated(changedProperties: Map<PropertyKey, unknown>): void {
@@ -136,40 +126,18 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
         this.#getScrollbarElements();
 
         this.#scrollElements.forEach(({ element }) => {
-            element.addEventListener("scroll", this.#listeners.scroll);
+            element.addEventListener("scroll", this.#handleScroll);
         });
 
-        if (this.preventScroll) document.addEventListener("wheel", this.#listeners.wheel, { passive: false });
+        if (this.preventScroll) document.addEventListener("wheel", this.#handleWheel, { passive: false });
     }
 
     #removePreventScroll() {
         this.#scrollElements.forEach(({ element }) => {
-            element.removeEventListener("scroll", this.#listeners.scroll);
+            element.removeEventListener("scroll", this.#handleScroll);
         });
 
-        document.removeEventListener("wheel", this.#listeners.wheel);
-    }
-
-    #handleScroll(ev: Event) {
-        const target = ev.currentTarget as HTMLElement;
-
-        if (this.preventScroll) {
-            for (const { element, scrollTop } of this.#scrollElements) {
-                if (element !== target) continue;
-
-                if (element === (window as unknown as HTMLElement)) {
-                    window.scrollTo(0, scrollTop);
-                } else {
-                    element.scrollTop = scrollTop;
-                }
-            }
-        } else {
-            this.updatePosition();
-        }
-    }
-
-    #preventWheel(ev: WheelEvent) {
-        if (ev.target !== this) ev.preventDefault();
+        document.removeEventListener("wheel", this.#handleWheel);
     }
 
     #getScrollbarElements() {
@@ -189,6 +157,32 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
         }
     }
 
+    #handleResize = () => {
+        this.updatePosition();
+    };
+
+    #handleScroll = (ev: Event) => {
+        const target = ev.currentTarget as HTMLElement;
+
+        if (this.preventScroll) {
+            for (const { element, scrollTop } of this.#scrollElements) {
+                if (element !== target) continue;
+
+                if (element === (window as unknown as HTMLElement)) {
+                    window.scrollTo(0, scrollTop);
+                } else {
+                    element.scrollTop = scrollTop;
+                }
+            }
+        } else {
+            this.updatePosition();
+        }
+    };
+
+    #handleWheel = (ev: WheelEvent) => {
+        if (ev.target !== this) ev.preventDefault();
+    };
+
     static styles = [
         css`
             :host {
@@ -202,19 +196,18 @@ export class DropdowContainer extends ThemeMixin(LitElement) implements IThemeMi
                 border-radius: var(--mjo-dropdown-radius, var(--mjo-radius-medium, 5px));
                 overflow-x: hidden;
                 overflow-y: auto;
+                z-index: 1000;
             }
             .container {
-                background-color: var(--dropdow-container-background-color, var(--mjo-dropdown-background-color, var(--mjo-background-color, white)));
+                background-color: var(--mjo-dropdown-container-background-color, var(--mjo-dropdown-background-color, var(--mjo-background-color, white)));
                 overflow: hidden;
             }
         `,
     ];
 }
 
-export type DropdownPositions = "left-bottom" | "center-bottom" | "right-bottom" | "left-top" | "center-top" | "right-top" | "left-middle" | "right-middle";
-
 declare global {
     interface HTMLElementTagNameMap {
-        "dropdow-container": DropdowContainer;
+        "dropdown-container": DropdownContainer;
     }
 }

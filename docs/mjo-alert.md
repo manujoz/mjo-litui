@@ -138,8 +138,8 @@ export class ExampleAlertControl extends LitElement {
                     type="info"
                     message="Programmatically controlled alert"
                     focusOnShow
-                    @mjo-alert-show=${() => console.log("Alert shown")}
-                    @mjo-alert-closed=${() => console.log("Alert closed")}
+                    @mjo-alert:opened=${() => console.log("Alert shown")}
+                    @mjo-alert:closed=${() => console.log("Alert closed")}
                 ></mjo-alert>
             </div>
         `;
@@ -382,10 +382,10 @@ export class ExampleAlertDynamic extends LitElement {
 
 | Event                  | Detail                  | Emitted When               | Notes                                    |
 | ---------------------- | ----------------------- | -------------------------- | ---------------------------------------- |
-| `mjo-alert-will-show`  | `{ element: MjoAlert }` | Before the alert is shown  | Can be used to prepare for alert display |
-| `mjo-alert-show`       | `{ element: MjoAlert }` | After the alert is shown   | Fired when show animation completes      |
-| `mjo-alert-will-close` | `{ element: MjoAlert }` | Before the alert is closed | Can be used to save state or cleanup     |
-| `mjo-alert-closed`     | `{ element: MjoAlert }` | After the alert is closed  | Fired when close animation completes     |
+| `mjo-alert:will-show`  | `{ element: MjoAlert }` | Before the alert is shown  | Can be used to prepare for alert display |
+| `mjo-alert:opened`     | `{ element: MjoAlert }` | After the alert is shown   | Fired when show animation completes      |
+| `mjo-alert:will-close` | `{ element: MjoAlert }` | Before the alert is closed | Can be used to save state or cleanup     |
+| `mjo-alert:closed`     | `{ element: MjoAlert }` | After the alert is closed  | Fired when close animation completes     |
 
 **Note**: All events are custom events that bubble and are composed, making them available across shadow DOM boundaries.
 

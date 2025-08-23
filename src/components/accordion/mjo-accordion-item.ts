@@ -158,7 +158,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
         this.expanded = !this.expanded;
 
         // Dispatch the old toggle event for backward compatibility
-        this.dispatchEvent(new CustomEvent("mjo-accordion-toggle", { detail: { item: this, expanded: this.expanded } }));
+        this.dispatchEvent(new CustomEvent("mjo-accordion:toggle", { detail: { item: this, expanded: this.expanded } }));
     }
 
     async #openContent(tries = 0) {
@@ -176,7 +176,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
         }
 
         // Dispatch cancelable event before state change
-        const willEvent = new CustomEvent("mjo-accordion-will-expand", {
+        const willEvent = new CustomEvent("mjo-accordion:will-expand", {
             detail: { item: this, expanded: true },
             cancelable: true,
         });
@@ -201,7 +201,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
 
         // Dispatch new completed event
         this.dispatchEvent(
-            new CustomEvent("mjo-accordion-expanded", {
+            new CustomEvent("mjo-accordion:expanded", {
                 detail: { item: this, expanded: this.expanded },
             }),
         );
@@ -209,7 +209,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
 
     async #closeContent() {
         // Dispatch cancelable event before state change
-        const willEvent = new CustomEvent("mjo-accordion-will-collapse", {
+        const willEvent = new CustomEvent("mjo-accordion:will-collapse", {
             detail: { item: this, expanded: false },
             cancelable: true,
         });
@@ -224,7 +224,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
 
         await pause(this.animationDuration);
         this.dispatchEvent(
-            new CustomEvent("mjo-accordion-collapsed", {
+            new CustomEvent("mjo-accordion:collapsed", {
                 detail: { item: this, expanded: this.expanded },
             }),
         );

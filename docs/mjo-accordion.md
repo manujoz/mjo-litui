@@ -289,21 +289,21 @@ export class ExampleAccordionCompact extends LitElement {
 
 | Event                         | Detail                                                                   | Emitted When                         | Notes                                |
 | ----------------------------- | ------------------------------------------------------------------------ | ------------------------------------ | ------------------------------------ |
-| `mjo-accordion-toggle`        | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | Any section is expanded or collapsed | Forwarded from accordion-item events |
-| `mjo-accordion-will-expand`   | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | Before a section starts expanding    | Cancelable event                     |
-| `mjo-accordion-expanded`      | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | After a section finishes expanding   | Animation completed                  |
-| `mjo-accordion-will-collapse` | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | Before a section starts collapsing   | Cancelable event                     |
-| `mjo-accordion-collapsed`     | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | After a section finishes collapsing  | Animation completed                  |
+| `mjo-accordion:toggle`        | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | Any section is expanded or collapsed | Forwarded from accordion-item events |
+| `mjo-accordion:will-expand`   | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | Before a section starts expanding    | Cancelable event                     |
+| `mjo-accordion:expanded`      | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | After a section finishes expanding   | Animation completed                  |
+| `mjo-accordion:will-collapse` | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | Before a section starts collapsing   | Cancelable event                     |
+| `mjo-accordion:collapsed`     | `{ item: MjoAccordionItem, expanded: boolean, accordion: MjoAccordion }` | After a section finishes collapsing  | Animation completed                  |
 
 ### mjo-accordion-item
 
 | Event                         | Detail                                          | Emitted When                      | Notes                                        |
 | ----------------------------- | ----------------------------------------------- | --------------------------------- | -------------------------------------------- |
-| `mjo-accordion-toggle`        | `{ item: MjoAccordionItem, expanded: boolean }` | Section is expanded or collapsed  | Bubbles to parent accordion                  |
-| `mjo-accordion-will-expand`   | `{ item: MjoAccordionItem, expanded: boolean }` | Before section starts expanding   | Cancelable - prevents expansion if cancelled |
-| `mjo-accordion-expanded`      | `{ item: MjoAccordionItem, expanded: boolean }` | After section finishes expanding  | Fired when animation completes               |
-| `mjo-accordion-will-collapse` | `{ item: MjoAccordionItem, expanded: boolean }` | Before section starts collapsing  | Cancelable - prevents collapse if cancelled  |
-| `mjo-accordion-collapsed`     | `{ item: MjoAccordionItem, expanded: boolean }` | After section finishes collapsing | Fired when animation completes               |
+| `mjo-accordion:toggle`        | `{ item: MjoAccordionItem, expanded: boolean }` | Section is expanded or collapsed  | Bubbles to parent accordion                  |
+| `mjo-accordion:will-expand`   | `{ item: MjoAccordionItem, expanded: boolean }` | Before section starts expanding   | Cancelable - prevents expansion if cancelled |
+| `mjo-accordion:expanded`      | `{ item: MjoAccordionItem, expanded: boolean }` | After section finishes expanding  | Fired when animation completes               |
+| `mjo-accordion:will-collapse` | `{ item: MjoAccordionItem, expanded: boolean }` | Before section starts collapsing  | Cancelable - prevents collapse if cancelled  |
+| `mjo-accordion:collapsed`     | `{ item: MjoAccordionItem, expanded: boolean }` | After section finishes collapsing | Fired when animation completes               |
 
 ## CSS Variables
 
@@ -464,8 +464,8 @@ export class ExampleAccordionProgrammatic extends LitElement {
                 <mjo-accordion
                     variant="shadow"
                     selectionMode="multiple"
-                    @mjo-accordion-expanded=${this.handleAccordionEvent}
-                    @mjo-accordion-collapsed=${this.handleAccordionEvent}
+                    @mjo-accordion:expanded=${this.handleAccordionEvent}
+                    @mjo-accordion:collapsed=${this.handleAccordionEvent}
                 >
                     <mjo-accordion-item itemTitle="Section 1">
                         <p>Content for section 1</p>

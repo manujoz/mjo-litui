@@ -15,7 +15,7 @@ export interface MjoAlertClosedEvent extends CustomEvent {
         element: MjoAlert;
     };
 }
-export interface MjoAlertShowEvent extends CustomEvent {
+export interface MjoAlertOpenedEvent extends CustomEvent {
     detail: {
         element: MjoAlert;
     };

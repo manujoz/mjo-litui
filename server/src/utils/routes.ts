@@ -9,6 +9,7 @@ import { ChipController } from "../controllers/chip-controller.js";
 import { ColorPickerController } from "../controllers/color-picker-controller.js";
 import { DatePickerController } from "../controllers/date-picker-controller.js";
 import { DrawerController } from "../controllers/drawer-controller.js";
+import { DropdownController } from "../controllers/dropdown-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
 
@@ -23,6 +24,7 @@ const chipController = new ChipController();
 const colorPickerController = new ColorPickerController();
 const datePickerController = new DatePickerController();
 const drawerController = new DrawerController();
+const dropdownController = new DropdownController();
 const accordionController = new AccordionController();
 const textfieldController = new TextfieldController();
 
@@ -74,6 +76,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-drawer",
         controller: drawerController.renderDrawerPage,
+    },
+    {
+        path: "/component/mjo-dropdown",
+        controller: dropdownController.renderDropdownPage,
     },
     {
         path: "/component/mjo-textfield",

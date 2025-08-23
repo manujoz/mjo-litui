@@ -99,7 +99,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
 
         // Forward the event to the accordion level
         this.dispatchEvent(
-            new CustomEvent("mjo-accordion-toggle", {
+            new CustomEvent("mjo-accordion:toggle", {
                 detail: {
                     item: toggledItem,
                     expanded: customEvent.detail.expanded,
@@ -113,13 +113,13 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
         this.items.forEach((item) => {
             this.containerEl.appendChild(item);
             item.variant = this.variant;
-            item.addEventListener("mjo-accordion-toggle", this.#handleToggle);
+            item.addEventListener("mjo-accordion:toggle", this.#handleToggle);
 
             // Listen for granular events and forward them
-            item.addEventListener("mjo-accordion-will-expand", (event) => {
+            item.addEventListener("mjo-accordion:will-expand", (event) => {
                 const customEvent = event as CustomEvent;
                 this.dispatchEvent(
-                    new CustomEvent("mjo-accordion-will-expand", {
+                    new CustomEvent("mjo-accordion:will-expand", {
                         detail: { ...customEvent.detail, accordion: this },
                         cancelable: true,
                         bubbles: true,
@@ -128,10 +128,10 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
                 );
             });
 
-            item.addEventListener("mjo-accordion-expanded", (event) => {
+            item.addEventListener("mjo-accordion:expanded", (event) => {
                 const customEvent = event as CustomEvent;
                 this.dispatchEvent(
-                    new CustomEvent("mjo-accordion-expanded", {
+                    new CustomEvent("mjo-accordion:expanded", {
                         detail: { ...customEvent.detail, accordion: this },
                         bubbles: true,
                         composed: true,
@@ -139,10 +139,10 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
                 );
             });
 
-            item.addEventListener("mjo-accordion-will-collapse", (event) => {
+            item.addEventListener("mjo-accordion:will-collapse", (event) => {
                 const customEvent = event as CustomEvent;
                 this.dispatchEvent(
-                    new CustomEvent("mjo-accordion-will-collapse", {
+                    new CustomEvent("mjo-accordion:will-collapse", {
                         detail: { ...customEvent.detail, accordion: this },
                         cancelable: true,
                         bubbles: true,
@@ -151,10 +151,10 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
                 );
             });
 
-            item.addEventListener("mjo-accordion-collapsed", (event) => {
+            item.addEventListener("mjo-accordion:collapsed", (event) => {
                 const customEvent = event as CustomEvent;
                 this.dispatchEvent(
-                    new CustomEvent("mjo-accordion-collapsed", {
+                    new CustomEvent("mjo-accordion:collapsed", {
                         detail: { ...customEvent.detail, accordion: this },
                         bubbles: true,
                         composed: true,
@@ -211,10 +211,10 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-accordion-toggle": MjoAccordionToggleEvent;
-        "mjo-accordion-will-expand": MjoAccordionWillExpandEvent;
-        "mjo-accordion-expanded": MjoAccordionExpandedEvent;
-        "mjo-accordion-will-collapse": MjoAccordionWillCollapseEvent;
-        "mjo-accordion-collapsed": MjoAccordionCollapsedEvent;
+        "mjo-accordion:toggle": MjoAccordionToggleEvent;
+        "mjo-accordion:will-expand": MjoAccordionWillExpandEvent;
+        "mjo-accordion:expanded": MjoAccordionExpandedEvent;
+        "mjo-accordion:will-collapse": MjoAccordionWillCollapseEvent;
+        "mjo-accordion:collapsed": MjoAccordionCollapsedEvent;
     }
 }

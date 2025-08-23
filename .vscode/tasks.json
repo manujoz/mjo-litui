@@ -215,6 +215,11 @@
 			"label": "Build Drawer Client",
 			"type": "shell",
 			"command": "npm run server:build:client"
+		},
+		{
+			"label": "Check Dropdown TypeScript Only",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-dropdown.ts src/components/dropdown/dropdown-container.ts src/types/mjo-dropdown.d.ts src/utils/dropdown.ts"
 		}
 	]
 }

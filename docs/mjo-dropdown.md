@@ -1,6 +1,6 @@
 # mjo-dropdown
 
-Configurable dropdown component that displays floating content relative to its trigger element. Supports multiple positioning strategies, hover/click behaviors, scroll prevention, and theme customization.
+Accessible dropdown component that displays floating content relative to its trigger element. Supports multiple positioning strategies, hover/click behaviors, keyboard navigation, focus management, and comprehensive accessibility features.
 
 ## HTML Usage
 
@@ -14,15 +14,17 @@ Configurable dropdown component that displays floating content relative to its t
 </mjo-dropdown>
 ```
 
-## Basic Example
+## Usage
+
+### Basic Hover Dropdown
 
 ```ts
-import { LitElement, html, css } from "lit";
+import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-dropdown";
 
-@customElement("example-dropdown-basic")
-export class ExampleDropdownBasic extends LitElement {
+@customElement("example-dropdown-hover")
+export class ExampleDropdownHover extends LitElement {
     render() {
         return html`
             <mjo-dropdown
@@ -41,10 +43,10 @@ export class ExampleDropdownBasic extends LitElement {
 }
 ```
 
-## Click Behavior Example
+### Click Dropdown with Menu
 
 ```ts
-import { LitElement, html, css } from "lit";
+import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-dropdown";
 
@@ -72,209 +74,16 @@ export class ExampleDropdownClick extends LitElement {
 }
 ```
 
-## Positioning & Sizing Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-dropdown";
-
-@customElement("example-dropdown-positioning")
-export class ExampleDropdownPositioning extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <mjo-dropdown
-                    behaviour="hover"
-                    fullwidth
-                    .html=${html`
-                        <div style="padding: 1rem; background: #f0f9ff; border: 1px solid #0ea5e9;">
-                            <p>This dropdown matches the trigger width (fullwidth)</p>
-                        </div>
-                    `}
-                >
-                    <input type="text" placeholder="Fullwidth dropdown" style="width: 300px;" />
-                </mjo-dropdown>
-
-                <mjo-dropdown
-                    behaviour="hover"
-                    width="400"
-                    height="200"
-                    .html=${html`
-                        <div style="padding: 1rem; background: #fef3c7; border: 1px solid #f59e0b; height: 100%;">
-                            <p>Fixed width (400px) and height (200px)</p>
-                            <p>Content with scrollable overflow if needed</p>
-                        </div>
-                    `}
-                >
-                    <button>Fixed size dropdown</button>
-                </mjo-dropdown>
-            </div>
-        `;
-    }
-}
-```
-
-## Custom Styles Example
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-dropdown";
-
-@customElement("example-dropdown-styles")
-export class ExampleDropdownStyles extends LitElement {
-    private dropdownStyles = css`
-        .custom-dropdown {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        .custom-dropdown h3 {
-            margin: 0 0 1rem 0;
-            font-size: 1.2rem;
-        }
-        .custom-dropdown p {
-            margin: 0.5rem 0;
-        }
-    `;
-
-    render() {
-        return html`
-            <mjo-dropdown
-                behaviour="click"
-                .css=${this.dropdownStyles}
-                .html=${html`
-                    <div class="custom-dropdown">
-                        <h3>Custom Styled Content</h3>
-                        <p>This dropdown has custom CSS styling.</p>
-                        <p>Background gradient and custom spacing.</p>
-                    </div>
-                `}
-            >
-                <button>Click for styled dropdown</button>
-            </mjo-dropdown>
-        `;
-    }
-}
-```
-
-## Advanced Usage Example
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-dropdown";
-
-@customElement("example-dropdown-advanced")
-export class ExampleDropdownAdvanced extends LitElement {
-    @state() private selectedOption = "Select an option";
-    @state() private isDropdownOpen = false;
-
-    private options = [
-        { value: "option1", label: "First Option" },
-        { value: "option2", label: "Second Option" },
-        { value: "option3", label: "Third Option" },
-    ];
-
-    private handleOptionSelect(value: string, label: string) {
-        this.selectedOption = label;
-        this.isDropdownOpen = false;
-    }
-
-    private handleDropdownOpen() {
-        this.isDropdownOpen = true;
-    }
-
-    private handleDropdownClose() {
-        this.isDropdownOpen = false;
-    }
-
-    render() {
-        return html`
-            <mjo-dropdown
-                behaviour="click"
-                .isOpen=${this.isDropdownOpen}
-                fullwidth
-                preventScroll
-                .html=${html`
-                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 0.5rem 0;">
-                        ${this.options.map(
-                            (option) => html`
-                                <div
-                                    style="padding: 0.75rem 1rem; cursor: pointer; hover: background-color: #f9fafb;"
-                                    @click=${() => this.handleOptionSelect(option.value, option.label)}
-                                >
-                                    ${option.label}
-                                </div>
-                            `,
-                        )}
-                    </div>
-                `}
-                @open=${this.handleDropdownOpen}
-                @close=${this.handleDropdownClose}
-            >
-                <div style="border: 1px solid #d1d5db; padding: 0.75rem 1rem; border-radius: 6px; cursor: pointer; background: white;">
-                    ${this.selectedOption}
-                    <span style="float: right;">${this.isDropdownOpen ? "▲" : "▼"}</span>
-                </div>
-            </mjo-dropdown>
-        `;
-    }
-}
-```
-
-## Attributes / Properties
-
-| Name                       | Type                          | Default     | Reflects | Description                                                                |
-| -------------------------- | ----------------------------- | ----------- | -------- | -------------------------------------------------------------------------- |
-| `fullwidth`                | `boolean`                     | `false`     | no       | Makes dropdown width match trigger element width                           |
-| `disabled`                 | `boolean`                     | `false`     | no       | Disables dropdown interaction                                              |
-| `preventScroll`            | `boolean`                     | `false`     | no       | Prevents page scrolling when dropdown is open                              |
-| `isOpen`                   | `boolean`                     | `false`     | yes      | Controls dropdown open state (can be used for programmatic control)        |
-| `css`                      | `CSSResult \| undefined`      | `undefined` | no       | Custom CSS styles to apply to dropdown content                             |
-| `html`                     | `TemplateResult \| undefined` | `undefined` | no       | HTML template to render inside dropdown                                    |
-| `behaviour`                | `"hover" \| "click"`          | `"hover"`   | no       | Interaction mode: hover or click to trigger                                |
-| `width`                    | `string \| undefined`         | `undefined` | no       | Fixed width for dropdown (converted to pixels if numeric)                  |
-| `height`                   | `string \| undefined`         | `undefined` | no       | Fixed height for dropdown (converted to pixels if numeric)                 |
-| `preventCloseOnInnerClick` | `boolean`                     | `false`     | no       | Prevents dropdown from closing when clicking inside dropdown content       |
-| `suppressOpenSelectors`    | `string[] \| undefined`       | `undefined` | no       | CSS selectors that prevent dropdown opening when matched (click mode only) |
-
-### Internal Properties
-
-| Name                | Type                       | Description                                             |
-| ------------------- | -------------------------- | ------------------------------------------------------- |
-| `dropdownContainer` | `DropdowContainer \| null` | Reference to the floating dropdown container element    |
-| `openTimestamp`     | `number`                   | Timestamp when dropdown was opened (for click debounce) |
-
-### Behavior Notes
-
--   The dropdown container is created dynamically and appended to `document.body`
--   Position is automatically calculated and updated on scroll/resize
--   Click behavior includes a 100ms debounce to prevent immediate close on trigger click
--   When `preventScroll` is true, the dropdown locks scroll position during display
--   When `preventCloseOnInnerClick` is true, clicking inside the dropdown content will not close the dropdown
--   `suppressOpenSelectors` array allows preventing dropdown opening when click events originate from matching elements (only applies to `behaviour="click"`)
--   Theme inheritance: dropdown inherits theme from closest `<mjo-theme>` ancestor
-
-## New Properties Examples
-
-### Prevent Close on Inner Click Example
+### Form Dropdown (Prevent Close on Inner Click)
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-dropdown";
 
-@customElement("example-dropdown-prevent-close")
-export class ExampleDropdownPreventClose extends LitElement {
+@customElement("example-dropdown-form")
+export class ExampleDropdownForm extends LitElement {
     @state() private formData = { name: "", email: "" };
-
-    private handleInputChange(field: string, value: string) {
-        this.formData = { ...this.formData, [field]: value };
-    }
 
     private handleSubmit(e: Event) {
         e.preventDefault();
@@ -294,31 +103,14 @@ export class ExampleDropdownPreventClose extends LitElement {
                         <h3 style="margin: 0 0 1rem 0;">User Information</h3>
                         <form @submit=${this.handleSubmit}>
                             <div style="margin-bottom: 1rem;">
-                                <label style="display: block; margin-bottom: 0.5rem;">Name:</label>
-                                <input
-                                    type="text"
-                                    .value=${this.formData.name}
-                                    @input=${(e: Event) => this.handleInputChange("name", (e.target as HTMLInputElement).value)}
-                                    style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px;"
-                                />
+                                <label>Name:</label>
+                                <input type="text" .value=${this.formData.name} style="width: 100%; padding: 0.5rem;" />
                             </div>
                             <div style="margin-bottom: 1rem;">
-                                <label style="display: block; margin-bottom: 0.5rem;">Email:</label>
-                                <input
-                                    type="email"
-                                    .value=${this.formData.email}
-                                    @input=${(e: Event) => this.handleInputChange("email", (e.target as HTMLInputElement).value)}
-                                    style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px;"
-                                />
+                                <label>Email:</label>
+                                <input type="email" .value=${this.formData.email} style="width: 100%; padding: 0.5rem;" />
                             </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button type="submit" style="padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 4px;">
-                                    Save
-                                </button>
-                                <button type="button" style="padding: 0.5rem 1rem; background: #6b7280; color: white; border: none; border-radius: 4px;">
-                                    Cancel
-                                </button>
-                            </div>
+                            <button type="submit">Save</button>
                         </form>
                     </div>
                 `}
@@ -330,98 +122,89 @@ export class ExampleDropdownPreventClose extends LitElement {
 }
 ```
 
-### Suppress Open Selectors Example
+## Attributes / Properties
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-dropdown";
+| Name                       | Type                          | Default           | Reflects | Description                                                                |
+| -------------------------- | ----------------------------- | ----------------- | -------- | -------------------------------------------------------------------------- |
+| `fullwidth`                | `boolean`                     | `false`           | no       | Makes dropdown width match trigger element width                           |
+| `disabled`                 | `boolean`                     | `false`           | no       | Disables dropdown interaction                                              |
+| `preventScroll`            | `boolean`                     | `false`           | no       | Prevents page scrolling when dropdown is open                              |
+| `isOpen`                   | `boolean`                     | `false`           | yes      | Controls dropdown open state (can be used for programmatic control)        |
+| `css`                      | `CSSResult \| undefined`      | `undefined`       | no       | Custom CSS styles to apply to dropdown content                             |
+| `html`                     | `TemplateResult \| undefined` | `undefined`       | no       | HTML template to render inside dropdown                                    |
+| `behaviour`                | `"hover" \| "click"`          | `"hover"`         | no       | Interaction mode: hover or click to trigger                                |
+| `width`                    | `string \| undefined`         | `undefined`       | no       | Fixed width for dropdown (converted to pixels if numeric)                  |
+| `height`                   | `string \| undefined`         | `undefined`       | no       | Fixed height for dropdown (converted to pixels if numeric)                 |
+| `preventCloseOnInnerClick` | `boolean`                     | `false`           | no       | Prevents dropdown from closing when clicking inside dropdown content       |
+| `position`                 | `MjoDropdownPosition`         | `"center-bottom"` | no       | Preferred position for dropdown relative to trigger                        |
+| `restoreFocus`             | `boolean`                     | `true`            | no       | Restores focus to trigger element when dropdown closes                     |
+| `suppressOpenSelectors`    | `string[] \| undefined`       | `undefined`       | no       | CSS selectors that prevent dropdown opening when matched (click mode only) |
 
-@customElement("example-dropdown-suppress-open")
-export class ExampleDropdownSuppressOpen extends LitElement {
-    @state() private items = [
-        { id: 1, name: "Item 1", deletable: true },
-        { id: 2, name: "Item 2", deletable: true },
-        { id: 3, name: "Item 3", deletable: false },
-    ];
+### Internal Properties
 
-    private deleteItem(id: number, event: Event) {
-        event.stopPropagation(); // Additional safety
-        this.items = this.items.filter((item) => item.id !== id);
-        console.log(`Deleted item ${id}`);
-    }
+| Name                | Type                        | Description                                             |
+| ------------------- | --------------------------- | ------------------------------------------------------- |
+| `dropdownContainer` | `DropdownContainer \| null` | Reference to the floating dropdown container element    |
+| `openTimestamp`     | `number`                    | Timestamp when dropdown was opened (for click debounce) |
 
-    private selectItem(id: number) {
-        console.log(`Selected item ${id}`);
-    }
+### Behavior Notes
 
-    render() {
-        return html`
-            <mjo-dropdown
-                behaviour="click"
-                .suppressOpenSelectors=${[".delete-button", ".no-open-zone"]}
-                .html=${html`
-                    <div style="padding: 0.5rem; background: white; border: 1px solid #e5e7eb; border-radius: 6px; min-width: 250px;">
-                        <h4 style="margin: 0 0 0.5rem 0; padding: 0.5rem;">Action Menu</h4>
-                        <div style="border-top: 1px solid #e5e7eb; padding-top: 0.5rem;">
-                            <div style="padding: 0.5rem; cursor: pointer;" @click=${() => console.log("Edit clicked")}>✏️ Edit Item</div>
-                            <div style="padding: 0.5rem; cursor: pointer;" @click=${() => console.log("Share clicked")}>🔗 Share Item</div>
-                            <div style="padding: 0.5rem; cursor: pointer; color: #ef4444;" @click=${() => console.log("Delete all clicked")}>🗑️ Delete All</div>
-                        </div>
-                    </div>
-                `}
-            >
-                <div style="border: 1px solid #d1d5db; border-radius: 8px; padding: 1rem; background: white;">
-                    <h3>Items List</h3>
-                    <p class="no-open-zone" style="color: #6b7280; font-size: 0.875rem;">Click delete buttons won't open the dropdown menu</p>
-                    ${this.items.map(
-                        (item) => html`
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #f3f4f6;"
-                            >
-                                <span @click=${() => this.selectItem(item.id)} style="cursor: pointer;"> ${item.name} </span>
-                                <button
-                                    class="delete-button"
-                                    ?disabled=${!item.deletable}
-                                    @click=${(e: Event) => this.deleteItem(item.id, e)}
-                                    style="background: #ef4444; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer;"
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        `,
-                    )}
-                    <div style="margin-top: 1rem; text-align: center; color: #6b7280; font-size: 0.875rem;">Click anywhere else to open actions menu</div>
-                </div>
-            </mjo-dropdown>
-        `;
-    }
-}
-```
+-   The dropdown container is created dynamically and appended to `document.body`
+-   Position is automatically calculated and updated on scroll/resize
+-   Click behavior includes a 100ms debounce to prevent immediate close on trigger click
+-   When `preventScroll` is true, the dropdown locks scroll position during display
+-   When `preventCloseOnInnerClick` is true, clicking inside the dropdown content will not close the dropdown
+-   `suppressOpenSelectors` array allows preventing dropdown opening when click events originate from matching elements (only applies to `behaviour="click"`)
+-   Theme inheritance: dropdown inherits theme from closest `<mjo-theme>` ancestor
 
 ## Slots
 
-| Slot      | Description                                                       |
-| --------- | ----------------------------------------------------------------- |
-| (default) | Trigger element that activates the dropdown (button, input, etc.) |
+| Name      | Description                                             |
+| --------- | ------------------------------------------------------- |
+| `trigger` | Element that triggers the dropdown (button, link, etc.) |
+| (default) | Default slot for dropdown content                       |
 
 ## Events
 
-| Event   | Detail | Emitted When    | Notes                               |
-| ------- | ------ | --------------- | ----------------------------------- |
-| `open`  | none   | Dropdown opens  | Fired when dropdown becomes visible |
-| `close` | none   | Dropdown closes | Fired when dropdown becomes hidden  |
+| Name                  | Type                     | Description                                                                |
+| --------------------- | ------------------------ | -------------------------------------------------------------------------- |
+| `mjo-dropdown-opened` | `MjoDropdownOpenedEvent` | Fired when dropdown opens. Contains `isOpen: true` property                |
+| `mjo-dropdown-closed` | `MjoDropdownClosedEvent` | Fired when dropdown closes. Contains `isOpen: false` property              |
+| `mjo-dropdown-change` | `MjoDropdownChangeEvent` | Fired when dropdown state changes. Contains `isOpen: boolean` and `reason` |
+
+## Accessibility Features
+
+The `mjo-dropdown` component implements comprehensive accessibility features following ARIA standards:
+
+### ARIA Attributes
+
+-   **aria-haspopup="true"**: Indicates trigger element has a popup
+-   **aria-expanded**: Reflects current open/closed state
+-   **aria-controls**: Links trigger to dropdown content via ID
+-   **role="region"**: Applied to dropdown container for screen readers
+-   **aria-labelledby**: Links dropdown content to trigger element
+
+### Keyboard Navigation
+
+-   **Escape**: Closes dropdown and restores focus to trigger
+-   **Tab**: Normal tab navigation through dropdown content
+-   **Shift+Tab**: Reverse tab navigation
+-   **Space/Enter**: Opens dropdown when trigger is focused (click mode)
+
+### Focus Management
+
+-   Focus is automatically moved to dropdown content when opened
+-   Focus is restored to trigger element when closed (configurable via `restoreFocus`)
+-   Focus trap prevents tabbing outside dropdown when open
+-   Screen reader announcements for state changes
 
 ## Public Methods
 
-| Method             | Parameters    | Returns       | Description                                    |
-| ------------------ | ------------- | ------------- | ---------------------------------------------- |
-| `open()`           | none          | `void`        | Programmatically opens the dropdown            |
-| `close()`          | `ev?: Event`  | `void`        | Programmatically closes the dropdown           |
-| `updatePosition()` | none          | `void`        | Recalculates and updates dropdown position     |
-| `scrollToTop()`    | `top: number` | `void`        | Scrolls dropdown content to specified position |
-| `getScroll()`      | none          | `{top, left}` | Gets current scroll position of dropdown       |
-| `getHeigth()`      | none          | `number`      | Gets dropdown container height                 |
+| Method             | Parameters   | Returns | Description                                |
+| ------------------ | ------------ | ------- | ------------------------------------------ |
+| `open()`           | none         | `void`  | Programmatically opens the dropdown        |
+| `close()`          | `ev?: Event` | `void`  | Programmatically closes the dropdown       |
+| `updatePosition()` | none         | `void`  | Recalculates and updates dropdown position |
 
 ## CSS Variables
 
@@ -540,71 +323,30 @@ The dropdown automatically selects the best position based on available viewport
 -   **Top positions**: `left-top`, `center-top`, `right-top`
 -   **Middle positions**: `left-middle`, `right-middle`
 
-Position is calculated dynamically by the `DropdowContainer` using utilities that consider:
+Position is calculated dynamically by the `DropdownContainer` using utilities that consider available space, dropdown dimensions, viewport boundaries, and scroll position.
 
--   Available space in each direction
--   Dropdown content dimensions
--   Viewport boundaries
--   Scroll position
+## Common Use Cases
 
-## Accessibility Notes
+### Tooltip
 
--   The dropdown container is appended to `document.body` but maintains association with its trigger
--   Ensure trigger elements are keyboard accessible (native buttons, focusable elements)
--   Consider adding `aria-haspopup="true"` and `aria-expanded` to trigger elements for screen readers
--   When using click behavior, clicking outside the dropdown will close it
--   Content inside dropdown should follow standard accessibility practices
-
-## Performance Considerations
-
--   Dropdown container is created once on `connectedCallback` and reused
--   Position calculations are throttled to prevent excessive updates during scroll/resize
--   Event listeners are properly cleaned up on `disconnectedCallback`
--   Consider using `preventScroll` sparingly as it can impact user experience
-
-## Common Patterns
-
-### Tooltip-style Dropdown
-
-```ts
-<mjo-dropdown
-    behaviour="hover"
-    .html=${html`<div style="padding: 0.5rem; font-size: 0.875rem;">Helpful tooltip text</div>`}
->
+```html
+<mjo-dropdown behaviour="hover" .html=${html`<div style="padding: 0.5rem;">Helpful tooltip</div>`}>
     <button>?</button>
 </mjo-dropdown>
 ```
 
 ### Context Menu
 
-```ts
-<mjo-dropdown
-    behaviour="click"
-    .html=${html`
-        <div style="padding: 0.5rem 0;">
-            <div style="padding: 0.5rem 1rem; cursor: pointer;">Cut</div>
-            <div style="padding: 0.5rem 1rem; cursor: pointer;">Copy</div>
-            <div style="padding: 0.5rem 1rem; cursor: pointer;">Paste</div>
-        </div>
-    `}
->
+```html
+<mjo-dropdown behaviour="click" .html=${html`<div>Menu items...</div>`}>
     <div>Right-click area</div>
 </mjo-dropdown>
 ```
 
-### Select-style Dropdown
+### Select Dropdown
 
-```ts
-<mjo-dropdown
-    behaviour="click"
-    fullwidth
-    preventScroll
-    .html=${html`<!-- options list -->`}
->
+```html
+<mjo-dropdown behaviour="click" fullwidth .html=${html`<div>Options list...</div>`}>
     <input readonly placeholder="Select option..." />
 </mjo-dropdown>
 ```
-
-## Summary
-
-`<mjo-dropdown>` provides a flexible foundation for creating floating content relative to trigger elements. It handles complex positioning calculations automatically, supports both hover and click interactions, and integrates seamlessly with the mjo-litui theming system. Use global theming for consistency and component-level theming for specific customizations.

@@ -161,7 +161,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     async #handleClick() {
         if (!this.clickable || this.disabled) return;
 
-        this.dispatchEvent(new CustomEvent("mjo-avatar-click", { detail: { value: this.value || this.name || "" } }));
+        this.dispatchEvent(new CustomEvent("mjo-avatar:click", { detail: { value: this.value || this.name || "" } }));
 
         this.container.style.transform = "scale(0.9)";
         await pause(100);
@@ -173,7 +173,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     #handleError() {
         this.error = true;
         this.dispatchEvent(
-            new CustomEvent("mjo-avatar-error", {
+            new CustomEvent("mjo-avatar:error", {
                 detail: { message: "Failed to load avatar image" },
             }),
         );
@@ -348,7 +348,7 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-avatar-click": CustomEvent<{ value: string }>;
-        "mjo-avatar-error": CustomEvent<{ message: string }>;
+        "mjo-avatar:click": CustomEvent<{ value: string }>;
+        "mjo-avatar:error": CustomEvent<{ message: string }>;
     }
 }

@@ -122,7 +122,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
 
         // Dispatch indeterminate change event
         this.dispatchEvent(
-            new CustomEvent<MjoCheckboxIndeterminateChangeEvent["detail"]>("mjo-checkbox-indeterminate-change", {
+            new CustomEvent<MjoCheckboxIndeterminateChangeEvent["detail"]>("mjo-checkbox:indeterminate-change", {
                 detail: {
                     element: this,
                     indeterminate: this.indeterminate,
@@ -208,7 +208,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         if (this.disabled) return;
 
         this.dispatchEvent(
-            new CustomEvent<MjoCheckboxFocusEvent["detail"]>("mjo-checkbox-focus", {
+            new CustomEvent<MjoCheckboxFocusEvent["detail"]>("mjo-checkbox:focus", {
                 detail: {
                     element: this,
                 },
@@ -220,7 +220,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
 
     #handleBlur() {
         this.dispatchEvent(
-            new CustomEvent<MjoCheckboxBlurEvent["detail"]>("mjo-checkbox-blur", {
+            new CustomEvent<MjoCheckboxBlurEvent["detail"]>("mjo-checkbox:blur", {
                 detail: {
                     element: this,
                 },
@@ -366,8 +366,8 @@ declare global {
 
     interface HTMLElementEventMap {
         "mjo-checkbox-change": MjoCheckboxChangeEvent;
-        "mjo-checkbox-indeterminate-change": MjoCheckboxIndeterminateChangeEvent;
-        "mjo-checkbox-focus": MjoCheckboxFocusEvent;
-        "mjo-checkbox-blur": MjoCheckboxBlurEvent;
+        "mjo-checkbox:indeterminate-change": MjoCheckboxIndeterminateChangeEvent;
+        "mjo-checkbox:focus": MjoCheckboxFocusEvent;
+        "mjo-checkbox:blur": MjoCheckboxBlurEvent;
     }
 }

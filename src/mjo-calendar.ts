@@ -42,8 +42,8 @@ import {
  * @csspart day - Individual day cell
  * @csspart selected - Selected day(s)
  * @csspart today - Today's date
- * @fires mjo-calendar-date-selected - Fired when a date is selected
- * @fires mjo-calendar-range-selected - Fired when a date range is selected
+ * @fires mjo-calendar:date-selected - Fired when a date is selected
+ * @fires mjo-calendar:range-selected - Fired when a date range is selected
  */
 @customElement("mjo-calendar")
 export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IFormMixin, IThemeMixin {
@@ -924,9 +924,9 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             this.#announceText(`Selected ${dateString}`);
         }
 
-        // Emit the specific mjo-calendar-date-selected event
+        // Emit the specific mjo-calendar:date-selected event
         this.dispatchEvent(
-            new CustomEvent("mjo-calendar-date-selected", {
+            new CustomEvent("mjo-calendar:date-selected", {
                 detail: eventDetail,
                 bubbles: true,
                 composed: true,
@@ -958,9 +958,9 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             this.#announceText(`Selected date range from ${startString} to ${endString}`);
         }
 
-        // Emit the specific mjo-calendar-range-selected event
+        // Emit the specific mjo-calendar:range-selected event
         this.dispatchEvent(
-            new CustomEvent("mjo-calendar-range-selected", {
+            new CustomEvent("mjo-calendar:range-selected", {
                 detail: eventDetail,
                 bubbles: true,
                 composed: true,
@@ -1148,7 +1148,7 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-calendar-date-selected": CalendarDateSelectedEvent;
-        "mjo-calendar-range-selected": CalendarRangeSelectedEvent;
+        "mjo-calendar:date-selected": CalendarDateSelectedEvent;
+        "mjo-calendar:range-selected": CalendarRangeSelectedEvent;
     }
 }

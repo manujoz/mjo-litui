@@ -1,5 +1,6 @@
-import { type DropdowContainer } from "./components/dropdwon/dropdow-container";
-import { type MjoTheme } from "./mjo-theme.js";
+import type { DropdownContainer } from "./components/dropdown/dropdown-container";
+import type { MjoTheme } from "./mjo-theme.js";
+import type { MjoDropdownBehaviour, MjoDropdownCloseEvent, MjoDropdownOpenEvent, MjoDropdownPosition } from "./types/mjo-dropdown.d.ts";
 
 import { CSSResult, LitElement, TemplateResult, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -7,7 +8,7 @@ import { customElement, property } from "lit/decorators.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { searchClosestElement } from "./utils/shadow-dom.js";
 
-import "./components/dropdwon/dropdow-container.js";
+import "./components/dropdown/dropdown-container.js";
 
 const convertToPx = (value: string | null): string | null => {
     if (value === null) return value;
@@ -22,45 +23,27 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean, reflect: true }) isOpen = false;
     @property({ type: Object }) css?: CSSResult;
     @property({ type: Object }) html?: TemplateResult<1>;
-    @property({ type: String }) behaviour: "hover" | "click" = "hover";
+    @property({ type: String }) behaviour: MjoDropdownBehaviour = "hover";
     @property({ type: String, converter: convertToPx }) width?: string;
     @property({ type: String, converter: convertToPx }) height?: string;
     @property({ type: Boolean }) preventCloseOnInnerClick = false;
+    @property({ type: String }) position: MjoDropdownPosition = "center-bottom";
+    @property({ type: Boolean }) restoreFocus = true;
     /** Optional list of CSS selectors that, if any element in the click composedPath matches, will prevent opening (only for behaviour='click'). */
     @property({ type: Array }) suppressOpenSelectors?: string[];
 
-    dropdownContainer?: DropdowContainer | null;
+    dropdownContainer?: DropdownContainer | null;
     openTimestamp = 0;
-
-    #listeners = {
-        open: (ev: Event) => {
-            if (this.behaviour === "click" && ev?.type === "click" && this.suppressOpenSelectors?.length) {
-                const path = ev.composedPath();
-                if (
-                    path.some((n) => {
-                        const el = n as HTMLElement;
-                        if (!el || !el.matches) return false;
-                        return this.suppressOpenSelectors!.some((sel) => {
-                            try {
-                                return el.matches(sel);
-                            } catch {
-                                return false;
-                            }
-                        });
-                    })
-                ) {
-                    return; // suppressed
-                }
-            }
-            this.open();
-        },
-        close: (ev: Event) => {
-            this.close(ev);
-        },
-    };
+    #lastFocusedElement?: HTMLElement;
 
     render() {
-        return html`<slot></slot>`;
+        return html`<slot
+            role="button"
+            tabindex="0"
+            aria-haspopup="true"
+            aria-expanded=${this.isOpen}
+            .ariaControls=${this.dropdownContainer?.id || ""}
+        ></slot>`;
     }
 
     connectedCallback() {
@@ -104,20 +87,20 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
 
     #setListeners() {
         if (this.behaviour === "hover") {
-            this.addEventListener("mouseenter", this.#listeners.open);
-            this.dropdownContainer?.addEventListener("mouseleave", this.#listeners.close);
+            this.addEventListener("mouseenter", this.#handleOpen);
+            this.dropdownContainer?.addEventListener("mouseleave", this.#handleClose);
         } else {
-            this.addEventListener("click", this.#listeners.open);
+            this.addEventListener("click", this.#handleOpen);
         }
 
-        document.addEventListener("click", this.#listeners.close);
+        document.addEventListener("click", this.#handleClose);
     }
 
     #removeListeners() {
-        this.removeEventListener("mouseenter", this.#listeners.open);
-        this.dropdownContainer?.removeEventListener("mouseleave", this.#listeners.close);
-        this.removeEventListener("click", this.#listeners.open);
-        document.removeEventListener("click", this.#listeners.close);
+        this.removeEventListener("mouseenter", this.#handleOpen);
+        this.dropdownContainer?.removeEventListener("mouseleave", this.#handleClose);
+        this.removeEventListener("click", this.#handleOpen);
+        document.removeEventListener("click", this.#handleClose);
     }
 
     open() {
@@ -147,6 +130,11 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     #open() {
         if (this.isOpen || this.disabled) return;
 
+        // Store current focused element for restoration
+        if (this.restoreFocus) {
+            this.#lastFocusedElement = document.activeElement as HTMLElement;
+        }
+
         if (this.fullwidth && this.dropdownContainer) {
             this.dropdownContainer.width = `${this.offsetWidth}px`;
         }
@@ -159,7 +147,15 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         this.dropdownContainer?.open();
         this.openTimestamp = Date.now();
 
-        this.dispatchEvent(new CustomEvent("open"));
+        // Dispatch custom event with new naming convention
+        const openEvent = new CustomEvent("mjo-dropdown:open", {
+            detail: {},
+            bubbles: true,
+            composed: true,
+        });
+
+        this.dispatchEvent(openEvent);
+        document.addEventListener("keydown", this.#handleKeydown);
     }
 
     #close(ev?: Event) {
@@ -177,21 +173,42 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         this.isOpen = false;
         this.dropdownContainer?.close();
         this.openTimestamp = 0;
-        this.dispatchEvent(new CustomEvent("close"));
+
+        // Restore focus to the trigger element
+        if (this.restoreFocus && this.#lastFocusedElement) {
+            this.#lastFocusedElement.focus();
+            this.#lastFocusedElement = undefined;
+        }
+
+        // Dispatch custom event with new naming convention
+        const closeEvent = new CustomEvent("mjo-dropdown:close", {
+            detail: {},
+            bubbles: true,
+            composed: true,
+        });
+
+        this.dispatchEvent(closeEvent);
+
+        document.removeEventListener("keydown", this.#handleKeydown);
     }
 
     #createDropdown() {
         const themeElement = searchClosestElement(this as LitElement, "mjo-theme") as MjoTheme | null;
 
-        this.dropdownContainer = document.createElement("dropdow-container");
+        this.dropdownContainer = document.createElement("dropdown-container") as DropdownContainer;
         this.dropdownContainer.host = this;
         this.dropdownContainer.html = this.html;
         this.dropdownContainer.css = this.css;
         this.dropdownContainer.preventScroll = this.preventScroll;
+        this.dropdownContainer.position = this.position;
 
         if (this.theme) this.dropdownContainer.theme = this.theme as Record<string, string>;
 
         if (this.width) this.dropdownContainer.style.width = this.width;
+
+        // Set up ARIA attributes
+        const dropdownId = `dropdown-${Math.random().toString(36).substring(2, 9)}`;
+        this.dropdownContainer.id = dropdownId;
 
         if (themeElement) {
             const themeClone = document.createElement("mjo-theme") as MjoTheme;
@@ -205,6 +222,39 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         }
     }
 
+    #handleKeydown = (ev: KeyboardEvent) => {
+        if (ev.key === "Escape" && this.isOpen) {
+            ev.preventDefault();
+            this.close();
+        }
+    };
+
+    #handleClose = (ev: Event) => {
+        this.close(ev);
+    };
+
+    #handleOpen = (ev: Event) => {
+        if (this.behaviour === "click" && ev?.type === "click" && this.suppressOpenSelectors?.length) {
+            const path = ev.composedPath();
+            if (
+                path.some((n) => {
+                    const el = n as HTMLElement;
+                    if (!el || !el.matches) return false;
+                    return this.suppressOpenSelectors!.some((sel) => {
+                        try {
+                            return el.matches(sel);
+                        } catch {
+                            return false;
+                        }
+                    });
+                })
+            ) {
+                return;
+            }
+        }
+        this.open();
+    };
+
     static styles = [
         css`
             :host {
@@ -217,5 +267,10 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-dropdown": MjoDropdown;
+    }
+
+    interface HTMLElementEventMap {
+        "mjo-dropdown:open": MjoDropdownOpenEvent;
+        "mjo-dropdown:close": MjoDropdownCloseEvent;
     }
 }

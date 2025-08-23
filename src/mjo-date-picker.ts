@@ -222,8 +222,8 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                 minDate=${ifDefined(this.minDate)}
                 maxDate=${ifDefined(this.maxDate)}
                 .disabledDates=${this.disabledDates}
-                @mjo-calendar-date-selected=${this.#onDateSelected}
-                @mjo-calendar-range-selected=${this.#onRangeSelected}
+                @mjo-calendar:date-selected=${this.#onDateSelected}
+                @mjo-calendar:range-selected=${this.#onRangeSelected}
             ></mjo-calendar>
         </div>`;
     }

@@ -11,7 +11,7 @@ Si el componente tiene componentes dependiente en la carpeta `src/components`, a
 
 ## Desarrollo
 
-Si no existe crea el archivo de tipos del componente en la carpeta `src/types` siguiendo el patrón de los demás archivos de tipos para componentes y migra los tipos que sean necesarios desde el componente hasta el archivo de tipos.
+Si no existe crea el archivo de tipos del componente en la carpeta `src/types` siguiendo el patrón de los demás archivos de tipos para componentes y migra los tipos que sean necesarios desde el componente hasta el archivo de tipos. Las interfaces de estilos para relacionadas con el ThemeMixin van en `src/types/mjo-theme.d.ts`, compruba si existen en este archivo y si están actalizadas.
 
 Ten en cuenta que Lit cuenta con soporte nativo para muchos atributos aria como `this.ariaLabel` intenta utilizar primero los aria nativos de lit, si no existen crealos como propiedades con su atributo correspondiente.
 

@@ -326,7 +326,7 @@ export class ExampleCalendarSingle extends LitElement {
             <mjo-calendar
                 mode="single"
                 .value=${this.selectedDate}
-                @mjo-calendar-date-selected=${this.handleDateSelected}
+                @mjo-calendar:date-selected=${this.handleDateSelected}
                 @change=${this.handleDateSelected}
             ></mjo-calendar>
             <p>Selected: ${this.selectedDate || "None"}</p>
@@ -362,7 +362,7 @@ export class ExampleCalendarRange extends LitElement {
                 range-calendars="auto"
                 .startDate=${this.selectedRange.start}
                 .endDate=${this.selectedRange.end}
-                @mjo-calendar-range-selected=${this.handleRangeSelected}
+                @mjo-calendar:range-selected=${this.handleRangeSelected}
                 @change=${this.handleRangeSelected}
             ></mjo-calendar>
             <p>Range: ${this.selectedRange.start || "None"} - ${this.selectedRange.end || "None"}</p>
@@ -442,7 +442,7 @@ export class ExampleCalendarConstraints extends LitElement {
                 .minDate=${this.minDate}
                 .maxDate=${this.maxDate}
                 .disabledDates=${this.disabledDates}
-                @mjo-calendar-date-selected=${this.handleDateSelected}
+                @mjo-calendar:date-selected=${this.handleDateSelected}
             ></mjo-calendar>
 
             <p><strong>Disabled dates:</strong> ${this.disabledDates.join(", ")}</p>
@@ -640,8 +640,8 @@ The auto mode uses a `ResizeObserver` for responsive adaptation. The threshold i
 
 ### Behavior Notes
 
--   **Single Mode**: Clicking a date selects it and fires `mjo-calendar-date-selected` + `change` events.
--   **Range Mode**: First valid click sets start date, second sets end date and fires `mjo-calendar-range-selected` + `change` events.
+-   **Single Mode**: Clicking a date selects it and fires `mjo-calendar:date-selected` + `change` events.
+-   **Range Mode**: First valid click sets start date, second sets end date and fires `mjo-calendar:range-selected` + `change` events.
 -   **Date Ordering**: If the second selected date is earlier than the first, dates are automatically swapped (start ≤ end guarantee).
 -   **Navigation**: Month/year navigation ignores constraints; constraints only block selection.
 -   **Constraints**: Selection is vetoed by `minDate`, `maxDate`, and `disabledDates`.
@@ -654,9 +654,9 @@ The auto mode uses a `ResizeObserver` for responsive adaptation. The threshold i
 
 | Event                         | Detail (shape)                                                                                                                                                                | Emitted When                          |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `mjo-calendar-date-selected`  | `{ date?: Date, value?: string }`                                                                                                                                             | Date is selected (single mode)        |
-| `mjo-calendar-range-selected` | `{ startDate?: Date, endDate?: Date, startDateValue?: string, endDateValue?: string }`                                                                                        | Date range fully selected (both ends) |
-| `change`                      | Mirrors `mjo-calendar-date-selected` (single) or `mjo-calendar-` (range) with identical detail fields (adds compatibility for generic form handlers & change event listeners) | Date selection changes                |
+| `mjo-calendar:date-selected`  | `{ date?: Date, value?: string }`                                                                                                                                             | Date is selected (single mode)        |
+| `mjo-calendar:range-selected` | `{ startDate?: Date, endDate?: Date, startDateValue?: string, endDateValue?: string }`                                                                                        | Date range fully selected (both ends) |
+| `change`                      | Mirrors `mjo-calendar:date-selected` (single) or `mjo-calendar-` (range) with identical detail fields (adds compatibility for generic form handlers & change event listeners) | Date selection changes                |
 
 ### Event Details
 
@@ -669,13 +669,13 @@ All events expose date(s) in two forms:
 
 ```ts
 // Single mode events
-calendar.addEventListener("mjo-calendar-date-selected", (e) => {
+calendar.addEventListener("mjo-calendar:date-selected", (e) => {
     console.log("Date object:", e.detail.date); // Date object or undefined
     console.log("Date string:", e.detail.value); // "2025-01-15" or undefined
 });
 
 // Range mode events
-calendar.addEventListener("mjo-calendar-range-selected", (e) => {
+calendar.addEventListener("mjo-calendar:range-selected", (e) => {
     console.log("Start date:", e.detail.startDate); // Date object or undefined
     console.log("End date:", e.detail.endDate); // Date object or undefined
     console.log("Start string:", e.detail.startDateValue); // "2025-01-15" or undefined
@@ -1226,8 +1226,8 @@ For development and debugging, you can listen to all events:
 const calendar = document.querySelector("mjo-calendar");
 
 // Debug all calendar events
-calendar.addEventListener("mjo-calendar-date-selected", (e) => console.log("Date selected:", e.detail));
-calendar.addEventListener("mjo-calendar-range-selected", (e) => console.log("Range selected:", e.detail));
+calendar.addEventListener("mjo-calendar:date-selected", (e) => console.log("Date selected:", e.detail));
+calendar.addEventListener("mjo-calendar:range-selected", (e) => console.log("Range selected:", e.detail));
 calendar.addEventListener("change", (e) => console.log("Calendar changed:", e.detail));
 
 // Monitor displayed months

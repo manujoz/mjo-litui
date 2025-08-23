@@ -47,14 +47,14 @@ export class ExampleButtonAccessibility extends LitElement {
         return html`
             <div>
                 <h4>Loading State (uses aria-busy)</h4>
-                <mjo-button .loading=${this.isLoading} @mjo-button-loading-change=${this.handleLoadingChange} @click=${this.simulateLoading}>
+                <mjo-button .loading=${this.isLoading} @mjo-button:loading-change=${this.handleLoadingChange} @click=${this.simulateLoading}>
                     ${this.isLoading ? "Loading..." : "Start Task"}
                 </mjo-button>
             </div>
 
             <div>
                 <h4>Toggle Button (uses aria-pressed)</h4>
-                <mjo-button toggleable button-label="Toggle notifications" @mjo-button-toggle=${this.handleToggle}> Notifications </mjo-button>
+                <mjo-button toggleable button-label="Toggle notifications" @mjo-button:toggle=${this.handleToggle}> Notifications </mjo-button>
             </div>
 
             <div>
@@ -194,9 +194,9 @@ export class ExampleButtonStates extends LitElement {
 | Event                       | Detail                                | Emitted When          | Notes                                               |
 | --------------------------- | ------------------------------------- | --------------------- | --------------------------------------------------- |
 | `click`                     | Native `MouseEvent`                   | User activation       | Standard DOM event, prevented when disabled/loading |
-| `mjo-button-click`          | `{ element, toggle?, originalEvent }` | Button is clicked     | Custom event with additional context                |
-| `mjo-button-toggle`         | `{ element, pressed, previousState }` | Toggle state changes  | Only emitted when `toggleable` is true              |
-| `mjo-button-loading-change` | `{ element, loading }`                | Loading state changes | Emitted whenever loading property changes           |
+| `mjo-button:click`          | `{ element, toggle?, originalEvent }` | Button is clicked     | Custom event with additional context                |
+| `mjo-button:toggle`         | `{ element, pressed, previousState }` | Toggle state changes  | Only emitted when `toggleable` is true              |
+| `mjo-button:loading-change` | `{ element, loading }`                | Loading state changes | Emitted whenever loading property changes           |
 
 ### Event Details
 

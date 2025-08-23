@@ -24,9 +24,9 @@ import "./mjo-typography.js";
 /**
  * A fully accessible button component with loading states, toggle functionality, and comprehensive ARIA support.
  *
- * @fires mjo-button-click - Fired when the button is clicked
- * @fires mjo-button-toggle - Fired when toggle state changes (only when toggleable=true)
- * @fires mjo-button-loading-change - Fired when loading state changes
+ * @fires mjo-button:click - Fired when the button is clicked
+ * @fires mjo-button:toggle - Fired when toggle state changes (only when toggleable=true)
+ * @fires mjo-button:loading-change - Fired when loading state changes
  *
  * @slot - Button text content
  * @csspart button - The native button element
@@ -169,7 +169,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     }
 
     #dispatchClickEvent(originalEvent: MouseEvent) {
-        const clickEvent: MjoButtonClickEvent = new CustomEvent("mjo-button-click", {
+        const clickEvent: MjoButtonClickEvent = new CustomEvent("mjo-button:click", {
             detail: {
                 element: this,
                 toggle: this.toggle,
@@ -182,7 +182,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     }
 
     #dispatchToggleEvent(previousState: boolean) {
-        const toggleEvent: MjoButtonToggleEvent = new CustomEvent("mjo-button-toggle", {
+        const toggleEvent: MjoButtonToggleEvent = new CustomEvent("mjo-button:toggle", {
             detail: {
                 element: this,
                 pressed: this.toggle,
@@ -195,7 +195,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     }
 
     #dispatchLoadingChangeEvent() {
-        const loadingEvent: MjoButtonLoadingChangeEvent = new CustomEvent("mjo-button-loading-change", {
+        const loadingEvent: MjoButtonLoadingChangeEvent = new CustomEvent("mjo-button:loading-change", {
             detail: {
                 element: this,
                 loading: this.loading,
@@ -707,10 +707,10 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-button-click": MjoButtonClickEvent;
-        "mjo-button-toggle": MjoButtonToggleEvent;
-        "mjo-button-loading-change": MjoButtonLoadingChangeEvent;
-        "mjo-button-focus": MjoButtonFocusEvent;
-        "mjo-button-blur": MjoButtonBlurEvent;
+        "mjo-button:click": MjoButtonClickEvent;
+        "mjo-button:toggle": MjoButtonToggleEvent;
+        "mjo-button:loading-change": MjoButtonLoadingChangeEvent;
+        "mjo-button:focus": MjoButtonFocusEvent;
+        "mjo-button:blur": MjoButtonBlurEvent;
     }
 }

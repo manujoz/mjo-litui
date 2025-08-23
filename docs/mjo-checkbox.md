@@ -830,9 +830,9 @@ All validation properties from FormMixin are inherited:
 | ----------------------------------- | ----------------------------------------------------------------- | --------------------------- | ----------------------------------------------------- |
 | `change`                            | Native event                                                      | Checkbox state changes      | Standard HTML input change event for form handling    |
 | `mjo-checkbox-change`               | `{ element, checked, indeterminate, value, name, previousState }` | Checkbox state changes      | Enhanced custom event with detailed state information |
-| `mjo-checkbox-indeterminate-change` | `{ element, indeterminate, checked }`                             | Indeterminate state changes | Fired when `setIndeterminate()` method is called      |
-| `mjo-checkbox-focus`                | `{ element }`                                                     | Checkbox receives focus     | Custom focus event for advanced interactions          |
-| `mjo-checkbox-blur`                 | `{ element }`                                                     | Checkbox loses focus        | Custom blur event for advanced interactions           |
+| `mjo-checkbox:indeterminate-change` | `{ element, indeterminate, checked }`                             | Indeterminate state changes | Fired when `setIndeterminate()` method is called      |
+| `mjo-checkbox:focus`                | `{ element }`                                                     | Checkbox receives focus     | Custom focus event for advanced interactions          |
+| `mjo-checkbox:blur`                 | `{ element }`                                                     | Checkbox loses focus        | Custom blur event for advanced interactions           |
 
 ### Event Details
 
@@ -878,7 +878,7 @@ checkbox.setIndeterminate(false); // Clears indeterminate state
 ```
 
 -   Updates both the component property and the internal HTML input's indeterminate property
--   Dispatches the `mjo-checkbox-indeterminate-change` event
+-   Dispatches the `mjo-checkbox:indeterminate-change` event
 -   Updates form data automatically
 
 ## CSS Variables
@@ -912,8 +912,8 @@ The component provides extensive customization through CSS variables with fallba
 
 | Variable                             | Fallback                  | Used For               |
 | ------------------------------------ | ------------------------- | ---------------------- |
-| `--mjo-checkbox-focus-color`         | `rgba(59, 130, 246, 0.1)` | Focus box shadow color |
-| `--mjo-checkbox-focus-outline-color` | `--mjo-primary-color`     | Focus outline color    |
+| `--mjo-checkbox:focus-color`         | `rgba(59, 130, 246, 0.1)` | Focus box shadow color |
+| `--mjo-checkbox:focus-outline-color` | `--mjo-primary-color`     | Focus outline color    |
 
 ### Disabled State
 

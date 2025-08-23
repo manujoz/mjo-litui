@@ -40,7 +40,7 @@ function changeAvatarProp(prop: string, value: string | boolean): void {
 // Initialize interactions when the page loads
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("mjo-avatar").forEach((avatar) => {
-        avatar.addEventListener("mjo-avatar-click", (ev: Event) => {
+        avatar.addEventListener("mjo-avatar:click", (ev: Event) => {
             const value = (ev as MjoAvatarClickEvent).detail.value;
             alert(value);
         });

@@ -23,4 +23,5 @@ node_modules
 
 /coverage
 /actions-plan
-/server/public/js
+/server/public/js/*.js
+/server/public/js/*.js.map
