@@ -25,6 +25,7 @@ import "../../../src/mjo-modal.js";
 import "../../../src/mjo-notification.js";
 import "../../../src/mjo-textfield.js";
 import "../../../src/mjo-theme.js";
+import "../../../src/mjo-typography.js";
 
 export interface RenderOptions {
     title?: string;

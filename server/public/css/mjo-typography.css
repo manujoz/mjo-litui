@@ -1,0 +1,128 @@
+/* Typography Showcase Specific Styles */
+
+.typography-showcase {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.typography-showcase mjo-typography {
+    width: 100%;
+}
+
+/* Article example styling */
+.article-example {
+    background: var(--mjo-background-color-card);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 1rem 0;
+}
+
+.article-example mjo-typography {
+    margin-bottom: 1rem;
+}
+
+.article-example mjo-typography:last-child {
+    margin-bottom: 0;
+}
+
+/* Interactive demo specific */
+.playground-showcase {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controls-panel textarea {
+    width: 100%;
+    max-width: 100%;
+    min-height: 60px;
+    padding: 0.5rem;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    resize: vertical;
+}
+
+.controls-panel textarea:focus {
+    outline: none;
+    border-color: var(--mjo-primary-color);
+    box-shadow: 0 0 0 2px var(--mjo-primary-color-alpha3);
+}
+
+/* ARIA properties inputs styling */
+.controls-panel input[placeholder*="aria"] {
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.controls-panel input[placeholder*="aria"]::placeholder {
+    color: var(--mjo-foreground-color-low);
+    font-style: italic;
+}
+
+/* Typography size reference */
+.typography-showcase mjo-typography[size="heading1"] {
+    border-left: 3px solid var(--mjo-primary-color);
+    padding-left: 1rem;
+}
+
+.typography-showcase mjo-typography[size="heading2"] {
+    border-left: 3px solid var(--mjo-secondary-color);
+    padding-left: 1rem;
+}
+
+.typography-showcase mjo-typography[size="heading3"] {
+    border-left: 2px solid var(--mjo-primary-color-alpha5);
+    padding-left: 1rem;
+}
+
+/* Weight demonstration */
+.typography-showcase mjo-typography[weight="bold"] {
+    background: var(--mjo-primary-color-alpha1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.typography-showcase mjo-typography[weight="light"] {
+    opacity: 0.8;
+}
+
+/* ARIA enhanced elements */
+.typography-showcase mjo-typography[aria-label] {
+    position: relative;
+}
+
+.typography-showcase mjo-typography[aria-label]::after {
+    content: "🔊";
+    position: absolute;
+    right: -1.5rem;
+    top: 0;
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+.typography-showcase mjo-typography[aria-hidden="true"] {
+    opacity: 0.4;
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .article-example {
+        padding: 1rem;
+    }
+
+    .typography-showcase {
+        gap: 0.75rem;
+    }
+
+    .controls-panel textarea {
+        min-height: 50px;
+    }
+}

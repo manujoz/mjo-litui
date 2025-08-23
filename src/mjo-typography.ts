@@ -1,3 +1,5 @@
+import type { MjoTypographySize, MjoTypographyTag, MjoTypographyWeight } from "./types/mjo-typography";
+
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
@@ -5,9 +7,14 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 @customElement("mjo-typography")
 export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin {
-    @property({ type: String }) tag: "h1" | "h2" | "h3" | "h4" | "h5" | "p" | "span" | "none" = "p";
-    @property({ type: String }) size: "heading1" | "heading2" | "heading3" | "base" | "body1" | "body2" | "body3" = "base";
-    @property({ type: String }) weight: "light" | "regular" | "medium" | "bold" = "regular";
+    @property({ type: String }) tag: MjoTypographyTag = "p";
+    @property({ type: String }) size: MjoTypographySize = "base";
+    @property({ type: String }) weight: MjoTypographyWeight = "regular";
+
+    // ARIA Properties (using Lit's native support)
+    @property({ type: String, attribute: "aria-labelledby", reflect: true }) ariaLabelledby?: string;
+    @property({ type: String, attribute: "aria-describedby", reflect: true }) ariaDescribedby?: string;
+    @property({ type: String, attribute: "aria-level", reflect: true }) ariaLevel: string | null = null;
 
     render() {
         switch (this.tag) {

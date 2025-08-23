@@ -1,6 +1,6 @@
 # mjo-typography
 
-Semantic typography component that provides consistent text styling with predefined sizes, weights, and semantic HTML tags. Supports theme customization and accessibility best practices through proper semantic markup.
+Semantic typography component that provides consistent text styling with predefined sizes, weights, and semantic HTML tags. Supports theme customization and accessibility best practices through proper semantic markup and ARIA properties.
 
 ## HTML Usage
 
@@ -54,29 +54,44 @@ export class ExampleTypographySizes extends LitElement {
 }
 ```
 
-## Font Weights Example
+## Accessibility Features Example
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-typography";
 
-@customElement("example-typography-weights")
-export class ExampleTypographyWeights extends LitElement {
+@customElement("example-typography-accessibility")
+export class ExampleTypographyAccessibility extends LitElement {
     render() {
         return html`
-            <div>
-                <mjo-typography tag="p" size="base" weight="light"> Light weight text (300) </mjo-typography>
-                <mjo-typography tag="p" size="base" weight="regular"> Regular weight text (400) </mjo-typography>
-                <mjo-typography tag="p" size="base" weight="medium"> Medium weight text (500) </mjo-typography>
-                <mjo-typography tag="p" size="base" weight="bold"> Bold weight text (600) </mjo-typography>
-            </div>
+            <article>
+                <!-- Proper heading hierarchy -->
+                <mjo-typography tag="h1" size="heading1" weight="bold" aria-level="1"> Article Title </mjo-typography>
+
+                <mjo-typography tag="h2" size="heading2" weight="medium" aria-level="2"> Section Heading </mjo-typography>
+
+                <!-- Visual heading that's actually level 4 semantically -->
+                <mjo-typography tag="h2" size="heading2" weight="medium" aria-level="4" aria-label="Technical specifications subsection">
+                    Technical Specs
+                </mjo-typography>
+
+                <!-- Paragraph with additional description -->
+                <mjo-typography tag="p" size="base" weight="regular" aria-describedby="usage-note">
+                    This component provides semantic structure for screen readers.
+                </mjo-typography>
+
+                <mjo-typography tag="p" size="body2" weight="light" id="usage-note">
+                    Note: Always use proper heading hierarchy for accessibility.
+                </mjo-typography>
+
+                <!-- Decorative text that should be hidden from screen readers -->
+                <mjo-typography tag="span" size="body3" weight="light" aria-hidden="true"> ★ ★ ★ Decorative stars ★ ★ ★ </mjo-typography>
+            </article>
         `;
     }
 }
 ```
-
-## Semantic Tags Example
 
 ```ts
 import { LitElement, html } from "lit";
@@ -178,74 +193,32 @@ export class ExampleTypographyTheme extends LitElement {
         return html`
             <mjo-theme scope="local" .config=${typographyTheme}>
                 <mjo-typography tag="h1" size="heading1" weight="bold"> Custom Themed Heading </mjo-typography>
-                <mjo-typography tag="p" size="base" weight="regular">
-                    This typography uses custom font sizes and line heights defined in the theme configuration.
-                </mjo-typography>
-                <mjo-typography tag="p" size="body1" weight="medium"> Medium weight body text with custom styling. </mjo-typography>
+                <mjo-typography tag="p" size="base" weight="regular"> This typography uses custom font sizes and line heights. </mjo-typography>
             </mjo-theme>
         `;
     }
 }
 ```
 
-## Layout Combinations Example
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-typography";
-import "mjo-litui/mjo-card";
-
-@customElement("example-typography-layout")
-export class ExampleTypographyLayout extends LitElement {
-    render() {
-        return html`
-            <mjo-card>
-                <mjo-typography tag="h2" size="heading2" weight="bold"> Typography in Cards </mjo-typography>
-
-                <mjo-typography tag="p" size="body1" weight="regular">
-                    Typography components work seamlessly with other mjo-litui components to create consistent layouts and hierarchies.
-                </mjo-typography>
-
-                <div class="stats">
-                    <div class="stat-item">
-                        <mjo-typography tag="span" size="heading3" weight="bold"> 142 </mjo-typography>
-                        <mjo-typography tag="span" size="body2" weight="medium"> Users </mjo-typography>
-                    </div>
-
-                    <div class="stat-item">
-                        <mjo-typography tag="span" size="heading3" weight="bold"> 2.4k </mjo-typography>
-                        <mjo-typography tag="span" size="body2" weight="medium"> Views </mjo-typography>
-                    </div>
-                </div>
-            </mjo-card>
-        `;
-    }
-
-    static styles = css`
-        .stats {
-            display: flex;
-            gap: 2rem;
-            margin-top: 1rem;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.25rem;
-        }
-    `;
-}
-```
-
 ## Attributes / Properties
 
-| Name     | Type                                                                                | Default     | Description                               |
-| -------- | ----------------------------------------------------------------------------------- | ----------- | ----------------------------------------- |
-| `tag`    | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'h5' \| 'p' \| 'span' \| 'none'`                   | `'p'`       | HTML tag to render for semantic structure |
-| `size`   | `'heading1' \| 'heading2' \| 'heading3' \| 'base' \| 'body1' \| 'body2' \| 'body3'` | `'base'`    | Typography size variant                   |
-| `weight` | `'light' \| 'regular' \| 'medium' \| 'bold'`                                        | `'regular'` | Font weight variant                       |
+| Name               | Type                                                                                | Default     | Description                                                             |
+| ------------------ | ----------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------- |
+| `tag`              | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'h5' \| 'p' \| 'span' \| 'none'`                   | `'p'`       | HTML tag to render for semantic structure                               |
+| `size`             | `'heading1' \| 'heading2' \| 'heading3' \| 'base' \| 'body1' \| 'body2' \| 'body3'` | `'base'`    | Typography size variant                                                 |
+| `weight`           | `'light' \| 'regular' \| 'medium' \| 'bold'`                                        | `'regular'` | Font weight variant                                                     |
+| `aria-label`       | `string \| null`                                                                    | `null`      | Custom accessibility label for screen readers                           |
+| `aria-labelledby`  | `string \| undefined`                                                               | `undefined` | ID of element that labels this typography element                       |
+| `aria-describedby` | `string \| undefined`                                                               | `undefined` | ID of element that describes this typography element                    |
+| `aria-level`       | `string \| null`                                                                    | `null`      | Semantic heading level (1-6) for accessibility when tag != visual level |
+| `aria-hidden`      | `string`                                                                            | `"false"`   | Hide element from screen readers when decorative                        |
+
+### Usage Notes for ARIA Properties
+
+-   **aria-label**: Use when the content needs additional context for screen readers
+-   **aria-level**: Use when visual heading level differs from semantic level (e.g., `tag="h2"` but semantically level 4)
+-   **aria-hidden="true"**: Use for purely decorative text that doesn't add meaning
+-   **aria-describedby**: Reference additional descriptive content by ID
 
 ## Events
 
@@ -282,72 +255,20 @@ This component does not emit any custom events.
 
 ## Theme Configuration
 
-The `mjo-typography` component can be themed using the `TypographyTheme` interface through the `mjo-theme` component:
-
-```ts
-interface TypographyTheme {
-    h1FontSize?: string;
-    h1LineHeight?: string;
-    h2FontSize?: string;
-    h2LineHeight?: string;
-    h3FontSize?: string;
-    h3LineHeight?: string;
-    baseFontSize?: string;
-    baseLineHeight?: string;
-    body1FontSize?: string;
-    body1LineHeight?: string;
-    body2FontSize?: string;
-    body2LineHeight?: string;
-    body3FontSize?: string;
-    body3LineHeight?: string;
-    fontWeightLight?: string;
-    fontWeightRegular?: string;
-    fontWeightMedium?: string;
-    fontWeightBold?: string;
-}
-```
-
-### Example Theme Configuration
+Configure typography through the `TypographyTheme` interface in `mjo-theme`:
 
 ```ts
 import type { MjoThemeConfig } from "mjo-litui/types/mjo-theme";
 
-const customTypographyTheme: Partial<MjoThemeConfig> = {
+const customTheme: Partial<MjoThemeConfig> = {
     light: {
         components: {
             mjoTypography: {
-                // Custom heading sizes
                 h1FontSize: "2.5rem",
                 h1LineHeight: "1.2",
-                h2FontSize: "2rem",
-                h2LineHeight: "1.3",
-                h3FontSize: "1.5rem",
-                h3LineHeight: "1.4",
-
-                // Custom body sizes
-                baseFontSize: "1rem",
+                baseFontSize: "1.125rem",
                 baseLineHeight: "1.6",
-                body1FontSize: "0.875rem",
-                body1LineHeight: "1.5",
-                body2FontSize: "0.75rem",
-                body2LineHeight: "1.4",
-                body3FontSize: "0.625rem",
-                body3LineHeight: "1.3",
-
-                // Custom font weights
-                fontWeightLight: "300",
-                fontWeightRegular: "400",
-                fontWeightMedium: "500",
                 fontWeightBold: "700",
-            },
-        },
-    },
-    dark: {
-        components: {
-            mjoTypography: {
-                // Dark mode specific adjustments if needed
-                fontWeightLight: "200",
-                fontWeightRegular: "300",
             },
         },
     },
@@ -356,24 +277,46 @@ const customTypographyTheme: Partial<MjoThemeConfig> = {
 
 ## Accessibility
 
-The `mjo-typography` component promotes accessibility best practices:
+The `mjo-typography` component provides comprehensive accessibility features:
 
--   **Semantic HTML**: Uses proper heading hierarchy (h1-h5) and paragraph tags
--   **Screen Reader Support**: Semantic tags provide proper document structure
--   **Keyboard Navigation**: Maintains natural tab order through semantic markup
--   **SEO Benefits**: Proper heading structure improves search engine optimization
+### **Semantic HTML Structure**
 
-### Accessibility Guidelines
+-   **Proper heading hierarchy**: Uses correct HTML tags (h1-h5) for screen reader navigation
+-   **Document outline**: Maintains logical content structure for assistive technologies
+-   **SEO benefits**: Semantic markup improves search engine understanding
 
-1. **Use proper heading hierarchy**: Start with h1 and progress sequentially (h1 → h2 → h3)
-2. **Don't skip heading levels**: Avoid jumping from h1 directly to h3
-3. **Use semantic tags appropriately**:
-    - `tag="h1"` for page titles
-    - `tag="h2"` for major sections
-    - `tag="h3"` for subsections
-    - `tag="p"` for body content
-    - `tag="span"` for inline styling
-    - `tag="none"` only when semantic markup would be redundant
+### **ARIA Enhancement**
+
+-   **aria-level**: Override semantic heading level when visual != logical hierarchy
+-   **aria-label**: Provide additional context when content alone isn't descriptive
+-   **aria-describedby**: Reference additional explanatory content
+-   **aria-hidden**: Hide decorative text from screen readers
+
+### **Accessibility Guidelines**
+
+1. **Maintain proper heading hierarchy**: h1 → h2 → h3 (don't skip levels)
+2. **Use aria-level judiciously**: When visual design requires different heading tag than semantic level
+3. **Label descriptively**: Use aria-label for complex or abbreviated content
+4. **Hide decorative content**: Set aria-hidden="true" for visual-only elements
+5. **Reference related content**: Use aria-describedby to link to explanatory text
+
+### **Example: Proper Heading Hierarchy**
+
+```ts
+// ✅ Correct: Logical progression
+<mjo-typography tag="h1" size="heading1">Main Title</mjo-typography>
+<mjo-typography tag="h2" size="heading2">Section</mjo-typography>
+<mjo-typography tag="h3" size="heading3">Subsection</mjo-typography>
+
+// ❌ Incorrect: Skips h2
+<mjo-typography tag="h1" size="heading1">Main Title</mjo-typography>
+<mjo-typography tag="h3" size="heading3">Subsection</mjo-typography>
+
+// ✅ Correct: Use aria-level when visual differs from semantic
+<mjo-typography tag="h1" size="heading1">Main Title</mjo-typography>
+<mjo-typography tag="h2" size="heading2">Section</mjo-typography>
+<mjo-typography tag="h1" size="heading1" aria-level="3">Visual H1, Semantic H3</mjo-typography>
+```
 
 ## Size Reference
 

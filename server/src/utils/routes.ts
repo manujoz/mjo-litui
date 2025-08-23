@@ -19,6 +19,7 @@ import { MessagesController } from "../controllers/messages-controller.js";
 import { ModalController } from "../controllers/modal-controller.js";
 import { NotificationController } from "../controllers/notification-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
+import { TypographyController } from "../controllers/typography-controller.js";
 
 const indexController = new IndexController();
 const alertController = new AlertController();
@@ -41,6 +42,7 @@ const messagesController = new MessagesController();
 const modalController = new ModalController();
 const notificationController = new NotificationController();
 const textfieldController = new TextfieldController();
+const typographyController = new TypographyController();
 
 export const ROUTES = [
     {
@@ -126,6 +128,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-textfield",
         controller: textfieldController.renderTextfieldPage,
+    },
+    {
+        path: "/component/mjo-typography",
+        controller: typographyController.renderTypographyPage,
     },
     {
         path: "/status",
