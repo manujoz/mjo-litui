@@ -1,0 +1,218 @@
+/* mjo-switch specific styles for SSR demo */
+
+.switch-showcase-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.switch-showcase-vertical h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--mjo-foreground-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.switch-showcase-vertical mjo-switch {
+    width: auto;
+    min-width: 250px;
+}
+
+/* Enhanced playground styles for switch */
+.playground-container .controls-panel .control-group input[name="label"],
+.playground-container .controls-panel .control-group input[name="name"],
+.playground-container .controls-panel .control-group input[name="value"],
+.playground-container .controls-panel .control-group input[name="helperText"],
+.playground-container .controls-panel .control-group input[name="checkgroup"],
+.playground-container .controls-panel .control-group input[name="ariaDescribedby"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 0.25rem;
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-size: 0.875rem;
+}
+
+.playground-container .controls-panel .control-group input:focus {
+    outline: 2px solid var(--mjo-primary-color);
+    outline-offset: 2px;
+}
+
+.playground-container .controls-panel .control-group select[name="color"],
+.playground-container .controls-panel .control-group select[name="size"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 0.25rem;
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-size: 0.875rem;
+}
+
+/* Toggle group enhancements for switch demo */
+.playground-container .controls-panel .toggle-group .toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease;
+}
+
+.playground-container .controls-panel .toggle-group .toggle:hover {
+    background: var(--mjo-background-color-high);
+}
+
+.playground-container .controls-panel .toggle-group .toggle input[type="checkbox"] {
+    margin: 0;
+    transform: scale(1.1);
+}
+
+.playground-container .controls-panel .toggle-group .toggle span {
+    font-size: 0.875rem;
+    color: var(--mjo-foreground-color);
+    user-select: none;
+}
+
+/* Playground showcase specific for switch */
+.playground-showcase mjo-switch {
+    width: auto;
+    min-width: 200px;
+}
+
+/* Demo section styling */
+.component-showcase.switch-showcase-vertical {
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--mjo-border-color);
+}
+
+/* Size demonstration styling */
+.switch-showcase-vertical mjo-switch[size="small"] {
+    margin: 0.5rem 0;
+}
+
+.switch-showcase-vertical mjo-switch[size="medium"] {
+    margin: 0.75rem 0;
+}
+
+.switch-showcase-vertical mjo-switch[size="large"] {
+    margin: 1rem 0;
+}
+
+/* Switch group styling */
+.switch-showcase-vertical h4 + mjo-switch {
+    margin-top: 0.5rem;
+}
+
+/* Color demonstrations */
+.switch-showcase-vertical mjo-switch[color="primary"] {
+    --mjo-switch-background-color-checked: var(--mjo-primary-color);
+}
+
+.switch-showcase-vertical mjo-switch[color="secondary"] {
+    --mjo-switch-background-color-checked: var(--mjo-secondary-color);
+}
+
+/* Form integration styling */
+.switch-showcase-vertical mjo-switch[required] {
+    border-left: 3px solid var(--mjo-primary-color);
+    padding-left: 0.75rem;
+    margin-left: -0.75rem;
+}
+
+/* Accessibility enhancements visual indicators */
+.switch-showcase-vertical mjo-switch[name*="a11y"] {
+    position: relative;
+}
+
+.switch-showcase-vertical mjo-switch[name*="a11y"]::before {
+    content: "♿";
+    position: absolute;
+    right: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+    opacity: 0.7;
+}
+
+/* Advanced usage indicators */
+.switch-showcase-vertical mjo-switch[name*="api"]::before {
+    content: "🔌";
+    position: absolute;
+    right: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+}
+
+.switch-showcase-vertical mjo-switch[name*="debug"]::before {
+    content: "🐛";
+    position: absolute;
+    right: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .switch-showcase-vertical mjo-switch {
+        min-width: unset;
+        width: 100%;
+    }
+
+    .playground-container .controls-panel {
+        gap: 1rem;
+    }
+
+    .playground-container .controls-panel .control-group {
+        margin-bottom: 1rem;
+    }
+
+    .switch-showcase-vertical mjo-switch::before,
+    .switch-showcase-vertical mjo-switch[name*="a11y"]::before,
+    .switch-showcase-vertical mjo-switch[name*="api"]::before,
+    .switch-showcase-vertical mjo-switch[name*="debug"]::before {
+        display: none;
+    }
+}
+
+/* Accessibility enhancements */
+@media (prefers-reduced-motion: reduce) {
+    .playground-container .controls-panel .toggle-group .toggle {
+        transition: none;
+    }
+
+    .switch-showcase-vertical mjo-switch {
+        --mjo-switch-transition: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .playground-container .controls-panel .control-group input,
+    .playground-container .controls-panel .control-group select {
+        border-width: 2px;
+    }
+
+    .component-showcase.switch-showcase-vertical {
+        border-width: 2px;
+    }
+
+    .switch-showcase-vertical mjo-switch[required] {
+        border-left-width: 4px;
+    }
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+    .switch-showcase-vertical h4 {
+        color: var(--mjo-foreground-color, #ffffff);
+    }
+}

@@ -476,6 +476,9 @@ export interface MjoSwitchTheme {
     labelColor?: string;
     labelFontSize?: string;
     labelFontWeight?: string;
+    focusColor?: string;
+    focusOutlineColor?: string;
+    disabledOpacity?: string;
 }
 
 export interface MjoMessageTheme {

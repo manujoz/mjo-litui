@@ -5,6 +5,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { FormMixin, IFormMixin } from "./mixins/form-mixin";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { MjoSwitchBlurEvent, MjoSwitchChangeEvent, MjoSwitchColor, MjoSwitchFocusEvent, MjoSwitchSize } from "./types/mjo-switch.js";
 
 import { GiCheckMark } from "mjo-icons/gi";
 
@@ -14,8 +15,8 @@ import "./mjo-icon.js";
 
 @customElement("mjo-switch")
 export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
-    @property({ type: String }) color: "primary" | "secondary" = "primary";
-    @property({ type: String }) size: "small" | "medium" | "large" = "medium";
+    @property({ type: String }) color: MjoSwitchColor = "primary";
+    @property({ type: String }) size: MjoSwitchSize = "medium";
     @property({ type: Boolean, reflect: true }) checked = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
@@ -24,11 +25,32 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     @property({ type: String }) value = "";
     @property({ type: String, reflect: true }) checkgroup?: string;
     @property({ type: Boolean }) hideErrors = false;
+    @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
 
-    @query("input#mjoSwitchInput") inputElement!: HTMLInputElement;
-    @query(".checkItem") checkItem!: HTMLDivElement;
+    @query("input") inputElement!: HTMLInputElement;
+    @query(".container") switchContainer!: HTMLDivElement;
 
     type = "switch";
+
+    // Computed properties for accessibility
+    private get computedAriaChecked(): "true" | "false" {
+        return this.checked ? "true" : "false";
+    }
+
+    private get computedAriaLabel(): string | undefined {
+        if (this.ariaLabel) return this.ariaLabel;
+        if (!this.label) return undefined;
+
+        let baseLabel = this.label;
+        if (this.required || this.ariaRequired) baseLabel += " (required)";
+        baseLabel += this.checked ? " (on)" : " (off)";
+
+        return baseLabel;
+    }
+
+    private get computedTabIndex(): number {
+        return this.disabled ? -1 : 0;
+    }
 
     render() {
         return html`
@@ -39,15 +61,35 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 ?data-disabled=${this.disabled}
                 ?data-checked=${this.checked}
                 data-size=${this.size}
+                role="switch"
+                aria-checked=${this.computedAriaChecked}
+                aria-label=${ifDefined(this.computedAriaLabel)}
+                aria-describedby=${ifDefined(this.ariaDescribedby)}
+                aria-disabled=${this.disabled ? "true" : "false"}
+                aria-invalid=${this.error ? "true" : "false"}
+                tabindex=${this.computedTabIndex}
                 @click=${this.#handleClick}
+                @keydown=${this.#handleKeydown}
+                @focus=${this.#handleFocus}
+                @blur=${this.#handleBlur}
             >
                 <div class="checkItem">
                     <mjo-icon src=${GiCheckMark}></mjo-icon>
                 </div>
-                <input id="mjoSwitchInput" type="checkbox" name=${ifDefined(this.name)} value=${ifDefined(this.value)} ?checked=${this.checked} />
+                <input
+                    id=${ifDefined(this.id)}
+                    type="checkbox"
+                    name=${ifDefined(this.name)}
+                    value=${ifDefined(this.value)}
+                    ?checked=${this.checked}
+                    ?disabled=${this.disabled}
+                    ?required=${this.required}
+                    aria-hidden="true"
+                    tabindex="-1"
+                />
             </div>
-            ${this.helperText
-                ? html`<input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}>${this.helperText}</input-helper-text>`
+            ${this.helperText || this.errormsg || this.successmsg
+                ? html`<input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}>${this.helperText}</input-helper-text>`
                 : nothing}
         `;
     }
@@ -59,21 +101,100 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     }
 
     getValue() {
-        return this.checked ? this.value : "";
+        return this.checked ? this.value || "1" : "";
     }
 
     setValue(value: string) {
         this.value = value;
     }
 
-    #handleClick() {
-        if (this.disabled) {
-            return;
+    toggle() {
+        if (this.disabled) return;
+        this.checked = !this.checked;
+        this.updateFormData({ name: this.name || "", value: this.getValue() });
+    }
+
+    focus() {
+        if (!this.disabled) {
+            this.switchContainer?.focus();
         }
+    }
+
+    blur() {
+        this.switchContainer?.blur();
+    }
+
+    reportValidity(): boolean {
+        return this.inputElement.reportValidity();
+    }
+
+    setCustomValidity(message: string): void {
+        this.inputElement.setCustomValidity(message);
+    }
+
+    #handleClick() {
+        if (this.disabled) return;
+
+        const previousState = {
+            checked: this.checked,
+        };
 
         this.checked = !this.checked;
-        this.updateFormData({ name: this.name || "", value: this.checked ? this.value || "1" : "" });
-        this.dispatchEvent(new Event("change"));
+        this.updateFormData({ name: this.name || "", value: this.getValue() });
+
+        // Dispatch standard change event for form compatibility
+        this.dispatchEvent(new Event("change", { bubbles: true }));
+
+        // Dispatch enhanced custom event
+        this.dispatchEvent(
+            new CustomEvent<MjoSwitchChangeEvent["detail"]>("mjo-switch:change", {
+                detail: {
+                    element: this,
+                    checked: this.checked,
+                    value: this.value,
+                    name: this.name || "",
+                    previousState,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
+    }
+
+    #handleKeydown(event: KeyboardEvent) {
+        if (this.disabled) return;
+
+        // Handle Space and Enter keys
+        if (event.key === " " || event.key === "Enter") {
+            event.preventDefault();
+            this.#handleClick();
+        }
+    }
+
+    #handleFocus() {
+        if (this.disabled) return;
+
+        this.dispatchEvent(
+            new CustomEvent<MjoSwitchFocusEvent["detail"]>("mjo-switch:focus", {
+                detail: {
+                    element: this,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
+    }
+
+    #handleBlur() {
+        this.dispatchEvent(
+            new CustomEvent<MjoSwitchBlurEvent["detail"]>("mjo-switch:blur", {
+                detail: {
+                    element: this,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
     }
 
     static styles = [
@@ -96,18 +217,32 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 border-style: var(--mjo-switch-border-style, var(--mjo-input-border-style, solid));
                 border-width: var(--mjo-switch-border-width, var(--mjo-input-border-width, 1px));
                 border-color: var(--mjo-switch-border-color, var(--mjo-input-border-color, var(--mjo-border-color, #dddddd)));
-                transition: background-color 0.3s;
+                transition: all 0.3s ease;
                 cursor: pointer;
+                outline: none;
+                width: 56px;
+                outline-offset: 2px;
+            }
+            .container:focus-visible {
+                box-shadow: 0 0 0 3px var(--mjo-switch-focus-color, rgba(59, 130, 246, 0.1));
+            }
+            .container[data-color="primary"]:focus-visible {
+                outline: 2px solid var(--mjo-switch-focus-outline-color, var(--mjo-primary-color));
+            }
+            .container[data-color="secondary"]:focus-visible {
+                outline: 2px solid var(--mjo-switch-focus-outline-color, var(--mjo-secondary-color));
             }
             .container[data-disabled] {
-                opacity: 0.5;
+                opacity: var(--mjo-switch-disabled-opacity, 0.5);
                 cursor: not-allowed;
             }
             .container[data-size="small"] {
                 height: var(--mjo-switch-size-small, 20px);
+                width: 42px;
             }
             .container[data-size="large"] {
                 height: var(--mjo-switch-size-large, 36px);
+                width: 65px;
             }
             .container[data-checked] {
                 background-color: var(--mjo-switch-background-color-checked, var(--mjo-primary-color, #007bff));
@@ -125,10 +260,7 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 background-color: var(--mjo-switch-ball-background-color, var(--mjo-foreground-color, #333333));
                 display: grid;
                 place-content: center;
-                transition:
-                    color 0.3s,
-                    left 0.3s,
-                    width 0.3s;
+                transition: all 0.3s ease;
             }
             .container[data-checked] .checkItem {
                 left: calc(100% - var(--mjo-switch-size-medium, 28px) + 2px);
@@ -166,13 +298,37 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 font-size: calc((var(--mjo-switch-size-medium, 28px) - 4px) * 0.6);
                 transform: scale(0);
                 transform-origin: center;
-                transition: transform 0.5s;
+                transition: transform 0.5s ease;
             }
             .container[data-color="secondary"] .checkItem mjo-icon {
                 color: var(--mjo-switch-background-color-checked, var(--mjo-secondary-color, #007bff));
             }
             input {
                 display: none;
+            }
+            input-helper-text {
+                color: var(--mjo-switch-helper-color, var(--mjo-foreground-color-low));
+                font-size: var(--mjo-switch-helper-font-size, inherit);
+                font-weight: var(--mjo-switch-helper-font-weight, inherit);
+            }
+
+            /* Reduced motion support */
+            @media (prefers-reduced-motion: reduce) {
+                .container,
+                .checkItem,
+                .checkItem mjo-icon {
+                    transition: none;
+                }
+            }
+
+            /* High contrast mode support */
+            @media (prefers-contrast: high) {
+                .container {
+                    border-width: 2px;
+                }
+                .container:focus-visible {
+                    outline-width: 3px;
+                }
             }
         `,
     ];
@@ -181,5 +337,11 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-switch": MjoSwitch;
+    }
+
+    interface HTMLElementEventMap {
+        "mjo-switch:change": MjoSwitchChangeEvent;
+        "mjo-switch:focus": MjoSwitchFocusEvent;
+        "mjo-switch:blur": MjoSwitchBlurEvent;
     }
 }
