@@ -1,10 +1,10 @@
 # mjo-radio
 
-A customizable radio button component with form integration and theming support.
+A customizable radio button component with enhanced accessibility, form integration, and theming support.
 
 ## Overview
 
-The `mjo-radio` component provides a styled radio button interface with support for form validation, custom theming, and accessibility features. Radio buttons are typically used in groups to allow users to select one option from multiple choices.
+The `mjo-radio` component provides a styled radio button interface with comprehensive accessibility features, form validation, and custom theming. Radio buttons are typically used in groups to allow users to select one option from multiple choices.
 
 ## Basic Usage
 
@@ -28,214 +28,69 @@ export class ExampleRadioBasic extends LitElement {
     @state()
     private selectedValue = "";
 
-    private handleChange(event: Event) {
-        const radio = event.target as any;
-        this.selectedValue = radio.value;
-        console.log("Selected:", this.selectedValue);
+    private handleChange(event: CustomEvent) {
+        this.selectedValue = event.detail.value;
     }
 
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <h4>Choose your favorite framework:</h4>
-
-                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                    <mjo-radio name="framework" value="lit" label="Lit" @change=${this.handleChange}> </mjo-radio>
-
-                    <mjo-radio name="framework" value="react" label="React" @change=${this.handleChange}> </mjo-radio>
-
-                    <mjo-radio name="framework" value="vue" label="Vue" @change=${this.handleChange}> </mjo-radio>
-
-                    <mjo-radio name="framework" value="angular" label="Angular" @change=${this.handleChange}> </mjo-radio>
-                </div>
-
-                ${this.selectedValue ? html` <p>Selected: <strong>${this.selectedValue}</strong></p> ` : ""}
+                <h4>Choose your preference:</h4>
+                <mjo-radio name="preference" value="option1" label="Option 1" @mjo-radio:change=${this.handleChange}></mjo-radio>
+                <mjo-radio name="preference" value="option2" label="Option 2" @mjo-radio:change=${this.handleChange}></mjo-radio>
+                <mjo-radio name="preference" value="option3" label="Option 3" @mjo-radio:change=${this.handleChange}></mjo-radio>
+                ${this.selectedValue ? html`<p>Selected: <strong>${this.selectedValue}</strong></p>` : ""}
             </div>
         `;
     }
 }
 ```
 
-## Radio Button States
+````
 
-Configure radio buttons with different states and styling:
+## Color Variants and States
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-radio";
-
-@customElement("example-radio-states")
-export class ExampleRadioStates extends LitElement {
-    render() {
-        return html`
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <!-- Default State -->
-                <div>
-                    <h4>Default Radio Buttons</h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <mjo-radio name="default" value="option1" label="Option 1"></mjo-radio>
-                        <mjo-radio name="default" value="option2" label="Option 2" checked></mjo-radio>
-                        <mjo-radio name="default" value="option3" label="Option 3"></mjo-radio>
-                    </div>
-                </div>
-
-                <!-- Disabled State -->
-                <div>
-                    <h4>Disabled Radio Buttons</h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <mjo-radio name="disabled" value="option1" label="Disabled Option 1" disabled></mjo-radio>
-                        <mjo-radio name="disabled" value="option2" label="Disabled Option 2" disabled checked></mjo-radio>
-                        <mjo-radio name="disabled" value="option3" label="Disabled Option 3" disabled></mjo-radio>
-                    </div>
-                </div>
-
-                <!-- With Helper Text -->
-                <div>
-                    <h4>Radio Buttons with Helper Text</h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <mjo-radio name="helper" value="basic" label="Basic Plan" helperText="Free with limited features"> </mjo-radio>
-                        <mjo-radio name="helper" value="pro" label="Pro Plan" helperText="$9.99/month with advanced features"> </mjo-radio>
-                        <mjo-radio name="helper" value="enterprise" label="Enterprise Plan" helperText="Custom pricing for large teams"> </mjo-radio>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Color Variants
-
-Use different color schemes for radio buttons:
+Configure radio buttons with different colors and states:
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-radio";
 
-@customElement("example-radio-colors")
-export class ExampleRadioColors extends LitElement {
+@customElement("example-radio-variants")
+export class ExampleRadioVariants extends LitElement {
     render() {
         return html`
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
                 <!-- Primary Color -->
                 <div>
                     <h4>Primary Color</h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <mjo-radio name="primary" value="option1" label="Primary Option 1" color="primary"></mjo-radio>
-                        <mjo-radio name="primary" value="option2" label="Primary Option 2" color="primary" checked></mjo-radio>
-                        <mjo-radio name="primary" value="option3" label="Primary Option 3" color="primary"></mjo-radio>
-                    </div>
+                    <mjo-radio name="primary" value="option1" label="Primary Option" color="primary" checked></mjo-radio>
                 </div>
 
                 <!-- Secondary Color -->
                 <div>
                     <h4>Secondary Color</h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <mjo-radio name="secondary" value="option1" label="Secondary Option 1" color="secondary"></mjo-radio>
-                        <mjo-radio name="secondary" value="option2" label="Secondary Option 2" color="secondary" checked></mjo-radio>
-                        <mjo-radio name="secondary" value="option3" label="Secondary Option 3" color="secondary"></mjo-radio>
-                    </div>
+                    <mjo-radio name="secondary" value="option1" label="Secondary Option" color="secondary" checked></mjo-radio>
+                </div>
+
+                <!-- Disabled States -->
+                <div>
+                    <h4>Disabled States</h4>
+                    <mjo-radio name="disabled1" value="option1" label="Disabled Unchecked" disabled></mjo-radio>
+                    <mjo-radio name="disabled2" value="option2" label="Disabled Checked" disabled checked></mjo-radio>
+                </div>
+
+                <!-- With Helper Text -->
+                <div>
+                    <h4>With Helper Text</h4>
+                    <mjo-radio name="helper" value="option1" label="Option with help" helperText="Additional information" checked></mjo-radio>
                 </div>
             </div>
         `;
     }
 }
-```
-
-## Radio Button Groups with Custom Content
-
-Create radio groups with rich content using slot content:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-radio";
-import "mjo-litui/mjo-typography";
-
-@customElement("example-radio-custom-content")
-export class ExampleRadioCustomContent extends LitElement {
-    @state()
-    private selectedPlan = "";
-
-    private handlePlanChange(event: Event) {
-        const radio = event.target as any;
-        this.selectedPlan = radio.value;
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <h3>Choose Your Subscription Plan</h3>
-
-                <!-- Plan Options -->
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    <!-- Basic Plan -->
-                    <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem;">
-                        <mjo-radio name="subscription" value="basic" @change=${this.handlePlanChange}>
-                            <div style="margin-left: 1.5rem;">
-                                <mjo-typography tag="h4" style="margin: 0 0 0.5rem 0;">Basic Plan</mjo-typography>
-                                <mjo-typography tag="p" style="margin: 0 0 0.5rem 0; color: #666;"> Perfect for getting started </mjo-typography>
-                                <ul style="margin: 0; padding-left: 1rem; color: #666;">
-                                    <li>5 Projects</li>
-                                    <li>10GB Storage</li>
-                                    <li>Email Support</li>
-                                </ul>
-                                <mjo-typography tag="strong" style="color: #2563eb;"> Free </mjo-typography>
-                            </div>
-                        </mjo-radio>
-                    </div>
-
-                    <!-- Pro Plan -->
-                    <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem;">
-                        <mjo-radio name="subscription" value="pro" color="secondary" @change=${this.handlePlanChange}>
-                            <div style="margin-left: 1.5rem;">
-                                <mjo-typography tag="h4" style="margin: 0 0 0.5rem 0;">Pro Plan</mjo-typography>
-                                <mjo-typography tag="p" style="margin: 0 0 0.5rem 0; color: #666;"> For growing teams and businesses </mjo-typography>
-                                <ul style="margin: 0; padding-left: 1rem; color: #666;">
-                                    <li>50 Projects</li>
-                                    <li>100GB Storage</li>
-                                    <li>Priority Support</li>
-                                    <li>Advanced Analytics</li>
-                                </ul>
-                                <mjo-typography tag="strong" style="color: #dc2626;"> $19/month </mjo-typography>
-                            </div>
-                        </mjo-radio>
-                    </div>
-
-                    <!-- Enterprise Plan -->
-                    <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem;">
-                        <mjo-radio name="subscription" value="enterprise" @change=${this.handlePlanChange}>
-                            <div style="margin-left: 1.5rem;">
-                                <mjo-typography tag="h4" style="margin: 0 0 0.5rem 0;">Enterprise Plan</mjo-typography>
-                                <mjo-typography tag="p" style="margin: 0 0 0.5rem 0; color: #666;"> For large organizations </mjo-typography>
-                                <ul style="margin: 0; padding-left: 1rem; color: #666;">
-                                    <li>Unlimited Projects</li>
-                                    <li>1TB Storage</li>
-                                    <li>24/7 Phone Support</li>
-                                    <li>Custom Integrations</li>
-                                    <li>SSO & Advanced Security</li>
-                                </ul>
-                                <mjo-typography tag="strong" style="color: #059669;"> Contact Sales </mjo-typography>
-                            </div>
-                        </mjo-radio>
-                    </div>
-                </div>
-
-                <!-- Selection Display -->
-                ${this.selectedPlan
-                    ? html`
-                          <div style="padding: 1rem; background: #f0f9ff; border-radius: 4px; border-left: 4px solid #0ea5e9;">
-                              <strong>Selected Plan:</strong> ${this.selectedPlan}
-                          </div>
-                      `
-                    : ""}
-            </div>
-        `;
-    }
-}
-```
+````
 
 ## Form Integration
 
@@ -243,11 +98,10 @@ Use radio buttons within forms with validation:
 
 ```ts
 import { LitElement, html } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
 import type { MjoForm } from "mjo-litui/types";
 import "mjo-litui/mjo-form";
 import "mjo-litui/mjo-radio";
-import "mjo-litui/mjo-textfield";
 import "mjo-litui/mjo-button";
 
 @customElement("example-radio-form")
@@ -255,334 +109,31 @@ export class ExampleRadioForm extends LitElement {
     @query("mjo-form")
     private form!: MjoForm;
 
-    @state()
-    private formData = {
-        name: "",
-        email: "",
-        gender: "",
-        experience: "",
-        preference: "",
-    };
-
-    @state()
-    private isSubmitting = false;
-
     private async handleSubmit() {
-        if (!this.form.validate()) {
-            console.log("Form validation failed");
-            return;
-        }
+        if (!this.form.validate()) return;
 
-        this.isSubmitting = true;
-
-        try {
-            // Get form data
-            const data = this.form.getFormData();
-            console.log("Form submitted with data:", data);
-
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-
-            alert("Registration completed successfully!");
-            this.form.reset();
-        } catch (error) {
-            console.error("Submission error:", error);
-            alert("Failed to submit registration");
-        } finally {
-            this.isSubmitting = false;
-        }
-    }
-
-    private handleFormChange(event: Event) {
-        const target = event.target as any;
-        if (target.name) {
-            this.formData = {
-                ...this.formData,
-                [target.name]: target.value,
-            };
-        }
+        const data = this.form.getFormData();
+        console.log("Form data:", data);
     }
 
     render() {
         return html`
-            <mjo-form @change=${this.handleFormChange}>
+            <mjo-form>
                 <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 500px;">
-                    <h3>User Registration</h3>
+                    <h3>Survey Form</h3>
 
-                    <!-- Personal Information -->
-                    <mjo-textfield label="Full Name" name="name" required rules="required|min:2" placeholder="Enter your full name"> </mjo-textfield>
-
-                    <mjo-textfield label="Email" name="email" type="email" required rules="required|email" placeholder="Enter your email address">
-                    </mjo-textfield>
-
-                    <!-- Gender Selection -->
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;"> Gender: <span style="color: red;">*</span> </label>
-                        <div style="display: flex; gap: 1rem;">
-                            <mjo-radio name="gender" value="male" required>Male</mjo-radio>
-                            <mjo-radio name="gender" value="female" required>Female</mjo-radio>
-                            <mjo-radio name="gender" value="other" required>Other</mjo-radio>
-                            <mjo-radio name="gender" value="prefer-not-to-say" required>Prefer not to say</mjo-radio>
-                        </div>
-                    </div>
-
-                    <!-- Experience Level -->
-                    <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
-                            Programming Experience: <span style="color: red;">*</span>
-                        </label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;"> Experience Level: <span style="color: red;">*</span> </label>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <mjo-radio name="experience" value="beginner" required helperText="0-1 years of experience"> Beginner </mjo-radio>
-                            <mjo-radio name="experience" value="intermediate" required helperText="2-5 years of experience"> Intermediate </mjo-radio>
-                            <mjo-radio name="experience" value="advanced" required helperText="5+ years of experience"> Advanced </mjo-radio>
-                            <mjo-radio name="experience" value="expert" required helperText="10+ years, industry expert"> Expert </mjo-radio>
+                            <mjo-radio name="experience" value="beginner" required helperText="0-1 years">Beginner</mjo-radio>
+                            <mjo-radio name="experience" value="intermediate" required helperText="2-5 years">Intermediate</mjo-radio>
+                            <mjo-radio name="experience" value="advanced" required helperText="5+ years">Advanced</mjo-radio>
                         </div>
                     </div>
 
-                    <!-- Communication Preference -->
-                    <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;"> Preferred Communication: </label>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <mjo-radio name="preference" value="email" color="secondary" helperText="Receive updates via email"> Email Updates </mjo-radio>
-                            <mjo-radio name="preference" value="sms" color="secondary" helperText="Receive updates via SMS"> SMS Notifications </mjo-radio>
-                            <mjo-radio name="preference" value="none" color="secondary" helperText="No promotional communications">
-                                No Communications
-                            </mjo-radio>
-                        </div>
-                    </div>
-
-                    <!-- Form Actions -->
-                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
-                        <mjo-button type="button" variant="ghost" @click=${() => this.form.reset()}> Reset Form </mjo-button>
-
-                        <mjo-button @click=${this.handleSubmit} .loading=${this.isSubmitting}>
-                            ${this.isSubmitting ? "Registering..." : "Register"}
-                        </mjo-button>
-                    </div>
-
-                    <!-- Current Form Data Display -->
-                    <details style="margin-top: 1rem;">
-                        <summary>View Current Form Data</summary>
-                        <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem;">
-${JSON.stringify(this.formData, null, 2)}
-            </pre>
-                    </details>
+                    <mjo-button @click=${this.handleSubmit}>Submit</mjo-button>
                 </div>
             </mjo-form>
-        `;
-    }
-}
-```
-
-## Advanced Radio Groups
-
-Create complex radio button interactions with dynamic behavior:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-radio";
-import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-textfield";
-
-@customElement("example-radio-advanced")
-export class ExampleRadioAdvanced extends LitElement {
-    @state()
-    private paymentMethod = "";
-
-    @state()
-    private shippingMethod = "";
-
-    @state()
-    private additionalOptions = new Set<string>();
-
-    @state()
-    private customAmount = "";
-
-    private handlePaymentChange(event: Event) {
-        const radio = event.target as any;
-        this.paymentMethod = radio.value;
-    }
-
-    private handleShippingChange(event: Event) {
-        const radio = event.target as any;
-        this.shippingMethod = radio.value;
-    }
-
-    private handleOptionChange(event: Event) {
-        const radio = event.target as any;
-        const newOptions = new Set(this.additionalOptions);
-
-        if (radio.checked) {
-            newOptions.add(radio.value);
-        } else {
-            newOptions.delete(radio.value);
-        }
-
-        this.additionalOptions = newOptions;
-    }
-
-    private calculateTotal() {
-        let total = 0;
-
-        // Base shipping cost
-        switch (this.shippingMethod) {
-            case "standard":
-                total += 5;
-                break;
-            case "express":
-                total += 15;
-                break;
-            case "overnight":
-                total += 25;
-                break;
-        }
-
-        // Additional options
-        if (this.additionalOptions.has("insurance")) total += 10;
-        if (this.additionalOptions.has("signature")) total += 5;
-        if (this.additionalOptions.has("tracking")) total += 3;
-
-        // Custom donation
-        if (this.customAmount) {
-            total += parseFloat(this.customAmount) || 0;
-        }
-
-        return total.toFixed(2);
-    }
-
-    private clearAll() {
-        this.paymentMethod = "";
-        this.shippingMethod = "";
-        this.additionalOptions = new Set();
-        this.customAmount = "";
-    }
-
-    render() {
-        const total = this.calculateTotal();
-
-        return html`
-            <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem; max-width: 800px;">
-                <!-- Options Panel -->
-                <div style="display: flex; flex-direction: column; gap: 2rem;">
-                    <!-- Payment Method -->
-                    <div>
-                        <h4>Payment Method</h4>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <mjo-radio name="payment" value="credit" @change=${this.handlePaymentChange} helperText="Visa, MasterCard, American Express">
-                                Credit Card
-                            </mjo-radio>
-                            <mjo-radio name="payment" value="paypal" @change=${this.handlePaymentChange} helperText="Pay with your PayPal account">
-                                PayPal
-                            </mjo-radio>
-                            <mjo-radio name="payment" value="bank" @change=${this.handlePaymentChange} helperText="Direct bank transfer">
-                                Bank Transfer
-                            </mjo-radio>
-                            <mjo-radio
-                                name="payment"
-                                value="crypto"
-                                @change=${this.handlePaymentChange}
-                                helperText="Bitcoin, Ethereum supported"
-                                color="secondary"
-                            >
-                                Cryptocurrency
-                            </mjo-radio>
-                        </div>
-                    </div>
-
-                    <!-- Shipping Method -->
-                    <div>
-                        <h4>Shipping Method</h4>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <mjo-radio name="shipping" value="standard" @change=${this.handleShippingChange} helperText="5-7 business days (+$5.00)">
-                                Standard Shipping
-                            </mjo-radio>
-                            <mjo-radio name="shipping" value="express" @change=${this.handleShippingChange} helperText="2-3 business days (+$15.00)">
-                                Express Shipping
-                            </mjo-radio>
-                            <mjo-radio
-                                name="shipping"
-                                value="overnight"
-                                @change=${this.handleShippingChange}
-                                helperText="Next business day (+$25.00)"
-                                color="secondary"
-                            >
-                                Overnight Shipping
-                            </mjo-radio>
-                        </div>
-                    </div>
-
-                    <!-- Additional Options -->
-                    <div>
-                        <h4>Additional Services</h4>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <mjo-radio name="insurance" value="insurance" @change=${this.handleOptionChange} helperText="Protect your package (+$10.00)">
-                                Package Insurance
-                            </mjo-radio>
-                            <mjo-radio
-                                name="signature"
-                                value="signature"
-                                @change=${this.handleOptionChange}
-                                helperText="Require signature on delivery (+$5.00)"
-                            >
-                                Signature Required
-                            </mjo-radio>
-                            <mjo-radio name="tracking" value="tracking" @change=${this.handleOptionChange} helperText="Real-time tracking updates (+$3.00)">
-                                Premium Tracking
-                            </mjo-radio>
-                        </div>
-                    </div>
-
-                    <!-- Custom Donation -->
-                    <div>
-                        <h4>Optional Donation</h4>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <mjo-radio name="donation" value="5">$5 Donation</mjo-radio>
-                            <mjo-radio name="donation" value="10">$10 Donation</mjo-radio>
-                            <mjo-radio name="donation" value="25">$25 Donation</mjo-radio>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <mjo-radio name="donation" value="custom">Custom Amount:</mjo-radio>
-                                <mjo-textfield
-                                    type="number"
-                                    placeholder="0.00"
-                                    .value=${this.customAmount}
-                                    @input=${(e: any) => (this.customAmount = e.target.value)}
-                                    style="width: 100px;"
-                                >
-                                </mjo-textfield>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Summary Panel -->
-                <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; height: fit-content;">
-                    <h4 style="margin-top: 0;">Order Summary</h4>
-
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
-                        <div><strong>Payment:</strong> ${this.paymentMethod || "Not selected"}</div>
-                        <div><strong>Shipping:</strong> ${this.shippingMethod || "Not selected"}</div>
-
-                        ${this.additionalOptions.size > 0 ? html` <div><strong>Services:</strong> ${Array.from(this.additionalOptions).join(", ")}</div> ` : ""}
-                        ${this.customAmount ? html` <div><strong>Donation:</strong> $${this.customAmount}</div> ` : ""}
-                    </div>
-
-                    <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 1rem 0;" />
-
-                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold;">
-                        <span>Total:</span>
-                        <span>$${total}</span>
-                    </div>
-
-                    <div style="margin-top: 1rem;">
-                        <mjo-button fullwidth .disabled=${!this.paymentMethod || !this.shippingMethod}> Proceed to Checkout </mjo-button>
-                    </div>
-
-                    <div style="margin-top: 0.5rem;">
-                        <mjo-button fullwidth variant="ghost" @click=${this.clearAll}> Clear All </mjo-button>
-                    </div>
-                </div>
-            </div>
         `;
     }
 }
@@ -604,27 +155,22 @@ export class ExampleRadioTheming extends LitElement {
         return html`
             <mjo-theme
                 .theme=${{
-                    radio: {
-                        borderColor: "#d1d5db",
-                        checkedColor: "#059669",
-                        checkedBorderColor: "#047857",
-                        labelColor: "#374151",
-                        labelFontSize: "1rem",
-                        labelFontWeight: "500",
-                        helperColor: "#6b7280",
-                        helperFontSize: "0.875rem",
+                    components: {
+                        mjoRadio: {
+                            borderColor: "#d1d5db",
+                            checkedColor: "#059669",
+                            checkedBorderColor: "#047857",
+                            labelColor: "#374151",
+                            labelFontSize: "1rem",
+                            labelFontWeight: "500",
+                        },
                     },
                 }}
             >
-                <div style="display: flex; flex-direction: column; gap: 2rem; padding: 2rem;">
+                <div style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
                     <h3>Custom Themed Radio Buttons</h3>
-
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <mjo-radio name="themed" value="option1" label="Custom Theme Option 1" helperText="This radio uses custom theme colors"> </mjo-radio>
-                        <mjo-radio name="themed" value="option2" label="Custom Theme Option 2" helperText="Green accent color and custom typography" checked>
-                        </mjo-radio>
-                        <mjo-radio name="themed" value="option3" label="Custom Theme Option 3" helperText="Consistent styling across all options"> </mjo-radio>
-                    </div>
+                    <mjo-radio name="themed" value="option1" label="Custom Theme Option 1" checked></mjo-radio>
+                    <mjo-radio name="themed" value="option2" label="Custom Theme Option 2"></mjo-radio>
                 </div>
             </mjo-theme>
         `;
@@ -644,40 +190,22 @@ import "mjo-litui/mjo-radio";
 export class ExampleRadioThemeMixin extends ThemeMixin(LitElement) {
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 1.5rem; padding: 2rem;">
+            <div style="padding: 2rem;">
                 <h3>Component-Level Radio Theming</h3>
-
-                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                    <mjo-radio
-                        name="custom"
-                        value="option1"
-                        label="Custom Component Theme"
-                        .theme=${{
-                            borderColor: "#fbbf24",
-                            checkedColor: "#f59e0b",
-                            checkedBorderColor: "#d97706",
-                            labelColor: "#92400e",
-                            labelFontWeight: "600",
-                        }}
-                        helperText="This radio has component-specific styling"
-                    >
-                    </mjo-radio>
-
-                    <mjo-radio
-                        name="custom"
-                        value="option2"
-                        label="Another Custom Style"
-                        .theme=${{
-                            borderColor: "#ec4899",
-                            checkedColor: "#db2777",
-                            checkedBorderColor: "#be185d",
-                            labelColor: "#be185d",
-                            helperColor: "#ec4899",
-                        }}
-                        helperText="Different color scheme for this option"
-                    >
-                    </mjo-radio>
-                </div>
+                <mjo-radio
+                    name="custom"
+                    value="option1"
+                    label="Custom Component Theme"
+                    .theme=${{
+                        borderColor: "#fbbf24",
+                        checkedColor: "#f59e0b",
+                        checkedBorderColor: "#d97706",
+                        labelColor: "#92400e",
+                        labelFontWeight: "600",
+                    }}
+                    checked
+                >
+                </mjo-radio>
             </div>
         `;
     }
@@ -686,39 +214,73 @@ export class ExampleRadioThemeMixin extends ThemeMixin(LitElement) {
 
 ## Properties
 
-| Name         | Type                       | Default     | Description                                   |
-| ------------ | -------------------------- | ----------- | --------------------------------------------- |
-| `color`      | `"primary" \| "secondary"` | `"primary"` | Color scheme for the radio button             |
-| `checked`    | `boolean`                  | `false`     | Whether the radio button is checked           |
-| `disabled`   | `boolean`                  | `false`     | Whether the radio button is disabled          |
-| `helperText` | `string`                   | -           | Helper text displayed below the radio button  |
-| `label`      | `string`                   | -           | Label text displayed next to the radio button |
-| `name`       | `string`                   | -           | Form field name for grouping radio buttons    |
-| `value`      | `string`                   | `""`        | Value associated with this radio button       |
-| `hideErrors` | `boolean`                  | `false`     | Hide validation error messages                |
-| `theme`      | `MjoRadioTheme`            | `{}`        | Theme configuration for the radio button      |
+| Name              | Type                       | Default     | Description                                           |
+| ----------------- | -------------------------- | ----------- | ----------------------------------------------------- |
+| `color`           | `"primary" \| "secondary"` | `"primary"` | Color scheme for the radio button                     |
+| `checked`         | `boolean`                  | `false`     | Whether the radio button is checked                   |
+| `disabled`        | `boolean`                  | `false`     | Whether the radio button is disabled                  |
+| `helperText`      | `string`                   | -           | Helper text displayed below the radio button          |
+| `label`           | `string`                   | -           | Label text displayed next to the radio button         |
+| `name`            | `string`                   | -           | Form field name for grouping radio buttons            |
+| `value`           | `string`                   | `""`        | Value associated with this radio button               |
+| `hideErrors`      | `boolean`                  | `false`     | Hide validation error messages                        |
+| `ariaDescribedby` | `string`                   | -           | Associates the radio with additional descriptive text |
+| `theme`           | `MjoRadioTheme`            | `{}`        | Theme configuration for the radio button              |
 
 ## Methods
 
-| Method                    | Description                                               |
-| ------------------------- | --------------------------------------------------------- |
-| `getValue()`              | Returns the current value if checked, empty string if not |
-| `setValue(value: string)` | Sets the value property of the radio button               |
+| Method                               | Description                                               |
+| ------------------------------------ | --------------------------------------------------------- |
+| `getValue()`                         | Returns the current value if checked, empty string if not |
+| `setValue(value: string)`            | Sets the value property of the radio button               |
+| `reportValidity()`                   | Checks validity and reports validation state to the user  |
+| `setCustomValidity(message: string)` | Sets a custom validation message                          |
 
 ## Events
 
-| Event    | Description                               |
-| -------- | ----------------------------------------- |
-| `change` | Fired when the radio button state changes |
+| Event              | Description                                |
+| ------------------ | ------------------------------------------ |
+| `change`           | Standard change event when state changes   |
+| `mjo-radio:change` | Custom event with enhanced detail object   |
+| `mjo-radio:focus`  | Fired when the radio button receives focus |
+| `mjo-radio:blur`   | Fired when the radio button loses focus    |
+
+### Event Details
+
+#### MjoRadioChangeEvent
+
+```ts
+interface MjoRadioChangeEvent extends CustomEvent {
+    detail: {
+        element: MjoRadio;
+        checked: boolean;
+        value: string;
+        name: string;
+        previousState: {
+            checked: boolean;
+        };
+    };
+}
+```
 
 ## CSS Custom Properties
 
-| Property                           | Default                                                    | Description                      |
-| ---------------------------------- | ---------------------------------------------------------- | -------------------------------- |
-| `--mjo-checkbox-border-color`      | `var(--mjo-foreground-color-low, rgb(51, 51, 51))`         | Border color for unchecked state |
-| `--mjo-radio-checked-color`        | `var(--mjo-primary-color)`                                 | Color when checked               |
-| `--mjo-radio-checked-border-color` | `var(--mjo-radio-checked-color, var(--mjo-primary-color))` | Border color when checked        |
-| `--mjo-space-small`                | `5px`                                                      | Spacing between radio and label  |
+| Property                               | Default                                                    | Description                      |
+| -------------------------------------- | ---------------------------------------------------------- | -------------------------------- |
+| `--mjo-radio-border-color`             | `var(--mjo-foreground-color-low, rgb(51, 51, 51))`         | Border color for unchecked state |
+| `--mjo-radio-checked-color`            | `var(--mjo-primary-color)`                                 | Color when checked               |
+| `--mjo-radio-checked-border-color`     | `var(--mjo-radio-checked-color, var(--mjo-primary-color))` | Border color when checked        |
+| `--mjo-radio-checked-background-color` | `transparent`                                              | Background color when checked    |
+| `--mjo-radio-disabled-opacity`         | `0.5`                                                      | Opacity when disabled            |
+| `--mjo-radio-focus-color`              | `rgba(59, 130, 246, 0.1)`                                  | Focus indicator shadow color     |
+| `--mjo-radio-focus-outline-color`      | `var(--mjo-primary-color)`                                 | Focus outline color              |
+| `--mjo-radio-label-color`              | `inherit`                                                  | Label text color                 |
+| `--mjo-radio-label-font-size`          | `inherit`                                                  | Label font size                  |
+| `--mjo-radio-label-font-weight`        | `inherit`                                                  | Label font weight                |
+| `--mjo-radio-helper-color`             | `var(--mjo-foreground-color-low)`                          | Helper text color                |
+| `--mjo-radio-helper-font-size`         | `inherit`                                                  | Helper text font size            |
+| `--mjo-radio-helper-font-weight`       | `inherit`                                                  | Helper text font weight          |
+| `--mjo-space-small`                    | `5px`                                                      | Spacing between radio and label  |
 
 ## Theme Interface
 
@@ -727,6 +289,10 @@ interface MjoRadioTheme {
     borderColor?: string;
     checkedColor?: string;
     checkedBorderColor?: string;
+    checkedBackgroundColor?: string;
+    disabledOpacity?: string;
+    focusColor?: string;
+    focusOutlineColor?: string;
     helperColor?: string;
     helperFontSize?: string;
     helperFontWeight?: string;
@@ -740,26 +306,29 @@ interface MjoRadioTheme {
 
 -   **Radio Groups**: Multiple radio buttons with the same `name` automatically form a group where only one can be selected
 -   **Form Integration**: Automatically integrates with `mjo-form` for validation and data collection
--   **Accessibility**: Full keyboard support and proper ARIA attributes for screen readers
+-   **Accessibility**: Full keyboard support (Tab, Space, Enter) and comprehensive ARIA attributes
 -   **Theme Inheritance**: Supports both global theme through `mjo-theme` and component-specific theme through `ThemeMixin`
 -   **Automatic Deselection**: When one radio in a group is selected, others are automatically deselected
+-   **Enhanced Events**: Provides both standard `change` events and custom `mjo-radio:*` events with detailed information
 
 ## Accessibility
 
--   Full keyboard navigation support (Tab, Space, Arrow keys for groups)
--   Proper ARIA attributes for screen readers
--   Visual focus indicators
--   Support for assistive technologies
+-   Full keyboard navigation support with proper focus management
+-   Comprehensive ARIA attributes including `role`, `aria-checked`, `aria-label`, and `aria-describedby`
+-   Visual focus indicators that respect user preferences
+-   Support for screen readers and assistive technologies
 -   Semantic HTML structure with proper form association
+-   High contrast mode support
 
 ## Best Practices
 
 -   Always use the same `name` attribute for radio buttons that should be grouped together
--   Provide meaningful labels for accessibility
--   Use helper text to provide additional context when needed
+-   Provide clear and descriptive labels for accessibility
+-   Use helper text to provide additional context when beneficial
 -   Consider using fieldsets and legends for complex radio groups
 -   Implement proper validation when used in forms
 -   Keep radio groups to a reasonable size (typically 5-7 options maximum)
 -   Order options logically (alphabetically, by frequency, or by logical progression)
+-   Test with keyboard navigation and screen readers
 
 For additional theming options, see the [Theming Guide](./theming.md).

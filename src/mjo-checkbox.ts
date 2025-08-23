@@ -32,7 +32,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     @property({ type: Boolean }) hideErrors = false;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
 
-    @query("input#mjoCheckboxInput") inputElement!: HTMLInputElement;
+    @query("input") inputElement!: HTMLInputElement;
     @query(".checkbox-container") checkboxContainer!: HTMLElement;
 
     type = "checkbox";
@@ -83,7 +83,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 </div>
                 ${this.label ? html`<div class="label-container"><mjo-typography tag="none" class="label">${this.label}</mjo-typography></div>` : nothing}
                 <input
-                    id="mjoCheckboxInput"
+                    id=${ifDefined(this.id)}
                     type="checkbox"
                     name=${ifDefined(this.name)}
                     value=${ifDefined(this.value)}

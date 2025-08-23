@@ -6,6 +6,7 @@ import { AiFillCheckCircle } from "mjo-icons/ai";
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { MjoRadioBlurEvent, MjoRadioChangeEvent, MjoRadioColor, MjoRadioFocusEvent } from "./types/mjo-radio.js";
 
 import "./components/input/input-helper-text.js";
 import "./mjo-icon.js";
@@ -13,7 +14,7 @@ import "./mjo-typography.js";
 
 @customElement("mjo-radio")
 export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IFormMixin, IInputErrorMixin {
-    @property({ type: String }) color: "primary" | "secondary" = "primary";
+    @property({ type: String }) color: MjoRadioColor = "primary";
     @property({ type: Boolean, reflect: true }) checked = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
@@ -21,19 +22,64 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
     @property({ type: String }) name?: string;
     @property({ type: String }) value = "";
     @property({ type: Boolean }) hideErrors = false;
+    @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
 
-    @query("input#mjoRadioInput") inputElement!: HTMLInputElement;
+    @query("input") inputElement!: HTMLInputElement;
+    @query(".radio-container") radioContainer!: HTMLElement;
 
     type = "radio";
 
+    // Computed properties for accessibility
+    private get computedAriaChecked(): "true" | "false" {
+        return this.checked ? "true" : "false";
+    }
+
+    private get computedAriaLabel(): string | undefined {
+        if (this.ariaLabel) return this.ariaLabel;
+        if (!this.label) return undefined;
+
+        let baseLabel = this.label;
+        if (this.required || this.ariaRequired) baseLabel += " (required)";
+        if (this.checked) baseLabel += " (selected)";
+
+        return baseLabel;
+    }
+
+    private get computedTabIndex(): number {
+        return this.disabled ? -1 : 0;
+    }
+
     render() {
-        return html` <div class="container" ?data-disabled=${this.disabled}>
-            <div class="flexContainer" @click=${this.#handleClick}>
+        return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color}>
+            <div
+                class="radio-container"
+                role="radio"
+                aria-checked=${this.computedAriaChecked}
+                aria-label=${ifDefined(this.computedAriaLabel)}
+                aria-describedby=${ifDefined(this.ariaDescribedby)}
+                aria-disabled=${this.disabled ? "true" : "false"}
+                aria-invalid=${this.error ? "true" : "false"}
+                tabindex=${this.computedTabIndex}
+                @click=${this.#handleClick}
+                @keydown=${this.#handleKeydown}
+                @focus=${this.#handleFocus}
+                @blur=${this.#handleBlur}
+            >
                 <div class="box">
                     <div class="checkbox" ?data-checked=${this.checked}><mjo-icon src=${AiFillCheckCircle}></mjo-icon></div>
                 </div>
-                ${this.label ? html`<mjo-typography tag="none" class="label">${this.label}</mjo-typography>` : nothing}
-                <input id="mjoRadioInput" type="radio" name=${ifDefined(this.name)} value=${ifDefined(this.value)} ?checked=${this.checked} />
+                ${this.label ? html`<div class="label-container"><mjo-typography tag="none" class="label">${this.label}</mjo-typography></div>` : nothing}
+                <input
+                    id=${ifDefined(this.id)}
+                    type="radio"
+                    name=${ifDefined(this.name)}
+                    value=${ifDefined(this.value)}
+                    ?checked=${this.checked}
+                    ?disabled=${this.disabled}
+                    ?required=${this.required}
+                    aria-hidden="true"
+                    tabindex="-1"
+                />
             </div>
             ${this.helperText ? html`<input-helper-text>${this.helperText}</input-helper-text> ` : nothing}
             ${this.errormsg || this.successmsg
@@ -56,20 +102,97 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
         this.value = value;
     }
 
+    reportValidity(): boolean {
+        return this.inputElement.reportValidity();
+    }
+
+    setCustomValidity(message: string): void {
+        this.inputElement.setCustomValidity(message);
+    }
+
     #handleClick() {
         if (this.disabled) {
             return;
         }
 
+        const previousState = {
+            checked: this.checked,
+        };
+
         this.checked = !this.checked;
         this.updateFormData({ name: this.name || "", value: this.checked ? this.value || "1" : "" });
-        this.dispatchEvent(new Event("change"));
+
+        // Dispatch enhanced change event
+        this.dispatchEvent(
+            new CustomEvent<MjoRadioChangeEvent["detail"]>("change", {
+                detail: {
+                    element: this,
+                    checked: this.checked,
+                    value: this.value,
+                    name: this.name || "",
+                    previousState,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
+
+        // Also dispatch custom event
+        this.dispatchEvent(
+            new CustomEvent<MjoRadioChangeEvent["detail"]>("mjo-radio:change", {
+                detail: {
+                    element: this,
+                    checked: this.checked,
+                    value: this.value,
+                    name: this.name || "",
+                    previousState,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
 
         this.mjoForm?.elements.forEach((element) => {
             if (element !== this && element.name === this.name) {
                 (element as MjoRadio).checked = false;
             }
         });
+    }
+
+    #handleKeydown(event: KeyboardEvent) {
+        if (this.disabled) return;
+
+        // Handle Space and Enter keys
+        if (event.key === " " || event.key === "Enter") {
+            event.preventDefault();
+            this.#handleClick();
+        }
+    }
+
+    #handleFocus() {
+        if (this.disabled) return;
+
+        this.dispatchEvent(
+            new CustomEvent<MjoRadioFocusEvent["detail"]>("mjo-radio:focus", {
+                detail: {
+                    element: this,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
+    }
+
+    #handleBlur() {
+        this.dispatchEvent(
+            new CustomEvent<MjoRadioBlurEvent["detail"]>("mjo-radio:blur", {
+                detail: {
+                    element: this,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
     }
 
     static styles = [
@@ -82,21 +205,34 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                 position: relative;
             }
             .container[data-disabled] {
-                opacity: 0.5;
+                opacity: var(--mjo-radio-disabled-opacity, 0.5);
                 cursor: not-allowed;
             }
             .container[data-disabled] input-helper-text,
             .container[data-disabled] .label {
-                opacity: 0.5;
+                opacity: var(--mjo-radio-disabled-opacity, 0.5);
             }
-            .flexContainer {
+            .radio-container {
                 position: relative;
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
                 cursor: pointer;
+                outline: none;
+                border-radius: 0.25rem;
+                transition: all 0.2s ease;
+                outline-offset: 2px;
             }
-            .container[data-disabled] .flexContainer {
+            .radio-container:focus-visible {
+                box-shadow: 0 0 0 3px var(--mjo-radio-focus-color, rgba(59, 130, 246, 0.1));
+            }
+            .container[data-color="primary"] .radio-container:focus-visible {
+                outline: 2px solid var(--mjo-radio-focus-outline-color, var(--mjo-primary-color));
+            }
+            .container[data-color="secondary"] .radio-container:focus-visible {
+                outline: 2px solid var(--mjo-radio-focus-outline-color, var(--mjo-secondary-color));
+            }
+            .container[data-disabled] .radio-container {
                 cursor: not-allowed;
             }
             .box {
@@ -106,33 +242,75 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
             }
             .checkbox {
                 position: relative;
-                border: solid 2px var(--mjo-checkbox-border-color, var(--mjo-foreground-color-low, rgb(51, 51, 51)));
+                border: solid 2px var(--mjo-radio-border-color, var(--mjo-foreground-color-low, rgb(51, 51, 51)));
                 border-radius: 9999px;
                 line-height: 0;
-                transition: border-color 0.3s;
+                transition: all 0.3s ease;
+                width: 1.3rem;
+                height: 1.3rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             mjo-icon {
                 transform: scale(0);
-                transition: transform 0.3s;
-                font-size: 1rem;
+                transition: transform 0.3s ease;
+                font-size: 1.3rem;
             }
             .checkbox[data-checked] {
                 color: var(--mjo-radio-checked-color, var(--mjo-primary-color));
                 border-color: var(--mjo-radio-checked-border-color, var(--mjo-radio-checked-color, var(--mjo-primary-color)));
+                background-color: var(--mjo-radio-checked-background-color, transparent);
+            }
+            .container[data-color="secondary"] .checkbox[data-checked] {
+                color: var(--mjo-radio-checked-color, var(--mjo-secondary-color));
+                border-color: var(--mjo-radio-checked-border-color, var(--mjo-radio-checked-color, var(--mjo-secondary-color)));
+                background-color: var(--mjo-radio-checked-background-color, transparent);
             }
             .checkbox[data-checked] mjo-icon {
                 transform: scale(1);
+            }
+            .label-container {
+                position: relative;
+                align-self: stretch;
+                display: flex;
+                align-items: center;
             }
             .label {
                 position: relative;
                 padding-left: var(--mjo-space-small, 5px);
                 user-select: none;
+                color: var(--mjo-radio-label-color, inherit);
+                font-size: var(--mjo-radio-label-font-size, inherit);
+                font-weight: var(--mjo-radio-label-font-weight, inherit);
             }
             input {
                 display: none;
             }
             input-helper-text {
-                padding-left: calc(calc(1rem + var(--mjo-space-small, 5px)) + 2px);
+                padding-left: calc(calc(1.3rem + var(--mjo-space-small, 5px)) + 2px);
+                color: var(--mjo-radio-helper-color, var(--mjo-foreground-color-low));
+                font-size: var(--mjo-radio-helper-font-size, inherit);
+                font-weight: var(--mjo-radio-helper-font-weight, inherit);
+            }
+
+            /* Reduced motion support */
+            @media (prefers-reduced-motion: reduce) {
+                .radio-container,
+                .checkbox,
+                mjo-icon {
+                    transition: none;
+                }
+            }
+
+            /* High contrast mode support */
+            @media (prefers-contrast: high) {
+                .checkbox {
+                    border-width: 3px;
+                }
+                .radio-container:focus-visible {
+                    outline-width: 3px;
+                }
             }
         `,
     ];
@@ -141,5 +319,11 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-radio": MjoRadio;
+    }
+
+    interface HTMLElementEventMap {
+        "mjo-radio:change": MjoRadioChangeEvent;
+        "mjo-radio:focus": MjoRadioFocusEvent;
+        "mjo-radio:blur": MjoRadioBlurEvent;
     }
 }

@@ -18,6 +18,8 @@ import { MenuButtonController } from "../controllers/menu-button-controller.js";
 import { MessagesController } from "../controllers/messages-controller.js";
 import { ModalController } from "../controllers/modal-controller.js";
 import { NotificationController } from "../controllers/notification-controller.js";
+import { RadioController } from "../controllers/radio-controller.js";
+import { RippleController } from "../controllers/ripple-controller.js";
 import { TextNowrapController } from "../controllers/text-nowrap-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
 import { TypographyController } from "../controllers/typography-controller.js";
@@ -42,6 +44,8 @@ const menuButtonController = new MenuButtonController();
 const messagesController = new MessagesController();
 const modalController = new ModalController();
 const notificationController = new NotificationController();
+const radioController = new RadioController();
+const rippleController = new RippleController();
 const textfieldController = new TextfieldController();
 const textNowrapController = new TextNowrapController();
 const typographyController = new TypographyController();
@@ -126,6 +130,14 @@ export const ROUTES = [
     {
         path: "/component/mjo-notification",
         controller: notificationController.renderNotificationPage,
+    },
+    {
+        path: "/component/mjo-radio",
+        controller: radioController.renderRadioPage,
+    },
+    {
+        path: "/component/mjo-ripple",
+        controller: rippleController.renderRipplePage,
     },
     {
         path: "/component/mjo-textfield",

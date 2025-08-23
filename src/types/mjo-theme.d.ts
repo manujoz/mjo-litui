@@ -346,6 +346,10 @@ export interface MjoRadioTheme {
     borderColor?: string;
     checkedColor?: string;
     checkedBorderColor?: string;
+    checkedBackgroundColor?: string;
+    disabledOpacity?: string;
+    focusColor?: string;
+    focusOutlineColor?: string;
     helperColor?: string;
     helperFontSize?: string;
     helperFontWeight?: string;
