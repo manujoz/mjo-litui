@@ -200,6 +200,21 @@
 			"type": "shell",
 			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-textfield.test.ts\"",
 			"isBackground": false
+		},
+		{
+			"label": "TypeScript Check Focus Trap",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/utils/focus-trap.ts"
+		},
+		{
+			"label": "TypeScript Check Drawer and FocusTrap",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/components/drawer/drawer-container.ts src/utils/focus-trap.ts"
+		},
+		{
+			"label": "Build Drawer Client",
+			"type": "shell",
+			"command": "npm run server:build:client"
 		}
 	]
 }

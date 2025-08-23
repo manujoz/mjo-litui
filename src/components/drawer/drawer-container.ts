@@ -1,4 +1,5 @@
 import { DrawerShowParams } from "../../types/mjo-drawer";
+import { FocusTrap } from "../../utils/focus-trap.js";
 
 import { LitElement, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
@@ -15,32 +16,49 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
     @state() position: "left" | "right" | "top" | "bottom" = "right";
     @state() blocked = false;
 
+    // Accessibility properties
+    @state() titleId = "";
+    @state() contentId = "";
+
     @query(".background") background!: HTMLDivElement;
     @query(".container") container!: HTMLDivElement;
+    @query(".close") closeButton?: HTMLElement;
 
     #animationDuration = 200;
     #onOpen?: () => void;
     #onClose?: () => void;
+    #focusTrap?: FocusTrap;
 
     render() {
+        // Generate unique IDs for accessibility
+        if (!this.titleId) this.titleId = `drawer-title-${Math.random().toString(36).substr(2, 9)}`;
+        if (!this.contentId) this.contentId = `drawer-content-${Math.random().toString(36).substr(2, 9)}`;
+
         return html`
-            <div class="background" @click=${this.#handleClose}></div>
-            <div class="container" data-position=${this.position}>
+            <div class="background" @click=${this.#handleClose} aria-hidden="true"></div>
+            <div
+                class="container"
+                data-position=${this.position}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby=${this.titleMsg ? this.titleId : nothing}
+                aria-describedby=${this.contentId}
+            >
                 ${this.titleMsg
                     ? html`
                           <div class="title">
-                              <mjo-typography size="heading3" tag="h5" weight="medium">${this.titleMsg}</mjo-typography>
+                              <mjo-typography id=${this.titleId} size="heading3" tag="h2" weight="medium"> ${this.titleMsg} </mjo-typography>
                               ${this.blocked
                                   ? nothing
                                   : html`
-                                        <div class="close" @click=${this.#handleClose}>
-                                            <mjo-icon src=${AiOutlineClose} @click=${this.#handleClose}></mjo-icon>
-                                        </div>
+                                        <button type="button" class="close" @click=${this.#handleClose} aria-label="Close drawer" tabindex="0">
+                                            <mjo-icon src=${AiOutlineClose}></mjo-icon>
+                                        </button>
                                     `}
                           </div>
                       `
                     : ""}
-                <div class="content">${this.content}</div>
+                <div class="content" id=${this.contentId} role="document">${this.content}</div>
             </div>
         `;
     }
@@ -100,6 +118,13 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
         this.#close();
     }
 
+    #handleKeyDown = (event: KeyboardEvent): void => {
+        if (event.key === "Escape" && !this.blocked) {
+            event.preventDefault();
+            this.#close();
+        }
+    };
+
     #open() {
         this.isOpen = true;
 
@@ -121,14 +146,22 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
         });
 
         containerAnimation.onfinish = () => {
+            // Initialize focus trap (this will handle making other elements inert)
+            this.#initializeFocusTrap();
+
             if (typeof this.#onOpen === "function") {
                 this.#onOpen();
             }
+
+            document.addEventListener("keydown", this.#handleKeyDown);
         };
     }
 
     #close() {
         this.isOpen = false;
+
+        // Deactivate focus trap (this will restore inert state automatically)
+        this.#deactivateFocusTrap();
 
         const translateTo =
             this.position === "left"
@@ -151,6 +184,23 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
                 this.#onClose();
             }
         };
+
+        document.removeEventListener("keydown", this.#handleKeyDown);
+    }
+
+    #initializeFocusTrap(): void {
+        if (!this.container) return;
+
+        this.#focusTrap = new FocusTrap(this);
+
+        this.#focusTrap.activate();
+    }
+
+    #deactivateFocusTrap(): void {
+        if (this.#focusTrap) {
+            this.#focusTrap.deactivate();
+            this.#focusTrap = undefined;
+        }
     }
 
     static styles = [
@@ -177,6 +227,29 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
+
+                /* Accessibility: Focus visible styles */
+                outline: none;
+                border: var(--mjo-drawer-border-width, 1px) solid var(--mjo-drawer-border-color, transparent);
+            }
+
+            .container:focus-visible {
+                outline: var(--mjo-drawer-focus-outline-width, 2px) solid var(--mjo-drawer-focus-outline-color, var(--mjo-theme-primary-color, #2563eb));
+                outline-offset: var(--mjo-drawer-focus-outline-offset, -2px);
+            }
+
+            /* High contrast mode support */
+            @media (prefers-contrast: high) {
+                .container {
+                    border: var(--mjo-drawer-border-width, 1px) solid var(--mjo-drawer-border-color, rgba(0, 0, 0, 0.5));
+                }
+            }
+
+            /* Reduced motion support */
+            @media (prefers-reduced-motion: reduce) {
+                .container {
+                    transition: none !important;
+                }
             }
             .container[data-position="left"],
             .container[data-position="right"] {
@@ -195,7 +268,7 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
             }
             .container[data-position="top"],
             .container[data-position="bottom"] {
-                width: 100vw;
+                width: 100%;
                 height: var(--mjo-drawer-height, 500px);
                 max-height: calc(100vh - 30px);
                 left: 0;
@@ -225,12 +298,19 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
                 place-content: center;
                 flex: 0 1 35px;
             }
+            .title button {
+                background: none;
+                border: none;
+                padding: 0;
+                cursor: pointer;
+            }
             .title mjo-icon {
                 font-size: 20px;
                 padding: 2px;
                 transition: background-color 0.2s;
                 cursor: pointer;
                 border-radius: var(--mjo-radius-small, 3px);
+                color: var(--mjo-foreground-color, currentColor);
             }
             .title mjo-icon:hover {
                 background-color: var(--mjo-background-color-high, #ffffff);

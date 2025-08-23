@@ -1,0 +1,237 @@
+/* Drawer specific styles for the demo page */
+
+.drawer-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.drawer-examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    align-items: start;
+}
+
+.drawer-demo-group {
+    background: var(--mjo-background-color-card);
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    min-height: 140px;
+}
+
+.drawer-demo-group h4 {
+    margin: 0 0 8px 0;
+    color: var(--mjo-foreground-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.drawer-demo-group small {
+    color: var(--mjo-foreground-color-low);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-top: auto;
+}
+
+.drawer-demo-group mjo-button {
+    margin: 8px 0;
+}
+
+/* Configuration examples styling */
+.config-example {
+    background: var(--mjo-background-color-card);
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.config-example h4 {
+    margin: 0 0 12px 0;
+    color: var(--mjo-foreground-color);
+    font-weight: 600;
+}
+
+.config-example pre {
+    background: var(--mjo-background-color-high);
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 4px;
+    padding: 12px;
+    margin: 8px 0;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--mjo-foreground-color);
+}
+
+.config-example code {
+    font-family: "Courier New", Courier, monospace;
+    background: var(--mjo-background-color-high);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+/* Playground specific styles */
+.playground-showcase {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background: var(--mjo-background-color-card);
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 12px;
+    padding: 32px;
+    position: relative;
+    overflow: visible;
+}
+
+/* Control groups specific to drawer */
+.controls-panel .control-group input[type="text"],
+.controls-panel .control-group input[type="number"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 6px;
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-size: 0.9rem;
+}
+
+.controls-panel .control-group input[type="text"]:focus,
+.controls-panel .control-group input[type="number"]:focus {
+    outline: none;
+    border-color: var(--mjo-theme-primary-color, #2563eb);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.controls-panel .control-group select {
+    width: 100%;
+    padding: 8px 12px;
+    border: solid 1px var(--mjo-border-color);
+    border-radius: 6px;
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-size: 0.9rem;
+}
+
+.controls-panel .control-group select:focus {
+    outline: none;
+    border-color: var(--mjo-theme-primary-color, #2563eb);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Toggle group styling for drawer options */
+.toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.toggle-group .toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.toggle-group .toggle input[type="checkbox"] {
+    margin: 0;
+    transform: scale(1.1);
+}
+
+.toggle-group .toggle span {
+    font-size: 0.9rem;
+    color: var(--mjo-foreground-color);
+    user-select: none;
+}
+
+/* Animation for drawer state indicators */
+.drawer-state-indicator {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--mjo-theme-success-color, #22c55e);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.drawer-state-indicator.visible {
+    opacity: 1;
+}
+
+.drawer-state-indicator.opening {
+    background: var(--mjo-theme-info-color, #3b82f6);
+}
+
+.drawer-state-indicator.closing {
+    background: var(--mjo-theme-warning-color, #f59e0b);
+}
+
+/* Focus trap visualization for demo */
+.focus-trap-demo {
+    outline: 2px dashed var(--mjo-theme-info-color, #3b82f6);
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .drawer-examples {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .drawer-demo-group {
+        padding: 16px;
+        min-height: 120px;
+    }
+
+    .drawer-controls {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .playground-showcase {
+        padding: 20px;
+        min-height: 160px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .drawer-demo-group {
+        border: 2px solid var(--mjo-border-color);
+    }
+
+    .config-example {
+        border: 2px solid var(--mjo-border-color);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .drawer-state-indicator {
+        transition: none;
+    }
+}
