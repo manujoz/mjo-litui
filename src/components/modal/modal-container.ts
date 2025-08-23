@@ -5,6 +5,7 @@ import { customElement, property, query, state } from "lit/decorators.js";
 
 import { AiOutlineClose } from "mjo-icons/ai";
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import { FocusTrap } from "../../utils/focus-trap.js";
 
 import "../../mjo-icon.js";
 import "../../mjo-typography.js";
@@ -16,6 +17,16 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
     @property({ type: String }) content: string | TemplateResult<1> = "";
     @property({ type: String }) closePosition: "out" | "in" = "in";
 
+    // Accessibility properties
+    @property({ type: String }) ariaLabelledby?: string;
+    @property({ type: String }) ariaDescribedby?: string;
+    @property({ type: String }) label?: string;
+    @property({ type: Boolean }) trapFocus = true;
+    @property({ type: Boolean }) restoreFocus = true;
+    @property({ type: Boolean }) closeOnEscape = true;
+    @property({ type: String }) initialFocus?: string;
+    @property({ type: Boolean }) preventBodyScroll = true;
+
     @state() blocked = false;
 
     @query(".background") background!: HTMLDivElement;
@@ -24,19 +35,44 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
 
     onClose?: () => void;
     #animationDuration = 200;
+    #focusTrap?: FocusTrap;
+    #originalBodyOverflow?: string;
 
     render() {
         return html`
             <div class="background" @click=${this.#handleClose}></div>
             ${!this.blocked && this.closePosition === "out"
-                ? html`<mjo-icon class="closeOut" src=${AiOutlineClose} @click=${this.#handleClose}></mjo-icon>`
+                ? html`<mjo-icon
+                      class="closeOut"
+                      src=${AiOutlineClose}
+                      @click=${this.#handleClose}
+                      @keydown=${this.#handleKeyDown}
+                      tabindex="0"
+                      role="button"
+                      aria-label="Close modal"
+                  ></mjo-icon>`
                 : nothing}
-            <div class="container">
+            <div
+                class="container"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby=${this.ariaLabelledby || nothing}
+                aria-describedby=${this.ariaDescribedby || nothing}
+                aria-label=${!this.ariaLabelledby && (this.label || this.titleMsg) ? this.label || this.titleMsg : nothing}
+            >
                 ${this.titleMsg ? html`<mjo-typography class="title" size="heading3" tag="h5" weight="medium">${this.titleMsg}</mjo-typography>` : ""}
                 <div class="content">${this.content}</div>
                 ${!this.blocked && this.closePosition === "in"
                     ? html`<div class="closeIn">
-                          <mjo-icon class="close" @click=${this.#handleClose} src=${AiOutlineClose}></mjo-icon>
+                          <mjo-icon
+                              class="close"
+                              @click=${this.#handleClose}
+                              @keydown=${this.#handleKeyDown}
+                              tabindex="0"
+                              role="button"
+                              aria-label="Close modal"
+                              src=${AiOutlineClose}
+                          ></mjo-icon>
                       </div>`
                     : nothing}
             </div>
@@ -83,8 +119,31 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
         this.close();
     }
 
+    #handleKeyDown(event: KeyboardEvent) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            this.#handleClose();
+        }
+    }
+
+    #handleGlobalKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Escape" && this.closeOnEscape && !this.blocked) {
+            event.preventDefault();
+            this.close();
+        }
+    };
+
     #open() {
         this.isOpen = true;
+
+        // Manage body scroll
+        if (this.preventBodyScroll) {
+            this.#originalBodyOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+        }
+
+        // Add global keyboard listener
+        document.addEventListener("keydown", this.#handleGlobalKeyDown);
 
         this.style.display = "grid";
 
@@ -97,10 +156,41 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
             ],
             { duration: this.#animationDuration, fill: "forwards" },
         );
+
+        // Setup focus trap after animation
+        setTimeout(() => {
+            if (this.trapFocus) {
+                this.#focusTrap = new FocusTrap(this, {
+                    initialFocus: this.initialFocus,
+                    onActivate: () => {
+                        // Focus trap activated
+                    },
+                    onDeactivate: () => {
+                        // Focus trap deactivated
+                    },
+                });
+                this.#focusTrap.activate();
+            }
+        }, this.#animationDuration);
     }
 
     #close() {
         this.isOpen = false;
+
+        // Cleanup focus trap
+        if (this.#focusTrap) {
+            this.#focusTrap.deactivate();
+            this.#focusTrap = undefined;
+        }
+
+        // Remove global keyboard listener
+        document.removeEventListener("keydown", this.#handleGlobalKeyDown);
+
+        // Restore body scroll
+        if (this.preventBodyScroll && this.#originalBodyOverflow !== undefined) {
+            document.body.style.overflow = this.#originalBodyOverflow;
+            this.#originalBodyOverflow = undefined;
+        }
 
         this.background.animate([{ opacity: 1 }, { opacity: 0 }], { duration: this.#animationDuration, fill: "forwards" });
         this.closeIcon?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: this.#animationDuration, fill: "forwards" });

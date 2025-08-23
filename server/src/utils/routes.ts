@@ -16,6 +16,7 @@ import { ImageController } from "../controllers/image-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
 import { MenuButtonController } from "../controllers/menu-button-controller.js";
 import { MessagesController } from "../controllers/messages-controller.js";
+import { ModalController } from "../controllers/modal-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
 
 const indexController = new IndexController();
@@ -36,6 +37,7 @@ const imageController = new ImageController();
 const accordionController = new AccordionController();
 const menuButtonController = new MenuButtonController();
 const messagesController = new MessagesController();
+const modalController = new ModalController();
 const textfieldController = new TextfieldController();
 
 export const ROUTES = [
@@ -108,8 +110,12 @@ export const ROUTES = [
         controller: menuButtonController.renderMenuButtonPage,
     },
     {
-        path: "/component/mjo-messages",
+        path: "/component/mjo-message",
         controller: messagesController.renderMessagesPage,
+    },
+    {
+        path: "/component/mjo-modal",
+        controller: modalController.renderModalPage,
     },
     {
         path: "/component/mjo-textfield",

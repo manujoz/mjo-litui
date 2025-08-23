@@ -31,11 +31,24 @@ export class ModalController implements ReactiveController {
     }
 
     #createModalElement() {
+        const hostModal = this.host as MjoModal;
+
         this.modalContainer = document.createElement("modal-container") as ModalContainer;
         this.modalContainer.style.zIndex = window.getComputedStyle(this.host as MjoModal).zIndex;
 
-        const theme = (this.host as MjoModal).theme as Record<string, string>;
+        // Transfer theme
+        const theme = hostModal.theme as Record<string, string>;
         if (theme) this.modalContainer.theme = theme;
+
+        // Transfer accessibility properties
+        this.modalContainer.ariaLabelledby = hostModal.ariaLabelledby;
+        this.modalContainer.ariaDescribedby = hostModal.ariaDescribedby;
+        this.modalContainer.label = hostModal.label;
+        this.modalContainer.trapFocus = hostModal.trapFocus;
+        this.modalContainer.restoreFocus = hostModal.restoreFocus;
+        this.modalContainer.closeOnEscape = hostModal.closeOnEscape;
+        this.modalContainer.initialFocus = hostModal.initialFocus;
+        this.modalContainer.preventBodyScroll = hostModal.preventBodyScroll;
 
         document.body.appendChild(this.modalContainer);
     }

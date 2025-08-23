@@ -1,10 +1,21 @@
 # mjo-modal
 
-A modal dialog component with controller architecture for displaying overlay content.
+A modal dialog component with controller architecture for displaying overlay content with full accessibility support.
 
 ## Overview
 
 The `mjo-modal` component provides a powerful modal system for displaying overlay content. It uses a controller architecture that creates a global modal container in the document body, allowing modals to appear above any content regardless of parent element constraints like `overflow: hidden`.
+
+The component includes comprehensive accessibility features including focus trapping, keyboard navigation, ARIA support, and screen reader compatibility.
+
+## Accessibility Features
+
+-   **Focus Management**: Automatic focus trapping within the modal with configurable initial focus
+-   **Keyboard Navigation**: ESC key to close, Tab navigation within modal content
+-   **ARIA Support**: Proper dialog role, aria-modal, aria-labelledby, and aria-describedby attributes
+-   **Screen Reader**: Announces modal opening and provides accessible labels
+-   **Body Scroll**: Prevents background scrolling when modal is open (configurable)
+-   **Focus Restoration**: Returns focus to the triggering element when closed
 
 ## Basic Usage
 
@@ -65,6 +76,58 @@ export class ExampleModalBasic extends LitElement {
             </div>
 
             <mjo-modal></mjo-modal>
+        `;
+    }
+}
+```
+
+## Accessibility Configuration
+
+Configure modal accessibility features for optimal screen reader and keyboard support:
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import type { MjoModal } from "mjo-litui/types";
+import "mjo-litui/mjo-modal";
+import "mjo-litui/mjo-button";
+
+@customElement("example-modal-accessibility")
+export class ExampleModalAccessibility extends LitElement {
+    @query("mjo-modal")
+    private modalComponent!: MjoModal;
+
+    private openAccessibleModal() {
+        this.modalComponent.controller.show({
+            title: "Confirm Action",
+            content: html`
+                <div style="padding: 1.5rem;">
+                    <h3 id="modal-title">Confirm Action</h3>
+                    <p id="modal-description">Are you sure you want to delete this item? This action cannot be undone.</p>
+                    <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
+                        <mjo-button variant="ghost" @click=${() => this.modalComponent.controller.close()}> Cancel </mjo-button>
+                        <mjo-button id="confirm-button" variant="danger"> Delete </mjo-button>
+                    </div>
+                </div>
+            `,
+        });
+    }
+
+    render() {
+        return html`
+            <mjo-button @click=${this.openAccessibleModal}> Open Accessible Modal </mjo-button>
+
+            <!-- Configure accessibility options -->
+            <mjo-modal
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+                initial-focus="#confirm-button"
+                trap-focus
+                restore-focus
+                close-on-escape
+                prevent-body-scroll
+            >
+            </mjo-modal>
         `;
     }
 }
@@ -229,7 +292,7 @@ export class ExampleModalBehavior extends LitElement {
 }
 ```
 
-## Complex Content and Animations
+## Complex Content Example
 
 Advanced modal content and custom animations:
 
@@ -240,47 +303,9 @@ import type { MjoModal } from "mjo-litui/types";
 import "mjo-litui/mjo-modal";
 import "mjo-litui/mjo-button";
 import "mjo-litui/mjo-textfield";
-import "mjo-litui/mjo-card";
 
 @customElement("example-modal-advanced")
 export class ExampleModalAdvanced extends LitElement {
-    static styles = css`
-        .form-container {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: flex-end;
-            margin-top: 1rem;
-        }
-
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
-        }
-
-        .image-item {
-            aspect-ratio: 1;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-            border-radius: 8px;
-            display: grid;
-            place-items: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .image-item:hover {
-            transform: scale(1.05);
-        }
-    `;
-
     @query("mjo-modal")
     private modalComponent!: MjoModal;
 
@@ -291,29 +316,14 @@ export class ExampleModalAdvanced extends LitElement {
         this.modalComponent.controller.show({
             title: "Contact Form",
             width: 500,
+            initialFocus: "#name-input",
             content: html`
-                <div class="form-container">
-                    <mjo-textfield label="Name" .value=${this.formData.name} @input=${(e: any) => (this.formData = { ...this.formData, name: e.target.value })}>
-                    </mjo-textfield>
+                <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+                    <mjo-textfield id="name-input" label="Name" .value=${this.formData.name}></mjo-textfield>
+                    <mjo-textfield label="Email" type="email" .value=${this.formData.email}></mjo-textfield>
+                    <mjo-textfield label="Message" multiline rows="4" .value=${this.formData.message}></mjo-textfield>
 
-                    <mjo-textfield
-                        label="Email"
-                        type="email"
-                        .value=${this.formData.email}
-                        @input=${(e: any) => (this.formData = { ...this.formData, email: e.target.value })}
-                    >
-                    </mjo-textfield>
-
-                    <mjo-textfield
-                        label="Message"
-                        multiline
-                        rows="4"
-                        .value=${this.formData.message}
-                        @input=${(e: any) => (this.formData = { ...this.formData, message: e.target.value })}
-                    >
-                    </mjo-textfield>
-
-                    <div class="button-group">
+                    <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
                         <mjo-button variant="ghost" @click=${() => this.modalComponent.controller.close()}> Cancel </mjo-button>
                         <mjo-button @click=${this.submitForm}> Submit </mjo-button>
                     </div>
@@ -322,85 +332,23 @@ export class ExampleModalAdvanced extends LitElement {
         });
     }
 
-    private openGalleryModal() {
-        this.modalComponent.controller.show({
-            title: "Image Gallery",
-            width: "90vw",
-            content: html`
-                <div class="image-gallery">
-                    ${Array.from(
-                        { length: 8 },
-                        (_, i) => html`
-                            <div class="image-item" @click=${() => this.openImageDetail(i + 1)}>
-                                <span>Image ${i + 1}</span>
-                            </div>
-                        `,
-                    )}
-                </div>
-            `,
-        });
-    }
-
-    private openImageDetail(imageNumber: number) {
-        this.modalComponent.controller.show({
-            title: `Image ${imageNumber} Details`,
-            width: 600,
-            animationDuration: 300,
-            content: html`
-                <div style="padding: 1.5rem; text-align: center;">
-                    <div
-                        style="width: 100%; height: 300px; background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 8px; display: grid; place-items: center; margin-bottom: 1rem;"
-                    >
-                        <span style="color: white; font-size: 2rem;">Image ${imageNumber}</span>
-                    </div>
-                    <h3>Image ${imageNumber} Title</h3>
-                    <p>This is a detailed view of image ${imageNumber}. Here you can see more information about this particular image.</p>
-                    <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
-                        <mjo-button variant="ghost">Download</mjo-button>
-                        <mjo-button variant="ghost">Share</mjo-button>
-                        <mjo-button @click=${() => this.modalComponent.controller.close()}>Close</mjo-button>
-                    </div>
-                </div>
-            `,
-        });
-    }
-
     private submitForm() {
-        console.log("Form data:", this.formData);
+        console.log("Form submitted:", this.formData);
         this.modalComponent.controller.close();
-
-        // Show success modal
-        setTimeout(() => {
-            this.modalComponent.controller.show({
-                title: "Success!",
-                content: html`
-                    <div style="padding: 1.5rem; text-align: center;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
-                        <p>Your message has been sent successfully!</p>
-                        <p>We'll get back to you soon.</p>
-                    </div>
-                `,
-                time: 3000,
-            });
-        }, 100);
     }
 
     render() {
         return html`
-            <div style="display: flex; gap: 1rem;">
-                <mjo-button @click=${this.openFormModal}> Contact Form Modal </mjo-button>
-                <mjo-button @click=${this.openGalleryModal}> Gallery Modal </mjo-button>
-            </div>
-
+            <mjo-button @click=${this.openFormModal}> Open Contact Form </mjo-button>
             <mjo-modal></mjo-modal>
         `;
     }
 }
 ```
 
-## Context Sharing Example
+## Context Sharing
 
-The modal controller can be shared across component hierarchies using `@lit/context`, allowing child components to display modals from a parent container. This is especially useful for applications where modal functionality needs to be accessible from deeply nested components.
+The modal controller can be shared across component hierarchies using `@lit/context`:
 
 ```ts
 import { LitElement, html, PropertyValues } from "lit";
@@ -409,8 +357,6 @@ import { createContext } from "@lit/context";
 import type { MjoModal, ModalController } from "mjo-litui/types";
 import "mjo-litui/mjo-modal";
 import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-card";
-import "mjo-litui/mjo-textfield";
 
 // Create a context for the modal controller
 const modalContext = createContext<ModalController>("modal-controller");
@@ -425,250 +371,37 @@ export class MainAppComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues): void {
         super.firstUpdated(_changedProperties);
-        // Assign the modal controller to the context provider after the modal is available
         this.modalController = this.modal.controller;
     }
 
     render() {
         return html`
-            <div style="padding: 2rem;">
+            <div>
                 <h2>Main Application</h2>
-                <p>This main component provides a modal controller to all child components through context.</p>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
-                    <user-management-component></user-management-component>
-                    <content-editor-component></content-editor-component>
-                </div>
-
-                <div style="margin-top: 2rem;">
-                    <confirmation-dialogs></confirmation-dialogs>
-                </div>
-
-                <!-- The modal instance that provides the controller -->
+                <child-component></child-component>
                 <mjo-modal></mjo-modal>
             </div>
         `;
     }
 }
 
-@customElement("user-management-component")
-export class UserManagementComponent extends LitElement {
+@customElement("child-component")
+export class ChildComponent extends LitElement {
     @consume({ context: modalContext, subscribe: true })
     modalController!: ModalController;
 
-    private openUserProfile() {
+    private openModal() {
         this.modalController.show({
-            title: "User Profile",
-            width: 500,
-            content: html`
-                <div style="padding: 1.5rem;">
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <mjo-textfield label="Full Name" value="John Doe"></mjo-textfield>
-                        <mjo-textfield label="Email" value="john@example.com"></mjo-textfield>
-                        <mjo-textfield label="Role" value="Administrator"></mjo-textfield>
-
-                        <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
-                            <mjo-button variant="ghost" @click=${() => this.modalController.close()}> Cancel </mjo-button>
-                            <mjo-button @click=${this.saveProfile}> Save Changes </mjo-button>
-                        </div>
-                    </div>
-                </div>
-            `,
-        });
-    }
-
-    private deleteUser() {
-        this.modalController.show({
-            title: "Confirm Deletion",
-            content: html`
-                <div style="padding: 1.5rem; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
-                    <h3>Delete User Account?</h3>
-                    <p>This action cannot be undone. The user will lose access to all their data.</p>
-
-                    <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1.5rem;">
-                        <mjo-button variant="ghost" @click=${() => this.modalController.close()}> Cancel </mjo-button>
-                        <mjo-button variant="danger" @click=${this.confirmDelete}> Delete User </mjo-button>
-                    </div>
-                </div>
-            `,
-            blocked: true,
-        });
-    }
-
-    private saveProfile() {
-        this.modalController.close();
-        // Show success feedback
-        setTimeout(() => {
-            this.modalController.show({
-                title: "Success",
-                content: html`
-                    <div style="padding: 1.5rem; text-align: center;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
-                        <p>User profile updated successfully!</p>
-                    </div>
-                `,
-                time: 2000,
-            });
-        }, 100);
-    }
-
-    private confirmDelete() {
-        this.modalController.close();
-        setTimeout(() => {
-            this.modalController.show({
-                title: "User Deleted",
-                content: html`
-                    <div style="padding: 1.5rem; text-align: center;">
-                        <p>User account has been permanently deleted.</p>
-                    </div>
-                `,
-                time: 2000,
-            });
-        }, 100);
-    }
-
-    render() {
-        return html`
-            <mjo-card>
-                <div style="padding: 1rem;">
-                    <h4>User Management</h4>
-                    <p>Manage user accounts and profiles using shared modal controller.</p>
-                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
-                        <mjo-button @click=${this.openUserProfile}> Edit Profile </mjo-button>
-                        <mjo-button @click=${this.deleteUser} variant="danger"> Delete User </mjo-button>
-                    </div>
-                </div>
-            </mjo-card>
-        `;
-    }
-}
-
-@customElement("content-editor-component")
-export class ContentEditorComponent extends LitElement {
-    @consume({ context: modalContext, subscribe: true })
-    modalController!: ModalController;
-
-    private openEditor() {
-        this.modalController.show({
-            title: "Content Editor",
-            width: "80vw",
-            content: html`
-                <div style="padding: 1.5rem;">
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <mjo-textfield label="Title" value="Sample Article"></mjo-textfield>
-                        <mjo-textfield label="Content" multiline rows="10" value="Lorem ipsum dolor sit amet, consectetur adipiscing elit..."> </mjo-textfield>
-
-                        <div style="display: flex; gap: 0.5rem; justify-content: space-between; margin-top: 1rem;">
-                            <div style="display: flex; gap: 0.5rem;">
-                                <mjo-button variant="ghost">Preview</mjo-button>
-                                <mjo-button variant="ghost">Save Draft</mjo-button>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <mjo-button variant="ghost" @click=${() => this.modalController.close()}> Cancel </mjo-button>
-                                <mjo-button @click=${this.publishContent}> Publish </mjo-button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `,
-        });
-    }
-
-    private publishContent() {
-        this.modalController.close();
-        setTimeout(() => {
-            this.modalController.show({
-                title: "Published!",
-                content: html`
-                    <div style="padding: 1.5rem; text-align: center;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
-                        <p>Your content has been published successfully!</p>
-                    </div>
-                `,
-                time: 2000,
-            });
-        }, 100);
-    }
-
-    render() {
-        return html`
-            <mjo-card>
-                <div style="padding: 1rem;">
-                    <h4>Content Editor</h4>
-                    <p>Create and edit content using the modal interface.</p>
-                    <mjo-button @click=${this.openEditor} style="margin-top: 1rem;"> Open Editor </mjo-button>
-                </div>
-            </mjo-card>
-        `;
-    }
-}
-
-@customElement("confirmation-dialogs")
-export class ConfirmationDialogs extends LitElement {
-    @consume({ context: modalContext, subscribe: true })
-    modalController!: ModalController;
-
-    private showConfirmationSeries() {
-        // First confirmation
-        this.modalController.show({
-            title: "Step 1: Initial Confirmation",
-            content: html`
-                <div style="padding: 1.5rem; text-align: center;">
-                    <p>Do you want to proceed with the multi-step process?</p>
-                    <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
-                        <mjo-button variant="ghost" @click=${() => this.modalController.close()}> Cancel </mjo-button>
-                        <mjo-button @click=${this.showStep2}> Continue </mjo-button>
-                    </div>
-                </div>
-            `,
-        });
-    }
-
-    private showStep2() {
-        this.modalController.show({
-            title: "Step 2: Final Confirmation",
-            content: html`
-                <div style="padding: 1.5rem; text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
-                    <p>This is the final step. Are you absolutely sure?</p>
-                    <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
-                        <mjo-button variant="ghost" @click=${this.showConfirmationSeries}> Back </mjo-button>
-                        <mjo-button variant="success" @click=${this.showSuccess}> Confirm </mjo-button>
-                    </div>
-                </div>
-            `,
-        });
-    }
-
-    private showSuccess() {
-        this.modalController.show({
-            title: "Process Complete",
-            content: html`
-                <div style="padding: 1.5rem; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
-                    <p>Multi-step process completed successfully!</p>
-                </div>
-            `,
-            time: 3000,
+            title: "Child Modal",
+            content: html`<p>This modal was opened from a child component!</p>`,
         });
     }
 
     render() {
-        return html`
-            <mjo-card>
-                <div style="padding: 1rem;">
-                    <h4>Confirmation Dialogs</h4>
-                    <p>Chain multiple modals for complex workflows.</p>
-                    <mjo-button @click=${this.showConfirmationSeries} style="margin-top: 1rem;"> Start Multi-Step Process </mjo-button>
-                </div>
-            </mjo-card>
-        `;
+        return html`<mjo-button @click=${this.openModal}>Open Modal</mjo-button>`;
     }
 }
 ```
-
-This pattern allows any component in the application hierarchy to display modals without needing to pass the controller through props or maintaining multiple modal instances.
 
 ## Theme Customization
 
@@ -778,7 +511,7 @@ export class ExampleModalThemeMixin extends ThemeMixin(LitElement) {
 
 ## Programmatic Control
 
-Advanced programmatic control of modal behavior:
+Simple programmatic control example:
 
 ```ts
 import { LitElement, html } from "lit";
@@ -793,95 +526,42 @@ export class ExampleModalControl extends LitElement {
     private modalComponent!: MjoModal;
 
     @state()
-    private modalIsOpen = false;
+    private processing = false;
 
-    @state()
-    private progressValue = 0;
+    private async startProcess() {
+        this.processing = true;
 
-    private openProgressModal() {
         this.modalComponent.controller.show({
             title: "Processing...",
             blocked: true,
             content: html`
                 <div style="padding: 1.5rem; text-align: center;">
                     <p>Please wait while we process your request.</p>
-                    <div style="width: 100%; background: #e0e0e0; border-radius: 10px; margin: 1rem 0;">
-                        <div
-                            style="width: ${this
-                                .progressValue}%; height: 20px; background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 10px; transition: width 0.3s;"
-                        ></div>
-                    </div>
-                    <p>${this.progressValue}% Complete</p>
+                    <div style="margin: 1rem 0;">Processing...</div>
                 </div>
             `,
         });
 
-        this.modalIsOpen = true;
-        this.simulateProgress();
-    }
+        // Simulate async operation
+        await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    private simulateProgress() {
-        const interval = setInterval(() => {
-            this.progressValue += 10;
+        this.modalComponent.controller.show({
+            title: "Complete!",
+            content: html`
+                <div style="padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                    <p>Processing completed successfully!</p>
+                </div>
+            `,
+            time: 2000,
+        });
 
-            // Update modal content
-            this.modalComponent.controller.show({
-                title: "Processing...",
-                blocked: true,
-                content: html`
-                    <div style="padding: 1.5rem; text-align: center;">
-                        <p>Please wait while we process your request.</p>
-                        <div style="width: 100%; background: #e0e0e0; border-radius: 10px; margin: 1rem 0;">
-                            <div
-                                style="width: ${this
-                                    .progressValue}%; height: 20px; background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 10px; transition: width 0.3s;"
-                            ></div>
-                        </div>
-                        <p>${this.progressValue}% Complete</p>
-                    </div>
-                `,
-            });
-
-            if (this.progressValue >= 100) {
-                clearInterval(interval);
-                this.showCompletionModal();
-            }
-        }, 500);
-    }
-
-    private showCompletionModal() {
-        setTimeout(() => {
-            this.modalComponent.controller.show({
-                title: "Complete!",
-                content: html`
-                    <div style="padding: 1.5rem; text-align: center;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
-                        <p>Processing completed successfully!</p>
-                        <mjo-button @click=${this.resetDemo} style="margin-top: 1rem;"> Reset Demo </mjo-button>
-                    </div>
-                `,
-                time: 3000,
-                onClose: () => this.resetDemo(),
-            });
-        }, 500);
-    }
-
-    private resetDemo() {
-        this.modalIsOpen = false;
-        this.progressValue = 0;
-        this.modalComponent.controller.close();
+        this.processing = false;
     }
 
     render() {
         return html`
-            <div style="display: flex; gap: 1rem;">
-                <mjo-button @click=${this.openProgressModal} .disabled=${this.modalIsOpen}>
-                    ${this.modalIsOpen ? "Processing..." : "Start Progress Demo"}
-                </mjo-button>
-
-                <mjo-button @click=${this.resetDemo} variant="ghost" .disabled=${!this.modalIsOpen}> Cancel Process </mjo-button>
-            </div>
-
+            <mjo-button @click=${this.startProcess} .disabled=${this.processing}> ${this.processing ? "Processing..." : "Start Process"} </mjo-button>
             <mjo-modal></mjo-modal>
         `;
     }
@@ -890,10 +570,18 @@ export class ExampleModalControl extends LitElement {
 
 ## Properties
 
-| Name    | Type            | Default | Description                                             |
-| ------- | --------------- | ------- | ------------------------------------------------------- |
-| `open`  | `boolean`       | `false` | Controls the modal visibility (mainly for internal use) |
-| `theme` | `MjoModalTheme` | `{}`    | Theme configuration for the modal container             |
+| Name                | Type            | Default | Description                                         |
+| ------------------- | --------------- | ------- | --------------------------------------------------- |
+| `open`              | `boolean`       | `false` | Controls modal visibility (mainly for internal use) |
+| `theme`             | `MjoModalTheme` | `{}`    | Theme configuration for the modal container         |
+| `ariaLabelledby`    | `string`        | -       | ID of element that labels the modal                 |
+| `ariaDescribedby`   | `string`        | -       | ID of element that describes the modal              |
+| `label`             | `string`        | -       | Alternative label for modal content                 |
+| `trapFocus`         | `boolean`       | `true`  | Enable/disable focus trapping                       |
+| `restoreFocus`      | `boolean`       | `true`  | Enable/disable focus restoration on close           |
+| `closeOnEscape`     | `boolean`       | `true`  | Enable/disable ESC key closing                      |
+| `initialFocus`      | `string`        | -       | CSS selector for initial focus element              |
+| `preventBodyScroll` | `boolean`       | `true`  | Prevent body scroll when modal is open              |
 
 ## Controller Methods
 
@@ -922,7 +610,7 @@ Closes the currently open modal.
 
 ## Types
 
-```ts
+````ts
 interface ModalShowParams {
     title?: string;
     content: string | TemplateResult<1>;
@@ -933,9 +621,16 @@ interface ModalShowParams {
     closePosition?: "out" | "in";
     onClose?: () => void;
 }
-```
 
-## Events
+interface MjoModalTheme {
+    iconCloseSize?: string;
+    titleBorderColor?: string;
+    backgroundColor?: string;
+    radius?: string;
+    boxShadow?: string;
+    width?: string;
+}
+```## Events
 
 This component does not emit custom events. The modal container handles internal events for user interactions.
 
@@ -961,7 +656,7 @@ interface MjoModalTheme {
     boxShadow?: string;
     width?: string;
 }
-```
+````
 
 ## Technical Notes
 
@@ -975,13 +670,17 @@ interface MjoModalTheme {
 
 ## Accessibility
 
--   Modal traps focus within the modal container
--   Uses semantic HTML structure with proper ARIA attributes
--   Supports keyboard navigation (ESC key to close)
--   High contrast support for close buttons and backgrounds
--   Screen reader friendly with proper heading structure
+-   **Focus Management**: Automatic focus trapping within modal with configurable initial focus
+-   **Keyboard Navigation**: Full keyboard support including ESC key to close and Tab navigation
+-   **ARIA Support**: Complete ARIA implementation with dialog role, modal attribute, and labeling
+-   **Screen Reader**: Proper announcements and accessible content structure
+-   **Body Scroll Control**: Prevents background scrolling when modal is active
+-   **Focus Restoration**: Automatically returns focus to the triggering element when closed
+-   **Customizable Behavior**: All accessibility features can be configured or disabled as needed
 
 ## Best Practices
+
+### General Usage
 
 -   Use descriptive titles for better user understanding
 -   Keep modal content focused and concise
@@ -990,5 +689,22 @@ interface MjoModalTheme {
 -   Consider mobile viewport constraints when setting width
 -   Use context sharing for large applications with multiple components
 -   Implement proper error handling in onClose callbacks
+
+### Accessibility
+
+-   Always provide either `ariaLabelledby` or `label` for screen readers
+-   Use `ariaDescribedby` to reference content that describes the modal's purpose
+-   Set `initialFocus` to the most important interactive element (like a confirm button)
+-   Keep focus trap enabled (`trapFocus: true`) unless there's a specific reason not to
+-   Allow ESC key closing (`closeOnEscape: true`) for keyboard users
+-   Use semantic HTML structure within modal content
+-   Ensure sufficient color contrast for all text and interactive elements
+-   Test with screen readers and keyboard-only navigation
+
+### Performance
+
+-   Avoid creating multiple modal instances; reuse a single instance when possible
+-   Use the controller pattern for complex modal workflows
+-   Implement proper cleanup in `onClose` callbacks to prevent memory leaks
 
 For additional theming options, see the [Theming Guide](./theming.md).
