@@ -10,6 +10,7 @@ import { ColorPickerController } from "../controllers/color-picker-controller.js
 import { DatePickerController } from "../controllers/date-picker-controller.js";
 import { DrawerController } from "../controllers/drawer-controller.js";
 import { DropdownController } from "../controllers/dropdown-controller.js";
+import { GridController } from "../controllers/grid-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
 
@@ -25,6 +26,7 @@ const colorPickerController = new ColorPickerController();
 const datePickerController = new DatePickerController();
 const drawerController = new DrawerController();
 const dropdownController = new DropdownController();
+const gridController = new GridController();
 const accordionController = new AccordionController();
 const textfieldController = new TextfieldController();
 
@@ -80,6 +82,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-dropdown",
         controller: dropdownController.renderDropdownPage,
+    },
+    {
+        path: "/component/mjo-grid",
+        controller: gridController.renderGridPage,
     },
     {
         path: "/component/mjo-textfield",

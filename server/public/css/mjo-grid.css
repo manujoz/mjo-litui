@@ -1,0 +1,245 @@
+/* Grid specific styles for SSR demo page */
+
+.grid-demo-section {
+    margin: 2rem 0;
+}
+
+.grid-demo-section h4 {
+    margin: 1.5rem 0 1rem 0;
+    color: var(--mjo-foreground-color-high);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Grid playground items */
+.grid-item {
+    background: var(--mjo-color-primary);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    text-align: center;
+    min-height: 60px;
+    transition: all 0.2s ease;
+}
+
+.grid-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Demo items for examples */
+.demo-item {
+    background: var(--mjo-background-color-card);
+    color: var(--mjo-foreground-color-high);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 2px solid var(--mjo-border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    text-align: center;
+    min-height: 80px;
+    transition: all 0.2s ease;
+}
+
+.demo-item:hover {
+    border-color: var(--mjo-color-primary);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Card items for responsive demo */
+.card-item {
+    background: var(--mjo-background-color-card);
+    color: var(--mjo-foreground-color-high);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--mjo-border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.card-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.card-item h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--mjo-color-primary);
+    font-size: 1.1rem;
+}
+
+.card-item p {
+    margin: 0;
+    color: var(--mjo-foreground-color-medium);
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+/* Metric items for dashboard demo */
+.metric-item {
+    background: var(--mjo-background-color-card);
+    color: var(--mjo-foreground-color-high);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--mjo-border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.metric-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--mjo-color-primary);
+    line-height: 1;
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    color: var(--mjo-foreground-color-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+}
+
+/* Flow demo items */
+.flow-item {
+    background: var(--mjo-color-secondary);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.wide-item {
+    grid-column: span 2;
+    background: var(--mjo-color-success);
+}
+
+/* Controls panel specific styles */
+.responsive-controls {
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.responsive-controls.active {
+    opacity: 1;
+}
+
+.responsive-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.responsive-group label {
+    font-size: 0.85rem;
+    color: var(--mjo-foreground-color-medium);
+    min-width: 80px;
+}
+
+.responsive-group input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 4px;
+    background: var(--mjo-background-color-card);
+    color: var(--mjo-foreground-color-high);
+    font-size: 0.85rem;
+}
+
+.grid-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.grid-actions button {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+}
+
+.grid-actions button:first-child {
+    background: var(--mjo-color-success);
+    color: white;
+}
+
+.grid-actions button:first-child:hover {
+    background: var(--mjo-color-success-dark, var(--mjo-color-success));
+    transform: translateY(-1px);
+}
+
+.grid-actions button:last-child {
+    background: var(--mjo-color-error);
+    color: white;
+}
+
+.grid-actions button:last-child:hover {
+    background: var(--mjo-color-error-dark, var(--mjo-color-error));
+    transform: translateY(-1px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .playground-container {
+        flex-direction: column;
+    }
+
+    .controls-panel {
+        margin-top: 2rem;
+    }
+
+    .grid-actions {
+        flex-direction: column;
+    }
+
+    .grid-actions button {
+        min-width: auto;
+    }
+
+    .metric-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .demo-item,
+    .grid-item {
+        padding: 1rem;
+        min-height: 60px;
+        font-size: 0.9rem;
+    }
+
+    .card-item {
+        padding: 1rem;
+    }
+
+    .card-item h4 {
+        font-size: 1rem;
+    }
+
+    .card-item p {
+        font-size: 0.9rem;
+    }
+}
