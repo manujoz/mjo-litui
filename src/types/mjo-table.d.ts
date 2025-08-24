@@ -1,20 +1,28 @@
-import { TemplateResult } from "lit";
+import { MjoTableHeaderItem, MjoTableRowItem } from "./mjo-table";
 
-interface MjoTableRowItem {
+type MjoTableRowItem = {
     key?: string;
     render: string | number | TemplateResult<1>;
-}
+};
 
-type MjoTableHeader = {
+type MjoTableHeaderItem = {
     key: string;
-    sortDirection?: "asc" | "desc";
     sortable?: boolean;
     filterable?: boolean;
     render: string | number | TemplateResult<1>;
-    icon?: string;
     minWidth?: string;
     colspan?: number;
     placeContent?: "center" | "left" | "right";
 };
 
-type MjoTableRows = MjoTableRowItem[];
+export type MjoTableHeaders = MjoTableHeaderItem[];
+export type MjoTableRows = MjoTableRowItem[][];
+export type MjoTableFooters = MjoTableRowItem[];
+export type MjoTableSortDirections = "asc" | "desc";
+
+export interface MjoTableSortEvent extends CustomEvent {
+    detail: {
+        key?: string;
+        direction?: MjoTableSortDirections;
+    };
+}

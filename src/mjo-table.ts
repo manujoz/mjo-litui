@@ -1,27 +1,43 @@
-import { MjoTableHeader, MjoTableRowItem, MjoTableRows } from "./types/mjo-table";
+import { MjoTableFooters, MjoTableHeaders, MjoTableRowItem, MjoTableRows, MjoTableSortDirections, MjoTableSortEvent } from "./types/mjo-table";
 
 import { LitElement, TemplateResult, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
-import { AiFillAlert, AiOutlineArrowUp } from "mjo-icons/ai";
+import { AiFillAlert } from "mjo-icons/ai";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import "./components/table/sortable-button.js";
 import "./mjo-icon.js";
 
 @customElement("mjo-table")
 export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
+    @property({ type: String }) rowSeparator: "border" | "contrast" | "none" = "none";
+
+    @property({ type: Array }) headers: MjoTableHeaders = [];
+    @property({ type: Array }) rows: MjoTableRows = [];
+    @property({ type: Array }) footers: MjoTableFooters = [];
+
     @property({ type: Number }) page = 1;
     @property({ type: Number }) itemsPerPage = 10;
-    @property({ type: Array }) headers: MjoTableHeader[] = [];
-    @property({ type: Array }) rows: MjoTableRows[] = [];
-    @property({ type: Array }) footers: MjoTableRows[] = [];
 
-    #currentSortColumn!: MjoTableHeader;
+    @state() sortDirection?: MjoTableSortDirections;
+
+    #currentSortKey?: string;
+
     #selectedRowIndex = -1;
-    #totalItems = 0;
+    #totalItems = -1;
 
     render() {
+        if (this.headers.length === 0 || this.rows.length === 0) {
+            console.error("Headers and rows are required", this);
+            return nothing;
+        }
+
+        if (this.#totalItems === -1) this.#totalItems = this.rows.length;
+
         return html`
             <table>
                 <thead>
@@ -32,43 +48,13 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                 <tbody>
                     ${this.#renderTBody()}
                 </tbody>
-                <tfoot>
-                    ${this.#renderTFoot()}
-                </tfoot>
+                ${this.footers.length > 0
+                    ? html`<tfoot>
+                          ${this.#renderTFoot()}
+                      </tfoot>`
+                    : nothing}
             </table>
         `;
-    }
-
-    connectedCallback(): void {
-        super.connectedCallback();
-        this.#sortFirstSortableColumn();
-        this.#totalItems = this.rows.length;
-    }
-
-    #filterColumn() {}
-
-    #getColspan() {
-        let colspan = 0;
-        this.headers.map((head) => {
-            colspan += head.colspan || 1;
-        });
-        return colspan;
-    }
-
-    #getItemsRows(): MjoTableRows[] {
-        const startIndex = (this.page - 1) * this.itemsPerPage;
-        const endIndex = Math.min(startIndex + this.itemsPerPage, this.#totalItems);
-        return this.rows.slice(startIndex, endIndex);
-    }
-
-    #getValue(value: string | number | TemplateResult<1> | undefined): string | number {
-        if (value === undefined) {
-            return "";
-        }
-        if (typeof value === "string" || typeof value === "number") {
-            return value;
-        }
-        return value.toString();
     }
 
     #renderThead() {
@@ -77,16 +63,48 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             (header, index) => {
                 return `${header.key}-${index}`;
             },
-            (header) =>
-                html` <th style="min-width: ${header.minWidth || ""}" colspan=${header.colspan || 0} @click=${() => this.#sortColumn(header)}>
-                    <div class="container-header" style="place-content: ${header.placeContent || "left"}">
-                        ${header.icon ? html`<mjo-icon class="icon" src=${header.icon}></mjo-icon>` : nothing} ${header.render}
-                        ${header.sortable ? html`<mjo-icon class="sort-icon ${header.sortDirection}" src=${AiOutlineArrowUp}></mjo-icon>` : nothing}
-                        ${header.filterable ? html`<mjo-icon class="filter-icon" @click=${() => this.#filterColumn()} src=${AiFillAlert}></mjo-icon>` : nothing}
-                    </div>
-                </th>`,
+            (header) => {
+                const classes = classMap({
+                    "container-header": true,
+                    "place-right": header.placeContent === "right",
+                    "place-center": header.placeContent === "center",
+                    sortable: header.sortable || false,
+                    filterable: header.filterable || false,
+                });
+
+                const styles = styleMap({
+                    "min-width": header.minWidth,
+                    colspan: header.colspan,
+                });
+
+                return html`
+                    <th style=${styles} @click=${() => this.#sortColumn(header)}>
+                        <div class=${classes}>
+                            <span class="render">${header.render}</span>
+                            ${header.sortable
+                                ? html`<sortable-button
+                                      key=${header.key}
+                                      .direction=${this.sortDirection}
+                                      @mjo-table:sort=${this.#handleSort}
+                                  ></sortable-button>`
+                                : nothing}
+                            ${header.filterable
+                                ? html`<mjo-icon class="filter-icon" @click=${() => this.#filterColumn()} src=${AiFillAlert}></mjo-icon>`
+                                : nothing}
+                        </div>
+                    </th>
+                `;
+            },
         );
     }
+
+    #handleSort = (ev: MjoTableSortEvent) => {
+        const { key, direction } = ev.detail;
+        // TODO: Ordenar las filas de la tabla
+        // this.#currentSortKey = key;
+        // this.sortDirection = direction;
+        // this.requestUpdate();
+    };
 
     #renderTBody() {
         const itemsRow = this.#getItemsRows();
@@ -115,22 +133,49 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
     }
 
     #renderTFoot() {
-        return repeat(
-            this.footers,
-            (footer, index) => {
-                return `${footer[0].key}-${index}`;
-            },
-            (footer) =>
-                html`<tr>
-                    ${repeat(
-                        footer,
-                        (column, index) => {
-                            return `${column.key}-${index}`;
-                        },
-                        (column: MjoTableRowItem) => html`<td>${column.render}</td>`,
-                    )}
-                </tr> `,
-        );
+        return nothing;
+        // return repeat(
+        //     this.footers,
+        //     (footer, index) => {
+        //         return `${footer[0].key}-${index}`;
+        //     },
+        //     (footer) =>
+        //         html`<tr>
+        //             ${repeat(
+        //                 footer,
+        //                 (column, index) => {
+        //                     return `${column.key}-${index}`;
+        //                 },
+        //                 (column: MjoTableRowItem) => html`<td>${column.render}</td>`,
+        //             )}
+        //         </tr> `,
+        // );
+    }
+
+    #filterColumn() {}
+
+    #getColspan() {
+        let colspan = 0;
+        this.headers.map((head) => {
+            colspan += head.colspan || 1;
+        });
+        return colspan;
+    }
+
+    #getItemsRows(): MjoTableRows[] {
+        const startIndex = (this.page - 1) * this.itemsPerPage;
+        const endIndex = Math.min(startIndex + this.itemsPerPage, this.#totalItems);
+        return this.rows.slice(startIndex, endIndex);
+    }
+
+    #getValue(value: string | number | TemplateResult<1> | undefined): string | number {
+        if (value === undefined) {
+            return "";
+        }
+        if (typeof value === "string" || typeof value === "number") {
+            return value;
+        }
+        return value.toString();
     }
 
     #selectRow(index: number): void {
@@ -138,43 +183,31 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         this.requestUpdate();
     }
 
-    #sortFirstSortableColumn(): void {
-        const sortableColumn = this.headers.find((header) => header.sortable);
-        if (sortableColumn) {
-            this.#sortColumn(sortableColumn);
-            this.#currentSortColumn = sortableColumn;
-        }
-    }
-
-    #sortColumn(header: MjoTableHeader): void {
-        if (!header.sortable) {
-            return;
-        }
-
-        const sortDirection = header.sortDirection === "asc" ? 1 : -1;
-
-        const comparator = (a: string | number, b: string | number): number => {
-            if (typeof a === "string" && typeof b === "string") {
-                return a.localeCompare(b) * sortDirection;
-            } else if (typeof a === "number" && typeof b === "number") {
-                return (a - b) * sortDirection;
-            } else {
-                return 0;
-            }
-        };
-
-        this.rows.sort((a: MjoTableRows, b: MjoTableRows) => {
-            const valueA = this.#getValue(a.find((item) => item.key === header.key)?.render);
-            const valueB = this.#getValue(b.find((item) => item.key === header.key)?.render);
-            return comparator(valueA, valueB);
-        });
-
-        if (this.#currentSortColumn === header) {
-            this.#currentSortColumn = header;
-        }
-        header.sortDirection = header.sortDirection === "asc" ? "desc" : "asc";
-        this.page = 1;
-        this.requestUpdate();
+    #sortColumn(header: MjoTableHeaders[0]): void {
+        // if (!header.sortable) {
+        //     return;
+        // }
+        // const sortDirection = header.sortDirection === "asc" ? 1 : -1;
+        // const comparator = (a: string | number, b: string | number): number => {
+        //     if (typeof a === "string" && typeof b === "string") {
+        //         return a.localeCompare(b) * sortDirection;
+        //     } else if (typeof a === "number" && typeof b === "number") {
+        //         return (a - b) * sortDirection;
+        //     } else {
+        //         return 0;
+        //     }
+        // };
+        // this.rows.sort((a: MjoTableRows, b: MjoTableRows) => {
+        //     const valueA = this.#getValue(a.find((item) => item.key === header.key)?.render);
+        //     const valueB = this.#getValue(b.find((item) => item.key === header.key)?.render);
+        //     return comparator(valueA, valueB);
+        // });
+        // if (this.#currentSortColumn === header) {
+        //     this.#currentSortColumn = header;
+        // }
+        // header.sortDirection = header.sortDirection === "asc" ? "desc" : "asc";
+        // this.page = 1;
+        // this.requestUpdate();
     }
 
     static styles = css`
@@ -200,55 +233,48 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             padding: 8px;
             text-align: left;
         }
-
         td {
             color: var(--mjo-table-cell-foreground-color, var(--mjo-foreground-color, #333333));
         }
-
         tr:nth-child(even) {
             background-color: var(--mjo-table-cell-even-background-color, #f2f2f2);
         }
-
         tr:nth-child(even) td {
             color: var(--mjo-table-cell-even-foreground-color, var(--mjo-table-cell-foreground-color, var(--mjo-foreground-color, #333333)));
         }
-
         th {
+            padding: var(--mjo-table-header-padding, 0 var(--mjo-space-small) var(--mjo-space-xxsmall));
             cursor: pointer;
             user-select: none;
-            background-color: var(--mjo-table-header-background-color, var(--mjo-primary-color, rgb(235, 195, 23)));
+            background-color: var(--mjo-table-header-background-color, transparent);
             color: var(--mjo-table-header-foreground-color, var(--mjo-foreground-color, #333333));
+            border-bottom: solid 1px var(--mjo-table-header-border-color, var(--mjo-border-color, #dddddd));
         }
 
         .container-header {
+            position: relative;
             display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: var(--mjo-space-xxsmall);
+            font-weight: 500;
         }
-
-        mjo-icon {
-            width: 1.2rem;
-            margin-left: 0.5rem;
+        .container-header.place-right {
+            justify-content: flex-end;
         }
-
-        .sort-icon {
-            transition: transform 0.3s ease-in-out;
+        .container-header.place-center {
+            justify-content: center;
         }
-
-        .sort-icon.asc {
-            transform: rotate(180deg);
+        .container-header > .render {
+            font-size: var(--mjo-table-header-font-size, 0.8em);
+            color: var(--mjo-table-header-foreground-color, var(--mjo-foreground-color-low, #333333));
+            flex: 1 1 0;
         }
 
         tfoot {
             background-color: var(--mjo-table-footer-background-color, transparent);
             color: var(--mjo-table-footer-color, var(--text-color));
             font-size: var(--mjo-table-footer-font-size, inherit);
-        }
-        tr.selected {
-            background-color: var(--mjo-table-row-selected-color, transparent);
-        }
-
-        illo-image-fit {
-            opacity: var(--mjo-table-no-data-opacity, 0.6);
-            width: var(--mjo-table-no-data-width, 180px);
         }
     `;
 }
