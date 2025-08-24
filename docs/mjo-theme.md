@@ -361,9 +361,9 @@ app.get("*", (req, res) => {
 
 ## Events
 
-| Name               | Type                                  | Description                  |
-| ------------------ | ------------------------------------- | ---------------------------- |
-| `mjo-theme-change` | `CustomEvent<{theme: MjoThemeModes}>` | Fired when the theme changes |
+| Name               | Type                                  | Target                                | Description                  |
+| ------------------ | ------------------------------------- | ------------------------------------- | ---------------------------- |
+| `mjo-theme:change` | `CustomEvent<{theme: MjoThemeModes}>` | If global `document`, if local `this` | Fired when the theme changes |
 
 ## Cookie Management
 

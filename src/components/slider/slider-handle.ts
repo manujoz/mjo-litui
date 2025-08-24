@@ -1,14 +1,17 @@
 import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { parseColorToRgba } from "../../utils/colors";
+import { MJO_SLIDER_TOPS } from "../../utils/mjo-slider";
 import { getParentNodes } from "../../utils/shadow-dom";
+
+const MEDIUM_SIZE = 20;
 
 @customElement("slider-handle")
 export class SliderHandle extends LitElement {
     @property({ type: Boolean }) pressed = false;
     @property({ type: Boolean }) tooltip = false;
     @property({ type: Boolean }) disabled = false;
-    @property({ type: Number }) size = 20;
+    @property({ type: Number }) size = MEDIUM_SIZE;
     @property({ type: Number }) left = 0;
     @property({ type: String }) value = "0";
     @property({ type: String }) valuePrefix = "";
@@ -88,6 +91,8 @@ export class SliderHandle extends LitElement {
         this.#setSize();
         this.#setPosition();
         this.#setBackgroundColor();
+
+        document.addEventListener("mjo-theme:change", this.#setBackgroundColor);
     }
 
     disconnectedCallback(): void {
@@ -99,6 +104,8 @@ export class SliderHandle extends LitElement {
         document.removeEventListener("touchmove", this.listeners.mousemove);
         document.removeEventListener("mouseup", this.listeners.mouseup);
         document.removeEventListener("touchend", this.listeners.mouseup);
+
+        document.removeEventListener("mjo-theme:change", this.#setBackgroundColor);
     }
 
     protected firstUpdated(_changedProperties: PropertyValues): void {
@@ -110,9 +117,13 @@ export class SliderHandle extends LitElement {
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
         if (_changedProperties.has("size") && this.size > 0) {
             this.#setFontSize();
+            this.#setSize();
+            this.#setPosition();
         }
 
         if (_changedProperties.has("pressed")) {
+            const outer = this.shadowRoot?.querySelector(".outter") as HTMLElement;
+            if (this.pressed) outer?.focus();
             this.#showTooltip();
         }
     }
@@ -222,12 +233,22 @@ export class SliderHandle extends LitElement {
         const outter = this.shadowRoot?.querySelector(".outter") as HTMLElement;
         if (!outter) return;
 
-        if (this.size < 20) this.size = 20;
+        // if (this.size < 20) this.size = 20;
 
         outter.style.fontSize = `${this.size / 20}px`;
     }
 
-    #setBackgroundColor() {
+    #setPosition() {
+        this.style.top = `${MJO_SLIDER_TOPS[this.size]}px`;
+        this.style.left = `${this.left - this.size / 2}px`;
+    }
+
+    #setSize() {
+        this.style.width = `${this.size}px`;
+        this.style.height = `${this.size}px`;
+    }
+
+    #setBackgroundColor = () => {
         const parentNodesGen = getParentNodes(this);
         let parent = parentNodesGen.next();
         let lastColor = "";
@@ -243,16 +264,7 @@ export class SliderHandle extends LitElement {
         }
 
         this.style.setProperty("--inner-background-color", this.backgroundColor || lastColor);
-    }
-
-    #setPosition() {
-        this.style.left = `${this.left - this.size / 2}px`;
-    }
-
-    #setSize() {
-        this.style.width = `${this.size}px`;
-        this.style.height = `${this.size}px`;
-    }
+    };
 
     static styles = [
         css`

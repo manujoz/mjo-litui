@@ -61,7 +61,7 @@ function initializeTheme(tries = 1): void {
         toggleBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
     }
 
-    themeComponent.addEventListener("mjo-theme-change", (ev) => {
+    themeComponent.addEventListener("mjo-theme:change", (ev) => {
         const newTheme = ev.detail.theme;
         if (toggleBtn) {
             toggleBtn.textContent = newTheme === "dark" ? "☀️" : "🌙";

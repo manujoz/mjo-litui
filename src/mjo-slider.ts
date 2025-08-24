@@ -9,7 +9,7 @@ import {
     MjoSliderValueChangeEvent,
 } from "./types/mjo-slider.js";
 
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
@@ -21,6 +21,7 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./components/input/input-label.js";
 import "./components/slider/slider-handle.js";
+import { MJO_SLIDER_SIZES } from "./utils/mjo-slider.js";
 
 @customElement("mjo-slider")
 export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
@@ -51,6 +52,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
     @state() private isFocused = false;
     @state() private activeHandle: "one" | "two" | null = null;
+    @state() private sizeNumber = MJO_SLIDER_SIZES.medium;
 
     @query("input") inputElement!: HTMLInputElement;
 
@@ -98,9 +100,9 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     };
 
     render() {
-        const handleOneId = `${this.id || "slider"}-handle-one`;
-        const handleTwoId = this.isRange ? `${this.id || "slider"}-handle-two` : undefined;
-        const labelId = this.label ? `${this.id || "slider"}-label` : undefined;
+        const handleOneId = `${this.id || "slider"}-handle-one-${Math.random().toString(36).substring(2, 9)}`;
+        const handleTwoId = this.isRange ? `${this.id || "slider"}-handle-two-${Math.random().toString(36).substring(2, 9)}` : undefined;
+        const labelId = this.label ? `${this.id || "slider"}-label-${Math.random().toString(36).substring(2, 9)}` : undefined;
 
         return html`<div class="label">
                 ${this.label
@@ -153,7 +155,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     value=${this.#getSliderValue("one")}
                     valuePrefix=${this.valuePrefix}
                     valueSuffix=${this.valueSuffix}
-                    size="20"
+                    size=${this.sizeNumber}
                     color=${this.color}
                     @release=${this.#handleRelease}
                 ></slider-handle>
@@ -180,7 +182,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                           value=${this.#getSliderValue("two")}
                           valuePrefix=${this.valuePrefix}
                           valueSuffix=${this.valueSuffix}
-                          size="20"
+                          size=${this.sizeNumber}
                           color=${this.color}
                           @release=${this.#handleRelease}
                       ></slider-handle>`
@@ -223,6 +225,14 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         }
         if (this.sliderTwoRef.value) {
             this.#setSliderPosition(this.sliderTwoRef.value, this.#getSliderValue("two"));
+        }
+    }
+
+    protected updated(_changedProperties: PropertyValues): void {
+        if (_changedProperties.has("size") && this.size) {
+            this.sizeNumber = MJO_SLIDER_SIZES[this.size];
+
+            this.style.setProperty("--slider-size", `${this.sizeNumber}px`);
         }
     }
 
@@ -590,7 +600,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             .container {
                 position: relative;
                 width: 100%;
-                height: 20px;
+                height: var(--slider-size, 20px);
                 display: flex;
                 align-items: center;
                 outline: none;
@@ -602,9 +612,8 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 opacity: var(--mjo-slider-disabled-opacity, 0.5);
             }
             .rangebar {
-                position: relative;
                 width: 100%;
-                height: 3px;
+                height: 15%;
                 background-color: var(--mjo-slider-background-color, transparent);
                 border-radius: var(--mjo-slider-border-radius, var(--mjo-radius-medium, 5px));
                 padding: 8px 0;
@@ -616,14 +625,15 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 position: absolute;
                 top: 8px;
                 left: 0;
-                height: 3px;
+                height: 15%;
                 background-color: var(--mjo-slider-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #007bff)));
                 border-radius: inherit;
                 transition: background-color 0.2s ease;
             }
             .track {
                 width: 100%;
-                background-color: rgba(0, 0, 0, 0.2);
+                background-color: var(--mjo-foreground-color);
+                opacity: 0.2;
             }
             .progress[data-color="secondary"] {
                 background-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #ff8800)));

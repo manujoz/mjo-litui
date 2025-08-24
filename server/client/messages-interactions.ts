@@ -500,33 +500,3 @@ window.showSilentMessage = showSilentMessage;
 window.simulateFileUpload = simulateFileUpload;
 window.simulateNetworkIssue = simulateNetworkIssue;
 window.showSystemNotifications = showSystemNotifications;
-
-declare global {
-    interface Window {
-        showInfoMessage: () => void;
-        showSuccessMessage: () => void;
-        showWarningMessage: () => void;
-        showErrorMessage: () => void;
-        showQuickMessage: () => void;
-        showLongMessage: () => void;
-        showPersistentMessage: () => void;
-        showMultipleMessages: () => void;
-        showRapidMessages: () => void;
-        showMixedMessages: () => void;
-        showPoliteMessage: () => void;
-        showAssertiveMessage: () => void;
-        showCustomRegionMessage: () => void;
-        validateForm: () => void;
-        simulateSave: () => void;
-        simulateAsyncOperation: () => void;
-        showCallbackMessage: () => void;
-        showChainedMessages: () => void;
-        showConfirmationSequence: () => void;
-        showLimitedQueue: () => void;
-        showLargeQueue: () => void;
-        showSilentMessage: () => void;
-        simulateFileUpload: () => void;
-        simulateNetworkIssue: () => void;
-        showSystemNotifications: () => void;
-    }
-}
