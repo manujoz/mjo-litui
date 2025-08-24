@@ -20,12 +20,12 @@ A comprehensive pagination component with animated page indicator, accessibility
 ### Basic HTML
 
 ```html
-<mjo-pagination current-page="3" total-pages="10" page-size="10" total-items="100"> </mjo-pagination>
+<mjo-pagination total-items="100" page-size="10" current-page="1"></mjo-pagination>
 ```
 
 ### With Lit Element
 
-````ts
+```ts
 import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import 'mjo-litui/mjo-pagination';
@@ -33,15 +33,26 @@ import 'mjo-litui/mjo-pagination';
 @customElement('example-pagination')
 export class ExamplePagination extends LitElement {
   @state() private currentPage = 1;
-  @state() private totalPages = 20;
+  @state() private totalItems = 100;
   @state() private pageSize = 10;
-  @state() private totalItems = 200;
 
   render() {
     return html`
       <mjo-pagination
         .currentPage=${this.currentPage}
-        .totalPages=${this.totalPages}
+        .totalItems=${this.totalItems}
+        .pageSize=${this.pageSize}
+        @mjo-pagination:change=${this.#handlePageChange}
+      ></mjo-pagination>
+    `;
+  }
+
+  #handlePageChange(event: CustomEvent) {
+    this.currentPage = event.detail.page;
+  }
+}
+```
+
 ## Examples
 
 ### Basic Pagination
@@ -55,39 +66,29 @@ import 'mjo-litui/mjo-pagination';
 export class ExampleBasicPagination extends LitElement {
   render() {
     return html`
-      <h3>Basic Pagination</h3>
-      <mjo-pagination
-        currentPage="5"
-        totalPages="10"
-        pageSize="10"
-        totalItems="100"
-      ></mjo-pagination>
+      <mjo-pagination total-items="250" page-size="25" current-page="3"></mjo-pagination>
     `;
   }
 }
-````
+```
 
-### With All Navigation Options
+### With Navigation and Page Size Selector
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-pagination";
 
-@customElement("example-full-navigation")
-export class ExampleFullNavigation extends LitElement {
+@customElement("example-full-pagination")
+export class ExampleFullPagination extends LitElement {
     render() {
         return html`
-            <h3>Full Navigation</h3>
             <mjo-pagination
-                currentPage="15"
-                totalPages="50"
-                pageSize="20"
-                totalItems="1000"
-                showFirstLast
-                showPrevNext
-                showPageSizeSelector
-                .pageSizeOptions=${[10, 20, 50, 100]}
+                total-items="500"
+                page-size="25"
+                current-page="5"
+                show-page-size-selector
+                .pageSizeOptions=${[10, 25, 50, 100]}
             ></mjo-pagination>
         `;
     }
@@ -105,126 +106,9 @@ import "mjo-litui/mjo-pagination";
 export class ExamplePaginationVariants extends LitElement {
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 20px;">
-                <div>
-                    <h4>Small Primary</h4>
-                    <mjo-pagination size="small" color="primary" currentPage="2" totalPages="5" showPrevNext></mjo-pagination>
-                </div>
-
-                <div>
-                    <h4>Medium Secondary</h4>
-                    <mjo-pagination size="medium" color="secondary" currentPage="2" totalPages="5" showPrevNext></mjo-pagination>
-                </div>
-
-                <div>
-                    <h4>Large Primary</h4>
-                    <mjo-pagination size="large" color="primary" currentPage="2" totalPages="5" showPrevNext></mjo-pagination>
-                </div>
-            </div>
+            <mjo-pagination total-items="100" size="small" color="secondary"></mjo-pagination>
+            <mjo-pagination total-items="100" size="large" color="primary"></mjo-pagination>
         `;
-    }
-}
-```
-
-### Internationalization
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-pagination";
-
-@customElement("example-pagination-i18n")
-export class ExamplePaginationI18n extends LitElement {
-    @state() private locale: "en" | "es" | "fr" | "de" = "en";
-
-    render() {
-        return html`
-            <div>
-                <label>
-                    Language:
-                    <select @change=${this.handleLocaleChange}>
-                        <option value="en">English</option>
-                        <option value="es">Español</option>
-                        <option value="fr">Français</option>
-                        <option value="de">Deutsch</option>
-                    </select>
-                </label>
-
-                <mjo-pagination .locale=${this.locale} currentPage="5" totalPages="25" showFirstLast showPrevNext showPageSizeSelector></mjo-pagination>
-            </div>
-        `;
-    }
-
-    private handleLocaleChange(e: Event) {
-        this.locale = (e.target as HTMLSelectElement).value as any;
-    }
-}
-```
-
-### Advanced Usage with Event Handling
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-pagination";
-
-@customElement("example-pagination-advanced")
-export class ExamplePaginationAdvanced extends LitElement {
-    @state() private currentPage = 1;
-    @state() private totalPages = 20;
-    @state() private pageSize = 10;
-    @state() private totalItems = 200;
-    @state() private loading = false;
-
-    render() {
-        return html`
-            <div>
-                <mjo-pagination
-                    .currentPage=${this.currentPage}
-                    .totalPages=${this.totalPages}
-                    .pageSize=${this.pageSize}
-                    .totalItems=${this.totalItems}
-                    .disabled=${this.loading}
-                    showFirstLast
-                    showPrevNext
-                    showPageSizeSelector
-                    maxVisiblePages="7"
-                    @mjo-pagination:change=${this.handlePageChange}
-                    @mjo-pagination:page-click=${this.handlePageClick}
-                    @mjo-pagination:navigation=${this.handleNavigation}
-                ></mjo-pagination>
-
-                ${this.loading ? html`<p>Loading...</p>` : ""}
-            </div>
-        `;
-    }
-
-    private async handlePageChange(e: CustomEvent) {
-        const { page, previousPage, pageSize } = e.detail;
-        this.loading = true;
-
-        try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 500));
-
-            this.currentPage = page;
-            this.pageSize = pageSize;
-
-            // Recalculate total pages if page size changed
-            this.totalPages = Math.ceil(this.totalItems / pageSize);
-        } finally {
-            this.loading = false;
-        }
-    }
-
-    private handlePageClick(e: CustomEvent) {
-        const { page, originalEvent } = e.detail;
-        console.log(`Direct click on page ${page}`, originalEvent);
-    }
-
-    private handleNavigation(e: CustomEvent) {
-        const { direction, targetPage } = e.detail;
-        console.log(`Navigation: ${direction} to page ${targetPage}`);
     }
 }
 ```
@@ -233,15 +117,14 @@ export class ExamplePaginationAdvanced extends LitElement {
 
 | Name                   | Type                                 | Default             | Description                            |
 | ---------------------- | ------------------------------------ | ------------------- | -------------------------------------- |
-| `currentPage`          | `number`                             | `1`                 | Current active page (1-based)          |
-| `totalPages`           | `number`                             | `1`                 | Total number of pages                  |
-| `pageSize`             | `number`                             | `10`                | Number of items per page               |
 | `totalItems`           | `number`                             | `0`                 | Total number of items across all pages |
-| `maxVisiblePages`      | `number`                             | `7`                 | Maximum number of page buttons to show |
-| `showFirstLast`        | `boolean`                            | `false`             | Show first/last navigation buttons     |
-| `showPrevNext`         | `boolean`                            | `true`              | Show previous/next navigation buttons  |
+| `pageSize`             | `number`                             | `10`                | Number of items per page               |
+| `currentPage`          | `number`                             | `1`                 | Current active page (1-based)          |
+| `siblingCount`         | `number`                             | `1`                 | Number of sibling pages around current page |
+| `hideFirstLast`        | `boolean`                            | `false`             | Hide first/last navigation buttons     |
+| `hidePrevNext`         | `boolean`                            | `false`             | Hide previous/next navigation buttons  |
 | `showPageSizeSelector` | `boolean`                            | `false`             | Show page size selector dropdown       |
-| `pageSizeOptions`      | `number[]`                           | `[10, 20, 50, 100]` | Available page size options            |
+| `pageSizeOptions`      | `number[]`                           | `[10, 25, 50, 100]` | Available page size options            |
 | `disabled`             | `boolean`                            | `false`             | Disable all pagination interactions    |
 | `size`                 | `"small"` \| `"medium"` \| `"large"` | `"medium"`          | Component size variant                 |
 | `color`                | `"primary"` \| `"secondary"`         | `"primary"`         | Color scheme variant                   |
@@ -249,54 +132,53 @@ export class ExamplePaginationAdvanced extends LitElement {
 
 ## Methods
 
-| Method                     | Parameters                                        | Returns | Description                            |
-| -------------------------- | ------------------------------------------------- | ------- | -------------------------------------- |
-| `goToPage(page, options?)` | `page: number`, `options?: { animate?: boolean }` | `void`  | Navigate to specific page              |
-| `previousPage()`           | -                                                 | `void`  | Navigate to previous page              |
-| `nextPage()`               | -                                                 | `void`  | Navigate to next page                  |
-| `firstPage()`              | -                                                 | `void`  | Navigate to first page                 |
-| `lastPage()`               | -                                                 | `void`  | Navigate to last page                  |
-| `setPageSize(size)`        | `size: number`                                    | `void`  | Update page size and recalculate pages |
+| Method             | Parameters      | Returns | Description                            |
+| ------------------ | --------------- | ------- | -------------------------------------- |
+| `goToPage(page)`   | `page: number`  | `void`  | Navigate to specific page              |
+| `previousPage()`   | -               | `void`  | Navigate to previous page              |
+| `nextPage()`       | -               | `void`  | Navigate to next page                  |
+| `firstPage()`      | -               | `void`  | Navigate to first page                 |
+| `lastPage()`       | -               | `void`  | Navigate to last page                  |
+| `setPageSize(size)` | `size: number` | `void`  | Update page size and recalculate pages |
+| `getPageRange()`   | -               | `(number \| "ellipsis")[]` | Get current page range array |
 
 ## Events
 
-| Event                       | Detail                                                              | Description                                  |
-| --------------------------- | ------------------------------------------------------------------- | -------------------------------------------- |
-| `mjo-pagination:change`     | `{ element, page, previousPage, totalPages, pageSize, totalItems }` | Fired when page or page size changes         |
-| `mjo-pagination:page-click` | `{ page, originalEvent }`                                           | Fired when a specific page number is clicked |
-| `mjo-pagination:navigation` | `{ direction, targetPage, originalEvent }`                          | Fired when navigation buttons are used       |
+| Event                       | Detail                                                                              | Description                                  |
+| --------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------- |
+| `mjo-pagination:change`     | `{ element, page, previousPage, totalPages, pageSize, totalItems }`                | Fired when page or page size changes         |
+| `mjo-pagination:page-click` | `{ element, page, originalEvent }`                                                  | Fired when a specific page number is clicked |
+| `mjo-pagination:navigation` | `{ element, direction, page, originalEvent }`                                       | Fired when navigation buttons are used       |
 
-### Event Details
-
-**mjo-pagination:change**
+### Event Interfaces
 
 ```typescript
-{
-    element: MjoPagination; // Reference to the component
-    page: number; // New current page
-    previousPage: number; // Previous page number
-    totalPages: number; // Total number of pages
-    pageSize: number; // Current page size
-    totalItems: number; // Total items count
+interface MjoPaginationChangeEvent extends CustomEvent {
+  detail: {
+    element: MjoPagination;
+    page: number;
+    previousPage: number;
+    totalPages: number;
+    pageSize: number;
+    totalItems: number;
+  };
 }
-```
 
-**mjo-pagination:page-click**
-
-```typescript
-{
-    page: number; // Clicked page number
-    originalEvent: Event; // Original click event
+interface MjoPaginationPageClickEvent extends CustomEvent {
+  detail: {
+    element: MjoPagination;
+    page: number;
+    originalEvent: MouseEvent | KeyboardEvent;
+  };
 }
-```
 
-**mjo-pagination:navigation**
-
-```typescript
-{
-    direction: "first" | "previous" | "next" | "last"; // Navigation direction
-    targetPage: number; // Target page number
-    originalEvent: Event; // Original click event
+interface MjoPaginationNavigationEvent extends CustomEvent {
+  detail: {
+    element: MjoPagination;
+    direction: "previous" | "next" | "first" | "last";
+    page: number;
+    originalEvent: MouseEvent | KeyboardEvent;
+  };
 }
 ```
 
@@ -322,14 +204,14 @@ export class ExamplePaginationAdvanced extends LitElement {
 | `--mjo-pagination-font-weight`        | `normal`  | Font weight                 |
 | `--mjo-pagination-active-font-weight` | `600`     | Font weight for active page |
 
-### Size Variants
+### Page Items
 
 | Property                           | Default | Description                   |
 | ---------------------------------- | ------- | ----------------------------- |
+| `--mjo-pagination-item-width`      | `2em`   | Width of page buttons         |
+| `--mjo-pagination-border-radius`   | `var(--mjo-radius, 5px)` | Border radius of page buttons |
 | `--mjo-pagination-small-font-size` | `0.8em` | Font size for small variant   |
 | `--mjo-pagination-large-font-size` | `1.2em` | Font size for large variant   |
-| `--mjo-pagination-item-width`      | `2.5em` | Minimum width of page buttons |
-| `--mjo-pagination-padding`         | `0.5em` | Padding inside page buttons   |
 
 ### Colors
 
@@ -346,9 +228,23 @@ export class ExamplePaginationAdvanced extends LitElement {
 
 | Property                                  | Default                                     | Description               |
 | ----------------------------------------- | ------------------------------------------- | ------------------------- |
-| `--mjo-pagination-hover-background-color` | `var(--mjo-background-color-low, #f5f5f5)`  | Background color on hover |
+| `--mjo-pagination-hover-background-color` | `var(--mjo-primary-color-alpha1, #f5f5f5)`  | Background color on hover |
 | `--mjo-pagination-primary-color-hover`    | `var(--mjo-primary-color-hover, #4e9be4)`   | Primary color on hover    |
 | `--mjo-pagination-secondary-color-hover`  | `var(--mjo-secondary-color-hover, #d86490)` | Secondary color on hover  |
+| `--mjo-pagination-secondary-color-alpha1` | `var(--mjo-secondary-color-alpha1, #ffeef0)` | Secondary alpha color for hover |
+
+### Navigation Buttons
+
+| Property                                  | Default                                       | Description                       |
+| ----------------------------------------- | --------------------------------------------- | --------------------------------- |
+| `--mjo-pagination-nav-color`              | `var(--mjo-foreground-color, #222222)`        | Navigation button text color      |
+| `--mjo-pagination-nav-min-width`          | `2.5em`                                       | Minimum width of nav buttons      |
+| `--mjo-pagination-nav-padding`            | `0.5em`                                       | Padding of nav buttons            |
+| `--mjo-pagination-nav-disabled-color`     | `var(--mjo-disabled-foreground-color, #aaaaaa)` | Color for disabled nav buttons |
+| `--mjo-pagination-nav-small-min-width`    | `2em`                                         | Small size nav button min width   |
+| `--mjo-pagination-nav-small-padding`      | `0.4em`                                       | Small size nav button padding     |
+| `--mjo-pagination-nav-large-min-width`    | `3em`                                         | Large size nav button min width   |
+| `--mjo-pagination-nav-large-padding`      | `0.6em`                                       | Large size nav button padding     |
 
 ### Animated Indicator
 
@@ -370,76 +266,46 @@ export class ExamplePaginationAdvanced extends LitElement {
 
 ### Page Size Selector
 
-| Property                                   | Default                                     | Description                                        |
-| ------------------------------------------ | ------------------------------------------- | -------------------------------------------------- |
-| `--mjo-pagination-page-size-gap`           | `0.5em`                                     | Gap between label and select in page size selector |
-| `--mjo-pagination-page-size-font-size`     | `0.9em`                                     | Font size of page size selector                    |
-| `--mjo-pagination-page-size-color`         | `var(--mjo-foreground-color, #222222)`      | Text color of page size selector                   |
-| `--mjo-pagination-select-background-color` | `var(--mjo-background-color-high, #ffffff)` | Background color of select dropdown                |
-| `--mjo-pagination-select-border-color`     | `var(--mjo-border-color, #dddddd)`          | Border color of select dropdown                    |
-| `--mjo-pagination-select-border-radius`    | `var(--mjo-radius, 5px)`                    | Border radius of select dropdown                   |
-| `--mjo-pagination-select-color`            | `var(--mjo-foreground-color, #222222)`      | Text color of select dropdown                      |
-| `--mjo-pagination-select-padding`          | `0.25em 0.5em`                              | Padding inside select dropdown                     |
+| Property                                    | Default                                       | Description                               |
+| ------------------------------------------- | --------------------------------------------- | ----------------------------------------- |
+| `--mjo-pagination-page-size-gap`            | `0.5em`                                       | Gap in page size selector                 |
+| `--mjo-pagination-page-size-font-size`      | `0.9em`                                       | Font size of page size selector           |
+| `--mjo-pagination-page-size-color`          | `var(--mjo-foreground-color, #222222)`        | Text color of page size selector          |
+| `--mjo-pagination-select-background-color`  | `var(--mjo-background-color-high, #ffffff)`   | Background color of select dropdown       |
+| `--mjo-pagination-select-border-color`      | `var(--mjo-border-color, #dddddd)`            | Border color of select dropdown           |
+| `--mjo-pagination-select-border-radius`     | `var(--mjo-radius, 5px)`                      | Border radius of select dropdown          |
+| `--mjo-pagination-select-color`             | `var(--mjo-foreground-color, #222222)`        | Text color of select dropdown             |
+| `--mjo-pagination-select-padding`           | `0.25em 0.5em`                               | Padding of select dropdown                |
 
-## Accessibility
+## Theming
 
-The `mjo-pagination` component implements comprehensive accessibility features:
+The component supports theming through the `MjoPaginationTheme` interface:
 
--   **ARIA Labels**: All buttons have descriptive aria-label attributes
--   **Current Page**: Active page uses `aria-current="page"`
--   **Keyboard Navigation**: Full keyboard support with Tab navigation
--   **Screen Reader Support**: Proper semantics and announcements
--   **Focus Management**: Clear focus indicators and logical tab order
--   **Disabled State**: Proper aria-disabled handling for unavailable actions
-
-## Internationalization
-
-The component supports multiple languages through the built-in locales system:
-
-### Supported Languages
-
-| Code | Language   | Code | Language  | Code | Language |
-| ---- | ---------- | ---- | --------- | ---- | -------- |
-| `en` | English    | `es` | Español   | `fr` | Français |
-| `pt` | Português  | `it` | Italiano  | `de` | Deutsch  |
-| `nl` | Nederlands | `bg` | Български | `sr` | Српски   |
-| `ru` | Русский    | `zh` | 中文      | `ja` | 日本語   |
-| `ko` | 한국어     | `tr` | Türkçe    | `pl` | Polski   |
-
-### Translation Keys
-
-The component uses these translation keys from the pagination namespace:
-
--   `first`: First page button label
--   `previous`: Previous page button label
--   `next`: Next page button label
--   `last`: Last page button label
--   `page`: Page number prefix
--   `of`: "of" connector for page info
--   `itemsPerPage`: Label for page size selector
--   `goToPage`: Tooltip for page buttons
-
-### Custom Translations
-
-You can extend the locales system by adding pagination translations for additional languages in `src/locales/locales.ts`.
-
-## Notes
-
--   The component automatically calculates page ranges and shows ellipsis for large page counts
--   Page size changes automatically recalculate total pages
--   The animated indicator smoothly moves to show the current page
--   All events bubble and can be caught by parent elements
--   The component is fully compatible with forms and validation libraries
--   Navigation buttons are automatically disabled when appropriate (e.g., previous on first page)
--   The page size selector integrates seamlessly with the existing mjo-select component
--   Responsive behavior automatically adjusts for smaller screens
-
-## Related Components
-
--   [`mjo-table`](./mjo-table.md) - Table component that can work with pagination
--   [`mjo-select`](./mjo-select.md) - Used internally for page size selector
--   [`mjo-button`](./mjo-button.md) - Button component with similar styling patterns
-
-```
-
+```typescript
+interface MjoPaginationTheme {
+  gap?: string;
+  itemsGap?: string;
+  containerPadding?: string;
+  containerBorderRadius?: string;
+  containerBorder?: string;
+  backgroundColor?: string;
+  fontFamily?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  activeFontWeight?: string;
+  color?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  primaryForegroundColor?: string;
+  secondaryForegroundColor?: string;
+  disabledColor?: string;
+  hoverBackgroundColor?: string;
+  primaryColorHover?: string;
+  secondaryColorHover?: string;
+  indicatorOpacity?: string;
+  animationDuration?: string;
+  animationTiming?: string;
+  ellipsisColor?: string;
+  // ... and more properties for complete customization
+}
 ```

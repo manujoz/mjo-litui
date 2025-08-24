@@ -215,6 +215,10 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
         this.goToPage(this.totalPages);
     }
 
+    getPageRange(): (number | "ellipsis")[] {
+        return this.pageRange;
+    }
+
     /**
      * Change the page size
      */
@@ -247,35 +251,104 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
         this.pageRange = this.#generatePageRange();
     }
 
+    /**
+     * Generate the page range array for display with consistent element count
+     * Made public for testing purposes
+     */
     #generatePageRange(): (number | "ellipsis")[] {
         const delta = this.siblingCount;
+
+        // If we have few pages, show all pages (but pad to maintain consistency)
+        if (this.totalPages <= 2 * delta + 5) {
+            const range: (number | "ellipsis")[] = [];
+            for (let i = 1; i <= this.totalPages; i++) {
+                range.push(i);
+            }
+            return range;
+        }
+
+        // Target layout with consistent element count: [1] [ellipsis?] [siblings around current] [ellipsis?] [last]
+        // Maximum elements: 1 + 1 + (2*delta+1) + 1 + 1 = 2*delta + 5 (e.g., 7 for delta=1, 9 for delta=2)
+        const maxElements = 2 * delta + 5;
         const range: (number | "ellipsis")[] = [];
 
-        // Always show first page
-        const startPage = Math.max(2, this.currentPage - delta);
-        const endPage = Math.min(this.totalPages - 1, this.currentPage + delta);
-
-        // Add first page
+        // Always start with page 1
         range.push(1);
 
-        // Add ellipsis after first page if needed
-        if (startPage > 2) {
+        // Calculate the core window around current page
+        let startPage = Math.max(this.currentPage - delta, 1);
+        let endPage = Math.min(this.currentPage + delta, this.totalPages);
+
+        // Determine if we need ellipsis
+        const needLeftEllipsis = startPage > 2;
+        const needRightEllipsis = endPage < this.totalPages - 1;
+
+        // Calculate current elements that would be used
+        let currentElements = 1; // First page
+        if (needLeftEllipsis) currentElements += 1; // Left ellipsis
+        if (needRightEllipsis) currentElements += 1; // Right ellipsis
+        currentElements += 1; // Last page
+
+        // Count middle pages (excluding first and last)
+        let middlePages = 0;
+        for (let page = startPage; page <= endPage; page++) {
+            if (page !== 1 && page !== this.totalPages) {
+                middlePages++;
+            }
+        }
+        currentElements += middlePages;
+
+        // Expand the middle section to fill up to maxElements
+        const availableSlots = maxElements - currentElements;
+
+        // Distribute additional slots to expand the visible page range
+        if (availableSlots > 0) {
+            let expandLeft = Math.floor(availableSlots / 2);
+            let expandRight = availableSlots - expandLeft;
+
+            // Expand left
+            while (expandLeft > 0 && startPage > 2) {
+                startPage--;
+                expandLeft--;
+            }
+
+            // If we couldn't expand left enough, add to right
+            expandRight += expandLeft;
+
+            // Expand right
+            while (expandRight > 0 && endPage < this.totalPages - 1) {
+                endPage++;
+                expandRight--;
+            }
+
+            // If we couldn't expand right enough, try expanding left more
+            while (expandRight > 0 && startPage > 2) {
+                startPage--;
+                expandRight--;
+            }
+        }
+
+        // Re-check ellipsis needs after expansion
+        const finalNeedLeftEllipsis = startPage > 2;
+        const finalNeedRightEllipsis = endPage < this.totalPages - 1;
+
+        // Build the final range
+        if (finalNeedLeftEllipsis) {
             range.push("ellipsis");
         }
 
-        // Add pages around current page
+        // Add middle pages (excluding first and last page)
         for (let page = startPage; page <= endPage; page++) {
             if (page !== 1 && page !== this.totalPages) {
                 range.push(page);
             }
         }
 
-        // Add ellipsis before last page if needed
-        if (endPage < this.totalPages - 1) {
+        if (finalNeedRightEllipsis) {
             range.push("ellipsis");
         }
 
-        // Add last page
+        // Always add last page (if different from first)
         if (this.totalPages > 1) {
             range.push(this.totalPages);
         }

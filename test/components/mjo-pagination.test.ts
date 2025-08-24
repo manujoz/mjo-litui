@@ -317,4 +317,167 @@ suite("mjo-pagination Component", () => {
             expect(element.labels.last).to.equal("Last");
         });
     });
+
+    /**
+     * Layout Stability tests - verifies consistent element count for stable UI
+     */
+    suite("Layout Stability", () => {
+        test("should maintain consistent element count across different page positions", async () => {
+            const element = (await csrFixture(html`<mjo-pagination totalItems="100" pageSize="10" siblingCount="1"></mjo-pagination>`, {
+                modules: [PAGINATION_MODULE_PATH],
+            })) as MjoPagination;
+
+            await waitForComponentUpdate(element);
+
+            const testPageCounts: Array<{ page: number; expectedCount: number; range: (number | "ellipsis")[] }> = [];
+
+            // Test pages 1-10 and collect element counts
+            for (let page = 1; page <= 10; page++) {
+                element.currentPage = page;
+                await waitForComponentUpdate(element);
+
+                const pageRange = element.getPageRange();
+                testPageCounts.push({
+                    page,
+                    expectedCount: pageRange.length,
+                    range: pageRange,
+                });
+
+                console.log(`Page ${page}: [${pageRange.join(", ")}] - Count: ${pageRange.length}`);
+            }
+
+            // Check for layout stability - all pages should have the same element count
+            const firstCount = testPageCounts[0].expectedCount;
+            const allSameCount = testPageCounts.every((item) => item.expectedCount === firstCount);
+
+            if (!allSameCount) {
+                const countVariations = testPageCounts.map((item) => `Page ${item.page}: ${item.expectedCount} elements [${item.range.join(", ")}]`);
+                throw new Error(`Layout instability detected!\n${countVariations.join("\n")}`);
+            }
+
+            expect(allSameCount).to.be.true;
+        });
+
+        test("should handle edge cases maintaining stability", async () => {
+            // Test with different configurations
+            const testConfigs = [
+                { totalItems: 50, pageSize: 10, siblingCount: 1 }, // 5 total pages - should show all
+                { totalItems: 200, pageSize: 20, siblingCount: 2 }, // 10 total pages with more siblings
+                { totalItems: 300, pageSize: 25, siblingCount: 1 }, // 12 total pages
+            ];
+
+            for (const config of testConfigs) {
+                const element = (await csrFixture(
+                    html`<mjo-pagination totalItems=${config.totalItems} pageSize=${config.pageSize} siblingCount=${config.siblingCount}></mjo-pagination>`,
+                    { modules: [PAGINATION_MODULE_PATH] },
+                )) as MjoPagination;
+
+                await waitForComponentUpdate(element);
+
+                const totalPages = Math.ceil(config.totalItems / config.pageSize);
+                const testPages = Math.min(totalPages, 6); // Test first 6 pages or total if less
+
+                const counts: number[] = [];
+
+                for (let page = 1; page <= testPages; page++) {
+                    element.currentPage = page;
+                    await waitForComponentUpdate(element);
+
+                    const pageRange = element.getPageRange();
+                    counts.push(pageRange.length);
+                }
+
+                // All counts should be the same for this configuration
+                const firstCount = counts[0];
+                const isStable = counts.every((count) => count === firstCount);
+
+                if (!isStable) {
+                    throw new Error(`Config ${JSON.stringify(config)} is unstable: ${counts.join(", ")}`);
+                }
+
+                expect(isStable).to.be.true;
+            }
+        });
+
+        test("should generate expected patterns for specific scenarios", async () => {
+            const element = (await csrFixture(html`<mjo-pagination totalItems="100" pageSize="10" siblingCount="1"></mjo-pagination>`, {
+                modules: [PAGINATION_MODULE_PATH],
+            })) as MjoPagination;
+
+            await waitForComponentUpdate(element);
+
+            // Test specific scenarios that were problematic
+            const testCases = [
+                { page: 1, description: "Page 1 - start boundary" },
+                { page: 2, description: "Page 2 - near start" },
+                { page: 3, description: "Page 3 - middle transition" },
+                { page: 5, description: "Page 5 - middle" },
+                { page: 8, description: "Page 8 - near end" },
+                { page: 9, description: "Page 9 - near end boundary" },
+                { page: 10, description: "Page 10 - end boundary" },
+            ];
+
+            const ranges: Array<{ page: number; range: (number | "ellipsis")[]; count: number }> = [];
+
+            for (const testCase of testCases) {
+                element.currentPage = testCase.page;
+                await waitForComponentUpdate(element);
+
+                const pageRange = element.getPageRange();
+                ranges.push({
+                    page: testCase.page,
+                    range: pageRange,
+                    count: pageRange.length,
+                });
+
+                console.log(`${testCase.description}: [${pageRange.join(", ")}] - Count: ${pageRange.length}`);
+            }
+
+            // Verify all ranges have consistent element count
+            const firstCount = ranges[0].count;
+            const allConsistent = ranges.every((item) => item.count === firstCount);
+
+            expect(allConsistent).to.be.true;
+
+            // Additional checks for logical correctness
+            ranges.forEach((item) => {
+                expect(item.range).to.include(1); // Always includes first page
+                expect(item.range).to.include(10); // Always includes last page
+                expect(item.range).to.include(item.page); // Always includes current page
+            });
+        });
+
+        test("should not have ellipsis when all pages fit", async () => {
+            // With only 5 pages and siblingCount=1, all pages should be visible
+            const element = (await csrFixture(html`<mjo-pagination totalItems="50" pageSize="10" siblingCount="1"></mjo-pagination>`, {
+                modules: [PAGINATION_MODULE_PATH],
+            })) as MjoPagination;
+
+            element.currentPage = 3;
+            await waitForComponentUpdate(element);
+
+            const pageRange = element.getPageRange();
+
+            expect(pageRange).to.deep.equal([1, 2, 3, 4, 5]);
+            expect(pageRange).to.not.include("ellipsis");
+        });
+
+        test("should access generatePageRange method publicly", async () => {
+            const element = (await csrFixture(html`<mjo-pagination totalItems="100" pageSize="10"></mjo-pagination>`, {
+                modules: [PAGINATION_MODULE_PATH],
+            })) as MjoPagination;
+
+            await waitForComponentUpdate(element);
+
+            // Test that generatePageRange is accessible and returns expected type
+            const pageRange = element.getPageRange();
+            expect(pageRange).to.be.an("array");
+            expect(pageRange.length).to.be.greaterThan(0);
+
+            // All items should be either numbers or "ellipsis"
+            pageRange.forEach((item) => {
+                expect(typeof item === "number" || item === "ellipsis").to.be.true;
+            });
+        });
+    });
 });

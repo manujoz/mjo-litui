@@ -350,6 +350,54 @@
 			"label": "TypeScript Check Server",
 			"type": "shell",
 			"command": "npx tsc --noEmit server/src/controllers/pagination-controller.ts"
+		},
+		{
+			"label": "Build After Pagination Fix",
+			"type": "shell",
+			"command": "npm run build"
+		},
+		{
+			"label": "Check Pagination TypeScript",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-pagination.ts"
+		},
+		{
+			"label": "Remove Duplicate Test File",
+			"type": "shell",
+			"command": "rm test/components/mjo-pagination-layout-stability.test.ts"
+		},
+		{
+			"label": "Test Pagination Layout Stability",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\""
+		},
+		{
+			"label": "Test Pagination Algorithm Debug",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --grep \"Layout Stability\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Fixed Algorithm",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --grep \"Layout Stability\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Full Pagination Suite",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Replace Pagination Documentation",
+			"type": "shell",
+			"command": "mv docs/mjo-pagination-new.md docs/mjo-pagination.md"
+		},
+		{
+			"label": "Clean Temporary File",
+			"type": "shell",
+			"command": "rm -f docs/mjo-pagination-new.md"
 		}
 	]
 }

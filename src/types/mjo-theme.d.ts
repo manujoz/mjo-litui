@@ -69,6 +69,7 @@ export interface MjoThemeConfig {
         mjoMessage?: MjoMessageTheme;
         mjoModal?: MjoModalTheme;
         mjoNotification?: MjoNotificationTheme;
+        mjoPagination?: MjoPaginationTheme;
         mjoRadio?: MjoRadioTheme;
         mjoRipple?: MjoRippleTheme;
         mjoSelect?: MjoSelectTheme;
@@ -591,4 +592,59 @@ export interface MjoCalendarTheme {
 
 export interface MjoMenuButtonTheme {
     colorHover?: string;
+}
+
+export interface MjoPaginationTheme {
+    gap?: string;
+    itemsGap?: string;
+    containerPadding?: string;
+    containerBorderRadius?: string;
+    containerBorder?: string;
+    backgroundColor?: string;
+    fontFamily?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    activeFontWeight?: string;
+    smallFontSize?: string;
+    largeFontSize?: string;
+    itemWidth?: string;
+    padding?: string;
+    color?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
+    primaryForegroundColor?: string;
+    secondaryForegroundColor?: string;
+    disabledColor?: string;
+    hoverBackgroundColor?: string;
+    primaryColorHover?: string;
+    secondaryColorHover?: string;
+    indicatorOpacity?: string;
+    indicatorBorderRadius?: string;
+    animationDuration?: string;
+    animationTiming?: string;
+    primaryColorAlpha?: string;
+    secondaryColorAlpha?: string;
+    ellipsisColor?: string;
+    ellipsisFontWeight?: string;
+    borderRadius?: string;
+    navColor?: string;
+    navMinWidth?: string;
+    navPadding?: string;
+    navDisabledColor?: string;
+    navSmallMinWidth?: string;
+    navSmallPadding?: string;
+    navLargeMinWidth?: string;
+    navLargePadding?: string;
+    smallMinWidth?: string;
+    smallPadding?: string;
+    largeMinWidth?: string;
+    largePadding?: string;
+    pageSizeGap?: string;
+    pageSizeFontSize?: string;
+    pageSizeColor?: string;
+    selectBackgroundColor?: string;
+    selectBorderColor?: string;
+    selectBorderRadius?: string;
+    selectColor?: string;
+    selectPadding?: string;
 }
