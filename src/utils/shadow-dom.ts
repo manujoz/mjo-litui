@@ -1,5 +1,14 @@
 import { type LitElement } from "lit";
 
+export const getParentNodes = function* (el: HTMLElement | ShadowRoot["host"]) {
+    let current: HTMLElement | Element | null = el.parentElement || (el.getRootNode() as ShadowRoot).host;
+    while (current) {
+        yield current as HTMLElement;
+
+        current = current?.parentElement || (current?.getRootNode() as ShadowRoot).host;
+    }
+};
+
 export const searchClosestElement = (element: LitElement, selector: keyof HTMLElementTagNameMap) => {
     let parent: HTMLElement | ShadowRoot["host"] | null = element.parentElement || (element.getRootNode() as ShadowRoot).host;
 

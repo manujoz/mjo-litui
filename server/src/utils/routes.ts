@@ -20,6 +20,7 @@ import { ModalController } from "../controllers/modal-controller.js";
 import { NotificationController } from "../controllers/notification-controller.js";
 import { RadioController } from "../controllers/radio-controller.js";
 import { RippleController } from "../controllers/ripple-controller.js";
+import { SliderController } from "../controllers/slider-controller.js";
 import { SwitchController } from "../controllers/switch-controller.js";
 import { TextNowrapController } from "../controllers/text-nowrap-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
@@ -47,6 +48,7 @@ const modalController = new ModalController();
 const notificationController = new NotificationController();
 const radioController = new RadioController();
 const rippleController = new RippleController();
+const sliderController = new SliderController();
 const switchController = new SwitchController();
 const textfieldController = new TextfieldController();
 const textNowrapController = new TextNowrapController();
@@ -140,6 +142,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-ripple",
         controller: rippleController.renderRipplePage,
+    },
+    {
+        path: "/component/mjo-slider",
+        controller: sliderController.renderSliderPage,
     },
     {
         path: "/component/mjo-switch",

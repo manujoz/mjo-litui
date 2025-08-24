@@ -13,6 +13,13 @@ export interface RGBColor {
     b: number;
 }
 
+export interface RGBAColor {
+    r: number;
+    g: number;
+    b: number;
+    a: number;
+}
+
 export interface HSLColor {
     h: number;
     s: number;
@@ -43,6 +50,33 @@ export function parseHexToRgb(hex: string): RGBColor {
         b: parseInt(cleanHex.substring(4, 6), 16),
     };
 }
+
+export const parseColorToRgba = (color: string): RGBAColor => {
+    const format = detectColorFormat(color);
+
+    let alpha = 1;
+    if (format === "hsla") {
+        const match = color.match(/hsla\(([^)]+)\)/);
+        if (!match) {
+            throw new Error(`Invalid HSLA color: ${color}`);
+        }
+
+        const [, , , a] = match[1].split(",").map(Number);
+
+        alpha = a;
+        color = toRgba(color, alpha);
+    } else if (format !== "rgba") {
+        color = toRgba(color, alpha);
+    }
+
+    const match = color.match(/rgba\(([^)]+)\)/);
+    if (!match) {
+        throw new Error(`Invalid RGBA color: ${color}`);
+    }
+
+    const [r, g, b, a] = match[1].split(",").map(Number);
+    return { r, g, b, a };
+};
 
 /**
  * Convert RGB color to HSL

@@ -70,7 +70,11 @@ export class MjoTheme extends LitElement {
 
         style.innerHTML = cssStyles;
 
-        this.dispatchEvent(new CustomEvent("mjo-theme-change", { detail: { theme: this.theme } }));
+        if (this.scope === "global") {
+            document.dispatchEvent(new CustomEvent("mjo-theme:change", { detail: { theme: this.theme } }));
+        } else {
+            this.dispatchEvent(new CustomEvent("mjo-theme:change", { detail: { theme: this.theme } }));
+        }
     }
 
     static styles = [
@@ -88,6 +92,6 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-theme-change": MjoThemeChangeEvent;
+        "mjo-theme:change": MjoThemeChangeEvent;
     }
 }

@@ -1,17 +1,35 @@
-import { LitElement, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { LitElement, PropertyValues, css, html, nothing } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { parseColorToRgba } from "../../utils/colors";
+import { MJO_SLIDER_TOPS } from "../../utils/mjo-slider";
+import { getParentNodes } from "../../utils/shadow-dom";
+
+const MEDIUM_SIZE = 20;
 
 @customElement("slider-handle")
 export class SliderHandle extends LitElement {
     @property({ type: Boolean }) pressed = false;
     @property({ type: Boolean }) tooltip = false;
     @property({ type: Boolean }) disabled = false;
-    @property({ type: Number }) size = 20;
+    @property({ type: Number }) size = MEDIUM_SIZE;
     @property({ type: Number }) left = 0;
     @property({ type: String }) value = "0";
     @property({ type: String }) valuePrefix = "";
     @property({ type: String }) valueSuffix = "";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
+
+    // Accessibility properties (using custom attributes to avoid conflicts)
+    @property({ type: String, attribute: "aria-valuemin" }) ariaValueMinAttr?: string;
+    @property({ type: String, attribute: "aria-valuemax" }) ariaValueMaxAttr?: string;
+    @property({ type: String, attribute: "aria-valuenow" }) ariaValueNowAttr?: string;
+    @property({ type: String, attribute: "aria-valuetext" }) ariaValueTextAttr?: string;
+    @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledByAttr?: string;
+    @property({ type: String, attribute: "aria-describedby" }) ariaDescribedByAttr?: string;
+    @property({ type: String, attribute: "aria-orientation" }) ariaOrientationAttr?: string;
+    @property({ type: String, attribute: "aria-disabled" }) ariaDisabledAttr?: string;
+
+    @state() private isFocused = false;
+    @state() private backgroundColor = "";
 
     start: number = 0;
 
@@ -34,7 +52,26 @@ export class SliderHandle extends LitElement {
                       <div class="text" data-color=${this.color}>${this.valuePrefix}${this.value}${this.valueSuffix}</div>
                   </div>`
                 : nothing}
-            <div class="outter" ?data-pressed=${this.pressed} data-color=${this.color} ?data-disabled=${this.disabled}>
+            <div
+                class="outter hidden"
+                ?data-pressed=${this.pressed}
+                ?data-focused=${this.isFocused}
+                data-color=${this.color}
+                ?data-disabled=${this.disabled}
+                role="slider"
+                aria-valuemin=${this.ariaValueMinAttr || "0"}
+                aria-valuemax=${this.ariaValueMaxAttr || "100"}
+                aria-valuenow=${this.ariaValueNowAttr || this.value}
+                aria-valuetext=${this.ariaValueTextAttr || `${this.valuePrefix}${this.value}${this.valueSuffix}`}
+                aria-labelledby=${this.ariaLabelledByAttr || nothing}
+                aria-describedby=${this.ariaDescribedByAttr || nothing}
+                aria-orientation=${(this.ariaOrientationAttr as "horizontal" | "vertical") || "horizontal"}
+                aria-disabled=${this.disabled ? "true" : "false"}
+                tabindex=${this.disabled ? -1 : 0}
+                @focus=${this.#handleFocus}
+                @blur=${this.#handleBlur}
+                @keydown=${this.#handleKeydown}
+            >
                 <div class="inner" ?data-pressed=${this.pressed}></div>
             </div>
         `;
@@ -53,6 +90,9 @@ export class SliderHandle extends LitElement {
         this.#setFontSize();
         this.#setSize();
         this.#setPosition();
+        this.#setBackgroundColor();
+
+        document.addEventListener("mjo-theme:change", this.#setBackgroundColor);
     }
 
     disconnectedCallback(): void {
@@ -64,14 +104,26 @@ export class SliderHandle extends LitElement {
         document.removeEventListener("touchmove", this.listeners.mousemove);
         document.removeEventListener("mouseup", this.listeners.mouseup);
         document.removeEventListener("touchend", this.listeners.mouseup);
+
+        document.removeEventListener("mjo-theme:change", this.#setBackgroundColor);
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues): void {
+        super.firstUpdated(_changedProperties);
+
+        this.shadowRoot?.querySelector(".outter")?.classList.remove("hidden");
     }
 
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
         if (_changedProperties.has("size") && this.size > 0) {
             this.#setFontSize();
+            this.#setSize();
+            this.#setPosition();
         }
 
         if (_changedProperties.has("pressed")) {
+            const outer = this.shadowRoot?.querySelector(".outter") as HTMLElement;
+            if (this.pressed) outer?.focus();
             this.#showTooltip();
         }
     }
@@ -140,16 +192,54 @@ export class SliderHandle extends LitElement {
         this.dispatchEvent(new CustomEvent("release", { detail: { target: this } }));
     }
 
+    #handleFocus() {
+        if (this.disabled) return;
+
+        this.isFocused = true;
+
+        this.dispatchEvent(
+            new CustomEvent("focus", {
+                detail: { target: this },
+            }),
+        );
+    }
+
+    #handleBlur() {
+        this.isFocused = false;
+
+        this.dispatchEvent(
+            new CustomEvent("blur", {
+                detail: { target: this },
+            }),
+        );
+    }
+
+    #handleKeydown(event: KeyboardEvent) {
+        if (this.disabled) return;
+
+        // Dispatch keydown event to parent slider for handling
+        this.dispatchEvent(
+            new CustomEvent("keydown", {
+                detail: {
+                    target: this,
+                    key: event.key,
+                    originalEvent: event,
+                },
+            }),
+        );
+    }
+
     #setFontSize() {
         const outter = this.shadowRoot?.querySelector(".outter") as HTMLElement;
         if (!outter) return;
 
-        if (this.size < 20) this.size = 20;
+        // if (this.size < 20) this.size = 20;
 
         outter.style.fontSize = `${this.size / 20}px`;
     }
 
     #setPosition() {
+        this.style.top = `${MJO_SLIDER_TOPS[this.size]}px`;
         this.style.left = `${this.left - this.size / 2}px`;
     }
 
@@ -157,6 +247,24 @@ export class SliderHandle extends LitElement {
         this.style.width = `${this.size}px`;
         this.style.height = `${this.size}px`;
     }
+
+    #setBackgroundColor = () => {
+        const parentNodesGen = getParentNodes(this);
+        let parent = parentNodesGen.next();
+        let lastColor = "";
+        while (parent.done === false) {
+            const backgroundColor = window.getComputedStyle(parent.value).backgroundColor;
+            lastColor = backgroundColor;
+            const rgba = parseColorToRgba(backgroundColor);
+            if (rgba.a > 0) {
+                this.backgroundColor = backgroundColor;
+                break;
+            }
+            parent = parentNodesGen.next();
+        }
+
+        this.style.setProperty("--inner-background-color", this.backgroundColor || lastColor);
+    };
 
     static styles = [
         css`
@@ -166,6 +274,9 @@ export class SliderHandle extends LitElement {
                 left: -10px;
                 width: 20px;
                 height: 20px;
+            }
+            .hidden {
+                display: none !important;
             }
             .tooltip {
                 position: absolute;
@@ -221,31 +332,48 @@ export class SliderHandle extends LitElement {
                 border-radius: 9999px;
                 cursor: grab;
                 box-sizing: border-box;
-                border: solid 2em var(--mjo-background-color, white);
+                border: solid 2em var(--inner-background-color, var(--mjo-background-color, transparent));
                 background-color: var(--mjo-slider-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #007bff)));
+                outline: none;
+                display: flex;
+                transition: box-shadow 0.2s ease;
+            }
+            .outter:focus-visible {
+                box-shadow: 0 0 0 2px var(--mjo-slider-handle-focus-ring-color, var(--mjo-primary-color, #007bff));
+            }
+            .outter[data-focused] {
+                box-shadow: 0 0 0 2px var(--mjo-slider-handle-focus-ring-color, var(--mjo-primary-color, #007bff));
             }
             .outter[data-color="secondary"] {
                 background-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)));
+            }
+            .outter[data-color="secondary"]:focus-visible,
+            .outter[data-color="secondary"][data-focused] {
+                box-shadow: 0 0 0 2px var(--mjo-slider-handle-focus-ring-color, var(--mjo-secondary-color, #cc3d74));
             }
             .outter[data-pressed] {
                 cursor: grabbing;
             }
             .outter[data-disabled] {
                 cursor: not-allowed;
-                background-color: var(--mjo-slider-background-color, var(--mjo-border-color-dark, #c7c7c7));
+                background-color: var(--mjo-slider-handle-disabled-color, var(--mjo-slider-background-color, var(--mjo-border-color-dark, #c7c7c7)));
+                opacity: var(--mjo-slider-disabled-opacity, 0.5);
+            }
+            .outter[data-disabled]:focus-visible,
+            .outter[data-disabled][data-focused] {
+                box-shadow: none;
             }
             .inner {
-                position: absolute;
-                top: 2em;
-                left: 2em;
-                width: calc(100% - 4em);
-                height: calc(100% - 4em);
+                position: relative;
+                align-self: stretch;
+                flex: 1 1 0;
                 border-radius: 9999px;
-                background-color: var(--mjo-background-color, white);
+                background-color: var(--inner-background-color, var(--mjo-background-color, transparent));
                 transition: transform 0.2s;
+                transform: scale(0.75);
             }
             .inner[data-pressed] {
-                transform: scale(0.8);
+                transform: scale(0.55);
             }
         `,
     ];

@@ -1,10 +1,19 @@
 # mjo-slider
 
-A customizable range slider component with support for single values and ranges, tooltips, and form integration.
+A customizable range slider component with full accessibility support, keyboard navigation, and support for single values and ranges.
 
 ## Overview
 
-The `mjo-slider` component provides an interactive slider interface for selecting numeric values within a specified range. It supports both single-value selection and range selection, with customizable appearance, tooltips, and seamless form integration. The slider automatically snaps to steps and provides visual feedback during interaction.
+The `mjo-slider` component provides an interactive slider interface for selecting numeric values within a specified range. It supports both single-value selection and range selection, with comprehensive accessibility features including ARIA attributes, keyboard navigation, screen reader support, and customizable appearance with seamless form integration.
+
+## Accessibility Features
+
+-   **Full ARIA support**: Complete implementation of ARIA slider pattern with proper roles and attributes
+-   **Keyboard navigation**: Arrow keys, Home/End, Page Up/Down for value adjustment
+-   **Screen reader support**: Live announcements of value changes and proper labeling
+-   **Focus management**: Visual focus indicators and proper tab order
+-   **High contrast mode**: Enhanced visibility in high contrast environments
+-   **Touch accessibility**: Improved touch targets for mobile devices
 
 ## Basic Usage
 
@@ -35,18 +44,13 @@ export class ExampleSliderBasic extends LitElement {
         console.log("Volume changed:", this.volume);
     }
 
-    private handleBrightnessChange(event: Event) {
-        const slider = event.target as any;
-        this.brightness = slider.value;
-        console.log("Brightness changed:", this.brightness);
-    }
-
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 2rem; width: 400px;">
                 <h3>Basic Sliders</h3>
 
-                <mjo-slider label="Volume" min="0" max="100" step="1" .value=${this.volume} valueSuffix="%" @change=${this.handleVolumeChange}> </mjo-slider>
+                <mjo-slider label="Volume" min="0" max="100" step="1" .value=${this.volume} valueSuffix="%" @mjo-slider:change=${this.handleVolumeChange}>
+                </mjo-slider>
 
                 <mjo-slider
                     label="Brightness"
@@ -56,14 +60,89 @@ export class ExampleSliderBasic extends LitElement {
                     .value=${this.brightness}
                     valueSuffix="%"
                     color="secondary"
-                    @change=${this.handleBrightnessChange}
+                    @mjo-slider:change=${(e: any) => (this.brightness = e.detail.value)}
                 >
                 </mjo-slider>
+            </div>
+        `;
+    }
+}
+```
 
-                <div style="padding: 1rem; background: #f5f5f5; border-radius: 4px;">
-                    <p><strong>Current Values:</strong></p>
-                    <p>Volume: ${this.volume}%</p>
-                    <p>Brightness: ${this.brightness}%</p>
+## Accessibility and Keyboard Navigation
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-slider";
+
+@customElement("example-slider-accessibility")
+export class ExampleSliderAccessibility extends LitElement {
+    @state()
+    private settings = {
+        contrast: "75",
+        fontSize: "16",
+        animationSpeed: "0.5",
+    };
+
+    render() {
+        return html`
+            <div style="max-width: 500px;">
+                <h3>Accessible Settings Panel</h3>
+                <p>Navigate with Tab key, adjust values with Arrow keys, Home/End for min/max, Page Up/Down for large steps.</p>
+
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    <!-- Slider with custom aria-valuetext formatting -->
+                    <mjo-slider
+                        label="Display Contrast"
+                        min="0"
+                        max="100"
+                        step="5"
+                        .value=${this.settings.contrast}
+                        valueSuffix="%"
+                        aria-describedby="contrast-help"
+                        .formatValueText=${(value: string) => `${value} percent contrast`}
+                        @mjo-slider:change=${(e: any) => (this.settings.contrast = e.detail.value)}
+                    >
+                    </mjo-slider>
+                    <div id="contrast-help" style="font-size: 0.8em; color: #666;">Adjust screen contrast for better visibility</div>
+
+                    <!-- Range slider with accessibility features -->
+                    <mjo-slider
+                        label="Font Size Range"
+                        min="12"
+                        max="24"
+                        step="1"
+                        .value=${this.settings.fontSize}
+                        valueSuffix="px"
+                        aria-describedby="fontsize-help"
+                        tooltip
+                        @mjo-slider:change=${(e: any) => (this.settings.fontSize = e.detail.value)}
+                    >
+                    </mjo-slider>
+                    <div id="fontsize-help" style="font-size: 0.8em; color: #666;">Choose comfortable reading size</div>
+
+                    <!-- Slider with live feedback -->
+                    <mjo-slider
+                        label="Animation Speed"
+                        min="0"
+                        max="2"
+                        step="0.1"
+                        .value=${this.settings.animationSpeed}
+                        valueSuffix="x"
+                        @mjo-slider:input=${(e: any) => console.log("Real-time value:", e.detail.value)}
+                        @mjo-slider:change=${(e: any) => (this.settings.animationSpeed = e.detail.value)}
+                    >
+                    </mjo-slider>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+                    <h4>Current Settings:</h4>
+                    <ul>
+                        <li>Contrast: ${this.settings.contrast}%</li>
+                        <li>Font Size: ${this.settings.fontSize}px</li>
+                        <li>Animation Speed: ${this.settings.animationSpeed}x</li>
+                    </ul>
                 </div>
             </div>
         `;
@@ -141,30 +220,11 @@ export class ExampleSliderRange extends LitElement {
     @state()
     private temperatureRange = "18-25";
 
-    @state()
-    private ageRange = "25-45";
-
-    private handlePriceChange(event: Event) {
-        const slider = event.target as any;
-        this.priceRange = slider.value;
-    }
-
-    private handleTemperatureChange(event: Event) {
-        const slider = event.target as any;
-        this.temperatureRange = slider.value;
-    }
-
-    private handleAgeChange(event: Event) {
-        const slider = event.target as any;
-        this.ageRange = slider.value;
-    }
-
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 2rem; width: 500px;">
                 <h3>Range Sliders</h3>
 
-                <!-- Price Range -->
                 <mjo-slider
                     label="Price Range"
                     min="0"
@@ -173,11 +233,11 @@ export class ExampleSliderRange extends LitElement {
                     .value=${this.priceRange}
                     valuePrefix="$"
                     isRange
-                    @change=${this.handlePriceChange}
+                    tooltip
+                    @mjo-slider:change=${(e: any) => (this.priceRange = e.detail.value)}
                 >
                 </mjo-slider>
 
-                <!-- Temperature Range -->
                 <mjo-slider
                     label="Temperature Range"
                     min="0"
@@ -187,32 +247,14 @@ export class ExampleSliderRange extends LitElement {
                     valueSuffix="°C"
                     color="secondary"
                     isRange
-                    @change=${this.handleTemperatureChange}
+                    @mjo-slider:change=${(e: any) => (this.temperatureRange = e.detail.value)}
                 >
                 </mjo-slider>
 
-                <!-- Age Range -->
-                <mjo-slider
-                    label="Age Range"
-                    min="18"
-                    max="65"
-                    step="1"
-                    .value=${this.ageRange}
-                    valueSuffix=" years"
-                    isRange
-                    size="large"
-                    @change=${this.handleAgeChange}
-                >
-                </mjo-slider>
-
-                <!-- Current Values Display -->
-                <div style="padding: 1.5rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #0ea5e9;">
-                    <h4 style="margin: 0 0 1rem 0;">Selected Ranges:</h4>
-                    <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1rem;">
-                        <strong>Price:</strong> <span>$${this.priceRange.replace("-", " - $")}</span> <strong>Temperature:</strong>
-                        <span>${this.temperatureRange.replace("-", "°C - ")}°C</span> <strong>Age:</strong>
-                        <span>${this.ageRange.replace("-", " - ")} years</span>
-                    </div>
+                <div style="padding: 1.5rem; background: #f0f9ff; border-radius: 8px;">
+                    <h4>Selected Ranges:</h4>
+                    <p>Price: $${this.priceRange.replace("-", " - $")}</p>
+                    <p>Temperature: ${this.temperatureRange.replace("-", "°C - ")}°C</p>
                 </div>
             </div>
         `;
@@ -237,16 +279,12 @@ export class ExampleSliderTooltips extends LitElement {
     @state()
     private budget = "500-1500";
 
-    @state()
-    private performance = "80";
-
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 3rem; width: 450px;">
                 <h3>Sliders with Tooltips</h3>
-                <p style="margin: 0; color: #666;">Drag the handles to see tooltips with current values</p>
+                <p>Drag the handles to see tooltips with current values</p>
 
-                <!-- Single Value with Tooltip -->
                 <mjo-slider
                     label="Quality Setting"
                     min="0"
@@ -255,11 +293,10 @@ export class ExampleSliderTooltips extends LitElement {
                     .value=${this.quality}
                     valueSuffix="%"
                     tooltip
-                    @change=${(e: any) => (this.quality = e.target.value)}
+                    @mjo-slider:change=${(e: any) => (this.quality = e.detail.value)}
                 >
                 </mjo-slider>
 
-                <!-- Range with Tooltip -->
                 <mjo-slider
                     label="Budget Range"
                     min="100"
@@ -270,29 +307,13 @@ export class ExampleSliderTooltips extends LitElement {
                     isRange
                     tooltip
                     color="secondary"
-                    @change=${(e: any) => (this.budget = e.target.value)}
+                    @mjo-slider:input=${(e: any) => console.log("Live value:", e.detail.value)}
+                    @mjo-slider:change=${(e: any) => (this.budget = e.detail.value)}
                 >
                 </mjo-slider>
 
-                <!-- Performance Slider -->
-                <mjo-slider
-                    label="Performance Level"
-                    min="0"
-                    max="100"
-                    step="1"
-                    .value=${this.performance}
-                    valueSuffix="%"
-                    tooltip
-                    size="large"
-                    @change=${(e: any) => (this.performance = e.target.value)}
-                >
-                </mjo-slider>
-
-                <!-- Instructions -->
-                <div style="padding: 1rem; background: #fffbeb; border: 1px solid #fbbf24; border-radius: 6px;">
-                    <p style="margin: 0; color: #92400e; font-size: 0.9rem;">
-                        <strong>💡 Tip:</strong> Click and drag the slider handles to see live tooltips showing the current values.
-                    </p>
+                <div style="padding: 1rem; background: #fffbeb; border-radius: 6px;">
+                    <p style="margin: 0; color: #92400e;"><strong>💡 Tip:</strong> Click and drag the slider handles to see live tooltips.</p>
                 </div>
             </div>
         `;
@@ -300,9 +321,9 @@ export class ExampleSliderTooltips extends LitElement {
 }
 ```
 
-## Custom Step Values and Precision
+## Custom Step Values
 
-Configure sliders with different step intervals and decimal precision:
+Configure sliders with different step intervals:
 
 ```ts
 import { LitElement, html } from "lit";
@@ -315,81 +336,38 @@ export class ExampleSliderSteps extends LitElement {
     private rating = "4.5";
 
     @state()
-    private discount = "15";
-
-    @state()
     private precision = "0.125";
-
-    @state()
-    private volume = "50";
 
     render() {
         return html`
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
-                <!-- Decimal Steps -->
-                <div>
-                    <h4>Decimal Precision</h4>
-                    <div style="display: flex; flex-direction: column; gap: 2rem;">
-                        <mjo-slider
-                            label="Rating"
-                            min="0"
-                            max="5"
-                            step="0.5"
-                            .value=${this.rating}
-                            valueSuffix=" stars"
-                            @change=${(e: any) => (this.rating = e.target.value)}
-                        >
-                        </mjo-slider>
+            <div style="display: flex; flex-direction: column; gap: 2rem; max-width: 400px;">
+                <h3>Custom Step Values</h3>
 
-                        <mjo-slider
-                            label="Precision Value"
-                            min="0"
-                            max="1"
-                            step="0.125"
-                            .value=${this.precision}
-                            @change=${(e: any) => (this.precision = e.target.value)}
-                        >
-                        </mjo-slider>
-                    </div>
-                </div>
+                <mjo-slider
+                    label="Rating"
+                    min="0"
+                    max="5"
+                    step="0.5"
+                    .value=${this.rating}
+                    valueSuffix=" stars"
+                    @mjo-slider:change=${(e: any) => (this.rating = e.detail.value)}
+                >
+                </mjo-slider>
 
-                <!-- Custom Intervals -->
-                <div>
-                    <h4>Custom Intervals</h4>
-                    <div style="display: flex; flex-direction: column; gap: 2rem;">
-                        <mjo-slider
-                            label="Discount"
-                            min="0"
-                            max="100"
-                            step="5"
-                            .value=${this.discount}
-                            valueSuffix="% off"
-                            color="secondary"
-                            @change=${(e: any) => (this.discount = e.target.value)}
-                        >
-                        </mjo-slider>
+                <mjo-slider
+                    label="Precision Value"
+                    min="0"
+                    max="1"
+                    step="0.125"
+                    .value=${this.precision}
+                    @mjo-slider:change=${(e: any) => (this.precision = e.detail.value)}
+                >
+                </mjo-slider>
 
-                        <mjo-slider
-                            label="Volume (10s)"
-                            min="0"
-                            max="100"
-                            step="10"
-                            .value=${this.volume}
-                            @change=${(e: any) => (this.volume = e.target.value)}
-                        >
-                        </mjo-slider>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Current Values -->
-            <div style="margin-top: 2rem; padding: 1rem; background: #f5f5f5; border-radius: 6px;">
-                <h4 style="margin: 0 0 0.5rem 0;">Current Values:</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem;">
-                    <span>Rating: <strong>${this.rating} stars</strong></span>
-                    <span>Discount: <strong>${this.discount}% off</strong></span>
-                    <span>Precision: <strong>${this.precision}</strong></span>
-                    <span>Volume: <strong>${this.volume}</strong></span>
+                <div style="padding: 1rem; background: #f5f5f5; border-radius: 6px;">
+                    <p><strong>Current Values:</strong></p>
+                    <p>Rating: ${this.rating} stars</p>
+                    <p>Precision: ${this.precision}</p>
                 </div>
             </div>
         `;
@@ -554,9 +532,9 @@ ${JSON.stringify(this.formData, null, 2)}
 }
 ```
 
-## Dynamic Slider Configuration
+## Slider Configuration
 
-Create sliders with dynamic ranges and interactive controls:
+Create sliders with different settings:
 
 ```ts
 import { LitElement, html } from "lit";
@@ -861,23 +839,29 @@ export class ExampleSliderThemeMixin extends ThemeMixin(LitElement) {
 
 ## Properties
 
-| Name          | Type                             | Default       | Description                                     |
-| ------------- | -------------------------------- | ------------- | ----------------------------------------------- |
-| `hideValue`   | `boolean`                        | `false`       | Hide the value display next to the label        |
-| `isRange`     | `boolean`                        | `false`       | Enable range selection with two handles         |
-| `tooltip`     | `boolean`                        | `false`       | Show tooltips when dragging handles             |
-| `disabled`    | `boolean`                        | `false`       | Disable the slider interaction                  |
-| `max`         | `number`                         | `1`           | Maximum value of the slider                     |
-| `min`         | `number`                         | `0`           | Minimum value of the slider                     |
-| `step`        | `number`                         | `0.01`        | Step increment for value changes                |
-| `color`       | `"primary" \| "secondary"`       | `"primary"`   | Color scheme for the slider                     |
-| `label`       | `string`                         | -             | Label text displayed above the slider           |
-| `name`        | `string`                         | -             | Form field name for form submission             |
-| `size`        | `"small" \| "medium" \| "large"` | `"medium"`    | Size variant of the slider                      |
-| `value`       | `string`                         | `"undefined"` | Current value (single) or range (e.g., "10-90") |
-| `valuePrefix` | `string`                         | `""`          | Text prefix for displayed values                |
-| `valueSuffix` | `string`                         | `""`          | Text suffix for displayed values                |
-| `theme`       | `MjoSliderTheme`                 | `{}`          | Theme configuration for the slider              |
+| Name               | Type                             | Default        | Description                                     |
+| ------------------ | -------------------------------- | -------------- | ----------------------------------------------- |
+| `hideValue`        | `boolean`                        | `false`        | Hide the value display next to the label        |
+| `isRange`          | `boolean`                        | `false`        | Enable range selection with two handles         |
+| `tooltip`          | `boolean`                        | `false`        | Show tooltips when dragging handles             |
+| `disabled`         | `boolean`                        | `false`        | Disable the slider interaction                  |
+| `max`              | `number`                         | `1`            | Maximum value of the slider                     |
+| `min`              | `number`                         | `0`            | Minimum value of the slider                     |
+| `step`             | `number`                         | `0.01`         | Step increment for value changes                |
+| `color`            | `"primary" \| "secondary"`       | `"primary"`    | Color scheme for the slider                     |
+| `label`            | `string`                         | -              | Label text displayed above the slider           |
+| `name`             | `string`                         | -              | Form field name for form submission             |
+| `size`             | `"small" \| "medium" \| "large"` | `"medium"`     | Size variant of the slider                      |
+| `value`            | `string`                         | `"undefined"`  | Current value (single) or range (e.g., "10-90") |
+| `valuePrefix`      | `string`                         | `""`           | Text prefix for displayed values                |
+| `valueSuffix`      | `string`                         | `""`           | Text suffix for displayed values                |
+| `ariaDescribedby`  | `string`                         | -              | ID of element that describes the slider         |
+| `ariaLabelledby`   | `string`                         | -              | ID of element that labels the slider            |
+| `ariaValuetext`    | `string`                         | -              | Custom aria-valuetext for screen readers        |
+| `ariaOrientation`  | `"horizontal" \| "vertical"`     | `"horizontal"` | Orientation of the slider                       |
+| `ariaRequiredAttr` | `string`                         | -              | Indicates if slider is required                 |
+| `formatValueText`  | `(value: string) => string`      | -              | Function to format aria-valuetext               |
+| `theme`            | `MjoSliderTheme`                 | `{}`           | Theme configuration for the slider              |
 
 ## Methods
 
@@ -888,10 +872,39 @@ export class ExampleSliderThemeMixin extends ThemeMixin(LitElement) {
 
 ## Events
 
-| Event    | Description                                                      |
-| -------- | ---------------------------------------------------------------- |
-| `change` | Fired when the slider value changes and handle is released       |
-| `move`   | Fired during slider handle movement (provides real-time updates) |
+| Event                    | Detail Interface            | Description                                                |
+| ------------------------ | --------------------------- | ---------------------------------------------------------- |
+| `mjo-slider:change`      | `MjoSliderChangeEvent`      | Fired when the slider value changes and handle is released |
+| `mjo-slider:input`       | `MjoSliderInputEvent`       | Fired during slider handle movement (real-time updates)    |
+| `mjo-slider:focus`       | `MjoSliderFocusEvent`       | Fired when slider handle receives focus                    |
+| `mjo-slider:blur`        | `MjoSliderBlurEvent`        | Fired when slider handle loses focus                       |
+| `mjo-slider:valuechange` | `MjoSliderValueChangeEvent` | Fired when value changes programmatically                  |
+| `change`                 | `Event`                     | Standard change event (maintained for compatibility)       |
+| `move`                   | `CustomEvent`               | Legacy event during handle movement (deprecated)           |
+
+### Event Detail Interfaces
+
+```ts
+interface MjoSliderChangeEvent {
+    detail: {
+        element: MjoSlider;
+        value: string;
+        name?: string;
+        isRange: boolean;
+        previousValue: string;
+    };
+}
+
+interface MjoSliderInputEvent {
+    detail: {
+        element: MjoSlider;
+        value: string;
+        name?: string;
+        isRange: boolean;
+        handle?: "one" | "two";
+    };
+}
+```
 
 ## CSS Custom Properties
 
@@ -903,9 +916,27 @@ export class ExampleSliderThemeMixin extends ThemeMixin(LitElement) {
 | `--mjo-slider-secondary-color`            | `var(--mjo-secondary-color, #ff8800)`                   | Secondary color for progress and handles |
 | `--mjo-slider-primary-foreground-color`   | `var(--mjo-primary-foreground-color, #333333)`          | Text color for primary tooltips          |
 | `--mjo-slider-secondary-foreground-color` | `var(--mjo-secondary-foreground-color, #333333)`        | Text color for secondary tooltips        |
+| `--mjo-slider-value-color`                | `inherit`                                               | Color of the value display               |
 | `--mjo-slider-value-font-size`            | `var(--mjo-input-label-font-size, calc(1em * 0.8))`     | Font size for value display              |
+| `--mjo-slider-value-font-weight`          | `inherit`                                               | Font weight for value display            |
+| `--mjo-slider-focus-outline-color`        | `var(--mjo-primary-color, #007bff)`                     | Color of focus outline                   |
+| `--mjo-slider-focus-outline-width`        | `2px`                                                   | Width of focus outline                   |
+| `--mjo-slider-focus-outline-offset`       | `2px`                                                   | Offset of focus outline                  |
+| `--mjo-slider-handle-focus-ring-color`    | `var(--mjo-primary-color, #007bff)`                     | Color of handle focus ring               |
+| `--mjo-slider-handle-disabled-color`      | `var(--mjo-border-color-dark, #c7c7c7)`                 | Color of disabled handles                |
+| `--mjo-slider-disabled-opacity`           | `0.5`                                                   | Opacity when disabled                    |
 | `--mjo-slider-tooltip-radius`             | `var(--mjo-radius-small, 5px)`                          | Border radius for tooltips               |
 | `--mjo-slider-tooltip-box-shadow`         | `var(--mjo-box-shadow, 0px 0px 3px rgba(0, 0, 0, 0.5))` | Box shadow for tooltips                  |
+
+### High Contrast Mode Variables
+
+| Property                                         | Default   | Description                          |
+| ------------------------------------------------ | --------- | ------------------------------------ |
+| `--mjo-slider-background-color-high-contrast`    | `#000`    | Track background in high contrast    |
+| `--mjo-slider-border-color-high-contrast`        | `#fff`    | Track border in high contrast        |
+| `--mjo-slider-primary-color-high-contrast`       | `#0000ff` | Primary color in high contrast       |
+| `--mjo-slider-secondary-color-high-contrast`     | `#ff0000` | Secondary color in high contrast     |
+| `--mjo-slider-focus-outline-width-high-contrast` | `3px`     | Focus outline width in high contrast |
 
 ## Theme Interface
 
@@ -921,6 +952,20 @@ interface MjoSliderTheme {
     labelFontWeight?: string;
     primaryForegroundColor?: string;
     secondaryForegroundColor?: string;
+    valueColor?: string;
+    valueFontSize?: string;
+    valueFontWeight?: string;
+    focusOutlineColor?: string;
+    focusOutlineWidth?: string;
+    focusOutlineOffset?: string;
+    handleFocusRingColor?: string;
+    handleFocusRingWidth?: string;
+    handleDisabledColor?: string;
+    tooltipBackgroundColor?: string;
+    tooltipTextColor?: string;
+    tooltipRadius?: string;
+    tooltipBoxShadow?: string;
+    disabledOpacity?: string;
 }
 ```
 
@@ -935,11 +980,53 @@ interface MjoSliderTheme {
 
 ## Accessibility
 
--   Full keyboard navigation support (Tab, Arrow keys, Home, End, Page Up/Down)
--   Proper ARIA attributes for screen readers
--   Visual focus indicators and high contrast support
--   Support for assistive technologies
--   Semantic HTML structure with proper labeling
+The `mjo-slider` component implements the complete ARIA slider pattern with comprehensive keyboard support and screen reader compatibility.
+
+### ARIA Attributes
+
+-   **`role="slider"`**: Properly identifies each handle as a slider control
+-   **`aria-valuemin`**, **`aria-valuemax`**, **`aria-valuenow`**: Current value and range information
+-   **`aria-valuetext`**: Human-readable value description (e.g., "75 percent")
+-   **`aria-labelledby`**: Links to label elements for proper naming
+-   **`aria-describedby`**: Links to helper text or instructions
+-   **`aria-orientation`**: Indicates horizontal/vertical orientation
+-   **`aria-disabled`**: Properly communicates disabled state
+-   **`aria-live="polite"`**: Live announcements of value changes
+
+### Keyboard Navigation
+
+| Key                 | Action                                |
+| ------------------- | ------------------------------------- |
+| **Tab**             | Navigate between slider handles       |
+| **Arrow Left/Down** | Decrease value by one step            |
+| **Arrow Right/Up**  | Increase value by one step            |
+| **Home**            | Set to minimum value                  |
+| **End**             | Set to maximum value                  |
+| **Page Down**       | Decrease by large step (10% of range) |
+| **Page Up**         | Increase by large step (10% of range) |
+
+### Screen Reader Support
+
+-   Value changes are announced using `aria-live` regions
+-   Custom `formatValueText` function for meaningful value descriptions
+-   Proper labeling and descriptions for context
+-   Range sliders announce both values appropriately
+
+### Visual Accessibility
+
+-   **Focus indicators**: Clear visual focus rings on handles and container
+-   **High contrast support**: Enhanced colors and borders in high contrast mode
+-   **Reduced motion**: Respects `prefers-reduced-motion` for animations
+-   **Touch accessibility**: Larger touch targets on mobile devices
+
+## Technical Notes
+
+-   **Range Values**: For range sliders, values are formatted as "min-max" (e.g., "10-90")
+-   **Step Calculation**: The slider automatically calculates step positions and snaps to the nearest valid value
+-   **Form Integration**: Automatically integrates with `mjo-form` for validation and data collection
+-   **Touch Support**: Full touch and mouse support with proper event handling
+-   **Value Validation**: Automatically validates and constrains values within min/max bounds
+-   **Event System**: New event system follows `mjo-slider:event-name` convention with detailed event information
 
 ## Best Practices
 
@@ -948,8 +1035,9 @@ interface MjoSliderTheme {
 -   Consider the range size when setting min/max values
 -   Use tooltips for sliders where precise values matter
 -   Provide value prefixes/suffixes to give context (%, $, etc.)
--   Test with both mouse and touch interactions
--   Consider disabled state styling for better UX
+-   Test with both keyboard and mouse/touch interactions
 -   Use consistent color schemes across related sliders
+-   Provide helper text for complex sliders using `aria-describedby`
+-   Consider using `formatValueText` for better screen reader announcements
 
 For additional theming options, see the [Theming Guide](./theming.md).

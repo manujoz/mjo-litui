@@ -27,6 +27,7 @@ import "../../src/mjo-modal.js";
 import "../../src/mjo-notification.js";
 import "../../src/mjo-radio.js";
 import "../../src/mjo-ripple.js";
+import "../../src/mjo-slider.js";
 import "../../src/mjo-switch.js";
 import "../../src/mjo-text-nowrap.js";
 import "../../src/mjo-textfield.js";
@@ -60,7 +61,7 @@ function initializeTheme(tries = 1): void {
         toggleBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
     }
 
-    themeComponent.addEventListener("mjo-theme-change", (ev) => {
+    themeComponent.addEventListener("mjo-theme:change", (ev) => {
         const newTheme = ev.detail.theme;
         if (toggleBtn) {
             toggleBtn.textContent = newTheme === "dark" ? "☀️" : "🌙";
