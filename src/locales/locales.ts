@@ -1,6 +1,16 @@
 export const locales = {
     en: {
         search: "Search...",
+        pagination: {
+            first: "First",
+            previous: "Previous",
+            next: "Next",
+            last: "Last",
+            page: "Page",
+            of: "of",
+            itemsPerPage: "Items per page",
+            goToPage: "Go to page",
+        },
         calendar: {
             months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -11,6 +21,16 @@ export const locales = {
     },
     es: {
         search: "Buscar...",
+        pagination: {
+            first: "Primera",
+            previous: "Anterior",
+            next: "Siguiente",
+            last: "Última",
+            page: "Página",
+            of: "de",
+            itemsPerPage: "Elementos por página",
+            goToPage: "Ir a la página",
+        },
         calendar: {
             months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
             monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
@@ -21,6 +41,16 @@ export const locales = {
     },
     fr: {
         search: "Rechercher...",
+        pagination: {
+            first: "Premier",
+            previous: "Précédent",
+            next: "Suivant",
+            last: "Dernier",
+            page: "Page",
+            of: "de",
+            itemsPerPage: "Éléments par page",
+            goToPage: "Aller à la page",
+        },
         calendar: {
             months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
             monthsShort: ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"],
@@ -31,6 +61,16 @@ export const locales = {
     },
     pt: {
         search: "Pesquisar...",
+        pagination: {
+            first: "Primeiro",
+            previous: "Anterior",
+            next: "Próximo",
+            last: "Último",
+            page: "Página",
+            of: "de",
+            itemsPerPage: "Itens por página",
+            goToPage: "Ir para a página",
+        },
         calendar: {
             months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
             monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
@@ -41,6 +81,16 @@ export const locales = {
     },
     it: {
         search: "Cerca...",
+        pagination: {
+            first: "Primo",
+            previous: "Precedente",
+            next: "Successivo",
+            last: "Ultimo",
+            page: "Pagina",
+            of: "di",
+            itemsPerPage: "Elementi per pagina",
+            goToPage: "Vai alla pagina",
+        },
         calendar: {
             months: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
             monthsShort: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
@@ -51,6 +101,16 @@ export const locales = {
     },
     de: {
         search: "Suchen...",
+        pagination: {
+            first: "Erste",
+            previous: "Zurück",
+            next: "Weiter",
+            last: "Letzte",
+            page: "Seite",
+            of: "von",
+            itemsPerPage: "Elemente pro Seite",
+            goToPage: "Gehe zu Seite",
+        },
         calendar: {
             months: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
             monthsShort: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
@@ -61,6 +121,16 @@ export const locales = {
     },
     nl: {
         search: "Zoeken...",
+        pagination: {
+            first: "Eerste",
+            previous: "Vorige",
+            next: "Volgende",
+            last: "Laatste",
+            page: "Pagina",
+            of: "van",
+            itemsPerPage: "Items per pagina",
+            goToPage: "Ga naar pagina",
+        },
         calendar: {
             months: ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"],
             monthsShort: ["Jan", "Feb", "Maa", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"],
@@ -71,6 +141,16 @@ export const locales = {
     },
     bg: {
         search: "Търсене...",
+        pagination: {
+            first: "Първа",
+            previous: "Предишна",
+            next: "Следваща",
+            last: "Последна",
+            page: "Страница",
+            of: "от",
+            itemsPerPage: "Елементи на страница",
+            goToPage: "Отиди на страница",
+        },
         calendar: {
             months: ["Януари", "Февруари", "Март", "Април", "Май", "Юни", "Юли", "Август", "Септември", "Октомври", "Ноември", "Декември"],
             monthsShort: ["Яну", "Фев", "Мар", "Апр", "Май", "Юни", "Юли", "Авг", "Сеп", "Окт", "Ное", "Дек"],
@@ -81,6 +161,16 @@ export const locales = {
     },
     sr: {
         search: "Претрага...",
+        pagination: {
+            first: "Прва",
+            previous: "Претходна",
+            next: "Следећа",
+            last: "Последња",
+            page: "Страна",
+            of: "од",
+            itemsPerPage: "Ставки по страни",
+            goToPage: "Иди на страну",
+        },
         calendar: {
             months: ["Јануар", "Фебруар", "Март", "Април", "Мај", "Јун", "Јул", "Август", "Септембар", "Октобар", "Новембар", "Децембар"],
             monthsShort: ["Јан", "Феб", "Мар", "Апр", "Мај", "Јун", "Јул", "Авг", "Сеп", "Окт", "Нов", "Дец"],
@@ -91,6 +181,16 @@ export const locales = {
     },
     ru: {
         search: "Поиск...",
+        pagination: {
+            first: "Первая",
+            previous: "Предыдущая",
+            next: "Следующая",
+            last: "Последняя",
+            page: "Страница",
+            of: "из",
+            itemsPerPage: "Элементов на странице",
+            goToPage: "Перейти на страницу",
+        },
         calendar: {
             months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
             monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
@@ -101,6 +201,16 @@ export const locales = {
     },
     zh: {
         search: "搜索...",
+        pagination: {
+            first: "首页",
+            previous: "上一页",
+            next: "下一页",
+            last: "末页",
+            page: "页",
+            of: "共",
+            itemsPerPage: "每页条数",
+            goToPage: "跳转至",
+        },
         calendar: {
             months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
             monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
@@ -111,6 +221,16 @@ export const locales = {
     },
     ja: {
         search: "検索...",
+        pagination: {
+            first: "最初",
+            previous: "前へ",
+            next: "次へ",
+            last: "最後",
+            page: "ページ",
+            of: "／",
+            itemsPerPage: "ページあたりの項目数",
+            goToPage: "ページへ移動",
+        },
         calendar: {
             months: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
             monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
@@ -121,6 +241,16 @@ export const locales = {
     },
     ko: {
         search: "검색...",
+        pagination: {
+            first: "첫 페이지",
+            previous: "이전",
+            next: "다음",
+            last: "마지막 페이지",
+            page: "페이지",
+            of: "의",
+            itemsPerPage: "페이지 당 항목",
+            goToPage: "페이지로 이동",
+        },
         calendar: {
             months: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
             monthsShort: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
@@ -131,6 +261,16 @@ export const locales = {
     },
     tr: {
         search: "Arama...",
+        pagination: {
+            first: "İlk",
+            previous: "Önceki",
+            next: "Sonraki",
+            last: "Son",
+            page: "Sayfa",
+            of: "of",
+            itemsPerPage: "Sayfa başına öğe",
+            goToPage: "Sayfaya git",
+        },
         calendar: {
             months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
             monthsShort: ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"],
@@ -141,6 +281,16 @@ export const locales = {
     },
     pl: {
         search: "Szukaj...",
+        pagination: {
+            first: "Pierwsza",
+            previous: "Poprzednia",
+            next: "Następna",
+            last: "Ostatnia",
+            page: "Strona",
+            of: "z",
+            itemsPerPage: "Elementów na stronie",
+            goToPage: "Idź do strony",
+        },
         calendar: {
             months: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"],
             monthsShort: ["Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"],
