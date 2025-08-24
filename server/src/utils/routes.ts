@@ -18,6 +18,7 @@ import { MenuButtonController } from "../controllers/menu-button-controller.js";
 import { MessagesController } from "../controllers/messages-controller.js";
 import { ModalController } from "../controllers/modal-controller.js";
 import { NotificationController } from "../controllers/notification-controller.js";
+import { PaginationController } from "../controllers/pagination-controller.js";
 import { RadioController } from "../controllers/radio-controller.js";
 import { RippleController } from "../controllers/ripple-controller.js";
 import { SliderController } from "../controllers/slider-controller.js";
@@ -46,6 +47,7 @@ const menuButtonController = new MenuButtonController();
 const messagesController = new MessagesController();
 const modalController = new ModalController();
 const notificationController = new NotificationController();
+const paginationController = new PaginationController();
 const radioController = new RadioController();
 const rippleController = new RippleController();
 const sliderController = new SliderController();
@@ -134,6 +136,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-notification",
         controller: notificationController.renderNotificationPage,
+    },
+    {
+        path: "/component/mjo-pagination",
+        controller: paginationController.renderPaginationPage,
     },
     {
         path: "/component/mjo-radio",

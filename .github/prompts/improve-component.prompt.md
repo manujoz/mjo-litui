@@ -27,6 +27,8 @@ No modifiques el código, presentame un plan detallado de lo que vas a hacer y e
 
 Los nombres de los eventos van a seguir esta convención: `mjo-component-name:event-name`, por ejemplo `mjo-date-picker:change` o `mjo-textfield:change`. Si el componente tiene un customEvent que no siga esta convención hay que cambiarlo (sin mantener retrocompatibilidad) y anotarlo para modificarlo/añadirlo a la documentación.
 
+No utilices `npx tsc` para probar archivos typescript ya que la configuración de typescript arroja errores en su lugar compila el proyecto con `npm run build`
+
 ## Documentación
 
 Analiza en profundidad el componente y su documentación y actualiza la documentación del componente para reflejar los nuevos cambios. Elimina de la documentación propiedades o métodos que ya no existan en el componente, añade a la documentación cualquier nueva propiedad o método que se haya introducido.

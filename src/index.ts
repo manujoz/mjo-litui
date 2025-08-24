@@ -20,6 +20,7 @@ export { MjoMessage } from "./mjo-message.js";
 export { MjoModal } from "./mjo-modal.js";
 export { MjoNotification } from "./mjo-notification.js";
 export { MjoOption } from "./mjo-option.js";
+export { MjoPagination } from "./mjo-pagination.js";
 export { MjoRadio } from "./mjo-radio.js";
 export { MjoRipple } from "./mjo-ripple.js";
 export { MjoSelect } from "./mjo-select.js";

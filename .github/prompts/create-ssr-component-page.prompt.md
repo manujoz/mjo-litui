@@ -12,5 +12,6 @@ Tu misión es:
 - Añadir la ruta a `server/src/utils/routes.ts` con el nuevo controlador.
 - Añadir la importación del componente para el servidor en `server/src/services/ssr-renderer.ts`
 - Añadir la importación del componente para el cliente en `server/client/client.ts`
+- No utilices `npx tsc` para probar archivos typescript ya que la configuración de typescript arroja errores en su lugar compila el proyecto con `npm run server:build:client`
 
 Si tienes alguna duda, consultame antes de implementar.

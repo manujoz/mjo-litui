@@ -285,6 +285,71 @@
 			"label": "TypeScript Check Message Only",
 			"type": "shell",
 			"command": "npx tsc --noEmit src/mjo-message.ts src/components/messages/message-container.ts src/components/messages/message-item.ts src/controllers/message-controller.ts"
+		},
+		{
+			"label": "Test Pagination Component Only",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-pagination.test.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Pagination Build and Run",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Pagination Simple",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination-simple.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Pagination Full",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Clean Pagination Tests",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-pagination-test-clean.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Debug setPageSize",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-pagination-test-clean.ts\" --grep \"should change page size\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Boolean Properties Debug",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination-test-clean.ts\" --grep \"should set boolean properties correctly\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Fixed Pagination Tests",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination-test-clean.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Final Pagination Tests",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Full Test Suite Validation",
+			"type": "shell",
+			"command": "npm run test",
+			"isBackground": false
+		},
+		{
+			"label": "TypeScript Check Server",
+			"type": "shell",
+			"command": "npx tsc --noEmit server/src/controllers/pagination-controller.ts"
 		}
 	]
 }
