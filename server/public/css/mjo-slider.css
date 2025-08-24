@@ -1,0 +1,155 @@
+/* Slider-specific styles for SSR demo page */
+
+.slider-showcase-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 600px;
+}
+
+.slider-showcase-vertical mjo-slider {
+    width: 100%;
+    min-width: 300px;
+}
+
+/* Event status indicator */
+.event-status {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: "Courier New", monospace;
+    max-width: 350px;
+    word-wrap: break-word;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-left: 3px solid var(--mjo-primary-color, #007bff);
+}
+
+/* Keyboard help styling */
+.keyboard-help {
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    background: var(--mjo-background-color-card, #f8f9fa);
+    border: 1px solid var(--mjo-border-color, #dee2e6);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: var(--mjo-foreground-color-low, #666);
+    font-style: italic;
+}
+
+/* Enhanced playground showcase for sliders */
+.playground-showcase {
+    padding: 2rem;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.playground-showcase mjo-slider {
+    width: 100%;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+/* Form styling improvements */
+.slider-showcase-vertical form {
+    width: 100%;
+    max-width: 500px;
+}
+
+.slider-showcase-vertical form mjo-slider {
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .slider-showcase-vertical {
+        gap: 1.5rem;
+    }
+
+    .playground-showcase {
+        padding: 1.5rem;
+    }
+
+    .playground-showcase mjo-slider {
+        min-width: 200px;
+    }
+
+    .event-status {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        font-size: 11px;
+    }
+}
+
+/* Enhanced controls panel for slider properties */
+.controls-panel .control-group input[type="number"] {
+    width: 100%;
+    max-width: 120px;
+}
+
+.controls-panel .control-group select {
+    width: 100%;
+    max-width: 150px;
+}
+
+/* Demo section improvements */
+.main-section .component-showcase.slider-showcase-vertical {
+    background: var(--mjo-background-color-card, #fafafa);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--mjo-border-color, #e5e7eb);
+    margin: 1rem 0;
+}
+
+.main-section .component-showcase.slider-showcase-vertical h4 {
+    margin: 0 0 1rem 0;
+    color: var(--mjo-foreground-color-high, #333);
+}
+
+/* Accessibility enhancements */
+.slider-showcase-vertical [id$="-help"] {
+    font-size: 0.875rem;
+    color: var(--mjo-foreground-color-medium, #666);
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--mjo-background-color-subtle, #f0f9ff);
+    border-radius: 4px;
+    border-left: 3px solid var(--mjo-info-color, #0ea5e9);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .event-status {
+        background: #000;
+        border: 2px solid #fff;
+        color: #fff;
+    }
+
+    .keyboard-help,
+    .main-section .component-showcase.slider-showcase-vertical {
+        border-width: 2px;
+        background: #fff;
+        color: #000;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .event-status,
+    .keyboard-help {
+        transition: none;
+    }
+}

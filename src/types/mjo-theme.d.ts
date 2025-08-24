@@ -372,10 +372,22 @@ export interface MjoSliderTheme {
     labelColor?: string;
     labelFontSize?: string;
     labelFontWeight?: string;
-    primaryColor?: string;
     primaryForegroundColor?: string;
-    secondaryColor?: string;
     secondaryForegroundColor?: string;
+    valueColor?: string;
+    valueFontSize?: string;
+    valueFontWeight?: string;
+    focusOutlineColor?: string;
+    focusOutlineWidth?: string;
+    focusOutlineOffset?: string;
+    handleFocusRingColor?: string;
+    handleFocusRingWidth?: string;
+    handleDisabledColor?: string;
+    tooltipBackgroundColor?: string;
+    tooltipTextColor?: string;
+    tooltipRadius?: string;
+    tooltipBoxShadow?: string;
+    disabledOpacity?: string;
 }
 
 export interface MjoSelectTheme extends MjoInputTheme {
