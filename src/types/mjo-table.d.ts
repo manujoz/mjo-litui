@@ -1,11 +1,11 @@
 import { MjoTableHeaderItem, MjoTableRowItem } from "./mjo-table";
 
-type MjoTableRowItem = {
+export type MjoTableRowItem = {
     key?: string;
     render: string | number | TemplateResult<1>;
 };
 
-type MjoTableHeaderItem = {
+export type MjoTableHeaderItem = {
     key: string;
     sortable?: boolean;
     filterable?: boolean;
@@ -24,5 +24,11 @@ export interface MjoTableSortEvent extends CustomEvent {
     detail: {
         key?: string;
         direction?: MjoTableSortDirections;
+    };
+}
+export interface MjoTableFilterEvent extends CustomEvent {
+    detail: {
+        key?: string;
+        filter?: string;
     };
 }
