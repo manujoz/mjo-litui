@@ -511,7 +511,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             transition: background-color 0.2s ease;
         }
         thead.header-sticky-style::before {
-            background-color: var(--mjo-table-header-background-color-stuck, var(--mjo-background-color-xhigh, #000000)) !important;
+            background-color: var(--mjo-table-header-background-color-stuck, var(--mjo-background-color-card-high, #000000)) !important;
             color: var(--mjo-table-header-foreground-color-stuck, var(--mjo-foreground-color, #ffffff));
             border-radius: var(--mjo-radius-large);
             box-shadow: var(--mjo-box-shadow-2);
@@ -620,7 +620,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             padding: 0;
         }
         mjo-checkbox {
-            font-size: 10px;
+            font-size: 14px;
         }
     `;
 }

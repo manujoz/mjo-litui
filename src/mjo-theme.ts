@@ -43,6 +43,15 @@ export class MjoTheme extends LitElement {
         }
     }
 
+    setTheme(theme: MjoThemeModes) {
+        this.theme = theme;
+    }
+
+    toggleTheme() {
+        this.theme = this.theme === "light" ? "dark" : "light";
+        return this.theme;
+    }
+
     applyTheme() {
         const mergedConfig = structuredClone(defaultTheme);
         mergeConfig(mergedConfig, this.config);

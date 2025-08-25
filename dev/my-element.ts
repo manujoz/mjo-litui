@@ -1,11 +1,13 @@
 /* eslint-disable no-console */
+import type { MjoTheme } from "../src/mjo-theme.js";
+import { MjoTableColumns, MjoTableRowClickEvent, MjoTableRows, MjoTableSelectEvent } from "../src/types/mjo-table.js";
 
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
+import "../src/mjo-button.js";
 import "../src/mjo-table.js";
 import "../src/mjo-theme.js";
-import { MjoTableColumns, MjoTableRowClickEvent, MjoTableRows, MjoTableSelectEvent } from "../src/types/mjo-table.js";
 
 const COLUMNS: MjoTableColumns = [
     { name: "name", label: "Name", sortable: true, filterable: true, minWidth: 150 },
@@ -72,13 +74,15 @@ export class MyElement extends LitElement {
     render() {
         return html` <div class=".container">
             <mjo-theme theme="light" scope="global"> </mjo-theme>
+            <mjo-button @click=${this.#toggleTheme}>Toggle Theme</mjo-button>
 
             <mjo-table
                 rowHover="highlight"
                 rowClickable
                 color="secondary"
-                size="medium"
+                size="large"
                 headerSticky
+                maxHeight="600"
                 rowSeparator="contrast"
                 selectable="multiple"
                 .columns=${COLUMNS}
@@ -97,6 +101,13 @@ export class MyElement extends LitElement {
     #handleSelect(event: MjoTableSelectEvent) {
         console.log("Rows selected:", event.detail);
     }
+
+    #toggleTheme = () => {
+        const mjoTheme = this.shadowRoot?.querySelector("mjo-theme") as MjoTheme;
+        if (mjoTheme) {
+            mjoTheme.toggleTheme();
+        }
+    };
 
     static styles = css`
         :host {

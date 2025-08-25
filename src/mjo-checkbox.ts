@@ -9,8 +9,7 @@ import {
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { AiFillCheckSquare } from "mjo-icons/ai";
-import { TiMinus } from "mjo-icons/ti";
+import { FaCheck, FaMinus } from "mjo-icons/fa";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
@@ -81,7 +80,17 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             >
                 <div class="box">
                     <div class="checkbox" ?data-checked=${this.checked} ?data-indeterminate=${this.indeterminate}>
-                        ${this.indeterminate ? html`<mjo-icon src=${TiMinus}></mjo-icon>` : html`<mjo-icon src=${AiFillCheckSquare}></mjo-icon>`}
+                        ${this.indeterminate
+                            ? html`
+                                  <div class="inner">
+                                      <mjo-icon src=${FaMinus}></mjo-icon>
+                                  </div>
+                              `
+                            : html`
+                                  <div class="inner">
+                                      <mjo-icon src=${FaCheck}></mjo-icon>
+                                  </div>
+                              `}
                     </div>
                 </div>
                 ${this.label ? html`<div class="label-container"><mjo-typography tag="none" class="label">${this.label}</mjo-typography></div>` : nothing}
@@ -298,34 +307,58 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 display: flex;
                 align-items: center;
                 justify-content: center;
-            }
-            mjo-icon {
-                transform: scale(0);
-                transition: transform 0.3s ease;
+                box-sizing: border-box;
             }
             .checkbox[data-checked] {
-                color: var(--mjo-checkbox-checked-color, var(--mjo-primary-color));
                 border-color: var(--mjo-checkbox-checked-border-color, var(--mjo-checkbox-checked-color, var(--mjo-primary-color)));
-                background-color: var(--mjo-checkbox-checked-background-color, transparent);
             }
             .container[data-color="secondary"] .checkbox[data-checked] {
-                color: var(--mjo-checkbox-checked-color, var(--mjo-secondary-color));
                 border-color: var(--mjo-checkbox-checked-border-color, var(--mjo-checkbox-checked-color, var(--mjo-secondary-color)));
-                background-color: var(--mjo-checkbox-checked-background-color, transparent);
-            }
-            .checkbox[data-checked] mjo-icon {
-                transform: scale(1);
             }
             .checkbox[data-indeterminate] {
-                color: var(--mjo-checkbox-indeterminate-color, var(--mjo-checkbox-checked-color, var(--mjo-primary-color)));
                 border-color: var(--mjo-checkbox-indeterminate-border-color, var(--mjo-checkbox-indeterminate-color, var(--mjo-primary-color)));
-                background-color: var(--mjo-checkbox-indeterminate-background-color, transparent);
             }
             .container[data-color="secondary"] .checkbox[data-indeterminate] {
-                color: var(--mjo-checkbox-checked-color, var(--mjo-secondary-color));
                 border-color: var(--mjo-checkbox-checked-border-color, var(--mjo-checkbox-checked-color, var(--mjo-secondary-color)));
-                background-color: var(--mjo-checkbox-checked-background-color, transparent);
             }
+            .inner {
+                position: relative;
+                flex: 1 1 0;
+                border-radius: 0.1rem;
+                align-self: stretch;
+                background: green;
+                display: flex;
+                background-color: var(--mjo-checkbox-checked-color, var(--mjo-primary-color));
+                color: var(--mjo-checkbox-checked-icon-color, var(--mjo-primary-foreground-color));
+                display: grid;
+                place-content: center;
+                transform: scale(0);
+                transition: transform 0.3s ease;
+                overflow: hidden;
+            }
+            .container[data-color="secondary"] .inner {
+                background-color: var(--mjo-checkbox-checked-color, var(--mjo-secondary-color));
+                color: var(--mjo-checkbox-checked-icon-color, var(--mjo-secondary-foreground-color));
+            }
+            .checkbox[data-indeterminate] .inner {
+                background-color: var(--mjo-checkbox-indeterminate-background-color, transparent);
+                color: var(--mjo-checkbox-indeterminate-icon-color, var(--mjo-primary-color));
+            }
+            .container[data-color="secondary"] .checkbox[data-indeterminate] .inner {
+                background-color: var(--mjo-checkbox-indeterminate-background-color, transparent);
+                color: var(--mjo-checkbox-indeterminate-icon-color, var(--mjo-secondary-color));
+            }
+            mjo-icon {
+                position: absolute;
+                inset: 0;
+                display: grid;
+                place-content: center;
+                font-size: 0.8em;
+                transform: scale(0);
+            }
+            .checkbox[data-checked] .inner,
+            .checkbox[data-indeterminate] .inner,
+            .checkbox[data-checked] mjo-icon,
             .checkbox[data-indeterminate] mjo-icon {
                 transform: scale(1);
             }
