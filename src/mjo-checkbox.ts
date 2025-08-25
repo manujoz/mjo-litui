@@ -9,7 +9,8 @@ import {
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { AiFillCheckSquare, AiOutlineMinus } from "mjo-icons/ai";
+import { AiFillCheckSquare } from "mjo-icons/ai";
+import { TiMinus } from "mjo-icons/ti";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
@@ -26,6 +27,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean, reflect: true }) indeterminate = false;
     @property({ type: String }) helperText?: string;
+    @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) label?: string;
     @property({ type: String }) name?: string;
     @property({ type: String }) value = "";
@@ -62,7 +64,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     }
 
     render() {
-        return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color}>
+        return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size}>
             <div
                 class="checkbox-container"
                 role="checkbox"
@@ -79,7 +81,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             >
                 <div class="box">
                     <div class="checkbox" ?data-checked=${this.checked} ?data-indeterminate=${this.indeterminate}>
-                        ${this.indeterminate ? html`<mjo-icon src=${AiOutlineMinus}></mjo-icon>` : html`<mjo-icon src=${AiFillCheckSquare}></mjo-icon>`}
+                        ${this.indeterminate ? html`<mjo-icon src=${TiMinus}></mjo-icon>` : html`<mjo-icon src=${AiFillCheckSquare}></mjo-icon>`}
                     </div>
                 </div>
                 ${this.label ? html`<div class="label-container"><mjo-typography tag="none" class="label">${this.label}</mjo-typography></div>` : nothing}
@@ -240,6 +242,15 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             .container {
                 position: relative;
             }
+            .container[data-size="small"] {
+                font-size: 0.8em;
+            }
+            .container[data-size="medium"] {
+                font-size: 1em;
+            }
+            .container[data-size="large"] {
+                font-size: 1.1em;
+            }
             .container[data-disabled] {
                 opacity: var(--mjo-checkbox-disabled-opacity, 0.5);
                 cursor: not-allowed;
@@ -282,8 +293,8 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 border-radius: 0.2rem;
                 line-height: 0;
                 transition: all 0.3s ease;
-                width: 1.3rem;
-                height: 1.3rem;
+                width: 1.2em;
+                height: 1.2em;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -291,7 +302,6 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             mjo-icon {
                 transform: scale(0);
                 transition: transform 0.3s ease;
-                font-size: 1.3rem;
             }
             .checkbox[data-checked] {
                 color: var(--mjo-checkbox-checked-color, var(--mjo-primary-color));
@@ -310,6 +320,11 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 color: var(--mjo-checkbox-indeterminate-color, var(--mjo-checkbox-checked-color, var(--mjo-primary-color)));
                 border-color: var(--mjo-checkbox-indeterminate-border-color, var(--mjo-checkbox-indeterminate-color, var(--mjo-primary-color)));
                 background-color: var(--mjo-checkbox-indeterminate-background-color, transparent);
+            }
+            .container[data-color="secondary"] .checkbox[data-indeterminate] {
+                color: var(--mjo-checkbox-checked-color, var(--mjo-secondary-color));
+                border-color: var(--mjo-checkbox-checked-border-color, var(--mjo-checkbox-checked-color, var(--mjo-secondary-color)));
+                background-color: var(--mjo-checkbox-checked-background-color, transparent);
             }
             .checkbox[data-indeterminate] mjo-icon {
                 transform: scale(1);

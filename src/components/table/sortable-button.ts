@@ -1,4 +1,4 @@
-import { MjoTableSortDirections } from "../../types/mjo-table.js";
+import { MjoTableSortDirections, MjoTableSortEvent } from "../../types/mjo-table.js";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -9,7 +9,7 @@ import "../../mjo-icon.js";
 
 @customElement("sortable-button")
 export class SortableButton extends LitElement {
-    @property({ type: String }) key?: string;
+    @property({ type: String }) columnname?: string;
     @property({ type: String }) direction?: MjoTableSortDirections;
 
     render() {
@@ -30,7 +30,13 @@ export class SortableButton extends LitElement {
     #handleSort = () => {
         this.direction = this.direction === "asc" ? "desc" : "asc";
 
-        this.dispatchEvent(new CustomEvent("mjo-table:sort", { detail: { key: this.key, direction: this.direction }, bubbles: true, composed: true }));
+        this.dispatchEvent(
+            new CustomEvent<MjoTableSortEvent["detail"]>("mjo-table:sort", {
+                detail: { columnName: this.columnname, direction: this.direction },
+                bubbles: true,
+                composed: true,
+            }),
+        );
     };
 
     #handleKeyDown = (e: KeyboardEvent) => {

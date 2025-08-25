@@ -8,7 +8,7 @@ import "../../mjo-icon.js";
 
 @customElement("filtrable-button")
 export class FiltrableButton extends LitElement {
-    @property({ type: String }) key?: string;
+    @property({ type: String }) columnName?: string;
     @property({ type: String }) filter?: string;
 
     @state() isOpen = false;
@@ -37,7 +37,7 @@ export class FiltrableButton extends LitElement {
         const input = ev.target as HTMLInputElement;
         this.filter = input.value;
 
-        this.dispatchEvent(new CustomEvent("mjo-table:filter", { detail: { key: this.key, filter: this.filter }, bubbles: true, composed: true }));
+        this.dispatchEvent(new CustomEvent("mjo-table:filter", { detail: { key: this.columnName, filter: this.filter }, bubbles: true, composed: true }));
     };
 
     #handleBlur = () => {
@@ -83,6 +83,7 @@ export class FiltrableButton extends LitElement {
                 color: var(--mjo-foreground-color);
                 box-sizing: border-box;
                 padding: 0 2.2em 0 0.5em;
+                outline: none;
             }
             search input::placeholder {
                 color: var(--mjo-foreground-color-xlow);

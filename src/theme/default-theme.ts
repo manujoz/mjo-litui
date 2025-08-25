@@ -282,7 +282,7 @@ export const defaultTheme: MjoThemeConfig = {
         },
         borderColor: {
             default: "#555555",
-            low: "#444444",
+            low: "#333333",
             xlow: "#222222",
             high: "#666666",
             xhigh: "#888888",
