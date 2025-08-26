@@ -1,4 +1,5 @@
 export { MjoAccordionItem } from "./components/accordion/mjo-accordion-item.js";
+export { MjoOption } from "./components/select/mjo-option.js";
 export { MjoAccordion } from "./mjo-accordion.js";
 export { MjoAlert } from "./mjo-alert.js";
 export { MjoAvatar } from "./mjo-avatar.js";
@@ -19,7 +20,6 @@ export { MjoMenuButton } from "./mjo-menu-button.js";
 export { MjoMessage } from "./mjo-message.js";
 export { MjoModal } from "./mjo-modal.js";
 export { MjoNotification } from "./mjo-notification.js";
-export { MjoOption } from "./mjo-option.js";
 export { MjoPagination } from "./mjo-pagination.js";
 export { MjoRadio } from "./mjo-radio.js";
 export { MjoRipple } from "./mjo-ripple.js";

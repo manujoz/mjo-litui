@@ -1,0 +1,249 @@
+/* Textarea-specific styles for SSR demo pages */
+
+.textarea-showcase {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    max-width: 600px;
+}
+
+.textarea-showcase mjo-textarea {
+    max-width: 100%;
+}
+
+/* Interactive demo specific styles */
+.playground-showcase {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.playground-showcase mjo-textarea {
+    min-width: 300px;
+    max-width: 400px;
+    min-height: 80px;
+}
+
+/* Controls panel styling */
+.controls-panel {
+    background: var(--mjo-background-color-card);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-group h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--mjo-foreground-color);
+}
+
+.control-group input,
+.control-group select {
+    padding: 8px 12px;
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 4px;
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    font-family: inherit;
+    font-size: 0.875rem;
+}
+
+.control-group input:focus,
+.control-group select:focus {
+    outline: 2px solid var(--mjo-primary-color);
+    outline-offset: -2px;
+}
+
+.toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--mjo-foreground-color);
+    user-select: none;
+}
+
+.toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.toggle:hover {
+    color: var(--mjo-primary-color);
+}
+
+/* Form examples styling */
+.form-example {
+    background: var(--mjo-background-color-card);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-example h4 {
+    margin: 0 0 16px 0;
+    color: var(--mjo-foreground-color);
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.form-row mjo-textarea {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Textarea specific styling */
+.textarea-showcase mjo-textarea {
+    transition: all 0.2s ease;
+}
+
+.textarea-showcase mjo-textarea:hover {
+    transform: translateY(-1px);
+}
+
+/* Auto-resize demo styling */
+.textarea-showcase mjo-textarea[maxheight] {
+    border-left: 3px solid var(--mjo-info-color);
+    padding-left: 8px;
+}
+
+/* Counter demo styling */
+.textarea-showcase mjo-textarea[counter] {
+    background: color-mix(in srgb, var(--mjo-primary-color) 2%, transparent);
+    border-radius: 6px;
+    padding: 4px;
+}
+
+/* Validation states demo styling */
+.textarea-showcase mjo-textarea[error] {
+    background: color-mix(in srgb, var(--mjo-color-error) 3%, transparent);
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.textarea-showcase mjo-textarea[successmsg] {
+    background: color-mix(in srgb, var(--mjo-color-success) 3%, transparent);
+    border-radius: 6px;
+    padding: 4px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .textarea-showcase {
+        max-width: 100%;
+    }
+
+    .playground-showcase mjo-textarea {
+        min-width: 250px;
+        max-width: 300px;
+    }
+
+    .controls-panel {
+        max-height: 400px;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-row mjo-textarea {
+        min-width: auto;
+    }
+}
+
+/* Advanced examples styling */
+.textarea-showcase .advanced-example {
+    background: var(--mjo-background-color-card);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 8px 0;
+}
+
+/* Character counter styling enhancements */
+.textarea-showcase mjo-textarea[counter][maxlength] {
+    position: relative;
+}
+
+.textarea-showcase mjo-textarea[counter][maxlength]::after {
+    content: "Counter enabled";
+    position: absolute;
+    top: -20px;
+    right: 0;
+    font-size: 0.7rem;
+    color: var(--mjo-foreground-color-low);
+    background: var(--mjo-background-color);
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--mjo-border-color);
+}
+
+/* State indicators */
+.textarea-showcase mjo-textarea[disabled] {
+    opacity: 0.6;
+    filter: grayscale(0.3);
+}
+
+.textarea-showcase mjo-textarea[readonly] {
+    background: color-mix(in srgb, var(--mjo-info-color) 5%, transparent);
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.textarea-showcase mjo-textarea[fullwidth] {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mjo-primary-color) 20%, transparent);
+    border-radius: 6px;
+}
+
+/* Size indicators */
+.textarea-showcase mjo-textarea[size="small"] {
+    border-left: 3px solid var(--mjo-warning-color);
+}
+
+.textarea-showcase mjo-textarea[size="medium"] {
+    border-left: 3px solid var(--mjo-info-color);
+}
+
+.textarea-showcase mjo-textarea[size="large"] {
+    border-left: 3px solid var(--mjo-success-color);
+}
+
+/* Color indicators */
+.textarea-showcase mjo-textarea[color="secondary"] {
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--mjo-secondary-color) 15%, transparent);
+}
+
+.textarea-showcase mjo-textarea[color="primary"] {
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--mjo-primary-color) 15%, transparent);
+}

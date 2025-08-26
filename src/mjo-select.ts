@@ -1,6 +1,6 @@
+import { type MjoOption } from "./components/select/mjo-option.js";
 import { type OptionsList } from "./components/select/options-list.js";
 import { type MjoDropdown } from "./mjo-dropdown.js";
-import { type MjoOption } from "./mjo-option.js";
 import { type MjoDropdownTheme } from "./types/mjo-theme.js";
 
 import { LitElement, css, html, nothing } from "lit";
@@ -16,9 +16,9 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./components/input/input-helper-text.js";
 import "./components/input/input-label.js";
+import "./components/select/mjo-option.js";
 import "./components/select/options-list.js";
 import "./mjo-dropdown.js";
-import "./mjo-option.js";
 
 @customElement("mjo-select")
 export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
@@ -75,7 +75,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 .html=${html`<options-list
                     ${ref(this.optionListRef)}
                     .options=${this.options}
-                    .mjoSelect=${this}
+                    .mjoSelect=${this as MjoSelect}
                     ?searchable=${this.searchable}
                     ?open=${this.open}
                     .theme=${this.theme}

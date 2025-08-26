@@ -1,6 +1,6 @@
 import { type locales } from "../../locales/locales.js";
-import { type MjoOption } from "../../mjo-option.js";
 import { type MjoSelect } from "../../mjo-select";
+import { type MjoOption } from "./mjo-option.js";
 
 import { LitElement, PropertyValues, css, html, isServer, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";

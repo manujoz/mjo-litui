@@ -57,17 +57,17 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
 
     @state() private isFocused = false;
     @state() private valueLength = 0;
-    @state() private uniqueId = `mjo-textfield-${Math.random().toString(36).substr(2, 9)}`;
 
     @query("input") inputElement!: HTMLInputElement;
 
     isPassword = false;
+    #uniqueId = `mjo-textfield-${Math.random().toString(36).substring(2, 9)}`;
 
     render() {
         if (this.type === "password" && !this.isPassword) this.isPassword = true;
 
-        const helperTextId = this.helperText || this.errormsg || this.successmsg ? `${this.uniqueId}-helper` : undefined;
-        const labelId = this.label ? `${this.uniqueId}-label` : undefined;
+        const helperTextId = this.helperText || this.errormsg || this.successmsg ? `${this.#uniqueId}-helper` : undefined;
+        const labelId = this.label ? `${this.#uniqueId}-label` : undefined;
 
         return html`${this.label
                 ? html`<input-label

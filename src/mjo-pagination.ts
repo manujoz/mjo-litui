@@ -18,7 +18,7 @@ import { MjoSelect } from "./mjo-select.js";
 import "./components/pagination/pagination-ellipsis.js";
 import "./components/pagination/pagination-nav-button.js";
 import "./components/pagination/pagination-page-item.js";
-import "./mjo-option.js";
+import "./components/select/mjo-option.js";
 import "./mjo-select.js";
 
 /**

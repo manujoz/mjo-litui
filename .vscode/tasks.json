@@ -19,7 +19,7 @@
 		{
 			"label": "TypeScript Check Card Controller",
 			"type": "shell",
-			"command": "npx tsc --noEmit server/src/controllers/card-controller.ts"
+			"command": "tsc --noEmit server/src/controllers/card-controller.ts"
 		},
 		{
 			"label": "Build Server Client",
@@ -27,19 +27,14 @@
 			"command": "npm run server:build:client"
 		},
 		{
-			"label": "TypeScript Check with npx",
-			"type": "shell",
-			"command": "npx tsc --noEmit"
-		},
-		{
 			"label": "Calendar TypeScript Check",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-calendar.ts"
+			"command": "tsc --noEmit src/mjo-calendar.ts"
 		},
 		{
 			"label": "TypeScript Check Calendar",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-calendar.ts"
+			"command": "tsc --noEmit src/mjo-calendar.ts"
 		},
 		{
 			"label": "Run Calendar Tests Only",
@@ -140,12 +135,12 @@
 		{
 			"label": "Check Color Picker Only",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-color-picker.ts"
+			"command": "tsc --noEmit src/mjo-color-picker.ts"
 		},
 		{
 			"label": "TypeScript Build Config Check",
 			"type": "shell",
-			"command": "npx tsc --noEmit -p tsconfig.build.json"
+			"command": "tsc --noEmit -p tsconfig.build.json"
 		},
 		{
 			"label": "Install Terser",
@@ -188,12 +183,12 @@
 		{
 			"label": "Check Date Picker TypeScript",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-date-picker.ts"
+			"command": "tsc --noEmit src/mjo-date-picker.ts"
 		},
 		{
 			"label": "TypeScript Check Textfield",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-textfield.ts"
+			"command": "tsc --noEmit src/mjo-textfield.ts"
 		},
 		{
 			"label": "Test MjoTextfield Component Only",
@@ -204,12 +199,12 @@
 		{
 			"label": "TypeScript Check Focus Trap",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/utils/focus-trap.ts"
+			"command": "tsc --noEmit src/utils/focus-trap.ts"
 		},
 		{
 			"label": "TypeScript Check Drawer and FocusTrap",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/components/drawer/drawer-container.ts src/utils/focus-trap.ts"
+			"command": "tsc --noEmit src/components/drawer/drawer-container.ts src/utils/focus-trap.ts"
 		},
 		{
 			"label": "Build Drawer Client",
@@ -219,27 +214,27 @@
 		{
 			"label": "Check Dropdown TypeScript Only",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-dropdown.ts src/components/dropdown/dropdown-container.ts src/types/mjo-dropdown.d.ts src/utils/dropdown.ts"
+			"command": "tsc --noEmit src/mjo-dropdown.ts src/components/dropdown/dropdown-container.ts src/types/mjo-dropdown.d.ts src/utils/dropdown.ts"
 		},
 		{
 			"label": "TypeScript Check Grid Only",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-grid.ts"
+			"command": "tsc --noEmit src/mjo-grid.ts"
 		},
 		{
 			"label": "Check MjoIcon TypeScript",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-icon.ts"
+			"command": "tsc --noEmit src/mjo-icon.ts"
 		},
 		{
 			"label": "TypeScript Check MJO Icon Final",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-icon.ts"
+			"command": "tsc --noEmit src/mjo-icon.ts"
 		},
 		{
 			"label": "TypeScript Build Config Check Final",
 			"type": "shell",
-			"command": "npx tsc --noEmit -p tsconfig.build.json"
+			"command": "tsc --noEmit -p tsconfig.build.json"
 		},
 		{
 			"label": "Build Full Application Fixed",
@@ -279,12 +274,12 @@
 		{
 			"label": "TypeScript Check Menu Button Only",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-menu-button.ts"
+			"command": "tsc --noEmit src/mjo-menu-button.ts"
 		},
 		{
 			"label": "TypeScript Check Message Only",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-message.ts src/components/messages/message-container.ts src/components/messages/message-item.ts src/controllers/message-controller.ts"
+			"command": "tsc --noEmit src/mjo-message.ts src/components/messages/message-container.ts src/components/messages/message-item.ts src/controllers/message-controller.ts"
 		},
 		{
 			"label": "Test Pagination Component Only",
@@ -349,7 +344,7 @@
 		{
 			"label": "TypeScript Check Server",
 			"type": "shell",
-			"command": "npx tsc --noEmit server/src/controllers/pagination-controller.ts"
+			"command": "tsc --noEmit server/src/controllers/pagination-controller.ts"
 		},
 		{
 			"label": "Build After Pagination Fix",
@@ -359,7 +354,7 @@
 		{
 			"label": "Check Pagination TypeScript",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-pagination.ts"
+			"command": "tsc --noEmit src/mjo-pagination.ts"
 		},
 		{
 			"label": "Remove Duplicate Test File",
@@ -444,7 +439,7 @@
 		{
 			"label": "Check Table TypeScript",
 			"type": "shell",
-			"command": "npx tsc --noEmit src/mjo-table.ts"
+			"command": "tsc --noEmit src/mjo-table.ts"
 		},
 		{
 			"label": "Table Tests Final Check",
@@ -475,6 +470,16 @@
 			"label": "Final Final Table Tests",
 			"type": "shell",
 			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
+		},
+		{
+			"label": "Check Textarea TypeScript",
+			"type": "shell",
+			"command": "tsc --noEmit src/mjo-textarea.ts"
+		},
+		{
+			"label": "TypeScript Check Config",
+			"type": "shell",
+			"command": "tsc --noEmit"
 		}
 	]
 }

@@ -1,3 +1,15 @@
+import type {
+    MjoTextareaAutoCapitalize,
+    MjoTextareaBlurEvent,
+    MjoTextareaChangeEvent,
+    MjoTextareaClearEvent,
+    MjoTextareaColor,
+    MjoTextareaFocusEvent,
+    MjoTextareaInputEvent,
+    MjoTextareaKeyupEvent,
+    MjoTextareaSize,
+} from "./types/mjo-textarea.js";
+
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -11,10 +23,11 @@ import { TextAreaAutoSize } from "./utils/textarea-autosize.js";
 import "./components/input/input-counter.js";
 import "./components/input/input-helper-text.js";
 import "./components/input/input-label.js";
+import "./mjo-icon.js";
 
 @customElement("mjo-textarea")
 export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
-    @property({ type: String }) autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
+    @property({ type: String }) autoCapitalize?: MjoTextareaAutoCapitalize;
     @property({ type: String }) autoComplete?: AutoFillContactField;
     @property({ type: Boolean }) autoFocus = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
@@ -26,8 +39,8 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     @property({ type: Number }) rows: number = 1;
     @property({ type: Number }) maxHeight?: number;
     @property({ type: String }) label?: string;
-    @property({ type: String }) size: "small" | "medium" | "large" = "medium";
-    @property({ type: String }) color: "primary" | "secondary" = "primary";
+    @property({ type: String }) size: MjoTextareaSize = "medium";
+    @property({ type: String }) color: MjoTextareaColor = "primary";
     @property({ type: String }) startIcon?: string;
     @property({ type: String }) endIcon?: string;
     @property({ type: String }) startImage?: string;
@@ -39,15 +52,22 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     @state() private isFocused = false;
     @state() private valueLength = 0;
 
-    @query("textarea#mjoTextareaInput") inputElement!: HTMLTextAreaElement;
+    @query("textarea") inputElement!: HTMLTextAreaElement;
 
     type = "textarea";
 
     textAreaAutoSize?: TextAreaAutoSize;
 
+    #uniqueId = `mjo-textarea-${Math.random().toString(36).substring(2, 9)}`;
+    #previousValue = "";
+
     render() {
+        const helperTextId = this.helperText || this.errormsg || this.successmsg ? `${this.#uniqueId}-helper` : undefined;
+        const labelId = this.label ? `${this.#uniqueId}-label` : undefined;
+
         return html`${this.label
                 ? html`<input-label
+                      id=${ifDefined(labelId)}
                       color=${this.color}
                       label=${this.label}
                       ?focused=${this.isFocused}
@@ -66,7 +86,7 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
                 ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
                 <textarea
-                    id="mjoTextareaInput"
+                    id=${this.id}
                     autocapitalize=${ifDefined(this.autoCapitalize)}
                     autocomplete=${ifDefined(this.autoComplete)}
                     ?autofocus=${this.autoFocus}
@@ -81,10 +101,13 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                     @focus=${this.#handleFocus}
                     @blur=${this.#handleBlur}
                     @input=${this.#handleInput}
-                    @change=${this.#handleInput}
+                    @change=${this.#handleChange}
                     @keyup=${this.#handleKeyup}
-                    aria-label=${this.label || this.ariaLabel || nothing}
+                    aria-label=${this.ariaLabel || nothing}
+                    aria-labelledby=${labelId || nothing}
+                    aria-describedby=${helperTextId || nothing}
                     aria-errormessage=${this.errormsg || nothing}
+                    aria-invalid=${this.error ? "true" : "false"}
                     aria-required=${ifDefined(this.required)}
                 ></textarea>
                 ${this.endIcon ? html`<div class="icon endIcon"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
@@ -92,7 +115,7 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             </div>
             <div class="helper" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
-                    ? html`<input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                    ? html`<input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
                           >${this.helperText}</input-helper-text
                       >`
                     : nothing}
@@ -112,8 +135,12 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     connectedCallback(): void {
         super.connectedCallback();
 
+        // Initialize valueLength and previousValue
+        this.valueLength = this.value.length;
+        this.#previousValue = this.value;
+
         if (this.autoFocus) {
-            this.#handleFocus();
+            this.focus();
         }
 
         this.updateFormData({ name: this.name || "", value: this.value });
@@ -132,15 +159,76 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     }
 
     setValue(value: string) {
+        this.#previousValue = this.value;
         this.value = value;
+        this.valueLength = value.length;
     }
 
     getValue() {
         return this.value;
     }
 
+    blur() {
+        this.inputElement.blur();
+    }
+
+    clear(focus = false) {
+        const previousValue = this.value;
+        this.setValue("");
+
+        if (focus) {
+            this.inputElement.focus();
+        }
+
+        // Dispatch custom clear event
+        this.dispatchEvent(
+            new CustomEvent("mjo-textarea:clear", {
+                detail: {
+                    element: this,
+                    previousValue,
+                },
+                bubbles: true,
+            }),
+        );
+
+        this.updateFormData({ name: this.name || "", value: this.value });
+    }
+
+    focus() {
+        this.inputElement.focus();
+    }
+
+    getError() {
+        return this.errormsg;
+    }
+
+    getForm() {
+        return this.closest("form");
+    }
+
+    removeError() {
+        this.error = false;
+        this.errormsg = "";
+    }
+
+    setError(errormsg: string) {
+        this.error = true;
+        this.errormsg = errormsg;
+    }
+
     #handleFocus() {
         this.isFocused = true;
+
+        // Dispatch custom focus event
+        this.dispatchEvent(
+            new CustomEvent("mjo-textarea:focus", {
+                detail: {
+                    element: this,
+                    value: this.value,
+                },
+                bubbles: true,
+            }),
+        );
 
         if (this.selectOnFocus) {
             this.inputElement.select();
@@ -154,20 +242,73 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
 
     #handleBlur() {
         this.isFocused = false;
+
+        // Dispatch custom blur event
+        this.dispatchEvent(
+            new CustomEvent("mjo-textarea:blur", {
+                detail: {
+                    element: this,
+                    value: this.value,
+                },
+                bubbles: true,
+            }),
+        );
     }
 
     #handleInput(ev: InputEvent) {
-        this.value = (ev.currentTarget as HTMLTextAreaElement).value;
+        const target = ev.currentTarget as HTMLTextAreaElement;
+        this.#previousValue = this.value;
+        this.value = target.value;
         this.valueLength = this.value.length;
 
-        if (ev.type === "change") {
-            this.dispatchEvent(new Event("change"));
-        }
+        // Dispatch custom input event
+        this.dispatchEvent(
+            new CustomEvent("mjo-textarea:input", {
+                detail: {
+                    element: this,
+                    value: this.value,
+                    previousValue: this.#previousValue,
+                    inputType: (ev as InputEvent).inputType || "",
+                },
+                bubbles: true,
+            }),
+        );
 
         this.updateFormData({ name: this.name || "", value: this.value });
     }
 
-    #handleKeyup() {}
+    #handleChange() {
+        // Dispatch custom change event
+        this.dispatchEvent(
+            new CustomEvent("mjo-textarea:change", {
+                detail: {
+                    element: this,
+                    value: this.value,
+                    previousValue: this.#previousValue,
+                },
+                bubbles: true,
+            }),
+        );
+
+        // Also dispatch native change event for form compatibility
+        this.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    #handleKeyup(ev: KeyboardEvent) {
+        // Dispatch custom keyup event
+        this.dispatchEvent(
+            new CustomEvent("mjo-textarea:keyup", {
+                detail: {
+                    element: this,
+                    key: ev.key,
+                    code: ev.code,
+                    value: this.value,
+                    originalEvent: ev,
+                },
+                bubbles: true,
+            }),
+        );
+    }
 
     static styles = [
         css`
@@ -318,5 +459,14 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-textarea": MjoTextarea;
+    }
+
+    interface HTMLElementEventMap {
+        "mjo-textarea:input": MjoTextareaInputEvent;
+        "mjo-textarea:change": MjoTextareaChangeEvent;
+        "mjo-textarea:focus": MjoTextareaFocusEvent;
+        "mjo-textarea:blur": MjoTextareaBlurEvent;
+        "mjo-textarea:keyup": MjoTextareaKeyupEvent;
+        "mjo-textarea:clear": MjoTextareaClearEvent;
     }
 }

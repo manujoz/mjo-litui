@@ -31,7 +31,7 @@ export class ExampleTextareaBasic extends LitElement {
                 label="Your Message"
                 placeholder="Type your message here..."
                 .value=${this.message}
-                @input=${this.#handleInput}
+                @mjo-textarea:input=${this.#handleInput}
                 helperText="Share your thoughts with us"
             ></mjo-textarea>
 
@@ -40,7 +40,7 @@ export class ExampleTextareaBasic extends LitElement {
     }
 
     #handleInput(e: CustomEvent) {
-        this.message = (e.target as any).value;
+        this.message = e.detail.value;
     }
 }
 ```
@@ -160,23 +160,15 @@ export class ExampleTextareaAutoresize extends LitElement {
                     rows="2"
                     maxHeight="150"
                     .value=${this.content}
-                    @input=${this.#handleInput}
+                    @mjo-textarea:input=${this.#handleInput}
                     helperText="Grows automatically up to 150px height"
-                ></mjo-textarea>
-
-                <mjo-textarea
-                    label="Larger auto-resize"
-                    placeholder="This one can grow much larger..."
-                    rows="3"
-                    maxHeight="300"
-                    helperText="Grows automatically up to 300px height"
                 ></mjo-textarea>
             </div>
         `;
     }
 
     #handleInput(e: CustomEvent) {
-        this.content = (e.target as any).value;
+        this.content = e.detail.value;
     }
 }
 ```
@@ -202,30 +194,20 @@ export class ExampleTextareaCounter extends LitElement {
 
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-textarea
-                    label="Product Review"
-                    placeholder="Write your review..."
-                    counter
-                    maxlength="200"
-                    .value=${this.feedback}
-                    @input=${this.#handleInput}
-                    helperText="Share your experience with this product"
-                ></mjo-textarea>
-
-                <mjo-textarea
-                    label="Brief Description"
-                    placeholder="Keep it short and sweet..."
-                    counter
-                    maxlength="50"
-                    helperText="Maximum 50 characters"
-                ></mjo-textarea>
-            </div>
+            <mjo-textarea
+                label="Product Review"
+                placeholder="Write your review..."
+                counter
+                maxlength="200"
+                .value=${this.feedback}
+                @mjo-textarea:input=${this.#handleInput}
+                helperText="Share your experience with this product"
+            ></mjo-textarea>
         `;
     }
 
     #handleInput(e: CustomEvent) {
-        this.feedback = (e.target as any).value;
+        this.feedback = e.detail.value;
     }
 }
 ```
@@ -294,7 +276,6 @@ import "mjo-litui/mjo-button";
 @customElement("example-textarea-validation")
 export class ExampleTextareaValidation extends LitElement {
     @state() message = "";
-    @state() isValid = false;
     @state() errorMessage = "";
 
     render() {
@@ -306,36 +287,26 @@ export class ExampleTextareaValidation extends LitElement {
                     .value=${this.message}
                     ?error=${!!this.errorMessage}
                     errormsg=${this.errorMessage}
-                    successmsg=${this.isValid ? "Message length is valid!" : ""}
                     counter
                     maxlength="500"
-                    @input=${this.#handleInput}
+                    @mjo-textarea:input=${this.#handleInput}
                     helperText="Please provide a meaningful message"
                 ></mjo-textarea>
 
-                <mjo-button @click=${this.#validate}> Validate Message </mjo-button>
+                <mjo-button @click=${this.#validate}>Validate Message</mjo-button>
             </div>
         `;
     }
 
     #handleInput(e: CustomEvent) {
-        this.message = (e.target as any).value;
-        this.#clearValidation();
+        this.message = e.detail.value;
+        this.errorMessage = "";
     }
 
     #validate() {
         if (this.message.length < 10) {
             this.errorMessage = "Message must be at least 10 characters long";
-            this.isValid = false;
-        } else {
-            this.errorMessage = "";
-            this.isValid = true;
         }
-    }
-
-    #clearValidation() {
-        this.errorMessage = "";
-        this.isValid = false;
     }
 }
 ```
@@ -358,195 +329,93 @@ export class ExampleTextareaForm extends LitElement {
 
     render() {
         return html`
-            <mjo-form @mjo-form-submit=${this.#handleSubmit}>
-                <h3>Contact Form</h3>
-
-                <mjo-textfield
-                    name="name"
-                    label="Full Name"
-                    required
-                    placeholder="Enter your full name"
-                    helperText="We'll use this to address you"
-                ></mjo-textfield>
-
-                <mjo-textfield
-                    name="email"
-                    label="Email Address"
-                    type="email"
-                    required
-                    placeholder="your@email.com"
-                    helperText="We'll send a confirmation to this email"
-                ></mjo-textfield>
-
-                <mjo-textarea
-                    name="subject"
-                    label="Subject"
-                    required
-                    placeholder="Brief subject line..."
-                    rows="1"
-                    maxHeight="100"
-                    helperText="What is this message about?"
-                ></mjo-textarea>
+            <mjo-form @mjo-form:submit=${this.#handleSubmit}>
+                <mjo-textfield name="name" label="Full Name" required placeholder="Enter your full name"></mjo-textfield>
 
                 <mjo-textarea
                     name="message"
                     label="Message"
                     required
                     minlength="20"
-                    maxlength="1000"
+                    maxlength="500"
                     counter
-                    placeholder="Please provide details about your inquiry..."
+                    placeholder="Please provide details..."
                     rows="4"
-                    maxHeight="200"
                     helperText="Minimum 20 characters required"
                 ></mjo-textarea>
 
-                <mjo-textarea
-                    name="additional_info"
-                    label="Additional Information (Optional)"
-                    placeholder="Any other details you'd like to share..."
-                    rows="2"
-                    maxHeight="150"
-                    helperText="Optional field for extra context"
-                ></mjo-textarea>
-
-                <mjo-button type="submit" style="margin-top: 1rem;"> Send Message </mjo-button>
+                <mjo-button type="submit">Send Message</mjo-button>
             </mjo-form>
 
-            <div style="margin-top: 1rem;">
-                <h4>Form Data:</h4>
-                <pre style="background: var(--mjo-color-surface); padding: 1rem; border-radius: 4px; overflow-x: auto;">
+            <pre style="margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 4px;">
 ${JSON.stringify(this.formData, null, 2)}
-                </pre
-                >
-            </div>
+            </pre
+            >
         `;
     }
 
     #handleSubmit(e: CustomEvent) {
         this.formData = e.detail.data;
-        console.log("Form submitted:", e.detail);
     }
 }
 ```
 
-## Advanced Features
+## Advanced Usage
 
-### Full Width and Custom Styling
+### Custom Event Handling
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-textarea";
 
-@customElement("example-textarea-advanced")
-export class ExampleTextareaAdvanced extends LitElement {
-    @state() settings = {
-        selectOnFocus: false,
-        readonly: false,
-        disabled: false,
-    };
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                    <label>
-                        <input
-                            type="checkbox"
-                            .checked=${this.settings.selectOnFocus}
-                            @change=${(e: Event) => this.#updateSetting("selectOnFocus", (e.target as HTMLInputElement).checked)}
-                        />
-                        Select on Focus
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            .checked=${this.settings.readonly}
-                            @change=${(e: Event) => this.#updateSetting("readonly", (e.target as HTMLInputElement).checked)}
-                        />
-                        Readonly
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            .checked=${this.settings.disabled}
-                            @change=${(e: Event) => this.#updateSetting("disabled", (e.target as HTMLInputElement).checked)}
-                        />
-                        Disabled
-                    </label>
-                </div>
-
-                <mjo-textarea
-                    label="Advanced textarea"
-                    placeholder="Test different states..."
-                    fullwidth
-                    .selectOnFocus=${this.settings.selectOnFocus}
-                    .readonly=${this.settings.readonly}
-                    .disabled=${this.settings.disabled}
-                    value="Sample text content for testing different states"
-                    helperText="Use the checkboxes above to test different states"
-                    counter
-                    maxlength="200"
-                ></mjo-textarea>
-            </div>
-        `;
-    }
-
-    #updateSetting(key: string, value: boolean) {
-        this.settings = { ...this.settings, [key]: value };
-    }
-}
-```
-
-### Code Editor Style
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-textarea";
-import { AiOutlineCode } from "mjo-icons/ai";
-
-@customElement("example-textarea-code")
-export class ExampleTextareaCode extends LitElement {
-    @state() code = `function greet(name) {
-    return \`Hello, \${name}!\`;
-}
-
-const message = greet("World");
-console.log(message);`;
+@customElement("example-textarea-events")
+export class ExampleTextareaEvents extends LitElement {
+    @state() logs: string[] = [];
 
     render() {
         return html`
             <mjo-textarea
-                label="JavaScript Code"
-                startIcon=${AiOutlineCode}
-                .value=${this.code}
-                @input=${this.#handleCodeChange}
-                rows="6"
-                maxHeight="400"
-                fullwidth
-                style="
-                    --mjo-textarea-font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
-                    --mjo-textarea-font-size: 14px;
-                    --mjo-textarea-background-color: #1e1e1e;
-                    --mjo-textarea-color: #d4d4d4;
-                    --mjo-textarea-border-color: #3c3c3c;
-                "
-                helperText="Enter your JavaScript code here"
-                counter
-                maxlength="2000"
+                label="Event Tracking"
+                placeholder="Type to see events..."
+                @mjo-textarea:input=${this.#onInput}
+                @mjo-textarea:focus=${this.#onFocus}
+                @mjo-textarea:blur=${this.#onBlur}
+                @mjo-textarea:keyup=${this.#onKeyup}
             ></mjo-textarea>
+
+            <div style="margin-top: 1rem; max-height: 200px; overflow-y: auto;">
+                <h4>Event Log:</h4>
+                ${this.logs.map((log) => html`<div style="font-family: monospace; font-size: 0.9em;">${log}</div>`)}
+            </div>
         `;
     }
 
-    #handleCodeChange(e: CustomEvent) {
-        this.code = (e.target as any).value;
+    #onInput(e: CustomEvent) {
+        this.#addLog(`input: "${e.detail.value}" (${e.detail.inputType})`);
+    }
+
+    #onFocus(e: CustomEvent) {
+        this.#addLog(`focus: "${e.detail.value}"`);
+    }
+
+    #onBlur(e: CustomEvent) {
+        this.#addLog(`blur: "${e.detail.value}"`);
+    }
+
+    #onKeyup(e: CustomEvent) {
+        this.#addLog(`keyup: ${e.detail.key} (${e.detail.code})`);
+    }
+
+    #addLog(message: string) {
+        this.logs = [...this.logs.slice(-9), `${new Date().toLocaleTimeString()}: ${message}`];
     }
 }
 ```
 
 ## Attributes/Properties
+
+### Core Properties
 
 | Name             | Type                                                                | Default     | Description                                       |
 | ---------------- | ------------------------------------------------------------------- | ----------- | ------------------------------------------------- |
@@ -562,12 +431,9 @@ console.log(message);`;
 | `helperText`     | `string`                                                            | `undefined` | Helper text displayed below the textarea          |
 | `label`          | `string`                                                            | `undefined` | Label text for the textarea                       |
 | `maxHeight`      | `number`                                                            | `undefined` | Maximum height for auto-resize (in pixels)        |
-| `maxlength`      | `number`                                                            | `undefined` | Maximum number of characters allowed              |
-| `minlength`      | `number`                                                            | `undefined` | Minimum number of characters required             |
 | `name`           | `string`                                                            | `undefined` | Name attribute for form submission                |
 | `placeholder`    | `string`                                                            | `undefined` | Placeholder text                                  |
 | `readonly`       | `boolean`                                                           | `false`     | Whether the textarea is read-only                 |
-| `required`       | `boolean`                                                           | `false`     | Whether the textarea is required in forms         |
 | `rows`           | `number`                                                            | `1`         | Initial number of rows to display                 |
 | `selectOnFocus`  | `boolean`                                                           | `false`     | Whether to select all text when focused           |
 | `size`           | `'small' \| 'medium' \| 'large'`                                    | `'medium'`  | Size variant of the textarea                      |
@@ -575,7 +441,54 @@ console.log(message);`;
 | `startImage`     | `string`                                                            | `undefined` | Image URL to display at the start of the textarea |
 | `value`          | `string`                                                            | `''`        | Current value of the textarea                     |
 
+### FormMixin Properties
+
+| Name           | Type                                           | Default     | Description                               |
+| -------------- | ---------------------------------------------- | ----------- | ----------------------------------------- |
+| `required`     | `boolean`                                      | `false`     | Whether the textarea is required in forms |
+| `maxlength`    | `number`                                       | `undefined` | Maximum number of characters allowed      |
+| `minlength`    | `number`                                       | `undefined` | Minimum number of characters required     |
+| `max`          | `number`                                       | `undefined` | Maximum value for numeric validation      |
+| `min`          | `number`                                       | `undefined` | Minimum value for numeric validation      |
+| `isemail`      | `boolean`                                      | `undefined` | Validates as email format                 |
+| `isurl`        | `boolean`                                      | `undefined` | Validates as URL format                   |
+| `nospaces`     | `boolean`                                      | `undefined` | Disallows spaces in input                 |
+| `rangelength`  | `number[]`                                     | `undefined` | Array with min/max length validation      |
+| `isnumber`     | `boolean`                                      | `undefined` | Validates as number                       |
+| `range`        | `number[]`                                     | `undefined` | Array with min/max value validation       |
+| `domains`      | `string[]`                                     | `undefined` | Allowed email domains for validation      |
+| `isdate`       | `'aaaa-mm-dd' \| 'dd-mm-aaaa' \| 'mm-dd-aaaa'` | `undefined` | Date format validation                    |
+| `dateprevious` | `boolean`                                      | `undefined` | Only allow dates before today             |
+| `minage`       | `number`                                       | `undefined` | Minimum age validation                    |
+| `maxage`       | `number`                                       | `undefined` | Maximum age validation                    |
+| `security`     | `'low' \| 'medium' \| 'high' \| 'very-high'`   | `undefined` | Password security level validation        |
+| `equalto`      | `string`                                       | `undefined` | Element name to match value against       |
+| `phonenumber`  | `boolean`                                      | `undefined` | Validates as phone number                 |
+| `phonecountry` | `string[]`                                     | `undefined` | Country codes for phone validation        |
+| `pattern`      | `string`                                       | `undefined` | Regular expression pattern for validation |
+| `allowed`      | `string[]`                                     | `undefined` | Array of allowed values                   |
+| `mincheck`     | `number`                                       | `undefined` | Minimum checkboxes to select (for groups) |
+| `maxcheck`     | `number`                                       | `undefined` | Maximum checkboxes to select (for groups) |
+| `formIgnore`   | `boolean`                                      | `false`     | Exclude from form data collection         |
+
+### InputErrorMixin Properties
+
+| Name         | Type      | Default     | Description                              |
+| ------------ | --------- | ----------- | ---------------------------------------- |
+| `error`      | `boolean` | `false`     | Whether the textarea is in error state   |
+| `errormsg`   | `string`  | `undefined` | Error message to display                 |
+| `success`    | `boolean` | `false`     | Whether the textarea is in success state |
+| `successmsg` | `string`  | `undefined` | Success message to display               |
+
+### ThemeMixin Properties
+
+| Name    | Type               | Default | Description                           |
+| ------- | ------------------ | ------- | ------------------------------------- |
+| `theme` | `MjoTextareaTheme` | `{}`    | Theme configuration for the component |
+
 ## Events
+
+### Native Events
 
 | Name     | Type         | Description                                               |
 | -------- | ------------ | --------------------------------------------------------- |
@@ -584,14 +497,85 @@ console.log(message);`;
 | `focus`  | `FocusEvent` | Fired when the textarea gains focus                       |
 | `blur`   | `FocusEvent` | Fired when the textarea loses focus                       |
 
+### Custom Events
+
+| Name                  | Type                     | Description                                     |
+| --------------------- | ------------------------ | ----------------------------------------------- |
+| `mjo-textarea:input`  | `MjoTextareaInputEvent`  | Custom input event with additional detail       |
+| `mjo-textarea:change` | `MjoTextareaChangeEvent` | Custom change event with previous value         |
+| `mjo-textarea:focus`  | `MjoTextareaFocusEvent`  | Custom focus event with current value           |
+| `mjo-textarea:blur`   | `MjoTextareaBlurEvent`   | Custom blur event with current value            |
+| `mjo-textarea:keyup`  | `MjoTextareaKeyupEvent`  | Custom keyup event with key information         |
+| `mjo-textarea:clear`  | `MjoTextareaClearEvent`  | Fired when textarea is cleared programmatically |
+
+### Event Details
+
+#### MjoTextareaInputEvent
+
+```ts
+{
+    element: MjoTextarea;
+    value: string;
+    previousValue: string;
+    inputType: string;
+}
+```
+
+#### MjoTextareaChangeEvent
+
+```ts
+{
+    element: MjoTextarea;
+    value: string;
+    previousValue: string;
+}
+```
+
+#### MjoTextareaFocusEvent & MjoTextareaBlurEvent
+
+```ts
+{
+    element: MjoTextarea;
+    value: string;
+}
+```
+
+#### MjoTextareaKeyupEvent
+
+```ts
+{
+    element: MjoTextarea;
+    key: string;
+    code: string;
+    value: string;
+    originalEvent: KeyboardEvent;
+}
+```
+
+#### MjoTextareaClearEvent
+
+```ts
+{
+    element: MjoTextarea;
+    previousValue: string;
+}
+```
+
 ## Methods
 
-| Name                      | Type     | Description                             |
-| ------------------------- | -------- | --------------------------------------- |
-| `setValue(value: string)` | `void`   | Programmatically set the textarea value |
-| `getValue()`              | `string` | Get the current textarea value          |
-| `focus()`                 | `void`   | Focus the textarea programmatically     |
-| `blur()`                  | `void`   | Remove focus from the textarea          |
+| Name                            | Type                      | Description                                   |
+| ------------------------------- | ------------------------- | --------------------------------------------- |
+| `setValue(value: string)`       | `void`                    | Programmatically set the textarea value       |
+| `getValue()`                    | `string`                  | Get the current textarea value                |
+| `focus()`                       | `void`                    | Focus the textarea programmatically           |
+| `blur()`                        | `void`                    | Remove focus from the textarea                |
+| `clear(focus?: boolean)`        | `void`                    | Clear the textarea value and optionally focus |
+| `getError()`                    | `string`                  | Get current error message                     |
+| `setError(errormsg: string)`    | `void`                    | Set error state with message                  |
+| `removeError()`                 | `void`                    | Remove error state and message                |
+| `getForm()`                     | `HTMLFormElement \| null` | Get the closest form element                  |
+| `submiForm()`                   | `void`                    | Programmatically submit the form              |
+| `updateFormData({name, value})` | `void`                    | Update form data for form integration         |
 
 ## CSS Custom Properties
 
@@ -620,57 +604,19 @@ The textarea component inherits from input theme and provides these customizatio
 | `--mjo-textarea-radius`             | `var(--mjo-input-radius)`                 | Border radius                    |
 | `--mjo-textarea-secondary-color`    | `var(--mjo-input-secondary-color)`        | Secondary color for focus states |
 
-## Theme Configuration
+## ThemeMixin Customization
 
-For global theme customization, use the theme configuration:
+This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to customize specific instances. Properties are automatically converted from camelCase to CSS variables with the pattern: `--mjo-textarea-{property-name}`.
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-textarea";
-
-@customElement("example-textarea-theme")
-export class ExampleTextareaTheme extends LitElement {
-    render() {
-        return html`
-            <mjo-theme
-                .config=${{
-                    components: {
-                        mjoTextarea: {
-                            backgroundColor: "#f8fafc",
-                            borderColor: "#e2e8f0",
-                            borderColorHover: "#cbd5e1",
-                            borderRadius: "8px",
-                            fontSize: "16px",
-                            fontFamily: "Inter, sans-serif",
-                            padding: "12px 16px",
-                            paddingSmall: "8px 12px",
-                            paddingLarge: "16px 20px",
-                        },
-                    },
-                }}
-            >
-                <mjo-textarea
-                    label="Themed textarea"
-                    placeholder="This textarea uses custom theme settings"
-                    helperText="Styled with custom theme configuration"
-                ></mjo-textarea>
-            </mjo-theme>
-        `;
-    }
-}
-```
-
-For component-specific theming using the `theme` property:
+### Component-level Theming
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-textarea";
 
-@customElement("example-textarea-custom-theme")
-export class ExampleTextareaCustomTheme extends LitElement {
+@customElement("example-textarea-themed")
+export class ExampleTextareaThemed extends LitElement {
     render() {
         return html`
             <mjo-textarea
@@ -683,6 +629,7 @@ export class ExampleTextareaCustomTheme extends LitElement {
                     color: "#92400e",
                     fontSize: "18px",
                     padding: "16px 20px",
+                    radius: "12px",
                 }}
                 helperText="This textarea has component-level custom styling"
             ></mjo-textarea>
@@ -691,14 +638,78 @@ export class ExampleTextareaCustomTheme extends LitElement {
 }
 ```
 
+### Global Theme Configuration
+
+For application-wide theming, configure the theme provider:
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-theme";
+import "mjo-litui/mjo-textarea";
+
+@customElement("example-textarea-global-theme")
+export class ExampleTextareaGlobalTheme extends LitElement {
+    render() {
+        return html`
+            <mjo-theme
+                .config=${{
+                    components: {
+                        mjoTextarea: {
+                            backgroundColor: "#f8fafc",
+                            borderColor: "#e2e8f0",
+                            borderColorHover: "#cbd5e1",
+                            radius: "8px",
+                            fontSize: "16px",
+                            fontFamily: "Inter, sans-serif",
+                        },
+                    },
+                }}
+            >
+                <mjo-textarea label="Globally themed textarea" placeholder="Uses global theme configuration"></mjo-textarea>
+            </mjo-theme>
+        `;
+    }
+}
+```
+
 ## Auto-resize Behavior
 
-The textarea automatically adjusts its height based on content:
+The textarea uses the `TextAreaAutoSize` utility for automatic height adjustment:
 
-1. **Initial Height**: Set by the `rows` property
-2. **Growth**: Expands as content is added
-3. **Maximum**: Limited by `maxHeight` property (default: 300px)
+1. **Initial Height**: Set by the `rows` property (default: 1 row)
+2. **Auto-growth**: Expands as content is added
+3. **Maximum Height**: Limited by `maxHeight` property (default: no limit)
 4. **Scrolling**: Shows scrollbar when content exceeds maximum height
+5. **Performance**: Optimized for smooth resizing without layout thrashing
+
+```ts
+// Example with controlled auto-resize
+<mjo-textarea
+    label="Auto-resizing textarea"
+    rows="3"           // Start with 3 rows
+    maxHeight="200"    // Don't grow beyond 200px
+    placeholder="Type to see auto-resize..."
+></mjo-textarea>
+```
+
+## Form Integration Details
+
+The textarea automatically integrates with form systems through the FormMixin:
+
+-   **Form Data**: Automatically added to `FormData` on form submission
+-   **Validation**: Supports all FormMixin validation rules
+-   **Event Bubbling**: Form-compatible events bubble up properly
+-   **Native Behavior**: Works with native form validation APIs
+-   **Custom Forms**: Integrates seamlessly with `mjo-form` component
+
+```ts
+// The textarea updates form data automatically
+<form>
+    <mjo-textarea name="description" required minlength="10"></mjo-textarea>
+    <button type="submit">Submit</button> <!-- Gets textarea data automatically -->
+</form>
+```
 
 ## Best Practices
 
@@ -714,27 +725,56 @@ The textarea automatically adjusts its height based on content:
 
 The textarea component follows accessibility best practices:
 
--   Uses semantic `<textarea>` element
--   Supports ARIA attributes for labels and descriptions
--   Maintains proper focus management
--   Works with screen readers and keyboard navigation
--   Error states are announced to assistive technologies
+-   Uses semantic `<textarea>` element for proper screen reader support
+-   Supports ARIA attributes (`aria-label`, `aria-labelledby`, `aria-describedby`, etc.)
+-   Maintains proper focus management with keyboard navigation
+-   Error states are announced to assistive technologies via `aria-invalid`
+-   Required fields indicated with `aria-required` attribute
+-   Helper text properly associated with `aria-describedby`
 
-## Browser Compatibility
+```html
+<!-- Example with full accessibility features -->
+<mjo-textarea
+    label="Message"
+    name="user-message"
+    required
+    aria-describedby="message-help"
+    helperText="Please provide a detailed message (minimum 20 characters)"
+    minlength="20"
+    maxlength="500"
+    counter
+></mjo-textarea>
+```
 
--   **Auto-resize**: Supported in all modern browsers
--   **Character Counter**: Universal support
--   **Form Integration**: Full support in all target browsers
--   **CSS Custom Properties**: Supported in all modern browsers
+## Implementation Notes
 
-## Notes
+### Performance Considerations
 
--   The component automatically manages form data integration
--   Auto-resize functionality is provided through the `TextAreaAutoSize` utility
--   Character counter updates in real-time during input
--   Icons and images can be combined for rich visual context
--   Component inherits styling from the input theme system
--   Form validation integrates seamlessly with `mjo-form`
+-   Auto-resize uses `TextAreaAutoSize` utility with optimized DOM measurements
+-   Character counter updates are debounced for performance
+-   Event handlers use efficient event delegation
+
+### Browser Compatibility
+
+-   **Auto-resize**: Supported in all modern browsers with fallback
+-   **Custom Properties**: Full support in all target browsers
+-   **Form Integration**: Works with both native forms and custom form libraries
+-   **Events**: Custom events work in all browsers supporting CustomEvent API
+
+### Technical Details
+
+-   Component extends LitElement with ThemeMixin, InputErrorMixin, and FormMixin
+-   Uses Shadow DOM for style encapsulation
+-   Auto-resize utility manages textarea height efficiently
+-   Form data automatically synchronized on input changes
+-   ARIA attributes managed automatically for accessibility
+
+### Migration Notes
+
+-   Custom events now use `mjo-textarea:` prefix (e.g., `mjo-textarea:input`)
+-   `clear()` method now accepts optional `focus` parameter
+-   Form validation properties inherited from FormMixin
+-   Theme customization available through both global config and component-level `theme` prop
 
 ## Related Components
 
