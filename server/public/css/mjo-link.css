@@ -1,0 +1,147 @@
+/* MJO Link Component Demo Styles */
+
+/* Typography showcase specific styling */
+.typography-showcase {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.typography-showcase mjo-link {
+    display: block;
+    margin: 0.5rem 0;
+}
+
+/* Cover link demo card styling */
+.cover-demo-card {
+    position: relative;
+    padding: 2rem;
+    border: 2px solid var(--mjo-border-color, #e2e8f0);
+    border-radius: var(--mjo-border-radius-large, 12px);
+    background: var(--mjo-background-card, #ffffff);
+    box-shadow: var(--mjo-shadow-medium, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+    transition: var(--mjo-transition, all 0.2s ease);
+    cursor: pointer;
+    max-width: 400px;
+    margin: 1rem 0;
+}
+
+.cover-demo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--mjo-shadow-large, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+    border-color: var(--mjo-primary-color, #1d7fdb);
+}
+
+.cover-demo-card h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--mjo-text-color, #1a202c);
+}
+
+.cover-demo-card p {
+    margin: 0 0 1.5rem 0;
+    color: var(--mjo-text-color-secondary, #4a5568);
+    line-height: 1.6;
+}
+
+.cover-demo-card mjo-link {
+    position: relative;
+    z-index: 2;
+    font-weight: 600;
+}
+
+/* Dark theme support for cover demo card */
+[data-theme="dark"] .cover-demo-card {
+    background: var(--mjo-background-card-dark, #2d3748);
+    border-color: var(--mjo-border-color-dark, #4a5568);
+    color: var(--mjo-text-color-dark, #e2e8f0);
+}
+
+[data-theme="dark"] .cover-demo-card h4 {
+    color: var(--mjo-text-color-dark, #e2e8f0);
+}
+
+[data-theme="dark"] .cover-demo-card p {
+    color: var(--mjo-text-color-secondary-dark, #a0aec0);
+}
+
+[data-theme="dark"] .cover-demo-card:hover {
+    border-color: var(--mjo-primary-color, #1d7fdb);
+}
+
+/* Enhanced component showcase for links */
+.component-showcase mjo-link {
+    margin: 0.5rem 0.75rem 0.5rem 0;
+}
+
+/* Control panel specific adjustments */
+.controls-panel .control-group input[type="text"],
+.controls-panel .control-group select {
+    width: 100%;
+    max-width: none;
+}
+
+/* Special spacing for toggle groups */
+.toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toggle-group .toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.toggle-group .toggle input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cover-demo-card {
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+
+    .typography-showcase {
+        gap: 0.75rem;
+    }
+
+    .component-showcase mjo-link {
+        margin: 0.25rem 0.5rem 0.25rem 0;
+    }
+}
+
+/* Focus states for better accessibility */
+.cover-demo-card:focus-within {
+    outline: 2px solid var(--mjo-primary-color, #1d7fdb);
+    outline-offset: 2px;
+}
+
+/* Animation for interactive elements */
+@media (prefers-reduced-motion: no-preference) {
+    .cover-demo-card {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cover-demo-card:hover {
+        transform: translateY(-2px) scale(1.01);
+    }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+    .cover-demo-card {
+        border-width: 3px;
+    }
+
+    .cover-demo-card:hover {
+        border-width: 3px;
+    }
+}

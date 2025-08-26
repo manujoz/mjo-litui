@@ -42,6 +42,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 -   **[mjo-button](mjo-button.md)** - Interactive buttons with variants and states
 -   **[mjo-dropdown](mjo-dropdown.md)** - Contextual dropdown menus
+-   **[mjo-link](mjo-link.md)** - Accessible links with button variants and comprehensive ARIA support
 
 ### Media & Display
 

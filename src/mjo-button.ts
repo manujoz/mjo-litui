@@ -77,6 +77,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             aria-label=${ifDefined(this.buttonLabel)}
             aria-describedby=${ifDefined(this.describedBy)}
             ?disabled=${this.disabled || this.loading}
+            tabindex=${ifDefined(this.tabIndex)}
             @click=${this.#handleClick}
         >
             ${this.startIcon && html` <mjo-icon src=${this.startIcon}></mjo-icon>`}

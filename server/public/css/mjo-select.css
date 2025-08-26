@@ -323,11 +323,6 @@
 }
 
 /* Focus indicators for accessibility */
-.playground-showcase mjo-select:focus-within {
-    outline: 2px solid var(--mjo-primary-color);
-    outline-offset: 2px;
-    border-radius: 4px;
-}
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {

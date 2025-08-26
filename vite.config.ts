@@ -17,7 +17,7 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: `${__dirname}/dev/index.html`,
-                "mjo-anchor": `${__dirname}/dev/mjo-anchor.html`,
+                "mjo-link": `${__dirname}/dev/mjo-link.html`,
             },
         },
     },

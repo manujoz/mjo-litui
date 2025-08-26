@@ -13,5 +13,6 @@ Tu misión es:
 - Añadir la importación del componente para el servidor en `server/src/services/ssr-renderer.ts`
 - Añadir la importación del componente para el cliente en `server/client/client.ts`
 - No utilices `npx tsc` para probar archivos typescript ya que la configuración de typescript arroja errores en su lugar compila el proyecto con `npm run server:build:client`
+- No te vuelvas locos creando estilos CSS nuevos, la mayoría los puedes reutilizar `server/public/css/root.css`, creo solo los necesarios.
 
 Si tienes alguna duda, consultame antes de implementar.

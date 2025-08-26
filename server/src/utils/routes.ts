@@ -15,6 +15,7 @@ import { GridController } from "../controllers/grid-controller.js";
 import { IconController } from "../controllers/icon-controller.js";
 import { ImageController } from "../controllers/image-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
+import { LinkController } from "../controllers/link-controller.js";
 import { MenuButtonController } from "../controllers/menu-button-controller.js";
 import { MessagesController } from "../controllers/messages-controller.js";
 import { ModalController } from "../controllers/modal-controller.js";
@@ -48,6 +49,7 @@ const gridController = new GridController();
 const iconController = new IconController();
 const imageController = new ImageController();
 const accordionController = new AccordionController();
+const linkController = new LinkController();
 const menuButtonController = new MenuButtonController();
 const messagesController = new MessagesController();
 const modalController = new ModalController();
@@ -132,6 +134,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-image",
         controller: imageController.renderImagePage,
+    },
+    {
+        path: "/component/mjo-link",
+        controller: linkController.renderLinkPage,
     },
     {
         path: "/component/mjo-menu-button",

@@ -65,6 +65,7 @@ export interface MjoThemeConfig {
         mjoIcon?: MjoIconTheme;
         mjoImage?: MjoImageTheme;
         mjoIonic?: MjoIonicTheme;
+        mjoLink?: MjoLinkTheme;
         mjoMenuButton?: MjoMenuButtonTheme;
         mjoMessage?: MjoMessageTheme;
         mjoModal?: MjoModalTheme;
@@ -305,6 +306,35 @@ export interface MjoImageTheme {
     disabledOpacity?: string;
     clickableHoverScale?: string;
     clickableCursor?: string;
+}
+
+export interface MjoLinkTheme {
+    /** --mjo-link-color-primary */
+    colorPrimary?: string;
+    /** --mjo-link-color-secondary */
+    colorSecondary?: string;
+    /** --mjo-link-color-default */
+    colorDefault?: string;
+    /** --mjo-link-color-disabled */
+    colorDisabled?: string;
+    /** --mjo-link-font-family */
+    fontFamily?: string;
+    /** --mjo-link-font-weight */
+    fontWeight?: string;
+    /** --mjo-link-text-decoration */
+    textDecoration?: string;
+    /** --mjo-link-text-decoration-hover */
+    textDecorationHover?: string;
+    /** --mjo-link-focus-outline */
+    focusOutline?: string;
+    /** --mjo-link-focus-outline-color */
+    focusOutlineColor?: string;
+    /** --mjo-link-focus-outline-width */
+    focusOutlineWidth?: string;
+    /** --mjo-link-focus-outline-offset */
+    focusOutlineOffset?: string;
+    /** --mjo-link-transition */
+    transition?: string;
 }
 
 export interface MjoIonicTheme {
