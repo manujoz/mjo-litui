@@ -1,5 +1,4 @@
 import { TemplateResult } from "lit";
-import { MjoTableRowItem } from "./mjo-table";
 
 export type MjoTableColumn = {
     name: string;
@@ -42,5 +41,12 @@ export interface MjoTableRowClickEvent extends CustomEvent {
 export interface MjoTableSelectEvent extends CustomEvent {
     detail: {
         selected: MjoTableRowItem[];
+    };
+}
+export interface MjoTableLoadMoreEvent extends CustomEvent {
+    detail: {
+        displayedRows: number;
+        totalRows: number;
+        hasMore: boolean;
     };
 }

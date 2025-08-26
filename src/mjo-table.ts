@@ -2,6 +2,7 @@ import { MjoCheckboxChangeEvent } from "./types/mjo-checkbox.js";
 import {
     MjoTableColumns,
     MjoTableFilterEvent,
+    MjoTableLoadMoreEvent,
     MjoTableRowClickEvent,
     MjoTableRowItem,
     MjoTableRows,
@@ -46,16 +47,22 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Array }) rows: MjoTableRows = []; // ¡IMPORTANT! Never mutate this array into component.
 
     @property({ type: Boolean }) infiniteScroll = false;
+    @property({ type: Number }) threshold = 100;
     @property({ type: Number }) currentPage = 1;
     @property({ type: Number }) pageSize?: number;
 
     @state() sort: Sort = { columnName: undefined, direction: undefined };
     @state() filters: Filter = { columnName: undefined, filter: undefined };
     @state() selectedItems: MjoTableRowItem[] = [];
+    @state() loading = false;
+    @state() displayedRows = 0;
 
     renderedRows: MjoTableRows = [];
 
+    hasMore = true;
     #stickyObserver: IntersectionObserver | null = null;
+    #infiniteScrollObserver: IntersectionObserver | null = null;
+    #isLoadingMore = false;
     #totalItems = 0;
 
     render() {
@@ -85,8 +92,8 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         });
 
         return html`
-            <div class="sentinel"></div>
             <div class="container" style=${containerStyles}>
+                <div class="sentinel"></div>
                 <table class=${tableClasses}>
                     <thead class=${headClasses}>
                         <tr>
@@ -97,6 +104,15 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                         ${this.#renderTBody()}
                     </tbody>
                 </table>
+
+                ${this.infiniteScroll && this.hasMore ? html`<div class="infinite-scroll-sentinel"></div>` : nothing}
+                ${this.infiniteScroll && this.loading
+                    ? html`
+                          <div class="loading-indicator">
+                              <div class="loading-spinner">Loading more...</div>
+                          </div>
+                      `
+                    : nothing}
             </div>
 
             ${this.pageSize && !this.infiniteScroll
@@ -249,12 +265,31 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                 this.#stickyObserver?.disconnect();
             }
         }
+
+        if (_changedProperties.has("infiniteScroll") || _changedProperties.has("rows") || _changedProperties.has("hasMore")) {
+            if (this.infiniteScroll) {
+                // Initialize displayedRows when infinite scroll is enabled
+                if (_changedProperties.has("infiniteScroll") && this.infiniteScroll) {
+                    this.displayedRows = this.pageSize || 10;
+                }
+
+                if (this.hasMore) {
+                    this.updateComplete.then(() => {
+                        this.#setupInfiniteScrollObserver();
+                    });
+                }
+            } else {
+                this.#infiniteScrollObserver?.disconnect();
+                this.#infiniteScrollObserver = null;
+            }
+        }
     }
 
     disconnectedCallback(): void {
         super.disconnectedCallback();
 
         this.#stickyObserver?.disconnect();
+        this.#infiniteScrollObserver?.disconnect();
     }
 
     #fullColspan() {
@@ -280,7 +315,18 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
 
         this.#sortRows();
 
-        if (this.pageSize) {
+        // Handle pagination vs infinite scroll
+        if (this.infiniteScroll) {
+            // For infinite scroll, show first N rows (progressive loading)
+            const totalAvailable = this.renderedRows.length;
+            const toShow = Math.min(this.displayedRows || 10, totalAvailable);
+
+            // Update hasMore state
+            this.hasMore = toShow < totalAvailable;
+
+            return this.renderedRows.slice(0, toShow);
+        } else if (this.pageSize) {
+            // Traditional pagination
             const totalItems = this.renderedRows.length;
             const startIndex = (this.currentPage - 1) * this.pageSize;
             const endIndex = Math.min(startIndex + this.pageSize, totalItems);
@@ -432,6 +478,75 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         this.#stickyObserver.observe(sentinel);
     }
 
+    #setupInfiniteScrollObserver() {
+        if (this.#infiniteScrollObserver) {
+            this.#infiniteScrollObserver.disconnect();
+        }
+
+        const sentinel = this.shadowRoot?.querySelector(".infinite-scroll-sentinel") as HTMLElement;
+        if (!sentinel) return;
+
+        // Find the scroll container (reuse logic from sticky observer)
+        const findScrollContainer = () => {
+            let element: Element | null = this.shadowRoot?.querySelector("table") as Element;
+
+            while (element) {
+                const style = getComputedStyle(element);
+                const overflow = style.overflow + style.overflowY;
+                if (element.scrollHeight > element.clientHeight && /(auto|scroll)/.test(overflow)) {
+                    return element;
+                }
+
+                element = element?.parentElement || (element?.getRootNode() as ShadowRoot).host;
+            }
+
+            return null;
+        };
+
+        const scrollContainer = findScrollContainer();
+
+        this.#infiniteScrollObserver = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !this.#isLoadingMore && this.hasMore) {
+                    this.#handleInfiniteScrollTrigger();
+                }
+            },
+            {
+                root: scrollContainer,
+                rootMargin: `0px 0px ${this.threshold}px 0px`,
+            },
+        );
+
+        this.#infiniteScrollObserver.observe(sentinel);
+    }
+
+    #handleInfiniteScrollTrigger() {
+        if (this.#isLoadingMore || !this.hasMore) return;
+
+        this.#isLoadingMore = true;
+        this.loading = true;
+
+        // Increase displayed rows (progressive loading)
+        const increment = this.pageSize || 10; // Use pageSize as batch size, or default 10
+        this.displayedRows = (this.displayedRows || 10) + increment;
+
+        this.dispatchEvent(
+            new CustomEvent<MjoTableLoadMoreEvent["detail"]>("mjo-table:load-more", {
+                detail: {
+                    displayedRows: this.displayedRows,
+                    totalRows: this.renderedRows.length,
+                    hasMore: this.hasMore,
+                },
+            }),
+        );
+
+        // Reset loading flags
+        setTimeout(() => {
+            this.#isLoadingMore = false;
+            this.loading = false;
+        }, 300);
+    }
+
     #sortRows() {
         const { columnName, direction } = this.sort;
         if (!columnName || !direction) return;
@@ -488,6 +603,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         }
         .sentinel {
             position: relative;
+            top: 2px;
             height: 1px;
         }
         .container {
@@ -653,6 +769,46 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         mjo-checkbox {
             font-size: 14px;
         }
+
+        /* Infinite Scroll Styles */
+        .infinite-scroll-sentinel {
+            height: 1px;
+            width: 100%;
+            background: transparent;
+            pointer-events: none;
+        }
+        .loading-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--mjo-space-medium);
+            color: var(--mjo-foreground-color-low);
+            font-style: italic;
+        }
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--mjo-space-small);
+            font-size: 0.9em;
+        }
+        .loading-spinner::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--mjo-border-color-low);
+            border-top: 2px solid var(--mjo-primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     `;
 }
 
@@ -666,6 +822,7 @@ declare global {
         "mjo-table:filter": MjoTableFilterEvent;
         "mjo-table:sort": MjoTableSortEvent;
         "mjo-table:select": MjoTableSelectEvent;
+        "mjo-table:load-more": MjoTableLoadMoreEvent;
     }
 }
 

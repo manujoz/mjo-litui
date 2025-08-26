@@ -440,6 +440,41 @@
 			"type": "shell",
 			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
 			"isBackground": false
+		},
+		{
+			"label": "Check Table TypeScript",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-table.ts"
+		},
+		{
+			"label": "Table Tests Final Check",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
+		},
+		{
+			"label": "Table Tests Debug",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
+		},
+		{
+			"label": "Table Tests with Details",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false --reporter=spec"
+		},
+		{
+			"label": "Final Table Tests",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
+		},
+		{
+			"label": "Final Table Tests Check",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
+		},
+		{
+			"label": "Final Final Table Tests",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
 		}
 	]
 }

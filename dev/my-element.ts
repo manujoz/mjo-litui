@@ -83,7 +83,6 @@ export class MyElement extends LitElement {
                 size="medium"
                 headerSticky
                 maxHeight="600"
-                pageSize="10"
                 currentPage="1"
                 rowSeparator="contrast"
                 selectable="multiple"
