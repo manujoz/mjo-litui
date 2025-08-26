@@ -1,0 +1,142 @@
+/* Form Demo Styles */
+
+/* Form grid layout */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Form groups */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.form-group-label {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--mjo-color-text-primary);
+    margin-bottom: 8px;
+}
+
+/* Form element spacing */
+mjo-form > mjo-textfield,
+mjo-form > mjo-textarea,
+mjo-form > mjo-select,
+mjo-form > mjo-date-picker,
+mjo-form > mjo-slider {
+    margin-bottom: 16px;
+}
+
+mjo-form > .form-grid:last-of-type {
+    margin-bottom: 16px;
+}
+
+mjo-form > mjo-button {
+    margin-top: 8px;
+}
+
+/* Radio and checkbox groups */
+.form-group mjo-radio,
+.form-group mjo-checkbox {
+    margin-bottom: 8px;
+}
+
+.form-group mjo-switch {
+    margin-bottom: 12px;
+}
+
+/* Component showcase improvements */
+.component-showcase mjo-form {
+    padding: 24px;
+    border: 1px solid var(--mjo-color-border-light);
+    border-radius: 12px;
+    background: var(--mjo-color-background-card);
+}
+
+/* Form notification styles */
+.form-notification {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.form-notification--success {
+    background-color: #10b981;
+}
+
+.form-notification--error {
+    background-color: #ef4444;
+}
+
+.form-notification--info {
+    background-color: #3b82f6;
+}
+
+/* Enhanced spacing for better readability */
+.main-section h3 {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Form validation state improvements */
+mjo-form mjo-textfield[error],
+mjo-form mjo-textarea[error],
+mjo-form mjo-select[error],
+mjo-form mjo-date-picker[error] {
+    margin-bottom: 20px; /* Extra space for error messages */
+}
+
+/* Responsive improvements */
+@media (max-width: 640px) {
+    .component-showcase mjo-form {
+        padding: 16px;
+    }
+
+    .form-grid {
+        gap: 12px;
+    }
+
+    .form-group {
+        gap: 6px;
+    }
+}
+
+/* Loading button states */
+mjo-button[loading] {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Form section dividers */
+.main-section + .main-section {
+    margin-top: 48px;
+}
+
+/* Better visual hierarchy */
+.component-showcase {
+    margin-top: 16px;
+    margin-bottom: 32px;
+}
+
+/* Form labels consistency */
+mjo-textfield,
+mjo-textarea,
+mjo-select,
+mjo-date-picker,
+mjo-slider {
+    --mjo-textfield-label-color: var(--mjo-color-text-secondary);
+    --mjo-textfield-label-font-weight: 500;
+}

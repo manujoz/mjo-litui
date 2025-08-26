@@ -10,6 +10,7 @@ import { ColorPickerController } from "../controllers/color-picker-controller.js
 import { DatePickerController } from "../controllers/date-picker-controller.js";
 import { DrawerController } from "../controllers/drawer-controller.js";
 import { DropdownController } from "../controllers/dropdown-controller.js";
+import { FormController } from "../controllers/form-controller.js";
 import { GridController } from "../controllers/grid-controller.js";
 import { IconController } from "../controllers/icon-controller.js";
 import { ImageController } from "../controllers/image-controller.js";
@@ -42,6 +43,7 @@ const colorPickerController = new ColorPickerController();
 const datePickerController = new DatePickerController();
 const drawerController = new DrawerController();
 const dropdownController = new DropdownController();
+const formController = new FormController();
 const gridController = new GridController();
 const iconController = new IconController();
 const imageController = new ImageController();
@@ -114,6 +116,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-dropdown",
         controller: dropdownController.renderDropdownPage,
+    },
+    {
+        path: "/component/mjo-form",
+        controller: formController.renderFormPage,
     },
     {
         path: "/component/mjo-grid",
