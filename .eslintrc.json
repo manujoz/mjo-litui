@@ -85,5 +85,13 @@
                 "printWidth": 160
             }
         ]
-    }
+    },
+    "overrides": [
+        {
+            "files": ["**/*.test.ts", "**/*.spec.ts", "test/**/*.ts"],
+            "rules": {
+                "lit/no-complex-attribute-binding": "off"
+            }
+        }
+    ]
 }

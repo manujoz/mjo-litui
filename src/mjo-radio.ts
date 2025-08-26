@@ -19,6 +19,7 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
     @property({ type: Boolean, reflect: true }) checked = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
+    @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) label?: string;
     @property({ type: String }) name?: string;
     @property({ type: String }) value = "";
@@ -51,7 +52,7 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
     }
 
     render() {
-        return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color}>
+        return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size}>
             <div
                 class="radio-container"
                 role="radio"
@@ -205,6 +206,15 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
             .container {
                 position: relative;
             }
+            .container[data-size="small"] {
+                font-size: 0.8em;
+            }
+            .container[data-size="medium"] {
+                font-size: 1em;
+            }
+            .container[data-size="large"] {
+                font-size: 1.1em;
+            }
             .container[data-disabled] {
                 opacity: var(--mjo-radio-disabled-opacity, 0.5);
                 cursor: not-allowed;
@@ -247,8 +257,8 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                 border-radius: 9999px;
                 line-height: 0;
                 transition: all 0.3s ease;
-                width: 1.3rem;
-                height: 1.3rem;
+                width: 1.2em;
+                height: 1.2em;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -256,7 +266,6 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
             mjo-icon {
                 transform: scale(0);
                 transition: transform 0.3s ease;
-                font-size: 1.3rem;
             }
             .checkbox[data-checked] {
                 color: var(--mjo-radio-checked-color, var(--mjo-primary-color));

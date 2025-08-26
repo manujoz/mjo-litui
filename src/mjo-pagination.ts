@@ -465,13 +465,15 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
             // Calculate the position and width of the active page item
             const containerRect = container.getBoundingClientRect();
             const activeRect = activePageItem.getBoundingClientRect();
+            const top = activePageItem.offsetTop;
 
             const offsetX = activeRect.left - containerRect.left;
             const width = activeRect.width;
 
             // Update CSS custom properties for smooth animation
-            indicator.style.setProperty("--mjo-pagination-indicator-offset", `${offsetX}px`);
-            indicator.style.setProperty("--mjo-pagination-indicator-width", `${width}px`);
+            indicator.style.setProperty("--mjoint-pagination-indicator-offset", `${offsetX}px`);
+            indicator.style.setProperty("--mjoint-pagination-indicator-top", `${top}px`);
+            indicator.style.setProperty("--mjoint-pagination-indicator-width", `${width}px`);
         });
     }
 
@@ -501,17 +503,17 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
 
             .pagination-indicator {
                 position: absolute;
-                top: 0;
+                top: var(--mjoint-pagination-indicator-top, 0);
                 left: 0;
-                height: 100%;
-                background-color: var(--mjo-pagination-primary-color-alpha, var(--mjo-primary-color-alpha1, #1d7fdb33));
+                /* opacity: 0; */
+                background-color: var(--mjo-pagination-primary-color-alpha, var(--mjo-primary-color, #1d7fdb33));
                 border-radius: var(--mjo-pagination-indicator-border-radius, var(--mjo-radius, 5px));
                 transition: all var(--mjo-pagination-animation-duration, 0.3s) var(--mjo-pagination-animation-timing, ease-out);
                 z-index: -1;
-                opacity: var(--mjo-pagination-indicator-opacity, 0.8);
                 pointer-events: none;
-                transform: translateX(var(--mjo-pagination-indicator-offset, 0));
-                width: var(--mjo-pagination-indicator-width, 2.5em);
+                transform: translateX(var(--mjoint-pagination-indicator-offset, 0));
+                width: var(--mjoint-pagination-indicator-width, 2.5em);
+                aspect-ratio: 1 / 1;
             }
 
             .pagination-container[data-color="secondary"] .pagination-indicator {

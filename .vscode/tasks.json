@@ -398,6 +398,83 @@
 			"label": "Clean Temporary File",
 			"type": "shell",
 			"command": "rm -f docs/mjo-pagination-new.md"
+		},
+		{
+			"label": "Test MjoTable Component Only",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test MjoTable Only Isolated",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test MjoTable Debug Logs",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test MjoTable Bracket Notation",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test MjoTable Descriptor Method",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test MjoTable Final",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test MjoTable Complete Suite",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Check Table TypeScript",
+			"type": "shell",
+			"command": "npx tsc --noEmit src/mjo-table.ts"
+		},
+		{
+			"label": "Table Tests Final Check",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
+		},
+		{
+			"label": "Table Tests Debug",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
+		},
+		{
+			"label": "Table Tests with Details",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false --reporter=spec"
+		},
+		{
+			"label": "Final Table Tests",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
+		},
+		{
+			"label": "Final Table Tests Check",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
+		},
+		{
+			"label": "Final Final Table Tests",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
 		}
 	]
 }

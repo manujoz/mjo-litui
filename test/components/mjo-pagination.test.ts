@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Test suite for mjo-pagination component
  * Tests basic functionality without complex dependencies

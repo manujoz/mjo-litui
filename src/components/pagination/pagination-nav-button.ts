@@ -96,7 +96,7 @@ export class PaginationNavButton extends LitElement {
                 font-family: var(--mjo-pagination-font-family, inherit);
                 font-size: var(--mjo-pagination-font-size, 1em);
                 line-height: 1;
-                min-width: var(--mjo-pagination-nav-min-width, 2.5em);
+                min-width: var(--mjo-pagination-nav-min-width, 1.5em);
                 padding: var(--mjo-pagination-nav-padding, 0.5em);
                 position: relative;
                 transition: all 0.2s ease-in-out;
@@ -112,7 +112,6 @@ export class PaginationNavButton extends LitElement {
             }
 
             button:focus {
-                background-color: var(--mjo-pagination-hover-background-color, var(--mjo-primary-color-alpha1, #f5f5f5));
                 color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1d7fdb));
                 outline-color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1d7fdb));
             }
@@ -123,7 +122,6 @@ export class PaginationNavButton extends LitElement {
             }
 
             button[data-color="secondary"]:focus {
-                background-color: var(--mjo-pagination-secondary-color-alpha1, var(--mjo-secondary-color-alpha1, #ffeef0));
                 color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #cc3d74));
                 outline-color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
@@ -132,18 +130,6 @@ export class PaginationNavButton extends LitElement {
                 color: var(--mjo-pagination-nav-disabled-color, var(--mjo-disabled-foreground-color, #aaaaaa));
                 cursor: not-allowed;
                 opacity: 0.5;
-            }
-
-            button[data-size="small"] {
-                font-size: var(--mjo-pagination-small-font-size, 0.8em);
-                min-width: var(--mjo-pagination-nav-small-min-width, 2em);
-                padding: var(--mjo-pagination-nav-small-padding, 0.4em);
-            }
-
-            button[data-size="large"] {
-                font-size: var(--mjo-pagination-large-font-size, 1.2em);
-                min-width: var(--mjo-pagination-nav-large-min-width, 3em);
-                padding: var(--mjo-pagination-nav-large-padding, 0.6em);
             }
 
             mjo-icon {
