@@ -1,3 +1,4 @@
+import { MjoCheckboxChangeEvent } from "./types/mjo-checkbox.js";
 import {
     MjoTableColumns,
     MjoTableFilterEvent,
@@ -23,7 +24,8 @@ import "./components/table/filtrable-button.js";
 import "./components/table/sortable-button.js";
 import "./mjo-checkbox.js";
 import "./mjo-icon.js";
-import { MjoCheckboxChangeEvent } from "./types/mjo-checkbox.js";
+import "./mjo-pagination.js";
+import { MjoPaginationChangeEvent } from "./types/mjo-pagination.js";
 
 @customElement("mjo-table")
 export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -43,15 +45,18 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Array }) columns: MjoTableColumns = [];
     @property({ type: Array }) rows: MjoTableRows = []; // ¡IMPORTANT! Never mutate this array into component.
 
-    @property({ type: Number }) page = 1;
-    @property({ type: Number }) itemsPerPage?: number;
+    @property({ type: Boolean }) infiniteScroll = false;
+    @property({ type: Number }) currentPage = 1;
+    @property({ type: Number }) pageSize?: number;
 
     @state() sort: Sort = { columnName: undefined, direction: undefined };
     @state() filters: Filter = { columnName: undefined, filter: undefined };
     @state() selectedItems: MjoTableRowItem[] = [];
 
     renderedRows: MjoTableRows = [];
+
     #stickyObserver: IntersectionObserver | null = null;
+    #totalItems = 0;
 
     render() {
         if (this.columns.length === 0 || this.rows.length === 0) {
@@ -93,6 +98,19 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                     </tbody>
                 </table>
             </div>
+
+            ${this.pageSize && !this.infiniteScroll
+                ? html`
+                      <mjo-pagination
+                          currentPage=${this.currentPage}
+                          pageSize=${ifDefined(this.pageSize)}
+                          totalItems=${this.#totalItems}
+                          size=${this.size}
+                          hideFirstLast
+                          @mjo-pagination:change=${this.#handlePagination}
+                      ></mjo-pagination>
+                  `
+                : nothing}
         `;
     }
 
@@ -262,10 +280,12 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
 
         this.#sortRows();
 
-        if (this.itemsPerPage) {
+        if (this.pageSize) {
             const totalItems = this.renderedRows.length;
-            const startIndex = (this.page - 1) * this.itemsPerPage;
-            const endIndex = Math.min(startIndex + this.itemsPerPage, totalItems);
+            const startIndex = (this.currentPage - 1) * this.pageSize;
+            const endIndex = Math.min(startIndex + this.pageSize, totalItems);
+
+            this.#totalItems = this.renderedRows.length;
 
             return this.renderedRows.slice(startIndex, endIndex);
         }
@@ -303,7 +323,13 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             return;
         }
 
+        this.currentPage = 1;
         this.filters = { columnName: key, filter };
+    };
+
+    #handlePagination = (ev: MjoPaginationChangeEvent) => {
+        const { page } = ev.detail;
+        this.currentPage = page;
     };
 
     #handleRowClick = (row: MjoTableRowItem, ev: Event) => {
@@ -618,6 +644,11 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             display: block;
             width: 100%;
             padding: 0;
+        }
+        mjo-pagination {
+            position: relative;
+            margin-top: var(--mjo-space-small);
+            font-size: 16px;
         }
         mjo-checkbox {
             font-size: 14px;

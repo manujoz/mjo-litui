@@ -63,6 +63,7 @@ export class PaginationPageItem extends LitElement {
                 font-weight: var(--mjo-pagination-font-weight, normal);
                 line-height: 0;
                 width: var(--mjo-pagination-item-width, 2em);
+                min-width: var(--mjo-pagination-small-min-width, 2em);
                 padding: 0;
                 aspect-ratio: 1 / 1;
                 position: relative;
@@ -96,27 +97,21 @@ export class PaginationPageItem extends LitElement {
             }
 
             button[data-active] {
-                background-color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1d7fdb));
-                border-color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1d7fdb));
                 color: var(--mjo-pagination-primary-foreground-color, var(--mjo-primary-foreground-color, white));
                 font-weight: var(--mjo-pagination-active-font-weight, 600);
             }
 
             button[data-active][data-color="secondary"] {
-                background-color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #cc3d74));
-                border-color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #cc3d74));
                 color: var(--mjo-pagination-secondary-foreground-color, var(--mjo-secondary-foreground-color, white));
             }
 
             button[data-active]:hover {
                 color: var(--mjo-pagination-primary-foreground-color, var(--mjo-primary-foreground-color, white));
-                background-color: var(--mjo-pagination-primary-color-hover, var(--mjo-primary-color-hover, #4e9be4));
                 border-color: var(--mjo-pagination-primary-color-hover, var(--mjo-primary-color-hover, #4e9be4));
             }
 
             button[data-active][data-color="secondary"]:hover {
                 color: var(--mjo-pagination-secondary-foreground-color, var(--mjo-secondary-foreground-color, white));
-                background-color: var(--mjo-pagination-secondary-color-hover, var(--mjo-secondary-color-hover, #d86490));
                 border-color: var(--mjo-pagination-secondary-color-hover, var(--mjo-secondary-color-hover, #d86490));
             }
 
@@ -128,14 +123,10 @@ export class PaginationPageItem extends LitElement {
 
             button[data-size="small"] {
                 font-size: var(--mjo-pagination-small-font-size, 0.8em);
-                min-width: var(--mjo-pagination-small-min-width, 2em);
-                padding: var(--mjo-pagination-small-padding, 0.4em);
             }
 
             button[data-size="large"] {
                 font-size: var(--mjo-pagination-large-font-size, 1.2em);
-                min-width: var(--mjo-pagination-large-min-width, 3em);
-                padding: var(--mjo-pagination-large-padding, 0.6em);
             }
 
             /* High contrast mode support */

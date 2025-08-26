@@ -80,9 +80,11 @@ export class MyElement extends LitElement {
                 rowHover="highlight"
                 rowClickable
                 color="secondary"
-                size="large"
+                size="medium"
                 headerSticky
                 maxHeight="600"
+                pageSize="10"
+                currentPage="1"
                 rowSeparator="contrast"
                 selectable="multiple"
                 .columns=${COLUMNS}
