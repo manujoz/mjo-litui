@@ -9,6 +9,7 @@ export type MjoTableColumn = {
     width?: string | number;
     colspan?: number;
     placeContent?: "center" | "left" | "right";
+    responsive?: "sm" | "md" | "lg";
 };
 
 export interface MjoTableRowItem extends Record<string, string | number | TemplateResult<1>> {

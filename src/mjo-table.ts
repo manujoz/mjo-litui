@@ -37,9 +37,6 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
 
     @property({ type: String }) selectable: "single" | "multiple" | "none" = "none";
 
-    // Accessibility properties
-    @property({ type: String }) caption?: string;
-
     @property({ type: Boolean }) headerSticky: boolean = false; // Only works when maxHeight is set
     @property({ type: String }) headerStyle?: "sticky-style";
     @property({ type: String }) rowSeparator: "border" | "contrast" | "none" = "none";
@@ -53,6 +50,9 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Number }) threshold = 100;
     @property({ type: Number }) currentPage = 1;
     @property({ type: Number }) pageSize?: number;
+
+    // Accessibility properties
+    @property({ type: String }) caption?: string;
 
     @state() sort: Sort = { columnName: undefined, direction: undefined };
     @state() filters: Filter = { columnName: undefined, filter: undefined };
@@ -75,7 +75,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
     #lastFocusedRowKey: string | number = "";
 
     render() {
-        if (this.columns.length === 0 || this.rows.length === 0) {
+        if (this.columns.length === 0) {
             console.error("Headers and rows are required", this);
             return nothing;
         }
@@ -175,10 +175,9 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                 return `${column.name}-${index}`;
             },
             (column, index) => {
-                const classes = classMap({
-                    "container-header": true,
-                    "place-right": column.placeContent === "right",
-                    "place-center": column.placeContent === "center",
+                const thClasses = classMap({
+                    md: column.responsive === "md",
+                    lg: column.responsive === "lg",
                 });
 
                 const styles = styleMap({
@@ -187,9 +186,16 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                     colspan: column.colspan,
                 });
 
+                const containerClasses = classMap({
+                    "container-header": true,
+                    "place-right": column.placeContent === "right",
+                    "place-center": column.placeContent === "center",
+                });
+
                 return html`
                     ${index === 0 ? selectableTh : nothing}
                     <th
+                        class=${thClasses}
                         style=${styles}
                         scope="col"
                         aria-sort=${ifDefined(
@@ -203,7 +209,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                         )}
                         id=${`header-${column.name}`}
                     >
-                        <div class=${classes}>
+                        <div class=${containerClasses}>
                             <span class="render">${column.label || "Column"}</span>
                             ${column.sortable
                                 ? html`<sortable-button
@@ -244,9 +250,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         return html`
             ${repeat(
                 itemsRow,
-                (row) => {
-                    return `${this.#getRowKey(row)}-${uniqueId()}`;
-                },
+                (row) => `${this.#getRowKey(row)}-${uniqueId()}`,
                 (row, rowIndex) => {
                     const isSelected = this.#isRowSelected(row);
                     const isClickable = this.rowClickable;
@@ -267,6 +271,11 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                                 (column, index) => {
                                     if (!row[column.name]) return nothing;
 
+                                    const tdClasses = classMap({
+                                        md: column.responsive === "md",
+                                        lg: column.responsive === "lg",
+                                    });
+
                                     let selectableTh: TemplateResult<1> | typeof nothing = nothing;
                                     if (this.selectable !== "none") {
                                         selectableTh = html`
@@ -283,7 +292,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                                     }
                                     return html`
                                         ${index === 0 ? selectableTh : nothing}
-                                        <td role="cell" headers=${`header-${column.name}`}>${row[column.name]}</td>
+                                        <td class=${tdClasses} role="cell" headers=${`header-${column.name}`}>${row[column.name]}</td>
                                     `;
                                 },
                             )}
@@ -980,6 +989,12 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             position: relative;
             font-size: var(--mjo-table-header-font-size, inherit);
         }
+        caption {
+            font-size: var(--mjo-table-caption-font-size, 0.9em);
+            color: var(--mjo-table-caption-foreground-color, var(--mjo-foreground-color-low, #666666));
+            font-weight: bold;
+            padding-bottom: var(--mjo-table-caption-padding-bottom, var(--mjo-space-medium));
+        }
         thead.sticky-header {
             position: sticky;
             top: 0px;
@@ -1008,6 +1023,26 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             color: var(--mjo-table-header-foreground-color, var(--mjo-foreground-color, #333333));
             border-bottom: solid 1px var(--mjo-table-header-border-color, var(--mjo-border-color, #dddddd));
         }
+        th.md,
+        th.lg,
+        td.md,
+        td.lg {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            th.md,
+            td.md {
+                display: table-cell;
+            }
+        }
+        @media (min-width: 1024px) {
+            th.lg,
+            td.lg {
+                display: table-cell;
+            }
+        }
+
         .container-header {
             position: relative;
             display: flex;
@@ -1259,6 +1294,16 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             clip: rect(0, 0, 0, 0);
             white-space: nowrap;
             border: 0;
+        }
+
+        tr.no-data {
+            border-bottom: none;
+        }
+        tr.no-data td {
+            padding: var(--mjo-table-no-data-padding, 60px 10px);
+            border-bottom: none;
+            text-align: center;
+            color: var(--mjo-table-no-data-foreground-color, var(--mjo-foreground-color-low, #666666));
         }
     `;
 }

@@ -23,6 +23,7 @@ import { RadioController } from "../controllers/radio-controller.js";
 import { RippleController } from "../controllers/ripple-controller.js";
 import { SliderController } from "../controllers/slider-controller.js";
 import { SwitchController } from "../controllers/switch-controller.js";
+import { TableController } from "../controllers/table-controller.js";
 import { TextNowrapController } from "../controllers/text-nowrap-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
 import { TypographyController } from "../controllers/typography-controller.js";
@@ -52,6 +53,7 @@ const radioController = new RadioController();
 const rippleController = new RippleController();
 const sliderController = new SliderController();
 const switchController = new SwitchController();
+const tableController = new TableController();
 const textfieldController = new TextfieldController();
 const textNowrapController = new TextNowrapController();
 const typographyController = new TypographyController();
@@ -156,6 +158,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-switch",
         controller: switchController.renderSwitchPage,
+    },
+    {
+        path: "/component/mjo-table",
+        controller: tableController.renderTablePage,
     },
     {
         path: "/component/mjo-textfield",

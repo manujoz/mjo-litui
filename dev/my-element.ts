@@ -12,8 +12,8 @@ import "../src/mjo-theme.js";
 const COLUMNS: MjoTableColumns = [
     { name: "name", label: "Name", sortable: true, filterable: true, minWidth: 150 },
     { name: "email", label: "Email", sortable: true },
-    { name: "age", label: "Age", sortable: true },
-    { name: "city", label: "City" },
+    { name: "age", label: "Age", sortable: true, responsive: "md" },
+    { name: "city", label: "City", responsive: "lg" },
 ];
 
 const ROWS: MjoTableRows = [

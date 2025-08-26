@@ -412,21 +412,52 @@ export interface MjoDatePickerTheme extends MjoInputTheme {
 }
 
 export interface MjoTableTheme {
+    /** --mjo-table-background-color */
     backgroundColor?: string;
+    /** --mjo-table-foreground-color */
     foregroundColor?: string;
+    /** --mjo-table-border-radius */
+    borderRadius?: string;
+    /** --mjo-table-scrollbar-thumb-color */
+    scrollbarThumbColor?: string;
+    /** --mjo-table-header-font-size */
     headerFontSize?: string;
+    /** --mjo-table-header-foreground-color */
+    headerForegroundColor?: string;
+    /** --mjo-table-header-border-color */
+    headerBorderColor?: string;
+    /** --mjo-table-header-padding */
+    headerPadding?: string;
+    /** --mjo-table-header-background-color-stuck */
+    headerBackgroundColorStuck?: string;
+    /** --mjo-table-header-foreground-color-stuck */
+    headerForegroundColorStuck?: string;
+    /** --mjo-table-body-font-size */
     bodyFontSize?: string;
+    /** --mjo-table-cell-foreground-color */
     cellForegroundColor?: string;
-    cellEvenBackgroundColor?: string;
-    cellEvenForegroundColor?: string;
-    cellHeaderBackgroundColor?: string;
-    cellHeaderForegroundColor?: string;
-    footerBackgroundColor?: string;
-    footerColor?: string;
-    footerFontSize?: string;
-    footerRowSelectedColor?: string;
-    noDataOpacity?: string;
-    noDataWidth?: string;
+    /** --mjo-table-row-background-color-even */
+    rowBackgroundColorEven?: string;
+    /** --mjo-table-row-foreground-color-even */
+    rowForegroundColorEven?: string;
+    /** --mjo-table-row-border-color */
+    rowBorderColor?: string;
+    /** --mjo-table-row-background-color-highlight */
+    rowBackgroundColorHighlight?: string;
+    /** --mjo-table-row-foreground-color-highlight */
+    rowForegroundColorHighlight?: string;
+    /** --mjo-table-row-background-color-hover */
+    rowBackgroundColorHover?: string;
+    /** --mjo-table-no-data-padding */
+    noDataPadding?: string;
+    /** --mjo-table-no-data-foreground-color */
+    noDataForegroundColor?: string;
+    /** --mjo-table-caption-font-size */
+    captionFontSize?: string;
+    /** --mjo-table-caption-foreground-color */
+    captionForegroundColor?: string;
+    /** --mjo-table-caption-padding-bottom */
+    captionPaddingBottom?: string;
 }
 
 export interface MjoTextaraTheme extends MjoInputTheme {
