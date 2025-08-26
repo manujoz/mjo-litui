@@ -32,13 +32,20 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
     };
 
     render() {
-        return html`
+        return html`<div role="listbox" aria-multiselectable="false">
             ${this.searchable
                 ? html`<div class="search" @click=${this.#handleInputClick}>
                       <div class="input">
-                          <input id="optionsListsInputSearch" type="text" placeholder=${this.dictionary.search} @input=${this.#hanldeInput} tabindex="0" />
+                          <input
+                              id="optionsListsInputSearch"
+                              type="text"
+                              placeholder=${this.dictionary.search}
+                              @input=${this.#hanldeInput}
+                              tabindex="0"
+                              aria-label="Search options"
+                          />
                       </div>
-                      <div class="icon">
+                      <div class="icon" aria-hidden="true">
                           <mjo-icon src=${AiOutlineSearch}></mjo-icon>
                       </div>
                   </div>`
@@ -58,7 +65,7 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
                     return html`${option}`;
                 },
             )}
-        `;
+        </div>`;
     }
 
     connectedCallback(): void {
@@ -141,6 +148,17 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
         const next = options[index + 1] || options[0];
         if (next) {
             next.preSelected = true;
+
+            // Dispatch selection change event for accessibility
+            this.dispatchEvent(
+                new CustomEvent("options-list.selection-change", {
+                    detail: {
+                        option: next,
+                        previousOption: preselected,
+                    },
+                    bubbles: true,
+                }),
+            );
         }
 
         this.#scrollTopOption(next);
@@ -168,6 +186,17 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
         const next = options[index - 1] || options[options.length - 1];
         if (next) {
             next.preSelected = true;
+
+            // Dispatch selection change event for accessibility
+            this.dispatchEvent(
+                new CustomEvent("options-list.selection-change", {
+                    detail: {
+                        option: next,
+                        previousOption: preselected,
+                    },
+                    bubbles: true,
+                }),
+            );
         }
 
         this.#scrollTopOption(next);

@@ -21,6 +21,7 @@ import { NotificationController } from "../controllers/notification-controller.j
 import { PaginationController } from "../controllers/pagination-controller.js";
 import { RadioController } from "../controllers/radio-controller.js";
 import { RippleController } from "../controllers/ripple-controller.js";
+import { SelectController } from "../controllers/select-controller.js";
 import { SliderController } from "../controllers/slider-controller.js";
 import { SwitchController } from "../controllers/switch-controller.js";
 import { TableController } from "../controllers/table-controller.js";
@@ -52,6 +53,7 @@ const notificationController = new NotificationController();
 const paginationController = new PaginationController();
 const radioController = new RadioController();
 const rippleController = new RippleController();
+const selectController = new SelectController();
 const sliderController = new SliderController();
 const switchController = new SwitchController();
 const tableController = new TableController();
@@ -156,6 +158,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-slider",
         controller: sliderController.renderSliderPage,
+    },
+    {
+        path: "/component/mjo-select",
+        controller: selectController.renderSelectPage,
     },
     {
         path: "/component/mjo-switch",

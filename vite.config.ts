@@ -13,4 +13,12 @@ export default defineConfig({
     },
     root: `${__dirname}/dev`,
     plugins: [svg()],
+    build: {
+        rollupOptions: {
+            input: {
+                main: `${__dirname}/dev/index.html`,
+                "mjo-anchor": `${__dirname}/dev/mjo-anchor.html`,
+            },
+        },
+    },
 });

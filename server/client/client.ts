@@ -28,6 +28,7 @@ import "../../src/mjo-notification.js";
 import "../../src/mjo-pagination.js";
 import "../../src/mjo-radio.js";
 import "../../src/mjo-ripple.js";
+import "../../src/mjo-select.js";
 import "../../src/mjo-slider.js";
 import "../../src/mjo-switch.js";
 import "../../src/mjo-table.js";

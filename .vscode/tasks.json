@@ -480,6 +480,21 @@
 			"label": "TypeScript Check Config",
 			"type": "shell",
 			"command": "tsc --noEmit"
+		},
+		{
+			"label": "Check Select TypeScript",
+			"type": "shell",
+			"command": "tsc --noEmit src/mjo-select.ts src/types/mjo-select.d.ts"
+		},
+		{
+			"label": "Check Select Only",
+			"type": "shell",
+			"command": "tsc --noEmit src/mjo-select.ts"
+		},
+		{
+			"label": "Build Config Check Only",
+			"type": "shell",
+			"command": "tsc -p tsconfig.build.json --noEmit"
 		}
 	]
 }

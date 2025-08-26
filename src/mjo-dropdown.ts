@@ -42,7 +42,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
             tabindex="0"
             aria-haspopup="true"
             aria-expanded=${this.isOpen}
-            .ariaControls=${this.dropdownContainer?.id || ""}
+            .aria-controls=${this.dropdownContainer?.id || ""}
         ></slot>`;
     }
 

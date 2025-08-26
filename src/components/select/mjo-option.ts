@@ -17,19 +17,26 @@ export class MjoOption extends ThemeMixin(LitElement) implements IThemeMixin {
 
     handleClick?: (value: string) => void;
 
+    // Unique ID for accessibility
+    #uniqueId = `mjo-option-${Math.random().toString(36).substring(2, 9)}`;
+
     render() {
         return html`<div
+            id=${this.#uniqueId}
+            role="option"
+            tabindex="-1"
+            aria-selected=${this.selected ? "true" : "false"}
             @click=${this.#handleClick}
             class="container"
             data-color=${this.color}
             ?data-selected=${this.selected}
             ?data-preselected=${this.preSelected}
         >
-            ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
-            ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
+            ${this.startIcon && html`<div class="icon startIcon" aria-hidden="true"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
+            ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Option image" /></div>` : nothing}
             <div class="option">${this.text || this.value}</div>
-            ${this.endIcon ? html`<div class="icon endIcon"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
-            ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Input image" /></div>` : nothing}
+            ${this.endIcon ? html`<div class="icon endIcon" aria-hidden="true"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
+            ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Option image" /></div>` : nothing}
         </div>`;
     }
 
@@ -39,6 +46,11 @@ export class MjoOption extends ThemeMixin(LitElement) implements IThemeMixin {
         if (!this.text) {
             this.text = this.textContent?.trim() || this.value;
         }
+    }
+
+    // Getter for accessing the unique ID
+    get id(): string {
+        return this.#uniqueId;
     }
 
     #handleClick() {

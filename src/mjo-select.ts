@@ -1,6 +1,19 @@
 import { type MjoOption } from "./components/select/mjo-option.js";
 import { type OptionsList } from "./components/select/options-list.js";
 import { type MjoDropdown } from "./mjo-dropdown.js";
+import {
+    MjoSelectBlurEvent,
+    MjoSelectChangeEvent,
+    MjoSelectClearEvent,
+    MjoSelectCloseEvent,
+    MjoSelectFocusEvent,
+    MjoSelectKeydownEvent,
+    MjoSelectOpenEvent,
+    MjoSelectOptionPreselectEvent,
+    MjoSelectSearchEvent,
+    type MjoSelectColor,
+    type MjoSelectSize,
+} from "./types/mjo-select.js";
 import { type MjoDropdownTheme } from "./types/mjo-theme.js";
 
 import { LitElement, css, html, nothing } from "lit";
@@ -8,7 +21,7 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 import { createRef, ref } from "lit/directives/ref.js";
-import { AiFillCloseCircle, AiOutlineDown } from "mjo-icons/ai";
+import { AiOutlineDown } from "mjo-icons/ai";
 
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
@@ -24,13 +37,14 @@ import "./mjo-dropdown.js";
 export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: Boolean }) autoFocus = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
+    @property({ type: Boolean, reflect: true }) required = false;
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: String }) name?: string;
     @property({ type: String }) placeholder?: string;
     @property({ type: String }) value: string = "";
     @property({ type: String }) label?: string;
-    @property({ type: String }) size: "small" | "medium" | "large" = "medium";
-    @property({ type: String }) color: "primary" | "secondary" = "primary";
+    @property({ type: String }) size: MjoSelectSize = "medium";
+    @property({ type: String }) color: MjoSelectColor = "primary";
     @property({ type: String }) startIcon?: string;
     @property({ type: String }) endIcon?: string;
     @property({ type: String }) startImage?: string;
@@ -39,9 +53,15 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     @property({ type: String }) suffixText?: string;
     @property({ type: String }) helperText?: string;
     @property({ type: Boolean }) selectOnFocus = false;
-    @property({ type: Boolean }) clearabled = false;
     @property({ type: Boolean }) searchable = false;
     @property({ type: Object }) dropDownTheme?: MjoDropdownTheme;
+
+    // ARIA properties - using Lit's built-in support where possible
+    @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
+    @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledby?: string;
+    @property({ type: String, attribute: "aria-errormessage" }) ariaErrormessage?: string;
+    @property({ type: String, attribute: "aria-autocomplete" }) ariaAutocomplete?: "none" | "inline" | "list" | "both";
+    @property({ type: String, attribute: "aria-activedescendant" }) ariaActivedescendant?: string;
 
     @state() private isFocused = false;
     @state() private open = false;
@@ -51,19 +71,31 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     @state() private endOptionImage?: string;
     @state() private startOptionIcon?: string;
     @state() private endOptionIcon?: string;
+    @state() private currentFilter: string = "";
+    @state() private activeDescendantId?: string;
+
+    // Private validation state
+    #customValidationMessage = "";
 
     @query("mjo-dropdown") dropdownElement!: MjoDropdown;
-    @query("input#inputHidden") inputElement!: HTMLInputElement;
-    @query("input#inputVisible") inputVisibleElement!: HTMLInputElement;
+    @query("input[type='hidden']") inputElement!: HTMLInputElement;
+    @query("input[type='text']") inputVisibleElement!: HTMLInputElement;
 
     type = "select";
     optionListRef = createRef<OptionsList>();
-
     observer!: MutationObserver;
+    #uniqueId = `mjo-select-${Math.random().toString(36).substring(2, 9)}`;
+    #previousValue = "";
+    #previousOption: MjoOption | null = null;
 
     render() {
+        const helperTextId = this.helperText || this.errormsg || this.successmsg ? `${this.#uniqueId}-helper` : undefined;
+        const labelId = this.label ? `${this.#uniqueId}-label` : undefined;
+        const listboxId = `${this.#uniqueId}-listbox`;
+
         return html`${this.label
                 ? html`<input-label
+                      id=${ifDefined(labelId)}
                       color=${this.color}
                       label=${this.label}
                       ?focused=${this.isFocused}
@@ -74,21 +106,23 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             <mjo-dropdown
                 .html=${html`<options-list
                     ${ref(this.optionListRef)}
+                    id=${listboxId}
                     .options=${this.options}
                     .mjoSelect=${this as MjoSelect}
                     ?searchable=${this.searchable}
                     ?open=${this.open}
                     .theme=${this.theme}
                     @options-list.blur=${() => this.#handleOptionsBlur()}
-                    @options-list.filter=${() => this.#handleOptionListFilter()}
+                    @options-list.filter=${(e: CustomEvent) => this.#handleOptionListFilter(e)}
+                    @options-list.selection-change=${(e: CustomEvent) => this.#handleOptionListSelectionChange(e)}
                 ></options-list>`}
                 ?disabled=${this.disabled}
                 preventScroll
                 behaviour="click"
                 fullwidth
                 .theme=${this.dropDownTheme}
-                @open=${this.#handleOpen}
-                @close=${this.#handleClose}
+                @mjo-dropdown:open=${this.#handleOpen}
+                @mjo-dropdown:close=${this.#handleClose}
                 @click=${this.#handleClick}
             >
                 <div
@@ -100,45 +134,52 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     ?data-disabled=${this.disabled}
                 >
                     ${this.prefixText ? html`<div class="prefixText">${this.prefixText}</div>` : nothing}
-                    ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
+                    ${this.startIcon && html`<div class="icon startIcon" aria-hidden="true"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
                     ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
-                    ${this.startOptionIcon && html`<div class="icon startIcon optionImage"><mjo-icon src=${this.startOptionIcon}></mjo-icon></div>`}
+                    ${this.startOptionIcon &&
+                    html`<div class="icon startIcon optionImage" aria-hidden="true"><mjo-icon src=${this.startOptionIcon}></mjo-icon></div>`}
                     ${this.startOptionImage && !this.startOptionIcon
-                        ? html`<div class="image startImage optionImage"><img src=${this.startOptionImage} alt="Input image" /></div>`
+                        ? html`<div class="image startImage optionImage"><img src=${this.startOptionImage} alt="Selected option image" /></div>`
                         : nothing}
                     <input
-                        id="inputVisible"
+                        role="combobox"
                         ?autofocus=${this.autoFocus}
                         ?disabled=${this.disabled}
                         placeholder=${ifDefined(this.placeholder)}
                         type="text"
                         .value=${live(this.visibleValue)}
-                        aria-label=${this.label || this.ariaLabel || nothing}
-                        aria-errormessage=${this.errormsg || nothing}
+                        aria-haspopup="listbox"
+                        aria-expanded=${this.open ? "true" : "false"}
+                        aria-controls=${listboxId}
+                        aria-activedescendant=${ifDefined(this.activeDescendantId)}
+                        aria-autocomplete=${this.searchable ? "list" : "none"}
+                        aria-label=${this.ariaLabel || nothing}
+                        aria-labelledby=${this.ariaLabelledby || labelId || nothing}
+                        aria-describedby=${this.ariaDescribedby || helperTextId || nothing}
+                        aria-errormessage=${this.ariaErrormessage || (this.errormsg ? helperTextId : nothing) || nothing}
+                        aria-invalid=${this.error ? "true" : "false"}
                         aria-required=${ifDefined(this.required)}
                         readonly
                         @focus=${this.#handleFocus}
                         @blur=${this.#handleBlur}
                     />
-                    <input id="inputHidden" type="hidden" name=${ifDefined(this.name)} .value=${live(this.value)} />
-                    ${this.clearabled
-                        ? html`<div class="icon endIcon clearabled" ?data-visible=${this.value.length > 0} @click=${this.#handleClearabled}>
-                              <mjo-icon src=${AiFillCloseCircle}></mjo-icon>
-                          </div>`
+                    <input type="hidden" name=${ifDefined(this.name)} .value=${live(this.value)} />
+
+                    ${this.endOptionIcon
+                        ? html`<div class="icon endIcon optionImage" aria-hidden="true"><mjo-icon src=${this.endOptionIcon}></mjo-icon></div>`
                         : nothing}
-                    ${this.endOptionIcon ? html`<div class="icon endIcon optionImage"><mjo-icon src=${this.endOptionIcon}></mjo-icon></div>` : nothing}
                     ${this.endOptionImage && !this.endOptionIcon
-                        ? html`<div class="image endImage optionImage"><img src=${this.endOptionImage} alt="Input image" /></div>`
+                        ? html`<div class="image endImage optionImage"><img src=${this.endOptionImage} alt="Selected option image" /></div>`
                         : nothing}
-                    ${this.endIcon && !this.clearabled ? html`<div class="icon endIcon"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
+                    ${this.endIcon ? html`<div class="icon endIcon" aria-hidden="true"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
                     ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Input image" /></div>` : nothing}
                     ${this.suffixText ? html`<div class="prefixText">${this.suffixText}</div>` : nothing}
-                    <div class="icon endIcon arrowDown"><mjo-icon src=${AiOutlineDown}></mjo-icon></div>
+                    <div class="icon endIcon arrowDown" aria-hidden="true"><mjo-icon src=${AiOutlineDown}></mjo-icon></div>
                 </div>
             </mjo-dropdown>
             <div class="helper" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
-                    ? html`<input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                    ? html`<input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
                           >${this.helperText}</input-helper-text
                       >`
                     : nothing}
@@ -175,17 +216,168 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         if (_changedProperties.has("value") && this.value !== this.inputElement.value) {
             this.setValue(this.value);
         }
+
+        // Update ARIA states
+        if (_changedProperties.has("open")) {
+            this.inputVisibleElement?.setAttribute("aria-expanded", this.open ? "true" : "false");
+        }
+
+        if (_changedProperties.has("activeDescendantId")) {
+            if (this.activeDescendantId) {
+                this.inputVisibleElement?.setAttribute("aria-activedescendant", this.activeDescendantId);
+            } else {
+                this.inputVisibleElement?.removeAttribute("aria-activedescendant");
+            }
+        }
     }
 
+    // Public methods for accessibility and validation
+
+    /**
+     * Focuses the select input element.
+     */
     focus() {
         this.inputVisibleElement.focus();
     }
 
+    /**
+     * Blurs the select input element.
+     */
+    blur() {
+        this.inputVisibleElement.blur();
+    }
+
+    /**
+     * Checks the validity of the select element according to its validation constraints.
+     * @returns true if the element meets all validation constraints, false otherwise
+     */
+    checkValidity(): boolean {
+        if (this.required && !this.value) {
+            return false;
+        }
+        if (this.#customValidationMessage) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Reports the validity state of the element and displays validation messages if invalid.
+     * @returns true if the element is valid, false otherwise
+     */
+    reportValidity(): boolean {
+        const isValid = this.checkValidity();
+
+        if (!isValid) {
+            this.dispatchEvent(
+                new CustomEvent("invalid", {
+                    detail: {
+                        message: this.validationMessage,
+                        element: this,
+                    },
+                    bubbles: true,
+                }),
+            );
+        }
+
+        return isValid;
+    }
+
+    /**
+     * Sets a custom validation message for the select element.
+     * @param message - The validation message to set
+     */
+    setCustomValidity(message: string): void {
+        this.#customValidationMessage = message;
+    }
+
+    /**
+     * Gets the current validation message.
+     * @returns The validation message
+     */
+    get validationMessage(): string {
+        if (this.#customValidationMessage) {
+            return this.#customValidationMessage;
+        }
+        if (this.required && !this.value) {
+            return "Please select an option.";
+        }
+        return "";
+    }
+
+    /**
+     * Opens the select dropdown.
+     */
+    openDropdown(): void {
+        if (!this.disabled) {
+            this.dropdownElement.open();
+        }
+    }
+
+    /**
+     * Closes the select dropdown.
+     */
+    closeDropdown(): void {
+        this.dropdownElement.close();
+    }
+
+    /**
+     * Toggles the select dropdown open/closed state.
+     */
+    toggleDropdown(): void {
+        if (this.open) {
+            this.closeDropdown();
+        } else {
+            this.openDropdown();
+        }
+    }
+
+    /**
+     * Gets the currently selected option.
+     * @returns The selected MjoOption element or null if none selected
+     */
+    getSelectedOption(): MjoOption | null {
+        return this.options.find((option) => option.selected) || null;
+    }
+
+    /**
+     * Gets all available options.
+     * @returns Array of MjoOption elements
+     */
+    getOptions(): MjoOption[] {
+        return [...this.options];
+    }
+
+    /**
+     * Filters options based on a search query.
+     * @param query - The search string to filter by
+     */
+    filterOptions(query: string): void {
+        if (this.optionListRef.value) {
+            this.optionListRef.value.filter = query;
+        }
+    }
+
+    /**
+     * Resets the filter to show all options.
+     */
+    resetFilter(): void {
+        if (this.optionListRef.value) {
+            this.optionListRef.value.resetFilter();
+        }
+    }
+
+    /**
+     * Returns whether the select dropdown is currently open.
+     */
     isOpen() {
         return this.open;
     }
 
     setValue(value: string, noDispatch: boolean = false) {
+        this.#previousValue = this.value;
+        this.#previousOption = this.options.find((option) => option.selected) || null;
+
         for (const option of this.options) {
             option.selected = option.value === value;
             if (option.value === value) {
@@ -195,11 +387,27 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 this.startOptionImage = option.startImage;
                 this.endOptionImage = option.endImage;
                 this.visibleValue = option.text || option.value;
+                this.activeDescendantId = option.id || undefined;
             }
         }
 
         if (!noDispatch) {
-            this.dispatchEvent(new Event("change"));
+            const selectedOption = this.options.find((option) => option.selected) || null;
+            this.dispatchEvent(
+                new CustomEvent("mjo-select:change", {
+                    detail: {
+                        element: this,
+                        value: this.value,
+                        previousValue: this.#previousValue,
+                        option: selectedOption,
+                        previousOption: this.#previousOption,
+                    },
+                    bubbles: true,
+                }),
+            );
+
+            // Also dispatch the standard change event for form compatibility
+            this.dispatchEvent(new Event("change", { bubbles: true }));
         }
 
         this.updateFormData({ name: this.name || "", value: this.value });
@@ -212,19 +420,50 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     #handleBlur() {
         if (this.searchable) return;
         this.dropdownElement.close();
+
+        this.dispatchEvent(
+            new CustomEvent("mjo-select:blur", {
+                detail: {
+                    element: this,
+                    value: this.value,
+                    reason: "blur",
+                },
+                bubbles: true,
+            }),
+        );
     }
 
     #handleClick() {
         if (!this.open) {
-            this.dispatchEvent(new FocusEvent("focus"));
+            this.dispatchEvent(
+                new CustomEvent("mjo-select:focus", {
+                    detail: {
+                        element: this,
+                        value: this.value,
+                    },
+                    bubbles: true,
+                }),
+            );
+            // Also dispatch the standard focus event
+            this.dispatchEvent(new FocusEvent("focus", { bubbles: true }));
         }
     }
-
-    #handleClearabled() {}
 
     #handleClose() {
         this.open = false;
         this.isFocused = false;
+        this.activeDescendantId = undefined;
+
+        this.dispatchEvent(
+            new CustomEvent("mjo-select:close", {
+                detail: {
+                    element: this,
+                    value: this.value,
+                    reason: "blur",
+                },
+                bubbles: true,
+            }),
+        );
     }
 
     #handleFocus() {
@@ -234,6 +473,17 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     #handleOpen() {
         this.open = true;
         this.isFocused = true;
+
+        this.dispatchEvent(
+            new CustomEvent("mjo-select:open", {
+                detail: {
+                    element: this,
+                    value: this.value,
+                    optionsCount: this.options.length,
+                },
+                bubbles: true,
+            }),
+        );
     }
 
     #handleOptionsBlur() {
@@ -241,10 +491,40 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         this.dropdownElement.close();
     }
 
-    #handleOptionListFilter() {
+    #handleOptionListFilter(event: CustomEvent) {
+        this.currentFilter = event.detail.filter || "";
+
+        this.dispatchEvent(
+            new CustomEvent("mjo-select:search", {
+                detail: {
+                    element: this,
+                    query: this.currentFilter,
+                    filteredOptionsCount: event.detail.filteredOptionsCount || 0,
+                },
+                bubbles: true,
+            }),
+        );
+
         setTimeout(() => {
             this.dropdownElement.updatePosition();
         }, 50);
+    }
+
+    #handleOptionListSelectionChange(event: CustomEvent) {
+        const { option, previousOption } = event.detail;
+        this.activeDescendantId = option?.id || undefined;
+
+        this.dispatchEvent(
+            new CustomEvent("mjo-select:option-preselect", {
+                detail: {
+                    element: this,
+                    option,
+                    previousOption,
+                    value: option?.value || "",
+                },
+                bubbles: true,
+            }),
+        );
     }
 
     async #handleOptions() {
@@ -482,5 +762,17 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 declare global {
     interface HTMLElementTagNameMap {
         "mjo-select": MjoSelect;
+    }
+
+    interface HTMLElementEventMap {
+        "mjo-select:change": MjoSelectChangeEvent;
+        "mjo-select:open": MjoSelectOpenEvent;
+        "mjo-select:close": MjoSelectCloseEvent;
+        "mjo-select:clear": MjoSelectClearEvent;
+        "mjo-select:search": MjoSelectSearchEvent;
+        "mjo-select:option-preselect": MjoSelectOptionPreselectEvent;
+        "mjo-select:focus": MjoSelectFocusEvent;
+        "mjo-select:blur": MjoSelectBlurEvent;
+        "mjo-select:keydown": MjoSelectKeydownEvent;
     }
 }
