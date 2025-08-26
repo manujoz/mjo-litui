@@ -2,6 +2,7 @@ import { MjoTableSortDirections, MjoTableSortEvent } from "../../types/mjo-table
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { MdKeyboardArrowDown } from "mjo-icons/md";
 
@@ -11,14 +12,21 @@ import "../../mjo-icon.js";
 export class SortableButton extends LitElement {
     @property({ type: String }) columnname?: string;
     @property({ type: String }) direction?: MjoTableSortDirections;
+    @property({ type: String }) color: "primary" | "secondary" = "primary";
 
     render() {
+        const columnName = this.columnname || "column";
+        const currentState = this.direction ? `currently sorted ${this.direction === "asc" ? "ascending" : "descending"}` : "not sorted";
+        const nextAction = this.direction === "asc" ? "Sort descending" : "Sort ascending";
+
         return html`
             <button
                 class="sort-button"
                 type="button"
-                aria-label=${this.direction === "asc" ? "Sort descending" : "Sort ascending"}
+                aria-label=${`${nextAction} by ${columnName}, ${currentState}`}
+                aria-describedby=${ifDefined(this.columnname ? `header-${this.columnname}` : undefined)}
                 data-direction=${this.direction || ""}
+                data-color=${this.color}
                 @click=${this.#handleSort}
                 @keydown=${this.#handleKeyDown}
             >
@@ -78,6 +86,9 @@ export class SortableButton extends LitElement {
                 outline-width: 2px;
                 outline-style: solid;
                 outline-color: var(--mjo-primary-color);
+            }
+            button[data-color="secondary"]:focus-visible {
+                outline-color: var(--mjo-secondary-color);
             }
             button[data-direction="desc"] {
                 transform: rotate(-180deg);

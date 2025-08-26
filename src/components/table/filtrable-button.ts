@@ -10,24 +10,37 @@ import "../../mjo-icon.js";
 export class FiltrableButton extends LitElement {
     @property({ type: String }) columnName?: string;
     @property({ type: String }) filter?: string;
+    @property({ type: String }) color: "primary" | "secondary" = "primary";
 
     @state() isOpen = false;
 
     @query("input") inputElement!: HTMLInputElement;
 
     render() {
+        const columnName = this.columnName || "column";
+        const hasActiveFilter = this.filter && this.filter.length > 0;
+        const buttonLabel = hasActiveFilter ? `Clear filter for ${columnName}, currently filtering by "${this.filter}"` : `Filter ${columnName}`;
+
         return html`
-            <search ?data-open=${this.isOpen}>
+            <search ?data-open=${this.isOpen} role="search" aria-label=${`Filter by ${columnName}`}>
                 <input
                     type="hidden"
                     value=${this.filter || ""}
                     @input=${this.#handleInput}
-                    data-label="Filter"
+                    aria-label=${`Filter by ${columnName}`}
                     placeholder="Filter..."
                     @blur=${this.#handleBlur}
                 />
             </search>
-            <button class="sort-button" type="button" aria-label=${ifDefined(this.filter)} @click=${this.#openFilter}>
+            <button
+                class="sort-button"
+                type="button"
+                data-color=${this.color}
+                aria-label=${buttonLabel}
+                aria-describedby=${ifDefined(this.columnName ? `header-${this.columnName}` : undefined)}
+                aria-expanded=${this.isOpen ? "true" : "false"}
+                @click=${this.#openFilter}
+            >
                 <mjo-icon src=${MdSearch}></mjo-icon>
             </button>
         `;
@@ -114,6 +127,9 @@ export class FiltrableButton extends LitElement {
                 outline-width: 2px;
                 outline-style: solid;
                 outline-color: var(--mjo-primary-color);
+            }
+            button[data-color="secondary"]:focus-visible {
+                outline-color: var(--mjo-secondary-color);
             }
         `,
     ];

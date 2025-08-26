@@ -246,7 +246,6 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         css`
             :host {
                 display: inline-block;
-                width: 200px;
             }
             .container {
                 position: relative;

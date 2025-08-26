@@ -37,6 +37,9 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
 
     @property({ type: String }) selectable: "single" | "multiple" | "none" = "none";
 
+    // Accessibility properties
+    @property({ type: String }) caption?: string;
+
     @property({ type: Boolean }) headerSticky: boolean = false; // Only works when maxHeight is set
     @property({ type: String }) headerStyle?: "sticky-style";
     @property({ type: String }) rowSeparator: "border" | "contrast" | "none" = "none";
@@ -65,6 +68,12 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
     #isLoadingMore = false;
     #totalItems = 0;
 
+    // Internal properties for accessibility
+    #ariaLiveMessage = "";
+    #prefersReducedMotion = false;
+    #prefersHighContrast = false;
+    #lastFocusedRowKey: string | number = "";
+
     render() {
         if (this.columns.length === 0 || this.rows.length === 0) {
             console.error("Headers and rows are required", this);
@@ -80,6 +89,8 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             clickable: this.rowClickable,
             secondary: this.color === "secondary",
             compact: this.compact,
+            "reduced-motion": this.#prefersReducedMotion,
+            "high-contrast": this.#prefersHighContrast,
         });
 
         const headClasses = classMap({
@@ -92,9 +103,17 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         });
 
         return html`
-            <div class="container" style=${containerStyles}>
+            <div class="container" style=${containerStyles} role="region" aria-label=${this.caption || "Data table"}>
                 <div class="sentinel"></div>
-                <table class=${tableClasses}>
+                ${this.#ariaLiveMessage ? html`<div class="sr-only" aria-live="polite" aria-atomic="true">${this.#ariaLiveMessage}</div>` : nothing}
+                <table class=${tableClasses} role="table">
+                    ${this.caption
+                        ? html`
+                              <caption>
+                                  ${this.caption}
+                              </caption>
+                          `
+                        : nothing}
                     <thead class=${headClasses}>
                         <tr>
                             ${this.#renderThead()}
@@ -108,7 +127,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                 ${this.infiniteScroll && this.hasMore ? html`<div class="infinite-scroll-sentinel"></div>` : nothing}
                 ${this.infiniteScroll && this.loading
                     ? html`
-                          <div class="loading-indicator">
+                          <div class="loading-indicator" aria-live="polite">
                               <div class="loading-spinner">Loading more...</div>
                           </div>
                       `
@@ -137,12 +156,13 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             const checked = this.selectedItems.length === this.rows.length;
 
             selectableTh = html`
-                <th class="selectable">
+                <th class="selectable" scope="col">
                     <mjo-checkbox
                         ?indeterminate=${indeterminate}
                         ?checked=${checked}
                         class=${this.selectable !== "multiple" ? "hidden" : ""}
                         color=${this.color || "primary"}
+                        aria-label=${this.selectable === "multiple" ? "Select all rows" : "Select row"}
                         @mjo-checkbox:change=${this.#handleSelectAll}
                     ></mjo-checkbox>
                 </th>
@@ -169,20 +189,37 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
 
                 return html`
                     ${index === 0 ? selectableTh : nothing}
-                    <th style=${styles}>
+                    <th
+                        style=${styles}
+                        scope="col"
+                        aria-sort=${ifDefined(
+                            this.sort.columnName === column.name
+                                ? this.sort.direction === "asc"
+                                    ? "ascending"
+                                    : "descending"
+                                : column.sortable
+                                  ? "none"
+                                  : undefined,
+                        )}
+                        id=${`header-${column.name}`}
+                    >
                         <div class=${classes}>
                             <span class="render">${column.label || "Column"}</span>
                             ${column.sortable
                                 ? html`<sortable-button
+                                      color=${this.color}
                                       columnname=${column.name}
                                       direction=${ifDefined(this.sort.columnName === column.name ? this.sort.direction : undefined)}
+                                      aria-describedby=${`header-${column.name}`}
                                       @mjo-table:sort=${this.#handleSort}
                                   ></sortable-button>`
                                 : nothing}
                             ${column.filterable
                                 ? html`<filtrable-button
+                                      color=${this.color}
                                       columnName=${column.name}
                                       filter=${ifDefined(this.filters.columnName === column.name ? this.filters.filter : undefined)}
+                                      aria-describedby=${`header-${column.name}`}
                                       @mjo-table:filter=${this.#handleFilter}
                                   ></filtrable-button>`
                                 : nothing}
@@ -199,7 +236,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         if (itemsRow.length === 0) {
             return html`
                 <tr class="no-data">
-                    <td colspan=${this.#fullColspan()} style="text-align: center;">No data</td>
+                    <td colspan=${this.#fullColspan()} style="text-align: center;" role="cell">No data available</td>
                 </tr>
             `;
         }
@@ -210,9 +247,18 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                 (row) => {
                     return `${this.#getRowKey(row)}-${uniqueId()}`;
                 },
-                (row) => {
+                (row, rowIndex) => {
+                    const isSelected = this.#isRowSelected(row);
+                    const isClickable = this.rowClickable;
+
                     return html`
-                        <tr @click=${(ev: Event) => this.#handleRowClick(row, ev)}>
+                        <tr
+                            role=${isClickable ? "button" : "row"}
+                            aria-selected=${ifDefined(this.selectable !== "none" ? (isSelected ? "true" : "false") : undefined)}
+                            tabindex=${ifDefined(isClickable ? "0" : undefined)}
+                            @click=${(ev: Event) => this.#handleRowClick(row, ev)}
+                            @keydown=${(ev: KeyboardEvent) => this.#handleRowKeydown(row, ev, rowIndex)}
+                        >
                             ${repeat(
                                 this.columns,
                                 (column, index) => {
@@ -224,11 +270,12 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                                     let selectableTh: TemplateResult<1> | typeof nothing = nothing;
                                     if (this.selectable !== "none") {
                                         selectableTh = html`
-                                            <td class="selectable">
+                                            <td class="selectable" role="cell">
                                                 <mjo-checkbox
                                                     class="selectable-checkbox-sr3as"
                                                     ?checked=${this.#isRowSelected(row)}
                                                     color=${this.color || "primary"}
+                                                    aria-label=${`Select row ${index + 1}`}
                                                     @mjo-checkbox:change=${() => this.#handleSelect(row)}
                                                 ></mjo-checkbox>
                                             </td>
@@ -236,7 +283,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                                     }
                                     return html`
                                         ${index === 0 ? selectableTh : nothing}
-                                        <td>${row[column.name]}</td>
+                                        <td role="cell" headers=${`header-${column.name}`}>${row[column.name]}</td>
                                     `;
                                 },
                             )}
@@ -283,6 +330,18 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                 this.#infiniteScrollObserver = null;
             }
         }
+
+        // Restore focus after re-render if there was a previously focused row
+        if (_changedProperties.has("selectedItems") && this.#lastFocusedRowKey !== "") {
+            this.updateComplete.then(() => {
+                this.#restoreFocusToRow();
+            });
+        }
+    }
+
+    connectedCallback(): void {
+        super.connectedCallback();
+        this.#detectUserPreferences();
     }
 
     disconnectedCallback(): void {
@@ -290,6 +349,31 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
 
         this.#stickyObserver?.disconnect();
         this.#infiniteScrollObserver?.disconnect();
+    }
+
+    /**
+     * Detect user accessibility preferences
+     */
+    #detectUserPreferences() {
+        // Detect reduced motion preference
+        const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        this.#prefersReducedMotion = reducedMotionQuery.matches;
+
+        // Listen for changes
+        reducedMotionQuery.addEventListener("change", (e) => {
+            this.#prefersReducedMotion = e.matches;
+            this.requestUpdate();
+        });
+
+        // Detect high contrast preference
+        const highContrastQuery = window.matchMedia("(prefers-contrast: high)");
+        this.#prefersHighContrast = highContrastQuery.matches;
+
+        // Listen for changes
+        highContrastQuery.addEventListener("change", (e) => {
+            this.#prefersHighContrast = e.matches;
+            this.requestUpdate();
+        });
     }
 
     #fullColspan() {
@@ -359,6 +443,11 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         const { columnName, direction } = ev.detail;
 
         this.sort = { columnName, direction };
+
+        // Announce the sort change
+        const column = this.columns.find((col) => col.name === columnName);
+        const columnLabel = column?.label || columnName || "Column";
+        this.#announceSortChange(columnLabel, direction || "none");
     };
 
     #handleFilter = (ev: MjoTableFilterEvent) => {
@@ -366,16 +455,32 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
 
         if (!filter) {
             this.filters = { columnName: undefined, filter: undefined };
+            const column = this.columns.find((col) => col.name === key);
+            const columnLabel = column?.label || key || "Column";
+            this.#announceFilterChange(columnLabel, "", this.#getRenderedRows().length);
             return;
         }
 
         this.currentPage = 1;
         this.filters = { columnName: key, filter };
+
+        // Announce filter change with result count
+        const column = this.columns.find((col) => col.name === key);
+        const columnLabel = column?.label || key || "Column";
+        const filteredResults = this.#getRenderedRows().length;
+        this.#announceFilterChange(columnLabel, filter, filteredResults);
     };
 
     #handlePagination = (ev: MjoPaginationChangeEvent) => {
         const { page } = ev.detail;
         this.currentPage = page;
+
+        // Calculate pagination info for announcement
+        const totalItems = this.#totalItems;
+        const itemsPerPage = this.pageSize || 10;
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+        this.#announcePaginationChange(page, totalPages, totalItems);
     };
 
     #handleRowClick = (row: MjoTableRowItem, ev: Event) => {
@@ -397,6 +502,45 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         );
     };
 
+    #handleRowKeydown = (row: MjoTableRowItem, ev: KeyboardEvent, rowIndex: number) => {
+        if (!this.rowClickable) return;
+
+        // Store the current row key when navigating
+        this.#lastFocusedRowKey = this.#getRowKey(row);
+
+        switch (ev.key) {
+            case "Enter":
+            case " ":
+                ev.preventDefault();
+                this.#handleRowClick(row, ev);
+                break;
+            case "ArrowDown":
+                ev.preventDefault();
+                this.#focusNextRow(rowIndex);
+                break;
+            case "ArrowUp":
+                ev.preventDefault();
+                this.#focusPreviousRow(rowIndex);
+                break;
+            case "Home":
+                ev.preventDefault();
+                if (ev.ctrlKey) {
+                    this.#focusFirstRow();
+                } else {
+                    this.#focusFirstCellInCurrentRow(ev.target as HTMLElement);
+                }
+                break;
+            case "End":
+                ev.preventDefault();
+                if (ev.ctrlKey) {
+                    this.#focusLastRow();
+                } else {
+                    this.#focusLastCellInCurrentRow(ev.target as HTMLElement);
+                }
+                break;
+        }
+    };
+
     #handleSelect = (row: MjoTableRowItem) => {
         const exists = this.#isRowSelected(row);
 
@@ -409,6 +553,9 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         } else if (exists) {
             this.selectedItems = this.selectedItems.filter((item) => this.#getRowKey(item) !== this.#getRowKey(row));
         }
+
+        // Announce selection change
+        this.#announceSelectionChange(this.selectedItems.length, this.renderedRows.length);
 
         this.dispatchEvent(
             new CustomEvent<MjoTableSelectEvent["detail"]>("mjo-table:select", {
@@ -425,6 +572,9 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         } else if (!event.detail.previousState.checked && event.detail.checked) {
             this.selectedItems = [...this.rows];
         }
+
+        // Announce selection change
+        this.#announceSelectionChange(this.selectedItems.length, this.rows.length);
 
         this.dispatchEvent(
             new CustomEvent<MjoTableSelectEvent["detail"]>("mjo-table:select", {
@@ -547,6 +697,185 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         }, 300);
     }
 
+    #focusNextRow(currentIndex: number) {
+        const rows = this.shadowRoot?.querySelectorAll("tbody tr[tabindex]");
+        if (!rows || currentIndex >= rows.length - 1) return;
+
+        const nextRow = rows[currentIndex + 1] as HTMLElement;
+        if (nextRow) {
+            nextRow.focus();
+            // Store the focused row key from the data attribute or find it in rendered rows
+            const nextRowIndex = currentIndex + 1;
+            const renderedRows = this.renderedRows;
+            if (renderedRows[nextRowIndex]) {
+                this.#lastFocusedRowKey = this.#getRowKey(renderedRows[nextRowIndex]);
+            }
+        }
+    }
+
+    #focusPreviousRow(currentIndex: number) {
+        const rows = this.shadowRoot?.querySelectorAll("tbody tr[tabindex]");
+        if (!rows || currentIndex <= 0) return;
+
+        const prevRow = rows[currentIndex - 1] as HTMLElement;
+        if (prevRow) {
+            prevRow.focus();
+            // Store the focused row key from the data attribute or find it in rendered rows
+            const prevRowIndex = currentIndex - 1;
+            const renderedRows = this.#getRenderedRows();
+            if (renderedRows[prevRowIndex]) {
+                this.#lastFocusedRowKey = this.#getRowKey(renderedRows[prevRowIndex]);
+            }
+        }
+    }
+
+    #focusFirstRow() {
+        const rows = this.shadowRoot?.querySelectorAll("tbody tr[tabindex]");
+        if (!rows || rows.length === 0) return;
+
+        const firstRow = rows[0] as HTMLElement;
+        if (firstRow) {
+            firstRow.focus();
+            // Store the focused row key
+            const renderedRows = this.#getRenderedRows();
+            if (renderedRows[0]) {
+                this.#lastFocusedRowKey = this.#getRowKey(renderedRows[0]);
+            }
+        }
+    }
+
+    #focusLastRow() {
+        const rows = this.shadowRoot?.querySelectorAll("tbody tr[tabindex]");
+        if (!rows || rows.length === 0) return;
+
+        const lastRow = rows[rows.length - 1] as HTMLElement;
+        if (lastRow) {
+            lastRow.focus();
+            // Store the focused row key
+            const renderedRows = this.#getRenderedRows();
+            const lastIndex = renderedRows.length - 1;
+            if (renderedRows[lastIndex]) {
+                this.#lastFocusedRowKey = this.#getRowKey(renderedRows[lastIndex]);
+            }
+        }
+    }
+
+    /**
+     * Focus the first cell in the current row
+     */
+    #focusFirstCellInCurrentRow(currentElement: HTMLElement) {
+        const currentRow = currentElement.closest("tr");
+        if (!currentRow) return;
+
+        const firstCell = currentRow.querySelector("td, th") as HTMLElement;
+        if (firstCell) {
+            const focusableElement = (firstCell.querySelector("button, input, [tabindex]") as HTMLElement) || firstCell;
+            focusableElement.focus();
+        }
+    }
+
+    /**
+     * Focus the last cell in the current row
+     */
+    #focusLastCellInCurrentRow(currentElement: HTMLElement) {
+        const currentRow = currentElement.closest("tr");
+        if (!currentRow) return;
+
+        const cells = Array.from(currentRow.querySelectorAll("td, th"));
+        const lastCell = cells[cells.length - 1] as HTMLElement;
+        if (lastCell) {
+            const focusableElement = (lastCell.querySelector("button, input, [tabindex]") as HTMLElement) || lastCell;
+            focusableElement.focus();
+        }
+    }
+
+    /**
+     * Restore focus to the previously focused row after re-render
+     */
+    #restoreFocusToRow() {
+        if (this.#lastFocusedRowKey === "") return;
+
+        const renderedRows = this.#getRenderedRows();
+        const rowIndex = renderedRows.findIndex((row) => this.#getRowKey(row) === this.#lastFocusedRowKey);
+
+        if (rowIndex === -1) {
+            // Row no longer exists, clear the stored key
+            this.#lastFocusedRowKey = "";
+            return;
+        }
+
+        const rows = this.shadowRoot?.querySelectorAll("tbody tr[tabindex]");
+        if (!rows || !rows[rowIndex]) return;
+
+        const targetRow = rows[rowIndex] as HTMLElement;
+        // Small delay to ensure the DOM is fully updated
+        setTimeout(() => {
+            targetRow.focus();
+        }, 10);
+    }
+
+    #announceChange(message: string) {
+        this.#ariaLiveMessage = message;
+        // Clear the message after a brief delay to allow it to be announced
+        setTimeout(() => {
+            this.#ariaLiveMessage = "";
+        }, 1000);
+    }
+
+    /**
+     * Announces sorting state changes
+     */
+    #announceSortChange(column: string, direction: "asc" | "desc" | "none") {
+        let message = "";
+        switch (direction) {
+            case "asc":
+                message = `Table sorted by ${column} in ascending order`;
+                break;
+            case "desc":
+                message = `Table sorted by ${column} in descending order`;
+                break;
+            case "none":
+                message = `Sorting removed from ${column}`;
+                break;
+        }
+        this.#announceChange(message);
+    }
+
+    /**
+     * Announces filtering state changes
+     */
+    #announceFilterChange(column: string, value: string, totalResults: number) {
+        const message = value
+            ? `Table filtered by ${column} with value "${value}". Showing ${totalResults} results.`
+            : `Filter removed from ${column}. Showing all ${totalResults} results.`;
+        this.#announceChange(message);
+    }
+
+    /**
+     * Announces pagination changes
+     */
+    #announcePaginationChange(currentPage: number, totalPages: number, totalItems: number) {
+        const message = `Page ${currentPage} of ${totalPages}. Showing results for ${totalItems} total items.`;
+        this.#announceChange(message);
+    }
+
+    /**
+     * Announces row selection changes
+     */
+    #announceSelectionChange(selectedCount: number, totalCount: number) {
+        let message = "";
+        if (selectedCount === 0) {
+            message = "No rows selected";
+        } else if (selectedCount === 1) {
+            message = "1 row selected";
+        } else if (selectedCount === totalCount) {
+            message = "All rows selected";
+        } else {
+            message = `${selectedCount} of ${totalCount} rows selected`;
+        }
+        this.#announceChange(message);
+    }
+
     #sortRows() {
         const { columnName, direction } = this.sort;
         if (!columnName || !direction) return;
@@ -600,6 +929,17 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         }
         .hidden {
             display: none !important;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
         .sentinel {
             position: relative;
@@ -744,6 +1084,20 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         .clickable tr th {
             cursor: default;
         }
+        .clickable tr:focus-visible {
+            outline: 2px solid var(--mjo-primary-color);
+            outline-offset: -2px;
+        }
+        .clickable tr[role="button"]:focus-visible {
+            background-color: var(--mjo-table-row-background-color-highlight, var(--mjo-primary-color-alpha1, #007bff11));
+        }
+        .clickable.secondary tr:focus-visible {
+            outline: 2px solid var(--mjo-secondary-color);
+            outline-offset: -2px;
+        }
+        .clickable.secondary tr[role="button"]:focus-visible {
+            background-color: var(--mjo-table-row-background-color-highlight, var(--mjo-secondary-color-alpha1, #007bff11));
+        }
 
         thead tr {
             background-color: var(--mjo-table-header-background-color, transparent) !important;
@@ -757,9 +1111,9 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         }
         th.selectable mjo-checkbox,
         td.selectable mjo-checkbox {
-            display: block;
-            width: 100%;
+            display: inline-block;
             padding: 0;
+            vertical-align: middle;
         }
         mjo-pagination {
             position: relative;
@@ -808,6 +1162,103 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             100% {
                 transform: rotate(360deg);
             }
+        }
+
+        /* Reduced motion support */
+        :host(.reduced-motion) .loading-spinner::before,
+        table.reduced-motion .loading-spinner::before {
+            animation: none;
+        }
+
+        :host(.reduced-motion) tr,
+        table.reduced-motion tr {
+            transition: none;
+        }
+
+        /* High contrast support */
+        :host(.high-contrast) th[aria-sort="ascending"]::after,
+        table.high-contrast th[aria-sort="ascending"]::after,
+        :host(.high-contrast) th[aria-sort="descending"]::after,
+        table.high-contrast th[aria-sort="descending"]::after {
+            border-color: currentColor;
+        }
+
+        :host(.high-contrast) tr:hover,
+        table.high-contrast tr:hover {
+            outline: 2px solid currentColor;
+            outline-offset: -2px;
+        }
+
+        :host(.high-contrast) .selected-row,
+        table.high-contrast .selected-row {
+            outline: 3px solid currentColor;
+            outline-offset: -3px;
+        }
+
+        /* Enhanced focus styles when high contrast is enabled */
+        :host(.high-contrast) tr:focus-visible,
+        table.high-contrast tr:focus-visible {
+            outline-width: 4px;
+            outline-color: HighlightText;
+            background-color: Highlight;
+            color: HighlightText;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .loading-spinner::before {
+                animation: none;
+            }
+
+            tr {
+                transition: none;
+            }
+        }
+
+        /* High contrast support */
+        @media (prefers-contrast: high) {
+            th[aria-sort="ascending"]::after,
+            th[aria-sort="descending"]::after {
+                border-color: currentColor;
+            }
+
+            tr:hover {
+                outline: 2px solid currentColor;
+                outline-offset: -2px;
+            }
+
+            .selected-row {
+                outline: 3px solid currentColor;
+                outline-offset: -3px;
+            }
+        }
+
+        /* Focus styles with enhanced visibility */
+        tr:focus-visible {
+            outline: 3px solid var(--mjo-primary-color);
+            outline-offset: 2px;
+            z-index: 1;
+        }
+
+        @media (prefers-contrast: high) {
+            tr:focus-visible {
+                outline-width: 4px;
+                outline-color: HighlightText;
+                background-color: Highlight;
+                color: HighlightText;
+            }
+        }
+
+        /* Live region styling */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
     `;
 }
