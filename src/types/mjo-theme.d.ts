@@ -55,6 +55,7 @@ export interface MjoThemeConfig {
         mjoAlert?: MjoAlertTheme;
         mjoAvatar?: MjoAvatarTheme;
         mjoBadge?: MjoBadgeTheme;
+        mjoBreadcrumbs?: MjoBreadcrumbsTheme;
         mjoButton?: MjoButtonTheme;
         mjoCalendar?: MjoCalendarTheme;
         mjoCard?: MjoCardTheme;
@@ -236,6 +237,7 @@ export interface MjoBadgeTheme {
     fontSizeLarge?: string;
     focusOutlineWidth?: string;
     focusOutlineOffset?: string;
+    iconTop?: string;
 }
 
 export interface MjoButtonTheme {
@@ -720,4 +722,35 @@ export interface MjoPaginationTheme {
     selectBorderRadius?: string;
     selectColor?: string;
     selectPadding?: string;
+}
+
+export interface MjoBreadcrumbsTheme {
+    /** --mjo-breadcrumbs-background-color */
+    backgroundColor?: string;
+    /** --mjo-breadcrumbs-border-color */
+    borderColor?: string;
+    /** --mjo-breadcrumbs-border-radius */
+    borderRadius?: string;
+    /** --mjo-breadcrumbs-padding */
+    padding?: string;
+    /** --mjo-breadcrumbs-text-color */
+    textColor?: string;
+    /** --mjo-breadcrumbs-link-hover-color */
+    linkHoverColor?: string;
+    /** --mjo-breadcrumbs-current-color */
+    currentColor?: string;
+    /** --mjo-breadcrumbs-current-font-weight */
+    currentFontWeight?: string;
+    /** --mjo-breadcrumbs-separator-color */
+    separatorColor?: string;
+    /** --mjo-breadcrumbs-icon-size */
+    iconSize?: string;
+    /** --mjo-breadcrumbs-focus-outline */
+    focusOutline?: string;
+    /** --mjo-breadcrumbs-font-family */
+    fontFamily?: string;
+    /** --mjo-breadcrumbs-font-size */
+    fontSize?: string;
+    /** --mjo-breadcrumbs-font-weight */
+    fontWeight?: string;
 }

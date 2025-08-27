@@ -60,15 +60,15 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                 @click=${this.#handleClick}
                 target=${this.target}
                 rel=${ifDefined(this.computedRel || undefined)}
-                role=${ifDefined(this.roleAssignment)}
+                role=${ifDefined(this.roleAssignment as "")}
                 tabindex=${this.computedTabIndex}
                 aria-label=${ifDefined(this.ariaLabel || undefined)}
                 aria-labelledby=${ifDefined(this.ariaLabelledBy)}
                 aria-describedby=${ifDefined(this.ariaDescribedBy)}
-                aria-current=${ifDefined(this.ariaCurrent || undefined)}
+                aria-current=${ifDefined((this.ariaCurrent as "page") || undefined)}
                 data-color=${this.color}
                 class=${aClasses}
-                ?aria-disabled=${this.disabled}
+                aria-disabled=${ifDefined(this.disabled ? "true" : undefined)}
             >
                 ${this.variant === "link"
                     ? html`<span class=${`${this.size} ${this.weight}`}><slot></slot></span>`
@@ -76,7 +76,7 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                           <mjo-button
                               type="button"
                               variant=${this.variant === "button" ? "default" : this.variant}
-                              color=${this.color}
+                              color=${this.color === "default" ? "primary" : this.color}
                               ?disabled=${this.disabled}
                               tabindex="-1"
                           >
@@ -113,7 +113,8 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                 text-decoration: var(--mjo-link-text-decoration, none);
                 font-weight: var(--mjo-link-font-weight, inherit);
                 transition: var(--mjo-link-transition, color 0.2s ease, text-decoration 0.2s ease);
-                display: inline-block;
+                display: inline-flex;
+                align-items: center;
                 outline: none;
             }
 
@@ -173,6 +174,11 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
             /* No decoration variant */
             a.nodecor:hover {
                 text-decoration: none;
+            }
+
+            a span {
+                display: inline-flex;
+                align-items: center;
             }
 
             /* Typography size classes */

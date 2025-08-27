@@ -9,6 +9,7 @@ import "../../src/mjo-accordion.js";
 import "../../src/mjo-alert.js";
 import "../../src/mjo-avatar.js";
 import "../../src/mjo-badge.js";
+import "../../src/mjo-breadcrumbs.js";
 import "../../src/mjo-button.js";
 import "../../src/mjo-calendar.js";
 import "../../src/mjo-card.js";

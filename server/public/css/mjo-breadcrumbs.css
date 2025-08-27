@@ -1,0 +1,72 @@
+/* Breadcrumbs Demo Specific Styles */
+
+.preset-btn {
+    background: var(--mjo-primary-color, #1d7fdb);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.preset-btn:hover {
+    background: var(--mjo-primary-color-darker, #0d5eaa);
+}
+
+.preset-btn:active {
+    transform: translateY(1px);
+}
+
+/* Enhanced playground showcase for breadcrumbs */
+.playground-showcase {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Component showcase spacing for breadcrumbs */
+.component-showcase > mjo-breadcrumbs {
+    margin: 16px 0;
+    display: block;
+}
+
+.component-showcase > mjo-breadcrumbs:first-child {
+    margin-top: 0;
+}
+
+.component-showcase > mjo-breadcrumbs:last-child {
+    margin-bottom: 0;
+}
+
+/* Example section spacing */
+.main-section h3 {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    color: var(--mjo-foreground-color-high, #333);
+}
+
+.main-section h3:first-of-type {
+    margin-top: 24px;
+}
+
+/* Responsive adjustments for breadcrumbs demo */
+@media (max-width: 768px) {
+    .playground-showcase {
+        padding: 16px;
+        min-height: 60px;
+    }
+
+    .preset-btn {
+        font-size: 12px;
+        padding: 6px 12px;
+        margin: 2px;
+    }
+
+    .component-showcase > mjo-breadcrumbs {
+        margin: 12px 0;
+    }
+}
