@@ -1,8 +1,7 @@
 import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { parseColorToRgba } from "../../utils/colors";
 import { MJO_SLIDER_TOPS } from "../../utils/mjo-slider";
-import { getParentNodes } from "../../utils/shadow-dom";
+import { getInheritBackgroundColor } from "../../utils/shadow-dom";
 
 const MEDIUM_SIZE = 20;
 
@@ -29,7 +28,6 @@ export class SliderHandle extends LitElement {
     @property({ type: String, attribute: "aria-disabled" }) ariaDisabledAttr?: string;
 
     @state() private isFocused = false;
-    @state() private backgroundColor = "";
 
     start: number = 0;
 
@@ -249,21 +247,9 @@ export class SliderHandle extends LitElement {
     }
 
     #setBackgroundColor = () => {
-        const parentNodesGen = getParentNodes(this);
-        let parent = parentNodesGen.next();
-        let lastColor = "";
-        while (parent.done === false) {
-            const backgroundColor = window.getComputedStyle(parent.value).backgroundColor;
-            lastColor = backgroundColor;
-            const rgba = parseColorToRgba(backgroundColor);
-            if (rgba.a > 0) {
-                this.backgroundColor = backgroundColor;
-                break;
-            }
-            parent = parentNodesGen.next();
-        }
+        const backgroundColor = getInheritBackgroundColor(this);
 
-        this.style.setProperty("--inner-background-color", this.backgroundColor || lastColor);
+        this.style.setProperty("--inner-background-color", backgroundColor);
     };
 
     static styles = [

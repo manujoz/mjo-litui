@@ -18,6 +18,7 @@ export default defineConfig({
             input: {
                 main: `${__dirname}/dev/index.html`,
                 "mjo-link": `${__dirname}/dev/mjo-link.html`,
+                "mjo-badge": `${__dirname}/dev/mjo-badge.html`,
             },
         },
     },

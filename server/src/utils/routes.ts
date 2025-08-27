@@ -1,6 +1,7 @@
 import { AccordionController } from "../controllers/accordion-controller.js";
 import { AlertController } from "../controllers/alert-controller.js";
 import { AvatarController } from "../controllers/avatar-controller.js";
+import { BadgeController } from "../controllers/badge-controller.js";
 import { ButtonController } from "../controllers/button-controller.js";
 import { CalendarController } from "../controllers/calendar-controller.js";
 import { CardController } from "../controllers/card-controller.js";
@@ -35,6 +36,7 @@ import { TypographyController } from "../controllers/typography-controller.js";
 const indexController = new IndexController();
 const alertController = new AlertController();
 const avatarController = new AvatarController();
+const badgeController = new BadgeController();
 const buttonController = new ButtonController();
 const calendarController = new CalendarController();
 const cardController = new CardController();
@@ -82,6 +84,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-avatar",
         controller: avatarController.renderAvatarPage,
+    },
+    {
+        path: "/component/mjo-badge",
+        controller: badgeController.renderBadgePage,
     },
     {
         path: "/component/mjo-button",

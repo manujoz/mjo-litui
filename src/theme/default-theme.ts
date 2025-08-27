@@ -28,6 +28,7 @@ export const defaultTheme: MjoThemeConfig = {
         success: "#4caf50",
         error: "#f44336",
         info: "#128ada",
+        default: "#999999",
         blue: {
             default: "#1d7fdb",
             alpha0: "#e3f2fd00",

@@ -16,8 +16,7 @@ a:hover {
 
 body {
     margin: 0;
-    display: grid;
-    place-content: center;
+    padding: 10px;
     background-color: var(--mjo-background-color);
     color: var(--mjo-foreground-color);
 }

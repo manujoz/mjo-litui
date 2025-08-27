@@ -1,4 +1,5 @@
 import { type LitElement } from "lit";
+import { parseColorToRgba } from "./colors";
 
 export const getParentNodes = function* (el: HTMLElement | ShadowRoot["host"]) {
     let current: HTMLElement | Element | null = el.parentElement || (el.getRootNode() as ShadowRoot).host;
@@ -38,4 +39,23 @@ export const querySelectorShadowRoot = (selector: keyof HTMLElementTagNameMap, e
         return element.shadowRoot.querySelector(selector);
     }
     return null;
+};
+
+export const getInheritBackgroundColor = (component: HTMLElement) => {
+    const parentNodesGen = getParentNodes(component);
+    let parent = parentNodesGen.next();
+    let lastColor = "";
+    let backgroundColor = "";
+    while (parent.done === false) {
+        const backgroundColorComputed = window.getComputedStyle(parent.value).backgroundColor;
+        lastColor = backgroundColorComputed;
+        const rgba = parseColorToRgba(backgroundColorComputed);
+        if (rgba.a > 0) {
+            backgroundColor = backgroundColorComputed;
+            break;
+        }
+        parent = parentNodesGen.next();
+    }
+
+    return backgroundColor || lastColor;
 };

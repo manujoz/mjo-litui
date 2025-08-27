@@ -1,0 +1,184 @@
+/* Badge specific styles for interactive demo */
+
+.badge-showcase-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.badge-positions-demo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    align-items: center;
+    justify-items: center;
+}
+
+.badge-example-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px;
+    background: var(--mjo-background-color-card, #f8fafc);
+    border-radius: 12px;
+    border: 1px solid var(--mjo-border-color, #e2e8f0);
+}
+
+.badge-icon-showcase {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background: var(--mjo-background-color-card);
+    border-radius: 12px;
+    border: 2px dashed var(--mjo-border-color-high);
+}
+
+/* Badge color preview */
+.badge-color-preview {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px 0;
+}
+
+.badge-color-swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--mjo-border-color);
+}
+
+/* Interactive controls specific to badge */
+.badge-offset-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.badge-target-selector {
+    background: var(--mjo-background-color-card-low);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+}
+
+.badge-target-selector h4 {
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+    color: var(--mjo-foreground-color-low);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Badge animation demo */
+.animated-badge-demo {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 20px;
+    background: var(--mjo-background-color-card);
+    border-radius: 12px;
+    border: 1px solid var(--mjo-border-color);
+}
+
+.badge-demo-item {
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.badge-demo-item:hover {
+    transform: scale(1.05);
+}
+
+/* Click feedback for interactive badges */
+.clickable-badge-demo {
+    cursor: help;
+}
+
+.clickable-badge-demo:hover {
+    background: var(--mjo-background-color-hover, rgba(0, 0, 0, 0.05));
+    border-radius: 8px;
+    padding: 4px;
+    margin: -4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .badge-positions-demo {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .badge-icon-showcase {
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .badge-example-group {
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .badge-offset-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Badge size comparison visual aids */
+.size-comparison-labels {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 10px 0;
+    font-size: 0.8rem;
+    color: var(--mjo-foreground-color-low);
+}
+
+.size-label {
+    text-align: center;
+}
+
+/* Position demonstration grid */
+.position-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    justify-items: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Special styling for icon + badge combinations */
+.icon-badge-combo {
+    position: relative;
+    display: inline-block;
+    padding: 8px;
+    transition: all 0.3s ease;
+}
+
+.icon-badge-combo:hover {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+/* Badge content type indicators */
+.content-type-demo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--mjo-background-color-card) 0%, var(--mjo-background-color-low) 100%);
+    border-radius: 12px;
+    border: 1px solid var(--mjo-border-color);
+}
+
+.content-type-demo h4 {
+    width: 100%;
+    margin: 0 0 10px 0;
+    color: var(--mjo-foreground-color);
+    font-size: 1rem;
+}

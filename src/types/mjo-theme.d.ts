@@ -54,6 +54,7 @@ export interface MjoThemeConfig {
         mjoAccordionItem?: MjoAccordionItemTheme;
         mjoAlert?: MjoAlertTheme;
         mjoAvatar?: MjoAvatarTheme;
+        mjoBadge?: MjoBadgeTheme;
         mjoButton?: MjoButtonTheme;
         mjoCalendar?: MjoCalendarTheme;
         mjoCard?: MjoCardTheme;
@@ -94,6 +95,8 @@ export interface MjoThemeConfig {
         warning: string;
         /** --mjo-color-info */
         info: string;
+        /** --mjo-color-default */
+        default: string;
         /** --mjo-color-blue, --mjo-color-blue-[50-900] */
         blue?: MjoThemeShadeStructure;
         /** --mjo-color-cyan, --mjo-color-cyan-[50-900] */
@@ -224,6 +227,15 @@ export interface MjoAvatarTheme {
     sizeSmall?: string;
     sizeMedium?: string;
     sizeLarge?: string;
+}
+
+export interface MjoBadgeTheme {
+    borderWidth?: string;
+    fontSizeSmall?: string;
+    fontSizeMedium?: string;
+    fontSizeLarge?: string;
+    focusOutlineWidth?: string;
+    focusOutlineOffset?: string;
 }
 
 export interface MjoButtonTheme {
