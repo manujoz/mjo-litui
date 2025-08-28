@@ -6,8 +6,8 @@ import { AiFillAlipaySquare } from "mjo-icons/ai";
 import "../../src/mjo-badge.js";
 import "../../src/mjo-grid.js";
 
-@customElement("badge-test")
-export class BadgeTest extends LitElement {
+@customElement("badge-component")
+export class BadgeComponent extends LitElement {
     render() {
         return html`
             <mjo-grid columns="4" gap="50px">
@@ -54,6 +54,6 @@ export class BadgeTest extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "badge-test": BadgeTest;
+        "badge-component": BadgeComponent;
     }
 }

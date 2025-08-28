@@ -73,6 +73,7 @@ export interface MjoThemeConfig {
         mjoModal?: MjoModalTheme;
         mjoNotification?: MjoNotificationTheme;
         mjoPagination?: MjoPaginationTheme;
+        mjoProgress?: MjoProgressTheme;
         mjoRadio?: MjoRadioTheme;
         mjoRipple?: MjoRippleTheme;
         mjoSelect?: MjoSelectTheme;
@@ -722,6 +723,39 @@ export interface MjoPaginationTheme {
     selectBorderRadius?: string;
     selectColor?: string;
     selectPadding?: string;
+}
+
+export interface MjoProgressTheme {
+    /** --mjo-progress-label-gap */
+    labelGap?: string;
+    /** --mjo-progress-font-size */
+    fontSize?: string;
+    /** --mjo-progress-font-weight */
+    fontWeight?: string;
+    /** --mjo-progress-font-size-small */
+    fontSizeSmall?: string;
+    /** --mjo-progress-font-size-medium */
+    fontSizeMedium?: string;
+    /** --mjo-progress-font-size-large */
+    fontSizeLarge?: string;
+    /** --mjo-progress-background */
+    background?: string;
+    /** --mjo-progress-color */
+    color?: string;
+    /** --mjo-progress-bar-border-radius */
+    barBorderRadius?: string;
+    /** --mjo-progress-bar-border-radius-small */
+    barBorderRadiusSmall?: string;
+    /** --mjo-progress-bar-border-radius-large */
+    barBorderRadiusLarge?: string;
+    /** --mjo-progress-animation-duration */
+    animationDuration?: string;
+    /** --mjo-progress-circle-dash */
+    circleDash?: string;
+    /** --mjo-progress-circle-dash-small */
+    circleDashSmall?: string;
+    /** --mjo-progress-circle-dash-large */
+    circleDashLarge?: string;
 }
 
 export interface MjoBreadcrumbsTheme {

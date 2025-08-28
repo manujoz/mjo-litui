@@ -1,0 +1,99 @@
+/* Progress Demo Specific Styles */
+
+.progress-example {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.progress-example h4 {
+    margin: 0 0 8px 0;
+    font-size: 0.875rem;
+    color: var(--mjo-text-color-high);
+    font-weight: 500;
+}
+
+/* Enhanced component showcase for progress */
+.component-showcase .progress-example {
+    min-width: 280px;
+    padding: 16px;
+    background: var(--mjo-background-color-card, var(--mjo-background-color));
+    border: 1px solid var(--mjo-border-color, transparent);
+    border-radius: 8px;
+    margin: 8px;
+}
+
+/* Circle progress alignment */
+.component-showcase mjo-progress[variant="circle"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px;
+}
+
+/* Interactive demo specific styles */
+.playground-showcase {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+/* Value display styling */
+#value-display {
+    margin-left: 8px;
+    font-weight: 600;
+    color: var(--mjo-primary-color, #4e9be4);
+    min-width: 40px;
+    display: inline-block;
+}
+
+/* Animation button */
+button {
+    margin-top: 12px;
+    padding: 8px 16px;
+    border: 1px solid var(--mjo-border-color, #d1d5db);
+    background: var(--mjo-background-color-card, #ffffff);
+    color: var(--mjo-text-color, inherit);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background: var(--mjo-background-color-hover, #f9fafb);
+}
+
+button:active {
+    background: var(--mjo-background-color-pressed, #f3f4f6);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .component-showcase .progress-example {
+        min-width: 250px;
+    }
+
+    .playground-showcase {
+        min-height: 100px;
+        padding: 16px;
+    }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] button {
+    background: var(--mjo-background-color-card, #1f2937);
+    border-color: var(--mjo-border-color, #374151);
+    color: var(--mjo-text-color, #f9fafb);
+}
+
+[data-theme="dark"] button:hover {
+    background: var(--mjo-background-color-hover, #374151);
+}
+
+[data-theme="dark"] button:active {
+    background: var(--mjo-background-color-pressed, #4b5563);
+}

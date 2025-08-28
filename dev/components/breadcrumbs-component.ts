@@ -25,8 +25,8 @@ const items: MjoBreadcrumbsItems = [
     },
 ];
 
-@customElement("breadcrumbs-test")
-export class BreadcrumbsTest extends LitElement {
+@customElement("breadcrumbs-component")
+export class BreadcrumbsComponent extends LitElement {
     render() {
         return html`<mjo-breadcrumbs .items=${items} color="secondary" size="small"></mjo-breadcrumbs>`;
     }
@@ -42,6 +42,6 @@ export class BreadcrumbsTest extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "breadcrumbs-test": BreadcrumbsTest;
+        "breadcrumbs-component": BreadcrumbsComponent;
     }
 }

@@ -3,8 +3,8 @@ import { customElement } from "lit/decorators.js";
 
 import "../../src/mjo-link.js";
 
-@customElement("link-test")
-export class LinkTest extends LitElement {
+@customElement("link-component")
+export class LinkComponent extends LitElement {
     render() {
         return html`
             <p>
@@ -62,6 +62,6 @@ export class LinkTest extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "link-test": LinkTest;
+        "link-component": LinkComponent;
     }
 }

@@ -23,6 +23,7 @@ import { MessagesController } from "../controllers/messages-controller.js";
 import { ModalController } from "../controllers/modal-controller.js";
 import { NotificationController } from "../controllers/notification-controller.js";
 import { PaginationController } from "../controllers/pagination-controller.js";
+import { ProgressController } from "../controllers/progress-controller.js";
 import { RadioController } from "../controllers/radio-controller.js";
 import { RippleController } from "../controllers/ripple-controller.js";
 import { SelectController } from "../controllers/select-controller.js";
@@ -59,6 +60,7 @@ const messagesController = new MessagesController();
 const modalController = new ModalController();
 const notificationController = new NotificationController();
 const paginationController = new PaginationController();
+const progressController = new ProgressController();
 const radioController = new RadioController();
 const rippleController = new RippleController();
 const selectController = new SelectController();
@@ -170,6 +172,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-pagination",
         controller: paginationController.renderPaginationPage,
+    },
+    {
+        path: "/component/mjo-progress",
+        controller: progressController.renderProgressPage,
     },
     {
         path: "/component/mjo-radio",
