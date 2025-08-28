@@ -1,13 +1,11 @@
-/* eslint-disable no-console */
-import type { MjoTheme } from "../src/mjo-theme.js";
-import { MjoTableColumns, MjoTableRowClickEvent, MjoTableRows, MjoTableSelectEvent } from "../src/types/mjo-table.js";
+import type { MjoTheme } from "../../src/mjo-theme.js";
+import { MjoTableColumns, MjoTableRowClickEvent, MjoTableRows, MjoTableSelectEvent } from "../../src/types/mjo-table";
 
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
-import "../src/mjo-button.js";
-import "../src/mjo-table.js";
-import "../src/mjo-theme.js";
+import "../../src/mjo-button.js";
+import "../../src/mjo-table.js";
 
 const COLUMNS: MjoTableColumns = [
     { name: "name", label: "Name", sortable: true, filterable: true, minWidth: 150 },
@@ -69,8 +67,8 @@ const ROWS: MjoTableRows = [
     { _key: 50, name: "Will Irving", email: "will@example.com", age: 28, city: "Tampa" },
 ];
 
-@customElement("my-element")
-export class MyElement extends LitElement {
+@customElement("table-component")
+export class TableComponent extends LitElement {
     render() {
         return html` <div class=".container">
             <mjo-theme theme="light" scope="global"> </mjo-theme>
@@ -110,22 +108,24 @@ export class MyElement extends LitElement {
         }
     };
 
-    static styles = css`
-        :host {
-            position: relative;
-            min-width: 100vw;
-            margin: 0 auto;
-            text-align: center;
-        }
-        mjo-table {
-            padding: 20px;
-            max-width: 100dvw;
-        }
-    `;
+    static styles = [
+        css`
+            :host {
+                position: relative;
+                min-width: 100vw;
+                margin: 0 auto;
+                text-align: center;
+            }
+            mjo-table {
+                padding: 20px;
+                max-width: 100dvw;
+            }
+        `,
+    ];
 }
 
 declare global {
     interface HTMLElementTagNameMap {
-        "my-element": MyElement;
+        "table-component": TableComponent;
     }
 }

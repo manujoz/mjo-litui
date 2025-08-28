@@ -968,7 +968,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             background-color: var(--mjo-table-background-color, var(--mjo-background-color-card-low, #f0f0f0));
             width: 100%;
             scrollbar-color: var(--mjo-table-scrollbar-thumb-color, var(--mjo-background-color, #888))
-                var(--mjo-scrollbar-track-color, var(--mjo-background-color-xhigh, #f1f1f1));
+                var(--mjo-scrollbar-track-color, var(--mjo-background-color-high, #f1f1f1));
         }
         table {
             width: 100%;

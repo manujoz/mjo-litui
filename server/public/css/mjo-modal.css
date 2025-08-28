@@ -53,7 +53,7 @@
 .showcase-item .description {
     margin: 0;
     font-size: 14px;
-    color: var(--mjo-foreground-color-xlow, #666);
+    color: var(--mjo-foreground-color-low, #666);
     line-height: 1.4;
 }
 

@@ -1,0 +1,392 @@
+/* 
+ * Default Theme CSS Variables
+ * Generated from default-theme.ts
+ */
+
+:root {
+    /* Basic Properties */
+    --mjo-radius-large: 10px;
+    --mjo-radius-medium: 5px;
+    --mjo-radius-small: 3px;
+
+    /* Font Sizes */
+    --mjo-font-size-large: 1.5em;
+    --mjo-font-size-xlarge: 1.75em;
+    --mjo-font-size-xxlarge: 2em;
+    --mjo-font-size: 1em;
+    --mjo-font-size-small: 0.8em;
+    --mjo-font-size-xsmall: 0.6em;
+    --mjo-font-size-xxsmall: 0.4em;
+
+    /* Font Weights */
+    --mjo-font-weight-bold: 700;
+    --mjo-font-weight-light: 300;
+    --mjo-font-weight-medium: 500;
+    --mjo-font-weight-regular: 400;
+
+    /* Spacing */
+    --mjo-space-xxsmall: 3px;
+    --mjo-space-xsmall: 6px;
+    --mjo-space-small: 8px;
+    --mjo-space: 16px;
+    --mjo-space-large: 24px;
+    --mjo-space-xlarge: 32px;
+    --mjo-space-xxlarge: 40px;
+
+    /* Colors */
+    --mjo-color-white: #ffffff;
+    --mjo-color-black: #000000;
+    --mjo-color-warning: #ff9800;
+    --mjo-color-success: #4caf50;
+    --mjo-color-error: #f44336;
+    --mjo-color-info: #128ada;
+    --mjo-color-default: #999999;
+    --mjo-color-gradient: linear-gradient(133deg, #1d7fdb 0%, #cc3d74 100%);
+    --mjo-color-gradient1: linear-gradient(133deg, #cc3d74 0%, #1d7fdb 100%);
+    --mjo-color-gradient2: radial-gradient(circle, #cc3d74 0%, #1d7fdb 100%);
+    --mjo-color-gradient3: radial-gradient(circle, #1d7fdb 0%, #cc3d74 100%);
+
+    /* Blue Color Palette */
+    --mjo-color-blue: #1d7fdb;
+    --mjo-color-blue-alpha0: #e3f2fd00;
+    --mjo-color-blue-alpha1: #e3f2fd11;
+    --mjo-color-blue-alpha2: #e3f2fd22;
+    --mjo-color-blue-alpha3: #e3f2fd33;
+    --mjo-color-blue-alpha4: #e3f2fd44;
+    --mjo-color-blue-alpha5: #e3f2fd55;
+    --mjo-color-blue-alpha6: #e3f2fd66;
+    --mjo-color-blue-alpha7: #e3f2fd77;
+    --mjo-color-blue-alpha8: #e3f2fd88;
+    --mjo-color-blue-alpha9: #e3f2fd99;
+    --mjo-color-blue-50: #e3f2fd;
+    --mjo-color-blue-100: #bbdefb;
+    --mjo-color-blue-200: #90caf9;
+    --mjo-color-blue-300: #64b5f6;
+    --mjo-color-blue-400: #42a5f5;
+    --mjo-color-blue-500: #1d7fdb;
+    --mjo-color-blue-600: #1e88e5;
+    --mjo-color-blue-700: #1976d2;
+    --mjo-color-blue-800: #1565c0;
+    --mjo-color-blue-900: #0d47a1;
+
+    /* Cyan Color Palette */
+    --mjo-color-cyan: #00bcd4;
+    --mjo-color-cyan-alpha0: #00bcd400;
+    --mjo-color-cyan-alpha1: #00bcd411;
+    --mjo-color-cyan-alpha2: #00bcd422;
+    --mjo-color-cyan-alpha3: #00bcd433;
+    --mjo-color-cyan-alpha4: #00bcd444;
+    --mjo-color-cyan-alpha5: #00bcd455;
+    --mjo-color-cyan-alpha6: #00bcd466;
+    --mjo-color-cyan-alpha7: #00bcd477;
+    --mjo-color-cyan-alpha8: #00bcd488;
+    --mjo-color-cyan-alpha9: #00bcd499;
+    --mjo-color-cyan-50: #e0f7fa;
+    --mjo-color-cyan-100: #b2ebf2;
+    --mjo-color-cyan-200: #80deea;
+    --mjo-color-cyan-300: #4dd0e1;
+    --mjo-color-cyan-400: #26c6da;
+    --mjo-color-cyan-500: #00bcd4;
+    --mjo-color-cyan-600: #00acc1;
+    --mjo-color-cyan-700: #0097a7;
+    --mjo-color-cyan-800: #00838f;
+    --mjo-color-cyan-900: #006064;
+
+    /* Green Color Palette */
+    --mjo-color-green: #4caf50;
+    --mjo-color-green-alpha0: #4caf5000;
+    --mjo-color-green-alpha1: #4caf5011;
+    --mjo-color-green-alpha2: #4caf5022;
+    --mjo-color-green-alpha3: #4caf5033;
+    --mjo-color-green-alpha4: #4caf5044;
+    --mjo-color-green-alpha5: #4caf5055;
+    --mjo-color-green-alpha6: #4caf5066;
+    --mjo-color-green-alpha7: #4caf5077;
+    --mjo-color-green-alpha8: #4caf5088;
+    --mjo-color-green-alpha9: #4caf5099;
+    --mjo-color-green-50: #e8f5e9;
+    --mjo-color-green-100: #c8e6c9;
+    --mjo-color-green-200: #a5d6a7;
+    --mjo-color-green-300: #81c784;
+    --mjo-color-green-400: #66bb6a;
+    --mjo-color-green-500: #4caf50;
+    --mjo-color-green-600: #43a047;
+    --mjo-color-green-700: #388e3c;
+    --mjo-color-green-800: #2e7d32;
+    --mjo-color-green-900: #1b5e20;
+
+    /* Purple Color Palette */
+    --mjo-color-purple: #9c27b0;
+    --mjo-color-purple-alpha0: #9c27b000;
+    --mjo-color-purple-alpha1: #9c27b011;
+    --mjo-color-purple-alpha2: #9c27b022;
+    --mjo-color-purple-alpha3: #9c27b033;
+    --mjo-color-purple-alpha4: #9c27b044;
+    --mjo-color-purple-alpha5: #9c27b055;
+    --mjo-color-purple-alpha6: #9c27b066;
+    --mjo-color-purple-alpha7: #9c27b077;
+    --mjo-color-purple-alpha8: #9c27b088;
+    --mjo-color-purple-alpha9: #9c27b099;
+    --mjo-color-purple-50: #f3e5f5;
+    --mjo-color-purple-100: #e1bee7;
+    --mjo-color-purple-200: #ce93d8;
+    --mjo-color-purple-300: #ba68c8;
+    --mjo-color-purple-400: #ab47bc;
+    --mjo-color-purple-500: #9c27b0;
+    --mjo-color-purple-600: #8e24aa;
+    --mjo-color-purple-700: #7b1fa2;
+    --mjo-color-purple-800: #6a1b9a;
+    --mjo-color-purple-900: #4a148c;
+
+    /* Red Color Palette */
+    --mjo-color-red: #f44336;
+    --mjo-color-red-alpha0: #f4433600;
+    --mjo-color-red-alpha1: #f4433611;
+    --mjo-color-red-alpha2: #f4433622;
+    --mjo-color-red-alpha3: #f4433633;
+    --mjo-color-red-alpha4: #f4433644;
+    --mjo-color-red-alpha5: #f4433655;
+    --mjo-color-red-alpha6: #f4433666;
+    --mjo-color-red-alpha7: #f4433677;
+    --mjo-color-red-alpha8: #f4433688;
+    --mjo-color-red-alpha9: #f4433699;
+    --mjo-color-red-50: #ffebee;
+    --mjo-color-red-100: #ffcdd2;
+    --mjo-color-red-200: #ef9a9a;
+    --mjo-color-red-300: #e57373;
+    --mjo-color-red-400: #ef5350;
+    --mjo-color-red-500: #f44336;
+    --mjo-color-red-600: #e53935;
+    --mjo-color-red-700: #d32f2f;
+    --mjo-color-red-800: #c62828;
+    --mjo-color-red-900: #b71c1c;
+
+    /* Yellow Color Palette */
+    --mjo-color-yellow: #ffeb3b;
+    --mjo-color-yellow-alpha0: #ffeb3b00;
+    --mjo-color-yellow-alpha1: #ffeb3b11;
+    --mjo-color-yellow-alpha2: #ffeb3b22;
+    --mjo-color-yellow-alpha3: #ffeb3b33;
+    --mjo-color-yellow-alpha4: #ffeb3b44;
+    --mjo-color-yellow-alpha5: #ffeb3b55;
+    --mjo-color-yellow-alpha6: #ffeb3b66;
+    --mjo-color-yellow-alpha7: #ffeb3b77;
+    --mjo-color-yellow-alpha8: #ffeb3b88;
+    --mjo-color-yellow-alpha9: #ffeb3b99;
+    --mjo-color-yellow-50: #fffde7;
+    --mjo-color-yellow-100: #fff9c4;
+    --mjo-color-yellow-200: #fff59d;
+    --mjo-color-yellow-300: #fff176;
+    --mjo-color-yellow-400: #ffee58;
+    --mjo-color-yellow-500: #ffeb3b;
+    --mjo-color-yellow-600: #fdd835;
+    --mjo-color-yellow-700: #fbc02d;
+    --mjo-color-yellow-800: #f9a825;
+    --mjo-color-yellow-900: #f57f17;
+
+    /* Pink Color Palette */
+    --mjo-color-pink: #e91e63;
+    --mjo-color-pink-alpha0: #e91e6300;
+    --mjo-color-pink-alpha1: #e91e6311;
+    --mjo-color-pink-alpha2: #e91e6322;
+    --mjo-color-pink-alpha3: #e91e6333;
+    --mjo-color-pink-alpha4: #e91e6344;
+    --mjo-color-pink-alpha5: #e91e6355;
+    --mjo-color-pink-alpha6: #e91e6366;
+    --mjo-color-pink-alpha7: #e91e6377;
+    --mjo-color-pink-alpha8: #e91e6388;
+    --mjo-color-pink-alpha9: #e91e6399;
+    --mjo-color-pink-50: #fce4ec;
+    --mjo-color-pink-100: #f8bbd0;
+    --mjo-color-pink-200: #f48fb1;
+    --mjo-color-pink-300: #f06292;
+    --mjo-color-pink-400: #ec407a;
+    --mjo-color-pink-500: #e91e63;
+    --mjo-color-pink-600: #d81b60;
+    --mjo-color-pink-700: #c2185b;
+    --mjo-color-pink-800: #ad1457;
+    --mjo-color-pink-900: #880e4f;
+
+    /* Gray Color Palette */
+    --mjo-color-gray: #71717a;
+    --mjo-color-gray-alpha0: #71717a00;
+    --mjo-color-gray-alpha1: #71717a11;
+    --mjo-color-gray-alpha2: #71717a22;
+    --mjo-color-gray-alpha3: #71717a33;
+    --mjo-color-gray-alpha4: #71717a44;
+    --mjo-color-gray-alpha5: #71717a55;
+    --mjo-color-gray-alpha6: #71717a66;
+    --mjo-color-gray-alpha7: #71717a77;
+    --mjo-color-gray-alpha8: #71717a88;
+    --mjo-color-gray-alpha9: #71717a99;
+    --mjo-color-gray-50: #fafafa;
+    --mjo-color-gray-100: #f4f4f5;
+    --mjo-color-gray-200: #e4e4e7;
+    --mjo-color-gray-300: #d4d4d8;
+    --mjo-color-gray-400: #a1a1aa;
+    --mjo-color-gray-500: #71717a;
+    --mjo-color-gray-600: #52525b;
+    --mjo-color-gray-700: #3f3f46;
+    --mjo-color-gray-800: #27272a;
+    --mjo-color-gray-900: #18181b;
+
+    /* Light Theme Mode Variables */
+    --mjo-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    --mjo-box-shadow-1: 0 0 2px rgba(0, 0, 0, 0.3);
+    --mjo-box-shadow-2: 0 0 8px rgba(0, 0, 0, 0.25);
+    --mjo-box-shadow-3: 0 0 14px rgba(0, 0, 0, 0.25);
+    --mjo-box-shadow-4: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    --mjo-box-shadow-5: 4px 4px 14px rgba(0, 0, 0, 0.25);
+
+    --mjo-primary-color: #1d7fdb;
+    --mjo-primary-color-hover: #1a72c5;
+    --mjo-primary-color-alpha0: #1d7fdb00;
+    --mjo-primary-color-alpha1: #1d7fdb11;
+    --mjo-primary-color-alpha2: #1d7fdb22;
+    --mjo-primary-color-alpha3: #1d7fdb33;
+    --mjo-primary-color-alpha4: #1d7fdb44;
+    --mjo-primary-color-alpha5: #1d7fdb55;
+    --mjo-primary-color-alpha6: #1d7fdb66;
+    --mjo-primary-color-alpha7: #1d7fdb77;
+    --mjo-primary-color-alpha8: #1d7fdb88;
+    --mjo-primary-color-alpha9: #1d7fdb99;
+    --mjo-primary-color-50: #e8f2fb;
+    --mjo-primary-color-100: #d2e5f8;
+    --mjo-primary-color-200: #a5ccf1;
+    --mjo-primary-color-300: #77b2e9;
+    --mjo-primary-color-400: #4a99e2;
+    --mjo-primary-color-500: #1d7fdb;
+    --mjo-primary-color-600: #1a72c5;
+    --mjo-primary-color-700: #145999;
+    --mjo-primary-color-800: #0f406e;
+    --mjo-primary-color-900: #092642;
+
+    --mjo-primary-foreground-color: #ffffff;
+    --mjo-primary-foreground-color-light: #f2f2f2;
+    --mjo-primary-foreground-color-dark: #cccccc;
+
+    --mjo-secondary-color: #cc3d74;
+    --mjo-secondary-color-hover: #b83768;
+    --mjo-secondary-color-alpha0: #cc3d7400;
+    --mjo-secondary-color-alpha1: #cc3d7411;
+    --mjo-secondary-color-alpha2: #cc3d7422;
+    --mjo-secondary-color-alpha3: #cc3d7433;
+    --mjo-secondary-color-alpha4: #cc3d7444;
+    --mjo-secondary-color-alpha5: #cc3d7455;
+    --mjo-secondary-color-alpha6: #cc3d7466;
+    --mjo-secondary-color-alpha7: #cc3d7477;
+    --mjo-secondary-color-alpha8: #cc3d7488;
+    --mjo-secondary-color-alpha9: #cc3d7499;
+    --mjo-secondary-color-50: #faecf1;
+    --mjo-secondary-color-100: #f5d8e3;
+    --mjo-secondary-color-200: #ebb1c7;
+    --mjo-secondary-color-300: #e08bac;
+    --mjo-secondary-color-400: #d66490;
+    --mjo-secondary-color-500: #cc3d74;
+    --mjo-secondary-color-600: #b83768;
+    --mjo-secondary-color-700: #8f2b51;
+    --mjo-secondary-color-800: #661f3a;
+    --mjo-secondary-color-900: #3d1223;
+
+    --mjo-secondary-foreground-color: #ffffff;
+    --mjo-secondary-foreground-color-light: #f2f2f2;
+    --mjo-secondary-foreground-color-dark: #cccccc;
+
+    --mjo-border-color-low: #fcfcfc;
+    --mjo-border-color: #dddddd;
+    --mjo-border-color-high: #cccccc;
+
+    --mjo-background-color-hover: #eeeeee;
+    --mjo-background-color-low: #f8f8f8;
+    --mjo-background-color: #efefef;
+    --mjo-background-color-high: #dadada;
+
+    --mjo-background-color-card-low: #ffffff;
+    --mjo-background-color-card: #fafafa;
+    --mjo-background-color-card-high: #e6e6e6;
+
+    --mjo-foreground-color-low: #666666;
+    --mjo-foreground-color: #333333;
+    --mjo-foreground-color-high: #151515;
+}
+
+/* Dark Theme Mode Variables */
+.dark {
+    --mjo-box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    --mjo-box-shadow-1: 0 0 2px rgba(0, 0, 0, 1);
+    --mjo-box-shadow-2: 0 0 8px rgba(0, 0, 0, 0.8);
+    --mjo-box-shadow-3: 0 0 14px rgba(0, 0, 0, 1);
+    --mjo-box-shadow-4: 4px 4px 8px rgba(0, 0, 0, 1);
+    --mjo-box-shadow-5: 4px 4px 14px rgba(0, 0, 0, 0.9);
+
+    --mjo-primary-color: #1d7fdb;
+    --mjo-primary-color-hover: #1a72c5;
+    --mjo-primary-color-alpha0: #1d7fdb00;
+    --mjo-primary-color-alpha1: #1d7fdb11;
+    --mjo-primary-color-alpha2: #1d7fdb22;
+    --mjo-primary-color-alpha3: #1d7fdb33;
+    --mjo-primary-color-alpha4: #1d7fdb44;
+    --mjo-primary-color-alpha5: #1d7fdb55;
+    --mjo-primary-color-alpha6: #1d7fdb66;
+    --mjo-primary-color-alpha7: #1d7fdb77;
+    --mjo-primary-color-alpha8: #1d7fdb88;
+    --mjo-primary-color-alpha9: #1d7fdb99;
+    --mjo-primary-color-50: #e8f2fb;
+    --mjo-primary-color-100: #d2e5f8;
+    --mjo-primary-color-200: #a5ccf1;
+    --mjo-primary-color-300: #77b2e9;
+    --mjo-primary-color-400: #4a99e2;
+    --mjo-primary-color-500: #1d7fdb;
+    --mjo-primary-color-600: #1a72c5;
+    --mjo-primary-color-700: #145999;
+    --mjo-primary-color-800: #0f406e;
+    --mjo-primary-color-900: #092642;
+
+    --mjo-primary-foreground-color: #ffffff;
+    --mjo-primary-foreground-color-light: #f2f2f2;
+    --mjo-primary-foreground-color-dark: #cccccc;
+
+    --mjo-secondary-color: #cc3d74;
+    --mjo-secondary-color-hover: #b83768;
+    --mjo-secondary-color-alpha0: #cc3d7400;
+    --mjo-secondary-color-alpha1: #cc3d7411;
+    --mjo-secondary-color-alpha2: #cc3d7422;
+    --mjo-secondary-color-alpha3: #cc3d7433;
+    --mjo-secondary-color-alpha4: #cc3d7444;
+    --mjo-secondary-color-alpha5: #cc3d7455;
+    --mjo-secondary-color-alpha6: #cc3d7466;
+    --mjo-secondary-color-alpha7: #cc3d7477;
+    --mjo-secondary-color-alpha8: #cc3d7488;
+    --mjo-secondary-color-alpha9: #cc3d7499;
+    --mjo-secondary-color-50: #faecf1;
+    --mjo-secondary-color-100: #f5d8e3;
+    --mjo-secondary-color-200: #ebb1c7;
+    --mjo-secondary-color-300: #e08bac;
+    --mjo-secondary-color-400: #d66490;
+    --mjo-secondary-color-500: #cc3d74;
+    --mjo-secondary-color-600: #b83768;
+    --mjo-secondary-color-700: #8f2b51;
+    --mjo-secondary-color-800: #661f3a;
+    --mjo-secondary-color-900: #3d1223;
+
+    --mjo-secondary-foreground-color: #ffffff;
+    --mjo-secondary-foreground-color-light: #f2f2f2;
+    --mjo-secondary-foreground-color-dark: #cccccc;
+
+    --mjo-border-color-low: #333333;
+    --mjo-border-color: #555555;
+    --mjo-border-color-high: #666666;
+
+    --mjo-background-color-hover: #666666;
+    --mjo-background-color-low: #101010;
+    --mjo-background-color: #151515;
+    --mjo-background-color-high: #252525;
+
+    --mjo-background-color-card-low: #222222;
+    --mjo-background-color-card: #333333;
+    --mjo-background-color-card-high: #555555;
+
+    --mjo-foreground-color-low: #cccccc;
+    --mjo-foreground-color: #f0f0f0;
+    --mjo-foreground-color-high: #ffffff;
+}

@@ -30,6 +30,9 @@ export class MjoTheme extends LitElement {
             this.theme = Cookies.get("mjo-theme") as MjoThemeModes;
         }
 
+        document.querySelector("html")?.classList.remove(this.theme === "light" ? "dark" : "light");
+        document.querySelector("html")?.classList.add(this.theme);
+
         this.applyTheme();
     }
 

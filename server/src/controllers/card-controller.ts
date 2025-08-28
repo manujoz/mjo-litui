@@ -64,6 +64,15 @@ export class CardController {
                                 <option value="large">Large</option>
                             </select>
                         </div>
+
+                        <div class="control-group">
+                            <h4>Variant</h4>
+                            <select onchange="changeCardProp('variant', this.value)">
+                                <option value="default" selected>Default</option>
+                                <option value="modern">Modern</option>
+                                <option value="skew">Skew</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -78,6 +87,28 @@ export class CardController {
                         <div class="card-content">
                             <h4>Default Card</h4>
                             <p>This is a basic card with default styling.</p>
+                        </div>
+                    </mjo-card>
+                </div>
+
+                <h3>Variant Styles</h3>
+                <div class="component-showcase">
+                    <mjo-card variant="default" radius="medium">
+                        <div class="card-content">
+                            <h4>Default Variant</h4>
+                            <p>Traditional rectangular card with standard styling.</p>
+                        </div>
+                    </mjo-card>
+                    <mjo-card variant="modern" radius="medium">
+                        <div class="card-content">
+                            <h4>Modern Variant</h4>
+                            <p>Contemporary design with cut corners for a sophisticated look.</p>
+                        </div>
+                    </mjo-card>
+                    <mjo-card variant="skew" radius="medium">
+                        <div class="card-content">
+                            <h4>Skew Variant</h4>
+                            <p>Dynamic slanted design for energetic, modern layouts.</p>
                         </div>
                     </mjo-card>
                 </div>
@@ -132,29 +163,51 @@ export class CardController {
                     </mjo-card>
                 </div>
 
+                <h3>Combined Variants</h3>
+                <div class="component-showcase">
+                    <mjo-card contrast="low" radius="small" variant="default">
+                        <div class="card-content">
+                            <h4>Subtle Default</h4>
+                            <p>Low contrast default card with small radius.</p>
+                        </div>
+                    </mjo-card>
+                    <mjo-card contrast="normal" radius="medium" variant="modern">
+                        <div class="card-content">
+                            <h4>Balanced Modern</h4>
+                            <p>Normal contrast modern card with geometric cut corners.</p>
+                        </div>
+                    </mjo-card>
+                    <mjo-card contrast="high" radius="large" variant="skew">
+                        <div class="card-content">
+                            <h4>Prominent Skew</h4>
+                            <p>High contrast skewed card for attention-grabbing content.</p>
+                        </div>
+                    </mjo-card>
+                </div>
+
                 <h3>Card with Different Content Types</h3>
                 <div class="component-showcase">
-                    <mjo-card radius="medium">
+                    <mjo-card radius="medium" variant="default">
                         <div class="card-content">
                             <img src="https://picsum.photos/300/200" alt="Sample image" style="width: 100%; border-radius: 4px; margin-bottom: 16px;" />
                             <h4>Image Card</h4>
-                            <p>Card containing an image and text content.</p>
+                            <p>Default variant card containing an image and text content.</p>
                         </div>
                     </mjo-card>
-                    <mjo-card radius="medium">
+                    <mjo-card radius="medium" variant="modern">
                         <div class="card-content">
                             <h4>Feature Card</h4>
                             <ul>
-                                <li>Feature one</li>
-                                <li>Feature two</li>
-                                <li>Feature three</li>
+                                <li>Modern geometric design</li>
+                                <li>Cut corner styling</li>
+                                <li>Contemporary appearance</li>
                             </ul>
                         </div>
                     </mjo-card>
-                    <mjo-card radius="medium">
+                    <mjo-card radius="medium" variant="skew">
                         <div class="card-content">
                             <h4>Action Card</h4>
-                            <p>Card with multiple actions.</p>
+                            <p>Dynamic skewed card with multiple actions.</p>
                             <div style="display: flex; gap: 8px; margin-top: 16px;">
                                 <button class="sample-button">Primary</button>
                                 <button class="sample-button secondary">Secondary</button>

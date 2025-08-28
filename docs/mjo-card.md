@@ -114,6 +114,38 @@ export class ExampleCardRadius extends LitElement {
 }
 ```
 
+## Variant Styles Example
+
+```ts
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-card";
+
+@customElement("example-card-variants")
+export class ExampleCardVariants extends LitElement {
+    render() {
+        return html`
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                <mjo-card variant="default" radius="medium">
+                    <h4 style="margin: 0 0 0.5rem 0;">Default Variant</h4>
+                    <p style="margin: 0;">Traditional rectangular card with standard corners and edges.</p>
+                </mjo-card>
+
+                <mjo-card variant="modern" radius="medium">
+                    <h4 style="margin: 0 0 0.5rem 0;">Modern Variant</h4>
+                    <p style="margin: 0;">Contemporary design with cut corners creating a sophisticated geometric appearance.</p>
+                </mjo-card>
+
+                <mjo-card variant="skew" radius="medium">
+                    <h4 style="margin: 0 0 0.5rem 0;">Skew Variant</h4>
+                    <p style="margin: 0;">Dynamic slanted design with parallelogram shape for modern, energetic layouts.</p>
+                </mjo-card>
+            </div>
+        `;
+    }
+}
+```
+
 ## Combined Variants Example
 
 ```ts
@@ -126,24 +158,34 @@ export class ExampleCardCombined extends LitElement {
     render() {
         return html`
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; padding: 1rem; background: #f8f9fa;">
-                <mjo-card contrast="low" radius="small">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #6c757d;">Subtle Card</h4>
+                <mjo-card contrast="low" radius="small" variant="default">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #6c757d;">Subtle Default Card</h4>
                     <p style="margin: 0; font-size: 0.9rem;">Low contrast with small radius for minimal visual impact.</p>
                 </mjo-card>
 
-                <mjo-card contrast="normal" radius="medium">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #495057;">Balanced Card</h4>
-                    <p style="margin: 0;">Normal contrast with medium radius for standard use cases.</p>
+                <mjo-card contrast="normal" radius="medium" variant="modern">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #495057;">Balanced Modern Card</h4>
+                    <p style="margin: 0;">Normal contrast with modern cut corners for contemporary design.</p>
                 </mjo-card>
 
-                <mjo-card contrast="high" radius="large">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #212529;">Prominent Card</h4>
-                    <p style="margin: 0;">High contrast with large radius for attention-grabbing content.</p>
+                <mjo-card contrast="high" radius="large" variant="skew">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #212529;">Prominent Skew Card</h4>
+                    <p style="margin: 0;">High contrast with skewed shape for attention-grabbing content.</p>
                 </mjo-card>
 
-                <mjo-card contrast="high" radius="none">
+                <mjo-card contrast="high" radius="none" variant="default">
                     <h4 style="margin: 0 0 0.5rem 0;">Sharp Modern Card</h4>
                     <p style="margin: 0;">High contrast with no radius for a clean, modern look.</p>
+                </mjo-card>
+
+                <mjo-card contrast="normal" radius="medium" variant="modern">
+                    <h4 style="margin: 0 0 0.5rem 0;">Geometric Design</h4>
+                    <p style="margin: 0;">Modern variant with geometric cut corners adds visual interest.</p>
+                </mjo-card>
+
+                <mjo-card contrast="low" radius="small" variant="skew">
+                    <h4 style="margin: 0 0 0.5rem 0;">Dynamic Layout</h4>
+                    <p style="margin: 0;">Skewed variant creates dynamic, movement-oriented designs.</p>
                 </mjo-card>
             </div>
         `;
@@ -163,9 +205,11 @@ import "mjo-litui/mjo-button";
 export class ExampleCardDynamic extends LitElement {
     @state() private currentContrast: "low" | "high" | "normal" = "normal";
     @state() private currentRadius: "none" | "small" | "medium" | "large" = "medium";
+    @state() private currentVariant: "default" | "modern" | "skew" = "default";
 
     private contrastOptions: Array<"low" | "high" | "normal"> = ["low", "normal", "high"];
     private radiusOptions: Array<"none" | "small" | "medium" | "large"> = ["none", "small", "medium", "large"];
+    private variantOptions: Array<"default" | "modern" | "skew"> = ["default", "modern", "skew"];
 
     private setContrast(contrast: "low" | "high" | "normal") {
         this.currentContrast = contrast;
@@ -173,6 +217,10 @@ export class ExampleCardDynamic extends LitElement {
 
     private setRadius(radius: "none" | "small" | "medium" | "large") {
         this.currentRadius = radius;
+    }
+
+    private setVariant(variant: "default" | "modern" | "skew") {
+        this.currentVariant = variant;
     }
 
     render() {
@@ -215,16 +263,34 @@ export class ExampleCardDynamic extends LitElement {
                                 )}
                             </div>
                         </div>
+
+                        <div>
+                            <h4 style="margin: 0 0 0.5rem 0;">Variant Style:</h4>
+                            <div style="display: flex; gap: 0.5rem;">
+                                ${this.variantOptions.map(
+                                    (variant) => html`
+                                        <mjo-button
+                                            size="small"
+                                            variant=${this.currentVariant === variant ? "default" : "ghost"}
+                                            @click=${() => this.setVariant(variant)}
+                                        >
+                                            ${variant}
+                                        </mjo-button>
+                                    `,
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <mjo-card contrast=${this.currentContrast} radius=${this.currentRadius}>
+                <mjo-card contrast=${this.currentContrast} radius=${this.currentRadius} variant=${this.currentVariant}>
                     <h4 style="margin: 0 0 1rem 0;">Interactive Card</h4>
                     <p style="margin: 0 0 1rem 0;">
-                        Current settings: <strong>${this.currentContrast}</strong> contrast, <strong>${this.currentRadius}</strong> radius
+                        Current settings: <strong>${this.currentContrast}</strong> contrast, <strong>${this.currentRadius}</strong> radius,
+                        <strong>${this.currentVariant}</strong> variant
                     </p>
                     <p style="margin: 0; color: #6c757d; font-size: 0.9rem;">
-                        Use the buttons above to see how different combinations affect the card's appearance.
+                        Use the buttons above to see how different combinations affect the card's appearance and shape.
                     </p>
                 </mjo-card>
             </div>
@@ -331,6 +397,7 @@ export class ExampleCardProgrammatic extends LitElement {
     @query("mjo-card") private card!: MjoCard;
     @state() private currentContrast: "low" | "high" | "normal" = "normal";
     @state() private currentRadius: "none" | "small" | "medium" | "large" = "medium";
+    @state() private currentVariant: "default" | "modern" | "skew" = "default";
 
     private changeContrast() {
         const contrasts: Array<"low" | "high" | "normal"> = ["low", "normal", "high"];
@@ -348,19 +415,28 @@ export class ExampleCardProgrammatic extends LitElement {
         this.card.setRadius(this.currentRadius);
     }
 
+    private changeVariant() {
+        const variants: Array<"default" | "modern" | "skew"> = ["default", "modern", "skew"];
+        const currentIndex = variants.indexOf(this.currentVariant);
+        const nextIndex = (currentIndex + 1) % variants.length;
+        this.currentVariant = variants[nextIndex];
+        this.card.setVariant(this.currentVariant);
+    }
+
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <div style="display: flex; gap: 1rem;">
                     <mjo-button @click=${this.changeContrast} variant="ghost"> Change Contrast (${this.currentContrast}) </mjo-button>
                     <mjo-button @click=${this.changeRadius} variant="ghost"> Change Radius (${this.currentRadius}) </mjo-button>
+                    <mjo-button @click=${this.changeVariant} variant="ghost"> Change Variant (${this.currentVariant}) </mjo-button>
                 </div>
 
                 <mjo-card>
                     <h3 style="margin: 0 0 1rem 0;">Programmatically Controlled Card</h3>
                     <p style="margin: 0;">
-                        This card's appearance is controlled using the <code>setContrast()</code> and <code>setRadius()</code> methods. Click the buttons above
-                        to see the changes.
+                        This card's appearance is controlled using the <code>setContrast()</code>, <code>setRadius()</code>, and
+                        <code>setVariant()</code> methods. Click the buttons above to see the changes.
                     </p>
                 </mjo-card>
             </div>
@@ -375,13 +451,18 @@ export class ExampleCardProgrammatic extends LitElement {
 | ---------- | ------------------------------------------ | ----------- | -------- | ------------------------------------------------------------------ |
 | `contrast` | `"low" \| "high" \| "normal" \| undefined` | `undefined` | yes      | Controls background contrast level relative to the page background |
 | `radius`   | `"none" \| "small" \| "medium" \| "large"` | `"medium"`  | yes      | Controls border radius applied to the card container               |
+| `variant`  | `"default" \| "modern" \| "skew"`          | `"default"` | yes      | Controls the visual style variant of the card shape and design     |
 
 ### Behavior Notes
 
 -   Properties use `noAccessor: true` and are managed through attribute reflection
 -   The `contrast` property affects background color variations through CSS variables
 -   The `radius` property controls corner rounding from sharp to fully rounded
--   Both properties can be changed programmatically using `setContrast()` and `setRadius()` methods
+-   The `variant` property changes the card's visual style:
+    -   `default`: Traditional rectangular card
+    -   `modern`: Contemporary design with cut corners using clip-path
+    -   `skew`: Dynamic slanted parallelogram shape using clip-path
+-   All properties can be changed programmatically using `setContrast()`, `setRadius()`, and `setVariant()` methods
 
 ## Slots
 
@@ -399,6 +480,7 @@ This component doesn't emit any custom events. It's a pure presentation componen
 | ------------------------------------------------------------- | ------------------------------------------- |
 | `setContrast(contrast: "low" \| "high" \| "normal")`          | Programmatically changes the contrast level |
 | `setRadius(radius: "none" \| "small" \| "medium" \| "large")` | Programmatically changes the border radius  |
+| `setVariant(variant: "default" \| "modern" \| "skew")`        | Programmatically changes the visual variant |
 
 ## CSS Variables
 
@@ -414,10 +496,12 @@ The component provides extensive customization through CSS variables with fallba
 
 ### Structure Variables
 
-| Variable                | Fallback                         | Used For              |
-| ----------------------- | -------------------------------- | --------------------- |
-| `--mjo-card-padding`    | `--mjo-space-small`              | Internal padding      |
-| `--mjo-card-box-shadow` | `--mjo-box-shadow-1` → `inherit` | Card elevation shadow |
+| Variable                  | Fallback                         | Used For                  |
+| ------------------------- | -------------------------------- | ------------------------- |
+| `--mjo-card-padding`      | `--mjo-space-small`              | Internal padding          |
+| `--mjo-card-box-shadow`   | `--mjo-box-shadow-1` → `inherit` | Card elevation shadow     |
+| `--mjo-card-border`       | `none`                           | Card border styling       |
+| `--mjo-card-border-color` | `transparent`                    | Border color for variants |
 
 ### Border Radius Variables
 

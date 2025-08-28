@@ -41,7 +41,8 @@
         "./utils/*": {
             "types": "./utils/*.d.ts",
             "import": "./utils/*.js"
-        }
+        },
+        "./styles/*": "./styles/*"
     },
     "files": [
         "*.js",
@@ -53,7 +54,8 @@
         "mixins/",
         "theme/",
         "types/",
-        "utils/"
+        "utils/",
+        "styles/"
     ],
     "keywords": [
         "web-components",
@@ -75,10 +77,10 @@
     },
     "scripts": {
         "dev": "vite",
-        "build": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md && npm run build:minify && npm run build:minify-css",
+        "build": "rm -rf dist && tsc -p tsconfig.build.json && ncp src/types dist/types && ncp src/styles dist/styles && cp dist/styles/theme.css dist/styles/theme.min.css && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md && npm run build:minify && npm run build:minify-css",
         "build:minify": "node scripts/minify-dist.js",
         "build:minify-css": "node scripts/minify-css.js",
-        "build:unminified": "tsc -p tsconfig.build.json && ncp src/types dist/types && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
+        "build:unminified": "rm -rf dist && tsc -p tsconfig.build.json && ncp src/types dist/types && ncp src/styles dist/styles && cp dist/styles/theme.css dist/styles/theme.min.css && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
         "build:publish": "npm run build && cd dist && npm publish",
         "preview": "vite preview",
         "test": "npm run build && web-test-runner",

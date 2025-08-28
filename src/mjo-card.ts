@@ -1,57 +1,80 @@
-import { MjoCardContrast, MjoCardRadius } from "./types/mjo-card.js";
+import { MjoCardContrast, MjoCardRadius, MjoCardVariants } from "./types/mjo-card.js";
 
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { ifDefined } from "lit/directives/if-defined.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 @customElement("mjo-card")
 export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
-    @property({ type: String, noAccessor: true }) contrast?: MjoCardContrast;
-    @property({ type: String, noAccessor: true }) radius?: MjoCardRadius = "medium";
+    @property({ type: String }) contrast?: MjoCardContrast;
+    @property({ type: String }) radius?: MjoCardRadius;
+    @property({ type: String }) variant: MjoCardVariants = "default";
 
     render() {
-        return html`<div class="content"><slot></slot></div>`;
-    }
-
-    connectedCallback(): void {
-        super.connectedCallback();
-
-        if (this.contrast) this.setAttribute("contrast", this.contrast);
-        if (this.radius) this.setAttribute("radius", this.radius);
-    }
-
-    setContrast(contrast: "low" | "high" | "normal") {
-        this.contrast = contrast;
-        this.setAttribute("contrast", contrast);
-    }
-
-    setRadius(radius: MjoCardRadius) {
-        this.radius = radius;
-        this.setAttribute("radius", radius);
+        return html`
+            ${this.variant !== "default" ? html`<div class="border" data-variant=${this.variant}></div>` : nothing}
+            <div class="container" data-contrast=${ifDefined(this.contrast)} data-radius=${ifDefined(this.radius)} data-variant=${this.variant}>
+                <div class="content"><slot></slot></div>
+            </div>
+        `;
     }
 
     static styles = [
         css`
             :host {
+                position: relative;
                 display: block;
+                min-height: 150px;
+            }
+            .border {
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                content: "";
+                background: var(--mjo-card-border-color, transparent);
+                z-index: -2;
+                pointer-events: none;
+            }
+            .container {
+                position: relative;
                 padding: var(--mjo-card-padding, var(--mjo-space-small));
                 box-shadow: var(--mjo-card-box-shadow, var(--mjo-box-shadow-1, inherit));
                 background-color: var(--mjo-card-background-color, var(--mjo-background-color-card, white));
+                border: var(--mjo-card-border, none);
+                min-height: inherit;
+                box-sizing: border-box;
             }
-            :host([contrast="low"]) {
+            .container[data-variant="modern"] {
+                padding: 1.5em;
+                clip-path: polygon(2em 0, 100% 0, 100% calc(100% - 2em), calc(100% - 2em) 100%, 0 100%, 0 2em);
+            }
+            .border[data-variant="modern"] {
+                clip-path: polygon(2em 0, 100% 0, 100% calc(100% - 2em), calc(100% - 2em) 100%, 0 100%, 0 2em);
+            }
+            .container[data-variant="skew"] {
+                padding: 1em 2em;
+                clip-path: polygon(1.5em 0, 100% 0, calc(100% - 1.5em) 100%, 0 100%);
+            }
+            .border[data-variant="skew"] {
+                clip-path: polygon(1.5em 0, 100% 0, calc(100% - 1.5em) 100%, 0 100%);
+            }
+            .container[data-contrast="low"] {
                 background-color: var(--mjo-card-background-color-low, var(--mjo-background-color-card-low, white));
             }
-            :host([contrast="high"]) {
+            .container[data-contrast="high"] {
                 background-color: var(--mjo-card-background-color-high, var(--mjo-background-color-card-high, white));
             }
-            :host([radius="small"]) {
+            .container[data-radius="small"] {
                 border-radius: var(--mjo-card-radius-small, var(--mjo-radius-small, 4px));
             }
-            :host([radius="medium"]) {
+            .container[data-radius="medium"] {
                 border-radius: var(--mjo-card-radius-medium, var(--mjo-radius-medium, 8px));
             }
-            :host([radius="large"]) {
+            .container[data-radius="large"] {
                 border-radius: var(--mjo-card-radius-large, var(--mjo-radius-large, 12px));
             }
         `,

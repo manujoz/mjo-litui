@@ -238,17 +238,17 @@ Generic background:
 
 -   `--mjo-background-color` (default)
 -   `--mjo-background-color-hover`
--   Contrasts: `--mjo-background-color-xlow`, `--mjo-background-color-low`, `--mjo-background-color-high`, `--mjo-background-color-xhigh`
+-   Contrasts: `--mjo-background-color-low`, `--mjo-background-color-high`
 
 Background for containers (cards, etc.):
 
 -   `--mjo-background-color-card` (default)
--   `--mjo-background-color-card-xlow`, `-low`, `-high`, `-xhigh`
+-   `--mjo-background-color-card-low`, `-high`
 
 Foreground (text / icons):
 
 -   `--mjo-foreground-color` (default)
--   `--mjo-foreground-color-xlow`, `-low`, `-high`, `-xhigh`
+-   `--mjo-foreground-color-low`, `-high`
 
 Shadows (boxShadow):
 

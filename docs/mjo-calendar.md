@@ -151,10 +151,10 @@ The component provides extensive CSS customization through variables with fallba
 
 ### Week Headers
 
-| Variable                              | Fallback                      | Purpose                      |
-| ------------------------------------- | ----------------------------- | ---------------------------- |
-| `--mjo-calendar-week-day-color`       | `--mjo-foreground-color-xlow` | Week day headers text color  |
-| `--mjo-calendar-week-day-font-weight` | `600`                         | Week day headers font weight |
+| Variable                              | Fallback                     | Purpose                      |
+| ------------------------------------- | ---------------------------- | ---------------------------- |
+| `--mjo-calendar-week-day-color`       | `--mjo-foreground-color-low` | Week day headers text color  |
+| `--mjo-calendar-week-day-font-weight` | `600`                        | Week day headers font weight |
 
 ### Day Cells
 
@@ -828,10 +828,10 @@ The component provides extensive CSS customization through variables with fallba
 
 ### Week Headers
 
-| Variable                              | Fallback                      | Purpose                     |
-| ------------------------------------- | ----------------------------- | --------------------------- |
-| `--mjo-calendar-week-day-color`       | `--mjo-foreground-color-xlow` | Week day labels color       |
-| `--mjo-calendar-week-day-font-weight` | `600`                         | Week day labels font weight |
+| Variable                              | Fallback                     | Purpose                     |
+| ------------------------------------- | ---------------------------- | --------------------------- |
+| `--mjo-calendar-week-day-color`       | `--mjo-foreground-color-low` | Week day labels color       |
+| `--mjo-calendar-week-day-font-weight` | `600`                        | Week day labels font weight |
 
 ### Day Cells
 

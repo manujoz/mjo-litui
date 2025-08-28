@@ -428,97 +428,149 @@ The `mjo-theme` component generates CSS custom properties with the `--mjo-` pref
 
 ### Color Variables
 
-| Variable               | Source Property         | Description               |
-| ---------------------- | ----------------------- | ------------------------- |
-| `--mjo-color-white`    | `colors.white`          | White color               |
-| `--mjo-color-black`    | `colors.black`          | Black color               |
-| `--mjo-color-error`    | `colors.error`          | Error color               |
-| `--mjo-color-success`  | `colors.success`        | Success color             |
-| `--mjo-color-warning`  | `colors.warning`        | Warning color             |
-| `--mjo-color-info`     | `colors.info`           | Info color                |
-| `--mjo-color-blue`     | `colors.blue.default`   | Blue color                |
-| `--mjo-color-blue-50`  | `colors.blue.50`        | Blue color shade 50       |
-| `--mjo-color-blue-100` | `colors.blue.100`       | Blue color shade 100      |
-| `--mjo-color-blue-...` | `colors.blue.*`         | Blue color various shades |
-| `--mjo-color-red`      | `colors.red.default`    | Red color                 |
-| `--mjo-color-green`    | `colors.green.default`  | Green color               |
-| `--mjo-color-yellow`   | `colors.yellow.default` | Yellow color              |
-| `--mjo-color-purple`   | `colors.purple.default` | Purple color              |
-| `--mjo-color-cyan`     | `colors.cyan.default`   | Cyan color                |
-| `--mjo-color-pink`     | `colors.pink.default`   | Pink color                |
-| `--mjo-color-gray`     | `colors.gray.default`   | Gray color                |
+| Variable                        | Source Property         | Description                 |
+| ------------------------------- | ----------------------- | --------------------------- |
+| `--mjo-color-white`             | `colors.white`          | White color                 |
+| `--mjo-color-black`             | `colors.black`          | Black color                 |
+| `--mjo-color-error`             | `colors.error`          | Error color                 |
+| `--mjo-color-success`           | `colors.success`        | Success color               |
+| `--mjo-color-warning`           | `colors.warning`        | Warning color               |
+| `--mjo-color-info`              | `colors.info`           | Info color                  |
+| `--mjo-color-default`           | `colors.default`        | Default color               |
+| `--mjo-color-gradient`          | `colors.gradient`       | Gradient color              |
+| `--mjo-color-gradient1`         | `colors.gradient1`      | Gradient 1 color            |
+| `--mjo-color-gradient2`         | `colors.gradient2`      | Gradient 2 color            |
+| `--mjo-color-gradient3`         | `colors.gradient3`      | Gradient 3 color            |
+| `--mjo-color-blue`              | `colors.blue.default`   | Blue color                  |
+| `--mjo-color-blue-50`           | `colors.blue.50`        | Blue color shade 50         |
+| `--mjo-color-blue-100`          | `colors.blue.100`       | Blue color shade 100        |
+| `--mjo-color-blue-200`          | `colors.blue.200`       | Blue color shade 200        |
+| `--mjo-color-blue-300`          | `colors.blue.300`       | Blue color shade 300        |
+| `--mjo-color-blue-400`          | `colors.blue.400`       | Blue color shade 400        |
+| `--mjo-color-blue-500`          | `colors.blue.500`       | Blue color shade 500        |
+| `--mjo-color-blue-600`          | `colors.blue.600`       | Blue color shade 600        |
+| `--mjo-color-blue-700`          | `colors.blue.700`       | Blue color shade 700        |
+| `--mjo-color-blue-800`          | `colors.blue.800`       | Blue color shade 800        |
+| `--mjo-color-blue-900`          | `colors.blue.900`       | Blue color shade 900        |
+| `--mjo-color-blue-alpha0`       | `colors.blue.alpha0`    | Blue color alpha 0          |
+| `--mjo-color-blue-alpha1`       | `colors.blue.alpha1`    | Blue color alpha 1          |
+| `--mjo-color-blue-alpha2`       | `colors.blue.alpha2`    | Blue color alpha 2          |
+| `--mjo-color-blue-alpha3`       | `colors.blue.alpha3`    | Blue color alpha 3          |
+| `--mjo-color-blue-alpha4`       | `colors.blue.alpha4`    | Blue color alpha 4          |
+| `--mjo-color-blue-alpha5`       | `colors.blue.alpha5`    | Blue color alpha 5          |
+| `--mjo-color-blue-alpha6`       | `colors.blue.alpha6`    | Blue color alpha 6          |
+| `--mjo-color-blue-alpha7`       | `colors.blue.alpha7`    | Blue color alpha 7          |
+| `--mjo-color-blue-alpha8`       | `colors.blue.alpha8`    | Blue color alpha 8          |
+| `--mjo-color-blue-alpha9`       | `colors.blue.alpha9`    | Blue color alpha 9          |
+| `--mjo-color-cyan`              | `colors.cyan.default`   | Cyan color                  |
+| `--mjo-color-cyan-[50-900]`     | `colors.cyan.*`         | Cyan color shades           |
+| `--mjo-color-cyan-alpha[0-9]`   | `colors.cyan.*`         | Cyan color alpha variants   |
+| `--mjo-color-green`             | `colors.green.default`  | Green color                 |
+| `--mjo-color-green-[50-900]`    | `colors.green.*`        | Green color shades          |
+| `--mjo-color-green-alpha[0-9]`  | `colors.green.*`        | Green color alpha variants  |
+| `--mjo-color-purple`            | `colors.purple.default` | Purple color                |
+| `--mjo-color-purple-[50-900]`   | `colors.purple.*`       | Purple color shades         |
+| `--mjo-color-purple-alpha[0-9]` | `colors.purple.*`       | Purple color alpha variants |
+| `--mjo-color-red`               | `colors.red.default`    | Red color                   |
+| `--mjo-color-red-[50-900]`      | `colors.red.*`          | Red color shades            |
+| `--mjo-color-red-alpha[0-9]`    | `colors.red.*`          | Red color alpha variants    |
+| `--mjo-color-yellow`            | `colors.yellow.default` | Yellow color                |
+| `--mjo-color-yellow-[50-900]`   | `colors.yellow.*`       | Yellow color shades         |
+| `--mjo-color-yellow-alpha[0-9]` | `colors.yellow.*`       | Yellow color alpha variants |
+| `--mjo-color-pink`              | `colors.pink.default`   | Pink color                  |
+| `--mjo-color-pink-[50-900]`     | `colors.pink.*`         | Pink color shades           |
+| `--mjo-color-pink-alpha[0-9]`   | `colors.pink.*`         | Pink color alpha variants   |
+| `--mjo-color-gray`              | `colors.gray.default`   | Gray color                  |
+| `--mjo-color-gray-[50-900]`     | `colors.gray.*`         | Gray color shades           |
+| `--mjo-color-gray-alpha[0-9]`   | `colors.gray.*`         | Gray color alpha variants   |
 
 ### Theme Mode Variables
 
-| Variable                           | Source Property (light/dark) | Description                          |
-| ---------------------------------- | ---------------------------- | ------------------------------------ |
-| `--mjo-primary-color`              | `primaryColor`               | Primary color                        |
-| `--mjo-primary-color-hover`        | `primaryColor.hover`         | Primary color hover state            |
-| `--mjo-primary-foreground-color`   | `primaryForegroundColor`     | Primary foreground color             |
-| `--mjo-secondary-color`            | `secondaryColor`             | Secondary color                      |
-| `--mjo-secondary-color-hover`      | `secondaryColor.hover`       | Secondary color hover state          |
-| `--mjo-secondary-foreground-color` | `secondaryForegroundColor`   | Secondary foreground color           |
-| `--mjo-border-color`               | `borderColor`                | Border color                         |
-| `--mjo-border-color-light`         | `borderColor.light`          | Light border color                   |
-| `--mjo-border-color-dark`          | `borderColor.dark`           | Dark border color                    |
-| `--mjo-background-color`           | `backgroundColor`            | Background color                     |
-| `--mjo-background-color-hover`     | `backgroundColor.hover`      | Background color hover state         |
-| `--mjo-background-color-xlow`      | `backgroundColor.xlow`       | Background color extra low contrast  |
-| `--mjo-background-color-low`       | `backgroundColor.low`        | Background color low contrast        |
-| `--mjo-background-color-high`      | `backgroundColor.high`       | Background color high contrast       |
-| `--mjo-background-color-xhigh`     | `backgroundColor.xhigh`      | Background color extra high contrast |
-| `--mjo-background-color-card`      | `backgroundColorCard`        | Card background color                |
-| `--mjo-foreground-color`           | `foregroundColor`            | Foreground/text color                |
-| `--mjo-foreground-color-xlow`      | `foregroundColor.xlow`       | Text color extra low contrast        |
-| `--mjo-foreground-color-low`       | `foregroundColor.low`        | Text color low contrast              |
-| `--mjo-foreground-color-high`      | `foregroundColor.high`       | Text color high contrast             |
-| `--mjo-foreground-color-xhigh`     | `foregroundColor.xhigh`      | Text color extra high contrast       |
-| `--mjo-box-shadow`                 | `boxShadow`                  | Default box shadow                   |
-| `--mjo-box-shadow-1`               | `boxShadow.1`                | Box shadow level 1                   |
-| `--mjo-box-shadow-2`               | `boxShadow.2`                | Box shadow level 2                   |
-| `--mjo-box-shadow-3`               | `boxShadow.3`                | Box shadow level 3                   |
-| `--mjo-box-shadow-4`               | `boxShadow.4`                | Box shadow level 4                   |
-| `--mjo-box-shadow-5`               | `boxShadow.5`                | Box shadow level 5                   |
-| `--mjo-disabled-color`             | `disabledColor`              | Disabled color                       |
-| `--mjo-disabled-foreground-color`  | `disabledForegroundColor`    | Disabled foreground color            |
-
-### Component-Specific Variables
-
-Each component has its own set of CSS variables following the pattern `--mjo-{component}-{property}`. For example:
-
-| Variable                           | Source Property                           | Description                |
-| ---------------------------------- | ----------------------------------------- | -------------------------- |
-| `--mjo-button-font-family`         | `components.mjoButton.fontFamily`         | Button font family         |
-| `--mjo-button-font-size`           | `components.mjoButton.fontSize`           | Button font size           |
-| `--mjo-button-font-weight`         | `components.mjoButton.fontWeight`         | Button font weight         |
-| `--mjo-button-padding`             | `components.mjoButton.padding`            | Button padding             |
-| `--mjo-button-border-radius`       | `components.mjoButton.borderRadius`       | Button border radius       |
-| `--mjo-calendar-font-family`       | `components.mjoCalendar.fontFamily`       | Calendar font family       |
-| `--mjo-calendar-background`        | `components.mjoCalendar.background`       | Calendar background        |
-| `--mjo-calendar-border`            | `components.mjoCalendar.border`           | Calendar border            |
-| `--mjo-calendar-border-radius`     | `components.mjoCalendar.borderRadius`     | Calendar border radius     |
-| `--mjo-calendar-shadow`            | `components.mjoCalendar.shadow`           | Calendar box shadow        |
-| `--mjo-calendar-padding`           | `components.mjoCalendar.padding`          | Calendar padding           |
-| `--mjo-card-background-color`      | `components.mjoCard.backgroundColor`      | Card background color      |
-| `--mjo-card-radius-small`          | `components.mjoCard.radiusSmall`          | Card small border radius   |
-| `--mjo-card-radius-medium`         | `components.mjoCard.radiusMedium`         | Card medium border radius  |
-| `--mjo-card-radius-large`          | `components.mjoCard.radiusLarge`          | Card large border radius   |
-| `--mjo-card-padding`               | `components.mjoCard.padding`              | Card padding               |
-| `--mjo-card-box-shadow`            | `components.mjoCard.boxShadow`            | Card box shadow            |
-| `--mjo-textfield-background-color` | `components.mjoTextfield.backgroundColor` | Textfield background color |
-| `--mjo-textfield-border-color`     | `components.mjoTextfield.borderColor`     | Textfield border color     |
-| `--mjo-textfield-font-family`      | `components.mjoTextfield.fontFamily`      | Textfield font family      |
-| `--mjo-textfield-font-size`        | `components.mjoTextfield.fontSize`        | Textfield font size        |
-| `--mjo-textfield-radius`           | `components.mjoTextfield.radius`          | Textfield border radius    |
+| Variable                                 | Source Property (light/dark)       | Description                      |
+| ---------------------------------------- | ---------------------------------- | -------------------------------- |
+| `--mjo-primary-color`                    | `primaryColor.default`             | Primary color                    |
+| `--mjo-primary-color-hover`              | `primaryColor.hover`               | Primary color hover state        |
+| `--mjo-primary-color-50`                 | `primaryColor.50`                  | Primary color shade 50           |
+| `--mjo-primary-color-100`                | `primaryColor.100`                 | Primary color shade 100          |
+| `--mjo-primary-color-200`                | `primaryColor.200`                 | Primary color shade 200          |
+| `--mjo-primary-color-300`                | `primaryColor.300`                 | Primary color shade 300          |
+| `--mjo-primary-color-400`                | `primaryColor.400`                 | Primary color shade 400          |
+| `--mjo-primary-color-500`                | `primaryColor.500`                 | Primary color shade 500          |
+| `--mjo-primary-color-600`                | `primaryColor.600`                 | Primary color shade 600          |
+| `--mjo-primary-color-700`                | `primaryColor.700`                 | Primary color shade 700          |
+| `--mjo-primary-color-800`                | `primaryColor.800`                 | Primary color shade 800          |
+| `--mjo-primary-color-900`                | `primaryColor.900`                 | Primary color shade 900          |
+| `--mjo-primary-color-alpha0`             | `primaryColor.alpha0`              | Primary color alpha 0            |
+| `--mjo-primary-color-alpha1`             | `primaryColor.alpha1`              | Primary color alpha 1            |
+| `--mjo-primary-color-alpha2`             | `primaryColor.alpha2`              | Primary color alpha 2            |
+| `--mjo-primary-color-alpha3`             | `primaryColor.alpha3`              | Primary color alpha 3            |
+| `--mjo-primary-color-alpha4`             | `primaryColor.alpha4`              | Primary color alpha 4            |
+| `--mjo-primary-color-alpha5`             | `primaryColor.alpha5`              | Primary color alpha 5            |
+| `--mjo-primary-color-alpha6`             | `primaryColor.alpha6`              | Primary color alpha 6            |
+| `--mjo-primary-color-alpha7`             | `primaryColor.alpha7`              | Primary color alpha 7            |
+| `--mjo-primary-color-alpha8`             | `primaryColor.alpha8`              | Primary color alpha 8            |
+| `--mjo-primary-color-alpha9`             | `primaryColor.alpha9`              | Primary color alpha 9            |
+| `--mjo-primary-foreground-color`         | `primaryForegroundColor.default`   | Primary foreground color         |
+| `--mjo-primary-foreground-color-light`   | `primaryForegroundColor.light`     | Light primary foreground color   |
+| `--mjo-primary-foreground-color-dark`    | `primaryForegroundColor.dark`      | Dark primary foreground color    |
+| `--mjo-secondary-color`                  | `secondaryColor.default`           | Secondary color                  |
+| `--mjo-secondary-color-hover`            | `secondaryColor.hover`             | Secondary color hover state      |
+| `--mjo-secondary-color-50`               | `secondaryColor.50`                | Secondary color shade 50         |
+| `--mjo-secondary-color-100`              | `secondaryColor.100`               | Secondary color shade 100        |
+| `--mjo-secondary-color-200`              | `secondaryColor.200`               | Secondary color shade 200        |
+| `--mjo-secondary-color-300`              | `secondaryColor.300`               | Secondary color shade 300        |
+| `--mjo-secondary-color-400`              | `secondaryColor.400`               | Secondary color shade 400        |
+| `--mjo-secondary-color-500`              | `secondaryColor.500`               | Secondary color shade 500        |
+| `--mjo-secondary-color-600`              | `secondaryColor.600`               | Secondary color shade 600        |
+| `--mjo-secondary-color-700`              | `secondaryColor.700`               | Secondary color shade 700        |
+| `--mjo-secondary-color-800`              | `secondaryColor.800`               | Secondary color shade 800        |
+| `--mjo-secondary-color-900`              | `secondaryColor.900`               | Secondary color shade 900        |
+| `--mjo-secondary-color-alpha0`           | `secondaryColor.alpha0`            | Secondary color alpha 0          |
+| `--mjo-secondary-color-alpha1`           | `secondaryColor.alpha1`            | Secondary color alpha 1          |
+| `--mjo-secondary-color-alpha2`           | `secondaryColor.alpha2`            | Secondary color alpha 2          |
+| `--mjo-secondary-color-alpha3`           | `secondaryColor.alpha3`            | Secondary color alpha 3          |
+| `--mjo-secondary-color-alpha4`           | `secondaryColor.alpha4`            | Secondary color alpha 4          |
+| `--mjo-secondary-color-alpha5`           | `secondaryColor.alpha5`            | Secondary color alpha 5          |
+| `--mjo-secondary-color-alpha6`           | `secondaryColor.alpha6`            | Secondary color alpha 6          |
+| `--mjo-secondary-color-alpha7`           | `secondaryColor.alpha7`            | Secondary color alpha 7          |
+| `--mjo-secondary-color-alpha8`           | `secondaryColor.alpha8`            | Secondary color alpha 8          |
+| `--mjo-secondary-color-alpha9`           | `secondaryColor.alpha9`            | Secondary color alpha 9          |
+| `--mjo-secondary-foreground-color`       | `secondaryForegroundColor.default` | Secondary foreground color       |
+| `--mjo-secondary-foreground-color-light` | `secondaryForegroundColor.light`   | Light secondary foreground color |
+| `--mjo-secondary-foreground-color-dark`  | `secondaryForegroundColor.dark`    | Dark secondary foreground color  |
+| `--mjo-border-color`                     | `borderColor.default`              | Border color                     |
+| `--mjo-border-color-low`                 | `borderColor.low`                  | Low border color                 |
+| `--mjo-border-color-high`                | `borderColor.high`                 | High border color                |
+| `--mjo-background-color`                 | `backgroundColor.default`          | Background color                 |
+| `--mjo-background-color-hover`           | `backgroundColor.hover`            | Background color hover state     |
+| `--mjo-background-color-low`             | `backgroundColor.low`              | Background color low contrast    |
+| `--mjo-background-color-high`            | `backgroundColor.high`             | Background color high contrast   |
+| `--mjo-background-color-card`            | `backgroundColorCard.default`      | Card background color            |
+| `--mjo-background-color-card-low`        | `backgroundColorCard.low`          | Card background color low        |
+| `--mjo-background-color-card-high`       | `backgroundColorCard.high`         | Card background color high       |
+| `--mjo-foreground-color`                 | `foregroundColor.default`          | Foreground/text color            |
+| `--mjo-foreground-color-low`             | `foregroundColor.low`              | Text color low contrast          |
+| `--mjo-foreground-color-high`            | `foregroundColor.high`             | Text color high contrast         |
+| `--mjo-box-shadow`                       | `boxShadow.default`                | Default box shadow               |
+| `--mjo-box-shadow-1`                     | `boxShadow.1`                      | Box shadow level 1               |
+| `--mjo-box-shadow-2`                     | `boxShadow.2`                      | Box shadow level 2               |
+| `--mjo-box-shadow-3`                     | `boxShadow.3`                      | Box shadow level 3               |
+| `--mjo-box-shadow-4`                     | `boxShadow.4`                      | Box shadow level 4               |
+| `--mjo-box-shadow-5`                     | `boxShadow.5`                      | Box shadow level 5               |
+| `--mjo-disabled-color`                   | `disabledColor`                    | Disabled color                   |
+| `--mjo-disabled-foreground-color`        | `disabledForegroundColor`          | Disabled foreground color        |
 
 ### Variable Naming Convention
 
 All CSS variables follow the kebab-case naming convention:
 
 -   **Basic properties**: `camelCase` → `--mjo-kebab-case` (e.g., `fontSizeSmall` → `--mjo-font-size-small`)
--   **Colors**: `colors.property` → `--mjo-color-kebab-case` (e.g., `colors.primaryBlue` → `--mjo-color-primary-blue`)
+-   **Colors**: `colors.property` → `--mjo-color-kebab-case` (e.g., `colors.blue` → `--mjo-color-blue`)
+-   **Color shades**: `colors.color.shade` → `--mjo-color-kebab-shade` (e.g., `colors.blue.500` → `--mjo-color-blue-500`)
 -   **Theme modes**: `light/dark.property` → `--mjo-kebab-case` (e.g., `light.primaryColor` → `--mjo-primary-color`)
 -   **Components**: `components.mjoComponent.property` → `--mjo-component-kebab-case` (e.g., `components.mjoButton.fontSize` → `--mjo-button-font-size`)
+
+> **Note**: Component-specific CSS variables are documented in each individual component's documentation.
 
 ## Theme Configuration Interface
 

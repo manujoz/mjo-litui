@@ -99,7 +99,7 @@ export class FiltrableButton extends LitElement {
                 outline: none;
             }
             search input::placeholder {
-                color: var(--mjo-foreground-color-xlow);
+                color: var(--mjo-foreground-color-low);
             }
             button {
                 position: relative;

@@ -7,17 +7,17 @@ export interface MjoThemeChangeEvent extends CustomEvent {
 }
 
 export interface MjoThemeConfig {
-    /** --mjo-radius-large */
+    /** --mjo-radius-small */
     radiusSmall?: string;
     /** --mjo-radius-medium */
     radiusMedium?: string;
-    /** --mjo-radius-small */
+    /** --mjo-radius-large */
     radiusLarge?: string;
     /** --mjo-font-size-small */
     fontSizeSmall?: string;
     /** --mjo-font-size-xsmall */
     fontSizeXsmall?: string;
-    /** --mjo-font-size-xsmall */
+    /** --mjo-font-size-xxsmall */
     fontSizeXxsmall?: string;
     /** --mjo-font-size */
     fontSizeMedium?: string;
@@ -99,21 +99,29 @@ export interface MjoThemeConfig {
         info: string;
         /** --mjo-color-default */
         default: string;
+        /** --mjo-color-gradient */
+        gradient?: string;
+        /** --mjo-color-gradient1 */
+        gradient1?: string;
+        /** --mjo-color-gradient2 */
+        gradient2?: string;
+        /** --mjo-color-gradient3 */
+        gradient3?: string;
         /** --mjo-color-blue, --mjo-color-blue-[50-900] */
         blue?: MjoThemeShadeStructure;
-        /** --mjo-color-cyan, --mjo-color-cyan-[50-900] */
-        red?: MjoThemeShadeStructure;
         /** --mjo-color-red, --mjo-color-red-[50-900] */
-        green?: MjoThemeShadeStructure;
+        red?: MjoThemeShadeStructure;
         /** --mjo-color-green, --mjo-color-green-[50-900] */
-        yellow?: MjoThemeShadeStructure;
+        green?: MjoThemeShadeStructure;
         /** --mjo-color-yellow, --mjo-color-yellow-[50-900] */
-        purple?: MjoThemeShadeStructure;
+        yellow?: MjoThemeShadeStructure;
         /** --mjo-color-purple, --mjo-color-purple-[50-900] */
+        purple?: MjoThemeShadeStructure;
+        /** --mjo-color-cyan, --mjo-color-cyan-[50-900] */
         cyan?: MjoThemeShadeStructure;
-        /** --mjo-color-cyan, --mjo-color-cyan-[50-900] */
+        /** --mjo-color-pink, --mjo-color-pink-[50-900] */
         pink?: MjoThemeShadeStructure;
-        /** --mjo-color-cyan, --mjo-color-cyan-[50-900] */
+        /** --mjo-color-gray, --mjo-color-gray-[50-900] */
         gray?: MjoThemeShadeStructure;
     };
     dark?: MjoThemeMode;
@@ -125,19 +133,19 @@ type MjoThemeMode = {
     primaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string;
     /** --mjo-primary-foreground-color */
     primaryForegroundColor?: MjoThemeColorSmall | string;
-    /** --mjo-secondary-color, -mjo-secondary-color-hover, --mjo-secondary-color-[50-900] */
+    /** --mjo-secondary-color, --mjo-secondary-color-hover, --mjo-secondary-color-[50-900] */
     secondaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string;
     /** --mjo-secondary-foreground-color */
     secondaryForegroundColor?: MjoThemeColorSmall | string;
-    /** --mjo-border-color, --mjo-border-color-light, --mjo-border-color-dark */
+    /** --mjo-border-color, --mjo-border-color-[xlow|low|high|xhigh] */
     borderColor?: MjoThemeColorContrasts | string;
-    /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */
+    /** --mjo-background-color, --mjo-background-color-hover, --mjo-background-color-[xlow|low|high|xhigh] */
     backgroundColor?: ({ hover: string } & MjoThemeColorContrasts) | string;
-    /** --mjo-background-color, --mjo-background-color-light, --mjo-background-color-dark */
+    /** --mjo-background-color-card, --mjo-background-color-card-[xlow|low|high|xhigh] */
     backgroundColorCard?: MjoThemeColorContrasts | string;
-    /** --mjo-foreground-color, --mjo-foreground-color-light, --mjo-foreground-color-dark */
+    /** --mjo-foreground-color, --mjo-foreground-color-[xlow|low|high|xhigh] */
     foregroundColor?: MjoThemeColorContrasts | string;
-    /** --mjo-box-shadow, --mjo-box-shadow-[215] */
+    /** --mjo-box-shadow, --mjo-box-shadow-[1-5] */
     boxShadow?: MjoThemeBoxShadow;
     /** --mjo-disabled-color */
     disabledColor?: string;
@@ -177,10 +185,8 @@ type MjoThemeColorSmall = {
 
 type MjoThemeColorContrasts = {
     default?: string;
-    xlow?: string;
     low?: string;
     high?: string;
-    xhigh?: string;
 };
 
 type MjoThemeBoxShadow = {
