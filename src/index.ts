@@ -19,6 +19,7 @@ export { MjoGrid } from "./mjo-grid.js";
 export { MjoIcon } from "./mjo-icon.js";
 export { MjoImage } from "./mjo-image.js";
 export { MjoLink } from "./mjo-link.js";
+export { MjoListbox } from "./mjo-listbox.js";
 export { MjoMenuButton } from "./mjo-menu-button.js";
 export { MjoMessage } from "./mjo-message.js";
 export { MjoModal } from "./mjo-modal.js";

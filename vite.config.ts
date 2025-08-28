@@ -20,6 +20,7 @@ export default defineConfig({
                 "mjo-link": `${__dirname}/dev/mjo-link.html`,
                 "mjo-badge": `${__dirname}/dev/mjo-badge.html`,
                 "mjo-breadcrumbs": `${__dirname}/dev/mjo-breadcrumbs.html`,
+                "mjo-listbox": `${__dirname}/dev/mjo-listbox.html`,
                 "mjo-progress": `${__dirname}/dev/mjo-progress.html`,
                 "mjo-table": `${__dirname}/dev/mjo-table.html`,
             },

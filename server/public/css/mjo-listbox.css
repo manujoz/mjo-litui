@@ -1,0 +1,90 @@
+/* Listbox Component Demo Styles */
+
+mjo-listbox {
+    --mjo-listbox-background-color: var(--mjo-background-color);
+}
+
+/* Override the default showcase for listboxes to show them vertically aligned */
+.component-showcase mjo-listbox {
+    margin: 10px 0;
+    width: 100%;
+    max-width: 300px;
+}
+
+/* Special styling for listbox examples */
+.component-showcase {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* For sections with multiple listboxes side by side */
+.component-showcase.horizontal {
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.component-showcase.horizontal mjo-listbox {
+    flex: 0 0 auto;
+    max-width: 250px;
+}
+
+/* Playground specific overrides */
+.playground-showcase mjo-listbox {
+    max-width: none;
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Event info panel styling */
+#event-info {
+    font-family: "Courier New", monospace;
+    border-left: 3px solid var(--mjo-primary-color);
+    transition: all 0.2s ease;
+}
+
+#event-info:has(div) {
+    background: var(--mjo-primary-color-alpha1) !important;
+    border-left-color: var(--mjo-success-color);
+}
+
+/* Enhanced control group styling for listbox */
+.controls-panel .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.controls-panel .button-group button {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .component-showcase {
+        align-items: center;
+    }
+
+    .component-showcase mjo-listbox {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .controls-panel .button-group button {
+        font-size: 0.75rem;
+        padding: 5px 8px;
+    }
+}
+
+/* Instructions overlay styling */
+.playground-showcase > div:last-child {
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--mjo-border-color);
+}

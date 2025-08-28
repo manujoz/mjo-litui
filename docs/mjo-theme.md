@@ -428,61 +428,66 @@ The `mjo-theme` component generates CSS custom properties with the `--mjo-` pref
 
 ### Color Variables
 
-| Variable                        | Source Property         | Description                 |
-| ------------------------------- | ----------------------- | --------------------------- |
-| `--mjo-color-white`             | `colors.white`          | White color                 |
-| `--mjo-color-black`             | `colors.black`          | Black color                 |
-| `--mjo-color-error`             | `colors.error`          | Error color                 |
-| `--mjo-color-success`           | `colors.success`        | Success color               |
-| `--mjo-color-warning`           | `colors.warning`        | Warning color               |
-| `--mjo-color-info`              | `colors.info`           | Info color                  |
-| `--mjo-color-default`           | `colors.default`        | Default color               |
-| `--mjo-color-gradient`          | `colors.gradient`       | Gradient color              |
-| `--mjo-color-gradient1`         | `colors.gradient1`      | Gradient 1 color            |
-| `--mjo-color-gradient2`         | `colors.gradient2`      | Gradient 2 color            |
-| `--mjo-color-gradient3`         | `colors.gradient3`      | Gradient 3 color            |
-| `--mjo-color-blue`              | `colors.blue.default`   | Blue color                  |
-| `--mjo-color-blue-50`           | `colors.blue.50`        | Blue color shade 50         |
-| `--mjo-color-blue-100`          | `colors.blue.100`       | Blue color shade 100        |
-| `--mjo-color-blue-200`          | `colors.blue.200`       | Blue color shade 200        |
-| `--mjo-color-blue-300`          | `colors.blue.300`       | Blue color shade 300        |
-| `--mjo-color-blue-400`          | `colors.blue.400`       | Blue color shade 400        |
-| `--mjo-color-blue-500`          | `colors.blue.500`       | Blue color shade 500        |
-| `--mjo-color-blue-600`          | `colors.blue.600`       | Blue color shade 600        |
-| `--mjo-color-blue-700`          | `colors.blue.700`       | Blue color shade 700        |
-| `--mjo-color-blue-800`          | `colors.blue.800`       | Blue color shade 800        |
-| `--mjo-color-blue-900`          | `colors.blue.900`       | Blue color shade 900        |
-| `--mjo-color-blue-alpha0`       | `colors.blue.alpha0`    | Blue color alpha 0          |
-| `--mjo-color-blue-alpha1`       | `colors.blue.alpha1`    | Blue color alpha 1          |
-| `--mjo-color-blue-alpha2`       | `colors.blue.alpha2`    | Blue color alpha 2          |
-| `--mjo-color-blue-alpha3`       | `colors.blue.alpha3`    | Blue color alpha 3          |
-| `--mjo-color-blue-alpha4`       | `colors.blue.alpha4`    | Blue color alpha 4          |
-| `--mjo-color-blue-alpha5`       | `colors.blue.alpha5`    | Blue color alpha 5          |
-| `--mjo-color-blue-alpha6`       | `colors.blue.alpha6`    | Blue color alpha 6          |
-| `--mjo-color-blue-alpha7`       | `colors.blue.alpha7`    | Blue color alpha 7          |
-| `--mjo-color-blue-alpha8`       | `colors.blue.alpha8`    | Blue color alpha 8          |
-| `--mjo-color-blue-alpha9`       | `colors.blue.alpha9`    | Blue color alpha 9          |
-| `--mjo-color-cyan`              | `colors.cyan.default`   | Cyan color                  |
-| `--mjo-color-cyan-[50-900]`     | `colors.cyan.*`         | Cyan color shades           |
-| `--mjo-color-cyan-alpha[0-9]`   | `colors.cyan.*`         | Cyan color alpha variants   |
-| `--mjo-color-green`             | `colors.green.default`  | Green color                 |
-| `--mjo-color-green-[50-900]`    | `colors.green.*`        | Green color shades          |
-| `--mjo-color-green-alpha[0-9]`  | `colors.green.*`        | Green color alpha variants  |
-| `--mjo-color-purple`            | `colors.purple.default` | Purple color                |
-| `--mjo-color-purple-[50-900]`   | `colors.purple.*`       | Purple color shades         |
-| `--mjo-color-purple-alpha[0-9]` | `colors.purple.*`       | Purple color alpha variants |
-| `--mjo-color-red`               | `colors.red.default`    | Red color                   |
-| `--mjo-color-red-[50-900]`      | `colors.red.*`          | Red color shades            |
-| `--mjo-color-red-alpha[0-9]`    | `colors.red.*`          | Red color alpha variants    |
-| `--mjo-color-yellow`            | `colors.yellow.default` | Yellow color                |
-| `--mjo-color-yellow-[50-900]`   | `colors.yellow.*`       | Yellow color shades         |
-| `--mjo-color-yellow-alpha[0-9]` | `colors.yellow.*`       | Yellow color alpha variants |
-| `--mjo-color-pink`              | `colors.pink.default`   | Pink color                  |
-| `--mjo-color-pink-[50-900]`     | `colors.pink.*`         | Pink color shades           |
-| `--mjo-color-pink-alpha[0-9]`   | `colors.pink.*`         | Pink color alpha variants   |
-| `--mjo-color-gray`              | `colors.gray.default`   | Gray color                  |
-| `--mjo-color-gray-[50-900]`     | `colors.gray.*`         | Gray color shades           |
-| `--mjo-color-gray-alpha[0-9]`   | `colors.gray.*`         | Gray color alpha variants   |
+| Variable                         | Source Property            | Description                 |
+| -------------------------------- | -------------------------- | --------------------------- |
+| `--mjo-color-white`              | `colors.white`             | White color                 |
+| `--mjo-color-black`              | `colors.black`             | Black color                 |
+| `--mjo-color-error`              | `colors.error`             | Error color                 |
+| `--mjo-color-error-foreground`   | `colors.errorForeground`   | Error color foreground      |
+| `--mjo-color-success`            | `colors.success`           | Success color               |
+| `--mjo-color-success-foreground` | `colors.successForeground` | Success color foreground    |
+| `--mjo-color-warning`            | `colors.warning`           | Warning color               |
+| `--mjo-color-warning-foreground` | `colors.warningForeground` | Warning color foreground    |
+| `--mjo-color-info`               | `colors.info`              | Info color                  |
+| `--mjo-color-info-foreground`    | `colors.infoForeground`    | Info color foreground       |
+| `--mjo-color-default`            | `colors.default`           | Default color               |
+| `--mjo-color-default-foreground` | `colors.defaultForeground` | Default color foreground    |
+| `--mjo-color-gradient`           | `colors.gradient`          | Gradient color              |
+| `--mjo-color-gradient1`          | `colors.gradient1`         | Gradient 1 color            |
+| `--mjo-color-gradient2`          | `colors.gradient2`         | Gradient 2 color            |
+| `--mjo-color-gradient3`          | `colors.gradient3`         | Gradient 3 color            |
+| `--mjo-color-blue`               | `colors.blue.default`      | Blue color                  |
+| `--mjo-color-blue-50`            | `colors.blue.50`           | Blue color shade 50         |
+| `--mjo-color-blue-100`           | `colors.blue.100`          | Blue color shade 100        |
+| `--mjo-color-blue-200`           | `colors.blue.200`          | Blue color shade 200        |
+| `--mjo-color-blue-300`           | `colors.blue.300`          | Blue color shade 300        |
+| `--mjo-color-blue-400`           | `colors.blue.400`          | Blue color shade 400        |
+| `--mjo-color-blue-500`           | `colors.blue.500`          | Blue color shade 500        |
+| `--mjo-color-blue-600`           | `colors.blue.600`          | Blue color shade 600        |
+| `--mjo-color-blue-700`           | `colors.blue.700`          | Blue color shade 700        |
+| `--mjo-color-blue-800`           | `colors.blue.800`          | Blue color shade 800        |
+| `--mjo-color-blue-900`           | `colors.blue.900`          | Blue color shade 900        |
+| `--mjo-color-blue-alpha0`        | `colors.blue.alpha0`       | Blue color alpha 0          |
+| `--mjo-color-blue-alpha1`        | `colors.blue.alpha1`       | Blue color alpha 1          |
+| `--mjo-color-blue-alpha2`        | `colors.blue.alpha2`       | Blue color alpha 2          |
+| `--mjo-color-blue-alpha3`        | `colors.blue.alpha3`       | Blue color alpha 3          |
+| `--mjo-color-blue-alpha4`        | `colors.blue.alpha4`       | Blue color alpha 4          |
+| `--mjo-color-blue-alpha5`        | `colors.blue.alpha5`       | Blue color alpha 5          |
+| `--mjo-color-blue-alpha6`        | `colors.blue.alpha6`       | Blue color alpha 6          |
+| `--mjo-color-blue-alpha7`        | `colors.blue.alpha7`       | Blue color alpha 7          |
+| `--mjo-color-blue-alpha8`        | `colors.blue.alpha8`       | Blue color alpha 8          |
+| `--mjo-color-blue-alpha9`        | `colors.blue.alpha9`       | Blue color alpha 9          |
+| `--mjo-color-cyan`               | `colors.cyan.default`      | Cyan color                  |
+| `--mjo-color-cyan-[50-900]`      | `colors.cyan.*`            | Cyan color shades           |
+| `--mjo-color-cyan-alpha[0-9]`    | `colors.cyan.*`            | Cyan color alpha variants   |
+| `--mjo-color-green`              | `colors.green.default`     | Green color                 |
+| `--mjo-color-green-[50-900]`     | `colors.green.*`           | Green color shades          |
+| `--mjo-color-green-alpha[0-9]`   | `colors.green.*`           | Green color alpha variants  |
+| `--mjo-color-purple`             | `colors.purple.default`    | Purple color                |
+| `--mjo-color-purple-[50-900]`    | `colors.purple.*`          | Purple color shades         |
+| `--mjo-color-purple-alpha[0-9]`  | `colors.purple.*`          | Purple color alpha variants |
+| `--mjo-color-red`                | `colors.red.default`       | Red color                   |
+| `--mjo-color-red-[50-900]`       | `colors.red.*`             | Red color shades            |
+| `--mjo-color-red-alpha[0-9]`     | `colors.red.*`             | Red color alpha variants    |
+| `--mjo-color-yellow`             | `colors.yellow.default`    | Yellow color                |
+| `--mjo-color-yellow-[50-900]`    | `colors.yellow.*`          | Yellow color shades         |
+| `--mjo-color-yellow-alpha[0-9]`  | `colors.yellow.*`          | Yellow color alpha variants |
+| `--mjo-color-pink`               | `colors.pink.default`      | Pink color                  |
+| `--mjo-color-pink-[50-900]`      | `colors.pink.*`            | Pink color shades           |
+| `--mjo-color-pink-alpha[0-9]`    | `colors.pink.*`            | Pink color alpha variants   |
+| `--mjo-color-gray`               | `colors.gray.default`      | Gray color                  |
+| `--mjo-color-gray-[50-900]`      | `colors.gray.*`            | Gray color shades           |
+| `--mjo-color-gray-alpha[0-9]`    | `colors.gray.*`            | Gray color alpha variants   |
 
 ### Theme Mode Variables
 

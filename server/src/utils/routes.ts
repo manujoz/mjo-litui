@@ -18,6 +18,7 @@ import { IconController } from "../controllers/icon-controller.js";
 import { ImageController } from "../controllers/image-controller.js";
 import { IndexController } from "../controllers/index-controller.js";
 import { LinkController } from "../controllers/link-controller.js";
+import { ListboxController } from "../controllers/listbox-controller.js";
 import { MenuButtonController } from "../controllers/menu-button-controller.js";
 import { MessagesController } from "../controllers/messages-controller.js";
 import { ModalController } from "../controllers/modal-controller.js";
@@ -55,6 +56,7 @@ const iconController = new IconController();
 const imageController = new ImageController();
 const accordionController = new AccordionController();
 const linkController = new LinkController();
+const listboxController = new ListboxController();
 const menuButtonController = new MenuButtonController();
 const messagesController = new MessagesController();
 const modalController = new ModalController();
@@ -152,6 +154,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-link",
         controller: linkController.renderLinkPage,
+    },
+    {
+        path: "/component/mjo-listbox",
+        controller: listboxController.renderListboxPage,
     },
     {
         path: "/component/mjo-menu-button",
