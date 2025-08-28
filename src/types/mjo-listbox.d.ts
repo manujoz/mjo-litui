@@ -22,3 +22,31 @@ export interface MjoListboxClickEvent extends CustomEvent {
         value: MjoListboxItem["value"];
     };
 }
+
+export interface MjoListboxItemClickEvent extends CustomEvent {
+    detail: {
+        item: MjoListboxItem;
+        value: MjoListboxItem["value"];
+    };
+}
+
+export interface MjoListboxItemFocusEvent extends CustomEvent {
+    detail: {
+        item: MjoListboxItem;
+        value: MjoListboxItem["value"];
+    };
+}
+
+export interface MjoListboxItemBlurEvent extends CustomEvent {
+    detail: {
+        item: MjoListboxItem;
+        value: MjoListboxItem["value"];
+    };
+}
+
+export interface MjoListboxChangeEvent extends CustomEvent {
+    detail: {
+        selectedItems: MjoListboxItems;
+        selectedValues: Array<string | number>;
+    };
+}

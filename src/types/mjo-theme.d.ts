@@ -68,6 +68,7 @@ export interface MjoThemeConfig {
         mjoImage?: MjoImageTheme;
         mjoIonic?: MjoIonicTheme;
         mjoLink?: MjoLinkTheme;
+        mjoListbox?: MjoListboxTheme;
         mjoMenuButton?: MjoMenuButtonTheme;
         mjoMessage?: MjoMessageTheme;
         mjoModal?: MjoModalTheme;
@@ -366,6 +367,33 @@ export interface MjoLinkTheme {
     focusOutlineOffset?: string;
     /** --mjo-link-transition */
     transition?: string;
+}
+
+export interface MjoListboxTheme {
+    /** --mjo-listbox-background-color */
+    backgroundColor?: string;
+    /** --mjo-listbox-border-radius */
+    borderRadius?: string;
+    /** --mjo-listbox-item-gap */
+    itemGap?: string;
+    /** --mjo-listbox-item-margin */
+    itemMargin?: string;
+    /** --mjo-listbox-item-padding */
+    itemPadding?: string;
+    /** --mjo-listbox-item-cursor */
+    itemCursor?: string;
+    /** --mjo-listbox-item-border-radius */
+    itemBorderRadius?: string;
+    /** --mjo-listbox-item-hover-background-color */
+    itemHoverBackgroundColor?: string;
+    /** --mjo-listbox-item-hover-foreground-color */
+    itemHoverForegroundColor?: string;
+    /** --mjo-listbox-icon-top */
+    iconTop?: string;
+    /** --mjo-listbox-section-border-color */
+    sectionBorderColor?: string;
+    /** --mjo-listbox-section-color */
+    sectionColor?: string;
 }
 
 export interface MjoIonicTheme {

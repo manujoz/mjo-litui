@@ -8,7 +8,11 @@ export class ListboxSection extends LitElement {
     @property({ type: String }) section = "";
 
     render() {
-        return html`<mjo-typography size="body2">${this.section}</mjo-typography>`;
+        return html`
+            <div role="group" aria-label=${this.section}>
+                <mjo-typography size="body2">${this.section}</mjo-typography>
+            </div>
+        `;
     }
 
     static styles = [

@@ -9,10 +9,10 @@ import { AiFillAccountBook, AiFillAlert, AiFillAlipayCircle, AiFillApple, AiFill
 
 const ListboxItems: MjoListboxItems = [
     { section: "Actions" },
-    { label: "No color", startIcon: AiFillAccountBook, endIcon: AiFillAccountBook, href: "#" },
+    { label: "No color", startIcon: AiFillAccountBook, endIcon: AiFillAccountBook },
     { label: "Edit", description: "This is description", startIcon: AiFillAccountBook, color: "primary", endIcon: AiFillAccountBook },
     { label: "Delete", startIcon: AiFillAlert, color: "error", endIcon: AiFillAlert },
-    { label: "View", startIcon: AiFillAlipayCircle, color: "info", endIcon: AiFillAlipayCircle },
+    { label: "View", startIcon: AiFillAlipayCircle, color: "info", endIcon: AiFillAlipayCircle, disabled: true },
     { section: "User" },
     { label: "Profile", startIcon: AiFillAccountBook, color: "secondary", endIcon: AiFillAccountBook },
     { label: "Settings", startIcon: AiFillApple, color: "warning", endIcon: AiFillApple },
@@ -27,7 +27,7 @@ const ListboxItems: MjoListboxItems = [
 @customElement("listbox-component")
 export class ListboxComponent extends LitElement {
     render() {
-        return html`<mjo-listbox .items=${ListboxItems} variant="flat" size="small" selectable="multiple"></mjo-listbox>`;
+        return html`<mjo-listbox .items=${ListboxItems} variant="light" size="small" selectable="multiple"></mjo-listbox>`;
     }
 
     static styles = [
@@ -35,6 +35,7 @@ export class ListboxComponent extends LitElement {
             :host {
                 display: block;
                 --mjo-listbox-icon-top: -1px;
+                min-height: 200vh;
             }
         `,
     ];
