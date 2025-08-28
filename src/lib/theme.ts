@@ -77,7 +77,7 @@ const applyColorsPaletteToCssVars = (colors: MjoThemeConfig["colors"]) => {
         if (typeof value === "object") {
             cssStyles += applyStylesFromObject(value as MjoThemeShadeStructure, `--mjo-color-${kamelCaseToKebabCase(key)}`);
         } else {
-            cssStyles += `--mjo-color-${key}: ${value};`;
+            cssStyles += `--mjo-color-${kamelCaseToKebabCase(key)}: ${value};`;
         }
     }
 

@@ -37,10 +37,15 @@
     --mjo-color-white: #ffffff;
     --mjo-color-black: #000000;
     --mjo-color-warning: #ff9800;
+    --mjo-color-warning-foreground: #ffffff;
     --mjo-color-success: #4caf50;
+    --mjo-color-success-foreground: #ffffff;
     --mjo-color-error: #f44336;
+    --mjo-color-error-foreground: #ffffff;
     --mjo-color-info: #128ada;
-    --mjo-color-default: #999999;
+    --mjo-color-info-foreground: #ffffff;
+    --mjo-color-default: #777777;
+    --mjo-color-default-foreground: #ffffff;
     --mjo-color-gradient: linear-gradient(133deg, #1d7fdb 0%, #cc3d74 100%);
     --mjo-color-gradient1: linear-gradient(133deg, #cc3d74 0%, #1d7fdb 100%);
     --mjo-color-gradient2: radial-gradient(circle, #cc3d74 0%, #1d7fdb 100%);

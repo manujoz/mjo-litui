@@ -91,14 +91,24 @@ export interface MjoThemeConfig {
         black?: string;
         /** --mjo-color-error */
         error: string;
+        /** --mjo-color-error-foreground */
+        errorForeground: string;
         /** --mjo-color-success */
         success: string;
+        /** --mjo-color-success-foreground */
+        successForeground: string;
         /** --mjo-color-warning */
         warning: string;
+        /** --mjo-color-warning-foreground */
+        warningForeground: string;
         /** --mjo-color-info */
         info: string;
+        /** --mjo-color-info-foreground */
+        infoForeground: string;
         /** --mjo-color-default */
         default: string;
+        /** --mjo-color-default-foreground */
+        defaultForeground: string;
         /** --mjo-color-gradient */
         gradient?: string;
         /** --mjo-color-gradient1 */
