@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx.cmd validate-branch-name
-npx.cmd eslint . --fix
+npx validate-branch-name
+npx lint-staged
