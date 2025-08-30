@@ -1,5 +1,5 @@
 import { type LitElement } from "lit";
-import { parseColorToRgba } from "./colors";
+import { parseColorToRgba } from "./colors.js";
 
 export const getParentNodes = function* (el: HTMLElement | ShadowRoot["host"]) {
     let current: HTMLElement | Element | null = el.parentElement || (el.getRootNode() as ShadowRoot).host;

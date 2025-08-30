@@ -31,6 +31,7 @@ import { SelectController } from "../controllers/select-controller.js";
 import { SliderController } from "../controllers/slider-controller.js";
 import { SwitchController } from "../controllers/switch-controller.js";
 import { TableController } from "../controllers/table-controller.js";
+import { TabsController } from "../controllers/tabs-controller.js";
 import { TextNowrapController } from "../controllers/text-nowrap-controller.js";
 import { TextareaController } from "../controllers/textarea-controller.js";
 import { TextfieldController } from "../controllers/textfield-controller.js";
@@ -69,6 +70,7 @@ const selectController = new SelectController();
 const sliderController = new SliderController();
 const switchController = new SwitchController();
 const tableController = new TableController();
+const tabsController = new TabsController();
 const textareaController = new TextareaController();
 const textfieldController = new TextfieldController();
 const textNowrapController = new TextNowrapController();
@@ -206,6 +208,10 @@ export const ROUTES = [
     {
         path: "/component/mjo-table",
         controller: tableController.renderTablePage,
+    },
+    {
+        path: "/component/mjo-tabs",
+        controller: tabsController.renderTabsPage,
     },
     {
         path: "/component/mjo-textarea",

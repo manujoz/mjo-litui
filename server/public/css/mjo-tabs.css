@@ -1,0 +1,314 @@
+/* mjo-tabs specific styles for SSR demo page */
+
+.tabs-playground {
+    display: block;
+}
+.tabs-example-group {
+    display: grid;
+    gap: 30px;
+    margin: 20px 0;
+}
+
+.tabs-example-item {
+    background: var(--mjo-background-color-card);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s ease;
+}
+
+.tabs-example-item:hover {
+    border-color: var(--mjo-border-color-high);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tabs-example-item h4 {
+    margin: 0 0 16px 0;
+    color: var(--mjo-foreground-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.tabs-example-item.vertical-example {
+    min-height: 200px;
+}
+
+.tabs-example-item.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Tab Content Styling */
+.tab-content {
+    padding: 20px;
+    color: var(--mjo-foreground-color);
+}
+
+.tab-content h3 {
+    margin: 0 0 12px 0;
+    color: var(--mjo-foreground-color);
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.tab-content p {
+    color: var(--mjo-foreground-color-low);
+    line-height: 1.6;
+    margin: 0 0 16px 0;
+}
+
+/* Demo Buttons */
+.demo-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.demo-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: var(--mjo-primary-color);
+    color: var(--mjo-primary-foreground-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.demo-btn:hover {
+    background: var(--mjo-primary-color-hover);
+    transform: translateY(-1px);
+}
+
+.demo-btn.secondary {
+    background: var(--mjo-secondary-color);
+    color: var(--mjo-secondary-foreground-color);
+}
+
+.demo-btn.secondary:hover {
+    background: var(--mjo-secondary-color-hover);
+}
+
+/* Code Block Styling */
+.code-block {
+    background: var(--mjo-background-color-high);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.9rem;
+    color: var(--mjo-foreground-color);
+    overflow-x: auto;
+    margin: 16px 0;
+}
+
+/* Feature List */
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+}
+
+.feature-list li {
+    padding: 8px 0;
+    font-size: 0.95rem;
+    color: var(--mjo-foreground-color);
+}
+
+/* Rich Content Styling */
+.rich-content {
+    padding: 8px 0;
+}
+
+.rich-content h3 {
+    margin: 0 0 20px 0;
+    color: var(--mjo-foreground-color);
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: var(--mjo-background-color-high);
+    border: 1px solid var(--mjo-border-color);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+    border-color: var(--mjo-primary-color);
+    transform: translateY(-2px);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--mjo-primary-color);
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--mjo-foreground-color-low);
+    font-weight: 500;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.info-item {
+    background: var(--mjo-background-color-high);
+    border-left: 3px solid var(--mjo-secondary-color);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.95rem;
+    color: var(--mjo-foreground-color);
+}
+
+.info-item strong {
+    color: var(--mjo-foreground-color);
+    font-weight: 600;
+}
+
+/* Actions Grid */
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.action-btn {
+    padding: 12px 24px;
+    border: 2px solid var(--mjo-border-color);
+    background: var(--mjo-background-color);
+    color: var(--mjo-foreground-color);
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    border-color: var(--mjo-primary-color);
+    background: var(--mjo-primary-color);
+    color: var(--mjo-primary-foreground-color);
+    transform: translateY(-1px);
+}
+
+.action-btn.primary {
+    border-color: var(--mjo-primary-color);
+    background: var(--mjo-primary-color);
+    color: var(--mjo-primary-foreground-color);
+}
+
+.action-btn.primary:hover {
+    background: var(--mjo-primary-color-hover);
+    border-color: var(--mjo-primary-color-hover);
+}
+
+.action-btn.secondary {
+    border-color: var(--mjo-secondary-color);
+    background: var(--mjo-secondary-color);
+    color: var(--mjo-secondary-foreground-color);
+}
+
+.action-btn.secondary:hover {
+    background: var(--mjo-secondary-color-hover);
+    border-color: var(--mjo-secondary-color-hover);
+}
+
+.action-btn.warning {
+    border-color: var(--mjo-color-warning);
+    color: var(--mjo-color-warning);
+}
+
+.action-btn.warning:hover {
+    background: var(--mjo-color-warning);
+    color: white;
+}
+
+/* Dynamic Features */
+.dynamic-features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0;
+    background: var(--mjo-background-color-high);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.feature-item {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--mjo-border-color-low);
+    font-size: 0.95rem;
+    color: var(--mjo-foreground-color);
+}
+
+.feature-item:last-child {
+    border-bottom: none;
+}
+
+.feature-item strong {
+    color: var(--mjo-foreground-color);
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+/* Playground specific enhancements */
+.playground-showcase mjo-tabs {
+    min-height: 300px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .demo-buttons {
+        flex-direction: column;
+    }
+
+    .tabs-example-item {
+        padding: 16px;
+    }
+}
+
+/* Animation for notifications */
+.demo-notification {
+    animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

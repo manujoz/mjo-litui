@@ -1,5 +1,6 @@
 export { MjoAccordionItem } from "./components/accordion/mjo-accordion-item.js";
 export { MjoOption } from "./components/select/mjo-option.js";
+export { MjoTab } from "./components/tabs/mjo-tab.js";
 export { MjoAccordion } from "./mjo-accordion.js";
 export { MjoAlert } from "./mjo-alert.js";
 export { MjoAvatar } from "./mjo-avatar.js";
@@ -32,6 +33,7 @@ export { MjoSelect } from "./mjo-select.js";
 export { MjoSlider } from "./mjo-slider.js";
 export { MjoSwitch } from "./mjo-switch.js";
 export { MjoTable } from "./mjo-table.js";
+export { MjoTabs } from "./mjo-tabs.js";
 export { MjoTextNowrap } from "./mjo-text-nowrap.js";
 export { MjoTextarea } from "./mjo-textarea.js";
 export { MjoTextfield } from "./mjo-textfield.js";

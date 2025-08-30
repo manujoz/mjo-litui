@@ -35,6 +35,7 @@ import "../../../src/mjo-select.js";
 import "../../../src/mjo-slider.js";
 import "../../../src/mjo-switch.js";
 import "../../../src/mjo-table.js";
+import "../../../src/mjo-tabs.js";
 import "../../../src/mjo-text-nowrap.js";
 import "../../../src/mjo-textarea.js";
 import "../../../src/mjo-textfield.js";

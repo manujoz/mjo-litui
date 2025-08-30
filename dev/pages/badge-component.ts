@@ -31,6 +31,11 @@ export class BadgeComponent extends LitElement {
                         <div class="container"></div>
                     </mjo-badge>
                 </div>
+                <div>
+                    <mjo-badge label=${AiFillAlipaySquare} size="medium" color="success" variant="flat" show>
+                        <div class="container"></div>
+                    </mjo-badge>
+                </div>
             </mjo-grid>
         `;
     }

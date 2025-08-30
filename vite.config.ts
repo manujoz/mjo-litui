@@ -23,6 +23,7 @@ export default defineConfig({
                 "mjo-listbox": `${__dirname}/dev/mjo-listbox.html`,
                 "mjo-progress": `${__dirname}/dev/mjo-progress.html`,
                 "mjo-table": `${__dirname}/dev/mjo-table.html`,
+                "mjo-tabs": `${__dirname}/dev/mjo-tabs.html`,
             },
         },
     },

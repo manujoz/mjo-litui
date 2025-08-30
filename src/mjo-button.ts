@@ -88,12 +88,22 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
         </button>`;
     }
 
+    connectedCallback(): void {
+        super.connectedCallback();
+        this.#setButtonCssVars();
+    }
+
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
         super.updated(_changedProperties);
 
         // Reset toggle state when disabled or loading
         if ((this.disabled || this.loading) && this.toggle) {
             this.toggle = false;
+        }
+
+        // Update button CSS variables when color or variant changes
+        if (_changedProperties.has("color") || _changedProperties.has("variant") || _changedProperties.has("disabled") || _changedProperties.has("loading")) {
+            this.#setButtonCssVars();
         }
 
         // Dispatch loading change event
@@ -207,6 +217,179 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
         this.dispatchEvent(loadingEvent);
     }
 
+    #setButtonCssVars() {
+        // Color property mapping
+        const colorMap = {
+            primary: "var(--mjo-primary-color, #1d7fdb)",
+            secondary: "var(--mjo-secondary-color, #cc3d74)",
+            success: "var(--mjo-color-success, #4caf50)",
+            info: "var(--mjo-color-info, #2196f3)",
+            warning: "var(--mjo-color-warning, #ff9800)",
+            error: "var(--mjo-color-error, #f44336)",
+        };
+
+        // Hover color mapping
+        const hoverColorMap = {
+            primary: "var(--mjo-primary-color-hover, #4e9be4)",
+            secondary: "var(--mjo-secondary-color-hover, #d86490)",
+            success: "var(--mjo-color-success, #4caf50)",
+            info: "var(--mjo-color-info, #2196f3)",
+            warning: "var(--mjo-color-warning, #ff9800)",
+            error: "var(--mjo-color-error, #f44336)",
+        };
+
+        // Foreground color mapping
+        const foregroundColorMap = {
+            primary: "var(--mjo-primary-foreground-color, white)",
+            secondary: "var(--mjo-secondary-foreground-color, white)",
+            success: "var(--mjo-color-success-foreground, white)",
+            info: "var(--mjo-color-info-foreground, white)",
+            warning: "var(--mjo-color-warning-foreground, white)",
+            error: "var(--mjo-color-error-foreground, white)",
+        };
+
+        // Alpha color mapping for flat variant
+        const alphaColorMap: Partial<Record<MjoButtonColor, string>> = {
+            primary: "var(--mjo-primary-color-alpha2, #1d7fdb22)",
+            secondary: "var(--mjo-secondary-color-alpha2, #cc3d7422)",
+        };
+
+        const currentColor = colorMap[this.color];
+        const currentHoverColor = hoverColorMap[this.color];
+        const currentForegroundColor = foregroundColorMap[this.color];
+
+        // Check if disabled or loading
+        const isDisabledOrLoading = this.disabled || this.loading;
+
+        // Default values for normal state
+        let backgroundColor = currentColor;
+        let borderColor = currentColor;
+        let borderStyle = "solid";
+        let textColor = currentForegroundColor;
+        let hoverBackgroundColor = currentHoverColor;
+        let hoverBorderColor = currentHoverColor;
+        let hoverOpacity = "1";
+        let pseudoBackground = "transparent";
+        let pseudoOpacity = "0";
+
+        // Handle disabled/loading state first
+        if (isDisabledOrLoading) {
+            backgroundColor = "var(--mjo-disabled-color, #e0e0e0)";
+            borderColor = "var(--mjo-disabled-color, #e0e0e0)";
+            textColor = "var(--mjo-disabled-foreground-color, #aaaaaa)";
+            hoverBackgroundColor = backgroundColor;
+            hoverBorderColor = borderColor;
+            hoverOpacity = "1";
+
+            // Special loading states for variants
+            if (this.loading) {
+                switch (this.variant) {
+                    case "ghost":
+                    case "dashed":
+                    case "link":
+                        backgroundColor = "transparent";
+                        borderColor = currentColor;
+                        textColor = currentColor;
+                        break;
+                    case "flat": {
+                        const alphaColor = alphaColorMap[this.color];
+                        if (alphaColor) {
+                            backgroundColor = alphaColor;
+                            textColor = currentForegroundColor;
+                        } else {
+                            backgroundColor = "transparent";
+                            pseudoBackground = currentColor;
+                            pseudoOpacity = "0.2";
+                            textColor = "white";
+                        }
+                        borderColor = "transparent";
+                        break;
+                    }
+                    case "text":
+                        backgroundColor = "transparent";
+                        borderColor = "transparent";
+                        textColor = "currentColor";
+                        break;
+                }
+            }
+        } else {
+            // Normal state - variant-specific styling
+            switch (this.variant) {
+                case "ghost": {
+                    backgroundColor = "transparent";
+                    textColor = currentColor;
+                    hoverBackgroundColor = "var(--mjo-background-color-high)";
+                    hoverBorderColor = borderColor;
+                    break;
+                }
+                case "flat": {
+                    const alphaColor = alphaColorMap[this.color];
+                    if (alphaColor) {
+                        backgroundColor = alphaColor;
+                        hoverBackgroundColor = `var(--mjo-${this.color}-color-alpha1, ${alphaColor})`;
+                    } else {
+                        backgroundColor = "transparent";
+                        pseudoBackground = currentColor;
+                        pseudoOpacity = "0.2";
+                        textColor = "white";
+                        hoverBackgroundColor = "transparent";
+                    }
+                    textColor = currentColor;
+                    borderColor = "transparent";
+                    hoverBorderColor = "transparent";
+                    break;
+                }
+                case "dashed": {
+                    backgroundColor = "transparent";
+                    borderStyle = "dashed";
+                    textColor = currentColor;
+                    hoverBackgroundColor = "var(--mjo-background-color-high)";
+                    hoverBorderColor = borderColor;
+                    break;
+                }
+                case "link": {
+                    backgroundColor = "transparent";
+                    borderColor = "transparent";
+                    textColor = currentColor;
+                    hoverBackgroundColor = "transparent";
+                    hoverBorderColor = "transparent";
+                    break;
+                }
+                case "text": {
+                    backgroundColor = "transparent";
+                    borderColor = "transparent";
+                    textColor = "currentColor";
+                    hoverBackgroundColor = "var(--mjo-background-color-high)";
+                    hoverBorderColor = "transparent";
+                    hoverOpacity = "1";
+                    break;
+                }
+                default: {
+                    // Default/solid variant
+                    if (this.color === "success" || this.color === "info" || this.color === "warning" || this.color === "error") {
+                        hoverOpacity = "0.8";
+                        hoverBackgroundColor = currentColor;
+                        hoverBorderColor = currentColor;
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Apply CSS variables
+        this.style.setProperty("--mjoint-button-background-color", backgroundColor);
+        this.style.setProperty("--mjoint-button-border-color", borderColor);
+        this.style.setProperty("--mjoint-button-border-style", borderStyle);
+        this.style.setProperty("--mjoint-button-text-color", textColor);
+        this.style.setProperty("--mjoint-button-hover-background-color", hoverBackgroundColor);
+        this.style.setProperty("--mjoint-button-hover-border-color", hoverBorderColor);
+        this.style.setProperty("--mjoint-button-hover-opacity", hoverOpacity);
+        this.style.setProperty("--mjoint-button-pseudo-background", pseudoBackground);
+        this.style.setProperty("--mjoint-button-pseudo-opacity", pseudoOpacity);
+        this.style.setProperty("--mjoint-button-focus-outline-color", currentColor);
+        this.style.setProperty("--mjoint-button-loading-color", currentColor);
+    }
+
     static styles = [
         css`
             :host {
@@ -218,11 +401,11 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             }
             button {
                 align-items: center;
-                background-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+                background-color: var(--mjoint-button-background-color);
                 border-radius: var(--mjo-button-border-radius, var(--mjo-radius, 5px));
-                border: var(--mjo-button-primary-border, solid 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb)));
+                border: var(--mjoint-button-border-style, solid) 1px var(--mjoint-button-border-color);
                 box-sizing: border-box;
-                color: var(--mjo-button-primary-foreground-color, var(--mjo-primary-foreground-color, white));
+                color: var(--mjoint-button-text-color);
                 cursor: inherit;
                 display: flex;
                 flex-flow: row nowrap;
@@ -242,12 +425,20 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 outline-width: 2px;
                 outline-style: solid;
             }
+            button::before {
+                position: absolute;
+                content: "";
+                inset: 0;
+                opacity: var(--mjoint-button-pseudo-opacity, 0);
+                background-color: var(--mjoint-button-pseudo-background, transparent);
+            }
             button:hover {
-                background-color: var(--mjo-button-primary-color-hover, var(--mjo-primary-color-hover, #4e9be4));
-                border: solid 1px var(--mjo-button-primary-color-hover, var(--mjo-primary-color-hover, #4e9be4));
+                background-color: var(--mjoint-button-hover-background-color);
+                border-color: var(--mjoint-button-hover-border-color);
+                opacity: var(--mjoint-button-hover-opacity, 1);
             }
             button:focus {
-                outline-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+                outline-color: var(--mjoint-button-focus-outline-color);
             }
             /* Ensure high contrast mode compatibility */
             @media (prefers-contrast: high) {
@@ -261,362 +452,8 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             button[data-small-caps] {
                 font-variant: all-small-caps;
             }
-            button[data-color="secondary"]:focus {
-                outline-color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-            }
-            button[data-color="secondary"] {
-                background-color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74)));
-                color: var(--mjo-button-secondary-foreground-color, var(--mjo-secondary-foreground-color, white));
-            }
-            button[data-color="secondary"]:hover {
-                background-color: var(--mjo-button-secondary-color-hover, var(--mjo-secondary-color-hover, #d86490));
-                border: solid 1px var(--mjo-button-secondary-color-hover, var(--mjo-secondary-color-hover, #d86490));
-            }
-            button[data-color="success"]:focus {
-                outline-color: var(--mjo-color-success);
-            }
-            button[data-color="success"] {
-                background-color: var(--mjo-color-success);
-                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-color-success));
-                color: white;
-            }
-            button[data-color="info"]:focus {
-                outline-color: var(--mjo-color-info);
-            }
-            button[data-color="info"] {
-                background-color: var(--mjo-color-info);
-                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-color-info));
-                color: white;
-            }
-            button[data-color="warning"]:focus {
-                outline-color: var(--mjo-color-warning);
-            }
-            button[data-color="warning"] {
-                background-color: var(--mjo-color-warning);
-                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-color-warning));
-                color: white;
-            }
-            button[data-color="error"]:focus {
-                outline-color: var(--mjo-color-error);
-            }
-            button[data-color="error"] {
-                background-color: var(--mjo-color-error);
-                border: var(--mjo-button-secondary-border, solid 1px var(--mjo-color-error));
-                color: white;
-            }
-            button[data-color="success"]:hover,
-            button[data-color="info"]:hover,
-            button[data-color="warning"]:hover,
-            button[data-color="error"]:hover {
-                opacity: 0.8;
-            }
-            button[data-variant="ghost"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-            }
-            button[data-variant="ghost"][data-color="secondary"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-            }
-            button[data-variant="ghost"][data-color="info"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-color-info);
-                color: var(--mjo-color-info);
-            }
-            button[data-variant="ghost"][data-color="warning"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-color-warning);
-                color: var(--mjo-color-warning);
-            }
-            button[data-variant="ghost"][data-color="error"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-color-error);
-                color: var(--mjo-color-error);
-            }
-            button[data-variant="ghost"][data-color="success"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-color-success);
-                color: var(--mjo-color-success);
-            }
-            button[data-variant="ghost"]:hover,
-            button[data-variant="ghost"][data-color="secondary"]:hover,
-            button[data-variant="ghost"][data-color="info"]:hover,
-            button[data-variant="ghost"][data-color="warning"]:hover,
-            button[data-variant="ghost"][data-color="error"]:hover,
-            button[data-variant="ghost"][data-color="success"]:hover {
-                background-color: var(--mjo-background-color-high);
-            }
-            button[data-variant="flat"] {
-                background-color: var(--mjo-button-flat-primary-background-color, var(--mjo-primary-color-alpha2, #1d7fdb22));
-                color: var(--mjo-button-flat-primary-foreground-color, var(--mjo-primary-color, #1d7fdb));
-                border: none;
-            }
-            button[data-variant="flat"]:hover {
-                background-color: var(--mjo-button-flat-primary-background-color-hover, var(--mjo-primary-color-alpha1, #1d7fdb22));
-                color: var(--mjo-button-flat-primary-foreground-color-hover, var(--mjo-primary-color, #1d7fdb));
-                border: none;
-            }
-            button[data-variant="flat"][data-color="secondary"] {
-                background-color: var(--mjo-button-flat-secondary-background-color, var(--mjo-secondary-color-alpha2, #cc3d7422));
-                color: var(--mjo-button-flat-secondary-foreground-color, var(--mjo-secondary-color, #cc3d74));
-                border: none;
-            }
-            button[data-variant="flat"][data-color="secondary"]:hover {
-                background-color: var(--mjo-button-flat-secondary-background-color-hover, var(--mjo-secondary-color-alpha1, #cc3d7422));
-                color: var(--mjo-button-flat-secondary-foreground-color-hover, var(--mjo-secondary-color, #cc3d74));
-                border: none;
-            }
-            button[data-variant="flat"][data-color="success"],
-            button[data-variant="flat"][data-color="error"],
-            button[data-variant="flat"][data-color="info"],
-            button[data-variant="flat"][data-color="warning"] {
-                background-color: transparent;
-                color: white;
-                border: none;
-            }
-            button[data-variant="flat"][data-color="success"]::before {
-                background-color: var(--mjo-color-success);
-                position: absolute;
-                inset: 0;
-                content: "";
-                opacity: 0.2;
-            }
-            button[data-variant="flat"][data-color="info"]::before {
-                background-color: var(--mjo-color-info);
-                position: absolute;
-                inset: 0;
-                content: "";
-                opacity: 0.2;
-            }
-            button[data-variant="flat"][data-color="warning"]::before {
-                background-color: var(--mjo-color-warning);
-                position: absolute;
-                inset: 0;
-                content: "";
-                opacity: 0.2;
-            }
-            button[data-variant="flat"][data-color="error"]::before {
-                background-color: var(--mjo-color-error);
-                position: absolute;
-                inset: 0;
-                content: "";
-                opacity: 0.2;
-            }
-            button[data-variant="dashed"] {
-                background-color: transparent;
-                border: dashed 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-            }
-            button[data-variant="dashed"][data-color="secondary"] {
-                border: dashed 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-            }
-            button[data-variant="dashed"][data-color="info"] {
-                border: dashed 1px var(--mjo-color-info);
-                color: var(--mjo-color-info);
-            }
-            button[data-variant="dashed"][data-color="success"] {
-                border: dashed 1px var(--mjo-color-success);
-                color: var(--mjo-color-success);
-            }
-            button[data-variant="dashed"][data-color="warning"] {
-                border: dashed 1px var(--mjo-color-warning);
-                color: var(--mjo-color-warning);
-            }
-            button[data-variant="dashed"][data-color="error"] {
-                border: dashed 1px var(--mjo-color-error);
-                color: var(--mjo-color-error);
-            }
-            button[data-variant="dashed"]:hover,
-            button[data-variant="dashed"][data-color="secondary"]:hover,
-            button[data-variant="dashed"][data-color="info"]:hover,
-            button[data-variant="dashed"][data-color="warning"]:hover,
-            button[data-variant="dashed"][data-color="error"]:hover,
-            button[data-variant="dashed"][data-color="success"]:hover {
-                background-color: var(--mjo-background-color-high);
-            }
-            button[data-variant="link"] {
-                background-color: transparent;
-                border: solid 1px transparent;
-                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-            }
-            button[data-variant="link"][data-color="secondary"] {
-                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-            }
-            button[data-variant="link"][data-color="info"] {
-                color: var(--mjo-color-info);
-            }
-            button[data-variant="link"][data-color="success"] {
-                color: var(--mjo-color-success);
-            }
-            button[data-variant="link"][data-color="warning"] {
-                color: var(--mjo-color-warning);
-            }
-            button[data-variant="link"][data-color="error"] {
-                color: var(--mjo-color-error);
-            }
-            button[data-variant="text"],
-            button[data-variant="text"][data-color="secondary"] {
-                background-color: transparent;
-                border: solid 1px transparent;
-                color: currentColor;
-            }
-            button[data-variant="text"]:hover {
-                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-                background-color: var(--mjo-background-color-high);
-            }
-            button[data-variant="text"][data-color="secondary"]:hover {
-                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-            }
-            button[data-variant="text"][data-color="info"]:hover {
-                color: var(--mjo-color-info);
-            }
-            button[data-variant="text"][data-color="success"]:hover {
-                color: var(--mjo-color-success);
-            }
-            button[data-variant="text"][data-color="warning"]:hover {
-                color: var(--mjo-color-warning);
-            }
-            button[data-variant="text"][data-color="error"]:hover {
-                color: var(--mjo-color-error);
-            }
-            :host([disabled]) button,
-            :host([loading]) button {
-                cursor: not-allowed;
-                color: var(--mjo-button-disabled-foreground-color, var(--mjo-disabled-foreground-color, #aaaaaa));
-                background-color: var(--mjo-button-disabled-background-color, var(--mjo-disabled-color, #e0e0e0));
-                border: solid 1px var(--mjo-button-disabled-background-color, var(--mjo-disabled-color, #e0e0e0));
-            }
-            :host([loading]) button[data-variant="ghost"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-            }
-            :host([loading]) button[data-variant="ghost"][data-color="secondary"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-            }
-            :host([loading]) button[data-variant="ghost"][data-color="info"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-color-info);
-                color: var(--mjo-color-info);
-            }
-            :host([loading]) button[data-variant="ghost"][data-color="success"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-color-success);
-                color: var(--mjo-color-success);
-            }
-            :host([loading]) button[data-variant="ghost"][data-color="warning"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-color-warning);
-                color: var(--mjo-color-warning);
-            }
-            :host([loading]) button[data-variant="ghost"][data-color="error"] {
-                background-color: transparent;
-                border: solid 1px var(--mjo-color-error);
-                color: var(--mjo-color-error);
-            }
-            :host([loading]) button[data-variant="flat"] {
-                background-color: var(--mjo-button-flat-primary-background-color, var(--mjo-primary-color-alpha2, #1d7fdb22));
-                color: var(--mjo-button-flat-primary-foreground-color, var(--mjo-primary-foreground-color, #ffffff));
-                border: none;
-            }
-            :host([loading]) button[data-variant="flat"][data-color="secondary"] {
-                background-color: var(--mjo-button-flat-secondary-background-color, var(--mjo-secondary-color-alpha2, #cc3d7422));
-                color: var(--mjo-button-flat-secondary-foreground-color, var(--mjo-secondary-foreground-color, #ffffff));
-                border: none;
-            }
-            :host([loading]) button[data-variant="flat"][data-color="info"],
-            :host([loading]) button[data-variant="flat"][data-color="success"],
-            :host([loading]) button[data-variant="flat"][data-color="error"],
-            :host([loading]) button[data-variant="flat"][data-color="warning"] {
-                background-color: transparent;
-                color: white;
-                border: none;
-            }
-            :host([loading]) button[data-variant="flat"][data-color="info"]::before,
-            :host([loading]) button[data-variant="flat"][data-color="success"]::before,
-            :host([loading]) button[data-variant="flat"][data-color="warning"]::before,
-            :host([loading]) button[data-variant="flat"][data-color="error"]::before {
-                position: absolute;
-                inset: 0;
-                content: "";
-                z-index: -1;
-                opacity: 0.2;
-            }
-            :host([loading]) button[data-variant="flat"][data-color="info"]::before {
-                background-color: var(--mjo-color-info);
-            }
-            :host([loading]) button[data-variant="flat"][data-color="success"]::before {
-                background-color: var(--mjo-color-success);
-            }
-            :host([loading]) button[data-variant="flat"][data-color="warning"]::before {
-                background-color: var(--mjo-color-warning);
-            }
-            :host([loading]) button[data-variant="flat"][data-color="error"]::before {
-                background-color: var(--mjo-color-error);
-            }
-            :host([loading]) button[data-variant="dashed"] {
-                background-color: transparent;
-                border: dashed 1px var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-            }
-            :host([loading]) button[data-variant="dashed"][data-color="secondary"] {
-                background-color: transparent;
-                border: dashed 1px var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-            }
-            :host([loading]) button[data-variant="dashed"][data-color="info"] {
-                background-color: transparent;
-                border: dashed 1px var(--mjo-color-info);
-                color: var(--mjo-color-info);
-            }
-            :host([loading]) button[data-variant="dashed"][data-color="success"] {
-                background-color: transparent;
-                border: dashed 1px var(--mjo-color-success);
-                color: var(--mjo-color-success);
-            }
-            :host([loading]) button[data-variant="dashed"][data-color="warning"] {
-                background-color: transparent;
-                border: dashed 1px var(--mjo-color-warning);
-                color: var(--mjo-color-warning);
-            }
-            :host([loading]) button[data-variant="dashed"][data-color="error"] {
-                background-color: transparent;
-                border: dashed 1px var(--mjo-color-error);
-                color: var(--mjo-color-error);
-            }
-            :host([loading]) button[data-variant="link"] {
-                background-color: transparent;
-                border: solid 1px transparent;
-                color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
-            }
-            :host([loading]) button[data-variant="link"][data-color="secondary"] {
-                color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-            }
-            :host([loading]) button[data-variant="link"][data-color="info"] {
-                color: var(--mjo-color-info);
-            }
-            :host([loading]) button[data-variant="link"][data-color="success"] {
-                color: var(--mjo-color-success);
-            }
-            :host([loading]) button[data-variant="link"][data-color="warning"] {
-                color: var(--mjo-color-warning);
-            }
-            :host([loading]) button[data-variant="link"][data-color="error"] {
-                color: var(--mjo-color-error);
-            }
-            :host([loading]) button[data-variant="text"] {
-                background-color: transparent;
-                border: solid 1px transparent;
-                color: currentColor;
-            }
+            /* Size variants */
             button[data-size="small"] {
-                padding: 5px 10px;
                 padding: calc(1em / 2 - 3px) calc(1em / 2);
                 font-size: 0.8em;
             }
@@ -624,20 +461,23 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 padding: calc(1em / 2) calc(1em / 2 + 3px);
                 font-size: 1.2em;
             }
+            /* Rounded buttons */
             button[data-rounded] {
                 border-radius: 100%;
                 gap: 0;
                 padding: 0.7em;
             }
-            button[data-rounded]button[data-size="small"] {
+            button[data-rounded][data-size="small"] {
                 padding: 0.5em;
             }
-            button[data-rounded]button[data-size="large"] {
+            button[data-rounded][data-size="large"] {
                 padding: 0.9em;
             }
+            /* Toggle state */
             button[data-toggle] {
                 box-shadow: inset 0px 0px 20px #333333;
             }
+            /* Icon and text layout */
             button mjo-icon,
             button span {
                 flex: 0 0 auto;
@@ -645,14 +485,21 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             button mjo-icon {
                 font-size: 1em;
             }
+            /* Loading indicator */
             .loading {
                 position: absolute;
                 bottom: 0;
                 left: 0;
                 width: 100%;
                 height: 0.2em;
-                background-color: var(--mjo-button-primary-color, var(--mjo-primary-color, #1d7fdb));
+                background-color: var(--mjoint-button-loading-color);
                 animation: loading 1.5s infinite;
+            }
+            button[data-size="small"] .loading {
+                height: 0.19em;
+            }
+            button[data-size="large"] .loading {
+                height: 0.21em;
             }
             /* Respect user's motion preferences */
             @media (prefers-reduced-motion: reduce) {
@@ -663,27 +510,6 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 button {
                     transition: none;
                 }
-            }
-            button[data-color="secondary"] .loading {
-                background-color: var(--mjo-button-secondary-color, var(--mjo-secondary-color, #cc3d74));
-            }
-            button[data-color="info"] .loading {
-                background-color: var(--mjo-color-info);
-            }
-            button[data-color="success"] .loading {
-                background-color: var(--mjo-color-success);
-            }
-            button[data-color="warning"] .loading {
-                background-color: var(--mjo-color-warning);
-            }
-            button[data-color="error"] .loading {
-                background-color: var(--mjo-color-error);
-            }
-            button[data-size="small"] .loading {
-                height: 0.19em;
-            }
-            button[data-size="large"] .loading {
-                height: 0.21em;
             }
 
             @keyframes loading {

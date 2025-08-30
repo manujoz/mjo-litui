@@ -495,6 +495,108 @@
 			"label": "Build Config Check Only",
 			"type": "shell",
 			"command": "tsc -p tsconfig.build.json --noEmit"
+		},
+		{
+			"label": "Test Tabs Component Only",
+			"type": "shell",
+			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Component Direct",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\"",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Component Fixed",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Properties Suite",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Tab Management Suite",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Navigation and Events Suite",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Visual States Suite",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Visual States Suite Fixed",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Accessibility Suite",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Accessibility Suite Fixed",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs Accessibility Suite Final",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs SSR Features Suite",
+			"type": "shell",
+			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Tabs SSR Features Suite Direct",
+			"type": "shell",
+			"command": "npx web-test-runner \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Test Complete Tabs Suite",
+			"type": "shell",
+			"command": "npx web-test-runner \"test/components/mjo-tabs.test.ts\" --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Final Tabs Test Direct",
+			"type": "shell",
+			"command": "npx web-test-runner test/components/mjo-tabs.test.ts --watch=false --node-resolve",
+			"isBackground": false
+		},
+		{
+			"label": "Final Complete Tabs Test",
+			"type": "shell",
+			"command": "npx web-test-runner test/components/mjo-tabs.test.ts --watch=false",
+			"isBackground": false
+		},
+		{
+			"label": "Final Tabs Verification",
+			"type": "shell",
+			"command": "npx web-test-runner test/components/mjo-tabs.test.ts --watch=false --node-resolve",
+			"isBackground": false
 		}
 	]
 }

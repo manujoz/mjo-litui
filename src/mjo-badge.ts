@@ -4,7 +4,7 @@ import { LitElement, PropertyValues, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { getInheritBackgroundColor } from "./utils/shadow-dom";
+import { getInheritBackgroundColor } from "./utils/shadow-dom.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { pause } from "./utils/utils.js";
@@ -102,6 +102,7 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
         super.connectedCallback();
 
         this.#setBackgroundColor();
+        this.#setBadgeCssVars();
     }
 
     hideBadge() {
@@ -136,6 +137,10 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
             setTimeout(() => {
                 this.#setPosition();
             }, 200);
+        }
+
+        if (_changedProperties.has("color") || _changedProperties.has("variant")) {
+            this.#setBadgeCssVars();
         }
     }
 
@@ -214,6 +219,86 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
         this.container.classList.add("show");
     }
 
+    #setBadgeCssVars() {
+        // Color property mapping
+        const colorMap = {
+            default: "var(--mjo-color-default, #999999)",
+            primary: "var(--mjo-primary-color, #4e9be4)",
+            secondary: "var(--mjo-secondary-color, #cc3d74)",
+            success: "var(--mjo-color-success, #4caf50)",
+            info: "var(--mjo-color-info, #2196f3)",
+            warning: "var(--mjo-color-warning, #ff9800)",
+            error: "var(--mjo-color-error, #f44336)",
+        };
+
+        // Foreground color mapping (when available)
+        const foregroundColorMap = {
+            primary: "var(--mjo-primary-foreground-color, currentColor)",
+            secondary: "var(--mjo-secondary-foreground-color, currentColor)",
+            default: "var(--mjo-foreground-color, currentColor)",
+            success: "var(--mjo-color-success-foreground, currentColor)",
+            info: "var(--mjo-color-info-foreground, currentColor)",
+            warning: "var(--mjo-color-warning-foreground, currentColor)",
+            error: "var(--mjo-color-error-foreground, currentColor)",
+        };
+
+        // Alpha color mapping for flat variant (only available for primary/secondary)
+        const alphaColorMap: Partial<Record<MjoBadgeColors, string>> = {
+            primary: "var(--mjo-primary-color-alpha3)",
+            secondary: "var(--mjo-secondary-color-alpha3)",
+        };
+
+        const currentColor = colorMap[this.color];
+        const currentForegroundColor = foregroundColorMap[this.color];
+
+        // Default values
+        let backgroundColor = `var(--mjo-badge-background-color, ${currentColor})`;
+        let textColor = `var(--mjo-badge-color, ${currentForegroundColor})`;
+        let boxShadow = "none";
+        let pseudoBackground = "none";
+        let pseudoOpacity = "0";
+        let overflow = "visible";
+
+        // Variant-specific styling
+        switch (this.variant) {
+            case "solid": {
+                // Default solid variant - no changes needed
+                break;
+            }
+            case "flat": {
+                textColor = currentColor;
+                const alphaColor = alphaColorMap[this.color];
+                if (alphaColor) {
+                    backgroundColor = alphaColor;
+                } else {
+                    backgroundColor = "transparent";
+                    pseudoBackground = currentColor;
+                    pseudoOpacity = "0.2";
+                    overflow = "hidden";
+                }
+                break;
+            }
+            case "ghost": {
+                backgroundColor = "rgba(200, 200, 200, 0.2)";
+                textColor = currentColor;
+                break;
+            }
+            case "brilliant": {
+                boxShadow = `0 0 1em ${currentColor}`;
+                break;
+            }
+        }
+
+        // Apply CSS variables
+        this.style.setProperty("--mjoint-badge-background-color", backgroundColor);
+        this.style.setProperty("--mjoint-badge-text-color", textColor);
+        this.style.setProperty("--mjoint-badge-box-shadow", boxShadow);
+        this.style.setProperty("--mjoint-badge-pseudo-background", pseudoBackground);
+        this.style.setProperty("--mjoint-badge-pseudo-opacity", pseudoOpacity);
+        this.style.setProperty("--mjoint-badge-overflow", overflow);
+        this.style.setProperty("--mjoint-badge-focus-outline-color", currentColor);
+    }
+
     static styles = [
         css`
             :host {
@@ -233,6 +318,19 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
                 transition: transform var(--mjo-badge-animation-duration, 0.2s) ease-in-out;
                 z-index: 1;
                 outline: none;
+
+                /* Dynamic styles via CSS variables */
+                background-color: var(--mjoint-badge-background-color);
+                color: var(--mjoint-badge-text-color);
+                box-shadow: var(--mjoint-badge-box-shadow);
+                overflow: var(--mjoint-badge-overflow);
+            }
+            .container::before {
+                position: absolute;
+                content: "";
+                inset: 0;
+                opacity: var(--mjoint-badge-pseudo-opacity, 0);
+                background-color: var(--mjoint-badge-pseudo-background, transparent);
             }
             .container.show {
                 transform: scale(1);
@@ -241,187 +339,21 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
                 animation: badge-click 0.2s ease-out;
             }
             .container:focus-visible {
-                outline: var(--mjo-badge-focus-outline-width, 2px) solid var(--mjo-badge-focus-outline-color);
+                outline: var(--mjo-badge-focus-outline-width, 2px) solid var(--mjoint-badge-focus-outline-color);
                 outline-offset: var(--mjo-badge-focus-outline-offset, 1px);
             }
             .container[data-hide-outline] {
                 border: none;
                 outline: none;
             }
-            .container[data-color="primary"]:focus-visible {
-                --mjo-badge-focus-outline-color: var(--mjo-primary-color, #4e9be4);
-            }
-            .container[data-color="secondary"]:focus-visible {
-                --mjo-badge-focus-outline-color: var(--mjo-secondary-color, #cc3d74);
-            }
-            .container[data-color="success"]:focus-visible {
-                --mjo-badge-focus-outline-color: var(--mjo-color-success, #4caf50);
-            }
-            .container[data-color="error"]:focus-visible {
-                --mjo-badge-focus-outline-color: var(--mjo-color-error, #f44336);
-            }
-            .container[data-color="info"]:focus-visible {
-                --mjo-badge-focus-outline-color: var(--mjo-color-info, #2196f3);
-            }
-            .container[data-color="warning"]:focus-visible {
-                --mjo-badge-focus-outline-color: var(--mjo-color-warning, #ff9800);
-            }
-            .container[data-color="default"]:focus-visible {
-                --mjo-badge-focus-outline-color: var(--mjo-color-default, #999999);
-            }
             .container[data-size="small"] {
-                font-size: var(--mjo-badge-small-size, 12px);
+                font-size: 12px;
             }
             .container[data-size="medium"] {
-                font-size: var(--mjo-badge-medium-size, 14px);
+                font-size: 14px;
             }
             .container[data-size="large"] {
-                font-size: var(--mjo-badge-large-size, 18px);
-            }
-            .container[data-color="primary"] {
-                background-color: var(--mjo-badge-background-color, var(--mjo-primary-color, #4e9be4));
-                color: var(--mjo-badge-color, var(--mjo-primary-foreground-color, currentColor));
-            }
-            .container[data-color="primary"][data-variant="flat"] {
-                background-color: var(--mjo-primary-color-alpha3);
-                color: var(--mjo-primary-color);
-            }
-            .container[data-color="primary"][data-variant="ghost"] {
-                background-color: rgba(200, 200, 200, 0.2);
-                color: var(--mjo-primary-color);
-            }
-            .container[data-color="primary"][data-variant="brilliant"] {
-                box-shadow: 0 0 1em var(--mjo-primary-color);
-            }
-            .container[data-color="secondary"] {
-                background-color: var(--mjo-badge-background-color, var(--mjo-secondary-color, #cc3d74));
-                color: var(--mjo-badge-color, var(--mjo-secondary-foreground-color, currentColor));
-            }
-            .container[data-color="secondary"][data-variant="flat"] {
-                background-color: var(--mjo-secondary-color-alpha3);
-                color: var(--mjo-secondary-color);
-            }
-            .container[data-color="secondary"][data-variant="ghost"] {
-                background-color: rgba(200, 200, 200, 0.2);
-                color: var(--mjo-secondary-color);
-            }
-            .container[data-color="secondary"][data-variant="brilliant"] {
-                box-shadow: 0 0 1em var(--mjo-secondary-color);
-            }
-            .container[data-color="success"] {
-                background-color: var(--mjo-badge-background-color, var(--mjo-color-success, #4caf50));
-                color: var(--mjo-badge-color, currentColor);
-            }
-            .container[data-color="success"][data-variant="flat"] {
-                color: var(--mjo-color-success, #4caf50);
-                background-color: transparent;
-                overflow: hidden;
-            }
-            .container[data-color="success"][data-variant="flat"]::before {
-                position: absolute;
-                content: "";
-                inset: 0;
-                opacity: 0.2;
-                background-color: var(--mjo-color-success, #4caf50);
-            }
-            .container[data-color="success"][data-variant="ghost"] {
-                background-color: rgba(200, 200, 200, 0.2);
-                color: var(--mjo-color-success);
-            }
-            .container[data-color="success"][data-variant="brilliant"] {
-                box-shadow: 0 0 1em var(--mjo-color-success);
-            }
-            .container[data-color="error"] {
-                background-color: var(--mjo-badge-background-color, var(--mjo-color-error, #f44336));
-                color: var(--mjo-badge-color, currentColor);
-            }
-            .container[data-color="error"][data-variant="flat"] {
-                background-color: transparent;
-                color: var(--mjo-color-error, #f44336);
-                overflow: hidden;
-            }
-            .container[data-color="error"][data-variant="flat"]::before {
-                position: absolute;
-                content: "";
-                inset: 0;
-                opacity: 0.2;
-                background-color: var(--mjo-color-error, #f44336);
-            }
-            .container[data-color="error"][data-variant="ghost"] {
-                background-color: rgba(200, 200, 200, 0.2);
-                color: var(--mjo-color-error);
-            }
-            .container[data-color="error"][data-variant="brilliant"] {
-                box-shadow: 0 0 1em var(--mjo-color-error);
-            }
-            .container[data-color="info"] {
-                background-color: var(--mjo-badge-background-color, var(--mjo-color-info, #2196f3));
-                color: var(--mjo-badge-color, currentColor);
-            }
-            .container[data-color="info"][data-variant="flat"] {
-                background-color: transparent;
-                color: var(--mjo-color-info, #2196f3);
-                overflow: hidden;
-            }
-            .container[data-color="info"][data-variant="flat"]::before {
-                position: absolute;
-                content: "";
-                inset: 0;
-                opacity: 0.2;
-                background-color: var(--mjo-color-info, #2196f3);
-            }
-            .container[data-color="info"][data-variant="ghost"] {
-                background-color: rgba(200, 200, 200, 0.2);
-                color: var(--mjo-color-info);
-            }
-            .container[data-color="info"][data-variant="brilliant"] {
-                box-shadow: 0 0 1em var(--mjo-color-info);
-            }
-            .container[data-color="warning"] {
-                background-color: var(--mjo-badge-background-color, var(--mjo-color-warning, #ff9800));
-                color: var(--mjo-badge-color, currentColor);
-            }
-            .container[data-color="warning"][data-variant="flat"] {
-                background-color: transparent;
-                color: var(--mjo-color-warning, #ff9800);
-                overflow: hidden;
-            }
-            .container[data-color="warning"][data-variant="flat"]::before {
-                position: absolute;
-                content: "";
-                inset: 0;
-                opacity: 0.2;
-                background-color: var(--mjo-color-warning, #ff9800);
-            }
-            .container[data-color="warning"][data-variant="ghost"] {
-                background-color: rgba(200, 200, 200, 0.2);
-                color: var(--mjo-color-warning);
-            }
-            .container[data-color="warning"][data-variant="brilliant"] {
-                box-shadow: 0 0 1em var(--mjo-color-warning);
-            }
-            .container[data-color="default"] {
-                background-color: var(--mjo-badge-background-color, var(--mjo-color-default, #999999));
-                color: var(--mjo-badge-color, currentColor);
-            }
-            .container[data-color="default"][data-variant="flat"] {
-                background-color: transparent;
-                color: var(--mjo-color-default, #999999);
-                overflow: hidden;
-            }
-            .container[data-color="default"][data-variant="flat"]::before {
-                position: absolute;
-                content: "";
-                inset: 0;
-                opacity: 0.2;
-                background-color: var(--mjo-color-default, #999999);
-            }
-            .container[data-color="default"][data-variant="ghost"] {
-                background-color: rgba(200, 200, 200, 0.2);
-                color: var(--mjo-color-default);
-            }
-            .container[data-color="default"][data-variant="brilliant"] {
-                box-shadow: 0 0 1em var(--mjo-color-default);
+                font-size: 18px;
             }
             .container[data-clickable] {
                 cursor: pointer;
