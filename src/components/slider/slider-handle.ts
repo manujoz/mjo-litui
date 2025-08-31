@@ -30,6 +30,7 @@ export class SliderHandle extends LitElement {
     @state() private isFocused = false;
 
     start: number = 0;
+    private isDragging = false;
 
     listeners = {
         mousedown: (ev: MouseEvent | TouchEvent) => {
@@ -78,12 +79,9 @@ export class SliderHandle extends LitElement {
     connectedCallback(): void {
         super.connectedCallback();
 
+        // Only local event listeners - global ones are added on demand
         this.addEventListener("mousedown", this.listeners.mousedown);
         this.addEventListener("touchstart", this.listeners.mousedown, { passive: true });
-        document.addEventListener("mousemove", this.listeners.mousemove);
-        document.addEventListener("touchmove", this.listeners.mousemove);
-        document.addEventListener("mouseup", this.listeners.mouseup);
-        document.addEventListener("touchend", this.listeners.mouseup);
 
         this.#setFontSize();
         this.#setSize();
@@ -92,15 +90,29 @@ export class SliderHandle extends LitElement {
         document.addEventListener("mjo-theme:change", this.#setBackgroundColor);
     }
 
+    #addGlobalListeners() {
+        // Use passive listeners for better performance where possible
+        document.addEventListener("mousemove", this.listeners.mousemove);
+        document.addEventListener("touchmove", this.listeners.mousemove, { passive: false });
+        document.addEventListener("mouseup", this.listeners.mouseup);
+        document.addEventListener("touchend", this.listeners.mouseup);
+    }
+
+    #removeGlobalListeners() {
+        document.removeEventListener("mousemove", this.listeners.mousemove);
+        document.removeEventListener("touchmove", this.listeners.mousemove);
+        document.removeEventListener("mouseup", this.listeners.mouseup);
+        document.removeEventListener("touchend", this.listeners.mouseup);
+    }
+
     disconnectedCallback(): void {
         super.disconnectedCallback();
 
         this.removeEventListener("mousedown", this.listeners.mousedown);
         this.removeEventListener("touchstart", this.listeners.mousedown);
-        document.removeEventListener("mousemove", this.listeners.mousemove);
-        document.removeEventListener("touchmove", this.listeners.mousemove);
-        document.removeEventListener("mouseup", this.listeners.mouseup);
-        document.removeEventListener("touchend", this.listeners.mouseup);
+
+        // Ensure global listeners are cleaned up if still active
+        this.#removeGlobalListeners();
 
         document.removeEventListener("mjo-theme:change", this.#setBackgroundColor);
     }
@@ -159,7 +171,7 @@ export class SliderHandle extends LitElement {
     }
 
     #handleMove(ev: MouseEvent | TouchEvent) {
-        if (!this.pressed) return;
+        if (!this.isDragging || !this.pressed) return;
 
         const clientX = ev.type === "mousemove" ? (ev as MouseEvent).clientX : (ev as TouchEvent).touches[0].clientX;
         const diff = clientX - this.start;
@@ -168,9 +180,14 @@ export class SliderHandle extends LitElement {
     }
 
     #handlePress(ev: MouseEvent | TouchEvent) {
-        if (ev.type !== "touchstart") ev.preventDefault();
-
         if (this.disabled) return;
+
+        // Only prevent default for mouse events, not touch events (to allow scrolling)
+        if (ev.type === "mousedown") {
+            ev.preventDefault();
+        }
+
+        this.isDragging = true;
         this.pressed = true;
 
         if (ev.type === "mousedown") {
@@ -178,15 +195,25 @@ export class SliderHandle extends LitElement {
         } else {
             this.start = (ev as TouchEvent).touches[0].clientX;
         }
+
+        // Add global listeners only when dragging starts
+        this.#addGlobalListeners();
     }
 
     #handleLeave(ev: MouseEvent | TouchEvent) {
-        ev.preventDefault();
+        if (!this.isDragging) return;
 
-        if (!this.pressed) return;
+        // Only prevent default when we're actually handling the slider interaction
+        if (this.pressed) {
+            ev.preventDefault();
+        }
 
+        this.isDragging = false;
         this.pressed = false;
         this.start = 0;
+
+        // Remove global listeners when dragging ends
+        this.#removeGlobalListeners();
 
         this.setLeft();
 
