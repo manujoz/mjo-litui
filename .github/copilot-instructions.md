@@ -2,6 +2,27 @@
 
 Este documento ayuda a agentes de IA (Copilot, Claude, etc.) a navegar y contribuir al proyecto **mjo-litui**, una librería de Web Components basada en LitElement.
 
+## ⚠️ REGLAS CRÍTICAS - LEER SIEMPRE PRIMERO
+
+### 🚫 NUNCA crear tasks automáticamente
+- **JAMÁS** usar `create_and_run_task` para agregar nuevos tasks a `.vscode/tasks.json`
+- El usuario ya tiene todos los tasks necesarios configurados
+- Si crees que necesitas un nuevo task, **PREGUNTA** al usuario primero
+- Usa solo tasks existentes del workspace o comandos directos de terminal
+
+### 🚫 NUNCA ejecutar comandos `tsc`
+- **JAMÁS** ejecutar `tsc --noEmit` o cualquier verificación directa de TypeScript
+- La configuración del proyecto hace que TypeScript dé errores falsos
+- En lugar de checks de TypeScript: **SIEMPRE usar `npm run build`**
+- El build es la forma correcta de validar TypeScript en este proyecto
+- Si el build pasa, TypeScript es válido - no lo cuestiones
+
+### ✅ Workflow correcto de validación
+1. **Para validar TypeScript**: Solo usar `npm run build`
+2. **Para testing**: Usar tasks existentes o comandos directos `npx web-test-runner`
+3. **Para funcionalidad nueva**: PREGUNTAR antes de crear tasks o asumir
+4. **Cuando tengas dudas**: PREGUNTA al usuario
+
 ## 0. Idioma
 
 - Te comunicas conmigo en español

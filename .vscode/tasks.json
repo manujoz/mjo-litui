@@ -2,601 +2,70 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Build Server Client",
-			"type": "shell",
-			"command": "npm run server:build:client"
-		},
-		{
 			"label": "Build Full Application",
 			"type": "shell",
-			"command": "npm run build"
+			"command": "npm run build",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": [
+				"$tsc"
+			]
 		},
 		{
-			"label": "TypeScript Check",
+			"label": "Full Test Suite",
 			"type": "shell",
-			"command": "tsc --noEmit"
+			"command": "npm run test",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
 		},
 		{
-			"label": "TypeScript Check Card Controller",
+			"label": "Test Single File",
 			"type": "shell",
-			"command": "tsc --noEmit server/src/controllers/card-controller.ts"
+			"command": "npm run test --files <file>",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
+		},
+		{
+			"label": "Test Watch Mode",
+			"type": "shell",
+			"command": "npx web-test-runner --watch",
+			"group": "test",
+			"isBackground": true,
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": true,
+				"clear": false
+			}
 		},
 		{
 			"label": "Build Server Client",
 			"type": "shell",
-			"command": "npm run server:build:client"
-		},
-		{
-			"label": "Calendar TypeScript Check",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-calendar.ts"
-		},
-		{
-			"label": "TypeScript Check Calendar",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-calendar.ts"
-		},
-		{
-			"label": "Run Calendar Tests Only",
-			"type": "shell",
-			"command": "npx web-test-runner test/components/mjo-calendar.test.ts --config web-test-runner.config.js",
-			"group": "test"
-		},
-		{
-			"label": "Run Calendar Tests Direct",
-			"type": "shell",
-			"command": "npx web-test-runner test/components/mjo-calendar.test.ts --config web-test-runner.config.js --watch=false",
-			"group": "test"
-		},
-		{
-			"label": "Full Test Suite with Auto-Compilation",
-			"type": "shell",
-			"command": "npm run test",
-			"isBackground": false
-		},
-		{
-			"label": "Build Only",
-			"type": "shell",
-			"command": "npm run build",
-			"isBackground": false
-		},
-		{
-			"label": "Test After Fixes",
-			"type": "shell",
-			"command": "npm run test",
-			"isBackground": false
-		},
-		{
-			"label": "Calendar Tests Only",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-calendar.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Build After Grid Fix",
-			"type": "shell",
-			"command": "npm run build",
-			"isBackground": false
-		},
-		{
-			"label": "Build After Header Fix",
-			"type": "shell",
-			"command": "npm run build",
-			"isBackground": false
-		},
-		{
-			"label": "Clean Build",
-			"type": "shell",
-			"command": "rm -rf dist && npm run build",
-			"isBackground": false
-		},
-		{
-			"label": "Build After Fixes",
-			"type": "shell",
-			"command": "npm run build",
-			"isBackground": false
-		},
-		{
-			"label": "Build and Test Specific",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\" --grep \"should navigate to a specific date with explicit side\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Calendar After Deprecated Fix",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Invalid Side Parameter",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\" --grep \"should handle invalid side parameter gracefully\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Invalid Side Parameter Fixed",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\" --grep \"should handle invalid side parameter gracefully\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Explicit Side Fixed",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\" --grep \"should navigate to a specific date with explicit side\"",
-			"isBackground": false
-		},
-		{
-			"label": "Final Calendar Test Suite",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-calendar.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Check Color Picker Only",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-color-picker.ts"
-		},
-		{
-			"label": "TypeScript Build Config Check",
-			"type": "shell",
-			"command": "tsc --noEmit -p tsconfig.build.json"
-		},
-		{
-			"label": "Install Terser",
-			"type": "shell",
-			"command": "npm install --save-dev terser@^5.33.0"
-		},
-		{
-			"label": "Test Build With Minification",
-			"type": "shell",
-			"command": "npm run build"
-		},
-		{
-			"label": "Test Avatar After Fix",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-avatar.test.ts\""
-		},
-		{
-			"label": "Test Avatar Clean Build",
-			"type": "shell",
-			"command": "npm run build:unminified && npx web-test-runner --files \"test/components/mjo-avatar.test.ts\""
-		},
-		{
-			"label": "Test Avatar After Role Fix",
-			"type": "shell",
-			"command": "npm run build:unminified && npx web-test-runner --files \"test/components/mjo-avatar.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Final Avatar Test Execution",
-			"type": "shell",
-			"command": "npm run build:unminified && npx web-test-runner --files \"test/components/mjo-avatar.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Complete Test Suite Verification",
-			"type": "shell",
-			"command": "npm run test",
-			"isBackground": false
-		},
-		{
-			"label": "Check Date Picker TypeScript",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-date-picker.ts"
-		},
-		{
-			"label": "TypeScript Check Textfield",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-textfield.ts"
-		},
-		{
-			"label": "Test MjoTextfield Component Only",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-textfield.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "TypeScript Check Focus Trap",
-			"type": "shell",
-			"command": "tsc --noEmit src/utils/focus-trap.ts"
-		},
-		{
-			"label": "TypeScript Check Drawer and FocusTrap",
-			"type": "shell",
-			"command": "tsc --noEmit src/components/drawer/drawer-container.ts src/utils/focus-trap.ts"
-		},
-		{
-			"label": "Build Drawer Client",
-			"type": "shell",
-			"command": "npm run server:build:client"
-		},
-		{
-			"label": "Check Dropdown TypeScript Only",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-dropdown.ts src/components/dropdown/dropdown-container.ts src/types/mjo-dropdown.d.ts src/utils/dropdown.ts"
-		},
-		{
-			"label": "TypeScript Check Grid Only",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-grid.ts"
-		},
-		{
-			"label": "Check MjoIcon TypeScript",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-icon.ts"
-		},
-		{
-			"label": "TypeScript Check MJO Icon Final",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-icon.ts"
-		},
-		{
-			"label": "TypeScript Build Config Check Final",
-			"type": "shell",
-			"command": "tsc --noEmit -p tsconfig.build.json"
-		},
-		{
-			"label": "Build Full Application Fixed",
-			"type": "shell",
-			"command": "npm run build"
-		},
-		{
-			"label": "Build After Ionic Fix",
-			"type": "shell",
-			"command": "npm run build"
-		},
-		{
-			"label": "Test CSS Minification Script",
-			"type": "shell",
-			"command": "node scripts/test-css-minification.js"
-		},
-		{
-			"label": "Test Enhanced CSS and JS Minification",
-			"type": "shell",
-			"command": "node scripts/minify-dist-enhanced.js"
-		},
-		{
-			"label": "Test Complete Build Pipeline with CSS Minification",
-			"type": "shell",
-			"command": "npm run build"
-		},
-		{
-			"label": "Test CSS Only Minification",
-			"type": "shell",
-			"command": "node scripts/minify-css.js"
-		},
-		{
-			"label": "Final CSS Minification Test",
-			"type": "shell",
-			"command": "node scripts/minify-css.js"
-		},
-		{
-			"label": "TypeScript Check Menu Button Only",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-menu-button.ts"
-		},
-		{
-			"label": "TypeScript Check Message Only",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-message.ts src/components/messages/message-container.ts src/components/messages/message-item.ts src/controllers/message-controller.ts"
-		},
-		{
-			"label": "Test Pagination Component Only",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-pagination.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Pagination Build and Run",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Pagination Simple",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination-simple.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Pagination Full",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Clean Pagination Tests",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-pagination-test-clean.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Debug setPageSize",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-pagination-test-clean.ts\" --grep \"should change page size\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Boolean Properties Debug",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination-test-clean.ts\" --grep \"should set boolean properties correctly\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Fixed Pagination Tests",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination-test-clean.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Final Pagination Tests",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Full Test Suite Validation",
-			"type": "shell",
-			"command": "npm run test",
-			"isBackground": false
-		},
-		{
-			"label": "TypeScript Check Server",
-			"type": "shell",
-			"command": "tsc --noEmit server/src/controllers/pagination-controller.ts"
-		},
-		{
-			"label": "Build After Pagination Fix",
-			"type": "shell",
-			"command": "npm run build"
-		},
-		{
-			"label": "Check Pagination TypeScript",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-pagination.ts"
-		},
-		{
-			"label": "Remove Duplicate Test File",
-			"type": "shell",
-			"command": "rm test/components/mjo-pagination-layout-stability.test.ts"
-		},
-		{
-			"label": "Test Pagination Layout Stability",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\""
-		},
-		{
-			"label": "Test Pagination Algorithm Debug",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --grep \"Layout Stability\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Fixed Algorithm",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --grep \"Layout Stability\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Full Pagination Suite",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-pagination.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Replace Pagination Documentation",
-			"type": "shell",
-			"command": "mv docs/mjo-pagination-new.md docs/mjo-pagination.md"
-		},
-		{
-			"label": "Clean Temporary File",
-			"type": "shell",
-			"command": "rm -f docs/mjo-pagination-new.md"
-		},
-		{
-			"label": "Test MjoTable Component Only",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test MjoTable Only Isolated",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test MjoTable Debug Logs",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test MjoTable Bracket Notation",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test MjoTable Descriptor Method",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test MjoTable Final",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test MjoTable Complete Suite",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Check Table TypeScript",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-table.ts"
-		},
-		{
-			"label": "Table Tests Final Check",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
-		},
-		{
-			"label": "Table Tests Debug",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
-		},
-		{
-			"label": "Table Tests with Details",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false --reporter=spec"
-		},
-		{
-			"label": "Final Table Tests",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
-		},
-		{
-			"label": "Final Table Tests Check",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
-		},
-		{
-			"label": "Final Final Table Tests",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-table.test.ts\" --watch=false"
-		},
-		{
-			"label": "Check Textarea TypeScript",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-textarea.ts"
-		},
-		{
-			"label": "TypeScript Check Config",
-			"type": "shell",
-			"command": "tsc --noEmit"
-		},
-		{
-			"label": "Check Select TypeScript",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-select.ts src/types/mjo-select.d.ts"
-		},
-		{
-			"label": "Check Select Only",
-			"type": "shell",
-			"command": "tsc --noEmit src/mjo-select.ts"
-		},
-		{
-			"label": "Build Config Check Only",
-			"type": "shell",
-			"command": "tsc -p tsconfig.build.json --noEmit"
-		},
-		{
-			"label": "Test Tabs Component Only",
-			"type": "shell",
-			"command": "npm run build && npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Component Direct",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\"",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Component Fixed",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Properties Suite",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Tab Management Suite",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Navigation and Events Suite",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Visual States Suite",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Visual States Suite Fixed",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Accessibility Suite",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Accessibility Suite Fixed",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs Accessibility Suite Final",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs SSR Features Suite",
-			"type": "shell",
-			"command": "npx web-test-runner --files \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Tabs SSR Features Suite Direct",
-			"type": "shell",
-			"command": "npx web-test-runner \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Test Complete Tabs Suite",
-			"type": "shell",
-			"command": "npx web-test-runner \"test/components/mjo-tabs.test.ts\" --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Final Tabs Test Direct",
-			"type": "shell",
-			"command": "npx web-test-runner test/components/mjo-tabs.test.ts --watch=false --node-resolve",
-			"isBackground": false
-		},
-		{
-			"label": "Final Complete Tabs Test",
-			"type": "shell",
-			"command": "npx web-test-runner test/components/mjo-tabs.test.ts --watch=false",
-			"isBackground": false
-		},
-		{
-			"label": "Final Tabs Verification",
-			"type": "shell",
-			"command": "npx web-test-runner test/components/mjo-tabs.test.ts --watch=false --node-resolve",
-			"isBackground": false
+			"command": "npm run server:build:client",
+			"group": "build"
 		}
 	]
 }

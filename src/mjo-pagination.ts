@@ -505,11 +505,9 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
                 position: absolute;
                 top: var(--mjoint-pagination-indicator-top, 0);
                 left: 0;
-                /* opacity: 0; */
                 background-color: var(--mjo-pagination-primary-color-alpha, var(--mjo-primary-color, #1d7fdb33));
                 border-radius: var(--mjo-pagination-indicator-border-radius, var(--mjo-radius, 5px));
                 transition: all var(--mjo-pagination-animation-duration, 0.3s) var(--mjo-pagination-animation-timing, ease-out);
-                z-index: -1;
                 pointer-events: none;
                 transform: translateX(var(--mjoint-pagination-indicator-offset, 0));
                 width: var(--mjoint-pagination-indicator-width, 2.5em);

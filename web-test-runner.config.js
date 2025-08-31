@@ -2,9 +2,19 @@ import { litSsrPlugin } from "@lit-labs/testing/web-test-runner-ssr-plugin.js";
 import { esbuildPlugin } from "@web/dev-server-esbuild";
 import { playwrightLauncher } from "@web/test-runner-playwright";
 
+// web-test-runner has a known issue where it ignores --watch=false in interactive terminals
+// The only reliable way to disable watch mode is to run tests in a non-interactive context
+// or use process control from the calling environment
+
+// Only enable watch mode if explicitly requested via --watch flag
+const watchMode = process.argv.includes("--watch");
+
 export default {
-    files: ["test/**/*.test.{js,ts}", "!test/components/TEMPLATE.test.{js,ts}"],
+    files: ["test/**/*.test.{js,ts}"],
     nodeResolve: true,
+
+    // Watch mode only when explicitly requested
+    watch: watchMode,
 
     // Enable SSR testing capabilities and TypeScript compilation
     plugins: [

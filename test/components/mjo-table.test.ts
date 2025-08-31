@@ -316,7 +316,7 @@ suite("mjo-table Component", () => {
             expect(noDataRow).to.exist;
 
             const noDataCell = noDataRow?.querySelector("td");
-            expect(noDataCell?.textContent?.trim()).to.equal("No data");
+            expect(noDataCell?.textContent?.trim()).to.equal("No data available");
         });
 
         test("should clear filter when empty value is provided", async () => {

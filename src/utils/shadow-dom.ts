@@ -1,5 +1,5 @@
 import { type LitElement } from "lit";
-import { parseColorToRgba } from "./colors.js";
+import { toRgbaObject } from "./colors.js";
 
 export const getParentNodes = function* (el: HTMLElement | ShadowRoot["host"]) {
     let current: HTMLElement | Element | null = el.parentElement || (el.getRootNode() as ShadowRoot).host;
@@ -49,7 +49,7 @@ export const getInheritBackgroundColor = (component: HTMLElement) => {
     while (parent.done === false) {
         const backgroundColorComputed = window.getComputedStyle(parent.value).backgroundColor;
         lastColor = backgroundColorComputed;
-        const rgba = parseColorToRgba(backgroundColorComputed);
+        const rgba = toRgbaObject(backgroundColorComputed);
         if (rgba.a > 0) {
             backgroundColor = backgroundColorComputed;
             break;

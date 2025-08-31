@@ -39,6 +39,14 @@ html`<mjo-component ?hideFirstLast=${true} ?disabled=${true}></mjo-component>`
 html`<mjo-component hideFirstLast disabled></mjo-component>`
 ```
 
+## 🚫 CRITICAL: NEVER RUN TypeScript Checks
+
+**NEVER use `tsc --noEmit` or any direct TypeScript compiler commands:**
+- The project configuration causes TypeScript to give false errors
+- **ALWAYS use `npm run build` instead** to validate TypeScript
+- If the build passes, TypeScript is valid - don't question it
+- Building is the ONLY reliable way to check TypeScript in this project
+
 ## ⚠️ IMPORTANT: Test Failure Investigation
 
 **When a test fails, ALWAYS investigate the root cause:**
