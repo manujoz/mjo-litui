@@ -1,6 +1,6 @@
 {
     "name": "mjo-litui",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "A collection of web components for building user interfaces with LitElement.",
     "type": "module",
     "main": "index.js",
@@ -83,11 +83,10 @@
         "build:unminified": "rm -rf dist && tsc -p tsconfig.build.json && ncp src/types dist/types && ncp src/styles dist/styles && cp dist/styles/theme.css dist/styles/theme.min.css && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
         "build:publish": "npm run build && cd dist && npm publish",
         "preview": "vite preview",
-        "prepare": "husky install",
         "test": "npm run build && web-test-runner",
         "test:watch": "npm run build && web-test-runner --watch",
         "test:coverage": "npm run build && web-test-runner --coverage",
-        "postinstall": "npx playwright install && npm run prepare",
+        "postinstall": "npx playwright install && npx husky install",
         "server:dev": "npm run server:build:client && nodemon --exec tsx server/src/app.ts",
         "server:dev:debug": "NODE_ENV=development nodemon --exec tsx server/src/app.ts --verbose",
         "server:build:client": "vite build --config vite.config.client.js"
