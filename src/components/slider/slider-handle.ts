@@ -88,7 +88,6 @@ export class SliderHandle extends LitElement {
         this.#setFontSize();
         this.#setSize();
         this.#setPosition();
-        this.#setBackgroundColor();
 
         document.addEventListener("mjo-theme:change", this.#setBackgroundColor);
     }
@@ -108,6 +107,10 @@ export class SliderHandle extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues): void {
         super.firstUpdated(_changedProperties);
+
+        requestAnimationFrame(() => {
+            this.#setBackgroundColor();
+        });
 
         this.shadowRoot?.querySelector(".outter")?.classList.remove("hidden");
     }
