@@ -66,6 +66,18 @@
 			"type": "shell",
 			"command": "npm run server:build:client",
 			"group": "build"
+		},
+		{
+			"label": "Development Server",
+			"type": "shell",
+			"command": "npm run dev",
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Validate Build",
+			"type": "shell",
+			"command": "npm run build"
 		}
 	]
 }

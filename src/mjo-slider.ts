@@ -218,14 +218,18 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             this.value = this.#checkValue(this.value);
         }
 
-        this.#setSteps();
+        // Use requestAnimationFrame to ensure the elements are fully rendered
+        // and have proper dimensions before calculating steps
+        requestAnimationFrame(() => {
+            this.#setSteps();
 
-        if (this.sliderOneRef.value) {
-            this.#setSliderPosition(this.sliderOneRef.value, this.#getSliderValue("one"));
-        }
-        if (this.sliderTwoRef.value) {
-            this.#setSliderPosition(this.sliderTwoRef.value, this.#getSliderValue("two"));
-        }
+            if (this.sliderOneRef.value) {
+                this.#setSliderPosition(this.sliderOneRef.value, this.#getSliderValue("one"));
+            }
+            if (this.sliderTwoRef.value) {
+                this.#setSliderPosition(this.sliderTwoRef.value, this.#getSliderValue("two"));
+            }
+        });
     }
 
     protected updated(_changedProperties: PropertyValues): void {
@@ -618,7 +622,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 border-radius: var(--mjo-slider-border-radius, var(--mjo-radius-medium, 5px));
                 padding: 8px 0;
                 margin: -8px 0;
-                touch-action: none;
+                touch-action: pan-y; /* Allow vertical scrolling, prevent horizontal pan */
             }
             .progress,
             .track {
@@ -673,9 +677,11 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 .rangebar {
                     padding: 14px 0; /* Aumentar área de toque */
                     margin: -14px 0;
+                    touch-action: pan-y; /* Ensure vertical scroll is preserved on mobile */
                 }
-                .progress {
-                    top: 14px; /* Ajustar posición por el padding */
+                /* Improve touch target for slider handles */
+                slider-handle {
+                    touch-action: none; /* Handles can prevent all touch actions when being dragged */
                 }
             }
         `,

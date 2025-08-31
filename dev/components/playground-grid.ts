@@ -48,7 +48,8 @@ export class PlaygroundGrid extends LitElement {
             }
 
             .demo-tabs {
-                position: relative;
+                position: sticky;
+                top: 20px;
                 min-height: 350px;
                 padding: 20px;
                 border: 2px dashed var(--mjo-border-color-high, #ccc);

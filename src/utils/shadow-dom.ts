@@ -2,11 +2,43 @@ import { type LitElement } from "lit";
 import { toRgbaObject } from "./colors.js";
 
 export const getParentNodes = function* (el: HTMLElement | ShadowRoot["host"]) {
-    let current: HTMLElement | Element | null = el.parentElement || (el.getRootNode() as ShadowRoot).host;
-    while (current) {
-        yield current as HTMLElement;
+    let current: HTMLElement | Element | null = el;
 
-        current = current?.parentElement || (current?.getRootNode() as ShadowRoot).host;
+    while (current) {
+        // Check if current element is slotted (assigned to a slot)
+        if ("assignedSlot" in current && current.assignedSlot) {
+            // Element is slotted - traverse to slot's parent host
+            const slot = current.assignedSlot as HTMLSlotElement;
+            if (slot.parentElement) {
+                current = slot.parentElement;
+                yield current as HTMLElement;
+            } else {
+                const rootNode = slot.getRootNode();
+                if (rootNode !== document && "host" in rootNode) {
+                    current = (rootNode as ShadowRoot).host as HTMLElement;
+                    yield current;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        // Normal DOM traversal
+        if (current.parentElement) {
+            current = current.parentElement;
+            yield current as HTMLElement;
+        } else {
+            // No parent element - check if we're in a shadow root
+            const rootNode = current.getRootNode();
+            if (rootNode !== document && "host" in rootNode) {
+                // We're in a shadow root - traverse to the host
+                current = (rootNode as ShadowRoot).host as HTMLElement;
+                yield current;
+            } else {
+                // Reached document root
+                break;
+            }
+        }
     }
 };
 
