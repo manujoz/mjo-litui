@@ -24,10 +24,10 @@ import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { CalendarUtils } from "./utils/calendar.js";
 
-import "./components/calendar/calendar-grid.js";
-import "./components/calendar/calendar-header.js";
-import "./components/calendar/calendar-month-picker.js";
-import "./components/calendar/calendar-year-picker.js";
+import "./components/calendar/mjoint-calendar-grid.js";
+import "./components/calendar/mjoint-calendar-header.js";
+import "./components/calendar/mjoint-calendar-month-picker.js";
+import "./components/calendar/mjoint-calendar-year-picker.js";
 
 /**
  * A configurable calendar component for date selection.
@@ -210,7 +210,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
 
         return html`
             <div class="calendar-side" data-side=${side}>
-                <calendar-header
+                <mjoint-calendar-header
                     month=${month}
                     year=${year}
                     .monthNames=${this.monthNames}
@@ -221,8 +221,8 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     @navigate=${this.#handleNavigate}
                     @month-picker=${this.#handleMonthPicker}
                     @year-picker=${this.#handleYearPicker}
-                ></calendar-header>
-                <calendar-grid
+                ></mjoint-calendar-header>
+                <mjoint-calendar-grid
                     month=${month}
                     year=${year}
                     .weekDays=${this.weekDays}
@@ -243,25 +243,25 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     @date-click=${this.#handleDateClick}
                     @date-hover=${this.#handleDateHover}
                     @date-leave=${this.#handleDateLeave}
-                ></calendar-grid>
+                ></mjoint-calendar-grid>
                 ${this.picker.open && this.picker.type === "month" && isPickerSide
                     ? html`
-                          <calendar-month-picker
+                          <mjoint-calendar-month-picker
                               selectedMonth=${month}
                               .monthNames=${this.monthNames}
                               ?disabled=${this.disabled}
                               @month-selected=${this.#handleMonthSelected}
                               @click=${(e: Event) => e.stopPropagation()}
-                          ></calendar-month-picker>
+                          ></mjoint-calendar-month-picker>
                       `
                     : this.picker.open && this.picker.type === "year" && isPickerSide
                       ? html`
-                            <calendar-year-picker
+                            <mjoint-calendar-year-picker
                                 selectedYear=${year}
                                 ?disabled=${this.disabled}
                                 @year-selected=${this.#handleYearSelected}
                                 @click=${(e: Event) => e.stopPropagation()}
-                            ></calendar-year-picker>
+                            ></mjoint-calendar-year-picker>
                         `
                       : nothing}
             </div>
@@ -1094,8 +1094,8 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 min-width: max-content;
             }
 
-            calendar-month-picker,
-            calendar-year-picker {
+            mjoint-calendar-month-picker,
+            mjoint-calendar-year-picker {
                 position: absolute;
                 inset: 0;
                 z-index: 1;
@@ -1113,9 +1113,9 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 font-size: calc(var(--mjo-font-size, 16px) - 3px);
             }
 
-            [data-color="secondary"] calendar-header,
-            [data-color="secondary"] calendar-month-picker,
-            [data-color="secondary"] calendar-year-picker {
+            [data-color="secondary"] mjoint-calendar-header,
+            [data-color="secondary"] mjoint-calendar-month-picker,
+            [data-color="secondary"] mjoint-calendar-year-picker {
                 --mjo-button-primary-color: var(--mjo-secondary-color, #cc3d74);
                 --mjo-button-secondary-foreground-color: var(--mjo-secondary-foreground-color, #ffffff);
                 --mjo-calendar-picker-button-selected-background: var(--mjo-secondary-color, #cc3d74);
@@ -1128,7 +1128,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             }
 
             /* Color variations */
-            [data-color="secondary"] calendar-grid {
+            [data-color="secondary"] mjoint-calendar-grid {
                 --mjo-calendar-today-background: var(--mjo-calendar-today-background-secondary, var(--mjo-secondary-color-alpha2, rgba(204, 61, 116, 0.1)));
                 --mjo-calendar-today-color: var(--mjo-calendar-today-color-secondary, var(--mjo-secondary-color, #cc3d74));
                 --mjo-calendar-selected-background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #cc3d74));

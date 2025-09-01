@@ -1,4 +1,4 @@
-import type { DropdownContainer } from "./components/dropdown/dropdown-container";
+import type { MjointDropdownContainer } from "./components/dropdown/mjoint-dropdown-container";
 import type { MjoTheme } from "./mjo-theme.js";
 import type { MjoDropdownBehaviour, MjoDropdownCloseEvent, MjoDropdownOpenEvent, MjoDropdownPosition } from "./types/mjo-dropdown.d.ts";
 
@@ -8,7 +8,7 @@ import { customElement, property } from "lit/decorators.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { searchClosestElement } from "./utils/shadow-dom.js";
 
-import "./components/dropdown/dropdown-container.js";
+import "./components/dropdown/mjoint-dropdown-container.js";
 
 const convertToPx = (value: string | null): string | null => {
     if (value === null) return value;
@@ -32,7 +32,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     /** Optional list of CSS selectors that, if any element in the click composedPath matches, will prevent opening (only for behaviour='click'). */
     @property({ type: Array }) suppressOpenSelectors?: string[];
 
-    dropdownContainer?: DropdownContainer | null;
+    dropdownContainer?: MjointDropdownContainer | null;
     openTimestamp = 0;
     #lastFocusedElement?: HTMLElement;
 
@@ -42,7 +42,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
             tabindex="0"
             aria-haspopup="true"
             aria-expanded=${this.isOpen}
-            .aria-controls=${this.dropdownContainer?.id || ""}
+            aria-controls=${this.dropdownContainer?.id || ""}
         ></slot>`;
     }
 
@@ -195,7 +195,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     #createDropdown() {
         const themeElement = searchClosestElement(this as LitElement, "mjo-theme") as MjoTheme | null;
 
-        this.dropdownContainer = document.createElement("dropdown-container") as DropdownContainer;
+        this.dropdownContainer = document.createElement("mjoint-drawer-container") as unknown as MjointDropdownContainer;
         this.dropdownContainer.host = this;
         this.dropdownContainer.html = this.html;
         this.dropdownContainer.css = this.css;

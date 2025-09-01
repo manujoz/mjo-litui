@@ -5,8 +5,8 @@ import { customElement, property } from "lit/decorators.js";
 
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
 
-@customElement("notification-item")
-export class NotificationItem extends LitElement {
+@customElement("mjoint-notification-item")
+export class MjointNotificationItem extends LitElement {
     @property({ type: String }) notificationTitle?: string = "";
     @property({ type: String }) message: string | TemplateResult<1> = "";
     @property({ type: String }) type?: NotificationTypes;
@@ -195,6 +195,6 @@ export class NotificationItem extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "notification-item": NotificationItem;
+        "mjoint-notification-item": MjointNotificationItem;
     }
 }

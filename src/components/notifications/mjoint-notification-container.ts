@@ -1,5 +1,5 @@
 import { NotificationPositions, NotificationShowParams } from "../../types/mjo-notification";
-import type { NotificationItem } from "./notification-item";
+import type { MjointNotificationItem } from "./mjoint-notification-item";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
@@ -7,10 +7,10 @@ import { customElement, property, query } from "lit/decorators.js";
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 import { pause } from "../../utils/utils.js";
 
-import "./notification-item.js";
+import "./mjoint-notification-item.js";
 
-@customElement("notification-container")
-export class NotificationContainer extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("mjoint-notification-container")
+export class MjointNotificationContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) position: NotificationPositions = "top-right";
     @property({ type: Number }) threshold = 4;
 
@@ -21,7 +21,7 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
     }
 
     async show({ message, type, time, title, onClose }: NotificationShowParams) {
-        const notificationItem = document.createElement("notification-item") as NotificationItem;
+        const notificationItem = document.createElement("mjoint-notification-item") as MjointNotificationItem;
         notificationItem.message = message;
         notificationItem.type = type;
         notificationItem.notificationTitle = title;
@@ -33,7 +33,7 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
 
         if (time) notificationItem.time = time;
 
-        const notificationItems = this.container.querySelectorAll("notification-item");
+        const notificationItems = this.container.querySelectorAll("mjoint-notification-item");
 
         if (notificationItems.length === 0 || this.position.includes("bottom")) {
             this.container.appendChild(notificationItem);
@@ -48,13 +48,13 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
     }
 
     clearAll() {
-        const notificationItems = this.container.querySelectorAll("notification-item");
+        const notificationItems = this.container.querySelectorAll("mjoint-notification-item");
         notificationItems.forEach((item) => {
-            (item as NotificationItem).close();
+            (item as MjointNotificationItem).close();
         });
     }
 
-    async #showItem(item: NotificationItem) {
+    async #showItem(item: MjointNotificationItem) {
         const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         if (prefersReducedMotion) {
@@ -90,7 +90,7 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
             item.style.transform = "translateX(0)";
         }, 600);
 
-        const notificationItems = this.container.querySelectorAll("notification-item");
+        const notificationItems = this.container.querySelectorAll("mjoint-notification-item");
         if (notificationItems.length === this.threshold + 1) {
             const index = this.position.includes("bottom") ? 0 : this.threshold;
             notificationItems[index].close();
@@ -133,7 +133,7 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
             }
 
             @media (prefers-reduced-motion: reduce) {
-                notification-item {
+                mjoint-notification-item {
                     transition: none !important;
                     animation: none !important;
                 }
@@ -144,6 +144,6 @@ export class NotificationContainer extends ThemeMixin(LitElement) implements ITh
 
 declare global {
     interface HTMLElementTagNameMap {
-        "notification-container": NotificationContainer;
+        "mjoint-notification-container": MjointNotificationContainer;
     }
 }

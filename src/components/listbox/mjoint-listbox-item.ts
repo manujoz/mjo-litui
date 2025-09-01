@@ -9,8 +9,8 @@ import { MdOutlineCheck } from "mjo-icons/md";
 import "../../mjo-icon.js";
 import "../../mjo-typography.js";
 
-@customElement("listbox-item")
-export class ListboxItem extends LitElement {
+@customElement("mjoint-listbox-item")
+export class MjointListboxItem extends LitElement {
     @property({ type: Object }) item!: MjoListboxItem;
     @property({ type: Number }) index: number = -1;
     @property({ type: String }) variant: MjoListboxVariant = "solid";
@@ -455,6 +455,6 @@ export class ListboxItem extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "listbox-item": ListboxItem;
+        "mjoint-listbox-item": MjointListboxItem;
     }
 }

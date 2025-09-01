@@ -9,8 +9,8 @@ import { MjoSwitchBlurEvent, MjoSwitchChangeEvent, MjoSwitchColor, MjoSwitchFocu
 
 import { GiCheckMark } from "mjo-icons/gi";
 
-import "./components/input/input-helper-text.js";
-import "./components/input/input-label.js";
+import "./components/input/mjoint-input-helper-text.js";
+import "./components/input/mjoint-input-label.js";
 import "./mjo-icon.js";
 
 @customElement("mjo-switch")
@@ -54,7 +54,7 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
     render() {
         return html`
-            ${this.label ? html`<input-label color=${this.color} label=${this.label} ?error=${this.error}></input-label>` : nothing}
+            ${this.label ? html`<mjoint-input-label color=${this.color} label=${this.label} ?error=${this.error}></mjoint-input-label>` : nothing}
             <div
                 class="container"
                 data-color=${this.color}
@@ -89,7 +89,7 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 />
             </div>
             ${this.helperText || this.errormsg || this.successmsg
-                ? html`<input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}>${this.helperText}</input-helper-text>`
+                ? html`<mjoint-input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}>${this.helperText}</mjoint-input-helper-text>`
                 : nothing}
         `;
     }
@@ -306,7 +306,7 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             input {
                 display: none;
             }
-            input-helper-text {
+            mjoint-input-helper-text {
                 color: var(--mjo-switch-helper-color, var(--mjo-foreground-color-low));
                 font-size: var(--mjo-switch-helper-font-size, inherit);
                 font-weight: var(--mjo-switch-helper-font-weight, inherit);

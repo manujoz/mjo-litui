@@ -7,8 +7,8 @@ import { AiOutlineClose } from "mjo-icons/ai";
 
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
-@customElement("drawer-container")
-export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("mjoint-drawer-container")
+export class MjointDrawerContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) titleMsg = "";
     @property({ type: String }) content: string | TemplateResult<1> = "";
 
@@ -326,6 +326,6 @@ export class DrawerContainer extends ThemeMixin(LitElement) implements IThemeMix
 
 declare global {
     interface HTMLElementTagNameMap {
-        "drawer-container": DrawerContainer;
+        "mjoint-drawer-container": MjointDrawerContainer;
     }
 }

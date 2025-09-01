@@ -12,8 +12,8 @@ import { getDictionary } from "../../utils/dictionary.js";
 
 import "../../mjo-icon.js";
 
-@customElement("options-list")
-export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("mjoint-options-list")
+export class MjointOptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Array }) options: MjoOption[] = [];
     @property({ type: Object }) mjoSelect: MjoSelect | null = null;
     @property({ type: Boolean }) searchable = false;
@@ -287,4 +287,10 @@ export class OptionsList extends ThemeMixin(LitElement) implements IThemeMixin {
             }
         `,
     ];
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "mjoint-options-list": MjointOptionsList;
+    }
 }

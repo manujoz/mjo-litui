@@ -1,13 +1,13 @@
-import type { NotificationContainer } from "../components/notifications/notification-container";
+import type { MjointNotificationContainer } from "../components/notifications/mjoint-notification-container";
 import type { MjoNotification } from "../mjo-notification";
 import { NotificationPositions, NotificationShowParams } from "../types/mjo-notification";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
-import "../components/notifications/notification-container.js";
+import "../components/notifications/mjoint-notification-container.js";
 
 export class NotificationController implements ReactiveController {
     host: ReactiveControllerHost;
-    notificationContainer!: NotificationContainer;
+    notificationContainer!: MjointNotificationContainer;
 
     constructor(host: ReactiveControllerHost) {
         (this.host = host).addController(this);
@@ -34,7 +34,7 @@ export class NotificationController implements ReactiveController {
     }
 
     #createNotificationElement() {
-        this.notificationContainer = document.createElement("notification-container") as NotificationContainer;
+        this.notificationContainer = document.createElement("mjoint-notification-container") as MjointNotificationContainer;
         this.notificationContainer.setAttribute("threshold", (this.host as MjoNotification).threshold.toString());
         this.notificationContainer.style.zIndex = window.getComputedStyle(this.host as MjoNotification).zIndex;
 

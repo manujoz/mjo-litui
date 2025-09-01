@@ -4,7 +4,7 @@ import { customElement, property } from "lit/decorators.js";
 import { MessageController } from "./controllers/message-controller.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./components/messages/message-container.js";
+import "./components/messages/mjoint-message-container.js";
 
 @customElement("mjo-message")
 export class MjoMessage extends ThemeMixin(LitElement) implements IThemeMixin {

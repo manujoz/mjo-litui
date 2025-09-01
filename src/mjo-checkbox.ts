@@ -16,7 +16,7 @@ import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./components/input/input-helper-text.js";
+import "./components/input/mjoint-input-helper-text.js";
 import "./mjo-icon.js";
 import "./mjo-typography.js";
 import { searchParentElement } from "./utils/shadow-dom.js";
@@ -109,9 +109,9 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                     tabindex="-1"
                 />
             </div>
-            ${this.helperText ? html`<input-helper-text>${this.helperText}</input-helper-text> ` : nothing}
+            ${this.helperText ? html`<mjoint-input-helper-text>${this.helperText}</mjoint-input-helper-text> ` : nothing}
             ${this.errormsg || this.successmsg
-                ? html`<input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}></input-helper-text> `
+                ? html`<mjoint-input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}></mjoint-input-helper-text> `
                 : nothing}
         </div>`;
     }
@@ -390,7 +390,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             input {
                 display: none;
             }
-            input-helper-text {
+            mjoint-input-helper-text {
                 padding-left: calc(calc(1.3rem + var(--mjo-space-small, 5px)) + 2px);
                 color: var(--mjo-checkbox-helper-color, var(--mjo-foreground-color-low));
                 font-size: var(--mjo-checkbox-helper-font-size, 0.8em);

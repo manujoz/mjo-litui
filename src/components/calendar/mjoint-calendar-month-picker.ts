@@ -7,8 +7,8 @@ import { customElement, property, state } from "lit/decorators.js";
  *
  * @fires month-selected - Fired when a month is selected
  */
-@customElement("calendar-month-picker")
-export class CalendarMonthPicker extends LitElement {
+@customElement("mjoint-calendar-month-picker")
+export class MjointCalendarMonthPicker extends LitElement {
     @property({ type: Number }) selectedMonth = new Date().getMonth();
     @property({ type: Array }) monthNames: string[] = [];
     @property({ type: Boolean }) disabled = false;
@@ -177,6 +177,6 @@ export class CalendarMonthPicker extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "calendar-month-picker": CalendarMonthPicker;
+        "mjoint-calendar-month-picker": MjointCalendarMonthPicker;
     }
 }

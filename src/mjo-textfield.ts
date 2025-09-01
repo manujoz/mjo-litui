@@ -22,9 +22,9 @@ import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./components/input/input-counter.js";
-import "./components/input/input-helper-text.js";
-import "./components/input/input-label.js";
+import "./components/input/mjoint-input-counter.js";
+import "./components/input/mjoint-input-helper-text.js";
+import "./components/input/mjoint-input-label.js";
 import "./mjo-icon.js";
 
 @customElement("mjo-textfield")
@@ -70,14 +70,14 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         const labelId = this.label ? `${this.#uniqueId}-label` : undefined;
 
         return html`${this.label
-                ? html`<input-label
+                ? html`<mjoint-input-label
                       id=${ifDefined(labelId)}
                       color=${this.color}
                       label=${this.label}
                       ?focused=${this.isFocused}
                       ?error=${this.error}
                       ?data-disabled=${this.disabled}
-                  ></input-label>`
+                  ></mjoint-input-label>`
                 : nothing}
             <div
                 class="container"
@@ -148,19 +148,19 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
             </div>
             <div class="helper" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
-                    ? html`<input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
-                          >${this.helperText}</input-helper-text
+                    ? html`<mjoint-input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                          >${this.helperText}</mjoint-input-helper-text
                       >`
                     : nothing}
                 ${this.counter
-                    ? html`<input-counter
+                    ? html`<mjoint-input-counter
                           count=${this.valueLength}
                           max=${ifDefined(this.maxlength)}
                           regressive
                           ?data-error=${this.error}
                           ?data-focused=${this.isFocused}
                           data-color=${this.color}
-                      ></input-counter>`
+                      ></mjoint-input-counter>`
                     : nothing}
             </div>`;
     }
@@ -389,7 +389,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                 border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
                 opacity: 0.5;
             }
-            input-label[data-disabled],
+            mjoint-input-label[data-disabled],
             .helper[data-disabled] {
                 opacity: 0.5;
             }
@@ -533,20 +533,20 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                 justify-content: flex-end;
                 gap: 5px;
             }
-            input-helper-text {
+            mjoint-input-helper-text {
                 flex: 1 1 0;
             }
-            input-counter {
+            mjoint-input-counter {
                 flex: 0 0 auto;
             }
-            input-counter[data-focused] {
+            mjoint-input-counter[data-focused] {
                 color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
             }
-            input-counter[data-focused][data-color="secondary"] {
+            mjoint-input-counter[data-focused][data-color="secondary"] {
                 color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
             }
-            input-counter[data-error],
-            input-counter[data-error][data-color="secondary"] {
+            mjoint-input-counter[data-error],
+            mjoint-input-counter[data-error][data-color="secondary"] {
                 color: var(--mjo-color-error, #d31616);
             }
         `,

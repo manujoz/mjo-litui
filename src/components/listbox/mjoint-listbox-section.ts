@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 
 import "../../mjo-typography.js";
 
-@customElement("listbox-section")
-export class ListboxSection extends LitElement {
+@customElement("mjoint-listbox-section")
+export class MjointListboxSection extends LitElement {
     @property({ type: String }) section = "";
 
     render() {
@@ -30,6 +30,6 @@ export class ListboxSection extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "listbox-section": ListboxSection;
+        "mjoint-listbox-section": MjointListboxSection;
     }
 }

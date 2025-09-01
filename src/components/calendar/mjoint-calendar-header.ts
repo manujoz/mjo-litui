@@ -11,8 +11,8 @@ import "../../mjo-typography.js";
 /**
  * Calendar header with navigation controls
  */
-@customElement("calendar-header")
-export class CalendarHeader extends LitElement {
+@customElement("mjoint-calendar-header")
+export class MjointCalendarHeader extends LitElement {
     @property({ type: Number }) month!: number;
     @property({ type: Number }) year!: number;
     @property({ type: String }) side: CalendarHeaderSide = "single";
@@ -183,6 +183,6 @@ export class CalendarHeader extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "calendar-header": CalendarHeader;
+        "mjoint-calendar-header": MjointCalendarHeader;
     }
 }

@@ -7,8 +7,8 @@ import { customElement, property, state } from "lit/decorators.js";
  *
  * @fires year-selected - Fired when a year is selected
  */
-@customElement("calendar-year-picker")
-export class CalendarYearPicker extends LitElement {
+@customElement("mjoint-calendar-year-picker")
+export class MjointCalendarYearPicker extends LitElement {
     @property({ type: Number }) selectedYear = new Date().getFullYear();
     @property({ type: Boolean }) disabled = false;
     @property({ type: Number }) minYear?: number;
@@ -300,6 +300,6 @@ export class CalendarYearPicker extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "calendar-year-picker": CalendarYearPicker;
+        "mjoint-calendar-year-picker": MjointCalendarYearPicker;
     }
 }

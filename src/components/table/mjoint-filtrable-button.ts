@@ -6,8 +6,8 @@ import { MdSearch } from "mjo-icons/md";
 
 import "../../mjo-icon.js";
 
-@customElement("filtrable-button")
-export class FiltrableButton extends LitElement {
+@customElement("mjoint-filtrable-button")
+export class MjointFiltrableButton extends LitElement {
     @property({ type: String }) columnName?: string;
     @property({ type: String }) filter?: string;
     @property({ type: String }) color: "primary" | "secondary" = "primary";
@@ -137,6 +137,6 @@ export class FiltrableButton extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "filtrable-button": FiltrableButton;
+        "mjoint-filtrable-button": MjointFiltrableButton;
     }
 }

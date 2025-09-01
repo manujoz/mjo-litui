@@ -15,9 +15,9 @@ import { locales } from "./locales/locales.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { MjoSelect } from "./mjo-select.js";
 
-import "./components/pagination/pagination-ellipsis.js";
-import "./components/pagination/pagination-nav-button.js";
-import "./components/pagination/pagination-page-item.js";
+import "./components/pagination/mjoint-pagination-ellipsis.js";
+import "./components/pagination/mjoint-pagination-nav-button.js";
+import "./components/pagination/mjoint-pagination-page-item.js";
 import "./components/select/mjo-option.js";
 import "./mjo-select.js";
 
@@ -94,56 +94,56 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
                     <div class="pagination-indicator" data-current-page=${this.currentPage} data-total-pages=${this.totalPages}></div>
 
                     ${!this.hideFirstLast
-                        ? html`<pagination-nav-button
+                        ? html`<mjoint-pagination-nav-button
                               direction="first"
                               size=${this.size}
                               color=${this.color}
                               ?disabled=${this.disabled || this.currentPage === 1}
                               label=${this.labels.first}
                               @pagination-nav-click=${this.#handleNavigation}
-                          ></pagination-nav-button>`
+                          ></mjoint-pagination-nav-button>`
                         : nothing}
                     ${!this.hidePrevNext
-                        ? html`<pagination-nav-button
+                        ? html`<mjoint-pagination-nav-button
                               direction="previous"
                               size=${this.size}
                               color=${this.color}
                               ?disabled=${this.disabled || this.currentPage === 1}
                               label=${this.labels.previous}
                               @pagination-nav-click=${this.#handleNavigation}
-                          ></pagination-nav-button>`
+                          ></mjoint-pagination-nav-button>`
                         : nothing}
                     ${this.pageRange.map((item) =>
                         item === "ellipsis"
-                            ? html`<pagination-ellipsis size=${this.size}></pagination-ellipsis>`
-                            : html`<pagination-page-item
+                            ? html`<mjoint-pagination-ellipsis size=${this.size}></mjoint-pagination-ellipsis>`
+                            : html`<mjoint-pagination-page-item
                                   page=${item}
                                   size=${this.size}
                                   color=${this.color}
                                   ?active=${item === this.currentPage}
                                   ?disabled=${this.disabled}
                                   @pagination-page-click=${this.#handlePageClick}
-                              ></pagination-page-item>`,
+                              ></mjoint-pagination-page-item>`,
                     )}
                     ${!this.hidePrevNext
-                        ? html`<pagination-nav-button
+                        ? html`<mjoint-pagination-nav-button
                               direction="next"
                               size=${this.size}
                               color=${this.color}
                               ?disabled=${this.disabled || this.currentPage === this.totalPages}
                               label=${this.labels.next}
                               @pagination-nav-click=${this.#handleNavigation}
-                          ></pagination-nav-button>`
+                          ></mjoint-pagination-nav-button>`
                         : nothing}
                     ${!this.hideFirstLast
-                        ? html`<pagination-nav-button
+                        ? html`<mjoint-pagination-nav-button
                               direction="last"
                               size=${this.size}
                               color=${this.color}
                               ?disabled=${this.disabled || this.currentPage === this.totalPages}
                               label=${this.labels.last}
                               @pagination-nav-click=${this.#handleNavigation}
-                          ></pagination-nav-button>`
+                          ></mjoint-pagination-nav-button>`
                         : nothing}
                 </div>
 
@@ -456,7 +456,7 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
         requestAnimationFrame(() => {
             const container = this.shadowRoot?.querySelector(".pagination-container") as HTMLElement;
             const indicator = this.shadowRoot?.querySelector(".pagination-indicator") as HTMLElement;
-            const activePageItem = this.shadowRoot?.querySelector("pagination-page-item[active]") as HTMLElement;
+            const activePageItem = this.shadowRoot?.querySelector("mjoint-pagination-page-item[active]") as HTMLElement;
 
             if (!container || !indicator || !activePageItem) {
                 return;

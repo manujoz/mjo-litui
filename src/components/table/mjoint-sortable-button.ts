@@ -8,8 +8,8 @@ import { MdKeyboardArrowDown } from "mjo-icons/md";
 
 import "../../mjo-icon.js";
 
-@customElement("sortable-button")
-export class SortableButton extends LitElement {
+@customElement("mjoint-sortable-button")
+export class MjointSortableButton extends LitElement {
     @property({ type: String }) columnname?: string;
     @property({ type: String }) direction?: MjoTableSortDirections;
     @property({ type: String }) color: "primary" | "secondary" = "primary";
@@ -102,6 +102,6 @@ export class SortableButton extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "sortable-button": SortableButton;
+        "mjoint-sortable-button": MjointSortableButton;
     }
 }

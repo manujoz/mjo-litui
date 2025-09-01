@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 
 import "../../mjo-text-nowrap.js";
 
-@customElement("input-label")
-export class InputLabel extends LitElement {
+@customElement("mjoint-input-label")
+export class MjointInputLabel extends LitElement {
     @property({ type: Boolean }) focused = false;
     @property({ type: Boolean }) error = false;
     @property({ type: String }) label?: string;
@@ -69,4 +69,10 @@ export class InputLabel extends LitElement {
             }
         `,
     ];
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "mjoint-input-label": MjointInputLabel;
+    }
 }

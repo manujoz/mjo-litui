@@ -1,13 +1,13 @@
-import type { MessageContainer } from "../components/messages/message-container";
+import type { MjointMessageContainer } from "../components/messages/mjoint-message-container";
 import type { MjoMessage } from "../mjo-message";
 import { MessageShowParams } from "../types/mjo-message";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
-import "../components/messages/message-container.js";
+import "../components/messages/mjoint-message-container.js";
 
 export class MessageController implements ReactiveController {
     host: ReactiveControllerHost;
-    messageContainer!: MessageContainer;
+    messageContainer!: MjointMessageContainer;
 
     constructor(host: ReactiveControllerHost) {
         (this.host = host).addController(this);
@@ -26,7 +26,7 @@ export class MessageController implements ReactiveController {
     }
 
     #createMessageElement() {
-        this.messageContainer = document.createElement("message-container") as MessageContainer;
+        this.messageContainer = document.createElement("mjoint-message-container") as MjointMessageContainer;
         this.messageContainer.style.zIndex = window.getComputedStyle(this.host as MjoMessage).zIndex;
 
         const theme = (this.host as MjoMessage).theme as Record<string, string>;

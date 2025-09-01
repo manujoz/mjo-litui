@@ -5,8 +5,8 @@ import { getInheritBackgroundColor } from "../../utils/shadow-dom";
 
 const MEDIUM_SIZE = 20;
 
-@customElement("slider-handle")
-export class SliderHandle extends LitElement {
+@customElement("mjoint-slider-handle")
+export class MjointSliderHandle extends LitElement {
     @property({ type: Boolean }) pressed = false;
     @property({ type: Boolean }) tooltip = false;
     @property({ type: Boolean }) disabled = false;
@@ -393,4 +393,10 @@ export class SliderHandle extends LitElement {
             }
         `,
     ];
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "mjoint-slider-handle": MjointSliderHandle;
+    }
 }

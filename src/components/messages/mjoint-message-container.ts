@@ -1,15 +1,15 @@
 import { MessageShowParams } from "../../types/mjo-message.js";
-import type { MessageItem } from "./message-item.js";
+import type { MjointMessageItem } from "./mjoint-message-item";
 
 import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
 
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
-import "./message-item.js";
+import "./mjoint-message-item.js";
 
-@customElement("message-container")
-export class MessageContainer extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("mjoint-message-container")
+export class MjointMessageContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @query(".container") container!: HTMLDivElement;
 
     render() {
@@ -17,13 +17,13 @@ export class MessageContainer extends ThemeMixin(LitElement) implements IThemeMi
     }
 
     async show({ message, type = "info", time, onClose }: MessageShowParams, maxMessages = 4) {
-        const messageItem = document.createElement("message-item") as MessageItem;
+        const messageItem = document.createElement("mjoint-message-item") as MjointMessageItem;
         messageItem.message = message;
         messageItem.type = type;
         if (time) messageItem.time = time;
         if (onClose) messageItem.onClose = onClose;
 
-        const messageItems = this.container.querySelectorAll("message-item");
+        const messageItems = this.container.querySelectorAll("mjoint-message-item");
         if (messageItems.length === maxMessages) {
             messageItems[0].close();
         }
@@ -55,6 +55,6 @@ export class MessageContainer extends ThemeMixin(LitElement) implements IThemeMi
 
 declare global {
     interface HTMLElementTagNameMap {
-        "message-container": MessageContainer;
+        "mjoint-message-container": MjointMessageContainer;
     }
 }

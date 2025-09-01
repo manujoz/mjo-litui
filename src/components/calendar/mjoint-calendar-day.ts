@@ -7,8 +7,8 @@ import "../../mjo-typography.js";
 /**
  * Individual day cell component for calendar
  */
-@customElement("calendar-day")
-export class CalendarDay extends LitElement {
+@customElement("mjoint-calendar-day")
+export class MjointCalendarDay extends LitElement {
     @property({ type: Number }) day!: number;
     @property({ type: Number }) month!: number;
     @property({ type: Number }) year!: number;
@@ -192,6 +192,6 @@ export class CalendarDay extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "calendar-day": CalendarDay;
+        "mjoint-calendar-day": MjointCalendarDay;
     }
 }

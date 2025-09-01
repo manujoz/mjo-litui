@@ -55,7 +55,7 @@ function getCellText(row: HTMLTableRowElement, columnIndex: number): string {
  * Helper function to trigger sort on a column
  */
 async function triggerSort(element: MjoTable, columnName: string): Promise<void> {
-    const sortButton = element.shadowRoot?.querySelector(`sortable-button[columnname="${columnName}"]`);
+    const sortButton = element.shadowRoot?.querySelector(`mjoint-sortable-button[columnname="${columnName}"]`);
     if (!sortButton) throw new Error(`Sort button for column "${columnName}" not found`);
 
     const button = sortButton.shadowRoot?.querySelector("button");
@@ -69,7 +69,7 @@ async function triggerSort(element: MjoTable, columnName: string): Promise<void>
  * Helper function to trigger filter on a column
  */
 async function triggerFilter(element: MjoTable, columnName: string, filterValue: string): Promise<void> {
-    const filterButton = element.shadowRoot?.querySelector(`filtrable-button[columnName="${columnName}"]`);
+    const filterButton = element.shadowRoot?.querySelector(`mjoint-filtrable-button[columnName="${columnName}"]`);
     if (!filterButton) throw new Error(`Filter button for column "${columnName}" not found`);
 
     // Open the filter input

@@ -21,8 +21,8 @@ import { styleMap } from "lit/directives/style-map.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { normalizeText, uniqueId } from "./utils/strings.js";
 
-import "./components/table/filtrable-button.js";
-import "./components/table/sortable-button.js";
+import "./components/table/mjoint-filtrable-button.js";
+import "./components/table/mjoint-sortable-button.js";
 import "./mjo-checkbox.js";
 import "./mjo-icon.js";
 import "./mjo-pagination.js";
@@ -212,22 +212,22 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                         <div class=${containerClasses}>
                             <span class="render">${column.label || "Column"}</span>
                             ${column.sortable
-                                ? html`<sortable-button
+                                ? html`<mjoint-sortable-button
                                       color=${this.color}
                                       columnname=${column.name}
                                       direction=${ifDefined(this.sort.columnName === column.name ? this.sort.direction : undefined)}
                                       aria-describedby=${`header-${column.name}`}
                                       @mjo-table:sort=${this.#handleSort}
-                                  ></sortable-button>`
+                                  ></mjoint-sortable-button>`
                                 : nothing}
                             ${column.filterable
-                                ? html`<filtrable-button
+                                ? html`<mjoint-filtrable-button
                                       color=${this.color}
                                       columnName=${column.name}
                                       filter=${ifDefined(this.filters.columnName === column.name ? this.filters.filter : undefined)}
                                       aria-describedby=${`header-${column.name}`}
                                       @mjo-table:filter=${this.#handleFilter}
-                                  ></filtrable-button>`
+                                  ></mjoint-filtrable-button>`
                                 : nothing}
                         </div>
                     </th>

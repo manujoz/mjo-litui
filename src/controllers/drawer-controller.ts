@@ -1,13 +1,13 @@
-import type { DrawerContainer } from "../components/drawer/drawer-container";
+import type { MjointDrawerContainer } from "../components/drawer/mjoint-drawer-container";
 import type { MjoDrawer } from "../mjo-drawer";
 import { DrawerShowParams } from "../types/mjo-drawer";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
-import "../components/drawer/drawer-container.js";
+import "../components/drawer/mjoint-drawer-container.js";
 
 export class DrawerController implements ReactiveController {
     host: ReactiveControllerHost;
-    drawerContainer!: DrawerContainer;
+    drawerContainer!: MjointDrawerContainer;
 
     constructor(host: ReactiveControllerHost) {
         (this.host = host).addController(this);
@@ -30,7 +30,7 @@ export class DrawerController implements ReactiveController {
     }
 
     #createMessageElement() {
-        this.drawerContainer = document.createElement("drawer-container") as DrawerContainer;
+        this.drawerContainer = document.createElement("mjoint-drawer-container") as MjointDrawerContainer;
         this.drawerContainer.style.zIndex = window.getComputedStyle(this.host as MjoDrawer).zIndex;
 
         const theme = (this.host as MjoDrawer).theme as Record<string, string>;

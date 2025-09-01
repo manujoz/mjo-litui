@@ -5,8 +5,8 @@ import { customElement, property } from "lit/decorators.js";
 
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning } from "mjo-icons/ai";
 
-@customElement("message-item")
-export class MessageItem extends LitElement {
+@customElement("mjoint-message-item")
+export class MjointMessageItem extends LitElement {
     @property({ type: String }) message = "";
     @property({ type: String }) type: MessageTypes = "info";
     @property({ type: Number }) time = 3000;
@@ -132,6 +132,6 @@ export class MessageItem extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "message-item": MessageItem;
+        "mjoint-message-item": MjointMessageItem;
     }
 }

@@ -1,8 +1,8 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("pagination-page-item")
-export class PaginationPageItem extends LitElement {
+@customElement("mjoint-pagination-page-item")
+export class MjointPaginationPageItem extends LitElement {
     @property({ type: Number }) page = 1;
     @property({ type: Boolean, reflect: true }) active = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
@@ -151,6 +151,6 @@ export class PaginationPageItem extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "pagination-page-item": PaginationPageItem;
+        "mjoint-pagination-page-item": MjointPaginationPageItem;
     }
 }

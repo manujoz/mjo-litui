@@ -6,13 +6,13 @@ import { customElement, property } from "lit/decorators.js";
 import { CalendarUtils } from "../../utils/calendar.js";
 
 import "../../mjo-typography.js";
-import "./calendar-day.js";
+import "./mjoint-calendar-day.js";
 
 /**
  * Calendar grid component that renders the days of a month
  */
-@customElement("calendar-grid")
-export class CalendarGrid extends LitElement {
+@customElement("mjoint-calendar-grid")
+export class MjointCalendarGrid extends LitElement {
     @property({ type: Number }) month!: number;
     @property({ type: Number }) year!: number;
     @property({ type: String }) side: "single" | "left" | "right" = "single";
@@ -59,7 +59,7 @@ export class CalendarGrid extends LitElement {
 
         // Empty cells for days before month starts
         for (let i = 0; i < firstDayOfWeek; i++) {
-            days.push(html`<calendar-day isEmpty .size=${this.size}></calendar-day>`);
+            days.push(html`<mjoint-calendar-day isEmpty .size=${this.size}></mjoint-calendar-day>`);
         }
 
         // Days of the month
@@ -74,7 +74,7 @@ export class CalendarGrid extends LitElement {
             const isHovered = this.mode === "range" && this.#isHoveredInRange(date);
 
             days.push(html`
-                <calendar-day
+                <mjoint-calendar-day
                     day=${day}
                     month=${this.month}
                     year=${this.year}
@@ -91,7 +91,7 @@ export class CalendarGrid extends LitElement {
                     @day-click=${this.#handleDayClick}
                     @day-hover=${this.#handleDayHover}
                     @day-leave=${this.#handleDayLeave}
-                ></calendar-day>
+                ></mjoint-calendar-day>
             `);
         }
 
@@ -221,6 +221,6 @@ export class CalendarGrid extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "calendar-grid": CalendarGrid;
+        "mjoint-calendar-grid": MjointCalendarGrid;
     }
 }

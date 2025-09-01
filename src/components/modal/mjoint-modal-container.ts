@@ -10,8 +10,8 @@ import { FocusTrap } from "../../utils/focus-trap.js";
 import "../../mjo-icon.js";
 import "../../mjo-typography.js";
 
-@customElement("modal-container")
-export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("mjoint-modal-container")
+export class MjointModalContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) isOpen = false;
     @property({ type: String }) titleMsg = "";
     @property({ type: String }) content: string | TemplateResult<1> = "";
@@ -279,6 +279,6 @@ export class ModalContainer extends ThemeMixin(LitElement) implements IThemeMixi
 
 declare global {
     interface HTMLElementTagNameMap {
-        "modal-container": ModalContainer;
+        "mjoint-modal-container": MjointModalContainer;
     }
 }

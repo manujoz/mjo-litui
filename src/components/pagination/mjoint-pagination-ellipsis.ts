@@ -1,8 +1,8 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("pagination-ellipsis")
-export class PaginationEllipsis extends LitElement {
+@customElement("mjoint-pagination-ellipsis")
+export class MjointPaginationEllipsis extends LitElement {
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
 
     render() {
@@ -42,6 +42,6 @@ export class PaginationEllipsis extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "pagination-ellipsis": PaginationEllipsis;
+        "mjoint-pagination-ellipsis": MjointPaginationEllipsis;
     }
 }

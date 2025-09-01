@@ -16,8 +16,8 @@ import { repeat } from "lit/directives/repeat.js";
 
 import { uniqueId } from "./utils/strings.js";
 
-import "./components/listbox/listbox-item.js";
-import "./components/listbox/listbox-section.js";
+import "./components/listbox/mjoint-listbox-item.js";
+import "./components/listbox/mjoint-listbox-section.js";
 
 @customElement("mjo-listbox")
 export class MjoListbox extends LitElement {
@@ -48,8 +48,8 @@ export class MjoListbox extends LitElement {
                     this.items,
                     (item, index) => this.#getItemKey(item, index),
                     (item, index) => {
-                        if (item.section) return html`<listbox-section section=${item.section}></listbox-section>`;
-                        return html`<listbox-item
+                        if (item.section) return html`<mjoint-listbox-section section=${item.section}></mjoint-listbox-section>`;
+                        return html`<mjoint-listbox-item
                             id=${this.#getItemId(index)}
                             .item=${item}
                             index=${index}
@@ -58,7 +58,7 @@ export class MjoListbox extends LitElement {
                             @mjo-listbox:click=${this.#handleItemClick}
                             @mjo-listbox:focus=${this.#handleItemFocus}
                             @navigate=${this.#handleItemNavigate}
-                        ></listbox-item>`;
+                        ></mjoint-listbox-item>`;
                     },
                 )}
             </div>
@@ -166,7 +166,7 @@ export class MjoListbox extends LitElement {
     #focusItem(index: number, visibleFocus = false) {
         this.#focusedIndex = index;
 
-        const items = this.shadowRoot?.querySelectorAll("listbox-item");
+        const items = this.shadowRoot?.querySelectorAll("mjoint-listbox-item");
         if (!items || items.length === 0) return;
 
         for (const item of items) {
@@ -232,7 +232,7 @@ export class MjoListbox extends LitElement {
             .container[data-size="large"] {
                 font-size: 1.1em;
             }
-            .container[data-selectable] listbox-item {
+            .container[data-selectable] mjoint-listbox-item {
                 user-select: none;
             }
         `,

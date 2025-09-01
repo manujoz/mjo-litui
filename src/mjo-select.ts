@@ -1,5 +1,5 @@
 import { type MjoOption } from "./components/select/mjo-option.js";
-import { type OptionsList } from "./components/select/options-list.js";
+import { type MjointOptionsList } from "./components/select/mjoint-options-list.js";
 import { type MjoDropdown } from "./mjo-dropdown.js";
 import {
     MjoSelectBlurEvent,
@@ -27,10 +27,10 @@ import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./components/input/input-helper-text.js";
-import "./components/input/input-label.js";
+import "./components/input/mjoint-input-helper-text.js";
+import "./components/input/mjoint-input-label.js";
 import "./components/select/mjo-option.js";
-import "./components/select/options-list.js";
+import "./components/select/mjoint-options-list.js";
 import "./mjo-dropdown.js";
 
 @customElement("mjo-select")
@@ -82,7 +82,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     @query("input[type='text']") inputVisibleElement!: HTMLInputElement;
 
     type = "select";
-    optionListRef = createRef<OptionsList>();
+    optionListRef = createRef<MjointOptionsList>();
     observer!: MutationObserver;
     #uniqueId = `mjo-select-${Math.random().toString(36).substring(2, 9)}`;
     #previousValue = "";
@@ -94,17 +94,17 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         const listboxId = `${this.#uniqueId}-listbox`;
 
         return html`${this.label
-                ? html`<input-label
+                ? html`<mjoint-input-label
                       id=${ifDefined(labelId)}
                       color=${this.color}
                       label=${this.label}
                       ?focused=${this.isFocused}
                       ?error=${this.error}
                       ?data-disabled=${this.disabled}
-                  ></input-label>`
+                  ></mjoint-input-label>`
                 : nothing}
             <mjo-dropdown
-                .html=${html`<options-list
+                .html=${html`<mjoint-options-list
                     ${ref(this.optionListRef)}
                     id=${listboxId}
                     .options=${this.options}
@@ -115,7 +115,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     @options-list.blur=${() => this.#handleOptionsBlur()}
                     @options-list.filter=${(e: CustomEvent) => this.#handleOptionListFilter(e)}
                     @options-list.selection-change=${(e: CustomEvent) => this.#handleOptionListSelectionChange(e)}
-                ></options-list>`}
+                ></mjoint-options-list>`}
                 ?disabled=${this.disabled}
                 preventScroll
                 behaviour="click"
@@ -179,8 +179,8 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             </mjo-dropdown>
             <div class="helper" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
-                    ? html`<input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
-                          >${this.helperText}</input-helper-text
+                    ? html`<mjoint-input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                          >${this.helperText}</mjoint-input-helper-text
                       >`
                     : nothing}
             </div>`;
@@ -626,7 +626,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
                 opacity: 0.5;
             }
-            input-label[data-disabled],
+            mjoint-input-label[data-disabled],
             .helper[data-disabled] {
                 opacity: 0.5;
             }
@@ -752,7 +752,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 justify-content: flex-end;
                 gap: 5px;
             }
-            input-helper-text {
+            mjoint-input-helper-text {
                 flex: 1 1 0;
             }
         `,

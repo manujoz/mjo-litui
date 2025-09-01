@@ -15,8 +15,8 @@ import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { ColorFormat, convertColor } from "./utils/colors.js";
 
-import "./components/input/input-helper-text.js";
-import "./components/input/input-label.js";
+import "./components/input/mjoint-input-helper-text.js";
+import "./components/input/mjoint-input-label.js";
 
 @customElement("mjo-color-picker")
 export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IFormMixin, IInputErrorMixin, IThemeMixin {
@@ -68,7 +68,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
     render() {
         return html`
             ${this.label
-                ? html`<input-label color=${this.color} label=${this.label} ?error=${this.error} ?data-disabled=${this.disabled}></input-label>`
+                ? html`<mjoint-input-label color=${this.color} label=${this.label} ?error=${this.error} ?data-disabled=${this.disabled}></mjoint-input-label>`
                 : nothing}
             <div class="container" ?data-rounded=${this.rounded} data-size=${this.size} ?data-disabled=${this.disabled}>
                 <div class="color-picker" role="presentation" aria-hidden="true"></div>
@@ -90,7 +90,9 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
             </div>
             ${this.showValue ? html`<div class="value-display" aria-live="polite">${this.getFormattedValue(this.format)}</div>` : nothing}
             ${this.helperText || this.errormsg || this.successmsg
-                ? html`<input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}>${this.helperText}</input-helper-text>`
+                ? html`<mjoint-input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                      >${this.helperText}</mjoint-input-helper-text
+                  >`
                 : nothing}
         `;
     }

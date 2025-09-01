@@ -6,7 +6,7 @@ import { customElement, property } from "lit/decorators.js";
 import { NotificationController } from "./controllers/notification-controller.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./components/notifications/notification-container.js";
+import "./components/notifications/mjoint-notification-container.js";
 
 @customElement("mjo-notification")
 export class MjoNotification extends ThemeMixin(LitElement) implements IThemeMixin {

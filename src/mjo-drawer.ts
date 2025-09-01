@@ -4,7 +4,7 @@ import { customElement, property } from "lit/decorators.js";
 import { DrawerController } from "./controllers/drawer-controller.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./components/drawer/drawer-container.js";
+import "./components/drawer/mjoint-drawer-container.js";
 
 @customElement("mjo-drawer")
 export class MjoDrawer extends ThemeMixin(LitElement) implements IThemeMixin {

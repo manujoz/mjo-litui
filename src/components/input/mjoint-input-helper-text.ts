@@ -5,8 +5,8 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "mjo-icons/ai";
 import "../../mjo-icon.js";
 import "../../mjo-typography.js";
 
-@customElement("input-helper-text")
-export class InputHelperText extends LitElement {
+@customElement("mjoint-input-helper-text")
+export class MjointInputHelperText extends LitElement {
     @property({ type: String }) errormsg?: string;
     @property({ type: String }) successmsg?: string;
 
@@ -82,4 +82,10 @@ export class InputHelperText extends LitElement {
             }
         `,
     ];
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "mjoint-input-helper-text": MjointInputHelperText;
+    }
 }

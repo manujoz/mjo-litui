@@ -1,4 +1,4 @@
-import { type SliderHandle } from "./components/slider/slider-handle.js";
+import { type MjointSliderHandle } from "./components/slider/mjoint-slider-handle.js";
 import {
     MjoSliderBlurEvent,
     MjoSliderChangeEvent,
@@ -19,8 +19,8 @@ import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./components/input/input-label.js";
-import "./components/slider/slider-handle.js";
+import "./components/input/mjoint-input-label.js";
+import "./components/slider/mjoint-slider-handle.js";
 import { MJO_SLIDER_SIZES } from "./utils/mjo-slider.js";
 
 @customElement("mjo-slider")
@@ -61,8 +61,8 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     private stepsValues = [0];
     private rangebarRef = createRef<HTMLDivElement>();
     private progressbarRef = createRef<HTMLDivElement>();
-    private sliderOneRef = createRef<SliderHandle>();
-    private sliderTwoRef = createRef<SliderHandle>();
+    private sliderOneRef = createRef<MjointSliderHandle>();
+    private sliderTwoRef = createRef<MjointSliderHandle>();
 
     // Computed properties for accessibility
     private get computedAriaValueText(): string {
@@ -106,14 +106,14 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
         return html`<div class="label">
                 ${this.label
-                    ? html`<input-label
+                    ? html`<mjoint-input-label
                           id=${ifDefined(labelId)}
                           color=${this.color}
                           label=${this.label}
                           ?focused=${this.isFocused}
                           ?error=${this.error}
                           ?data-disabled=${this.disabled}
-                      ></input-label>`
+                      ></mjoint-input-label>`
                     : nothing}
                 ${!this.hideValue
                     ? html`<div class="value" ?data-disabled=${this.disabled} aria-live="polite" aria-atomic="true">
@@ -133,7 +133,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     <div class="track"></div>
                     <div class="progress" data-color=${this.color} ${ref(this.progressbarRef)}></div>
                 </div>
-                <slider-handle
+                <mjoint-slider-handle
                     ${ref(this.sliderOneRef)}
                     id=${handleOneId}
                     .role=${"slider"}
@@ -158,9 +158,9 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     size=${this.sizeNumber}
                     color=${this.color}
                     @release=${this.#handleRelease}
-                ></slider-handle>
+                ></mjoint-slider-handle>
                 ${this.isRange
-                    ? html`<slider-handle
+                    ? html`<mjoint-slider-handle
                           ${ref(this.sliderTwoRef)}
                           id=${ifDefined(handleTwoId)}
                           .role=${"slider"}
@@ -185,7 +185,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                           size=${this.sizeNumber}
                           color=${this.color}
                           @release=${this.#handleRelease}
-                      ></slider-handle>`
+                      ></mjoint-slider-handle>`
                     : nothing}
                 <input name=${ifDefined(this.name)} type="hidden" .value=${live(this.value)} />
             </div>`;
@@ -343,7 +343,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
     #handleSliderFocus(event: FocusEvent) {
         this.isFocused = true;
-        const target = event.target as SliderHandle;
+        const target = event.target as MjointSliderHandle;
 
         // Determine which handle is focused
         if (target === this.sliderOneRef.value) {
@@ -389,7 +389,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     #handleKeydown(event: KeyboardEvent) {
         if (this.disabled) return;
 
-        const target = event.target as SliderHandle;
+        const target = event.target as MjointSliderHandle;
         const isHandleOne = target === this.sliderOneRef.value;
         const currentValue = Number(this.#getSliderValue(isHandleOne ? "one" : "two"));
         let newValue = currentValue;
@@ -488,7 +488,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         }
     }
 
-    #handleMove(ev: CustomEvent<{ diff: number; target: SliderHandle }>) {
+    #handleMove(ev: CustomEvent<{ diff: number; target: MjointSliderHandle }>) {
         const rangebar = this.rangebarRef.value;
         if (!rangebar) return;
 
@@ -547,7 +547,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         slider.setLeftPosition(closestPosition);
     }
 
-    #setSliderPosition(slider: SliderHandle, value: string) {
+    #setSliderPosition(slider: MjointSliderHandle, value: string) {
         const rangebar = this.rangebarRef.value;
         if (!rangebar) return;
 
@@ -588,7 +588,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 position: relative;
                 display: flex;
             }
-            input-label {
+            mjoint-input-label {
                 padding-top: 0.2em;
                 flex-grow: 1;
                 flex-basis: 0;
@@ -612,7 +612,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             }
             .container[data-disabled],
             .value[data-disabled],
-            input-label[data-disabled] {
+            mjoint-input-label[data-disabled] {
                 opacity: var(--mjo-slider-disabled-opacity, 0.5);
             }
             .rangebar {
@@ -647,7 +647,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             @media (prefers-reduced-motion: reduce) {
                 .container:focus-within,
                 .progress,
-                slider-handle {
+                mjoint-slider-handle {
                     transition: none;
                 }
             }
@@ -680,7 +680,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     touch-action: pan-y; /* Ensure vertical scroll is preserved on mobile */
                 }
                 /* Improve touch target for slider handles */
-                slider-handle {
+                mjoint-slider-handle {
                     touch-action: none; /* Handles can prevent all touch actions when being dragged */
                 }
             }

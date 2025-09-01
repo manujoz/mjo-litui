@@ -4,8 +4,8 @@ import { AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineLeft, AiOutlineRigh
 
 import "../../mjo-icon.js";
 
-@customElement("pagination-nav-button")
-export class PaginationNavButton extends LitElement {
+@customElement("mjoint-pagination-nav-button")
+export class MjointPaginationNavButton extends LitElement {
     @property({ type: String }) direction: "previous" | "next" | "first" | "last" = "next";
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
@@ -158,6 +158,6 @@ export class PaginationNavButton extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "pagination-nav-button": PaginationNavButton;
+        "mjoint-pagination-nav-button": MjointPaginationNavButton;
     }
 }

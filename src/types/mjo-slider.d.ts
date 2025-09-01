@@ -44,7 +44,7 @@ export interface MjoSliderValueChangeEvent extends CustomEvent {
     };
 }
 
-// Interfaces for slider-handle component
+// Interfaces for mjoint-slider-handle component
 export interface SliderHandleMoveEvent extends CustomEvent {
     detail: {
         diff: number;

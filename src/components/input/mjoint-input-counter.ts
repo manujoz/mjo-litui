@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 
 import "../../mjo-typography.js";
 
-@customElement("input-counter")
-export class InputCounter extends LitElement {
+@customElement("mjoint-input-counter")
+export class MjointInputCounter extends LitElement {
     @property({ type: Number }) count = 0;
     @property({ type: Number }) max?: number;
     @property({ type: Boolean }) regressive = false;
@@ -39,4 +39,10 @@ export class InputCounter extends LitElement {
             }
         `,
     ];
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "mjoint-input-counter": MjointInputCounter;
+    }
 }

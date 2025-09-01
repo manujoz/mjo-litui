@@ -98,7 +98,7 @@ suite("mjo-listbox Component", () => {
             const container = element.shadowRoot?.querySelector('[role="listbox"]');
             expect(container).to.exist;
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
             expect(items).to.have.length(0);
         });
     });
@@ -211,7 +211,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const listboxItems = element.shadowRoot?.querySelectorAll("listbox-item");
+            const listboxItems = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
             expect(listboxItems).to.have.length(5);
 
             // Check that each item has proper role and properties
@@ -235,10 +235,10 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const sections = element.shadowRoot?.querySelectorAll("listbox-section");
+            const sections = element.shadowRoot?.querySelectorAll("mjoint-listbox-section");
             expect(sections).to.have.length(2);
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
             expect(items).to.have.length(4); // 4 actual items, 2 sections
 
             // Check sections have proper role
@@ -255,7 +255,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const listboxItems = element.shadowRoot?.querySelectorAll("listbox-item");
+            const listboxItems = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
             expect(listboxItems).to.have.length(3);
 
             // Check first item has start icon
@@ -276,7 +276,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const listboxItems = element.shadowRoot?.querySelectorAll("listbox-item");
+            const listboxItems = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
             expect(listboxItems).to.have.length(3);
 
             // Check that items with href render as anchor elements
@@ -295,7 +295,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const listboxItems = element.shadowRoot?.querySelectorAll("listbox-item");
+            const listboxItems = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
             const disabledItem = listboxItems?.[2]; // Third item is disabled
 
             const disabledElement = disabledItem?.shadowRoot?.querySelector('[aria-disabled="true"]');
@@ -322,7 +322,7 @@ suite("mjo-listbox Component", () => {
                 clickEvent = event;
             });
 
-            const firstItem = element.shadowRoot?.querySelector("listbox-item");
+            const firstItem = element.shadowRoot?.querySelector("mjoint-listbox-item");
             const itemContainer = firstItem?.shadowRoot?.querySelector(".container");
             itemContainer?.dispatchEvent(new Event("click", { bubbles: true }));
 
@@ -345,7 +345,7 @@ suite("mjo-listbox Component", () => {
                 changeEvent = event;
             });
 
-            const firstItem = element.shadowRoot?.querySelector("listbox-item");
+            const firstItem = element.shadowRoot?.querySelector("mjoint-listbox-item");
             const itemContainer = firstItem?.shadowRoot?.querySelector(".container");
             itemContainer?.dispatchEvent(new Event("click", { bubbles: true }));
 
@@ -375,7 +375,7 @@ suite("mjo-listbox Component", () => {
                 blurEvent = event;
             });
 
-            const firstItem = element.shadowRoot?.querySelector("listbox-item");
+            const firstItem = element.shadowRoot?.querySelector("mjoint-listbox-item");
             const itemContainer = firstItem?.shadowRoot?.querySelector(".container");
 
             itemContainer?.dispatchEvent(new Event("focus", { bubbles: true }));
@@ -403,7 +403,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const firstItem = element.shadowRoot?.querySelector("listbox-item");
+            const firstItem = element.shadowRoot?.querySelector("mjoint-listbox-item");
             const itemContainer = firstItem?.shadowRoot?.querySelector(".container");
             itemContainer?.dispatchEvent(new Event("click", { bubbles: true }));
 
@@ -423,7 +423,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
 
             // Select first item
             const firstItemContainer = items?.[0]?.shadowRoot?.querySelector(".container");
@@ -453,7 +453,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const firstItem = element.shadowRoot?.querySelector("listbox-item");
+            const firstItem = element.shadowRoot?.querySelector("mjoint-listbox-item");
             const itemContainer = firstItem?.shadowRoot?.querySelector(".container");
             itemContainer?.dispatchEvent(new Event("click", { bubbles: true }));
 
@@ -474,7 +474,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
 
             // Select first item
             const firstItemContainer = items?.[0]?.shadowRoot?.querySelector(".container");
@@ -500,7 +500,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const firstItem = element.shadowRoot?.querySelector("listbox-item");
+            const firstItem = element.shadowRoot?.querySelector("mjoint-listbox-item");
             const itemContainer = firstItem?.shadowRoot?.querySelector(".container");
 
             // Select item
@@ -530,7 +530,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
 
             // Start from first item
             const firstItemContainer = items?.[0]?.shadowRoot?.querySelector(".container") as HTMLElement;
@@ -554,7 +554,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
 
             // Start from second item
             const secondItemContainer = items?.[1]?.shadowRoot?.querySelector(".container") as HTMLElement;
@@ -577,7 +577,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
 
             // Start from last item
             const lastItemContainer = items?.[4]?.shadowRoot?.querySelector(".container") as HTMLElement;
@@ -600,7 +600,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
 
             // Start from first item
             const firstItemContainer = items?.[0]?.shadowRoot?.querySelector(".container") as HTMLElement;
@@ -624,7 +624,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
 
             // Start from second item (index 1)
             const secondItemContainer = items?.[1]?.shadowRoot?.querySelector(".container") as HTMLElement;
@@ -648,7 +648,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const firstItem = element.shadowRoot?.querySelector("listbox-item");
+            const firstItem = element.shadowRoot?.querySelector("mjoint-listbox-item");
             const itemContainer = firstItem?.shadowRoot?.querySelector(".container") as HTMLElement;
 
             itemContainer?.focus();
@@ -671,7 +671,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const firstItem = element.shadowRoot?.querySelector("listbox-item");
+            const firstItem = element.shadowRoot?.querySelector("mjoint-listbox-item");
             const itemContainer = firstItem?.shadowRoot?.querySelector(".container") as HTMLElement;
 
             itemContainer?.focus();
@@ -704,7 +704,7 @@ suite("mjo-listbox Component", () => {
             expect(element).to.exist;
 
             // The item is still rendered but should show error in console
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
             expect(items).to.have.length(1);
 
             // The item should have the value but no visible label
@@ -725,8 +725,8 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const sections = element.shadowRoot?.querySelectorAll("listbox-section");
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const sections = element.shadowRoot?.querySelectorAll("mjoint-listbox-section");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
 
             expect(sections).to.have.length(1);
             expect(items).to.have.length(3);
@@ -739,7 +739,7 @@ suite("mjo-listbox Component", () => {
 
             await waitForComponentUpdate(element);
 
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
             const disabledItem = items?.[2]; // Third item is disabled
             const disabledItemContainer = disabledItem?.shadowRoot?.querySelector(".container");
 
@@ -763,7 +763,7 @@ suite("mjo-listbox Component", () => {
             await waitForComponentUpdate(element);
 
             // Keyboard events should not crash
-            const items = element.shadowRoot?.querySelectorAll("listbox-item");
+            const items = element.shadowRoot?.querySelectorAll("mjoint-listbox-item");
             const firstItemContainer = items?.[0]?.shadowRoot?.querySelector(".container");
 
             const downEvent = new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true });
