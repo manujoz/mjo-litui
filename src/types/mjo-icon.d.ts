@@ -10,7 +10,6 @@ export type MjoIconAnimation = "none" | "spin" | "pulse" | "rotate";
 export interface MjoIconClickEvent extends CustomEvent {
     detail: {
         element: MjoIcon;
-        originalEvent: MouseEvent | KeyboardEvent;
     };
 }
 

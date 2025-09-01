@@ -178,12 +178,12 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
         `;
     }
 
-    #handleClick(event: MouseEvent): void {
+    #handleClick(): void {
         if (!this.clickable || this.disabled || this.loading) {
             return;
         }
 
-        this.#dispatchClickEvent(event);
+        this.#dispatchClickEvent();
     }
 
     #handleKeydown(event: KeyboardEvent): void {
@@ -193,45 +193,47 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
 
         if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            this.#dispatchClickEvent(event);
+            this.#dispatchClickEvent();
         }
     }
 
-    #dispatchClickEvent(originalEvent: MouseEvent | KeyboardEvent): void {
-        const clickEvent: MjoIconClickEvent = new CustomEvent("mjo-icon:click", {
-            detail: {
-                element: this,
-                originalEvent,
-            },
-            bubbles: true,
-            composed: true,
-        });
-        this.dispatchEvent(clickEvent);
+    #dispatchClickEvent(): void {
+        this.dispatchEvent(
+            new CustomEvent<MjoIconClickEvent["detail"]>("mjo-icon:click", {
+                detail: {
+                    element: this,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
     }
 
     #dispatchLoadEvent(): void {
-        const loadEvent: MjoIconLoadEvent = new CustomEvent("mjo-icon:load", {
-            detail: {
-                element: this,
-                src: this.src!,
-            },
-            bubbles: true,
-            composed: true,
-        });
-        this.dispatchEvent(loadEvent);
+        this.dispatchEvent(
+            new CustomEvent<MjoIconLoadEvent["detail"]>("mjo-icon:load", {
+                detail: {
+                    element: this,
+                    src: this.src!,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
     }
 
     #dispatchErrorEvent(error: string): void {
-        const errorEvent: MjoIconErrorEvent = new CustomEvent("mjo-icon:error", {
-            detail: {
-                element: this,
-                error,
-                src: this.src,
-            },
-            bubbles: true,
-            composed: true,
-        });
-        this.dispatchEvent(errorEvent);
+        this.dispatchEvent(
+            new CustomEvent<MjoIconErrorEvent["detail"]>("mjo-icon:error", {
+                detail: {
+                    element: this,
+                    error,
+                    src: this.src,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
     }
 
     static styles = [
@@ -247,7 +249,6 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
                 pointer-events: none;
                 cursor: not-allowed;
             }
-
             .icon-container {
                 position: relative;
                 display: block;
@@ -258,14 +259,17 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
 
             .icon-container.clickable {
                 cursor: pointer;
+                border-radius: var(--mjo-icon-border-radius, 999px);
+                padding: var(--mjo-icon-padding, 0.2em);
                 transition: var(--mjo-icon-transition, all 0.2s ease);
+                transform-origin: center;
             }
 
             .icon-container.clickable:hover {
-                transform: scale(var(--mjo-icon-clickable-hover-scale, 1.1));
+                background-color: var(--mjo-color-gray-alpha3);
             }
 
-            .icon-container.clickable:focus {
+            .icon-container.clickable:focus-visible {
                 outline: var(--mjo-icon-clickable-focus-outline, 2px solid currentColor);
                 outline-offset: 2px;
             }
