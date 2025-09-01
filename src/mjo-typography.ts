@@ -41,7 +41,6 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
         css`
             :host {
                 display: block;
-                margin: 0.5em 0;
             }
             :host([tag="span"]),
             :host([tag="none"]) {

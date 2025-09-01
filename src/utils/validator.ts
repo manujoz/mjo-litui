@@ -1,3 +1,4 @@
+import type { MjoCheckbox } from "../mjo-checkbox.js";
 import { MjoFormElements } from "../types/litui";
 import { InputsValidatorMessages, ValidatorMessages, ValidatorRulesNames } from "../types/validator";
 
@@ -267,8 +268,8 @@ export class MjoValidator {
         }
 
         if (input.mincheck !== undefined) {
-            response.error = !this.#validateMincheck(input, form);
-            response.errmsg = response.error ? this.#getErrorMessage(input, "mincheck") : "";
+            response.error = !this.#validateMincheck(input);
+            response.errmsg = response.error ? this.#getErrorMessage(input, "mincheck", [String(input.mincheck)]) : "";
             response.rule = "mincheck";
 
             this.#setInputError(input, response.errmsg);
@@ -277,8 +278,8 @@ export class MjoValidator {
         }
 
         if (input.maxcheck !== undefined) {
-            response.error = !this.#validateMaxcheck(input, form);
-            response.errmsg = response.error ? this.#getErrorMessage(input, "maxcheck") : "";
+            response.error = !this.#validateMaxcheck(input);
+            response.errmsg = response.error ? this.#getErrorMessage(input, "maxcheck", [String(input.maxcheck)]) : "";
             response.rule = "maxcheck";
 
             this.#setInputError(input, response.errmsg);
@@ -912,30 +913,40 @@ export class MjoValidator {
         return valid;
     }
 
-    #validateMincheck(input: MjoFormElements, form: HTMLFormElement) {
-        const mincheck = parseInt(input.getAttribute("mincheck") ?? "0");
-        const checkgroup = input.getAttribute("checkgroup");
-        const checkboxs = [...form.querySelectorAll("input[type=checkbox]"), ...form.querySelectorAll("mo-checkbox")];
+    #validateMincheck(input: MjoFormElements) {
+        const checkbox = input as MjoCheckbox;
+        const group = checkbox.group;
+
+        if (!group) return true;
+
+        const mincheck = group.checkboxs.filter((cb) => cb.mincheck)[0]?.mincheck;
+
+        if (!mincheck) return true;
 
         let checkeds = 0;
-        for (let i = 0; i < checkboxs.length; i++) {
-            if (checkboxs[i].getAttribute("checkgroup") === checkgroup && checkboxs[i].hasAttribute("checked")) checkeds++;
-        }
+        group.checkboxs.forEach((cb) => {
+            if (cb.checked) checkeds++;
+        });
 
         if (mincheck > checkeds) return false;
 
         return true;
     }
 
-    #validateMaxcheck(input: MjoFormElements, form: HTMLFormElement) {
-        const maxcheck = parseInt(input.getAttribute("maxcheck") ?? "0");
-        const checkgroup = input.getAttribute("checkgroup");
-        const checkboxs = [...form.querySelectorAll("input[type=checkbox]"), ...form.querySelectorAll("mo-checkbox")];
+    #validateMaxcheck(input: MjoFormElements) {
+        const checkbox = input as MjoCheckbox;
+        const group = checkbox.group;
+
+        if (!group) return true;
+
+        const maxcheck = group.checkboxs.filter((cb) => cb.maxcheck)[0]?.maxcheck;
+
+        if (!maxcheck) return true;
 
         let checkeds = 0;
-        for (let i = 0; i < checkboxs.length; i++) {
-            if (checkboxs[i].getAttribute("checkgroup") === checkgroup && checkboxs[i].hasAttribute("checked")) checkeds++;
-        }
+        group.checkboxs.forEach((cb) => {
+            if (cb.checked) checkeds++;
+        });
 
         if (maxcheck < checkeds) return false;
 

@@ -1,3 +1,4 @@
+import type { MjoCheckboxGroup } from "./mjo-checkbox-group.js";
 import {
     MjoCheckboxBlurEvent,
     MjoCheckboxChangeEvent,
@@ -18,6 +19,7 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import "./components/input/input-helper-text.js";
 import "./mjo-icon.js";
 import "./mjo-typography.js";
+import { searchParentElement } from "./utils/shadow-dom.js";
 
 @customElement("mjo-checkbox")
 export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
@@ -30,13 +32,13 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     @property({ type: String }) label?: string;
     @property({ type: String }) name?: string;
     @property({ type: String }) value = "";
-    @property({ type: String, reflect: true }) checkgroup?: string;
     @property({ type: Boolean }) hideErrors = false;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
 
     @query("input") inputElement!: HTMLInputElement;
     @query(".checkbox-container") checkboxContainer!: HTMLElement;
 
+    group: MjoCheckboxGroup | null = null;
     type = "checkbox";
 
     // Computed properties for accessibility
@@ -63,7 +65,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     }
 
     render() {
-        return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size}>
+        return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size} ?data-error=${this.error}>
             <div
                 class="checkbox-container"
                 role="checkbox"
@@ -117,7 +119,16 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     connectedCallback(): void {
         super.connectedCallback();
 
+        this.#searchGroup();
+
         this.updateFormData({ name: this.name || "", value: this.checked ? this.value || "1" : "" });
+    }
+
+    #searchGroup() {
+        this.group = searchParentElement(this, "mjo-checkbox-group") as MjoCheckboxGroup | null;
+        if (this.group) {
+            this.group.pushCheckbox(this);
+        }
     }
 
     getValue() {
@@ -128,7 +139,20 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         this.value = value;
     }
 
+    setChecked(checked: boolean) {
+        this.#handleClick(checked);
+    }
+
+    click(): void {
+        this.#handleClick();
+    }
+
+    toggle() {
+        this.#handleClick();
+    }
+
     setIndeterminate(indeterminate: boolean) {
+        this.checked = false;
         this.indeterminate = indeterminate;
         this.inputElement.indeterminate = indeterminate;
 
@@ -156,7 +180,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         this.inputElement.setCustomValidity(message);
     }
 
-    #handleClick() {
+    #handleClick(newValue?: boolean) {
         if (this.disabled) return;
 
         const previousState = {
@@ -170,24 +194,13 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             this.inputElement.indeterminate = false;
         }
 
-        this.checked = !this.checked;
-        this.updateFormData({ name: this.name || "", value: this.getValue() });
+        if (typeof newValue === "boolean") {
+            this.checked = newValue;
+        } else {
+            this.checked = !this.checked;
+        }
 
-        // Dispatch enhanced change event
-        this.dispatchEvent(
-            new CustomEvent<MjoCheckboxChangeEvent["detail"]>("change", {
-                detail: {
-                    element: this,
-                    checked: this.checked,
-                    indeterminate: this.indeterminate,
-                    value: this.value,
-                    name: this.name || "",
-                    previousState,
-                },
-                bubbles: true,
-                composed: true,
-            }),
-        );
+        this.updateFormData({ name: this.name || "", value: this.getValue() });
 
         // Also dispatch custom event
         this.dispatchEvent(
@@ -301,12 +314,20 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 border-radius: 0.2rem;
                 line-height: 0;
                 transition: all 0.3s ease;
-                width: 1.2em;
-                height: 1.2em;
+                width: 1em;
+                height: 1em;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-sizing: border-box;
+            }
+            .container[data-size="small"] .checkbox {
+                font-size: 14px;
+            }
+            .container[data-size="medium"] .checkbox {
+                font-size: 16px;
+            }
+            .container[data-size="large"] .checkbox {
+                font-size: 18px;
             }
             .checkbox[data-checked] {
                 border-color: var(--mjo-checkbox-checked-border-color, var(--mjo-checkbox-checked-color, var(--mjo-primary-color)));
@@ -321,7 +342,8 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 border-color: var(--mjo-checkbox-checked-border-color, var(--mjo-checkbox-checked-color, var(--mjo-secondary-color)));
             }
             .inner {
-                position: relative;
+                position: absolute;
+                inset: 0;
                 flex: 1 1 0;
                 border-radius: 0.1rem;
                 align-self: stretch;
@@ -347,18 +369,8 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 background-color: var(--mjo-checkbox-indeterminate-background-color, transparent);
                 color: var(--mjo-checkbox-indeterminate-icon-color, var(--mjo-secondary-color));
             }
-            mjo-icon {
-                position: absolute;
-                inset: 0;
-                display: grid;
-                place-content: center;
-                font-size: 0.8em;
-                transform: scale(0);
-            }
             .checkbox[data-checked] .inner,
-            .checkbox[data-indeterminate] .inner,
-            .checkbox[data-checked] mjo-icon,
-            .checkbox[data-indeterminate] mjo-icon {
+            .checkbox[data-indeterminate] .inner {
                 transform: scale(1);
             }
             .label-container {
@@ -381,8 +393,18 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             input-helper-text {
                 padding-left: calc(calc(1.3rem + var(--mjo-space-small, 5px)) + 2px);
                 color: var(--mjo-checkbox-helper-color, var(--mjo-foreground-color-low));
-                font-size: var(--mjo-checkbox-helper-font-size, inherit);
-                font-weight: var(--mjo-checkbox-helper-font-weight, inherit);
+                font-size: var(--mjo-checkbox-helper-font-size, 0.8em);
+                font-weight: var(--mjo-checkbox-helper-font-weight, normal);
+            }
+            .container[data-error] .checkbox {
+                border-color: var(--mjo-checkbox-error-border-color, var(--mjo-color-error));
+            }
+            .container[data-error] .inner {
+                background-color: var(--mjo-checkbox-error-background-color, var(--mjo-color-error));
+                color: var(--mjo-checkbox-error-icon-color, var(--mjo-color-error-foreground));
+            }
+            .container[data-error] .label {
+                color: var(--mjo-checkbox-error-label-color, var(--mjo-color-error));
             }
 
             /* Reduced motion support */

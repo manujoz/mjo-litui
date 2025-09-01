@@ -27,8 +27,8 @@ export class ExampleCheckboxBasic extends LitElement {
                 <mjo-checkbox label="Basic checkbox" name="basic" value="1"></mjo-checkbox>
                 <mjo-checkbox label="Checked by default" name="checked" value="1" checked></mjo-checkbox>
                 <mjo-checkbox label="Secondary color" name="secondary" value="1" color="secondary"></mjo-checkbox>
+                <mjo-checkbox label="Large size" name="large" value="1" size="large"></mjo-checkbox>
                 <mjo-checkbox label="Disabled checkbox" name="disabled" value="1" disabled></mjo-checkbox>
-                <mjo-checkbox label="Disabled and checked" name="disabled-checked" value="1" disabled checked></mjo-checkbox>
             </div>
         `;
     }
@@ -64,10 +64,13 @@ export class ExampleCheckboxStates extends LitElement {
         return html`
             <div style="display: flex; flex-direction: column; gap: 2rem;">
                 <div>
-                    <h4>Colors</h4>
+                    <h4>Colors and Sizes</h4>
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
                         <mjo-checkbox label="Primary color (default)" name="primary" value="1" color="primary" checked></mjo-checkbox>
                         <mjo-checkbox label="Secondary color" name="secondary" value="1" color="secondary" checked></mjo-checkbox>
+                        <mjo-checkbox label="Small size" name="small" value="1" size="small" checked></mjo-checkbox>
+                        <mjo-checkbox label="Medium size (default)" name="medium" value="1" size="medium" checked></mjo-checkbox>
+                        <mjo-checkbox label="Large size" name="large" value="1" size="large" checked></mjo-checkbox>
                     </div>
                 </div>
 
@@ -346,7 +349,6 @@ export class ExampleCheckboxGroups extends LitElement {
                             label="Push Notifications"
                             name="features"
                             value="notifications"
-                            checkgroup="app-features"
                             ?checked=${this.selectedFeatures.includes("notifications")}
                             @change=${this.handleFeatureChange}
                             helperText="Receive push notifications for important updates"
@@ -356,7 +358,6 @@ export class ExampleCheckboxGroups extends LitElement {
                             label="Dark Mode"
                             name="features"
                             value="darkMode"
-                            checkgroup="app-features"
                             ?checked=${this.selectedFeatures.includes("darkMode")}
                             @change=${this.handleFeatureChange}
                             helperText="Use dark theme for better night viewing"
@@ -366,7 +367,6 @@ export class ExampleCheckboxGroups extends LitElement {
                             label="Auto Save"
                             name="features"
                             value="autoSave"
-                            checkgroup="app-features"
                             ?checked=${this.selectedFeatures.includes("autoSave")}
                             @change=${this.handleFeatureChange}
                             helperText="Automatically save your work every 30 seconds"
@@ -376,7 +376,6 @@ export class ExampleCheckboxGroups extends LitElement {
                             label="Usage Analytics"
                             name="features"
                             value="analytics"
-                            checkgroup="app-features"
                             ?checked=${this.selectedFeatures.includes("analytics")}
                             @change=${this.handleFeatureChange}
                             helperText="Help us improve by sharing anonymous usage data"
@@ -741,19 +740,19 @@ export class ExampleCheckboxThemes extends LitElement {
 
 ## Attributes / Properties
 
-| Name              | Type                       | Default     | Reflects | Description                                        |
-| ----------------- | -------------------------- | ----------- | -------- | -------------------------------------------------- |
-| `color`           | `"primary" \| "secondary"` | `"primary"` | no       | Color scheme for the checkbox when checked         |
-| `checked`         | `boolean`                  | `false`     | yes      | Controls whether the checkbox is checked           |
-| `disabled`        | `boolean`                  | `false`     | yes      | Disables interaction with the checkbox             |
-| `indeterminate`   | `boolean`                  | `false`     | yes      | Sets the checkbox to indeterminate/mixed state     |
-| `label`           | `string \| undefined`      | `undefined` | no       | Text label displayed next to the checkbox          |
-| `name`            | `string \| undefined`      | `undefined` | no       | Form field name for form submission                |
-| `value`           | `string`                   | `""`        | no       | Value submitted when checkbox is checked           |
-| `checkgroup`      | `string \| undefined`      | `undefined` | yes      | Groups checkboxes together for validation purposes |
-| `helperText`      | `string \| undefined`      | `undefined` | no       | Helper text displayed below the checkbox           |
-| `hideErrors`      | `boolean`                  | `false`     | no       | Hides error messages from InputErrorMixin          |
-| `ariaDescribedby` | `string \| undefined`      | `undefined` | no       | ARIA describedby attribute for accessibility       |
+| Name              | Type                             | Default     | Reflects | Description                                    |
+| ----------------- | -------------------------------- | ----------- | -------- | ---------------------------------------------- |
+| `color`           | `"primary" \| "secondary"`       | `"primary"` | no       | Color scheme for the checkbox when checked     |
+| `checked`         | `boolean`                        | `false`     | yes      | Controls whether the checkbox is checked       |
+| `disabled`        | `boolean`                        | `false`     | yes      | Disables interaction with the checkbox         |
+| `indeterminate`   | `boolean`                        | `false`     | yes      | Sets the checkbox to indeterminate/mixed state |
+| `size`            | `"small" \| "medium" \| "large"` | `"medium"`  | no       | Size variant of the checkbox                   |
+| `label`           | `string \| undefined`            | `undefined` | no       | Text label displayed next to the checkbox      |
+| `name`            | `string \| undefined`            | `undefined` | no       | Form field name for form submission            |
+| `value`           | `string`                         | `""`        | no       | Value submitted when checkbox is checked       |
+| `helperText`      | `string \| undefined`            | `undefined` | no       | Helper text displayed below the checkbox       |
+| `hideErrors`      | `boolean`                        | `false`     | no       | Hides error messages from InputErrorMixin      |
+| `ariaDescribedby` | `string \| undefined`            | `undefined` | no       | ARIA describedby attribute for accessibility   |
 
 ### FormMixin Properties
 
@@ -861,6 +860,9 @@ interface MjoCheckboxChangeEvent extends CustomEvent {
 | ------------------------------------------ | ---------------------------------------------------------------------- |
 | `getValue(): string`                       | Returns the checkbox value if checked, empty string if not             |
 | `setValue(value: string): void`            | Sets the checkbox value property                                       |
+| `setChecked(checked: boolean): void`       | Programmatically sets the checked state                                |
+| `click(): void`                            | Programmatically clicks the checkbox (toggles state)                   |
+| `toggle(): void`                           | Toggles the checkbox state (same as click)                             |
 | `setIndeterminate(value: boolean): void`   | Sets the indeterminate state and dispatches indeterminate-change event |
 | `reportValidity(): boolean`                | Validates the checkbox and returns validity state                      |
 | `setCustomValidity(message: string): void` | Sets custom validation message                                         |

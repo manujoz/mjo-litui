@@ -46,11 +46,9 @@ export class ExampleRadioBasic extends LitElement {
 }
 ```
 
-````
+## Color Variants, Sizes and States
 
-## Color Variants and States
-
-Configure radio buttons with different colors and states:
+Configure radio buttons with different colors, sizes and states:
 
 ```ts
 import { LitElement, html } from "lit";
@@ -74,6 +72,16 @@ export class ExampleRadioVariants extends LitElement {
                     <mjo-radio name="secondary" value="option1" label="Secondary Option" color="secondary" checked></mjo-radio>
                 </div>
 
+                <!-- Sizes -->
+                <div>
+                    <h4>Sizes</h4>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <mjo-radio name="sizes" value="small" label="Small size" size="small" checked></mjo-radio>
+                        <mjo-radio name="sizes" value="medium" label="Medium size (default)" size="medium"></mjo-radio>
+                        <mjo-radio name="sizes" value="large" label="Large size" size="large"></mjo-radio>
+                    </div>
+                </div>
+
                 <!-- Disabled States -->
                 <div>
                     <h4>Disabled States</h4>
@@ -90,7 +98,7 @@ export class ExampleRadioVariants extends LitElement {
         `;
     }
 }
-````
+```
 
 ## Form Integration
 
@@ -214,27 +222,31 @@ export class ExampleRadioThemeMixin extends ThemeMixin(LitElement) {
 
 ## Properties
 
-| Name              | Type                       | Default     | Description                                           |
-| ----------------- | -------------------------- | ----------- | ----------------------------------------------------- |
-| `color`           | `"primary" \| "secondary"` | `"primary"` | Color scheme for the radio button                     |
-| `checked`         | `boolean`                  | `false`     | Whether the radio button is checked                   |
-| `disabled`        | `boolean`                  | `false`     | Whether the radio button is disabled                  |
-| `helperText`      | `string`                   | -           | Helper text displayed below the radio button          |
-| `label`           | `string`                   | -           | Label text displayed next to the radio button         |
-| `name`            | `string`                   | -           | Form field name for grouping radio buttons            |
-| `value`           | `string`                   | `""`        | Value associated with this radio button               |
-| `hideErrors`      | `boolean`                  | `false`     | Hide validation error messages                        |
-| `ariaDescribedby` | `string`                   | -           | Associates the radio with additional descriptive text |
-| `theme`           | `MjoRadioTheme`            | `{}`        | Theme configuration for the radio button              |
+| Name              | Type                             | Default     | Description                                           |
+| ----------------- | -------------------------------- | ----------- | ----------------------------------------------------- |
+| `color`           | `"primary" \| "secondary"`       | `"primary"` | Color scheme for the radio button                     |
+| `checked`         | `boolean`                        | `false`     | Whether the radio button is checked                   |
+| `disabled`        | `boolean`                        | `false`     | Whether the radio button is disabled                  |
+| `size`            | `"small" \| "medium" \| "large"` | `"medium"`  | Size variant of the radio button                      |
+| `helperText`      | `string`                         | -           | Helper text displayed below the radio button          |
+| `label`           | `string`                         | -           | Label text displayed next to the radio button         |
+| `name`            | `string`                         | -           | Form field name for grouping radio buttons            |
+| `value`           | `string`                         | `""`        | Value associated with this radio button               |
+| `hideErrors`      | `boolean`                        | `false`     | Hide validation error messages                        |
+| `ariaDescribedby` | `string`                         | -           | Associates the radio with additional descriptive text |
+| `theme`           | `MjoRadioTheme`                  | `{}`        | Theme configuration for the radio button              |
 
 ## Methods
 
-| Method                               | Description                                               |
-| ------------------------------------ | --------------------------------------------------------- |
-| `getValue()`                         | Returns the current value if checked, empty string if not |
-| `setValue(value: string)`            | Sets the value property of the radio button               |
-| `reportValidity()`                   | Checks validity and reports validation state to the user  |
-| `setCustomValidity(message: string)` | Sets a custom validation message                          |
+| Method                                     | Description                                               |
+| ------------------------------------------ | --------------------------------------------------------- |
+| `getValue(): string`                       | Returns the current value if checked, empty string if not |
+| `setValue(value: string): void`            | Sets the value property of the radio button               |
+| `setChecked(checked: boolean): void`       | Programmatically sets the checked state                   |
+| `click(): void`                            | Programmatically clicks the radio button                  |
+| `toggle(): void`                           | Toggles the radio button state (same as click)            |
+| `reportValidity(): boolean`                | Checks validity and reports validation state to the user  |
+| `setCustomValidity(message: string): void` | Sets a custom validation message                          |
 
 ## Events
 
@@ -265,22 +277,22 @@ interface MjoRadioChangeEvent extends CustomEvent {
 
 ## CSS Custom Properties
 
-| Property                               | Default                                                    | Description                      |
-| -------------------------------------- | ---------------------------------------------------------- | -------------------------------- |
-| `--mjo-radio-border-color`             | `var(--mjo-foreground-color-low, rgb(51, 51, 51))`         | Border color for unchecked state |
-| `--mjo-radio-checked-color`            | `var(--mjo-primary-color)`                                 | Color when checked               |
-| `--mjo-radio-checked-border-color`     | `var(--mjo-radio-checked-color, var(--mjo-primary-color))` | Border color when checked        |
-| `--mjo-radio-checked-background-color` | `transparent`                                              | Background color when checked    |
-| `--mjo-radio-disabled-opacity`         | `0.5`                                                      | Opacity when disabled            |
-| `--mjo-radio-focus-color`              | `rgba(59, 130, 246, 0.1)`                                  | Focus indicator shadow color     |
-| `--mjo-radio-focus-outline-color`      | `var(--mjo-primary-color)`                                 | Focus outline color              |
-| `--mjo-radio-label-color`              | `inherit`                                                  | Label text color                 |
-| `--mjo-radio-label-font-size`          | `inherit`                                                  | Label font size                  |
-| `--mjo-radio-label-font-weight`        | `inherit`                                                  | Label font weight                |
-| `--mjo-radio-helper-color`             | `var(--mjo-foreground-color-low)`                          | Helper text color                |
-| `--mjo-radio-helper-font-size`         | `inherit`                                                  | Helper text font size            |
-| `--mjo-radio-helper-font-weight`       | `inherit`                                                  | Helper text font weight          |
-| `--mjo-space-small`                    | `5px`                                                      | Spacing between radio and label  |
+| Property                           | Default                                                    | Description                      |
+| ---------------------------------- | ---------------------------------------------------------- | -------------------------------- |
+| `--mjo-radio-border-color`         | `var(--mjo-foreground-color-low, rgb(51, 51, 51))`         | Border color for unchecked state |
+| `--mjo-radio-checked-color`        | `var(--mjo-primary-color)`                                 | Color when checked               |
+| `--mjo-radio-checked-border-color` | `var(--mjo-radio-checked-color, var(--mjo-primary-color))` | Border color when checked        |
+| `--mjo-radio-checked-icon-color`   | `var(--mjo-primary-foreground-color)`                      | Icon color when checked          |
+| `--mjo-radio-disabled-opacity`     | `0.5`                                                      | Opacity when disabled            |
+| `--mjo-radio-focus-color`          | `rgba(59, 130, 246, 0.1)`                                  | Focus indicator shadow color     |
+| `--mjo-radio-focus-outline-color`  | `var(--mjo-primary-color)`                                 | Focus outline color              |
+| `--mjo-radio-label-color`          | `inherit`                                                  | Label text color                 |
+| `--mjo-radio-label-font-size`      | `inherit`                                                  | Label font size                  |
+| `--mjo-radio-label-font-weight`    | `inherit`                                                  | Label font weight                |
+| `--mjo-radio-helper-color`         | `var(--mjo-foreground-color-low)`                          | Helper text color                |
+| `--mjo-radio-helper-font-size`     | `inherit`                                                  | Helper text font size            |
+| `--mjo-radio-helper-font-weight`   | `inherit`                                                  | Helper text font weight          |
+| `--mjo-space-small`                | `5px`                                                      | Spacing between radio and label  |
 
 ## Theme Interface
 

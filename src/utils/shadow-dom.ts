@@ -73,6 +73,16 @@ export const querySelectorShadowRoot = (selector: keyof HTMLElementTagNameMap, e
     return null;
 };
 
+export const searchParentElement = (component: HTMLElement, tagName: string) => {
+    const parentNodesGen = getParentNodes(component);
+    for (const parent of parentNodesGen) {
+        if (parent.tagName === tagName.toUpperCase()) {
+            return parent;
+        }
+    }
+    return null;
+};
+
 export const getInheritBackgroundColor = (component: HTMLElement) => {
     const parentNodesGen = getParentNodes(component);
     let parent = parentNodesGen.next();

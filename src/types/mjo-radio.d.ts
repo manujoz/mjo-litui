@@ -10,9 +10,6 @@ export interface MjoRadioChangeEvent extends CustomEvent {
         checked: boolean;
         value: string;
         name: string;
-        previousState: {
-            checked: boolean;
-        };
     };
 }
 
