@@ -39,12 +39,12 @@ export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
 
         setTimeout(() => {
             ripples.remove();
-        }, 800);
+        }, 500);
 
         clearTimeout(this.timeoutRipple);
         this.timeoutRipple = setTimeout(() => {
             container.setAttribute("hidden", "");
-        }, 850);
+        }, 550);
     };
 
     static styles = [
@@ -75,7 +75,7 @@ export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
                 transform: translate(-50%, -50%);
                 pointer-events: none;
                 border-radius: 50%;
-                animation: ripple 0.8s linear infinite;
+                animation: ripple 0.5s linear infinite;
             }
             @keyframes ripple {
                 0% {
@@ -84,8 +84,8 @@ export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
                     opacity: var(--mo-ripple-opacity, 0.25);
                 }
                 100% {
-                    width: 800px;
-                    height: 800px;
+                    width: 300%;
+                    height: 300%;
                     opacity: 0;
                 }
             }

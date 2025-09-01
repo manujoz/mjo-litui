@@ -1,4 +1,4 @@
-import type { MjoTypographySize, MjoTypographyTag, MjoTypographyWeight } from "./types/mjo-typography";
+import type { MjoTypographyColor, MjoTypographySize, MjoTypographyTag, MjoTypographyWeight } from "./types/mjo-typography";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -10,6 +10,7 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
     @property({ type: String }) tag: MjoTypographyTag = "p";
     @property({ type: String }) size: MjoTypographySize = "base";
     @property({ type: String }) weight: MjoTypographyWeight = "regular";
+    @property({ type: String }) color: MjoTypographyColor = "inherit";
 
     // ARIA Properties (using Lit's native support)
     @property({ type: String, attribute: "aria-labelledby", reflect: true }) ariaLabelledby?: string;
@@ -19,19 +20,19 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
     render() {
         switch (this.tag) {
             case "h1":
-                return html`<h1 class=${`${this.size} ${this.weight}`}><slot></slot></h1>`;
+                return html`<h1 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h1>`;
             case "h2":
-                return html`<h2 class=${`${this.size} ${this.weight}`}><slot></slot></h2>`;
+                return html`<h2 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h2>`;
             case "h3":
-                return html`<h3 class=${`${this.size} ${this.weight}`}><slot></slot></h3>`;
+                return html`<h3 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h3>`;
             case "h4":
-                return html`<h4 class=${`${this.size} ${this.weight}`}><slot></slot></h4>`;
+                return html`<h4 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h4>`;
             case "h5":
-                return html`<h5 class=${`${this.size} ${this.weight}`}><slot></slot></h5>`;
+                return html`<h5 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h5>`;
             case "span":
-                return html`<span class=${`${this.size} ${this.weight}`}><slot></slot></span>`;
+                return html`<span class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></span>`;
             case "p":
-                return html`<p class=${`${this.size} ${this.weight}`}><slot></slot></p>`;
+                return html`<p class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></p>`;
             default:
                 return html`<slot></slot>`;
         }
@@ -100,6 +101,24 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
             }
             .bold {
                 font-weight: var(--mjo-typography-font-weight-bold, 600);
+            }
+            .primary {
+                color: var(--mjo-primary-color, currentColor);
+            }
+            .secondary {
+                color: var(--mjo-secondary-color, currentColor);
+            }
+            .success {
+                color: var(--mjo-color-success, currentColor);
+            }
+            .warning {
+                color: var(--mjo-color-warning, currentColor);
+            }
+            .error {
+                color: var(--mjo-color-error, currentColor);
+            }
+            .info {
+                color: var(--mjo-color-info, currentColor);
             }
         `,
     ];

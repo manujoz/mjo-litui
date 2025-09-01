@@ -41,7 +41,7 @@ export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
             }
             .container {
                 position: relative;
-                padding: var(--mjo-card-padding, var(--mjo-space-small));
+                padding: var(--mjo-card-padding, inherit);
                 box-shadow: var(--mjo-card-box-shadow, var(--mjo-box-shadow-1, inherit));
                 background-color: var(--mjo-card-background-color, var(--mjo-background-color-card, white));
                 border: var(--mjo-card-border, none);

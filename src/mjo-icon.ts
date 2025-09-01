@@ -7,6 +7,8 @@ import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
+import "./mjo-ripple.js";
+
 /**
  * @summary Flexible SVG icon component with accessibility support, theming, and interaction capabilities.
  *
@@ -71,7 +73,7 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
                 @click=${this.#handleClick}
                 @keydown=${this.#handleKeydown}
             >
-                ${unsafeSVG(this.src)}
+                ${unsafeSVG(this.src)} ${this.clickable && !this.disabled ? html`<mjo-ripple></mjo-ripple>` : nothing}
             </div>
         `;
     }
@@ -263,6 +265,7 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
                 padding: var(--mjo-icon-padding, 0.2em);
                 transition: var(--mjo-icon-transition, all 0.2s ease);
                 transform-origin: center;
+                overflow: hidden;
             }
 
             .icon-container.clickable:hover {
