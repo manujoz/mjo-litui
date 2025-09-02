@@ -2,7 +2,7 @@ import { MjoInputTheme, MjoThemeConfig, MjoThemeModes, MjoThemeShadeStructure } 
 
 import { defaultTheme } from "../theme/default-theme.js";
 
-export const createMjoStyleThemeElement = ({ userConfig = {}, themeMode = "light" }: { userConfig?: MjoThemeConfig; themeMode: MjoThemeModes }) => {
+export const MjoThemeSSRGenerator = ({ userConfig = {}, themeMode = "light" }: { userConfig?: MjoThemeConfig; themeMode: MjoThemeModes }) => {
     const mergedConfig = structuredClone(defaultTheme);
 
     mergeConfig(mergedConfig, userConfig);

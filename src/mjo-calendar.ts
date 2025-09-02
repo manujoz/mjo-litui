@@ -1116,27 +1116,27 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             [data-color="secondary"] mjoint-calendar-header,
             [data-color="secondary"] mjoint-calendar-month-picker,
             [data-color="secondary"] mjoint-calendar-year-picker {
-                --mjo-button-primary-color: var(--mjo-secondary-color, #cc3d74);
+                --mjo-button-primary-color: var(--mjo-secondary-color, #7dc717);
                 --mjo-button-secondary-foreground-color: var(--mjo-secondary-foreground-color, #ffffff);
-                --mjo-calendar-picker-button-selected-background: var(--mjo-secondary-color, #cc3d74);
-                --mjo-calendar-picker-button-selected-border: var(--mjo-secondary-color, #cc3d74);
+                --mjo-calendar-picker-button-selected-background: var(--mjo-secondary-color, #7dc717);
+                --mjo-calendar-picker-button-selected-border: var(--mjo-secondary-color, #7dc717);
                 --mjo-calendar-picker-button-selected-color: var(--mjo-secondary-foreground-color, #ffffff);
-                --mjo-calendar-picker-button-hover-background: var(--mjo-secondary-color-alpha2, #cc3d74);
-                --mjo-calendar-picker-button-hover-border: var(--mjo-secondary-color, #cc3d74);
-                --mjo-calendar-nav-hover-background: var(--mjo-secondary-color-alpha2, #cc3d74);
-                --mjo-calendar-nav-hover-border: var(--mjo-secondary-color, #cc3d74);
+                --mjo-calendar-picker-button-hover-background: var(--mjo-secondary-color-alpha2, #7dc717);
+                --mjo-calendar-picker-button-hover-border: var(--mjo-secondary-color, #7dc717);
+                --mjo-calendar-nav-hover-background: var(--mjo-secondary-color-alpha2, #7dc717);
+                --mjo-calendar-nav-hover-border: var(--mjo-secondary-color, #7dc717);
             }
 
             /* Color variations */
             [data-color="secondary"] mjoint-calendar-grid {
                 --mjo-calendar-today-background: var(--mjo-calendar-today-background-secondary, var(--mjo-secondary-color-alpha2, rgba(204, 61, 116, 0.1)));
-                --mjo-calendar-today-color: var(--mjo-calendar-today-color-secondary, var(--mjo-secondary-color, #cc3d74));
-                --mjo-calendar-selected-background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #cc3d74));
+                --mjo-calendar-today-color: var(--mjo-calendar-today-color-secondary, var(--mjo-secondary-color, #7dc717));
+                --mjo-calendar-selected-background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #7dc717));
                 --mjo-calendar-selected-color: var(--mjo-calendar-selected-color-secondary, white);
-                --mjo-calendar-range-endpoint-background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #cc3d74));
+                --mjo-calendar-range-endpoint-background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #7dc717));
                 --mjo-calendar-range-endpoint-color: var(--mjo-calendar-selected-color-secondary, white);
                 --mjo-calendar-range-background: var(--mjo-calendar-range-background-secondary, var(--mjo-secondary-color-alpha1, rgba(204, 61, 116, 0.2)));
-                --mjo-calendar-range-color: var(--mjo-calendar-range-color-secondary, var(--mjo-secondary-color, #cc3d74));
+                --mjo-calendar-range-color: var(--mjo-calendar-range-color-secondary, var(--mjo-secondary-color, #7dc717));
             }
         `,
     ];

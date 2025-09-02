@@ -36,44 +36,20 @@
     /* Colors */
     --mjo-color-white: #ffffff;
     --mjo-color-black: #000000;
-    --mjo-color-warning: #ff9800;
-    --mjo-color-warning-foreground: #000000;
-    --mjo-color-success: #4caf50;
-    --mjo-color-success-foreground: #000000;
-    --mjo-color-error: #f44336;
-    --mjo-color-error-foreground: #ffffff;
-    --mjo-color-info: #128ada;
-    --mjo-color-info-foreground: #ffffff;
+    --mjo-color-warning: {{WARNING_COLOR}};
+    --mjo-color-warning-foreground: {{WARNING_FOREGROUND}};
+    --mjo-color-success: {{SUCCESS_COLOR}};
+    --mjo-color-success-foreground: {{SUCCESS_FOREGROUND}};
+    --mjo-color-error: {{ERROR_COLOR}};
+    --mjo-color-error-foreground: {{ERROR_FOREGROUND}};
+    --mjo-color-info: {{INFO_COLOR}};
+    --mjo-color-info-foreground: {{INFO_FOREGROUND}};
     --mjo-color-default: #777777;
     --mjo-color-default-foreground: #ffffff;
-    --mjo-color-gradient: linear-gradient(
-        133deg,
-        #1aa8ed 0%,
-        #0082c2 7%,
-        #005e99 14%,
-        #003c71 30%,
-        #001a4c 46%,
-        #001a4c 66%,
-        #003300 76%,
-        #3a7a00 91%,
-        #5ba000 97%,
-        #7dc717 100%
-    );
-    --mjo-color-gradient1: linear-gradient(
-        133deg,
-        #7dc717 0%,
-        #5ba000 7%,
-        #3a7a00 14%,
-        #1a5500 30%,
-        #003300 46%,
-        #003300 66%,
-        #001a4c 76%,
-        #005e99 91%,
-        #0082c2 97%,
-        #1aa8ed 100%
-    );
-    --mjo-color-gradient2: linear-gradient(133deg, #000028 0%, #001a4c 37%, #003c71 77%, #005e99 89%, #0082c2 96%, #1aa8ed 100%);
-    --mjo-color-gradient3: linear-gradient(133deg, #001300 0%, #003300 37%, #1a5500 77%, #3a7a00 89%, #5ba000 96%, #7dc717 100%);
+    --mjo-color-gradient: linear-gradient(133deg,{{PRIMARY_COLOR}} 0%,{{PRIMARY_600}} 7%,{{PRIMARY_700}} 14%,{{PRIMARY_800}} 30%,{{PRIMARY_900}} 46%,{{PRIMARY_900}} 66%,{{SECONDARY_900}} 76%,{{SECONDARY_700}} 91%,{{SECONDARY_600}} 97%,{{SECONDARY_COLOR}} 100%);
+    --mjo-color-gradient1: linear-gradient(133deg,{{SECONDARY_COLOR}} 0%,{{SECONDARY_600}} 7%,{{SECONDARY_700}} 14%,{{SECONDARY_800}} 30%,{{SECONDARY_900}} 46%,{{SECONDARY_900}} 66%,{{PRIMARY_900}} 76%,{{PRIMARY_700}} 91%,{{PRIMARY_600}} 97%,{{PRIMARY_COLOR}} 100%);
+    --mjo-color-gradient2: linear-gradient(133deg,{{PRIMARY_950}} 0%,{{PRIMARY_900}} 37%,{{PRIMARY_800}} 77%,{{PRIMARY_700}} 89%,{{PRIMARY_600}} 96%,{{PRIMARY_COLOR}} 100%);
+    --mjo-color-gradient3: linear-gradient(133deg,{{SECONDARY_950}} 0%,{{SECONDARY_900}} 37%,{{SECONDARY_800}} 77%,{{SECONDARY_700}} 89%,{{SECONDARY_600}} 96%,{{SECONDARY_COLOR}} 100%);
 
     /* Blue Color Palette */
     --mjo-color-blue: #1aa8ed;
@@ -267,57 +243,57 @@
     --mjo-box-shadow-4: 4px 4px 8px rgba(0, 0, 0, 0.3);
     --mjo-box-shadow-5: 4px 4px 14px rgba(0, 0, 0, 0.25);
 
-    --mjo-primary-color: #1aa8ed;
-    --mjo-primary-color-hover: #008ccd;
-    --mjo-primary-color-alpha0: #1aa8ed00;
-    --mjo-primary-color-alpha1: #1aa8ed0b;
-    --mjo-primary-color-alpha2: #1aa8ed16;
-    --mjo-primary-color-alpha3: #1aa8ed21;
-    --mjo-primary-color-alpha4: #1aa8ed2c;
-    --mjo-primary-color-alpha5: #1aa8ed37;
-    --mjo-primary-color-alpha6: #1aa8ed42;
-    --mjo-primary-color-alpha7: #1aa8ed4d;
-    --mjo-primary-color-alpha8: #1aa8ed58;
-    --mjo-primary-color-alpha9: #1aa8ed63;
-    --mjo-primary-color-50: #f0faff;
-    --mjo-primary-color-100: #cdeafe;
-    --mjo-primary-color-200: #a9dafb;
-    --mjo-primary-color-300: #84caf7;
-    --mjo-primary-color-400: #5ab9f2;
-    --mjo-primary-color-500: #1aa8ed;
-    --mjo-primary-color-600: #0082c2;
-    --mjo-primary-color-700: #005e99;
-    --mjo-primary-color-800: #003c71;
-    --mjo-primary-color-900: #001a4c;
-    --mjo-primary-color-950: #000028;
+    --mjo-primary-color: {{PRIMARY_COLOR}};
+    --mjo-primary-color-hover: {{PRIMARY_HOVER}};
+    --mjo-primary-color-alpha0: {{PRIMARY_ALPHA0}};
+    --mjo-primary-color-alpha1: {{PRIMARY_ALPHA1}};
+    --mjo-primary-color-alpha2: {{PRIMARY_ALPHA2}};
+    --mjo-primary-color-alpha3: {{PRIMARY_ALPHA3}};
+    --mjo-primary-color-alpha4: {{PRIMARY_ALPHA4}};
+    --mjo-primary-color-alpha5: {{PRIMARY_ALPHA5}};
+    --mjo-primary-color-alpha6: {{PRIMARY_ALPHA6}};
+    --mjo-primary-color-alpha7: {{PRIMARY_ALPHA7}};
+    --mjo-primary-color-alpha8: {{PRIMARY_ALPHA8}};
+    --mjo-primary-color-alpha9: {{PRIMARY_ALPHA9}};
+    --mjo-primary-color-50: {{PRIMARY_50}};
+    --mjo-primary-color-100: {{PRIMARY_100}};
+    --mjo-primary-color-200: {{PRIMARY_200}};
+    --mjo-primary-color-300: {{PRIMARY_300}};
+    --mjo-primary-color-400: {{PRIMARY_400}};
+    --mjo-primary-color-500: {{PRIMARY_500}};
+    --mjo-primary-color-600: {{PRIMARY_600}};
+    --mjo-primary-color-700: {{PRIMARY_700}};
+    --mjo-primary-color-800: {{PRIMARY_800}};
+    --mjo-primary-color-900: {{PRIMARY_900}};
+    --mjo-primary-color-950: {{PRIMARY_950}};
 
-    --mjo-primary-foreground-color: #ffffff;
+    --mjo-primary-foreground-color: {{PRIMARY_FOREGROUND}};
 
-    --mjo-secondary-color: #7dc717;
-    --mjo-secondary-color-hover: #63a900;
-    --mjo-secondary-color-alpha0: #7dc71700;
-    --mjo-secondary-color-alpha1: #7dc7170b;
-    --mjo-secondary-color-alpha2: #7dc71716;
-    --mjo-secondary-color-alpha3: #7dc71721;
-    --mjo-secondary-color-alpha4: #7dc7172c;
-    --mjo-secondary-color-alpha5: #7dc71737;
-    --mjo-secondary-color-alpha6: #7dc71742;
-    --mjo-secondary-color-alpha7: #7dc7174d;
-    --mjo-secondary-color-alpha8: #7dc71758;
-    --mjo-secondary-color-alpha9: #7dc71763;
-    --mjo-secondary-color-50: #f4fcee;
-    --mjo-secondary-color-100: #dcf2cb;
-    --mjo-secondary-color-200: #c4e8a8;
-    --mjo-secondary-color-300: #addd83;
-    --mjo-secondary-color-400: #95d259;
-    --mjo-secondary-color-500: #7dc717;
-    --mjo-secondary-color-600: #5ba000;
-    --mjo-secondary-color-700: #3a7a00;
-    --mjo-secondary-color-800: #1a5500;
-    --mjo-secondary-color-900: #003300;
-    --mjo-secondary-color-950: #001300;
+    --mjo-secondary-color: {{SECONDARY_COLOR}};
+    --mjo-secondary-color-hover: {{SECONDARY_HOVER}};
+    --mjo-secondary-color-alpha0: {{SECONDARY_ALPHA0}};
+    --mjo-secondary-color-alpha1: {{SECONDARY_ALPHA1}};
+    --mjo-secondary-color-alpha2: {{SECONDARY_ALPHA2}};
+    --mjo-secondary-color-alpha3: {{SECONDARY_ALPHA3}};
+    --mjo-secondary-color-alpha4: {{SECONDARY_ALPHA4}};
+    --mjo-secondary-color-alpha5: {{SECONDARY_ALPHA5}};
+    --mjo-secondary-color-alpha6: {{SECONDARY_ALPHA6}};
+    --mjo-secondary-color-alpha7: {{SECONDARY_ALPHA7}};
+    --mjo-secondary-color-alpha8: {{SECONDARY_ALPHA8}};
+    --mjo-secondary-color-alpha9: {{SECONDARY_ALPHA9}};
+    --mjo-secondary-color-50: {{SECONDARY_50}};
+    --mjo-secondary-color-100: {{SECONDARY_100}};
+    --mjo-secondary-color-200: {{SECONDARY_200}};
+    --mjo-secondary-color-300: {{SECONDARY_300}};
+    --mjo-secondary-color-400: {{SECONDARY_400}};
+    --mjo-secondary-color-500: {{SECONDARY_500}};
+    --mjo-secondary-color-600: {{SECONDARY_600}};
+    --mjo-secondary-color-700: {{SECONDARY_700}};
+    --mjo-secondary-color-800: {{SECONDARY_800}};
+    --mjo-secondary-color-900: {{SECONDARY_900}};
+    --mjo-secondary-color-950: {{SECONDARY_950}};
 
-    --mjo-secondary-foreground-color: #000000;
+    --mjo-secondary-foreground-color: {{SECONDARY_FOREGROUND}};
 
     --mjo-border-color-low: #fcfcfc;
     --mjo-border-color: #dddddd;

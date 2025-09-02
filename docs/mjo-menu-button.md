@@ -195,8 +195,8 @@ export class ExampleMenuButtonMethods extends LitElement {
 
 The component automatically uses different hover colors based on the `color` attribute:
 
--   **Primary**: `var(--mjo-menu-button-color-hover, var(--mjo-primary-color, #1d7fdb))`
--   **Secondary**: `var(--mjo-menu-button-color-hover, var(--mjo-secondary-color, #cc3d74))`
+-   **Primary**: `var(--mjo-menu-button-color-hover, var(--mjo-primary-color, #1aa8ed))`
+-   **Secondary**: `var(--mjo-menu-button-color-hover, var(--mjo-secondary-color, #7dc717))`
 -   **Success**: `var(--mjo-menu-button-color-hover, var(--mjo-color-success, #20d338))`
 -   **Info**: `var(--mjo-menu-button-color-hover, var(--mjo-color-info, #2065cc))`
 -   **Warning**: `var(--mjo-menu-button-color-hover, var(--mjo-color-warning, #df950c))`

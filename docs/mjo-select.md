@@ -893,8 +893,8 @@ export class ExampleOptionProperties extends LitElement {
 | `--mjo-input-color`              | `var(--mjo-foreground-color, #222222)`                        | Text color            |
 | `--mjo-input-font-size`          | `1em`                                                         | Font size             |
 | `--mjo-input-padding`            | `calc(1em / 2 - 3px) calc(1em / 2 - 2px) calc(1em / 2 - 4px)` | Input padding         |
-| `--mjo-input-primary-color`      | `var(--mjo-primary-color, #1d7fdb)`                           | Primary focus color   |
-| `--mjo-input-secondary-color`    | `var(--mjo-secondary-color, #cc3d74)`                         | Secondary focus color |
+| `--mjo-input-primary-color`      | `var(--mjo-primary-color, #1aa8ed)`                           | Primary focus color   |
+| `--mjo-input-secondary-color`    | `var(--mjo-secondary-color, #7dc717)`                         | Secondary focus color |
 
 ### Option Styling
 

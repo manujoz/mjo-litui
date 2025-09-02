@@ -5,7 +5,9 @@ This guide describes how the theming system works, which global CSS variables it
 ## Key Components
 
 -   `<mjo-theme>`: generates CSS variables (prefix `--mjo-`) at the global level (`:root`) or locally (the component's own Shadow DOM) by merging `defaultTheme` + user overrides.
+-   `MjoThemeSSRGenerator`: server-side utility for generating theme styles during SSR (Server-Side Rendering), eliminating FOUC (Flash of Unstyled Content).
 -   `ThemeMixin`: enables per-component variable overrides via its `theme` property, without affecting the global theme.
+-   **CLI Theme Generator**: `npx mjo-litui create-theme` command that creates complete CSS theme files with interactive prompts and automatic color scale generation.
 
 ## `<mjo-theme>` API
 
@@ -21,135 +23,271 @@ Useful public method (if you need to force regeneration after mutating `config`)
 
 Note: The current code automatically reapplies the theme when the `theme` property changes, but NOT when you mutate internal properties of `config` without reassigning. To apply changes after `theme.config.something = ...`, do a reassignment `theme.config = { ...theme.config }` or call `theme.applyTheme()`.
 
-## Basic Examples (with Lit components)
+## Server-Side Rendering (SSR)
 
-Below examples assume you are building your own Lit app components. All examples import the library once (tree‑shaking still works if you import only specific exports).
+For server-side applications, use `MjoThemeSSRGenerator` to pre-generate theme styles and avoid FOUC (Flash of Unstyled Content).
 
-### Global light theme
-
-Single global provider component placed high in your app:
+### API
 
 ```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-button";
+import { MjoThemeSSRGenerator } from 'mjo-litui/lib/theme';
 
-@customElement("example-global-theme")
-export class ExampleGlobalTheme extends LitElement {
-    render() {
-        return html`
-            <mjo-theme scope="global"></mjo-theme>
-            <mjo-button color="primary">Accept</mjo-button>
-        `;
-    }
+const styleTag = MjoThemeSSRGenerator({
+  themeMode: 'light' | 'dark',
+  userConfig?: Partial<MjoThemeConfig>
+});
+```
+
+Parameters:
+
+-   `themeMode`: `'light' | 'dark'` (default: `'light'`). Theme mode to apply.
+-   `userConfig`: partial object (`MjoThemeConfig`) merged with `defaultTheme`.
+
+Returns: HTML `<style>` tag string with generated CSS variables.
+
+### Express.js Example
+
+```ts
+import express from "express";
+import { MjoThemeSSRGenerator } from "mjo-litui/lib/theme";
+
+const app = express();
+
+app.get("*", (req, res) => {
+    // Detect theme from cookie, header, or user preferences
+    const themeMode = req.cookies["mjo-theme"] || "light";
+
+    // Generate theme styles
+    const themeStyles = MjoThemeSSRGenerator({
+        themeMode,
+        userConfig: {
+            light: {
+                primaryColor: { default: "#0066cc", hover: "#0052a3" },
+            },
+        },
+    });
+
+    // Inject into HTML head
+    const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>My App</title>
+        ${themeStyles}
+      </head>
+      <body>
+        <mjo-button color="primary">Click me</mjo-button>
+      </body>
+    </html>
+  `;
+
+    res.send(html);
+});
+```
+
+### Next.js App Router Example
+
+```tsx
+import { MjoThemeSSRGenerator } from "mjo-litui/lib/theme";
+import { cookies } from "next/headers";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const cookieStore = cookies();
+    const theme = cookieStore.get("mjo-theme")?.value || "light";
+
+    const themeStyles = MjoThemeSSRGenerator({
+        themeMode: theme as "light" | "dark",
+    });
+
+    return (
+        <html>
+            <head dangerouslySetInnerHTML={{ __html: themeStyles }} />
+            <body>{children}</body>
+        </html>
+    );
 }
 ```
 
-### Switch to dark and override primary
+## CLI Theme Generation
 
-Use property bindings for both mode and config. No imperative DOM queries needed:
+For developers who prefer a guided approach, mjo-litui provides a CLI tool that generates complete theme CSS files through interactive prompts.
+
+### Command
+
+```bash
+npx mjo-litui create-theme
+```
+
+### Features
+
+-   **Interactive Configuration**: Step-by-step prompts for all theme colors
+-   **Automatic Color Scales**: Generates complete color palettes (50-950) from base colors using OKLCH color science
+-   **Contrast Calculation**: Automatically calculates optimal foreground colors for accessibility
+-   **Custom Output Location**: Choose where to save your theme file
+-   **Minification Option**: Optional CSS minification for production use
+
+### Usage Example
+
+```bash
+$ npx mjo-litui create-theme
+🎨 Welcome to mjo-litui theme creator!
+
+📁 Install location: ./my-custom-theme.css
+🔵 Primary color: #3b82f6
+🟢 Secondary color: #8b5cf6
+✅ Success color: #10b981
+ℹ️  Info color: #3b82f6
+⚠️  Warning color: #f59e0b
+❌ Error color: #ef4444
+🗜️  Minify CSS output? Yes
+
+✅ Theme created successfully!
+📁 File saved to: /path/to/my-custom-theme.css
+```
+
+### Generated Output
+
+The CLI creates a complete CSS file with:
+
+```css
+:root {
+    /* Base tokens */
+    --mjo-radius-small: 3px;
+    --mjo-font-size: 1em;
+    --mjo-space-medium: 16px;
+
+    /* Generated color palettes */
+    --mjo-primary-color: #3b82f6;
+    --mjo-primary-color-hover: #2563eb;
+    --mjo-primary-foreground-color: #ffffff;
+    --mjo-primary-color-50: #eff6ff;
+    --mjo-primary-color-100: #dbeafe;
+    /* ... complete scale through 950 ... */
+
+    /* Alpha transparency variants */
+    --mjo-primary-color-alpha0: #3b82f600;
+    --mjo-primary-color-alpha1: #3b82f611;
+    /* ... through alpha9 ... */
+
+    /* All semantic colors and contrasts */
+    --mjo-background-color: #ffffff;
+    --mjo-foreground-color: #333333;
+    --mjo-border-color: #dddddd;
+}
+
+.dark {
+    /* Dark theme variants automatically included */
+    --mjo-background-color: #151515;
+    --mjo-foreground-color: #f0f0f0;
+}
+```
+
+### Integration
+
+Use the generated theme file in your project:
+
+```html
+<!-- Link the generated CSS -->
+<link rel="stylesheet" href="./my-custom-theme.css" />
+```
+
+### Color Science Benefits
+
+The CLI uses OKLCH color space for superior color generation:
+
+-   **Perceptual uniformity**: Colors appear equally spaced to human vision
+-   **Better accessibility**: More accurate contrast ratios
+-   **Smoother gradients**: Natural color transitions
+-   **Consistent lightness**: Maintains visual weight across the palette
+
+## Client-Side Usage
+
+## Client-Side Usage
+
+Below examples assume you are building your own Lit app components using `<mjo-theme>` for dynamic theming.
+
+### Global Theme Setup
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-theme";
 import "mjo-litui/mjo-button";
-import type { MjoThemeConfig } from "mjo-litui/types/mjo-theme";
 
-const darkPrimaryOverride: Partial<MjoThemeConfig> = {
-    dark: { primaryColor: { default: "#0F62FE", hover: "#0353E9" } },
-};
+@customElement("app-root")
+export class AppRoot extends LitElement {
+    @state() private darkMode = false;
 
-@customElement("example-toggle-theme")
-export class ExampleToggleTheme extends LitElement {
-    @state() private dark = true;
-
-    private toggleMode = () => (this.dark = !this.dark);
+    private toggleTheme = () => (this.darkMode = !this.darkMode);
 
     render() {
         return html`
-            <mjo-theme scope="global" .theme=${this.dark ? "dark" : "light"} .config=${darkPrimaryOverride}></mjo-theme>
-            <mjo-button variant="flat" @click=${this.toggleMode}> Toggle Theme (now ${this.dark ? "dark" : "light"}) </mjo-button>
+            <mjo-theme scope="global" .theme=${this.darkMode ? "dark" : "light"}></mjo-theme>
+            <mjo-button @click=${this.toggleTheme}> Switch to ${this.darkMode ? "light" : "dark"} mode </mjo-button>
         `;
     }
 }
 ```
 
-### Isolated local theme
-
-Wrap a subsection with a local-scoped theme so only its descendants inherit it:
+### Custom Theme Configuration
 
 ```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-card";
-
-@customElement("example-local-island")
-export class ExampleLocalIsland extends LitElement {
-    render() {
-        return html`
-            <section>
-                <h3>Default (global)</h3>
-                <mjo-button color="primary">Global area</mjo-button>
-            </section>
-            <section>
-                <h3>Local dark island</h3>
-                <mjo-theme theme="dark" scope="local">
-                    <mjo-card>
-                        <mjo-button color="secondary">Dark only</mjo-button>
-                    </mjo-card>
-                </mjo-theme>
-            </section>
-        `;
-    }
-}
-```
-
-## Overriding colors and scales
-
-The structure allows you to override:
-
--   Base palette (`colors`) for reusable colors (`--mjo-color-*`).
--   Mode (`light` / `dark`) for semantic colors (`--mjo-primary-*`, `--mjo-background-color-*`, etc.).
--   Global tokens for spacing, typography, and radii.
-
-Combined example (tokens + palettes + semantic overrides):
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-button";
 import type { MjoThemeConfig } from "mjo-litui/types/mjo-theme";
 
-const themeConfig: Partial<MjoThemeConfig> = {
-    radiusSmall: "2px",
-    spaceMedium: "18px",
+const customTheme: Partial<MjoThemeConfig> = {
+    radiusSmall: "4px",
     colors: {
-        success: "#22c55e",
-        error: "#dc2626",
-        blue: { default: "#2563eb", 500: "#2563eb", 600: "#1d4ed8" },
+        blue: { default: "#2563eb", hover: "#1d4ed8" },
     },
     light: {
         primaryColor: { default: "#2563eb", hover: "#1d4ed8" },
-        backgroundColor: { default: "#f5f7fa", high: "#ffffff", xlow: "#d9dde2" },
+    },
+    dark: {
+        primaryColor: { default: "#3b82f6", hover: "#2563eb" },
     },
 };
 
-@customElement("example-themed")
-export class ExampleThemed extends LitElement {
+@customElement("themed-app")
+export class ThemedApp extends LitElement {
     render() {
         return html`
-            <mjo-theme scope="global" theme="light" .config=${themeConfig}></mjo-theme>
-            <mjo-button color="primary">Primary</mjo-button>
-            <mjo-button color="success" variant="flat">Success</mjo-button>
+            <mjo-theme scope="global" theme="light" .config=${customTheme}></mjo-theme>
+            <mjo-button color="primary">Themed Button</mjo-button>
         `;
     }
 }
 ```
+
+### Local Theme Islands
+
+```ts
+@customElement("theme-islands")
+export class ThemeIslands extends LitElement {
+    render() {
+        return html`
+            <section>
+                <h3>Default Theme</h3>
+                <mjo-button color="primary">Global Button</mjo-button>
+            </section>
+
+            <mjo-theme theme="dark" scope="local">
+                <section>
+                    <h3>Dark Theme Island</h3>
+                    <mjo-button color="primary">Dark Button</mjo-button>
+                </section>
+            </mjo-theme>
+        `;
+    }
+}
+```
+
+## Theme Configuration
+
+The theme system supports comprehensive customization through:
+
+-   **Base palette** (`colors`) for reusable colors (`--mjo-color-*`)
+-   **Mode-specific colors** (`light`/`dark`) for semantic tokens (`--mjo-primary-*`, `--mjo-background-color-*`)
+-   **Global tokens** for spacing, typography, and radii
 
 ## Global CSS Variables (general)
 
@@ -266,9 +404,7 @@ Components consume these base variables to build their own (`--mjo-button-*`, `-
 
 ## Per-component overrides with `ThemeMixin`
 
-Some components (e.g., `mjo-button`) extend `ThemeMixin`. You can pass a `theme` object with camelCase keys and the mixin will generate CSS variables in its Shadow DOM using the pattern `--mjo-<tag>-<kebab-case(property)>`.
-
-Example with Lit:
+Some components extend `ThemeMixin`, allowing granular customization via their `theme` property. The mixin generates CSS variables in the component's Shadow DOM using the pattern `--mjo-<tag>-<kebab-case(property)>`.
 
 ```ts
 import { LitElement, html } from "lit";
@@ -277,39 +413,57 @@ import "mjo-litui/mjo-button";
 import type { MjoButtonTheme } from "mjo-litui/types/mjo-theme";
 
 const buttonTheme: Partial<MjoButtonTheme> = {
-    primaryColor: "#10B981", // -> --mjo-button-primary-color
+    primaryColor: "#10B981",
     primaryColorHover: "#059669",
-    fontSize: "0.9rem", // -> --mjo-button-font-size
-    padding: "0.4rem 0.9rem", // -> --mjo-button-padding
+    fontSize: "0.9rem",
+    padding: "0.5rem 1rem",
 };
 
-@customElement("example-button-themed")
-export class ExampleButtonThemed extends LitElement {
+@customElement("example-themed-button")
+export class ExampleThemedButton extends LitElement {
     render() {
         return html`
-            <mjo-button color="primary" .theme=${buttonTheme}>Save</mjo-button>
-            <mjo-button color="secondary">Cancel</mjo-button>
+            <mjo-button color="primary" .theme=${buttonTheme}>Custom Button</mjo-button>
+            <mjo-button color="secondary">Default Button</mjo-button>
         `;
     }
 }
 ```
 
-This does NOT modify the global theme, only that button.
+This approach affects only the specific component instance, not the global theme.
 
-### Relevant differences
+## Theming Approaches Comparison
 
-| Case                         | Scope                        | Example                                            |
-| ---------------------------- | ---------------------------- | -------------------------------------------------- |
-| `<mjo-theme scope="global">` | Whole application            | Changing `--mjo-primary-color` impacts all buttons |
-| `<mjo-theme scope="local">`  | Only descendants in its slot | Two zones with different schemes                   |
-| `ThemeMixin` (`.theme` prop) | Only specific instance       | A special highlighted button                       |
+| Approach                     | Scope                      | Use Case                                | Example                              |
+| ---------------------------- | -------------------------- | --------------------------------------- | ------------------------------------ |
+| `npx mjo-litui create-theme` | Static CSS file generation | Design systems, complete theme creation | Brand theme with full color palettes |
+| `MjoThemeSSRGenerator`       | Server-side pre-render     | SSR applications, eliminate FOUC        | Express.js, Next.js apps             |
+| `<mjo-theme scope="global">` | Application-wide           | Global theme changes                    | App-wide dark/light mode             |
+| `<mjo-theme scope="local">`  | Component descendants only | Theme islands, previews                 | Dark sidebar in light app            |
+| `ThemeMixin` (`.theme` prop) | Single component instance  | Special styling                         | Highlighted action buttons           |
 
-## Best practices
+## Best Practices
 
-1. Change global tokens first before adjusting component-specific variables (promotes consistency).
-2. Use `scope="local"` for previews/embeds without affecting the rest.
-3. For dynamic changes (toggle dark/light), modify the `theme` property of `<mjo-theme>` and, if you mutate `config`, reassign or call `applyTheme()`.
-4. Avoid overusing `ThemeMixin` for global styles: it's meant for exceptions.
+### Development Workflow
+
+1. **Start with CLI for complete themes**: Use `npx mjo-litui create-theme` to generate comprehensive design systems with proper color scales and accessibility.
+2. **Define global tokens**: Establish spacing, typography, and color foundations before component-specific customizations.
+3. **Use SSR for production**: Implement `MjoThemeSSRGenerator` to eliminate FOUC and improve perceived performance.
+4. **Scope themes appropriately**: Use `scope="global"` for app-wide changes, `scope="local"` for isolated sections.
+5. **Component theming sparingly**: Reserve `ThemeMixin` for truly exceptional cases, not global patterns.
+
+### Dynamic Theme Changes
+
+-   For client-side theme switching, modify the `theme` property of `<mjo-theme>`.
+-   If mutating `config` object properties, reassign the entire object or call `applyTheme()` to trigger updates.
+-   In SSR contexts, detect theme preferences from cookies, headers, or user settings.
+
+### Performance Considerations
+
+-   **CLI-generated themes**: Static CSS files are optimally cached by browsers and provide the best performance for consistent themes.
+-   **SSR-generated styles**: Cached by browsers and eliminate render-blocking theme generation.
+-   **Local theme scopes**: Only affect their descendants, minimizing CSS recalculation.
+-   **Component-level theming**: Creates additional CSS variables but provides precise control.
 
 ## Quick debugging
 
@@ -317,12 +471,15 @@ In DevTools, inspect a component and check the `:host` section to see the active
 
 ## Summary
 
-1. Define a global `<mjo-theme>` with the base tokens.
-2. Adjust palettes (`colors`) and semantics (`light`/`dark`).
-3. Use `ThemeMixin` only for specific customizations.
-4. Document specific variables in each component's guide (not here).
+The mjo-litui theming system provides flexible styling options for different deployment scenarios:
 
-With this, you can establish a consistent and adaptable visual identity for your entire component library.
+1. **CLI Theme Generation**: Use `npx mjo-litui create-theme` for complete design systems with automatic color scales and accessibility optimization.
+2. **Server-Side Rendering**: Use `MjoThemeSSRGenerator` for optimal performance and FOUC prevention.
+3. **Global Theming**: Define application-wide styles with `<mjo-theme scope="global">`.
+4. **Scoped Theming**: Create isolated theme areas with `<mjo-theme scope="local">`.
+5. **Component Theming**: Fine-tune individual components with `ThemeMixin`.
+
+This multi-layered approach ensures consistent visual identity while maintaining performance and flexibility across different application architectures.
 
 ## Complete API Reference
 

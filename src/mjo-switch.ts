@@ -301,7 +301,7 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 transition: transform 0.5s ease;
             }
             .container[data-color="secondary"] .checkItem mjo-icon {
-                color: var(--mjo-switch-background-color-checked, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-switch-background-color-checked, var(--mjo-secondary-color, #7dc717));
             }
             input {
                 display: none;

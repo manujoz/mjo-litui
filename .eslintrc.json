@@ -92,6 +92,14 @@
             "rules": {
                 "lit/no-complex-attribute-binding": "off"
             }
+        },
+        {
+            "files": ["cli/**/*.js"],
+            "rules": {
+                "no-console": "off",
+                "quotes": "off",
+            "semi": "off"
+            }
         }
     ]
 }

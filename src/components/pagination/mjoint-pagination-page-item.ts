@@ -76,24 +76,24 @@ export class MjointPaginationPageItem extends LitElement {
 
             button:hover:not(:disabled) {
                 background-color: var(--mjo-pagination-hover-background-color, var(--mjo-primary-color-alpha1, #f5f5f5));
-                color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
 
             button:focus {
                 background-color: var(--mjo-pagination-hover-background-color, var(--mjo-primary-color-alpha1, #f5f5f5));
-                color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1d7fdb));
-                outline-color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1aa8ed));
+                outline-color: var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
 
             button[data-color="secondary"]:hover:not(:disabled) {
                 background-color: var(--mjo-pagination-secondary-color-alpha1, var(--mjo-secondary-color-alpha1, #ffeef0));
-                color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
 
             button[data-color="secondary"]:focus {
                 background-color: var(--mjo-pagination-secondary-color-alpha1, var(--mjo-secondary-color-alpha1, #ffeef0));
-                color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #cc3d74));
-                outline-color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #7dc717));
+                outline-color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
 
             button[data-active] {

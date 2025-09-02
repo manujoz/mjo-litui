@@ -614,7 +614,7 @@ The component provides extensive customization through CSS variables with fallba
 | `--mjo-color-picker-border-style`       | `var(--mjo-input-border-style, solid)`                                   | Border style       |
 | `--mjo-color-picker-border-width`       | `var(--mjo-input-border-width, 1px)`                                     | Border width       |
 | `--mjo-color-picker-border-color`       | `var(--mjo-input-border-color, var(--mjo-border-color, #dddddd))`        | Border color       |
-| `--mjo-color-picker-border-color-focus` | `var(--mjo-input-border-color-focus, var(--mjo-primary-color, #1d7fdb))` | Focus border color |
+| `--mjo-color-picker-border-color-focus` | `var(--mjo-input-border-color-focus, var(--mjo-primary-color, #1aa8ed))` | Focus border color |
 | `--mjo-color-picker-radius`             | `var(--mjo-input-radius, var(--mjo-radius, 5px))`                        | Border radius      |
 | `--mjo-color-picker-box-shadow`         | `var(--mjo-input-box-shadow, none)`                                      | Box shadow effect  |
 | `--mjo-color-picker-box-shadow-focus`   | `var(--mjo-input-box-shadow-focus, 0 0 0 2px rgba(29, 127, 219, 0.2))`   | Focus box shadow   |

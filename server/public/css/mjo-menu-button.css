@@ -123,6 +123,6 @@
 
 /* Focus enhancement for demo */
 .playground-showcase mjo-menu-button:focus-visible {
-    outline: 3px solid var(--mjo-primary-color, #1d7fdb);
+    outline: 3px solid var(--mjo-primary-color, #1aa8ed);
     outline-offset: 4px;
 }

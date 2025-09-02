@@ -224,7 +224,7 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
         const colorMap = {
             default: "var(--mjo-color-default, #999999)",
             primary: "var(--mjo-primary-color, #4e9be4)",
-            secondary: "var(--mjo-secondary-color, #cc3d74)",
+            secondary: "var(--mjo-secondary-color, #7dc717)",
             success: "var(--mjo-color-success, #4caf50)",
             info: "var(--mjo-color-info, #2196f3)",
             warning: "var(--mjo-color-warning, #ff9800)",

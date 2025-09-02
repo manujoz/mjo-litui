@@ -334,10 +334,10 @@ export class MjointSliderHandle extends LitElement {
                     --mjo-slider-secondary-foreground-color,
                     var(--mjo-input-secondary-foreground-color, var(--mjo-secondary-foreground-color, #333333))
                 );
-                background-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)));
+                background-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717)));
             }
             .text[data-color="secondary"]::after {
-                border-top-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)));
+                border-top-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717)));
             }
             .outter {
                 position: absolute;
@@ -361,11 +361,11 @@ export class MjointSliderHandle extends LitElement {
                 box-shadow: 0 0 0 2px var(--mjo-slider-handle-focus-ring-color, var(--mjo-primary-color, #007bff));
             }
             .outter[data-color="secondary"] {
-                background-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)));
+                background-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717)));
             }
             .outter[data-color="secondary"]:focus-visible,
             .outter[data-color="secondary"][data-focused] {
-                box-shadow: 0 0 0 2px var(--mjo-slider-handle-focus-ring-color, var(--mjo-secondary-color, #cc3d74));
+                box-shadow: 0 0 0 2px var(--mjo-slider-handle-focus-ring-color, var(--mjo-secondary-color, #7dc717));
             }
             .outter[data-pressed] {
                 cursor: grabbing;

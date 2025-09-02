@@ -120,11 +120,11 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
 
             /* Color variants */
             a[data-color="primary"] {
-                color: var(--mjo-link-color-primary, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-link-color-primary, var(--mjo-primary-color, #1aa8ed));
             }
 
             a[data-color="secondary"] {
-                color: var(--mjo-link-color-secondary, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-link-color-secondary, var(--mjo-secondary-color, #7dc717));
             }
 
             a[data-color="default"] {
@@ -139,12 +139,12 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
             /* Focus states for accessibility */
             a:focus-visible {
                 outline: var(--mjo-link-focus-outline, 2px solid);
-                outline-color: var(--mjo-link-focus-outline-color, var(--mjo-primary-color, #1d7fdb));
+                outline-color: var(--mjo-link-focus-outline-color, var(--mjo-primary-color, #1aa8ed));
                 outline-offset: var(--mjo-link-focus-outline-offset, 2px);
                 border-radius: var(--mjo-link-focus-border-radius, 2px);
             }
             a[data-color="secondary"]:focus-visible {
-                outline-color: var(--mjo-link-focus-outline-color, var(--mjo-secondary-color, #cc3d74));
+                outline-color: var(--mjo-link-focus-outline-color, var(--mjo-secondary-color, #7dc717));
             }
 
             /* High contrast mode support */

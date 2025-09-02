@@ -85,14 +85,14 @@ export class MjoOption extends ThemeMixin(LitElement) implements IThemeMixin {
                 color: var(--mjo-option-option-preselected-color, var(--mjo-select-option-preselected-color, var(--mjo-foreground-color, currentColor)));
             }
             .container[data-selected] {
-                background-color: var(--mjo-option-option-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)));
+                background-color: var(--mjo-option-option-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed)));
                 color: var(
                     --mjo-option-option-selected-primary-color,
                     var(--mjo-select-option-selected-primary-color, var(--mjo-primary-foreground-color, white))
                 );
             }
             .container[data-color="secondary"][data-selected] {
-                background-color: var(--mjo-option-option-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #1d7fdb)));
+                background-color: var(--mjo-option-option-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717)));
                 color: var(
                     --mjo-option-option-selected-secondary-color,
                     var(--mjo-select-option-selected-secondary-color, var(--mjo-secondary-foreground-color, white))

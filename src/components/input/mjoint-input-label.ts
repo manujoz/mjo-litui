@@ -59,10 +59,10 @@ export class MjointInputLabel extends LitElement {
                 transition: color 0.2s;
             }
             .container[data-focused] {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
             .container[data-focused][data-color="secondary"] {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
             .container[data-error] {
                 color: var(--mjo-color-error, #d81717);

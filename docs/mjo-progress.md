@@ -317,7 +317,7 @@ The component automatically uses semantic colors based on the `color` prop:
 | Color       | CSS Variable            | Fallback  |
 | ----------- | ----------------------- | --------- |
 | `primary`   | `--mjo-primary-color`   | `#4e9be4` |
-| `secondary` | `--mjo-secondary-color` | `#cc3d74` |
+| `secondary` | `--mjo-secondary-color` | `#7dc717` |
 | `success`   | `--mjo-color-success`   | `#4caf50` |
 | `warning`   | `--mjo-color-warning`   | `#ff9800` |
 | `error`     | `--mjo-color-error`     | `#f44336` |

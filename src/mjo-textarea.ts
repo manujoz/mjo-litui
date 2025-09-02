@@ -351,12 +351,12 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             .container[data-focused] {
                 border-style: var(--mjo-textarea-border-style-focus, var(--mjo-input-border-style-focus, solid));
                 border-width: var(--mjo-textarea-border-width-focus, var(--mjo-input-border-width-focus, 1px));
-                border-color: var(--mjo-textarea-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)));
+                border-color: var(--mjo-textarea-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed)));
             }
             .container[data-focused][data-color="secondary"] {
                 border-style: var(--mjo-textarea-border-style-focus, var(--mjo-input-border-style-focus, solid));
                 border-width: var(--mjo-textarea-border-width-focus, var(--mjo-input-border-width-focus, 1px));
-                border-color: var(--mjo-textarea-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)));
+                border-color: var(--mjo-textarea-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717)));
             }
             .container[data-error],
             .container[data-error][data-color="secondary"] {
@@ -403,10 +403,10 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 font-size: var(--mjo-textarea-font-size, var(--mjo-input-font-size, 1em));
             }
             .container[data-focused] mjo-icon {
-                color: var(--mjo-textarea-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)));
+                color: var(--mjo-textarea-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed)));
             }
             .container[data-focused][data-color="secondary"] mjo-icon {
-                color: var(--mjo-textarea-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)));
+                color: var(--mjo-textarea-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717)));
             }
             .container[data-error] mjo-icon,
             .container[data-error][data-color="secondary"] mjo-icon {
@@ -443,10 +443,10 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 flex: 0 0 auto;
             }
             mjoint-input-counter[data-focused] {
-                color: var(--mjo-textarea-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)));
+                color: var(--mjo-textarea-primary-color, var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed)));
             }
             mjoint-input-counter[data-focused][data-color="secondary"] {
-                color: var(--mjo-textarea-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)));
+                color: var(--mjo-textarea-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717)));
             }
             mjoint-input-counter[data-error],
             mjoint-input-counter[data-error][data-color="secondary"] {

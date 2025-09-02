@@ -6,7 +6,7 @@ import { createServer } from "http";
 import { join } from "path";
 import { fileURLToPath } from "url";
 
-import { createMjoStyleThemeElement } from "../../src/lib/theme.js";
+import { MjoThemeSSRGenerator } from "../../src/lib/theme.js";
 
 // Import controllers directly
 import { IndexController } from "./controllers/index-controller.js";
@@ -38,7 +38,7 @@ ROUTES.forEach((route) => {
                     .find((row) => row.startsWith("mjo-theme="))
                     ?.split("=")[1] as MjoThemeModes) || "light";
 
-            const styleTag = createMjoStyleThemeElement({ themeMode: theme });
+            const styleTag = MjoThemeSSRGenerator({ themeMode: theme });
 
             let html = await route.controller();
             if (typeof html === "string") {

@@ -35,7 +35,7 @@ export class ColorPickerController {
 
                 <div class="playground-container interactive-demo">
                     <div class="playground-showcase">
-                        <mjo-color-picker id="playground-color-picker" value="#1d7fdb" label="Interactive Color"></mjo-color-picker>
+                        <mjo-color-picker id="playground-color-picker" value="#1aa8ed" label="Interactive Color"></mjo-color-picker>
                     </div>
 
                     <div class="controls-panel">
@@ -46,7 +46,7 @@ export class ColorPickerController {
 
                         <div class="control-group">
                             <h4>Value</h4>
-                            <input type="text" placeholder="Enter color value..." oninput="changeColorPickerProp('value', this.value)" value="#1d7fdb" />
+                            <input type="text" placeholder="Enter color value..." oninput="changeColorPickerProp('value', this.value)" value="#1aa8ed" />
                         </div>
 
                         <div class="control-group">
@@ -126,14 +126,14 @@ export class ColorPickerController {
 
                 <h3>Sizes</h3>
                 <div class="component-showcase">
-                    <mjo-color-picker value="#1d7fdb" size="small" label="Small"></mjo-color-picker>
-                    <mjo-color-picker value="#1d7fdb" size="medium" label="Medium"></mjo-color-picker>
-                    <mjo-color-picker value="#1d7fdb" size="large" label="Large"></mjo-color-picker>
+                    <mjo-color-picker value="#1aa8ed" size="small" label="Small"></mjo-color-picker>
+                    <mjo-color-picker value="#1aa8ed" size="medium" label="Medium"></mjo-color-picker>
+                    <mjo-color-picker value="#1aa8ed" size="large" label="Large"></mjo-color-picker>
                 </div>
 
                 <h3>Color Themes</h3>
                 <div class="component-showcase">
-                    <mjo-color-picker value="#1d7fdb" color="primary" label="Primary Theme"></mjo-color-picker>
+                    <mjo-color-picker value="#1aa8ed" color="primary" label="Primary Theme"></mjo-color-picker>
                     <mjo-color-picker value="#6b7280" color="secondary" label="Secondary Theme"></mjo-color-picker>
                 </div>
 
@@ -154,7 +154,7 @@ export class ColorPickerController {
                 <h3>Rounded Style</h3>
                 <div class="component-showcase">
                     <mjo-color-picker value="#ff6b35" rounded size="small" label="Small Rounded"></mjo-color-picker>
-                    <mjo-color-picker value="#1d7fdb" rounded size="medium" label="Medium Rounded"></mjo-color-picker>
+                    <mjo-color-picker value="#1aa8ed" rounded size="medium" label="Medium Rounded"></mjo-color-picker>
                     <mjo-color-picker value="#28a745" rounded size="large" label="Large Rounded"></mjo-color-picker>
                 </div>
 

@@ -1,4 +1,4 @@
-import { MjoCardContrast, MjoCardRadius, MjoCardVariants } from "./types/mjo-card.js";
+import { MjoCardContrast, MjoCardRadius, MjoCardSpace, MjoCardVariants } from "./types/mjo-card.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -11,11 +11,18 @@ export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) contrast?: MjoCardContrast;
     @property({ type: String }) radius?: MjoCardRadius;
     @property({ type: String }) variant: MjoCardVariants = "default";
+    @property({ type: String }) space: MjoCardSpace = "medium";
 
     render() {
         return html`
             ${this.variant !== "default" ? html`<div class="border" data-variant=${this.variant}></div>` : nothing}
-            <div class="container" data-contrast=${ifDefined(this.contrast)} data-radius=${ifDefined(this.radius)} data-variant=${this.variant}>
+            <div
+                class="container"
+                data-space=${this.space}
+                data-contrast=${ifDefined(this.contrast)}
+                data-radius=${ifDefined(this.radius)}
+                data-variant=${this.variant}
+            >
                 <div class="content"><slot></slot></div>
             </div>
         `;
@@ -41,12 +48,33 @@ export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
             }
             .container {
                 position: relative;
-                padding: var(--mjo-card-padding, inherit);
+                padding: var(--mjo-card-padding, var(--mjo-space-medium));
                 box-shadow: var(--mjo-card-box-shadow, var(--mjo-box-shadow-1, inherit));
                 background-color: var(--mjo-card-background-color, var(--mjo-background-color-card, white));
                 border: var(--mjo-card-border, none);
                 min-height: inherit;
                 box-sizing: border-box;
+            }
+            .container[data-space="xxsmall"] {
+                padding: var(--mjo-space-xxsmall);
+            }
+            .container[data-space="xsmall"] {
+                padding: var(--mjo-space-xsmall);
+            }
+            .container[data-space="small"] {
+                padding: var(--mjo-space-small);
+            }
+            .container[data-space="medium"] {
+                padding: var(--mjo-space-medium);
+            }
+            .container[data-space="large"] {
+                padding: var(--mjo-space-large);
+            }
+            .container[data-space="xlarge"] {
+                padding: var(--mjo-space-xlarge);
+            }
+            .container[data-space="xxlarge"] {
+                padding: var(--mjo-space-xxlarge);
             }
             .container[data-variant="modern"] {
                 padding: 1.5em;

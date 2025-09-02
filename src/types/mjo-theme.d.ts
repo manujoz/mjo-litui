@@ -135,19 +135,19 @@ export interface MjoThemeConfig {
         /** --mjo-color-gray, --mjo-color-gray-[50-900] */
         gray?: MjoThemeShadeStructure;
     };
+    /** --mjo-primary-color, --mjo-primary-color-hover, --mjo-primary-color-[50-900] */
+    primaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string;
+    /** --mjo-primary-foreground-color */
+    primaryForegroundColor?: string;
+    /** --mjo-secondary-color, --mjo-secondary-color-hover, --mjo-secondary-color-[50-900] */
+    secondaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string;
+    /** --mjo-secondary-foreground-color */
+    secondaryForegroundColor?: string;
     dark?: MjoThemeMode;
     light?: MjoThemeMode;
 }
 
 type MjoThemeMode = {
-    /** --mjo-primary-color, --mjo-primary-color-hover, --mjo-primary-color-[50-900] */
-    primaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string;
-    /** --mjo-primary-foreground-color */
-    primaryForegroundColor?: MjoThemeColorSmall | string;
-    /** --mjo-secondary-color, --mjo-secondary-color-hover, --mjo-secondary-color-[50-900] */
-    secondaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string;
-    /** --mjo-secondary-foreground-color */
-    secondaryForegroundColor?: MjoThemeColorSmall | string;
     /** --mjo-border-color, --mjo-border-color-[xlow|low|high|xhigh] */
     borderColor?: MjoThemeColorContrasts | string;
     /** --mjo-background-color, --mjo-background-color-hover, --mjo-background-color-[xlow|low|high|xhigh] */
@@ -186,6 +186,7 @@ type MjoThemeShadeStructure = {
     "700"?: string;
     "800"?: string;
     "900"?: string;
+    "950"?: string;
 };
 
 type MjoThemeColorSmall = {

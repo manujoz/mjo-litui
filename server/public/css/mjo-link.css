@@ -29,7 +29,7 @@
 .cover-demo-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--mjo-shadow-large, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
-    border-color: var(--mjo-primary-color, #1d7fdb);
+    border-color: var(--mjo-primary-color, #1aa8ed);
 }
 
 .cover-demo-card h4 {
@@ -67,7 +67,7 @@
 }
 
 [data-theme="dark"] .cover-demo-card:hover {
-    border-color: var(--mjo-primary-color, #1d7fdb);
+    border-color: var(--mjo-primary-color, #1aa8ed);
 }
 
 /* Enhanced component showcase for links */
@@ -120,7 +120,7 @@
 
 /* Focus states for better accessibility */
 .cover-demo-card:focus-within {
-    outline: 2px solid var(--mjo-primary-color, #1d7fdb);
+    outline: 2px solid var(--mjo-primary-color, #1aa8ed);
     outline-offset: 2px;
 }
 

@@ -167,22 +167,22 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
             }
 
             mjo-link:hover {
-                color: var(--mjo-breadcrumbs-link-hover-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-breadcrumbs-link-hover-color, var(--mjo-primary-color, #1aa8ed));
             }
 
             nav[data-color="secondary"] mjo-link:hover {
-                color: var(--mjo-breadcrumbs-link-hover-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-breadcrumbs-link-hover-color, var(--mjo-secondary-color, #7dc717));
             }
 
             /* Focus states for accessibility */
             mjo-link:focus-visible {
-                outline: var(--mjo-breadcrumbs-focus-outline, 2px solid var(--mjo-primary-color, #1d7fdb));
+                outline: var(--mjo-breadcrumbs-focus-outline, 2px solid var(--mjo-primary-color, #1aa8ed));
                 outline-offset: 2px;
                 border-radius: 2px;
             }
 
             nav[data-color="secondary"] mjo-link:focus-visible {
-                outline-color: var(--mjo-secondary-color, #cc3d74);
+                outline-color: var(--mjo-secondary-color, #7dc717);
             }
 
             /* Typography for active/current items */

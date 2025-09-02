@@ -90,7 +90,7 @@ function logMenuButtonEvent(eventName: string, detail: any): void {
         position: fixed;
         top: 20px;
         right: 20px;
-        background: var(--mjo-primary-color, #1d7fdb);
+        background: var(--mjo-primary-color, #1aa8ed);
         color: white;
         padding: 0.5rem 1rem;
         border-radius: 6px;

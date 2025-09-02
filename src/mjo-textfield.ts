@@ -396,12 +396,12 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
             .container[data-focused] {
                 border-style: var(--mjo-input-border-style-focus, solid);
                 border-width: var(--mjo-input-border-width-focus, 1px);
-                border-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+                border-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
             .container[data-focused][data-color="secondary"] {
                 border-style: var(--mjo-input-border-style-focus, solid);
                 border-width: var(--mjo-input-border-width-focus, 1px);
-                border-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                border-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
             .container[data-error],
             .container[data-error][data-color="secondary"] {
@@ -459,10 +459,10 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                 transition: color 0.3s;
             }
             .container[data-focused].prefixText {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
             .container[data-focused][data-color="secondary"] .prefixText {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
             .icon {
                 position: relative;
@@ -474,10 +474,10 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                 font-size: var(--mjo-input-font-size, 1em);
             }
             .container[data-focused] mjo-icon {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
             .container[data-focused][data-color="secondary"] mjo-icon {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
             .container[data-error] mjo-icon,
             .container[data-error][data-color="secondary"] mjo-icon {
@@ -521,11 +521,11 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
             }
             .container .passIcon:hover mjo-icon,
             .container .clearabled:hover mjo-icon {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)) !important;
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed)) !important;
             }
             .container[data-color="secondary"] .passIcon:hover mjo-icon,
             .container[data-color="secondary"] .clearabled:hover mjo-icon {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)) !important;
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717)) !important;
             }
             .helper {
                 position: relative;
@@ -540,10 +540,10 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                 flex: 0 0 auto;
             }
             mjoint-input-counter[data-focused] {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
             mjoint-input-counter[data-focused][data-color="secondary"] {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
             mjoint-input-counter[data-error],
             mjoint-input-counter[data-error][data-color="secondary"] {

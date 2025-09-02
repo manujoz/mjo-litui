@@ -80,7 +80,7 @@ import type { MjoThemeConfig } from "mjo-litui/types/mjo-theme";
 const themeOverrides: Partial<MjoThemeConfig> = {
     light: {
         primaryColor: { default: "#7C3AED", hover: "#6D28D9" },
-        secondaryColor: { default: "#CC3D74", hover: "#B83768" },
+        secondaryColor: { default: "#7dc717", hover: "#B83768" },
         borderColor: { default: "#E5E7EB" },
     },
     colors: {
@@ -243,6 +243,43 @@ Key files:
 -   `src/helpers|mixins|utils/`: utilities, validation, and theme/form mixins
 -   `src/theme/default-theme.ts`: base theme configuration (light/dark + palettes)
 -   `docs/`: comprehensive component documentation
+
+## CLI Tools
+
+mjo-litui includes command-line tools to help you customize themes and streamline development workflows:
+
+### `create-theme` - Interactive Theme Generator
+
+Generate custom theme CSS files with personalized colors and automatic color scale generation:
+
+```bash
+npx mjo-litui create-theme
+```
+
+**Features:**
+
+-   🎨 **Interactive prompts** for color selection
+-   🔬 **OKLCH color science** for better color perception
+-   📊 **Automatic color scales** (50-950 shades) from base colors
+-   ♿ **Accessibility** - automatic foreground colors for proper contrast
+-   📁 **Custom output paths** - save themes where you need them
+
+**Example workflow:**
+
+1. Run `npx mjo-litui create-theme`
+2. Choose your primary color (e.g., `#3b82f6`)
+3. Configure secondary, success, error, warning, and info colors
+4. Specify output location (defaults to `./mjo-theme.css`)
+5. Import and use your generated theme:
+
+```html
+<link rel="stylesheet" href="./mjo-theme.css" />
+<mjo-theme>
+    <your-app></your-app>
+</mjo-theme>
+```
+
+For complete CLI documentation, see [`cli/README.md`](./cli/README.md).
 
 ## Best Practices and Conventions
 

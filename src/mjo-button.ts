@@ -220,8 +220,8 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     #setButtonCssVars() {
         // Color property mapping
         const colorMap = {
-            primary: "var(--mjo-primary-color, #1d7fdb)",
-            secondary: "var(--mjo-secondary-color, #cc3d74)",
+            primary: "var(--mjo-primary-color, #1aa8ed)",
+            secondary: "var(--mjo-secondary-color, #7dc717)",
             success: "var(--mjo-color-success, #4caf50)",
             info: "var(--mjo-color-info, #2196f3)",
             warning: "var(--mjo-color-warning, #ff9800)",

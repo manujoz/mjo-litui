@@ -273,7 +273,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 border-color: var(--mjo-primary-color, #1976d2);
             }
             .color-secondary {
-                border-color: var(--mjo-secondary-color, #cc3d74);
+                border-color: var(--mjo-secondary-color, #7dc717);
             }
             .color-success {
                 border-color: var(--mjo-success-color, #4caf50);

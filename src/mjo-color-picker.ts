@@ -276,7 +276,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
                 transition: var(--mjo-color-picker-transition, border-color 0.2s ease, box-shadow 0.2s ease);
             }
             .container:focus-within {
-                border-color: var(--mjo-color-picker-border-color-focus, var(--mjo-input-border-color-focus, var(--mjo-primary-color, #1d7fdb)));
+                border-color: var(--mjo-color-picker-border-color-focus, var(--mjo-input-border-color-focus, var(--mjo-primary-color, #1aa8ed)));
                 box-shadow: var(--mjo-color-picker-box-shadow-focus, var(--mjo-input-box-shadow-focus, 0 0 0 2px rgba(29, 127, 219, 0.2)));
                 outline: none;
             }

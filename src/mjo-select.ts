@@ -611,12 +611,12 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             .container[data-focused] {
                 border-style: var(--mjo-input-border-style-focus, solid);
                 border-width: var(--mjo-input-border-width-focus, 1px);
-                border-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+                border-color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
             .container[data-focused][data-color="secondary"] {
                 border-style: var(--mjo-input-border-style-focus, solid);
                 border-width: var(--mjo-input-border-width-focus, 1px);
-                border-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                border-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
             .container[data-error],
             .container[data-error][data-color="secondary"] {
@@ -679,10 +679,10 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 transition: color 0.3s;
             }
             .container[data-focused].prefixText {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
             .container[data-focused][data-color="secondary"] .prefixText {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
             .icon {
                 position: relative;
@@ -694,10 +694,10 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 font-size: var(--mjo-input-font-size, 1em);
             }
             .container[data-focused] :not(.optionImage) mjo-icon {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed));
             }
             .container[data-focused][data-color="secondary"] :not(.optionImage) mjo-icon {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
             .container[data-error] :not(.optionImage) mjo-icon,
             .container[data-error][data-color="secondary"] :not(.optionImage) mjo-icon {
@@ -741,10 +741,10 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 color: #999999 !important;
             }
             .container .clearabled:hover mjo-icon {
-                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1d7fdb)) !important;
+                color: var(--mjo-input-primary-color, var(--mjo-primary-color, #1aa8ed)) !important;
             }
             .container[data-color="secondary"] .clearabled:hover mjo-icon {
-                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #cc3d74)) !important;
+                color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717)) !important;
             }
             .helper {
                 position: relative;

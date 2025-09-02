@@ -547,12 +547,12 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
             }
 
             .page-size-selector select:focus {
-                outline: 2px solid var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1d7fdb));
+                outline: 2px solid var(--mjo-pagination-primary-color, var(--mjo-primary-color, #1aa8ed));
                 outline-offset: 2px;
             }
 
             .pagination-container[data-color="secondary"] .page-size-selector select:focus {
-                outline-color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #cc3d74));
+                outline-color: var(--mjo-pagination-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
 
             /* Responsive design */

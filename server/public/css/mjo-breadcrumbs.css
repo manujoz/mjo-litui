@@ -1,7 +1,7 @@
 /* Breadcrumbs Demo Specific Styles */
 
 .preset-btn {
-    background: var(--mjo-primary-color, #1d7fdb);
+    background: var(--mjo-primary-color, #1aa8ed);
     color: white;
     border: none;
     padding: 8px 16px;

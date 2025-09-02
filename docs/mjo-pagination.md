@@ -210,8 +210,8 @@ interface MjoPaginationNavigationEvent extends CustomEvent {
 | Property                                      | Default                                         | Description                        |
 | --------------------------------------------- | ----------------------------------------------- | ---------------------------------- |
 | `--mjo-pagination-color`                      | `var(--mjo-foreground-color, #222222)`          | Default text color                 |
-| `--mjo-pagination-primary-color`              | `var(--mjo-primary-color, #1d7fdb)`             | Primary theme color                |
-| `--mjo-pagination-secondary-color`            | `var(--mjo-secondary-color, #cc3d74)`           | Secondary theme color              |
+| `--mjo-pagination-primary-color`              | `var(--mjo-primary-color, #1aa8ed)`             | Primary theme color                |
+| `--mjo-pagination-secondary-color`            | `var(--mjo-secondary-color, #7dc717)`           | Secondary theme color              |
 | `--mjo-pagination-primary-foreground-color`   | `var(--mjo-primary-foreground-color, white)`    | Text color on primary background   |
 | `--mjo-pagination-secondary-foreground-color` | `var(--mjo-secondary-foreground-color, white)`  | Text color on secondary background |
 | `--mjo-pagination-disabled-color`             | `var(--mjo-disabled-foreground-color, #aaaaaa)` | Color for disabled items           |

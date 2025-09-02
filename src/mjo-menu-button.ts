@@ -531,12 +531,12 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
             /* Focus styles for better accessibility */
             .container:focus-visible,
             .container:focus {
-                outline: 2px solid var(--mjo-primary-color, #1d7fdb);
+                outline: 2px solid var(--mjo-primary-color, #1aa8ed);
                 outline-offset: 2px;
             }
             .container[data-color="secondary"]:focus,
             .container[data-color="secondary"]:focus-visible {
-                outline: 2px solid var(--mjo-secondary-color, #cc3d74);
+                outline: 2px solid var(--mjo-secondary-color, #7dc717);
             }
             .container[data-color="success"]:focus,
             .container[data-color="success"]:focus-visible {
@@ -567,10 +567,10 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
 
             /* Color variants */
             .container[data-color="primary"]:hover:not(:disabled) {
-                color: var(--mjo-menu-button-color-hover, var(--mjo-primary-color, #1d7fdb));
+                color: var(--mjo-menu-button-color-hover, var(--mjo-primary-color, #1aa8ed));
             }
             .container[data-color="secondary"]:hover:not(:disabled) {
-                color: var(--mjo-menu-button-color-hover, var(--mjo-secondary-color, #cc3d74));
+                color: var(--mjo-menu-button-color-hover, var(--mjo-secondary-color, #7dc717));
             }
             .container[data-color="success"]:hover:not(:disabled) {
                 color: var(--mjo-menu-button-color-hover, var(--mjo-color-success, #20d338));

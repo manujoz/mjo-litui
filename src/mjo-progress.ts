@@ -402,10 +402,10 @@ export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
             }
 
             .progress-wrapper[data-color="secondary"] .bar-fill {
-                background-color: var(--mjo-progress-color, var(--mjo-secondary-color, #cc3d74));
+                background-color: var(--mjo-progress-color, var(--mjo-secondary-color, #7dc717));
             }
             .progress-wrapper[data-color="secondary"] .circle-progress {
-                stroke: var(--mjo-progress-color, var(--mjo-secondary-color, #cc3d74));
+                stroke: var(--mjo-progress-color, var(--mjo-secondary-color, #7dc717));
             }
 
             .progress-wrapper[data-color="success"] .bar-fill {

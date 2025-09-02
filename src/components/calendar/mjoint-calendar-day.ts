@@ -141,12 +141,12 @@ export class MjointCalendarDay extends LitElement {
 
         .day.today:not(.empty):not(.disabled) {
             background: var(--mjo-calendar-today-background, var(--mjo-primary-color-alpha2, rgba(29, 127, 219, 0.1)));
-            color: var(--mjo-calendar-today-color, var(--mjo-primary-color, #1d7fdb));
+            color: var(--mjo-calendar-today-color, var(--mjo-primary-color, #1aa8ed));
             font-weight: 600;
         }
 
         .day.selected:not(.empty):not(.disabled) {
-            background: var(--mjo-calendar-selected-background, var(--mjo-primary-color, #1d7fdb));
+            background: var(--mjo-calendar-selected-background, var(--mjo-primary-color, #1aa8ed));
             color: var(--mjo-calendar-selected-color, white);
             font-weight: 600;
         }
@@ -154,12 +154,12 @@ export class MjointCalendarDay extends LitElement {
         .day.in-range,
         .day.hovered-range {
             background: var(--mjo-calendar-range-background, var(--mjo-primary-color-alpha1, rgba(29, 127, 219, 0.2)));
-            color: var(--mjo-calendar-range-color, var(--mjo-primary-color, #1d7fdb));
+            color: var(--mjo-calendar-range-color, var(--mjo-primary-color, #1aa8ed));
         }
 
         .day.range-start,
         .day.range-end {
-            background: var(--mjo-calendar-range-endpoint-background, var(--mjo-primary-color, #1d7fdb));
+            background: var(--mjo-calendar-range-endpoint-background, var(--mjo-primary-color, #1aa8ed));
             color: var(--mjo-calendar-range-endpoint-color, white);
             font-weight: 600;
         }
@@ -175,7 +175,7 @@ export class MjointCalendarDay extends LitElement {
         }
 
         .day.focused {
-            outline: 2px solid var(--mjo-calendar-focus-outline, var(--mjo-primary-color, #1d7fdb));
+            outline: 2px solid var(--mjo-calendar-focus-outline, var(--mjo-primary-color, #1aa8ed));
             outline-offset: 2px;
         }
 

@@ -33,7 +33,10 @@ export class MjoTheme extends LitElement {
         document.querySelector("html")?.classList.remove(this.theme === "light" ? "dark" : "light");
         document.querySelector("html")?.classList.add(this.theme);
 
-        this.applyTheme();
+        const style = document.querySelector("#mjo-theme") as HTMLStyleElement | null;
+        if ((this.scope === "global" && !style) || this.scope === "local") {
+            this.applyTheme();
+        }
     }
 
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
@@ -56,6 +59,11 @@ export class MjoTheme extends LitElement {
     }
 
     applyTheme() {
+        let style =
+            this.scope === "global"
+                ? (document.querySelector("#mjo-theme") as HTMLStyleElement | null)
+                : (this.shadowRoot?.querySelector("#mjo-theme") as HTMLStyleElement | null | undefined);
+
         const mergedConfig = structuredClone(defaultTheme);
         mergeConfig(mergedConfig, this.config);
 
@@ -63,30 +71,22 @@ export class MjoTheme extends LitElement {
         cssStyles += applyThemeToCssVars({ config: mergedConfig, themeMode: this.theme });
         cssStyles += "}";
 
-        let style: HTMLStyleElement;
+        style = document.createElement("style");
+        style.setAttribute("id", "mjo-theme");
+
         if (this.scope === "global") {
-            style = document.querySelector("#mjo-theme") as HTMLStyleElement;
-            if (!style) {
-                style = document.createElement("style");
-                style.setAttribute("id", "mjo-theme");
-                document.head.appendChild(style);
-            }
+            document.head.appendChild(style);
         } else {
-            style = this.shadowRoot?.querySelector("#mjo-theme") as HTMLStyleElement;
-            if (!style) {
-                style = document.createElement("style");
-                style.setAttribute("id", "mjo-theme");
-                this.shadowRoot?.appendChild(style);
-            }
+            this.shadowRoot?.appendChild(style);
         }
 
         style.innerHTML = cssStyles;
 
         if (this.scope === "global") {
             document.dispatchEvent(new CustomEvent("mjo-theme:change", { detail: { theme: this.theme } }));
-        } else {
-            this.dispatchEvent(new CustomEvent("mjo-theme:change", { detail: { theme: this.theme } }));
         }
+
+        this.dispatchEvent(new CustomEvent("mjo-theme:change", { detail: { theme: this.theme } }));
     }
 
     static styles = [
