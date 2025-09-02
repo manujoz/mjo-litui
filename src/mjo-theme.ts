@@ -1,9 +1,9 @@
 import { MjoThemeChangeEvent, MjoThemeConfig, MjoThemeModes } from "./types/mjo-theme";
 
-import Cookies from "js-cookie";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { Cookies } from "./lib/cookies.js";
 import { applyThemeToCssVars, mergeConfig } from "./lib/theme.js";
 import { defaultTheme } from "./theme/default-theme.js";
 

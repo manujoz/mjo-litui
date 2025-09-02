@@ -1,6 +1,6 @@
 import type { MjoTheme } from "../../src/mjo-theme.js";
 
-import Cookies from "js-cookie";
+import { Cookies } from "../../src/lib/cookies.js";
 
 /**
  * Client entry point for SSR hydration
