@@ -73,13 +73,15 @@ export class MjoTheme extends LitElement {
         cssStyles += applyThemeToCssVars({ config: mergedConfig, themeMode: this.theme });
         cssStyles += "}";
 
-        style = document.createElement("style");
-        style.setAttribute("id", "mjo-theme");
+        if (!style) {
+            style = document.createElement("style");
+            style.setAttribute("id", "mjo-theme");
 
-        if (this.scope === "global") {
-            document.head.appendChild(style);
-        } else {
-            this.shadowRoot?.appendChild(style);
+            if (this.scope === "global") {
+                document.head.appendChild(style);
+            } else {
+                this.shadowRoot?.appendChild(style);
+            }
         }
 
         style.innerHTML = cssStyles;
