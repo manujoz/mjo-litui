@@ -5,6 +5,7 @@ export const defaultTheme: MjoThemeConfig = {
     radiusLarge: "10px",
     radiusMedium: "5px",
     radiusSmall: "3px",
+    fontFamily: "inherit",
     fontSizeLarge: "1.5em",
     fontSizeXlarge: "1.75em",
     fontSizeXxlarge: "2em",

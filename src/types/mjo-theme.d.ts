@@ -13,6 +13,8 @@ export interface MjoThemeConfig {
     radiusMedium?: string;
     /** --mjo-radius-large */
     radiusLarge?: string;
+    /** --mjo-font-family */
+    fontFamily?: string;
     /** --mjo-font-size-small */
     fontSizeSmall?: string;
     /** --mjo-font-size-xsmall */
@@ -633,6 +635,7 @@ export interface MjoNotificationTheme {
 }
 
 export interface MjoCardTheme {
+    border?: string;
     backgroundColor?: string;
     backgroundColorLow?: string;
     backgroundColorHigh?: string;
