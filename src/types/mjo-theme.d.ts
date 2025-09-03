@@ -151,7 +151,7 @@ type MjoThemeMode = {
     /** --mjo-border-color, --mjo-border-color-[xlow|low|high|xhigh] */
     borderColor?: MjoThemeColorContrasts | string;
     /** --mjo-background-color, --mjo-background-color-hover, --mjo-background-color-[xlow|low|high|xhigh] */
-    backgroundColor?: ({ hover: string } & MjoThemeColorContrasts) | string;
+    backgroundColor?: ({ hover?: string } & MjoThemeColorContrasts) | string;
     /** --mjo-background-color-card, --mjo-background-color-card-[xlow|low|high|xhigh] */
     backgroundColorCard?: MjoThemeColorContrasts | string;
     /** --mjo-foreground-color, --mjo-foreground-color-[xlow|low|high|xhigh] */

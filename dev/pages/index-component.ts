@@ -1,25 +1,42 @@
-import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { LitElement, PropertyValues, css, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
 
 import "../../src/mjo-card.js";
 import "../../src/mjo-grid.js";
+import "../../src/mjo-theme.js";
+import { MjoThemeConfig } from "../../src/types/mjo-theme.js";
 
 @customElement("index-component")
 export class IndexComponent extends LitElement {
+    @state() config: MjoThemeConfig = {};
     render() {
         return html`
-            <mjo-grid columns="3">
-                <div class="background-low"></div>
-                <div class="background-default"></div>
-                <div class="background-high"></div>
-                <div class="background-card-low"></div>
-                <div class="background-card-default"></div>
-                <div class="background-card-high"></div>
-                <div class="border-low"></div>
-                <div class="border-default"></div>
-                <div class="border-high"></div>
-            </mjo-grid>
+            <mjo-theme scope="local" .config=${this.config}>
+                <mjo-grid columns="3">
+                    <div class="background-low"></div>
+                    <div class="background-default"></div>
+                    <div class="background-high"></div>
+                    <div class="background-card-low"></div>
+                    <div class="background-card-default"></div>
+                    <div class="background-card-high"></div>
+                    <div class="border-low"></div>
+                    <div class="border-default"></div>
+                    <div class="border-high"></div>
+                </mjo-grid>
+            </mjo-theme>
         `;
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues): void {
+        setTimeout(() => {
+            this.config = {
+                dark: {
+                    backgroundColor: {
+                        default: "#666666",
+                    },
+                },
+            };
+        }, 5000);
     }
 
     static styles = [

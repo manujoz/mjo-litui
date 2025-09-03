@@ -1,6 +1,6 @@
 import { MjoThemeChangeEvent, MjoThemeConfig, MjoThemeModes } from "./types/mjo-theme";
 
-import { LitElement, css, html } from "lit";
+import { LitElement, PropertyValues, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { Cookies } from "./lib/cookies.js";
@@ -16,8 +16,6 @@ export class MjoTheme extends LitElement {
     #isFirstUpdated = true;
 
     render() {
-        this.#isFirstUpdated = false;
-
         return html`<slot></slot>`;
     }
 
@@ -39,14 +37,18 @@ export class MjoTheme extends LitElement {
         }
     }
 
-    protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
-        if (_changedProperties.has("theme") && _changedProperties.get("theme") && _changedProperties.get("theme") !== this.theme) {
+    protected update(_changedProperties: PropertyValues<this>): void {
+        super.update(_changedProperties);
+        if ((_changedProperties.get("theme") !== undefined && _changedProperties.get("theme") !== this.theme) || _changedProperties.has("config")) {
             if (!this.#isFirstUpdated) {
                 Cookies.set("mjo-theme", this.theme, { expires: 365 });
+                this.applyTheme();
             }
-
-            this.applyTheme();
         }
+    }
+
+    protected firstUpdated(): void {
+        this.#isFirstUpdated = false;
     }
 
     setTheme(theme: MjoThemeModes) {

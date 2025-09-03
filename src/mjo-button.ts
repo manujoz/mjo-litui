@@ -437,7 +437,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 border-color: var(--mjoint-button-hover-border-color);
                 opacity: var(--mjoint-button-hover-opacity, 1);
             }
-            button:focus {
+            button:focus-visible {
                 outline-color: var(--mjoint-button-focus-outline-color);
             }
             /* Ensure high contrast mode compatibility */

@@ -75,17 +75,16 @@ export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
                 transform: translate(-50%, -50%);
                 pointer-events: none;
                 border-radius: 50%;
+                aspect-ratio: 1 / 1;
                 animation: ripple 0.5s linear infinite;
             }
             @keyframes ripple {
                 0% {
                     width: 0;
-                    height: 0;
                     opacity: var(--mo-ripple-opacity, 0.25);
                 }
                 100% {
                     width: 300%;
-                    height: 300%;
                     opacity: 0;
                 }
             }
