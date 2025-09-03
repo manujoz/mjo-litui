@@ -391,7 +391,7 @@ This component does not emit custom events. Individual message items emit a `rem
 | `--mjo-message-background-color` | `color-mix(in srgb, var(--mjo-color-on-surface-variant) 8%, transparent)` | Background color for message container |
 | `--mjo-message-backdrop-filter`  | `blur(10px)`                                                              | Backdrop filter effect                 |
 | `--mjo-message-box-shadow`       | `var(--mjo-elevation-3)`                                                  | Box shadow elevation                   |
-| `--mjo-message-radius`           | `var(--mjo-shape-corner-small)`                                           | Border radius                          |
+| `--mjo-message-border-radius`    | `var(--mjo-shape-corner-small)`                                           | Border radius                          |
 | `--mjo-message-padding`          | `var(--mjo-space-4)`                                                      | Internal padding                       |
 | `--mjo-message-gap`              | `var(--mjo-space-3)`                                                      | Gap between message elements           |
 | `--mjo-message-font-size`        | `var(--mjo-typeface-body-medium-size)`                                    | Text size                              |

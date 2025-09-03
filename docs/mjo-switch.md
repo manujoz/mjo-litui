@@ -292,7 +292,7 @@ The switch component inherits global theme tokens and provides these specific cu
 | `--mjo-switch-background-color-checked`      | `var(--mjo-primary-color)`            | Background color when checked                    |
 | `--mjo-switch-ball-background-color`         | `var(--mjo-foreground-color)`         | Background color of the switch ball              |
 | `--mjo-switch-ball-background-color-checked` | `var(--mjo-primary-foreground-color)` | Background color of the switch ball when checked |
-| `--mjo-switch-radius`                        | `50px`                                | Border radius of the switch                      |
+| `--mjo-switch-border-radius`                 | `50px`                                | Border radius of the switch                      |
 | `--mjo-switch-border-style`                  | `solid`                               | Border style of the switch                       |
 | `--mjo-switch-border-width`                  | `1px`                                 | Border width of the switch                       |
 | `--mjo-switch-border-color`                  | `var(--mjo-border-color)`             | Border color of the switch                       |

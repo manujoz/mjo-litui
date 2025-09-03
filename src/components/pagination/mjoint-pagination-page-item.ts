@@ -52,7 +52,7 @@ export class MjointPaginationPageItem extends LitElement {
             button {
                 background-color: transparent;
                 border: solid 1px transparent;
-                border-radius: var(--mjo-pagination-border-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-pagination-border-radius, var(--mjo-radius-medium, 5px));
                 color: var(--mjo-pagination-color, var(--mjo-foreground-color, #222222));
                 cursor: pointer;
                 display: flex;

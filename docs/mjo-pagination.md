@@ -178,14 +178,14 @@ interface MjoPaginationNavigationEvent extends CustomEvent {
 
 ### Layout and Spacing
 
-| Property                                   | Default                  | Description                                        |
-| ------------------------------------------ | ------------------------ | -------------------------------------------------- |
-| `--mjo-pagination-gap`                     | `1em`                    | Gap between main pagination and page size selector |
-| `--mjo-pagination-items-gap`               | `0.25em`                 | Gap between pagination items                       |
-| `--mjo-pagination-container-padding`       | `0.25em`                 | Padding around the pagination container            |
-| `--mjo-pagination-container-border-radius` | `var(--mjo-radius, 5px)` | Border radius of the container                     |
-| `--mjo-pagination-container-border`        | `none`                   | Border around the container                        |
-| `--mjo-pagination-background-color`        | `transparent`            | Background color of the container                  |
+| Property                                   | Default                         | Description                                        |
+| ------------------------------------------ | ------------------------------- | -------------------------------------------------- |
+| `--mjo-pagination-gap`                     | `1em`                           | Gap between main pagination and page size selector |
+| `--mjo-pagination-items-gap`               | `0.25em`                        | Gap between pagination items                       |
+| `--mjo-pagination-container-padding`       | `0.25em`                        | Padding around the pagination container            |
+| `--mjo-pagination-container-border-radius` | `var(--mjo-radius-medium, 5px)` | Border radius of the container                     |
+| `--mjo-pagination-container-border`        | `none`                          | Border around the container                        |
+| `--mjo-pagination-background-color`        | `transparent`                   | Background color of the container                  |
 
 ### Typography
 
@@ -198,12 +198,12 @@ interface MjoPaginationNavigationEvent extends CustomEvent {
 
 ### Page Items
 
-| Property                           | Default                  | Description                   |
-| ---------------------------------- | ------------------------ | ----------------------------- |
-| `--mjo-pagination-item-width`      | `2em`                    | Width of page buttons         |
-| `--mjo-pagination-border-radius`   | `var(--mjo-radius, 5px)` | Border radius of page buttons |
-| `--mjo-pagination-small-font-size` | `0.8em`                  | Font size for small variant   |
-| `--mjo-pagination-large-font-size` | `1.2em`                  | Font size for large variant   |
+| Property                           | Default                         | Description                   |
+| ---------------------------------- | ------------------------------- | ----------------------------- |
+| `--mjo-pagination-item-width`      | `2em`                           | Width of page buttons         |
+| `--mjo-pagination-border-radius`   | `var(--mjo-radius-medium, 5px)` | Border radius of page buttons |
+| `--mjo-pagination-small-font-size` | `0.8em`                         | Font size for small variant   |
+| `--mjo-pagination-large-font-size` | `1.2em`                         | Font size for large variant   |
 
 ### Colors
 
@@ -243,7 +243,7 @@ interface MjoPaginationNavigationEvent extends CustomEvent {
 | Property                                   | Default                                        | Description                                    |
 | ------------------------------------------ | ---------------------------------------------- | ---------------------------------------------- |
 | `--mjo-pagination-indicator-opacity`       | `0.8`                                          | Opacity of the sliding indicator               |
-| `--mjo-pagination-indicator-border-radius` | `var(--mjo-radius, 5px)`                       | Border radius of the indicator                 |
+| `--mjo-pagination-indicator-border-radius` | `var(--mjo-radius-medium, 5px)`                | Border radius of the indicator                 |
 | `--mjo-pagination-animation-duration`      | `0.3s`                                         | Duration of the sliding animation              |
 | `--mjo-pagination-animation-timing`        | `ease-out`                                     | Timing function for animations                 |
 | `--mjo-pagination-primary-color-alpha`     | `var(--mjo-primary-color-alpha1, #1d7fdb33)`   | Semi-transparent primary color for indicator   |
@@ -265,7 +265,7 @@ interface MjoPaginationNavigationEvent extends CustomEvent {
 | `--mjo-pagination-page-size-color`         | `var(--mjo-foreground-color, #222222)`      | Text color of page size selector    |
 | `--mjo-pagination-select-background-color` | `var(--mjo-background-color-high, #ffffff)` | Background color of select dropdown |
 | `--mjo-pagination-select-border-color`     | `var(--mjo-border-color, #dddddd)`          | Border color of select dropdown     |
-| `--mjo-pagination-select-border-radius`    | `var(--mjo-radius, 5px)`                    | Border radius of select dropdown    |
+| `--mjo-pagination-select-border-radius`    | `var(--mjo-radius-medium, 5px)`             | Border radius of select dropdown    |
 | `--mjo-pagination-select-color`            | `var(--mjo-foreground-color, #222222)`      | Text color of select dropdown       |
 | `--mjo-pagination-select-padding`          | `0.25em 0.5em`                              | Padding of select dropdown          |
 

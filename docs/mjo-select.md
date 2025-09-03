@@ -886,7 +886,7 @@ export class ExampleOptionProperties extends LitElement {
 
 | Property                         | Default                                                       | Description           |
 | -------------------------------- | ------------------------------------------------------------- | --------------------- |
-| `--mjo-input-radius`             | `var(--mjo-radius, 5px)`                                      | Border radius         |
+| `--mjo-input-border-radius`      | `var(--mjo-radius-medium, 5px)`                               | Border radius         |
 | `--mjo-input-border-color`       | `var(--mjo-border-color, #dddddd)`                            | Border color          |
 | `--mjo-input-border-color-hover` | `#cccccc`                                                     | Border color on hover |
 | `--mjo-input-background-color`   | `var(--mjo-background-color-high, #ffffff)`                   | Background color      |

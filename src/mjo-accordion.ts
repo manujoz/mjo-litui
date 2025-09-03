@@ -175,11 +175,11 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
                 position: relative;
             }
             .container[data-variant="shadow"] {
-                border-radius: var(--mjo-accordion-radius, var(--mjo-radius-large));
+                border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
                 background-color: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
             }
             .container[data-variant="bordered"] {
-                border-radius: var(--mjo-accordion-radius, var(--mjo-radius-large));
+                border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
                 border: 1px solid var(--mjo-accordion-border-color, var(--mjo-border-color));
             }
             .container[data-variant="light"] mjo-accordion-item,
@@ -198,7 +198,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
                 gap: var(--mjo-accordion-gap, var(--mjo-space-small));
             }
             .container[data-variant="splitted"] mjo-accordion-item {
-                border-radius: var(--mjo-accordion-radius, var(--mjo-radius-large));
+                border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
                 background-color: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
             }
         `,

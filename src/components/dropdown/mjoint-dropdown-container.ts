@@ -193,7 +193,7 @@ export class MjointDropdownContainer extends ThemeMixin(LitElement) implements I
                 transform-origin: top center;
                 max-width: calc(100vw - 20px);
                 box-shadow: var(--mjo-dropdown-box-shadow, var(--mjo-box-shadow, 0px 0px 7px rgba(0, 0, 0, 0.5)));
-                border-radius: var(--mjo-dropdown-radius, var(--mjo-radius-medium, 5px));
+                border-radius: var(--mjo-dropdown-border-radius, var(--mjo-radius-medium, 5px));
                 overflow-x: hidden;
                 overflow-y: auto;
                 z-index: 1000;

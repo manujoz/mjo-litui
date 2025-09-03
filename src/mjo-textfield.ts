@@ -367,7 +367,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                 width: 100%;
             }
             .container {
-                border-radius: var(--mjo-input-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-input-border-radius, var(--mjo-radius-medium, 5px));
                 border: solid 1px;
                 border-style: var(--mjo-input-border-style, solid);
                 border-width: var(--mjo-input-border-width, 1px);

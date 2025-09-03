@@ -253,7 +253,7 @@ export class MjointModalContainer extends ThemeMixin(LitElement) implements IThe
                 position: relative;
                 background-color: var(--mjo-modal-background-color, var(--mjo-background-color, #fff));
                 box-shadow: var(--mjo-modal-box-shadow, var(--mjo-box-shadow3, 0 0 10px rgba(0, 0, 0, 0.5)));
-                border-radius: var(--mjo-modal-radius, var(--mjo-border-radius, 5px));
+                border-radius: var(--mjo-modal-border-radius, var(--mjo-border-radius, 5px));
                 width: var(--mjo-modal-width, 450px);
                 max-width: calc(100vw - 30px);
                 box-sizing: border-box;

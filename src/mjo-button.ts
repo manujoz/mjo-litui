@@ -402,7 +402,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             button {
                 align-items: center;
                 background-color: var(--mjoint-button-background-color);
-                border-radius: var(--mjo-button-border-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-button-border-radius, var(--mjo-radius-medium, 5px));
                 border: var(--mjoint-button-border-style, solid) 1px var(--mjoint-button-border-color);
                 box-sizing: border-box;
                 color: var(--mjoint-button-text-color);

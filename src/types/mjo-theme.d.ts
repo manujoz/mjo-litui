@@ -215,7 +215,7 @@ export interface MjoAccordionTheme {
     borderColor?: string;
     padding?: string;
     paddingCompact?: string;
-    radius?: string;
+    borderRadius?: string;
     gap?: string;
 }
 
@@ -270,7 +270,7 @@ export interface MjoButtonTheme {
     primaryBorder?: string;
     primaryColorHover?: string;
     primaryForegroundColor?: string;
-    boderRadius?: string;
+    borderRadius?: string;
     secondaryBorder?: string;
     secondaryColor?: string;
     secondaryColorHover?: string;
@@ -313,7 +313,7 @@ export interface MjoChipTheme {
 
 export interface MjoDropdownTheme {
     backgroundColor?: string;
-    radius?: string;
+    borderRadius?: string;
     boxShadow?: string;
 }
 
@@ -397,13 +397,6 @@ export interface MjoListboxTheme {
     sectionColor?: string;
 }
 
-export interface MjoIonicTheme {
-    colorOne?: string;
-    colorTwo?: string;
-    colorThree?: string;
-    radius?: string;
-}
-
 export interface MjoInputTheme {
     backgroundColor?: string;
     borderColor?: string;
@@ -430,7 +423,7 @@ export interface MjoInputTheme {
     paddingLarge?: string;
     prefixTextBackgroundColor?: string;
     prefixTextColor?: string;
-    radius?: string;
+    borderRadius?: string;
 }
 
 export interface MjoRadioTheme {
@@ -456,7 +449,6 @@ export interface MjoRippleTheme {
 
 export interface MjoSliderTheme {
     backgroundColor?: string;
-    radius?: string;
     progressColor?: string;
     primaryColor?: string;
     secondaryColor?: string;
@@ -481,7 +473,7 @@ export interface MjoSliderTheme {
     disabledOpacity?: string;
 }
 
-export interface MjoSelectTheme extends MjoInputTheme {
+export interface MjoSelectTheme {
     arrowColor?: string;
     optionPadding?: string;
     optionPreselectedBackgroundColor?: string;
@@ -493,7 +485,7 @@ export interface MjoSelectTheme extends MjoInputTheme {
     optionSecondaryColor?: string;
 }
 
-export interface MjoDatePickerTheme extends MjoInputTheme {
+export interface MjoDatePickerTheme {
     panelBackgroundColor?: string;
     panelRadius?: string;
     panelBoxShadow?: string;
@@ -550,7 +542,7 @@ export interface MjoTableTheme {
     captionPaddingBottom?: string;
 }
 
-export interface MjoTextareaTheme extends MjoInputTheme {
+export interface MjoTextareaTheme {
     padding?: string;
     paddingSmall?: string;
     paddingLarge?: string;
@@ -564,7 +556,7 @@ export interface MjoColorPickerTheme {
     borderStyle?: string;
     borderWidth?: string;
     borderColor?: string;
-    radius?: string;
+    borderRadius?: string;
     boxShadow?: string;
     labelColor?: string;
     labelFontSize?: string;
@@ -600,7 +592,7 @@ export interface MjoSwitchTheme {
     backgroundColorChecked?: string;
     ballBackgroundColor?: string;
     ballBackgroundColorChecked?: string;
-    radius?: string;
+    borderRadius?: string;
     borderStyle?: string;
     borderWidth?: string;
     borderColor?: string;
@@ -620,13 +612,13 @@ export interface MjoMessageTheme {
     boxShadow?: string;
     marginTop?: string;
     top?: string;
-    radius?: string;
+    borderRadius?: string;
 }
 
 export interface MjoNotificationTheme {
     backgroundColor?: string;
     boxShadow?: string;
-    radius?: string;
+    borderRadius?: string;
     margin?: string;
     titleFontSize?: string;
     titleFontWeight?: string;
@@ -655,7 +647,7 @@ export interface MjoModalTheme {
     iconCloseSize?: string;
     titleBorderColor?: string;
     backgroundColor?: string;
-    radius?: string;
+    borderRadius?: string;
     boxShadow?: string;
     width?: string;
 }

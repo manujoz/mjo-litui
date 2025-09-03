@@ -363,7 +363,7 @@ interface NotificationAccessibilityOptions {
 | ------------------------------------------------- | ------------------------------------------------------ | --------------------------------------- |
 | `--mjo-notification-background-color`             | `var(--mjo-background-color-low, #ffffff)`             | Background color for notification items |
 | `--mjo-notification-box-shadow`                   | `var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1))` | Box shadow for notification items       |
-| `--mjo-notification-radius`                       | `var(--mjo-radius-large, 4px)`                         | Border radius for notification items    |
+| `--mjo-notification-border-radius`                | `var(--mjo-radius-large, 4px)`                         | Border radius for notification items    |
 | `--mjo-notification-margin`                       | `15px`                                                 | Margin between notification items       |
 | `--mjo-notification-space-vertical`               | `0`                                                    | Vertical spacing from screen edge       |
 | `--mjo-notification-space-horizontal`             | `15px`                                                 | Horizontal spacing from screen edge     |

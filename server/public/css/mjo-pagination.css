@@ -8,7 +8,7 @@
     margin-bottom: 2rem;
     padding: 1.5rem;
     background-color: var(--mjo-background-color-low, #f8f9fa);
-    border-radius: var(--mjo-radius, 8px);
+    border-radius: var(--mjo-radius-medium, 8px);
     border: 1px solid var(--mjo-border-color, #e2e8f0);
 }
 
@@ -25,7 +25,7 @@
 
 .data-table-example {
     background-color: var(--mjo-background-color-high, #ffffff);
-    border-radius: var(--mjo-radius, 8px);
+    border-radius: var(--mjo-radius-medium, 8px);
     border: 1px solid var(--mjo-border-color, #e2e8f0);
     overflow: hidden;
     box-shadow: var(--mjo-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
@@ -141,7 +141,7 @@
     justify-content: center;
     background-color: var(--mjo-background-color-high, #ffffff);
     border: 1px solid var(--mjo-border-color, #e2e8f0);
-    border-radius: var(--mjo-radius, 8px);
+    border-radius: var(--mjo-radius-medium, 8px);
 }
 
 /* Component showcase grid for pagination examples */

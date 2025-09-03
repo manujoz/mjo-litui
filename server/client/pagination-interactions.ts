@@ -156,7 +156,7 @@ function showNotification(message: string): void {
         background-color: var(--mjo-primary-color, #3b82f6);
         color: white;
         padding: 12px 20px;
-        border-radius: var(--mjo-radius, 8px);
+        border-radius: var(--mjo-radius-medium, 8px);
         box-shadow: var(--mjo-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
         z-index: 1000;
         font-size: 14px;

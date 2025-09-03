@@ -213,7 +213,7 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 position: relative;
                 height: var(--mjo-switch-size-medium, 28px);
                 background-color: var(--mjo-switch-background-color, var(--mjo-background-color-high, #dddddd));
-                border-radius: var(--mjo-switch-radius, 50px);
+                border-radius: var(--mjo-switch-border-radius, 50px);
                 border-style: var(--mjo-switch-border-style, var(--mjo-input-border-style, solid));
                 border-width: var(--mjo-switch-border-width, var(--mjo-input-border-width, 1px));
                 border-color: var(--mjo-switch-border-color, var(--mjo-input-border-color, var(--mjo-border-color, #dddddd)));

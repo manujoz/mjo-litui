@@ -615,7 +615,7 @@ The component provides extensive customization through CSS variables with fallba
 | `--mjo-color-picker-border-width`       | `var(--mjo-input-border-width, 1px)`                                     | Border width       |
 | `--mjo-color-picker-border-color`       | `var(--mjo-input-border-color, var(--mjo-border-color, #dddddd))`        | Border color       |
 | `--mjo-color-picker-border-color-focus` | `var(--mjo-input-border-color-focus, var(--mjo-primary-color, #1aa8ed))` | Focus border color |
-| `--mjo-color-picker-radius`             | `var(--mjo-input-radius, var(--mjo-radius, 5px))`                        | Border radius      |
+| `--mjo-color-picker-border-radius`      | `var(--mjo-input-border-radius, var(--mjo-radius-medium, 5px))`          | Border radius      |
 | `--mjo-color-picker-box-shadow`         | `var(--mjo-input-box-shadow, none)`                                      | Box shadow effect  |
 | `--mjo-color-picker-box-shadow-focus`   | `var(--mjo-input-box-shadow-focus, 0 0 0 2px rgba(29, 127, 219, 0.2))`   | Focus box shadow   |
 | `--mjo-color-picker-transition`         | `border-color 0.2s ease, box-shadow 0.2s ease`                           | Transition effects |
@@ -769,18 +769,18 @@ export class ExampleColorPickerCssCustom extends LitElement {
             --mjo-color-picker-size-medium: 40px;
             --mjo-color-picker-border-width: 3px;
             --mjo-color-picker-border-color: #3b82f6;
-            --mjo-color-picker-radius: 8px;
+            --mjo-color-picker-border-radius: 8px;
             --mjo-color-picker-box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .compact-picker {
             --mjo-color-picker-size-medium: 20px;
             --mjo-color-picker-border-width: 1px;
-            --mjo-color-picker-radius: 4px;
+            --mjo-color-picker-border-radius: 4px;
         }
 
         .rounded-picker {
-            --mjo-color-picker-radius: 50%;
+            --mjo-color-picker-border-radius: 50%;
             --mjo-color-picker-border-width: 2px;
             --mjo-color-picker-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }

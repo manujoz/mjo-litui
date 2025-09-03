@@ -215,7 +215,7 @@ The dropdown component uses a minimal set of CSS variables with comprehensive fa
 | Variable                          | Fallback                                   | Used For               |
 | --------------------------------- | ------------------------------------------ | ---------------------- |
 | `--mjo-dropdown-box-shadow`       | `--mjo-box-shadow` (fallback: standard)    | Dropdown shadow        |
-| `--mjo-dropdown-radius`           | `--mjo-radius-medium` (fallback: 5px)      | Dropdown border radius |
+| `--mjo-dropdown-border-radius`    | `--mjo-radius-medium` (fallback: 5px)      | Dropdown border radius |
 | `--mjo-dropdown-background-color` | `--mjo-background-color` (fallback: white) | Dropdown background    |
 
 ### Container Specific

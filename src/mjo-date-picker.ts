@@ -371,7 +371,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
             .panel {
                 padding: var(--mjo-date-picker-panel-padding, var(--mjo-space-small, 8px));
                 background: var(--mjo-date-picker-panel-background-color, var(--mjo-background-color));
-                border-radius: var(--mjo-date-picker-panel-radius, var(--mjo-radius, 8px));
+                border-radius: var(--mjo-date-picker-panel-radius, var(--mjo-radius-medium, 8px));
                 box-shadow: var(--mjo-date-picker-panel-box-shadow, var(--mjo-box-shadow, 0 2px 6px rgba(0, 0, 0, 0.15)));
             }
 

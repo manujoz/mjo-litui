@@ -409,7 +409,7 @@ The component exposes these CSS custom properties for styling:
 | ------------------------------------------ | --------------------------------------------------- | -------------------------------- |
 | `--mjo-date-picker-panel-padding`          | `var(--mjo-space-small, 8px)`                       | Panel padding                    |
 | `--mjo-date-picker-panel-background-color` | `var(--mjo-background-color)`                       | Panel background                 |
-| `--mjo-date-picker-panel-radius`           | `var(--mjo-radius, 8px)`                            | Panel border-radius              |
+| `--mjo-date-picker-panel-radius`           | `var(--mjo-radius-medium, 8px)`                     | Panel border-radius              |
 | `--mjo-date-picker-panel-box-shadow`       | `var(--mjo-box-shadow, 0 2px 6px rgba(0,0,0,0.15))` | Panel shadow                     |
 | `--mjo-date-picker-sr-only-position`       | `absolute`                                          | Screen reader only text position |
 | `--mjo-date-picker-sr-only-width`          | `1px`                                               | Screen reader only text width    |

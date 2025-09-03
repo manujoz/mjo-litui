@@ -640,7 +640,7 @@ This component does not emit custom events. The modal container handles internal
 | -------------------------------- | ----------------------------------------------------- | ---------------------- |
 | `--mjo-modal-background-color`   | `var(--mjo-background-color, #fff)`                   | Modal background color |
 | `--mjo-modal-box-shadow`         | `var(--mjo-box-shadow3, 0 0 10px rgba(0, 0, 0, 0.5))` | Modal box shadow       |
-| `--mjo-modal-radius`             | `var(--mjo-border-radius, 5px)`                       | Modal border radius    |
+| `--mjo-modal-border-radius`             | `var(--mjo-border-radius, 5px)`                       | Modal border radius    |
 | `--mjo-modal-width`              | `450px`                                               | Default modal width    |
 | `--mjo-modal-icon-close-size`    | `16px` (inside), `30px` (outside)                     | Close button icon size |
 | `--mjo-modal-title-border-color` | `var(--mjo-border-color, #ccc)`                       | Title border color     |

@@ -315,7 +315,7 @@ The component consumes CSS variables with fallbacks. Custom values can be inject
 | ---------------------------------- | ----------------------------- | ----------------------------------------------- |
 | `--mjo-accordion-padding`          | `--mjo-space-medium`          | Horizontal padding for shadow/bordered variants |
 | `--mjo-accordion-padding-compact`  | `--mjo-space-small`           | Compact horizontal padding                      |
-| `--mjo-accordion-radius`           | `--mjo-radius-large`          | Border radius for container and items           |
+| `--mjo-accordion-border-radius`    | `--mjo-radius-large`          | Border radius for container and items           |
 | `--mjo-accordion-background-color` | `--mjo-background-color-high` | Background color for shadow/splitted variants   |
 | `--mjo-accordion-border-color`     | `--mjo-border-color`          | Border color for separators and borders         |
 | `--mjo-accordion-gap`              | `--mjo-space-small`           | Gap between items in splitted variant           |

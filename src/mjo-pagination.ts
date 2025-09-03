@@ -497,7 +497,7 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
                 position: relative;
                 padding: var(--mjo-pagination-container-padding, 0.25em);
                 background-color: var(--mjo-pagination-background-color, transparent);
-                border-radius: var(--mjo-pagination-container-border-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-pagination-container-border-radius, var(--mjo-radius-medium, 5px));
                 border: var(--mjo-pagination-container-border, none);
             }
 
@@ -506,7 +506,7 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
                 top: var(--mjoint-pagination-indicator-top, 0);
                 left: 0;
                 background-color: var(--mjo-pagination-primary-color-alpha, var(--mjo-primary-color, #1d7fdb33));
-                border-radius: var(--mjo-pagination-indicator-border-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-pagination-indicator-border-radius, var(--mjo-radius-medium, 5px));
                 transition: all var(--mjo-pagination-animation-duration, 0.3s) var(--mjo-pagination-animation-timing, ease-out);
                 pointer-events: none;
                 transform: translateX(var(--mjoint-pagination-indicator-offset, 0));
@@ -539,7 +539,7 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
             .page-size-selector select {
                 background-color: var(--mjo-pagination-select-background-color, var(--mjo-background-color-high, #ffffff));
                 border: solid 1px var(--mjo-pagination-select-border-color, var(--mjo-border-color, #dddddd));
-                border-radius: var(--mjo-pagination-select-border-radius, var(--mjo-radius, 5px));
+                border-radius: var(--mjo-pagination-select-border-radius, var(--mjo-radius-medium, 5px));
                 color: var(--mjo-pagination-select-color, var(--mjo-foreground-color, #222222));
                 font-family: inherit;
                 font-size: inherit;

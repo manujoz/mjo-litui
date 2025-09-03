@@ -259,7 +259,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
                 min-width: 150px;
             }
             :host([rounded]) {
-                --mjo-input-radius: 50%;
+                --mjo-input-border-radius: 50%;
             }
             .container {
                 position: relative;
@@ -272,7 +272,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
                 border-width: var(--mjo-color-picker-border-width, var(--mjo-input-border-width, 1px));
                 border-color: var(--mjo-color-picker-border-color, var(--mjo-input-border-color, var(--mjo-border-color, #dddddd)));
                 box-shadow: var(--mjo-color-picker-box-shadow, var(--mjo-input-box-shadow, none));
-                border-radius: var(--mjo-color-picker-radius, var(--mjo-input-radius, var(--mjo-radius, 5px)));
+                border-radius: var(--mjo-color-picker-border-radius, var(--mjo-input-border-radius, var(--mjo-radius-medium, 5px)));
                 transition: var(--mjo-color-picker-transition, border-color 0.2s ease, box-shadow 0.2s ease);
             }
             .container:focus-within {

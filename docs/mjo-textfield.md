@@ -912,7 +912,7 @@ The textfield component provides extensive customization through CSS custom prop
 | `--mjo-input-prefix-text-background-color` | `rgba(220, 220, 220, 0.5)`                                    | Background color for prefix/suffix text |
 | `--mjo-input-prefix-text-color`            | `currentColor`                                                | Text color for prefix/suffix text       |
 | `--mjo-input-primary-color`                | `var(--mjo-primary-color, #1aa8ed)`                           | Primary color for focus states          |
-| `--mjo-input-radius`                       | `var(--mjo-radius, 5px)`                                      | Border radius                           |
+| `--mjo-input-border-radius`                | `var(--mjo-radius-medium, 5px)`                               | Border radius                           |
 | `--mjo-input-secondary-color`              | `var(--mjo-secondary-color, #7dc717)`                         | Secondary color for focus states        |
 
 ## Theme Configuration

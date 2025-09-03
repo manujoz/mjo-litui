@@ -82,7 +82,7 @@ export class MjointMessageItem extends LitElement {
                 gap: 7px;
                 background-color: var(--mjo-message-background-color, var(--mjo-background-color-low, #ffffff));
                 box-shadow: var(--mjo-message-box-shadow, var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1)));
-                border-radius: var(--mjo-message-radius, var(--mjo-radius-large, 4px));
+                border-radius: var(--mjo-message-border-radius, var(--mjo-radius-large, 4px));
                 margin: var(--mjo-message-margin-top, 15px) 0 0;
                 padding: 7px 15px;
                 max-width: 90vw;

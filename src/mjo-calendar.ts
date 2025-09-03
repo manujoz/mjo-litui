@@ -1077,7 +1077,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 position: relative;
                 background: var(--mjo-calendar-background, var(--mjo-background-color, white));
                 border: var(--mjo-calendar-border, 1px solid var(--mjo-border-color, #e0e0e0));
-                border-radius: var(--mjo-calendar-border-radius, var(--mjo-radius, 8px));
+                border-radius: var(--mjo-calendar-border-radius, var(--mjo-radius-medium, 8px));
                 box-shadow: var(--mjo-calendar-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
                 padding: var(--mjo-calendar-padding, 16px);
                 font-size: calc(var(--mjo-font-size-small, 14px) - 3px);
@@ -1100,7 +1100,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 inset: 0;
                 z-index: 1;
                 background: var(--mjo-calendar-picker-background, var(--mjo-background-color, white));
-                border-radius: var(--mjo-calendar-picker-radius, var(--mjo-radius, 8px));
+                border-radius: var(--mjo-calendar-picker-radius, var(--mjo-radius-medium, 8px));
                 box-shadow: var(--mjo-calendar-picker-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
             }
 

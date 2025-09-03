@@ -84,7 +84,7 @@
     width: 100%;
     padding: 8px 12px;
     border: 1px solid var(--mjo-border-color);
-    border-radius: var(--mjo-radius, 5px);
+    border-radius: var(--mjo-radius-medium, 5px);
     background: var(--mjo-background-color);
     color: var(--mjo-foreground-color);
     font-family: inherit;
@@ -101,7 +101,7 @@
     width: 100%;
     padding: 8px 12px;
     border: 1px solid var(--mjo-border-color);
-    border-radius: var(--mjo-radius, 5px);
+    border-radius: var(--mjo-radius-medium, 5px);
     background: var(--mjo-background-color);
     color: var(--mjo-foreground-color);
     font-family: inherit;

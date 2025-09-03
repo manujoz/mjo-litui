@@ -137,7 +137,7 @@ export class MjointCalendarMonthPicker extends LitElement {
         .month-button {
             background: var(--mjo-calendar-picker-button-background, transparent);
             border: var(--mjo-calendar-picker-button-border, 1px solid var(--mjo-border-color, #e0e0e0));
-            border-radius: var(--mjo-calendar-picker-button-radius, var(--mjo-radius, 4px));
+            border-radius: var(--mjo-calendar-picker-button-radius, var(--mjo-radius-medium, 4px));
             color: var(--mjo-calendar-picker-button-color, var(--mjo-foreground-color-low, #333));
             cursor: pointer;
             font-family: inherit;

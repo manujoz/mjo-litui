@@ -101,7 +101,7 @@ export class MjointNotificationItem extends LitElement {
                 width: 400px;
                 background-color: var(--mjo-notification-background-color, var(--mjo-background-color-low, #ffffff));
                 box-shadow: var(--mjo-notification-box-shadow, var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1)));
-                border-radius: var(--mjo-notification-radius, var(--mjo-radius-large, 4px));
+                border-radius: var(--mjo-notification-border-radius, var(--mjo-radius-large, 4px));
                 overflow: hidden;
             }
             :host([position="top-left"]),

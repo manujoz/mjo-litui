@@ -601,7 +601,7 @@ The textarea component inherits from input theme and provides these customizatio
 | `--mjo-textarea-padding-small`      | `calc(1em / 2 - 4px) calc(1em / 2)`       | Padding for small size           |
 | `--mjo-textarea-padding-large`      | `calc(1em / 2 - 2px) calc(1em / 2 + 3px)` | Padding for large size           |
 | `--mjo-textarea-primary-color`      | `var(--mjo-input-primary-color)`          | Primary color for focus states   |
-| `--mjo-textarea-radius`             | `var(--mjo-input-radius)`                 | Border radius                    |
+| `--mjo-textarea-radius`             | `var(--mjo-input-border-radius)`          | Border radius                    |
 | `--mjo-textarea-secondary-color`    | `var(--mjo-input-secondary-color)`        | Secondary color for focus states |
 
 ## ThemeMixin Customization
