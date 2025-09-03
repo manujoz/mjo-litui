@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { MjoThemeConfig } from "../types/mjo-theme";
 
 export const defaultTheme: MjoThemeConfig = {
@@ -36,11 +37,11 @@ export const defaultTheme: MjoThemeConfig = {
         default: "#777777",
         defaultForeground: "#ffffff",
         gradient:
-            " linear-gradient(133deg,#1aa8ed 0%,#0082c2 7%,#005e99 14%,#003c71 30%,#001a4c 46%,#001a4c 66%,#003300 76%,#3a7a00 91%,#5ba000 97%,#7dc717 100%)",
+            "linear-gradient(149deg, #003c7177 0%, #00002899 35%, #00002888 63%, #00002855 100%),linear-gradient(149deg, #003c7177 0%, #00002899 22%, #00002888 63%, #00002855 100%),linear-gradient(149deg, #003c7177 0%, #00002899 22%, #00002888 63%, #00002855 100%), linear-gradient(132deg, #1aa8ed 0%, #1aa8ed 100%)",
         gradient1:
-            "linear-gradient(133deg,#7dc717 0%,#5ba000 7%,#3a7a00 14%,#1a5500 30%,#003300 46%,#003300 66%,#001a4c 76%,#005e99 91%,#0082c2 97%,#1aa8ed 100%)",
-        gradient2: "linear-gradient(133deg, #000028 0%, #001a4c 37%, #003c71 77%, #005e99 89%, #0082c2 96%, #1aa8ed 100%)",
-        gradient3: "linear-gradient(133deg, #001300 0%, #003300 37%, #1a5500 77%, #3a7a00 89%, #5ba000 96%, #7dc717 100%)",
+            "linear-gradient(149deg, #1a550077 0%, #00130099 35%, #00130088 63%, #00130055 100%),linear-gradient(149deg, #1a550077 1%, #00130099 22%, #00130088 63%, #00130055 100%),linear-gradient(149deg, #1a550077 0%, #00130099 22%, #00130088 63%, #00130055 100%),linear-gradient(132deg, #7dc717 0%, #c4e8a8 100%)",
+        gradient2: "linear-gradient(132deg, #1aa8ed 0%, #7dc717 100%)",
+        gradient3: "linear-gradient(132deg, #7dc717 0%, #1aa8ed 100%)",
         blue: {
             default: "#1d7fdb",
             alpha0: "#e3f2fd00",

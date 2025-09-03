@@ -322,11 +322,11 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 transition: transform 0.2s ease;
             }
             .container:focus-visible {
-                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline: 2px solid var(--mjo-primary-color, #1aa8ed);
                 outline-offset: 2px;
             }
             .container[data-clickable]:focus-visible {
-                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline: 2px solid var(--mjo-primary-color, #1aa8ed);
                 outline-offset: 2px;
             }
 

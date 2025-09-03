@@ -46,10 +46,10 @@
     --mjo-color-info-foreground: {{INFO_FOREGROUND}};
     --mjo-color-default: #777777;
     --mjo-color-default-foreground: #ffffff;
-    --mjo-color-gradient: linear-gradient(133deg,{{PRIMARY_COLOR}} 0%,{{PRIMARY_600}} 7%,{{PRIMARY_700}} 14%,{{PRIMARY_800}} 30%,{{PRIMARY_900}} 46%,{{PRIMARY_900}} 66%,{{SECONDARY_900}} 76%,{{SECONDARY_700}} 91%,{{SECONDARY_600}} 97%,{{SECONDARY_COLOR}} 100%);
-    --mjo-color-gradient1: linear-gradient(133deg,{{SECONDARY_COLOR}} 0%,{{SECONDARY_600}} 7%,{{SECONDARY_700}} 14%,{{SECONDARY_800}} 30%,{{SECONDARY_900}} 46%,{{SECONDARY_900}} 66%,{{PRIMARY_900}} 76%,{{PRIMARY_700}} 91%,{{PRIMARY_600}} 97%,{{PRIMARY_COLOR}} 100%);
-    --mjo-color-gradient2: linear-gradient(133deg,{{PRIMARY_950}} 0%,{{PRIMARY_900}} 37%,{{PRIMARY_800}} 77%,{{PRIMARY_700}} 89%,{{PRIMARY_600}} 96%,{{PRIMARY_COLOR}} 100%);
-    --mjo-color-gradient3: linear-gradient(133deg,{{SECONDARY_950}} 0%,{{SECONDARY_900}} 37%,{{SECONDARY_800}} 77%,{{SECONDARY_700}} 89%,{{SECONDARY_600}} 96%,{{SECONDARY_COLOR}} 100%);
+    --mjo-color-gradient: linear-gradient(149deg, #003c7177 0%, #00002899 35%, #00002888 63%, #00002855 100%),linear-gradient(149deg, #003c7177 0%, #00002899 22%, #00002888 63%, #00002855 100%),linear-gradient(149deg, #003c7177 0%, #00002899 22%, #00002888 63%, #00002855 100%), linear-gradient(132deg, #1aa8ed 0%, #1aa8ed 100%);
+    --mjo-color-gradient1: linear-gradient(149deg, #1a550077 0%, #00130099 35%, #00130088 63%, #00130055 100%),linear-gradient(149deg, #1a550077 1%, #00130099 22%, #00130088 63%, #00130055 100%),linear-gradient(149deg, #1a550077 0%, #00130099 22%, #00130088 63%, #00130055 100%),linear-gradient(132deg, #7dc717 0%, #c4e8a8 100%);
+    --mjo-color-gradient2: linear-gradient(132deg, {{PRIMARY_COLOR}} 0%, {{SECONDARY_COLOR}} 100%);
+    --mjo-color-gradient3: linear-gradient(132deg, {{SECONDARY_COLOR}} 0%, {{PRIMARY_COLOR}} 100%);
 
     /* Blue Color Palette */
     --mjo-color-blue: #1aa8ed;

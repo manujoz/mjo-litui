@@ -400,7 +400,7 @@ Disabled state:
 
 ### 6. Derived variable pattern
 
-Components consume these base variables to build their own (`--mjo-button-*`, `--mjo-input-*`, etc.). Changing the globals affects all components that have not overridden values internally.
+Components consume these base variables to build their own (`--mjo-button-*`, `--mjo-textfield-*`, etc.). Changing the globals affects all components that have not overridden values internally.
 
 ## Per-component overrides with `ThemeMixin`
 

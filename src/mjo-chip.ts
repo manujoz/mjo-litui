@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { css, html, LitElement, nothing, PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
@@ -42,8 +42,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
     }
 
     private get computedTabIndex() {
-        if (this.disabled) return -1;
-        if (this.clickable || this.closable) return this.tabIndex ?? 0;
+        if (this.clickable) return 0;
         return -1;
     }
 
@@ -67,7 +66,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         >
             ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
             ${this.startIcon ? html`<mjo-icon src=${this.startIcon}></mjo-icon>` : nothing}
-            <mjo-typography tag="span" class="label">${this.label}</mjo-typography>
+            <mjo-typography tag="none" class="label">${this.label}</mjo-typography>
             ${this.endIcon ? html`<mjo-icon src=${this.endIcon}></mjo-icon>` : nothing}
             ${this.closable
                 ? html`<mjo-icon
@@ -146,6 +145,185 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         this.remove();
     }
 
+    connectedCallback(): void {
+        super.connectedCallback();
+        this.#setChipCssVars();
+    }
+
+    updated(_changedProperties: PropertyValues): void {
+        if (_changedProperties.has("color") || _changedProperties.has("variant") || _changedProperties.has("size") || _changedProperties.has("radius")) {
+            this.#setChipCssVars();
+        }
+    }
+
+    #setChipCssVars() {
+        // Color property mapping
+        const colorMap = {
+            default: "var(--mjo-color-gray-400)",
+            primary: "var(--mjo-primary-color)",
+            secondary: "var(--mjo-secondary-color)",
+            success: "var(--mjo-color-success)",
+            info: "var(--mjo-color-info)",
+            warning: "var(--mjo-color-warning)",
+            error: "var(--mjo-color-error)",
+        };
+
+        // Foreground color mapping
+        const foregroundColorMap = {
+            default: "var(--mjo-color-white)",
+            primary: "var(--mjo-primary-foreground-color)",
+            secondary: "var(--mjo-secondary-foreground-color)",
+            success: "var(--mjo-color-white)",
+            info: "var(--mjo-color-white)",
+            warning: "var(--mjo-color-white)",
+            error: "var(--mjo-color-white)",
+        };
+
+        // Alpha colors for flat variant
+        const alphaColorMap = {
+            primary: "var(--mjo-primary-color-alpha2)",
+            secondary: "var(--mjo-secondary-color-alpha2)",
+        };
+
+        // Shadow colors for shadow variant
+        const shadowColorMap = {
+            default: "rgba(0, 0, 0, 0.2)",
+            primary: "var(--mjo-primary-color-alpha5)",
+            secondary: "var(--mjo-secondary-color-alpha5)",
+            success: "var(--mjo-color-green-alpha5)",
+            warning: "var(--mjo-color-yellow-alpha5)",
+            info: "var(--mjo-color-cyan-alpha5)",
+            error: "var(--mjo-color-red-alpha5)",
+        };
+
+        const currentColor = colorMap[this.color];
+        const currentForegroundColor = foregroundColorMap[this.color];
+
+        // Default values
+        let backgroundColor = currentColor;
+        let textColor = currentForegroundColor;
+        let borderColor = "transparent";
+        let borderWidth = "0px";
+        let boxShadow = "none";
+        let pseudoBackground = "transparent";
+        let pseudoOpacity = "0";
+        let closeIconColor = "rgba(0, 0, 0, 0.6)";
+
+        // Variant-specific styling
+        switch (this.variant) {
+            case "solid": {
+                // Default solid variant
+                backgroundColor = currentColor;
+                textColor = currentForegroundColor;
+                closeIconColor = "rgba(0, 0, 0, 0.6)";
+                break;
+            }
+            case "bordered": {
+                backgroundColor = "transparent";
+                textColor = currentColor;
+                borderColor = currentColor;
+                borderWidth = this.size === "small" ? "1px" : this.size === "large" ? "3px" : "2px";
+                closeIconColor = currentColor;
+                break;
+            }
+            case "light": {
+                backgroundColor = "transparent";
+                textColor = currentColor;
+                closeIconColor = currentColor;
+                break;
+            }
+            case "flat": {
+                textColor = currentColor;
+                closeIconColor = currentColor;
+                const alphaColor = alphaColorMap[this.color as keyof typeof alphaColorMap];
+                if (alphaColor) {
+                    backgroundColor = alphaColor;
+                } else {
+                    backgroundColor = "transparent";
+                    pseudoBackground = currentColor;
+                    pseudoOpacity = "0.1";
+                }
+                break;
+            }
+            case "faded": {
+                backgroundColor = "rgba(0, 0, 0, 0.1)";
+                textColor = this.color === "default" ? "var(--mjo-foreground-color)" : currentColor;
+                closeIconColor = currentColor;
+                break;
+            }
+            case "shadow": {
+                backgroundColor = currentColor;
+                textColor = this.color === "warning" ? "var(--mjo-color-black)" : currentForegroundColor;
+                boxShadow = `0px 2px 5px ${shadowColorMap[this.color]}`;
+                closeIconColor = "rgba(0, 0, 0, 0.6)";
+                break;
+            }
+            case "dot": {
+                backgroundColor = "transparent";
+                textColor = "var(--mjo-foreground-color)";
+                borderColor = "var(--mjo-foreground-color-low)";
+                borderWidth = "2px";
+                closeIconColor = currentColor;
+                // For dot variant, the dot color should match the chip's color
+                break;
+            }
+        }
+
+        // Size-specific values
+        let fontSize, lineHeight, height;
+        switch (this.size) {
+            case "small":
+                fontSize = "var(--mjo-chip-font-size-small-size, 0.75em)";
+                lineHeight = "var(--mjo-chip-line-height-small-size, 0.75em)";
+                height = "1.5em";
+                break;
+            case "large":
+                fontSize = "var(--mjo-chip-font-size-large-size, 1.1em)";
+                lineHeight = "var(--mjo-chip-line-height-large-size, 1.2em)";
+                height = "1.8em";
+                break;
+            default: // medium
+                fontSize = "var(--mjo-chip-font-size-medium-size, 0.9em)";
+                lineHeight = "var(--mjo-chip-line-height-medium-size, 1em)";
+                height = "1.8em";
+        }
+
+        // Radius values
+        let borderRadius;
+        switch (this.radius) {
+            case "none":
+                borderRadius = "0px";
+                break;
+            case "small":
+                borderRadius = "5px";
+                break;
+            case "medium":
+                borderRadius = "10px";
+                break;
+            case "large":
+                borderRadius = "20px";
+                break;
+            default: // full
+                borderRadius = "9999px";
+        }
+
+        // Apply CSS variables
+        this.style.setProperty("--mjoint-chip-background-color", backgroundColor);
+        this.style.setProperty("--mjoint-chip-text-color", textColor);
+        this.style.setProperty("--mjoint-chip-border-color", borderColor);
+        this.style.setProperty("--mjoint-chip-border-width", borderWidth);
+        this.style.setProperty("--mjoint-chip-box-shadow", boxShadow);
+        this.style.setProperty("--mjoint-chip-pseudo-background", pseudoBackground);
+        this.style.setProperty("--mjoint-chip-pseudo-opacity", pseudoOpacity);
+        this.style.setProperty("--mjoint-chip-close-icon-color", closeIconColor);
+        this.style.setProperty("--mjoint-chip-font-size", fontSize);
+        this.style.setProperty("--mjoint-chip-line-height", lineHeight);
+        this.style.setProperty("--mjoint-chip-height", height);
+        this.style.setProperty("--mjoint-chip-border-radius", borderRadius);
+        this.style.setProperty("--mjoint-chip-focus-outline-color", currentColor);
+        this.style.setProperty("--mjoint-chip-dot-color", currentColor);
+    }
+
     static styles = [
         css`
             :host {
@@ -153,25 +331,46 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
             }
             .container {
                 position: relative;
-                background-color: var(--mjo-color-gray-400);
-                color: var(--mjo-color-white);
-                border-radius: 9999px;
-                font-size: var(--mjo-chip-font-size-medium-size, 0.9em);
-                line-height: var(--mjo-chip-line-height-medium-size, 1em);
-                height: 1.6em;
+                background-color: var(--mjoint-chip-background-color);
+                color: var(--mjoint-chip-text-color);
+                border: var(--mjoint-chip-border-width) solid var(--mjoint-chip-border-color);
+                border-radius: var(--mjoint-chip-border-radius);
+                font-size: var(--mjoint-chip-font-size);
+                line-height: var(--mjoint-chip-line-height);
+                height: var(--mjoint-chip-height);
+                box-shadow: var(--mjoint-chip-box-shadow);
+                vertical-align: middle;
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
                 padding: var(--mjo-chip-padding, 0 0.75em);
                 gap: var(--mjo-chip-gap, 0.4em);
+                overflow: visible;
+            }
+            .container::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                opacity: var(--mjoint-chip-pseudo-opacity);
+                background-color: var(--mjoint-chip-pseudo-background);
+                border-radius: var(--mjoint-chip-border-radius);
+                z-index: -1;
             }
             .dot {
                 width: 0.9em;
                 height: 0.9em;
                 border-radius: 9999px;
-                background-color: var(--mjo-color-gray-400);
+                background-color: var(--mjoint-chip-dot-color);
                 flex-grow: 0;
                 flex-basis: auto;
+            }
+            .container[data-size="small"] .dot {
+                width: 0.75em;
+                height: 0.75em;
+            }
+            .container[data-size="large"] .dot {
+                width: 1.1em;
+                height: 1.1em;
             }
             mjo-icon {
                 font-size: 1em;
@@ -179,6 +378,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 flex-basis: auto;
             }
             mjo-icon.close {
+                color: var(--mjoint-chip-close-icon-color);
                 cursor: pointer;
                 transition: opacity 0.2s;
             }
@@ -193,240 +393,6 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
             .container[data-closable] {
                 padding-right: 0.25em;
             }
-            .container[data-color="primary"] {
-                background-color: var(--mjo-primary-color);
-                color: var(--mjo-primary-foreground-color);
-            }
-            .container[data-color="secondary"] {
-                background-color: var(--mjo-secondary-color);
-                color: var(--mjo-secondary-foreground-color);
-            }
-            .container[data-color="success"] {
-                background-color: var(--mjo-color-success);
-                color: var(--mjo-color-white);
-            }
-            .container[data-color="warning"] {
-                background-color: var(--mjo-color-warning);
-                color: var(--mjo-color-white);
-            }
-            .container[data-color="info"] {
-                background-color: var(--mjo-color-info);
-                color: var(--mjo-color-white);
-            }
-            .container[data-color="error"] {
-                background-color: var(--mjo-color-error);
-                color: var(--mjo-color-white);
-            }
-            .container[data-color="default"] mjo-icon.close {
-                color: var(--mjo-color-gray-800);
-            }
-            .container[data-color="primary"] mjo-icon.close {
-                color: var(--mjo-primary-color-300, var(--mjo-secondary-foreground-color));
-            }
-            .container[data-color="secondary"] mjo-icon.close {
-                color: var(--mjo-secondary-color-300, var(--mjo-secondary-foreground-color));
-            }
-            .container[data-color="success"] mjo-icon.close {
-                color: #ace4a3;
-            }
-            .container[data-color="warning"] mjo-icon.close {
-                color: #e6d6a2;
-            }
-            .container[data-color="info"] mjo-icon.close {
-                color: #94bedf;
-            }
-            .container[data-color="error"] mjo-icon.close {
-                color: #e29aa2;
-            }
-            .container[data-radius="none"] {
-                border-radius: 0px;
-            }
-            .container[data-radius="small"] {
-                border-radius: 5px;
-            }
-            .container[data-radius="medium"] {
-                border-radius: 10px;
-            }
-            .container[data-radius="large"] {
-                border-radius: 20px;
-            }
-            .container[data-size="small"] {
-                font-size: var(--mjo-chip-font-size-small-size, 0.75em);
-                line-height: var(--mjo-chip-line-height-small-size, 0.75em);
-                height: 1.5em;
-            }
-            .container[data-size="large"] {
-                font-size: var(--mjo-chip-font-size-large-size, 1.1em);
-                line-height: var(--mjo-chip-line-height-large-size, 1.2em);
-                height: 1.8em;
-            }
-            .container[data-variant="bordered"] {
-                background-color: transparent;
-                border-style: solid;
-                border-width: var(--mjo-chip-border-width-size-medium, 2px);
-                border-color: var(--mjo-color-gray-400);
-                color: var(--mjo-color-gray-400);
-            }
-            .container[data-variant="bordered"][data-size="small"] {
-                border-width: var(--mjo-chip-border-width-size-small, 1px);
-            }
-            .container[data-variant="bordered"][data-size="large"] {
-                border-width: var(--mjo-chip-border-width-size-large, 3px);
-            }
-            .container[data-variant="bordered"][data-color="primary"] {
-                border-color: var(--mjo-primary-color);
-                color: var(--mjo-primary-color);
-            }
-            .container[data-variant="bordered"][data-color="secondary"] {
-                border-color: var(--mjo-secondary-color);
-                color: var(--mjo-secondary-color);
-            }
-            .container[data-variant="bordered"][data-color="success"] {
-                border-color: var(--mjo-color-success);
-                color: var(--mjo-color-success);
-            }
-            .container[data-variant="bordered"][data-color="warning"] {
-                border-color: var(--mjo-color-warning);
-                color: var(--mjo-color-warning);
-            }
-            .container[data-variant="bordered"][data-color="info"] {
-                border-color: var(--mjo-color-info);
-                color: var(--mjo-color-info);
-            }
-            .container[data-variant="bordered"][data-color="error"] {
-                border-color: var(--mjo-color-error);
-                color: var(--mjo-color-error);
-            }
-            .container[data-variant="light"] {
-                background-color: transparent;
-                color: var(--mjo-color-gray-400);
-            }
-            .container[data-variant="light"][data-color="primary"] {
-                color: var(--mjo-primary-color);
-            }
-            .container[data-variant="light"][data-color="secondary"] {
-                color: var(--mjo-secondary-color);
-            }
-            .container[data-variant="light"][data-color="success"] {
-                color: var(--mjo-color-success);
-            }
-            .container[data-variant="light"][data-color="warning"] {
-                color: var(--mjo-color-warning);
-            }
-            .container[data-variant="light"][data-color="info"] {
-                color: var(--mjo-color-info);
-            }
-            .container[data-variant="light"][data-color="error"] {
-                color: var(--mjo-color-error);
-            }
-            .container[data-variant="flat"] {
-                background-color: var(--mjo-color-gray-alpha2);
-                color: var(--mjo-color-gray-600);
-            }
-            .container[data-variant="flat"][data-color="primary"] {
-                background-color: var(--mjo-primary-color-alpha2);
-                color: var(--mjo-primary-color);
-            }
-            .container[data-variant="flat"][data-color="secondary"] {
-                background-color: var(--mjo-secondary-color-alpha2);
-                color: var(--mjo-secondary-color);
-            }
-            .container[data-variant="flat"][data-color="success"] {
-                background-color: var(--mjo-color-green-alpha2);
-                color: var(--mjo-color-success);
-            }
-            .container[data-variant="flat"][data-color="warning"] {
-                background-color: var(--mjo-color-orange-alpha2);
-                color: var(--mjo-color-warning);
-            }
-            .container[data-variant="flat"][data-color="info"] {
-                background-color: var(--mjo-color-blue-alpha2);
-                color: var(--mjo-color-info);
-            }
-            .container[data-variant="flat"][data-color="error"] {
-                background-color: var(--mjo-color-red-alpha2);
-                color: var(--mjo-color-error);
-            }
-            .container[data-variant="faded"] {
-                background-color: var(--mjo-background-color-card);
-                border-style: solid;
-                border-width: 2px;
-                border-color: var(--mjo-foreground-color);
-                color: var(--mjo-foreground-color);
-            }
-            .container[data-variant="faded"][data-color="primary"] {
-                color: var(--mjo-primary-color);
-            }
-            .container[data-variant="faded"][data-color="secondary"] {
-                color: var(--mjo-secondary-color);
-            }
-            .container[data-variant="faded"][data-color="success"] {
-                color: var(--mjo-color-success);
-            }
-            .container[data-variant="faded"][data-color="warning"] {
-                color: var(--mjo-color-warning);
-            }
-            .container[data-variant="faded"][data-color="info"] {
-                color: var(--mjo-color-info);
-            }
-            .container[data-variant="faded"][data-color="error"] {
-                color: var(--mjo-color-error);
-            }
-            .container[data-variant="shadow"] {
-                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-            }
-            .container[data-variant="shadow"][data-color="primary"] {
-                box-shadow: 0px 2px 5px var(--mjo-primary-color-alpha5);
-            }
-            .container[data-variant="shadow"][data-color="secondary"] {
-                box-shadow: 0px 2px 5px var(--mjo-secondary-color-alpha5);
-            }
-            .container[data-variant="shadow"][data-color="success"] {
-                box-shadow: 0px 2px 5px var(--mjo-color-green-alpha3);
-            }
-            .container[data-variant="shadow"][data-color="warning"] {
-                color: var(--mjo-color-black);
-                box-shadow: 0px 2px 5px var(--mjo-color-orange-alpha5);
-            }
-            .container[data-variant="shadow"][data-color="info"] {
-                box-shadow: 0px 2px 5px var(--mjo-color-blue-alpha5);
-            }
-            .container[data-variant="shadow"][data-color="error"] {
-                box-shadow: 0px 2px 5px var(--mjo-color-red-alpha5);
-            }
-            .container[data-variant="dot"] {
-                border-style: solid;
-                border-width: 2px;
-                border-color: var(--mjo-foreground-color);
-                background-color: transparent;
-                color: var(--mjo-foreground-color);
-            }
-            .container[data-variant="dot"][data-size="small"] .dot {
-                width: 0.75em;
-                height: 0.75em;
-            }
-            .container[data-variant="dot"][data-size="large"] .dot {
-                width: 1.1em;
-                height: 1.1em;
-            }
-            .container[data-variant="dot"][data-color="primary"] .dot {
-                background-color: var(--mjo-primary-color);
-            }
-            .container[data-variant="dot"][data-color="secondary"] .dot {
-                background-color: var(--mjo-secondary-color);
-            }
-            .container[data-variant="dot"][data-color="success"] .dot {
-                background-color: var(--mjo-color-success);
-            }
-            .container[data-variant="dot"][data-color="warning"] .dot {
-                background-color: var(--mjo-color-warning);
-            }
-            .container[data-variant="dot"][data-color="info"] .dot {
-                background-color: var(--mjo-color-info);
-            }
-            .container[data-variant="dot"][data-color="error"] .dot {
-                background-color: var(--mjo-color-error);
-            }
             .container[data-disabled] {
                 opacity: 0.5;
                 pointer-events: none;
@@ -434,18 +400,13 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
 
             /* Accessibility and interaction styles */
             .container[data-clickable] {
+                user-select: none;
                 cursor: pointer;
                 transition: transform 0.2s ease-in-out;
             }
-            .container[data-clickable]:hover:not([data-disabled]) {
-                transform: scale(1.02);
-            }
-            .container:focus-visible {
-                outline: 2px solid var(--mjo-primary-color, #005fcc);
-                outline-offset: 2px;
-            }
-            .container[data-clickable]:focus-visible {
-                outline: 2px solid var(--mjo-primary-color, #005fcc);
+            .container:focus-visible,
+            .container[data-clickable]:hover {
+                outline: 2px solid var(--mjoint-chip-focus-outline-color);
                 outline-offset: 2px;
             }
 
@@ -458,9 +419,9 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 opacity: 0.8;
             }
             mjo-icon.close:focus-visible {
-                outline: 2px solid var(--mjo-primary-color, #005fcc);
+                outline: 1px solid #000000;
                 outline-offset: 1px;
-                border-radius: 2px;
+                border-radius: 9999px;
             }
         `,
     ];
