@@ -345,7 +345,8 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 align-items: center;
                 padding: var(--mjo-chip-padding, 0 0.75em);
                 gap: var(--mjo-chip-gap, 0.4em);
-                overflow: visible;
+                overflow: hidden;
+                z-index: 1;
             }
             .container::before {
                 content: "";
