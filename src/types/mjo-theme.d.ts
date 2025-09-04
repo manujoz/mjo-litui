@@ -29,6 +29,12 @@ export interface MjoThemeConfig {
     fontSizeXlarge?: string;
     /** --mjo-font-size-xxlarge */
     fontSizeXxlarge?: string;
+    /** --mjo-font-size-title1 */
+    fontSizeTitle1?: string;
+    /** --mjo-font-size-title2 */
+    fontSizeTitle2?: string;
+    /** --mjo-font-size-title3 */
+    fontSizeTitle3?: string;
     /** --mjo-font-weight-light */
     fontWeightLight?: string;
     /** --mjo-font-weight-regular */
@@ -150,13 +156,17 @@ export interface MjoThemeConfig {
 }
 
 type MjoThemeMode = {
-    /** --mjo-border-color, --mjo-border-color-[xlow|low|high|xhigh] */
+    /** --mjo-muted-color, --mjo-border-color-[low|high] */
+    mutedColor?: MjoThemeColorContrasts | string;
+    /** --mjo-muted-foreground, --mjo-border-color-[low|high] */
+    mutedColorForeground?: MjoThemeColorContrasts | string;
+    /** --mjo-border-color, --mjo-border-color-[low|high] */
     borderColor?: MjoThemeColorContrasts | string;
-    /** --mjo-background-color, --mjo-background-color-hover, --mjo-background-color-[xlow|low|high|xhigh] */
+    /** --mjo-background-color, --mjo-background-color-hover, --mjo-background-color-[low|high] */
     backgroundColor?: ({ hover?: string } & MjoThemeColorContrasts) | string;
-    /** --mjo-background-color-card, --mjo-background-color-card-[xlow|low|high|xhigh] */
+    /** --mjo-background-color-card, --mjo-background-color-card-[low|high] */
     backgroundColorCard?: MjoThemeColorContrasts | string;
-    /** --mjo-foreground-color, --mjo-foreground-color-[xlow|low|high|xhigh] */
+    /** --mjo-foreground-color, --mjo-foreground-color-[low|high] */
     foregroundColor?: MjoThemeColorContrasts | string;
     /** --mjo-box-shadow, --mjo-box-shadow-[1-5] */
     boxShadow?: MjoThemeBoxShadow;
