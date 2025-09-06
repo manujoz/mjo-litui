@@ -1,0 +1,189 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in mjo-litui components
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thank you for reporting a bug!
+        
+        Please fill out the following information to help us investigate and resolve the issue efficiently.
+        
+        **Before submitting:**
+        - Search existing issues to avoid duplicates
+        - Ensure you're using the latest version of mjo-litui
+        - Test in multiple browsers if possible
+        - **Include the component name in the title** (e.g., "[Bug]: mjo-button not responding to click events")
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What type of rendering/behavior issue are you experiencing?
+      options:
+        - Visual rendering (styling, layout, appearance)
+        - Client-side rendering (CSR) behavior
+        - Server-side rendering (SSR) issue
+        - Hydration mismatch
+        - Theming / CSS variables
+        - Event handling
+        - Accessibility
+        - Performance
+        - TypeScript types
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: |
+        A clear and concise description of what the bug is.
+        
+        **Please specify which component(s) are affected** (e.g., mjo-button, mjo-modal, mjo-theme, etc.)
+      placeholder: |
+        Component(s) affected: mjo-button
+        
+        Describe what happened and what you expected to happen instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the behavior
+      placeholder: |
+        1. Import component '...'
+        2. Set property '...' to '...'
+        3. Trigger event '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What should happen instead?
+      placeholder: A clear description of what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-code
+    attributes:
+      label: Minimal Reproduction Code
+      description: Optional but highly recommended - provide minimal code that reproduces the issue
+      placeholder: |
+        ```typescript
+        import { LitElement, html } from 'lit';
+        import { customElement } from 'lit/decorators.js';
+        import 'mjo-litui/mjo-button';
+
+        @customElement('example-bug')
+        export class ExampleBug extends LitElement {
+          render() {
+            return html`<mjo-button>Test</mjo-button>`;
+          }
+        }
+        ```
+      render: typescript
+
+  - type: input
+    id: version
+    attributes:
+      label: mjo-litui Version
+      description: Which version of mjo-litui are you using?
+      placeholder: "0.7.7"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser(s) are affected?
+      multiple: true
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other (please specify in additional context)
+    validations:
+      required: true
+
+  - type: input
+    id: browser-version
+    attributes:
+      label: Browser Version(s)
+      description: Specific browser version(s) where the issue occurs
+      placeholder: "Chrome 118.0.5993.70, Firefox 119.0"
+
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Framework
+      description: What framework are you using with mjo-litui?
+      options:
+        - Vanilla JavaScript/TypeScript
+        - Lit
+        - React
+        - Vue
+        - Angular
+        - Svelte
+        - Other (please specify in additional context)
+
+  - type: dropdown
+    id: build-tool
+    attributes:
+      label: Build Tool
+      description: What build tool are you using?
+      options:
+        - Vite
+        - Webpack
+        - Rollup
+        - Parcel
+        - esbuild
+        - None (direct ES modules)
+        - Other (please specify in additional context)
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version
+      description: What version of Node.js are you using?
+      placeholder: "18.17.0"
+
+  - type: textarea
+    id: console-logs
+    attributes:
+      label: Console Logs
+      description: Optional - Any relevant console errors, warnings, or logs
+      placeholder: |
+        Include any error messages, warnings, or console output that might be related to the issue
+      render: text
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots/Videos
+      description: Optional - Add screenshots or videos to help explain the problem
+      placeholder: You can drag and drop images here or paste them directly
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context, workarounds, or relevant information
+      placeholder: |
+        - Theme configuration (if using mjo-theme)
+        - Import method (individual components vs full bundle)
+        - SSR setup details (if applicable)
+        - Any workarounds you've found
+        - Related issues or discussions

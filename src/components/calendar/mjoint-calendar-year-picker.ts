@@ -41,6 +41,7 @@ export class MjointCalendarYearPicker extends LitElement {
                         class="nav-button"
                         ?disabled=${this.disabled}
                         @click=${this.#previousDecade}
+                        tabindex=${this.disabled ? -1 : 0}
                         title="Previous decade: ${this.previousDecadeLabel}"
                         aria-label="Previous decade: ${this.previousDecadeLabel}"
                     >
@@ -52,6 +53,7 @@ export class MjointCalendarYearPicker extends LitElement {
                     <button
                         class="nav-button"
                         ?disabled=${this.disabled}
+                        tabindex=${this.disabled ? -1 : 0}
                         @click=${this.#nextDecade}
                         title="Next decade: ${this.nextDecadeLabel}"
                         aria-label="Next decade: ${this.nextDecadeLabel}"
@@ -203,11 +205,9 @@ export class MjointCalendarYearPicker extends LitElement {
         :host {
             display: block;
         }
-
         .year-picker {
-            padding: var(--mjo-space-medium) var(--mjo-space-small);
+            padding: var(--mjo-space-medium, 8px) var(--mjo-space-small, 4px);
         }
-
         .year-navigation {
             display: flex;
             align-items: center;
@@ -215,12 +215,11 @@ export class MjointCalendarYearPicker extends LitElement {
             margin-bottom: 16px;
             padding: 0 8px;
         }
-
         .nav-button {
             background: var(--mjo-calendar-nav-background, transparent);
-            border: var(--mjo-calendar-nav-border, 1px solid var(--mjo-border-color, #e0e0e0));
+            border: var(--mjo-calendar-nav-border, 1px solid var(--mjoint-calendar-border-color));
             border-radius: var(--mjo-calendar-nav-radius, var(--mjo-radius-medium, 4px));
-            color: var(--mjo-calendar-nav-color, var(--mjo-foreground-color, #333));
+            color: var(--mjo-calendar-nav-color, var(--mjoint-calendar-color-foreground));
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -230,39 +229,33 @@ export class MjointCalendarYearPicker extends LitElement {
             width: 32px;
             transition: all 0.2s ease;
         }
-
         .nav-button:hover:not(:disabled) {
-            background: var(--mjo-calendar-nav-hover-background, var(--mjo-primary-color-alpha2, rgba(76, 129, 201, 0.1)));
-            border-color: var(--mjo-calendar-nav-hover-border, var(--mjo-primary-color, #4c81c9));
+            background: var(--mjo-calendar-nav-hover-background, var(--mjoint-calendar-accent-color-alpha));
+            border-color: var(--mjo-calendar-nav-hover-border, var(--mjoint-calendar-accent-color));
         }
-
-        .nav-button:focus {
-            outline: 2px solid var(--mjo-calendar-nav-focus-outline, var(--mjo-primary-color, #4c81c9));
+        .nav-button:focus-visible {
+            outline: 2px solid var(--mjo-calendar-nav-focus-outline, var(--mjoint-calendar-accent-color));
             outline-offset: 2px;
         }
-
         .nav-button:disabled {
             cursor: not-allowed;
             opacity: 0.6;
         }
-
         .decade-label {
             font-weight: 500;
-            color: var(--mjo-calendar-decade-label-color, var(--mjo-foreground-color, #333));
+            color: var(--mjo-calendar-decade-label-color, var(--mjoint-calendar-color-foreground));
             font-size: 1.5em;
         }
-
         .years-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
         }
-
         .year-button {
             background: var(--mjo-calendar-picker-button-background, transparent);
-            border: var(--mjo-calendar-picker-button-border, 1px solid var(--mjo-border-color, #e0e0e0));
+            border: var(--mjo-calendar-picker-button-border, 1px solid var(--mjoint-calendar-border-color));
             border-radius: var(--mjo-calendar-picker-button-radius, var(--mjo-radius-medium, 4px));
-            color: var(--mjo-calendar-picker-button-color, var(--mjo-foreground-color-low, #333));
+            color: var(--mjo-calendar-picker-button-color, var(--mjoint-calendar-color-foreground-low));
             cursor: pointer;
             font-family: inherit;
             font-size: 1.3em;
@@ -270,28 +263,23 @@ export class MjointCalendarYearPicker extends LitElement {
             transition: all 0.2s ease;
             min-height: 40px;
         }
-
         .year-button:hover:not(:disabled) {
-            background: var(--mjo-calendar-picker-button-hover-background, var(--mjo-primary-color-alpha2, rgba(76, 129, 201, 0.1)));
-            border-color: var(--mjo-calendar-picker-button-hover-border, var(--mjo-primary-color, #4c81c9));
+            background: var(--mjo-calendar-picker-button-hover-background, var(--mjoint-calendar-accent-color-alpha));
+            border-color: var(--mjo-calendar-picker-button-hover-border, var(--mjoint-calendar-accent-color));
         }
-
-        .year-button:focus {
-            outline: 2px solid var(--mjo-calendar-picker-button-focus-outline, var(--mjo-primary-color, #4c81c9));
+        .year-button:focus-visible {
+            outline: 2px solid var(--mjo-calendar-picker-button-focus-outline, var(--mjoint-calendar-accent-color));
             outline-offset: 2px;
         }
-
         .year-button[data-selected]:not(:disabled) {
-            background: var(--mjo-calendar-picker-button-selected-background, var(--mjo-primary-color, #4c81c9));
-            border-color: var(--mjo-calendar-picker-button-selected-border, var(--mjo-primary-color, #4c81c9));
-            color: var(--mjo-calendar-picker-button-selected-color, var(--mjo-primary-foreground-color, white));
+            background: var(--mjo-calendar-picker-button-selected-background, var(--mjoint-calendar-accent-color));
+            border-color: var(--mjo-calendar-picker-button-selected-border, var(--mjoint-calendar-accent-color));
+            color: var(--mjo-calendar-picker-button-selected-color, var(--mjoint-calendar-accent-color-foreground));
         }
-
         .year-button:disabled {
             cursor: not-allowed;
             opacity: 0.6;
         }
-
         .year-picker[data-disabled] {
             pointer-events: none;
         }

@@ -211,7 +211,7 @@ export class MjointCalendarGrid extends LitElement {
             text-align: center;
             justify-self: center;
             padding: 8px 4px;
-            color: var(--mjo-calendar-week-day-color, var(--mjo-foreground-color-low, #666));
+            color: var(--mjo-calendar-week-day-color, var(--mjoint-calendar-color-foreground-low));
             font-weight: var(--mjo-calendar-week-day-font-weight, 600);
             box-sizing: border-box;
             width: 3em;

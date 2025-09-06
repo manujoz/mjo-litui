@@ -6,6 +6,7 @@ import { customElement, property } from "lit/decorators.js";
 import { FaChevronLeft, FaChevronRight } from "mjo-icons/fa";
 
 import "../../mjo-button.js";
+import "../../mjo-icon.js";
 import "../../mjo-typography.js";
 
 /**
@@ -61,56 +62,57 @@ export class MjointCalendarHeader extends LitElement {
                 <div class="navigation" part="navigation" role="toolbar" aria-label="Calendar navigation">
                     ${this.side === "single" || this.side === "left"
                         ? html`
-                              <mjo-button
-                                  variant="ghost"
-                                  size="small"
-                                  rounded
-                                  startIcon=${FaChevronLeft}
-                                  @click=${this.#handlePrevious}
+                              <button
+                                  class="nav-button"
                                   ?disabled=${this.disabled}
                                   aria-label=${this.previousMonthLabel}
+                                  tabindex=${this.disabled ? -1 : 0}
                                   title=${this.previousMonthLabel}
-                              ></mjo-button>
+                                  @click=${this.#handlePrevious}
+                              >
+                                  <mjo-icon src=${FaChevronLeft}></mjo-icon>
+                              </button>
                           `
                         : nothing}
 
                     <div class="month-year-selectors" part="month-year" role="group" aria-label=${this.currentMonthYearLabel}>
-                        <mjo-button
-                            variant="text"
-                            @click=${this.#handleMonthClick}
+                        <button
+                            class="selector-button"
                             ?disabled=${this.disabled}
+                            tabindex=${this.disabled ? -1 : 0}
                             aria-label="Select month"
                             aria-expanded=${this.monthPickerOpen ? "true" : "false"}
+                            @click=${this.#handleMonthClick}
                         >
                             <mjo-typography tag="none">
                                 ${this.monthNames && Array.isArray(this.monthNames) && this.monthNames[this.month]
                                     ? this.monthNames[this.month]
                                     : `Month ${this.month + 1}`}
                             </mjo-typography>
-                        </mjo-button>
-                        <mjo-button
-                            variant="text"
-                            @click=${this.#handleYearClick}
+                        </button>
+                        <button
+                            class="selector-button"
                             ?disabled=${this.disabled}
+                            tabindex=${this.disabled ? -1 : 0}
                             aria-label="Select year"
                             aria-expanded=${this.yearPickerOpen ? "true" : "false"}
+                            @click=${this.#handleYearClick}
                         >
                             <mjo-typography tag="none">${this.year}</mjo-typography>
-                        </mjo-button>
+                        </button>
                     </div>
 
                     ${this.side === "single" || this.side === "right"
                         ? html`
-                              <mjo-button
-                                  variant="ghost"
-                                  size="small"
-                                  rounded
-                                  startIcon=${FaChevronRight}
-                                  @click=${this.#handleNext}
+                              <button
+                                  class="nav-button"
                                   ?disabled=${this.disabled}
                                   aria-label=${this.nextMonthLabel}
                                   title=${this.nextMonthLabel}
-                              ></mjo-button>
+                                  @click=${this.#handleNext}
+                              >
+                                  <mjo-icon src=${FaChevronRight}></mjo-icon>
+                              </button>
                           `
                         : nothing}
                 </div>
@@ -172,11 +174,57 @@ export class MjointCalendarHeader extends LitElement {
             min-width: max-content;
             --mjo-button-disabled-background-color: transparent;
         }
-
+        .nav-button {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            font-size: 1em;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.8em;
+            aspect-ratio: 1 / 1;
+            border: var(--mjo-calendar-nav-button-border, solid 1px var(--mjoint-calendar-accent-color));
+            color: var(--mjo-calendar-nav-button-color, var(--mjoint-calendar-accent-color));
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-family: inherit;
+        }
         .month-year-selectors {
             display: flex;
             align-items: center;
             gap: 4px;
+        }
+        .selector-button {
+            background: none;
+            border: none;
+            padding: 5px 8px;
+            margin: 0;
+            font-size: 1em;
+            font-family: inherit;
+            border-radius: var(--mjo-radius-medium, 6px);
+            display: flex;
+            align-items: center;
+            color: var(--mjo-calendar-selector-button-color, var(--mjoint-calendar-color-foreground));
+            cursor: pointer;
+        }
+        .nav-button:hover:not(:disabled),
+        .selector-button:hover:not(:disabled) {
+            background-color: var(--mjo-button-selector-button-highlight-color, var(--mjoint-calendar-highlight-color));
+        }
+        .nav-button:focus-visible,
+        .selector-button:focus-visible {
+            outline: 2px solid var(--mjo-calendar-nav-button-color, var(--mjoint-calendar-accent-color));
+            outline-offset: 2px;
+        }
+        .nav-button:disabled,
+        .selector-button:disabled {
+            background-color: transparent;
+            color: var(--mjoint-calendar-disabled-color-foreground);
+            border-color: var(--mjoint-calendar-disabled-color-foreground);
+            cursor: not-allowed;
         }
     `;
 }

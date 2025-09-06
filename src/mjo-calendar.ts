@@ -1059,6 +1059,15 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             .calendar {
                 position: relative;
                 min-width: max-content;
+                --mjoint-calendar-color-foreground: var(--mjo-foreground-color, white);
+                --mjoint-calendar-color-foreground-low: var(--mjo-foreground-color-low, #666);
+                --mjoint-calendar-border-color: var(--mjo-border-color, #e0e0e0);
+                --mjoint-calendar-accent-color: var(--mjo-primary-color, #1aa8ed);
+                --mjoint-calendar-accent-color-alpha: var(--mjo-primary-color-alpha2, rgba(26, 168, 237, 0.1));
+                --mjoint-calendar-accent-color-foreground: var(--mjo-primary-foreground-color, #ffffff);
+                --mjoint-calendar-highlight-color: var(--mjo-background-color-high, rgba(0, 0, 0, 0.2));
+                --mjoint-calendar-disabled-color: var(--mjo-disabled-color, rgba(0, 0, 0, 0.1));
+                --mjoint-calendar-disabled-color-foreground: var(--mjo-disabled-foreground-color, #aaa);
             }
             .sr-only {
                 position: absolute;
@@ -1080,7 +1089,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 border-radius: var(--mjo-calendar-border-radius, var(--mjo-radius-medium, 8px));
                 box-shadow: var(--mjo-calendar-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
                 padding: var(--mjo-calendar-padding, 16px);
-                font-size: calc(var(--mjo-font-size-small, 14px) - 3px);
+                font-size: 12px;
                 min-width: max-content;
             }
 
@@ -1106,37 +1115,17 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
 
             /* Size variations */
             [data-size="small"] {
-                font-size: calc(var(--mjo-font-size-xsmall, 10px) - 1px);
+                font-size: 10px;
             }
 
             [data-size="large"] {
-                font-size: calc(var(--mjo-font-size, 16px) - 3px);
+                font-size: 14px;
             }
 
-            [data-color="secondary"] mjoint-calendar-header,
-            [data-color="secondary"] mjoint-calendar-month-picker,
-            [data-color="secondary"] mjoint-calendar-year-picker {
-                --mjo-button-primary-color: var(--mjo-secondary-color, #7dc717);
-                --mjo-button-secondary-foreground-color: var(--mjo-secondary-foreground-color, #ffffff);
-                --mjo-calendar-picker-button-selected-background: var(--mjo-secondary-color, #7dc717);
-                --mjo-calendar-picker-button-selected-border: var(--mjo-secondary-color, #7dc717);
-                --mjo-calendar-picker-button-selected-color: var(--mjo-secondary-foreground-color, #ffffff);
-                --mjo-calendar-picker-button-hover-background: var(--mjo-secondary-color-alpha2, #7dc717);
-                --mjo-calendar-picker-button-hover-border: var(--mjo-secondary-color, #7dc717);
-                --mjo-calendar-nav-hover-background: var(--mjo-secondary-color-alpha2, #7dc717);
-                --mjo-calendar-nav-hover-border: var(--mjo-secondary-color, #7dc717);
-            }
-
-            /* Color variations */
-            [data-color="secondary"] mjoint-calendar-grid {
-                --mjo-calendar-today-background: var(--mjo-calendar-today-background-secondary, var(--mjo-secondary-color-alpha2, rgba(204, 61, 116, 0.1)));
-                --mjo-calendar-today-color: var(--mjo-calendar-today-color-secondary, var(--mjo-secondary-color, #7dc717));
-                --mjo-calendar-selected-background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #7dc717));
-                --mjo-calendar-selected-color: var(--mjo-calendar-selected-color-secondary, white);
-                --mjo-calendar-range-endpoint-background: var(--mjo-calendar-selected-background-secondary, var(--mjo-secondary-color, #7dc717));
-                --mjo-calendar-range-endpoint-color: var(--mjo-calendar-selected-color-secondary, white);
-                --mjo-calendar-range-background: var(--mjo-calendar-range-background-secondary, var(--mjo-secondary-color-alpha1, rgba(204, 61, 116, 0.2)));
-                --mjo-calendar-range-color: var(--mjo-calendar-range-color-secondary, var(--mjo-secondary-color, #7dc717));
+            [data-color="secondary"] {
+                --mjoint-calendar-accent-color: var(--mjo-secondary-color, #7dc717);
+                --mjoint-calendar-accent-color-alpha: var(--mjo-secondary-color-alpha2, rgba(125, 199, 23, 0.1));
+                --mjoint-calendar-accent-color-foreground: var(--mjo-secondary-foreground-color, #ffffff);
             }
         `,
     ];

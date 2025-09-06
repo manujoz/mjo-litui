@@ -1,5 +1,5 @@
-import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { LitElement, PropertyValues, css, html } from "lit";
+import { customElement, property, query } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import "../../mjo-typography.js";
@@ -23,6 +23,8 @@ export class MjointCalendarDay extends LitElement {
     @property({ type: Boolean }) isFocused = false;
     @property({ type: Boolean }) showToday = true;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
+
+    @query(".day") $day!: HTMLElement;
 
     get dateLabel() {
         if (this.isEmpty || !this.month || !this.year) return "";
@@ -61,7 +63,6 @@ export class MjointCalendarDay extends LitElement {
             "range-end": this.isRangeEnd,
             disabled: this.isDisabled,
             "hovered-range": this.isHovered,
-            focused: this.isFocused,
         };
 
         return html`
@@ -81,6 +82,16 @@ export class MjointCalendarDay extends LitElement {
                 <mjo-typography tag="none">${this.day}</mjo-typography>
             </div>
         `;
+    }
+
+    protected updated(_changedProperties: PropertyValues<this>): void {
+        if (_changedProperties.has("isFocused")) {
+            if (this.isFocused) {
+                this.$day?.focus();
+            } else {
+                this.$day?.blur();
+            }
+        }
     }
 
     #handleClick() {
@@ -129,57 +140,46 @@ export class MjointCalendarDay extends LitElement {
             position: relative;
             font-size: 1.3em;
         }
-
         .day.empty {
             cursor: default;
             pointer-events: none;
         }
-
         .day:not(.empty):not(.disabled):hover {
-            background: var(--mjo-calendar-day-hover-background, var(--mjo-background-color-high, #f5f5f5));
+            background: var(--mjo-calendar-day-hover-background, var(--mjoint-calendar-highlight-color));
         }
-
         .day.today:not(.empty):not(.disabled) {
-            background: var(--mjo-calendar-today-background, var(--mjo-primary-color-alpha2, rgba(29, 127, 219, 0.1)));
-            color: var(--mjo-calendar-today-color, var(--mjo-primary-color, #1aa8ed));
+            background: var(--mjo-calendar-today-background, var(--mjoint-calendar-accent-color-alpha));
+            color: var(--mjo-calendar-today-color, var(--mjoint-calendar-accent-color));
             font-weight: 600;
         }
-
         .day.selected:not(.empty):not(.disabled) {
-            background: var(--mjo-calendar-selected-background, var(--mjo-primary-color, #1aa8ed));
-            color: var(--mjo-calendar-selected-color, white);
+            background: var(--mjo-calendar-selected-background, var(--mjoint-calendar-accent-color));
+            color: var(--mjo-calendar-selected-color, var(--mjoint-calendar-accent-color-foreground));
             font-weight: 600;
         }
-
         .day.in-range,
         .day.hovered-range {
-            background: var(--mjo-calendar-range-background, var(--mjo-primary-color-alpha1, rgba(29, 127, 219, 0.2)));
-            color: var(--mjo-calendar-range-color, var(--mjo-primary-color, #1aa8ed));
+            background: var(--mjo-calendar-range-background, var(--mjoint-calendar-accent-color-alpha));
+            color: var(--mjo-calendar-range-color, var(--mjoint-calendar-accent-color));
         }
-
         .day.range-start,
         .day.range-end {
-            background: var(--mjo-calendar-range-endpoint-background, var(--mjo-primary-color, #1aa8ed));
-            color: var(--mjo-calendar-range-endpoint-color, white);
+            background: var(--mjo-calendar-range-endpoint-background, var(--mjoint-calendar-accent-color));
+            color: var(--mjo-calendar-range-endpoint-color, var(--mjoint-calendar-accent-color-foreground));
             font-weight: 600;
         }
-
         .day.disabled {
-            color: var(--mjo-calendar-disabled-color, var(--mjo-disabled-foreground-color, #aaa));
+            color: var(--mjo-calendar-disabled-color, var(--mjoint-calendar-disabled-color-foreground));
             cursor: not-allowed;
             background: var(--mjo-calendar-disabled-background, transparent);
         }
-
         .day.disabled:hover {
             background: var(--mjo-calendar-disabled-background, transparent);
         }
-
-        .day.focused {
-            outline: 2px solid var(--mjo-calendar-focus-outline, var(--mjo-primary-color, #1aa8ed));
+        .day:focus-visible {
+            outline: 2px solid var(--mjo-calendar-focus-outline, var(--mjoint-calendar-accent-color));
             outline-offset: 2px;
         }
-
-        /* Size variations */
         :host([size="small"]) .day {
             min-height: 28px;
         }

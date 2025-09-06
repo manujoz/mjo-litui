@@ -227,19 +227,6 @@ When `color="secondary"`, these variables apply:
 | `--mjo-calendar-picker-button-selected-border`     | `--mjo-primary-color`            | Picker button selected border     |
 | `--mjo-calendar-picker-button-selected-color`      | `--mjo-primary-foreground-color` | Picker button selected text color |
 
-### Year Picker Navigation
-
-| Variable                              | Fallback                       | Purpose                            |
-| ------------------------------------- | ------------------------------ | ---------------------------------- |
-| `--mjo-calendar-nav-background`       | `transparent`                  | Navigation button background       |
-| `--mjo-calendar-nav-border`           | `1px solid --mjo-border-color` | Navigation button border           |
-| `--mjo-calendar-nav-radius`           | `--mjo-radius`                 | Navigation button border radius    |
-| `--mjo-calendar-nav-color`            | `--mjo-foreground-color`       | Navigation button text color       |
-| `--mjo-calendar-nav-hover-background` | `--mjo-primary-color-alpha2`   | Navigation button hover background |
-| `--mjo-calendar-nav-hover-border`     | `--mjo-primary-color`          | Navigation button hover border     |
-| `--mjo-calendar-nav-focus-outline`    | `--mjo-primary-color`          | Navigation button focus outline    |
-| `--mjo-calendar-decade-label-color`   | `--mjo-foreground-color`       | Decade label text color            |
-
 -   **Smart Constraints**: Min/max dates and individual disabled dates support
 -   **Form Integration**: Native form support with validation capabilities
 -   **Accessibility**: Full keyboard navigation and screen reader support
@@ -885,13 +872,17 @@ When `color="secondary"`, these variables apply:
 
 ### Navigation Controls
 
-| Variable                              | Fallback                     | Purpose                            |
-| ------------------------------------- | ---------------------------- | ---------------------------------- |
-| `--mjo-calendar-nav-background`       | `transparent`                | Navigation button background       |
-| `--mjo-calendar-nav-border`           | `--mjo-border-color`         | Navigation button border           |
-| `--mjo-calendar-nav-color`            | `--mjo-foreground-color`     | Navigation button text color       |
-| `--mjo-calendar-nav-hover-background` | `--mjo-primary-color-alpha2` | Navigation button hover background |
-| `--mjo-calendar-nav-radius`           | `--mjo-radius`               | Navigation button border radius    |
+| Variable                                       | Fallback                                   | Purpose                                |
+| ---------------------------------------------- | ------------------------------------------ | -------------------------------------- |
+| `--mjo-calendar-nav-background`                | `transparent`                              | Navigation button background           |
+| `--mjo-calendar-nav-border`                    | `--mjo-border-color`                       | Navigation button border               |
+| `--mjo-calendar-nav-color`                     | `--mjo-foreground-color`                   | Navigation button text color           |
+| `--mjo-calendar-nav-hover-background`          | `--mjo-primary-color-alpha2`               | Navigation button hover background     |
+| `--mjo-calendar-nav-radius`                    | `--mjo-radius`                             | Navigation button border radius        |
+| `--mjo-calendar-nav-button-border`             | `solid 1px --mjoint-calendar-accent-color` | Header navigation button border        |
+| `--mjo-calendar-nav-button-color`              | `--mjoint-calendar-accent-color`           | Header navigation button text color    |
+| `--mjo-calendar-selector-button-color`         | `--mjoint-calendar-color-foreground`       | Month/year selector button text color  |
+| `--mjo-button-selector-button-highlight-color` | `--mjoint-calendar-highlight-color`        | Selector button hover background color |
 
 ### Month/Year Pickers
 
@@ -1022,6 +1013,12 @@ export interface MjoCalendarTheme {
     navHoverBorder?: string; // --mjo-calendar-nav-hover-border
     navFocusOutline?: string; // --mjo-calendar-nav-focus-outline
     decadeLabelColor?: string; // --mjo-calendar-decade-label-color
+
+    // Header navigation controls
+    navButtonBorder?: string; // --mjo-calendar-nav-button-border
+    navButtonColor?: string; // --mjo-calendar-nav-button-color
+    selectorButtonColor?: string; // --mjo-calendar-selector-button-color
+    buttonSelectorButtonHighlightColor?: string; // --mjo-button-selector-button-highlight-color
 }
 ```
 

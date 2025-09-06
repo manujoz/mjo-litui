@@ -1,0 +1,209 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for mjo-litui
+title: "[Feature]: "
+labels: ["enhancement", "needs-discussion"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thank you for suggesting a feature!
+        
+        Please provide detailed information about your feature request to help us understand and evaluate it.
+        
+        **Before submitting:**
+        - Search existing issues and discussions to avoid duplicates
+        - Consider if this aligns with Web Components philosophy and mjo-litui's design principles
+        - Think about backward compatibility and potential breaking changes
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature are you requesting?
+      options:
+        - New component
+        - Enhancement to existing component
+        - New theming capability
+        - New utility/mixin
+        - API improvement
+        - Documentation improvement
+        - Developer experience (DX)
+        - Performance optimization
+        - Accessibility improvement
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: project-area
+    attributes:
+      label: Project Area
+      description: Which area of the project does this feature affect?
+      options:
+        - Components
+        - Theming system
+        - Controllers (modal, drawer, notification)
+        - Mixins/utilities
+        - CLI tools
+        - Build system
+        - Documentation
+        - Testing infrastructure
+        - Multiple areas
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story
+      description: Describe the user need this feature would address
+      placeholder: |
+        As a [type of user], I want [feature] so that [benefit/goal].
+        
+        Example: As a developer building a dashboard, I want a data table component with sorting and filtering so that I can display large datasets effectively.
+    validations:
+      required: true
+
+  - type: textarea
+    id: detailed-description
+    attributes:
+      label: Detailed Description
+      description: Provide a clear and detailed description of the feature
+      placeholder: |
+        Describe the feature in detail:
+        - What should it do?
+        - How should it behave?
+        - What are the key requirements?
+        - Any specific use cases or scenarios?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: How do you envision this feature being implemented?
+      placeholder: |
+        Describe your proposed approach:
+        - Component structure or API design
+        - Integration with existing components
+        - Expected behavior and interactions
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-api
+    attributes:
+      label: Proposed API
+      description: Optional - Suggest the component API, properties, methods, or events
+      placeholder: |
+        ```typescript
+        // Example API proposal
+        @customElement('mjo-new-component')
+        export class MjoNewComponent extends LitElement {
+          @property() someProperty: string = 'default';
+          @property({ type: Boolean }) enabled: boolean = false;
+          
+          // Methods
+          doSomething(): void { }
+          
+          // Events
+          // Dispatches: 'mjo-new-component:change'
+        }
+        ```
+      render: typescript
+
+  - type: textarea
+    id: code-examples
+    attributes:
+      label: Usage Examples
+      description: Optional - Show how the feature would be used
+      placeholder: |
+        ```html
+        <!-- Basic usage -->
+        <mjo-new-component someProperty="value"></mjo-new-component>
+        
+        <!-- Advanced usage -->
+        <mjo-new-component 
+          someProperty="value" 
+          enabled
+          @mjo-new-component:change=${this.handleChange}>
+        </mjo-new-component>
+        ```
+        
+        ```typescript
+        // Lit usage example
+        render() {
+          return html`
+            <mjo-new-component 
+              .someProperty=${this.value}
+              @mjo-new-component:change=${this.handleChange}>
+            </mjo-new-component>
+          `;
+        }
+        ```
+      render: html
+
+  - type: textarea
+    id: alternative-solutions
+    attributes:
+      label: Alternative Solutions
+      description: What alternative approaches have you considered?
+      placeholder: |
+        Describe alternative solutions you've thought about:
+        - Other ways to solve the same problem
+        - Existing workarounds you're currently using
+        - Similar features in other libraries
+        - Why the proposed solution is better
+
+  - type: textarea
+    id: related-discussions
+    attributes:
+      label: Related Issues/Discussions
+      description: Optional - Link to any related issues, discussions, or references
+      placeholder: |
+        - Related issue: #123
+        - Discussion: https://github.com/manujoz/mjo-litui/discussions/456
+        - Reference implementation: https://example.com
+        - Similar feature in other libraries: https://example.com
+
+  - type: checkboxes
+    id: web-components-philosophy
+    attributes:
+      label: Web Components Philosophy
+      description: Please confirm this feature aligns with Web Components principles
+      options:
+        - label: This feature maintains encapsulation and doesn't leak implementation details
+          required: true
+        - label: This feature works across different frameworks (React, Vue, Angular, etc.)
+          required: true
+        - label: This feature doesn't require framework-specific APIs or dependencies
+          required: true
+
+  - type: dropdown
+    id: willing-to-implement
+    attributes:
+      label: Implementation Willingness
+      description: Are you willing to help implement this feature?
+      options:
+        - "Yes, I can implement this feature"
+        - "Yes, I can help with implementation"
+        - "Maybe, depending on complexity and guidance"
+        - "No, but I can help with testing/feedback"
+        - "No, I'm just suggesting the idea"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context, mockups, screenshots, or information
+      placeholder: |
+        Add any other context about the feature request:
+        - Mockups or wireframes
+        - Screenshots of similar features
+        - Performance considerations
+        - Breaking change implications
+        - Timeline considerations

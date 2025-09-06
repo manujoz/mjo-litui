@@ -1,0 +1,202 @@
+name: Question
+description: Ask a question about using mjo-litui components
+title: "[Question]: "
+labels: ["question", "needs-response"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Ask your question!
+        
+        We're here to help you with mjo-litui. Please provide details about what you're trying to achieve.
+        
+        **Before asking:**
+        - Check the [documentation](https://github.com/manujoz/mjo-litui/tree/master/docs) for existing answers
+        - Search existing issues to see if your question has been asked before
+        - Be specific about your use case to get the most helpful response
+
+  - type: dropdown
+    id: question-type
+    attributes:
+      label: Question Type
+      description: What type of question is this?
+      options:
+        - Usage/How-to (how to use a component)
+        - Integration (integrating with frameworks)
+        - Theming/Styling
+        - Performance
+        - Best practices
+        - Troubleshooting
+        - API clarification
+        - Browser compatibility
+        - Server-side rendering (SSR)
+        - TypeScript types
+        - Build/bundling
+        - General guidance
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Related Component(s)
+      description: Which component(s) is your question about? (Select "Not component-specific" if it's a general question)
+      options:
+        - Not component-specific
+        - mjo-accordion
+        - mjo-alert
+        - mjo-avatar
+        - mjo-badge
+        - mjo-breadcrumbs
+        - mjo-button
+        - mjo-calendar
+        - mjo-card
+        - mjo-checkbox / mjo-checkbox-group
+        - mjo-chip
+        - mjo-color-picker
+        - mjo-date-picker
+        - mjo-drawer
+        - mjo-dropdown
+        - mjo-form
+        - mjo-grid
+        - mjo-icon
+        - mjo-image
+        - mjo-link
+        - mjo-listbox
+        - mjo-menu-button
+        - mjo-message
+        - mjo-modal
+        - mjo-notification
+        - mjo-pagination
+        - mjo-progress
+        - mjo-radio / mjo-radio-group
+        - mjo-ripple
+        - mjo-select
+        - mjo-slider
+        - mjo-switch
+        - mjo-table
+        - mjo-tabs
+        - mjo-text-nowrap
+        - mjo-textarea
+        - mjo-textfield
+        - mjo-theme
+        - mjo-typography
+        - Multiple components
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-trying-to-achieve
+    attributes:
+      label: What are you trying to achieve?
+      description: Describe your goal or use case clearly
+      placeholder: |
+        Examples:
+        - "I want to customize the color scheme of my buttons"
+        - "I need to integrate mjo-calendar with React and handle date selection"
+        - "I want to create a form with validation using mjo-form"
+        - "I'm trying to implement server-side rendering with mjo-components"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-tried
+    attributes:
+      label: What have you tried?
+      description: Describe what approaches you've attempted so far
+      placeholder: |
+        Tell us about:
+        - Code you've written
+        - Documentation you've read
+        - Approaches that didn't work
+        - Error messages you encountered
+        - Workarounds you've attempted
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-code
+    attributes:
+      label: Current Code
+      description: Optional - Share your current code to provide context
+      placeholder: |
+        ```typescript
+        import { LitElement, html } from 'lit';
+        import { customElement } from 'lit/decorators.js';
+        import 'mjo-litui/mjo-button';
+
+        @customElement('my-component')
+        export class MyComponent extends LitElement {
+          render() {
+            return html`
+              <mjo-button>Click me</mjo-button>
+            `;
+          }
+        }
+        ```
+      render: typescript
+
+  - type: textarea
+    id: expected-outcome
+    attributes:
+      label: Expected Outcome
+      description: What result or behavior are you hoping to achieve?
+      placeholder: |
+        Describe what you expect to happen:
+        - How should the component behave?
+        - What should the final result look like?
+        - Any specific requirements or constraints?
+
+  - type: input
+    id: mjo-litui-version
+    attributes:
+      label: mjo-litui Version
+      description: Optional - What version of mjo-litui are you using?
+      placeholder: "0.7.7"
+
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Framework
+      description: Optional - What framework are you using?
+      options:
+        - Not specified
+        - Vanilla JavaScript/TypeScript
+        - Lit
+        - React
+        - Vue
+        - Angular
+        - Svelte
+        - Other
+
+  - type: dropdown
+    id: build-tool
+    attributes:
+      label: Build Tool
+      description: Optional - What build tool are you using?
+      options:
+        - Not specified
+        - Vite
+        - Webpack
+        - Rollup
+        - Parcel
+        - esbuild
+        - None (direct ES modules)
+        - Other
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+      placeholder: |
+        Add any additional context:
+        - Browser requirements
+        - Performance constraints
+        - Accessibility needs
+        - Design requirements
+        - Related issues or discussions
+        - Screenshots or mockups

@@ -714,6 +714,10 @@ export interface MjoCalendarTheme {
     navHoverBorder?: string;
     navFocusOutline?: string;
     decadeLabelColor?: string;
+    navButtonBorder?: string;
+    navButtonColor?: string;
+    selectorButtonColor?: string;
+    buttonSelectorButtonHighlightColor?: string;
 }
 
 export interface MjoMenuButtonTheme {

@@ -123,22 +123,19 @@ export class MjointCalendarMonthPicker extends LitElement {
         :host {
             display: block;
         }
-
         .month-picker {
             padding: var(--mjo-space-small);
         }
-
         .months-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
         }
-
         .month-button {
             background: var(--mjo-calendar-picker-button-background, transparent);
-            border: var(--mjo-calendar-picker-button-border, 1px solid var(--mjo-border-color, #e0e0e0));
+            border: var(--mjo-calendar-picker-button-border, 1px solid var(--mjoint-calendar-border-color));
             border-radius: var(--mjo-calendar-picker-button-radius, var(--mjo-radius-medium, 4px));
-            color: var(--mjo-calendar-picker-button-color, var(--mjo-foreground-color-low, #333));
+            color: var(--mjo-calendar-picker-button-color, var(--mjoint-calendar-color-foreground-low));
             cursor: pointer;
             font-family: inherit;
             font-size: 1.2em;
@@ -147,23 +144,19 @@ export class MjointCalendarMonthPicker extends LitElement {
             transition: all 0.2s ease;
             min-height: 40px;
         }
-
         .month-button:hover:not(:disabled) {
-            background: var(--mjo-calendar-picker-button-hover-background, var(--mjo-primary-color-alpha2, rgba(76, 129, 201, 0.1)));
-            border-color: var(--mjo-calendar-picker-button-hover-border, var(--mjo-primary-color, #4c81c9));
+            background: var(--mjo-calendar-picker-button-hover-background, var(--mjoint-calendar-accent-color-alpha));
+            border-color: var(--mjo-calendar-picker-button-hover-border, var(--mjoint-calendar-accent-color));
         }
-
-        .month-button:focus {
-            outline: 2px solid var(--mjo-calendar-picker-button-focus-outline, var(--mjo-primary-color, #4c81c9));
+        .month-button:focus-visible {
+            outline: 2px solid var(--mjo-calendar-picker-button-focus-outline, var(--mjoint-calendar-accent-color));
             outline-offset: 2px;
         }
-
         .month-button[data-selected]:not(:disabled) {
-            background: var(--mjo-calendar-picker-button-selected-background, var(--mjo-primary-color, #4c81c9));
-            border-color: var(--mjo-calendar-picker-button-selected-border, var(--mjo-primary-color, #4c81c9));
-            color: var(--mjo-calendar-picker-button-selected-color, var(--mjo-primary-foreground-color, white));
+            background: var(--mjo-calendar-picker-button-selected-background, var(--mjoint-calendar-accent-color));
+            border-color: var(--mjo-calendar-picker-button-selected-border, var(--mjoint-calendar-accent-color));
+            color: var(--mjo-calendar-picker-button-selected-color, var(--mjoint-calendar-accent-color-foreground));
         }
-
         .month-button:disabled {
             cursor: not-allowed;
             opacity: 0.6;
