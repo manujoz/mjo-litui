@@ -22,36 +22,36 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
     @property({ type: String }) selectionMode: MjoAccordionSelectionModes = "single";
     @property({ type: Boolean }) compact = false;
 
-    items: MjoAccordionItem[] = [];
+    private itemsChildren: MjoAccordionItem[] = [];
 
-    @query(".container") containerEl!: HTMLElement;
+    @query(".container") private $container!: HTMLElement;
 
     render() {
         return html`<div class="container" role="tablist" data-variant=${this.variant} ?data-compact=${this.compact}></div>`;
     }
 
     firstUpdated(): void {
-        this.items = Array.from(this.querySelectorAll("mjo-accordion-item"));
+        this.itemsChildren = Array.from(this.querySelectorAll("mjo-accordion-item"));
 
         this.#mount();
     }
 
     updated(_changedProperties: PropertyValues): void {
         if (_changedProperties.has("compact")) {
-            this.items.forEach((item) => {
+            this.itemsChildren.forEach((item) => {
                 item.setCompact(this.compact);
             });
         }
 
         if (_changedProperties.has("variant")) {
-            this.items.forEach((item) => {
-                item.variant = this.variant;
+            this.itemsChildren.forEach((item) => {
+                item.setVariant(this.variant);
             });
         }
     }
 
     expandItem(index: number | string) {
-        const item = typeof index === "number" ? this.items[index] : this.items.find((i) => i.id === index);
+        const item = typeof index === "number" ? this.itemsChildren[index] : this.itemsChildren.find((i) => i.id === index);
 
         if (item && !item.disabled) {
             item.open();
@@ -59,7 +59,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
     }
 
     collapseItem(index: number | string) {
-        const item = typeof index === "number" ? this.items[index] : this.items.find((i) => i.id === index);
+        const item = typeof index === "number" ? this.itemsChildren[index] : this.itemsChildren.find((i) => i.id === index);
 
         if (item) {
             item.close();
@@ -68,19 +68,19 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
 
     expandAll() {
         if (this.selectionMode === "multiple") {
-            this.items.forEach((item) => {
+            this.itemsChildren.forEach((item) => {
                 if (!item.disabled) item.open();
             });
         }
     }
 
     collapseAll() {
-        this.items.forEach((item) => item.close());
+        this.itemsChildren.forEach((item) => item.close());
     }
 
     focusItem(index: number) {
-        if (this.items[index] && !this.items[index].disabled) {
-            this.items[index].focus();
+        if (this.itemsChildren[index] && !this.itemsChildren[index].disabled) {
+            this.itemsChildren[index].focus();
         }
     }
 
@@ -90,7 +90,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
 
         // In single selection mode, close other items
         if (this.selectionMode === "single") {
-            this.items.forEach((item) => {
+            this.itemsChildren.forEach((item) => {
                 if (item !== toggledItem && item.expanded) {
                     item.close();
                 }
@@ -110,9 +110,9 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
     };
 
     #mount() {
-        this.items.forEach((item) => {
-            this.containerEl.appendChild(item);
-            item.variant = this.variant;
+        this.itemsChildren.forEach((item) => {
+            this.$container.appendChild(item);
+            item.setVariant(this.variant);
             item.addEventListener("mjo-accordion:toggle", this.#handleToggle);
 
             // Listen for granular events and forward them

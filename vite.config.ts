@@ -17,6 +17,7 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: `${__dirname}/dev/index.html`,
+                "mjo-accordion": `${__dirname}/dev/mjo-accordion.html`,
                 "mjo-link": `${__dirname}/dev/mjo-link.html`,
                 "mjo-badge": `${__dirname}/dev/mjo-badge.html`,
                 "mjo-breadcrumbs": `${__dirname}/dev/mjo-breadcrumbs.html`,

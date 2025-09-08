@@ -15,18 +15,18 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
     @property({ type: String }) itemSubtitle = "";
     @property({ type: Boolean }) expanded = false;
     @property({ type: Boolean }) disabled = false;
-    @property({ type: Boolean }) compact = false;
     @property({ type: String }) icon = AiOutlineRight;
     @property({ type: Number }) animationDuration = 300;
     @property({ type: String }) animationEasing = "ease-in-out";
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
+    @property({ type: Boolean }) private compact = false;
 
-    @state() variant: MjoAccordionVariants = "light";
+    @state() private variant: MjoAccordionVariants = "light";
 
-    @query(".container") containerEl!: HTMLElement;
-    @query(".content") contentEl!: HTMLElement;
-    @query(".iconContainer mjo-icon") iconEl!: HTMLElement;
-    @query(".titleContainer") titleContainerEl!: HTMLElement;
+    @query(".container") private $container!: HTMLElement;
+    @query(".content") private $content!: HTMLElement;
+    @query(".iconContainer mjo-icon") private $icon!: HTMLElement;
+    @query(".titleContainer") private $titleContainer!: HTMLElement;
 
     #uniqueId = `accordion-item-${Math.random().toString(36).substring(2, 15)}`;
 
@@ -105,7 +105,11 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
     }
 
     focus() {
-        this.titleContainerEl?.focus();
+        this.$titleContainer?.focus();
+    }
+
+    setVariant(variant: MjoAccordionVariants) {
+        this.variant = variant;
     }
 
     #handleKeyDown = (event: KeyboardEvent) => {
@@ -164,7 +168,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
     async #openContent(tries = 0) {
         if (this.disabled) return;
 
-        const scrollHeight = this.contentEl.scrollHeight;
+        const scrollHeight = this.$content.scrollHeight;
 
         if (scrollHeight === 0) {
             if (tries === 10) return;
@@ -186,16 +190,16 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
         }
 
         // Apply custom animation duration and easing
-        this.contentEl.style.transition = `
+        this.$content.style.transition = `
             max-height ${this.animationDuration}ms ${this.animationEasing},
             opacity ${this.animationDuration}ms ${this.animationEasing}
         `;
-        this.iconEl.style.transition = `transform ${this.animationDuration}ms ${this.animationEasing}`;
+        this.$icon.style.transition = `transform ${this.animationDuration}ms ${this.animationEasing}`;
 
-        this.containerEl.style.paddingBottom = "var(--mjo-accordion-item-content-padding, var(--mjo-space-medium))";
-        this.contentEl.style.maxHeight = `${scrollHeight}px`;
-        this.contentEl.style.opacity = "1";
-        this.iconEl.style.transform = "rotate(90deg)";
+        this.$container.style.paddingBottom = "var(--mjo-accordion-item-content-padding, var(--mjo-space-medium))";
+        this.$content.style.maxHeight = `${scrollHeight}px`;
+        this.$content.style.opacity = "1";
+        this.$icon.style.transform = "rotate(90deg)";
 
         await pause(this.animationDuration);
 
@@ -218,9 +222,9 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
             return; // Event was cancelled
         }
 
-        this.containerEl.removeAttribute("style");
-        this.contentEl.removeAttribute("style");
-        this.iconEl.removeAttribute("style");
+        this.$container.removeAttribute("style");
+        this.$content.removeAttribute("style");
+        this.$icon.removeAttribute("style");
 
         await pause(this.animationDuration);
         this.dispatchEvent(
@@ -327,10 +331,6 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
             }
 
             /* Focus styles for accessibility */
-            .titleContainer:focus {
-                outline: 2px solid var(--mjo-accordion-item-focus-color, var(--mjo-primary-color));
-                outline-offset: 2px;
-            }
 
             .titleContainer:focus-visible {
                 outline: 2px solid var(--mjo-accordion-item-focus-color, var(--mjo-primary-color));
