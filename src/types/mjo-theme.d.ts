@@ -59,7 +59,6 @@ export interface MjoThemeConfig {
     spaceXxlarge?: string;
     components?: {
         mjoAccordion?: MjoAccordionTheme;
-        mjoAccordionItem?: MjoAccordionItemTheme;
         mjoAlert?: MjoAlertTheme;
         mjoAvatar?: MjoAvatarTheme;
         mjoBadge?: MjoBadgeTheme;
@@ -228,17 +227,16 @@ export interface MjoAccordionTheme {
     padding?: string;
     paddingCompact?: string;
     borderRadius?: string;
+    boxShadow?: string;
     gap?: string;
-}
-
-export interface MjoAccordionItemTheme {
-    titlePadding?: string;
-    titlePaddingCompact?: string;
-    titleFontSize?: string;
-    titleColor?: string;
-    subtitleColor?: string;
-    contentPadding?: string;
-    focusColor?: string;
+    itemTitlePadding?: string;
+    itemTitlePaddingCompact?: string;
+    itemTitleFontSize?: string;
+    itemTitleColor?: string;
+    itemTitleColorHover?: string;
+    itemSubtitleColor?: string;
+    itemContentPadding?: string;
+    itemFocusColor?: string;
 }
 
 export interface MjoAlertTheme {

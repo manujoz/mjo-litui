@@ -1,7 +1,7 @@
 import { MjoAccordionItem } from "../components/accordion/mjo-accordion-item";
 import { MjoAccordion } from "../mjo-accordion";
 
-export type MjoAccordionVariants = "light" | "shadow" | "bordered" | "splitted";
+export type MjoAccordionVariants = "light" | "solid" | "shadow" | "bordered" | "splitted";
 export type MjoAccordionSelectionModes = "single" | "multiple";
 
 export interface MjoAccordionToggleEvent extends CustomEvent {
@@ -40,13 +40,5 @@ export interface MjoAccordionCollapsedEvent extends CustomEvent {
         item: MjoAccordionItem;
         expanded: boolean;
         accordion?: MjoAccordion;
-    };
-}
-
-export interface MjoAccordionToggleEventWithAccordion extends CustomEvent {
-    detail: {
-        item: MjoAccordionItem;
-        expanded: boolean;
-        accordion: MjoAccordion;
     };
 }

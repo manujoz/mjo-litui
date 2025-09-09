@@ -174,20 +174,26 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
             .container {
                 position: relative;
             }
+            .container[data-variant="solid"],
             .container[data-variant="shadow"] {
                 border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
-                background-color: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
+                background: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
+            }
+            .container[data-variant="shadow"] {
+                box-shadow: var(--mjo-accordion-box-shadow, var(--mjo-box-shadow-2));
             }
             .container[data-variant="bordered"] {
                 border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
                 border: 1px solid var(--mjo-accordion-border-color, var(--mjo-border-color));
             }
             .container[data-variant="light"] mjo-accordion-item,
+            .container[data-variant="solid"] mjo-accordion-item,
             .container[data-variant="shadow"] mjo-accordion-item,
             .container[data-variant="bordered"] mjo-accordion-item {
                 border-top: 1px solid var(--mjo-accordion-border-color, var(--mjo-border-color));
             }
             .container[data-variant="light"] mjo-accordion-item:first-child,
+            .container[data-variant="solid"] mjo-accordion-item:first-child,
             .container[data-variant="shadow"] mjo-accordion-item:first-child,
             .container[data-variant="bordered"] mjo-accordion-item:first-child {
                 border-top: none;
@@ -199,7 +205,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
             }
             .container[data-variant="splitted"] mjo-accordion-item {
                 border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
-                background-color: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
+                background: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
             }
         `,
     ];

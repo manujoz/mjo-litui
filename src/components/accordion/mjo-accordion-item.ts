@@ -1,13 +1,17 @@
+import { MjoAccordionVariants } from "../../types/mjo-accordion.js";
+
 import { LitElement, PropertyValues, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { AiOutlineRight } from "mjo-icons/ai";
 
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import { pause } from "../../utils/utils.js";
 
 import "../../mjo-icon.js";
-import { MjoAccordionVariants } from "../../types/mjo-accordion.js";
-import { pause } from "../../utils/utils.js";
+import "../../mjo-typography.js";
+
+const ANIMATION_DURATION = 300;
 
 @customElement("mjo-accordion-item")
 export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -16,11 +20,9 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
     @property({ type: Boolean }) expanded = false;
     @property({ type: Boolean }) disabled = false;
     @property({ type: String }) icon = AiOutlineRight;
-    @property({ type: Number }) animationDuration = 300;
-    @property({ type: String }) animationEasing = "ease-in-out";
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
-    @property({ type: Boolean }) private compact = false;
 
+    @state() private compact = false;
     @state() private variant: MjoAccordionVariants = "light";
 
     @query(".container") private $container!: HTMLElement;
@@ -191,17 +193,17 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
 
         // Apply custom animation duration and easing
         this.$content.style.transition = `
-            max-height ${this.animationDuration}ms ${this.animationEasing},
-            opacity ${this.animationDuration}ms ${this.animationEasing}
+            max-height ${ANIMATION_DURATION}ms ease-in-out,
+            opacity ${ANIMATION_DURATION}ms ease-in-out
         `;
-        this.$icon.style.transition = `transform ${this.animationDuration}ms ${this.animationEasing}`;
+        this.$icon.style.transition = `transform ${ANIMATION_DURATION}ms ease-in-out`;
 
         this.$container.style.paddingBottom = "var(--mjo-accordion-item-content-padding, var(--mjo-space-medium))";
         this.$content.style.maxHeight = `${scrollHeight}px`;
         this.$content.style.opacity = "1";
         this.$icon.style.transform = "rotate(90deg)";
 
-        await pause(this.animationDuration);
+        await pause(ANIMATION_DURATION);
 
         // Dispatch new completed event
         this.dispatchEvent(
@@ -226,7 +228,7 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
         this.$content.removeAttribute("style");
         this.$icon.removeAttribute("style");
 
-        await pause(this.animationDuration);
+        await pause(ANIMATION_DURATION);
         this.dispatchEvent(
             new CustomEvent("mjo-accordion:collapsed", {
                 detail: { item: this, expanded: this.expanded },
@@ -276,6 +278,10 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
                 margin: 0;
                 font-size: var(--mjo-accordion-item-title-font-size, 1em);
                 color: var(--mjo-accordion-item-title-color, var(--mjo-foreground-color));
+                transition: color 0.2s ease-in-out;
+            }
+            .titleContainer:hover .title {
+                color: var(--mjo-accordion-item-title-color-hover, var(--mjo-foreground-color));
             }
             .subtitle {
                 margin: 0;
@@ -290,11 +296,15 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
                     max-height 0.3s ease-in-out,
                     opacity 0.3s ease-in-out;
             }
+            .container[data-variant="solid"] .titleContainer,
+            .container[data-variant="solid"] .content,
             .container[data-variant="shadow"] .titleContainer,
             .container[data-variant="shadow"] .content {
                 padding-left: var(--mjo-accordion-padding, var(--mjo-space-medium));
                 padding-right: var(--mjo-accordion-padding, var(--mjo-space-medium));
             }
+            .container[data-variant="solid"][data-compact] .titleContainer,
+            .container[data-variant="solid"][data-compact] .content,
             .container[data-variant="shadow"][data-compact] .titleContainer,
             .container[data-variant="shadow"][data-compact] .content {
                 padding-left: var(--mjo-accordion-padding-compact, var(--mjo-space-small));

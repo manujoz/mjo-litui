@@ -154,7 +154,7 @@ export class ExampleAccordionSelection extends LitElement {
 }
 ```
 
-## Compact Mode and Custom Content Example
+## Compact Mode Example
 
 ```ts
 import { LitElement, html } from "lit";
@@ -180,9 +180,9 @@ export class ExampleAccordionCompact extends LitElement {
                 </div>
 
                 <div>
-                    <h4>Custom Content</h4>
+                    <h4>Rich Content</h4>
                     <mjo-accordion variant="shadow">
-                        <mjo-accordion-item itemTitle="Rich Content" itemSubtitle="With buttons and more">
+                        <mjo-accordion-item itemTitle="Custom Content" itemSubtitle="With buttons and elements">
                             <div style="display: flex; flex-direction: column; gap: 1rem;">
                                 <p>You can include any content inside accordion sections:</p>
                                 <div style="display: flex; gap: 0.5rem;">
@@ -190,15 +190,6 @@ export class ExampleAccordionCompact extends LitElement {
                                     <mjo-button color="secondary" variant="ghost" size="small">Action 2</mjo-button>
                                 </div>
                             </div>
-                        </mjo-accordion-item>
-                        <mjo-accordion-item itemTitle="Form Content">
-                            <form style="display: flex; flex-direction: column; gap: 1rem;">
-                                <input type="text" placeholder="Enter some text" style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;" />
-                                <textarea
-                                    placeholder="Enter description"
-                                    style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; min-height: 80px;"
-                                ></textarea>
-                            </form>
                         </mjo-accordion-item>
                     </mjo-accordion>
                 </div>
@@ -220,17 +211,15 @@ export class ExampleAccordionCompact extends LitElement {
 
 ### mjo-accordion-item
 
-| Name                | Type                       | Default          | Reflects | Description                                                  |
-| ------------------- | -------------------------- | ---------------- | -------- | ------------------------------------------------------------ |
-| `itemTitle`         | `string \| TemplateResult` | `""`             | no       | Title text or template for the accordion section header      |
-| `itemSubtitle`      | `string`                   | `""`             | no       | Subtitle text displayed below the title                      |
-| `expanded`          | `boolean`                  | `false`          | no       | Controls whether the section is expanded or collapsed        |
-| `disabled`          | `boolean`                  | `false`          | no       | Disables interaction with the accordion section              |
-| `compact`           | `boolean`                  | `false`          | no       | Internal property managed by parent accordion                |
-| `icon`              | `string`                   | `AiOutlineRight` | no       | Icon used for the expand/collapse indicator                  |
-| `animationDuration` | `number`                   | `300`            | no       | Animation duration in milliseconds for expand/collapse       |
-| `animationEasing`   | `string`                   | `"ease-in-out"`  | no       | CSS easing function for animations                           |
-| `ariaDescribedby`   | `string \| undefined`      | `undefined`      | no       | References additional descriptive content for screen readers |
+| Name              | Type                       | Default          | Reflects | Description                                                  |
+| ----------------- | -------------------------- | ---------------- | -------- | ------------------------------------------------------------ |
+| `itemTitle`       | `string \| TemplateResult` | `""`             | no       | Title text or template for the accordion section header      |
+| `itemSubtitle`    | `string`                   | `""`             | no       | Subtitle text displayed below the title                      |
+| `expanded`        | `boolean`                  | `false`          | no       | Controls whether the section is expanded or collapsed        |
+| `disabled`        | `boolean`                  | `false`          | no       | Disables interaction with the accordion section              |
+| `compact`         | `boolean`                  | `false`          | no       | Internal property managed by parent accordion                |
+| `icon`            | `string`                   | `AiOutlineRight` | no       | Icon used for the expand/collapse indicator                  |
+| `ariaDescribedby` | `string \| undefined`      | `undefined`      | no       | References additional descriptive content for screen readers |
 
 ### Internal State
 
@@ -313,24 +302,26 @@ The component consumes CSS variables with fallbacks. Custom values can be inject
 
 | Variable                           | Fallback                      | Used For                                        |
 | ---------------------------------- | ----------------------------- | ----------------------------------------------- |
-| `--mjo-accordion-padding`          | `--mjo-space-medium`          | Horizontal padding for shadow/bordered variants |
-| `--mjo-accordion-padding-compact`  | `--mjo-space-small`           | Compact horizontal padding                      |
-| `--mjo-accordion-border-radius`    | `--mjo-radius-large`          | Border radius for container and items           |
 | `--mjo-accordion-background-color` | `--mjo-background-color-high` | Background color for shadow/splitted variants   |
 | `--mjo-accordion-border-color`     | `--mjo-border-color`          | Border color for separators and borders         |
+| `--mjo-accordion-border-radius`    | `--mjo-radius-large`          | Border radius for container and items           |
+| `--mjo-accordion-box-shadow`       | `--mjo-box-shadow-2`          | Box shadow for the container                    |
 | `--mjo-accordion-gap`              | `--mjo-space-small`           | Gap between items in splitted variant           |
+| `--mjo-accordion-padding-compact`  | `--mjo-space-small`           | Compact horizontal padding                      |
+| `--mjo-accordion-padding`          | `--mjo-space-medium`          | Horizontal padding for shadow/bordered variants |
 
 ### mjo-accordion-item Variables
 
 | Variable                                     | Fallback                     | Used For                                   |
 | -------------------------------------------- | ---------------------------- | ------------------------------------------ |
-| `--mjo-accordion-item-title-padding`         | `--mjo-space-medium`         | Vertical padding for title container       |
-| `--mjo-accordion-item-title-padding-compact` | `--mjo-space-small`          | Compact vertical padding for title         |
 | `--mjo-accordion-item-content-padding`       | `--mjo-space-medium`         | Bottom padding when content is expanded    |
-| `--mjo-accordion-item-title-font-size`       | `1em`                        | Font size for the title                    |
-| `--mjo-accordion-item-title-color`           | `--mjo-foreground-color`     | Color for the title text                   |
-| `--mjo-accordion-item-subtitle-color`        | `--mjo-foreground-color-low` | Color for the subtitle text                |
 | `--mjo-accordion-item-focus-color`           | `--mjo-primary-color`        | Outline color for keyboard focus indicator |
+| `--mjo-accordion-item-subtitle-color`        | `--mjo-foreground-color-low` | Color for the subtitle text                |
+| `--mjo-accordion-item-title-color-hover`     | `--mjo-foreground-color`     | Color for the title text on hover          |
+| `--mjo-accordion-item-title-color`           | `--mjo-foreground-color`     | Color for the title text                   |
+| `--mjo-accordion-item-title-font-size`       | `1em`                        | Font size for the title                    |
+| `--mjo-accordion-item-title-padding-compact` | `--mjo-space-small`          | Compact vertical padding for title         |
+| `--mjo-accordion-item-title-padding`         | `--mjo-space-medium`         | Vertical padding for title container       |
 
 ## ThemeMixin Customization
 
@@ -344,22 +335,17 @@ interface MjoAccordionTheme {
     borderColor?: string;
     padding?: string;
     paddingCompact?: string;
-    radius?: string;
+    borderRadius?: string;
+    boxShadow?: string;
     gap?: string;
-}
-```
-
-### MjoAccordionItemTheme Interface
-
-```ts
-interface MjoAccordionItemTheme {
-    titlePadding?: string;
-    titlePaddingCompact?: string;
-    titleFontSize?: string;
-    titleColor?: string;
-    subtitleColor?: string;
-    contentPadding?: string;
-    focusColor?: string;
+    itemTitlePadding?: string;
+    itemTitlePaddingCompact?: string;
+    itemTitleFontSize?: string;
+    itemTitleColor?: string;
+    itemTitleColorHover?: string;
+    itemSubtitleColor?: string;
+    itemContentPadding?: string;
+    itemFocusColor?: string;
 }
 ```
 
@@ -376,20 +362,17 @@ export class ExampleAccordionThemed extends LitElement {
         backgroundColor: "#f8f9fa",
         borderColor: "#e9ecef",
         padding: "1rem",
-        radius: "12px",
-    };
-
-    private customItemTheme = {
-        titleColor: "#495057",
-        titleFontSize: "1.1rem",
-        subtitleColor: "#6c757d",
-        titlePadding: "1rem",
+        borderRadius: "12px",
+        itemTitleColor: "#495057",
+        itemTitleFontSize: "1.1rem",
+        itemSubtitleColor: "#6c757d",
+        itemTitlePadding: "1rem",
     };
 
     render() {
         return html`
             <mjo-accordion variant="shadow" .theme=${this.customAccordionTheme}>
-                <mjo-accordion-item itemTitle="Custom Themed Section" itemSubtitle="With custom colors and spacing" .theme=${this.customItemTheme}>
+                <mjo-accordion-item itemTitle="Custom Themed Section" itemSubtitle="With custom colors and spacing">
                     <p>This accordion uses custom theming for both container and items.</p>
                 </mjo-accordion-item>
             </mjo-accordion>
@@ -441,75 +424,23 @@ import "mjo-litui/mjo-button";
 export class ExampleAccordionProgrammatic extends LitElement {
     @query("mjo-accordion") private accordion!: MjoAccordion;
 
-    private expandFirst() {
-        this.accordion.expandItem(0);
-    }
-
-    private collapseAll() {
-        this.accordion.collapseAll();
-    }
-
-    private handleAccordionEvent(event: CustomEvent) {
-        console.log("Accordion event:", event.type, event.detail);
-    }
-
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <div style="display: flex; gap: 0.5rem;">
-                    <mjo-button @click=${this.expandFirst}>Expand First</mjo-button>
-                    <mjo-button @click=${this.collapseAll}>Collapse All</mjo-button>
+                    <mjo-button @click=${() => this.accordion.expandItem(0)}>Expand First</mjo-button>
+                    <mjo-button @click=${() => this.accordion.collapseAll()}>Collapse All</mjo-button>
                 </div>
 
-                <mjo-accordion
-                    variant="shadow"
-                    selectionMode="multiple"
-                    @mjo-accordion:expanded=${this.handleAccordionEvent}
-                    @mjo-accordion:collapsed=${this.handleAccordionEvent}
-                >
+                <mjo-accordion variant="shadow" selectionMode="multiple">
                     <mjo-accordion-item itemTitle="Section 1">
                         <p>Content for section 1</p>
                     </mjo-accordion-item>
-                    <mjo-accordion-item itemTitle="Section 2" animationDuration="500">
-                        <p>This section has slower animation</p>
+                    <mjo-accordion-item itemTitle="Section 2">
+                        <p>Content for section 2</p>
                     </mjo-accordion-item>
                 </mjo-accordion>
             </div>
-        `;
-    }
-}
-```
-
-## Dynamic Content Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-accordion";
-
-@customElement("example-accordion-dynamic")
-export class ExampleAccordionDynamic extends LitElement {
-    @state() private sections = [
-        { title: "Dynamic Section 1", content: "This content is generated dynamically.", expanded: false },
-        { title: "Dynamic Section 2", content: "You can programmatically control sections.", expanded: true },
-        { title: "Dynamic Section 3", content: "Add, remove, or modify sections as needed.", expanded: false },
-    ];
-
-    private toggleSection(index: number) {
-        this.sections = this.sections.map((section, i) => (i === index ? { ...section, expanded: !section.expanded } : section));
-    }
-
-    render() {
-        return html`
-            <mjo-accordion variant="shadow" selectionMode="multiple">
-                ${this.sections.map(
-                    (section, index) => html`
-                        <mjo-accordion-item itemTitle=${section.title} ?expanded=${section.expanded} @toggle=${() => this.toggleSection(index)}>
-                            <p>${section.content}</p>
-                        </mjo-accordion-item>
-                    `,
-                )}
-            </mjo-accordion>
         `;
     }
 }
