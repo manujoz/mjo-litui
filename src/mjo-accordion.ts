@@ -10,12 +10,28 @@ import {
 } from "./types/mjo-accordion.js";
 
 import { LitElement, PropertyValues, css, html } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./components/accordion/mjo-accordion-item.js";
 
+/**
+ * @summary Flexible accordion component with multiple variants, selection modes, and accessibility support.
+ *
+ * @description The mjo-accordion component provides an organized way to display collapsible content sections.
+ * It supports multiple visual variants, single or multiple selection modes, and includes comprehensive
+ * keyboard navigation and ARIA support for accessibility.
+ *
+ * @fires mjo-accordion:toggle - Fired when any accordion item is toggled
+ * @fires mjo-accordion:will-expand - Fired before an item expands (cancelable)
+ * @fires mjo-accordion:expanded - Fired after an item has expanded
+ * @fires mjo-accordion:will-collapse - Fired before an item collapses (cancelable)
+ * @fires mjo-accordion:collapsed - Fired after an item has collapsed
+ *
+ * @slot - Contains mjo-accordion-item elements
+ * @csspart accordion - The main accordion container
+ */
 @customElement("mjo-accordion")
 export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) variant: MjoAccordionVariants = "light";
@@ -24,10 +40,12 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
 
     private itemsChildren: MjoAccordionItem[] = [];
 
-    @query(".container") private $container!: HTMLElement;
-
     render() {
-        return html`<div class="container" role="tablist" data-variant=${this.variant} ?data-compact=${this.compact}></div>`;
+        return html`
+            <div class="container" part="accordion" role="tablist" data-variant=${this.variant} ?data-compact=${this.compact}>
+                <slot></slot>
+            </div>
+        `;
     }
 
     firstUpdated(): void {
@@ -111,7 +129,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
 
     #mount() {
         this.itemsChildren.forEach((item) => {
-            this.$container.appendChild(item);
+            // this.$container.appendChild(item);
             item.setVariant(this.variant);
             item.addEventListener("mjo-accordion:toggle", this.#handleToggle);
 
@@ -186,16 +204,16 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
                 border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
                 border: 1px solid var(--mjo-accordion-border-color, var(--mjo-border-color));
             }
-            .container[data-variant="light"] mjo-accordion-item,
-            .container[data-variant="solid"] mjo-accordion-item,
-            .container[data-variant="shadow"] mjo-accordion-item,
-            .container[data-variant="bordered"] mjo-accordion-item {
+            .container[data-variant="light"] ::slotted(mjo-accordion-item),
+            .container[data-variant="solid"] ::slotted(mjo-accordion-item),
+            .container[data-variant="shadow"] ::slotted(mjo-accordion-item),
+            .container[data-variant="bordered"] ::slotted(mjo-accordion-item) {
                 border-top: 1px solid var(--mjo-accordion-border-color, var(--mjo-border-color));
             }
-            .container[data-variant="light"] mjo-accordion-item:first-child,
-            .container[data-variant="solid"] mjo-accordion-item:first-child,
-            .container[data-variant="shadow"] mjo-accordion-item:first-child,
-            .container[data-variant="bordered"] mjo-accordion-item:first-child {
+            .container[data-variant="light"] ::slotted(mjo-accordion-item:first-child),
+            .container[data-variant="solid"] ::slotted(mjo-accordion-item:first-child),
+            .container[data-variant="shadow"] ::slotted(mjo-accordion-item:first-child),
+            .container[data-variant="bordered"] ::slotted(mjo-accordion-item:first-child) {
                 border-top: none;
             }
             .container[data-variant="splitted"] {
@@ -203,7 +221,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
                 flex-direction: column;
                 gap: var(--mjo-accordion-gap, var(--mjo-space-small));
             }
-            .container[data-variant="splitted"] mjo-accordion-item {
+            .container[data-variant="splitted"] ::slotted(mjo-accordion-item) {
                 border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
                 background: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
             }

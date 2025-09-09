@@ -395,6 +395,7 @@ export class AccordionComponent extends LitElement {
                     <mjo-accordion
                         id="event-accordion"
                         variant="shadow"
+                        class="accordion"
                         selectionMode="single"
                         @mjo-accordion:toggle=${this.#logEvent}
                         @mjo-accordion:will-expand=${this.#logEvent}
@@ -677,6 +678,10 @@ export class AccordionComponent extends LitElement {
 
             mjo-grid {
                 width: 100%;
+            }
+            .accordion mjo-accordion-item::part(title) {
+                font-weight: bold;
+                color: red;
             }
         `,
     ];

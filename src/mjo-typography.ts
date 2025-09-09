@@ -5,6 +5,16 @@ import { customElement, property } from "lit/decorators.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
+/**
+ * @summary Semantic typography component with configurable sizes, weights, and semantic HTML tags.
+ *
+ * @description The mjo-typography component provides consistent text styling with predefined sizes,
+ * weights, and semantic HTML tags. It supports theme customization, accessibility best practices
+ * through proper semantic markup, and comprehensive ARIA properties for enhanced screen reader support.
+ *
+ * @slot - Text content to be styled with typography rules
+ * @csspart typography - The rendered HTML element (h1, h2, h3, h4, h5, p, or span)
+ */
 @customElement("mjo-typography")
 export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) tag: MjoTypographyTag = "p";
@@ -20,19 +30,19 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
     render() {
         switch (this.tag) {
             case "h1":
-                return html`<h1 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h1>`;
+                return html`<h1 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h1>`;
             case "h2":
-                return html`<h2 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h2>`;
+                return html`<h2 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h2>`;
             case "h3":
-                return html`<h3 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h3>`;
+                return html`<h3 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h3>`;
             case "h4":
-                return html`<h4 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h4>`;
+                return html`<h4 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h4>`;
             case "h5":
-                return html`<h5 class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></h5>`;
+                return html`<h5 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h5>`;
             case "span":
-                return html`<span class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></span>`;
+                return html`<span class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></span>`;
             case "p":
-                return html`<p class=${`${this.size} ${this.weight} ${this.color}`}><slot></slot></p>`;
+                return html`<p class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></p>`;
             default:
                 return html`<slot></slot>`;
         }

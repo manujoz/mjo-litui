@@ -13,6 +13,27 @@ import "../../mjo-typography.js";
 
 const ANIMATION_DURATION = 300;
 
+/**
+ * @summary Individual accordion item component with title, subtitle, content, and interaction support.
+ *
+ * @description The mjo-accordion-item component represents a single collapsible section within an accordion.
+ * It provides title and subtitle display, smooth expand/collapse animations, keyboard navigation,
+ * and comprehensive accessibility features. The component can be used standalone or within mjo-accordion.
+ *
+ * @fires mjo-accordion:toggle - Fired when the item is toggled (expanded or collapsed)
+ * @fires mjo-accordion:will-expand - Fired before the item expands (cancelable)
+ * @fires mjo-accordion:expanded - Fired after the item has expanded
+ * @fires mjo-accordion:will-collapse - Fired before the item collapses (cancelable)
+ * @fires mjo-accordion:collapsed - Fired after the item has collapsed
+ *
+ * @slot - Content to be displayed when the accordion item is expanded
+ * @csspart item - The main accordion item container
+ * @csspart header - The clickable header area containing title and icon
+ * @csspart content - The collapsible content area
+ * @csspart title - The title typography element (via exportparts)
+ * @csspart subtitle - The subtitle typography element (via exportparts)
+ * @csspart icon - The toggle icon element (via exportparts)
+ */
 @customElement("mjo-accordion-item")
 export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) itemTitle: string | TemplateResult<1> = "";
@@ -42,9 +63,10 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
 
     render() {
         return html`
-            <div class="container" data-variant=${this.variant} ?data-compact=${this.compact} ?data-disabled=${this.disabled}>
+            <div class="container" part="item" data-variant=${this.variant} ?data-compact=${this.compact} ?data-disabled=${this.disabled}>
                 <div
                     class="titleContainer"
+                    part="header"
                     role="button"
                     tabindex=${this.disabled ? -1 : 0}
                     aria-expanded=${this.expanded}
@@ -58,18 +80,22 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
                     <div class="titleContent" id=${`${this.#uniqueId}-title`}>
                         ${typeof this.itemTitle === "string"
                             ? html`
-                                  <mjo-typography class="title" tag="h3" size="heading3" weight="medium">${this.itemTitle}</mjo-typography>
+                                  <mjo-typography class="title" exportparts="typography: title" tag="h3" size="heading3" weight="medium">
+                                      ${this.itemTitle}
+                                  </mjo-typography>
                                   ${this.itemSubtitle
-                                      ? html`<mjo-typography class="subtitle" tag="p" size="body1" weight="medium"> ${this.itemSubtitle} </mjo-typography>`
+                                      ? html`<mjo-typography class="subtitle" exportparts="typography: subtitle" tag="p" size="body1" weight="medium">
+                                            ${this.itemSubtitle}
+                                        </mjo-typography>`
                                       : nothing}
                               `
                             : this.itemTitle}
                     </div>
                     <div class="iconContainer">
-                        <mjo-icon src=${this.icon}></mjo-icon>
+                        <mjo-icon exportparts="icon: icon" src=${this.icon}></mjo-icon>
                     </div>
                 </div>
-                <div class="content" id=${`${this.#uniqueId}-content`} role="region" aria-labelledby=${`${this.#uniqueId}-title`}>
+                <div class="content" part="content" id=${`${this.#uniqueId}-content`} role="region" aria-labelledby=${`${this.#uniqueId}-title`}>
                     <slot></slot>
                 </div>
             </div>

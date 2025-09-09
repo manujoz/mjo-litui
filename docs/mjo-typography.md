@@ -275,6 +275,38 @@ const customTheme: Partial<MjoThemeConfig> = {
 };
 ```
 
+## CSS Parts
+
+| Part         | Component        | Description                                                |
+| ------------ | ---------------- | ---------------------------------------------------------- |
+| `typography` | `mjo-typography` | The rendered HTML element (h1, h2, h3, h4, h5, p, or span) |
+
+### Parts vs CSS Variables
+
+**CSS Variables** are ideal for theming and design tokens:
+
+```css
+mjo-typography {
+    --mjo-typography-h1-font-size: 2.5rem;
+    --mjo-typography-font-weight-bold: 700;
+    --mjo-typography-base-line-height: 1.6;
+}
+```
+
+**CSS Parts** provide structural control and advanced styling:
+
+```css
+/* Maximum flexibility with parts */
+mjo-typography::part(typography) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+```
+
+Both approaches work together harmoniously - use variables for consistent theming and parts for advanced customization.
+
 ## Accessibility
 
 The `mjo-typography` component provides comprehensive accessibility features:

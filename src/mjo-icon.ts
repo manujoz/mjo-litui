@@ -22,12 +22,6 @@ import "./mjo-ripple.js";
  *
  * @slot - No slots available (content provided via src property)
  * @csspart icon - The SVG icon element
- *
- * @example
- * ```html
- * <mjo-icon src="<svg>...</svg>" size="large" clickable></mjo-icon>
- * <mjo-icon src="${iconString}" animation="spin" disabled></mjo-icon>
- * ```
  */
 @customElement("mjo-icon")
 export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {

@@ -448,11 +448,39 @@ export class ExampleAccordionProgrammatic extends LitElement {
 
 ## CSS Parts
 
-| Part        | Component            | Description                  |
-| ----------- | -------------------- | ---------------------------- |
-| `container` | `mjo-accordion`      | The main container element   |
-| `container` | `mjo-accordion-item` | The item container element   |
-| `content`   | `mjo-accordion-item` | The collapsible content area |
+| Part        | Component            | Description                                       |
+| ----------- | -------------------- | ------------------------------------------------- |
+| `accordion` | `mjo-accordion`      | The main accordion container element              |
+| `item`      | `mjo-accordion-item` | The individual accordion item container           |
+| `header`    | `mjo-accordion-item` | The clickable header area (title + icon)          |
+| `content`   | `mjo-accordion-item` | The collapsible content area                      |
+| `title`     | `mjo-accordion-item` | The title typography element (via exportparts)    |
+| `subtitle`  | `mjo-accordion-item` | The subtitle typography element (via exportparts) |
+| `icon`      | `mjo-accordion-item` | The toggle icon element (via exportparts)         |
+
+### Parts vs CSS Variables
+
+**CSS Variables** are ideal for theming and design tokens:
+
+```css
+mjo-accordion {
+    --mjo-accordion-border-radius: 12px;
+    --mjo-accordion-padding: 1rem;
+    --mjo-accordion-item-title-color: #2563eb;
+}
+```
+
+**CSS Parts** provide structural control and advanced styling:
+
+```css
+/* Maximum flexibility with parts */
+mjo-accordion-item::part(header) {
+    background: conic-gradient(from 180deg, #ff0080, #7928ca, #ff0080);
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+}
+```
+
+Both approaches work together harmoniously - use variables for consistent theming and parts for advanced customization.
 
 ## Accessibility Notes
 
