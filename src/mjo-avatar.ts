@@ -5,6 +5,22 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { pause } from "./utils/utils.js";
 
+/**
+ * @summary Configurable avatar component for displaying user images, initials, or fallback icons with multiple sizes, shapes, and colors.
+ *
+ * @description The mjo-avatar component provides a comprehensive solution for displaying user avatars
+ * with intelligent fallback handling, automatic color generation, and extensive customization options.
+ * It supports multiple display modes, interactive behavior, and full accessibility compliance.
+ *
+ * @fires mjo-avatar:click - Fired when the avatar is clicked (only when clickable is true)
+ * @fires mjo-avatar:error - Fired when the image fails to load
+ *
+ * @slot - No slots available (content provided via properties)
+ * @csspart container - The main avatar container element
+ * @csspart image-container - The image/content container
+ * @csspart image - The actual image element (when using src)
+ * @csspart icon - The fallback icon element (via exportparts)
+ */
 @customElement("mjo-avatar")
 export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) bordered = false;
@@ -51,6 +67,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
 
         return html`<div
             class="container size-${this.size} radius-${this.radius} color-${this.color}"
+            part="container"
             role=${this.appropriateRole}
             aria-label=${this.computedAriaLabel}
             aria-describedby=${ifDefined(this.ariaDescribedby)}
@@ -63,14 +80,20 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             @keydown=${this.#handleKeydown}
         >
             ${this.src && !this.error
-                ? html`<div class="image radius-${this.radius}">
-                      <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${this.#handleError} />
-                  </div>`
+                ? html`
+                      <div class="image radius-${this.radius}" part="image-container">
+                          <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${this.#handleError} part="image" />
+                      </div>
+                  `
                 : this.fallbackIcon
-                  ? html`<div class="image fallback radius-${this.radius} font-size-${this.size}"><mjo-icon src=${this.fallbackIcon}></mjo-icon></div>`
+                  ? html`
+                        <div class="image fallback radius-${this.radius} font-size-${this.size}" part="image-container">
+                            <mjo-icon src=${this.fallbackIcon} exportparts="icon: icon"></mjo-icon>
+                        </div>
+                    `
                   : this.name
-                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}"><span>${this.initial}</span></div>`
-                    : html`<div class="image radius-${this.radius}"></div>`}
+                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}" part="image-container"><span>${this.initial}</span></div>`
+                    : html`<div class="image radius-${this.radius}" part="image-container"></div>`}
         </div>`;
     }
 

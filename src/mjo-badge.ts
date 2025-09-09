@@ -1,4 +1,4 @@
-import { MjoBadgeClickEvent, MjoBadgeColors, MjoBadgePositions, MjoBadgeRoles, MjoBadgeSizes, MjoBadgeVariants } from "./types/mjo-badge.js";
+import { MjoBadgeClickEvent, MjoBadgeColors, MjoBadgePositions, MjoBadgeSizes, MjoBadgeVariants } from "./types/mjo-badge.js";
 
 import { LitElement, PropertyValues, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
@@ -12,6 +12,20 @@ import { pause } from "./utils/utils.js";
 import "./mjo-icon.js";
 import "./mjo-typography.js";
 
+/**
+ * @summary Positioned notification badge component with comprehensive accessibility support and theming.
+ *
+ * @description The mjo-badge component displays informational content over other elements using absolute positioning.
+ * It supports multiple visual variants (solid, flat, ghost, brilliant), color schemes, sizes, and positions.
+ * The component includes automatic count limiting, click handling, keyboard navigation, and comprehensive ARIA support.
+ *
+ * @fires mjo-badge:click - Fired when the badge is clicked (only when clickable is true)
+ *
+ * @slot - Contains the element over which the badge will be positioned
+ * @csspart container - The main badge container element
+ * @csspart icon - The icon element (via exportparts from mjo-icon)
+ * @csspart label - The typography element (via exportparts from mjo-typography)
+ */
 @customElement("mjo-badge")
 export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) color: MjoBadgeColors = "primary";
@@ -26,17 +40,17 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) disabled = false;
     @property({ type: Boolean }) clickable = false;
     @property({ type: Boolean }) hideOutline = false;
-    @property({ type: String }) badgeRole: MjoBadgeRoles = "status";
 
     // ARIA properties using native Lit support
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedBy?: string;
 
-    @query(".container") container!: HTMLElement;
+    @query(".container") private container!: HTMLElement;
 
-    maxCount = 99;
-    maxCountSuffix = "+";
+    private maxCount = 99;
+    private maxCountSuffix = "+";
+    private backgroundColor = "";
 
-    get computedRole() {
+    private get computedRole() {
         // Auto-detect role based on badge properties
         if (this.role !== "status") {
             return this.role === "none" ? "" : this.role;
@@ -56,7 +70,7 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
         return "status";
     }
 
-    get displayedLabel() {
+    private get displayedLabel() {
         if (!this.label) return "";
 
         // Handle numeric values with max count limit
@@ -73,6 +87,7 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
             <slot></slot>
             <div
                 class="container"
+                part="container"
                 data-color=${this.color}
                 data-size=${this.size}
                 data-variant=${this.variant}
@@ -90,13 +105,11 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
                 @keydown=${this.#keydownHandler}
             >
                 ${this.displayedLabel.includes("<svg")
-                    ? html`<mjo-icon src=${this.displayedLabel} aria-hidden="true"></mjo-icon>`
-                    : html`<mjo-typography tag="none" size="body2" weight="bold">${this.displayedLabel}</mjo-typography>`}
+                    ? html`<mjo-icon src=${this.displayedLabel} exportparts="icon: icon" aria-hidden="true"></mjo-icon>`
+                    : html`<mjo-typography tag="none" size="body2" weight="bold" exportparts="typography: label">${this.displayedLabel}</mjo-typography>`}
             </div>
         `;
     }
-
-    backgroundColor = "";
 
     connectedCallback(): void {
         super.connectedCallback();

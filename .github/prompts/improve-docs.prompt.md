@@ -10,5 +10,7 @@ Repasa la documentación del componente ${component}. Analiza detalladamente la 
 - Comprobar que todos eventos del componente y sus componentes dependientes estén documentados en su sección correspondiente.
 - Comprobar que todas las propiedades del componente y sus componentes dependientes estén documentadas en su sección correspondiente.
 - Comprobar que todos los métodos de la API pública del componente y sus componentes dependientes estén documentados en su sección correspondiente.
+- Comprobar que todas las css parts del componente y sus componentes dependientes estén documentados en su sección correspondiente.
 - Repasar todos los ejemplos de la documentación y si hay ejemplos redundantes o que no aporten valor para un desarrollador experimentado eliminarlos. Los ejemplos deben ser claros, concisos y reducidos, no hagas ejemplos muy complejos. Si hay ejemplos excesivamente complejos reducirlos para hacerlos más simples.
 - Volver a repasar toda la documentación para comprobar que no haya duplicidades, errores ortográficos o gramaticales y que todo esté perfectamente explicado para que cualquier desarrollador pueda entenderlo y usar el componente sin problemas.
+- Crear JSdoc para el componente tal y como se hace en `src/mjo-accordion.ts` y `src/components/accordion/mjo-accordion-item.ts` siguiendo el patrón establecido en estos archivos.

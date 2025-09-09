@@ -1,11 +1,33 @@
+import { MjoAlertClosedEvent, MjoAlertOpenedEvent, MjoAlertWillCloseEvent, MjoAlertWillShowEvent } from "./types/mjo-alert.js";
+
 import { LitElement, PropertyValues, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
 
 import "./mjo-icon.js";
-import { MjoAlertClosedEvent, MjoAlertOpenedEvent, MjoAlertWillCloseEvent, MjoAlertWillShowEvent } from "./types/mjo-alert.js";
 
+/**
+ * @summary Alert component for displaying contextual feedback messages with multiple types, sizes, and dismissal functionality.
+ *
+ * @description The mjo-alert component provides a flexible way to display contextual feedback messages
+ * with automatic type-based styling and icons. It supports multiple sizes, border radius options,
+ * dismissal functionality, auto-close behavior, and comprehensive accessibility features including
+ * screen reader support and keyboard navigation.
+ *
+ * @fires mjo-alert:will-show - Fired before the alert is shown
+ * @fires mjo-alert:opened - Fired after the alert is shown and animation completes
+ * @fires mjo-alert:will-close - Fired before the alert is closed
+ * @fires mjo-alert:closed - Fired after the alert is closed and animation completes
+ *
+ * @slot - Currently not implemented; content provided via message and detail properties
+ * @csspart container - The main alert container
+ * @csspart message-container - The container for the message and close button
+ * @csspart icon-container - The container for the type icon
+ * @csspart message - The message content area
+ * @csspart detail - The detail content area
+ * @csspart icon - The icon element (via exportparts from mjo-icon)
+ */
 @customElement("mjo-alert")
 export class MjoAlert extends LitElement {
     @property({ type: String }) type: "success" | "info" | "warning" | "error" = "info";
@@ -34,8 +56,8 @@ export class MjoAlert extends LitElement {
     @state() private icon: string = "";
     @state() private autoCloseTimer: number | null = null;
 
-    storeHeight: number = 0;
-    isAnimating: boolean = false;
+    private storeHeight: number = 0;
+    private isAnimating: boolean = false;
 
     render() {
         const messageId = `alert-message-${Math.random().toString(36).substring(2, 9)}`;
@@ -45,6 +67,7 @@ export class MjoAlert extends LitElement {
         return html`
             <div
                 class="container"
+                part="container"
                 data-type=${this.type}
                 data-size=${this.size}
                 data-rounded=${this.rounded}
@@ -55,12 +78,14 @@ export class MjoAlert extends LitElement {
                 aria-labelledby=${messageId}
                 aria-describedby=${this.detail ? detailId : nothing}
             >
-                <div class="messageContainer">
-                    ${!this.hideIcon && this.icon ? html`<div class="icon"><mjo-icon src=${this.icon}></mjo-icon></div>` : nothing}
-                    <div class="message" id=${messageId}>${this.message}</div>
+                <div class="messageContainer" part="message-container">
+                    ${!this.hideIcon && this.icon
+                        ? html`<div class="icon" part="icon-container"><mjo-icon src=${this.icon} exportparts="icon: icon"></mjo-icon></div>`
+                        : nothing}
+                    <div class="message" id=${messageId} part="message">${this.message}</div>
                     ${this.closable && !this.persistent ? this.#renderCloseButton() : nothing}
                 </div>
-                ${this.detail ? html`<div class="detail" id=${detailId} ?data-icon=${!this.hideIcon}>${this.detail}</div>` : nothing}
+                ${this.detail ? html`<div class="detail" id=${detailId} ?data-icon=${!this.hideIcon} part="detail">${this.detail}</div>` : nothing}
             </div>
         `;
     }

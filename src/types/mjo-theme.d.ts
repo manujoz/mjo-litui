@@ -241,16 +241,20 @@ export interface MjoAccordionTheme {
 
 export interface MjoAlertTheme {
     space?: string;
+    animationDuration?: string;
 }
 
 export interface MjoAvatarTheme {
     backgroundColor?: string;
+    borderColor?: string;
     borderWidth?: string;
     fallbackColor?: string;
     fallbackSizeSmall?: string;
     fallbackSizeMedium?: string;
     fallbackSizeLarge?: string;
     nameColor?: string;
+    nameAutoBackgroundColor?: string;
+    nameAutoForegroundColor?: string;
     radiusSmall?: string;
     radiusMedium?: string;
     radiusLarge?: string;
@@ -260,13 +264,24 @@ export interface MjoAvatarTheme {
 }
 
 export interface MjoBadgeTheme {
+    /** --mjo-badge-border-width */
     borderWidth?: string;
+    /** --mjo-badge-font-size-small */
     fontSizeSmall?: string;
+    /** --mjo-badge-font-size-medium */
     fontSizeMedium?: string;
+    /** --mjo-badge-font-size-large */
     fontSizeLarge?: string;
+    /** --mjo-badge-focus-outline-width */
     focusOutlineWidth?: string;
+    /** --mjo-badge-focus-outline-offset */
     focusOutlineOffset?: string;
-    iconTop?: string;
+    /** --mjo-badge-animation-duration */
+    animationDuration?: string;
+    /** --mjo-badge-background-color */
+    backgroundColor?: string;
+    /** --mjo-badge-color */
+    color?: string;
 }
 
 export interface MjoButtonTheme {
