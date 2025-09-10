@@ -79,6 +79,25 @@ export class BreadcrumbsController {
                         </div>
 
                         <div class="control-group">
+                            <h4>Collapse Strategy</h4>
+                            <select onchange="changeBreadcrumbsProp('collapseStrategy', this.value)">
+                                <option value="auto" selected>Auto</option>
+                                <option value="manual">Manual</option>
+                                <option value="responsive">Responsive</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <h4>Max Visible Items</h4>
+                            <select onchange="changeBreadcrumbsProp('maxVisibleItems', parseInt(this.value))">
+                                <option value="0">No limit</option>
+                                <option value="3">3 items</option>
+                                <option value="4">4 items</option>
+                                <option value="5">5 items</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
                             <h4>Separator Icon</h4>
                             <select onchange="changeBreadcrumbsProp('separator', this.value)">
                                 <option value="" selected>Default (Chevron Right)</option>
@@ -92,6 +111,7 @@ export class BreadcrumbsController {
                             <button onclick="setBasicBreadcrumbs()" class="preset-btn">Basic</button>
                             <button onclick="setWithIconsBreadcrumbs()" class="preset-btn">With Icons</button>
                             <button onclick="setDeepBreadcrumbs()" class="preset-btn">Deep Navigation</button>
+                            <button onclick="setCollapseBreadcrumbs()" class="preset-btn">Collapse Test</button>
                         </div>
                     </div>
                 </div>
@@ -139,6 +159,24 @@ export class BreadcrumbsController {
                 <h3>Auto Navigate (Click disabled)</h3>
                 <div class="component-showcase">
                     <mjo-breadcrumbs id="auto-navigate" autoNavigate></mjo-breadcrumbs>
+                </div>
+
+                <h3>Collapse Strategies</h3>
+                <div class="component-showcase">
+                    <h4>Manual Collapse (max 3 items)</h4>
+                    <div style="width: 300px; border: 2px dashed #ccc; padding: 1rem; margin: 1rem 0;">
+                        <mjo-breadcrumbs id="manual-collapse" collapseStrategy="manual"></mjo-breadcrumbs>
+                    </div>
+
+                    <h4>Responsive Collapse (Container Queries)</h4>
+                    <div style="width: 400px; border: 2px dashed #7dc717; padding: 1rem; margin: 1rem 0; resize: horizontal; overflow: auto;">
+                        <mjo-breadcrumbs id="responsive-collapse" collapseStrategy="responsive" color="secondary"></mjo-breadcrumbs>
+                    </div>
+
+                    <h4>Auto Collapse</h4>
+                    <div style="width: 250px; border: 2px dashed #1aa8ed; padding: 1rem; margin: 1rem 0;">
+                        <mjo-breadcrumbs id="auto-collapse" collapseStrategy="auto" variant="bordered"></mjo-breadcrumbs>
+                    </div>
                 </div>
             </div>
         `;

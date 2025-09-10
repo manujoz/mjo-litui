@@ -1,6 +1,7 @@
 export type MjoBreadCrumbsSizes = "small" | "medium" | "large";
 export type MjoBreadCrumbsColor = "primary" | "secondary";
 export type MjoBreadCrumbsVariants = "default" | "solid" | "bordered";
+export type MjoBreadcrumbsCollapseStrategy = "auto" | "responsive" | "manual";
 export type MjoBreadcrumbsItems = MjoBreadcrumbsItem[];
 
 export type MjoBreadcrumbsItem = {

@@ -1,7 +1,7 @@
 import { MjoBreadCrumbsColor, MjoBreadcrumbsItems, MjoBreadcrumbsNavigateEvent, MjoBreadCrumbsSizes, MjoBreadCrumbsVariants } from "./types/mjo-breadcrumbs";
 
-import { css, html, LitElement, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { css, html, LitElement, nothing, PropertyValues } from "lit";
+import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { repeat } from "lit/directives/repeat.js";
 
@@ -24,6 +24,8 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
 
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledBy?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedBy?: string;
+
+    @query("nav") $nav!: HTMLElement;
 
     render() {
         if (this.items.length === 0) return nothing;
@@ -95,8 +97,41 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
         `;
     }
 
+    disconnectedCallback(): void {
+        super.disconnectedCallback();
+
+        this.$nav.removeEventListener("scroll", this.#handleScroll);
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues<this>): void {
+        super.firstUpdated(_changedProperties);
+
+        this.$nav.addEventListener("scroll", this.#handleScroll);
+        this.updateComplete.then(() => {
+            this.#setScrollToEnd();
+        });
+    }
+
+    protected updated(_changedProperties: PropertyValues<this>): void {
+        super.updated(_changedProperties);
+
+        if (_changedProperties.has("items")) {
+            this.updateComplete.then(() => {
+                this.#setScrollToEnd();
+            });
+        }
+    }
+
+    #handleScroll = () => {
+        // console.log(this.$nav.scrollLeft);
+    };
+
     get #computedAriaLabel(): string {
         return this.ariaLabel || "breadcrumb";
+    }
+
+    #setScrollToEnd() {
+        this.$nav.scrollTo({ left: this.$nav.scrollWidth, behavior: "smooth" });
     }
 
     #handleNavigate(event: Event, item: MjoBreadcrumbsItems[0], index: number) {
@@ -117,8 +152,9 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
     static styles = [
         css`
             :host {
-                display: inline-block;
+                display: block;
                 font-family: var(--mjo-breadcrumbs-font-family, inherit);
+                width: 100%;
             }
 
             nav {
@@ -126,6 +162,12 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
                 display: inline-flex;
                 font-size: var(--mjo-breadcrumbs-font-size, inherit);
                 font-weight: var(--mjo-breadcrumbs-font-weight, inherit);
+                max-width: 100%;
+                overflow: hidden;
+                overflow-x: auto;
+                overflow-anchor: auto;
+                box-sizing: border-box;
+                scrollbar-width: none;
             }
 
             nav[data-variant="solid"] {
@@ -160,6 +202,7 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
                 position: relative;
                 display: flex;
                 align-items: center;
+                white-space: nowrap;
             }
 
             /* Icon styling */
