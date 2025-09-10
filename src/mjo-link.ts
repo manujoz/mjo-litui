@@ -59,6 +59,7 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                 href=${ifDefined(this.href)}
                 @click=${this.#handleClick}
                 target=${this.target}
+                part="link"
                 rel=${ifDefined(this.computedRel || undefined)}
                 role=${ifDefined(this.roleAssignment as "")}
                 tabindex=${this.computedTabIndex}

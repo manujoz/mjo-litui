@@ -14,7 +14,7 @@ export class PlaygroundGrid extends LitElement {
     render() {
         return html`
             <div class="playground-grid">
-                <div class="demo-tabs">
+                <div class="demo-tabs" part="demo-tabs">
                     <slot name="demo"></slot>
                 </div>
                 <div class="controls">
@@ -54,7 +54,7 @@ export class PlaygroundGrid extends LitElement {
                 padding: 20px;
                 border: 2px dashed var(--mjo-border-color-high, #ccc);
                 border-radius: 8px;
-                background-color: var(--mjo-background-color-card, #ffffff);
+                background-color: var(--mjo-background-color, #ffffff);
             }
 
             .controls {

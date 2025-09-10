@@ -22,27 +22,24 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
     @property({ type: Boolean }) autoNavigate = false;
     @property({ type: String }) separator?: string;
 
-    // ARIA Properties (using Lit's native support)
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledBy?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedBy?: string;
-
-    private get computedAriaLabel(): string {
-        return this.ariaLabel || "breadcrumb";
-    }
 
     render() {
         if (this.items.length === 0) return nothing;
 
         return html`
             <nav
-                aria-label=${this.computedAriaLabel}
+                part="container"
+                role="navigation"
+                aria-label=${this.#computedAriaLabel}
                 aria-labelledby=${ifDefined(this.ariaLabelledBy)}
                 aria-describedby=${ifDefined(this.ariaDescribedBy)}
                 data-color=${this.color}
                 data-size=${this.size}
                 data-variant=${this.variant}
             >
-                <ul>
+                <ul part="list" role="list">
                     ${repeat(
                         this.items,
                         (item) => item.href || item.label,
@@ -50,10 +47,11 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
                             const isActive = item.active || index === this.items.length - 1;
 
                             return html`
-                                <li ?data-active=${isActive}>
+                                <li ?data-active=${isActive} part="item" role="listitem">
                                     ${item.href && !isActive
                                         ? html`
                                               <mjo-link
+                                                  exportparts="link: link"
                                                   href=${item.href}
                                                   @click=${this.autoNavigate ? nothing : (e: Event) => this.#handleNavigate(e, item, index)}
                                                   aria-current=${ifDefined(isActive ? "page" : undefined)}
@@ -64,13 +62,29 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
                                               </mjo-link>
                                           `
                                         : html`
-                                              ${item.icon ? html`<mjo-icon class="icon active" src=${item.icon} aria-hidden="true"></mjo-icon>` : nothing}
-                                              <mjo-typography tag="span" aria-current=${ifDefined(isActive ? "page" : undefined)}>
+                                              ${item.icon
+                                                  ? html`<mjo-icon
+                                                        class="icon active"
+                                                        src=${item.icon}
+                                                        aria-hidden="true"
+                                                        exportparts="icon: active-icon"
+                                                    ></mjo-icon>`
+                                                  : nothing}
+                                              <mjo-typography
+                                                  tag="span"
+                                                  aria-current=${ifDefined(isActive ? "page" : undefined)}
+                                                  exportparts="typography: active-text"
+                                              >
                                                   ${item.label}
                                               </mjo-typography>
                                           `}
                                     ${index < this.items.length - 1
-                                        ? html`<mjo-icon class="separator" src=${this.separator || HiChevronRight} aria-hidden="true"></mjo-icon>`
+                                        ? html`<mjo-icon
+                                              class="separator"
+                                              src=${this.separator || HiChevronRight}
+                                              aria-hidden="true"
+                                              exportparts="icon: icon-separator"
+                                          ></mjo-icon>`
                                         : nothing}
                                 </li>
                             `;
@@ -79,6 +93,10 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
                 </ul>
             </nav>
         `;
+    }
+
+    get #computedAriaLabel(): string {
+        return this.ariaLabel || "breadcrumb";
     }
 
     #handleNavigate(event: Event, item: MjoBreadcrumbsItems[0], index: number) {

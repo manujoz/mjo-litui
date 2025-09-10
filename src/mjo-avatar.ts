@@ -41,35 +41,16 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
 
     @query(".container") private container!: HTMLElement;
 
-    private initial = "";
-
-    private get appropriateRole() {
-        if (this.clickable) return "button";
-        if (this.src) return "img";
-        return "presentation";
-    }
-
-    private get computedAriaLabel() {
-        if (this.ariaLabel) return this.ariaLabel;
-
-        if (this.clickable) {
-            const nameOrValue = this.name || this.value || "avatar";
-            return `Click to interact with ${nameOrValue}`;
-        }
-        if (this.name) {
-            return `Avatar for ${this.name}`;
-        }
-        return "Avatar";
-    }
+    #initial = "";
 
     render() {
-        this.initial = this.name ? this.name[0].toLocaleUpperCase() : "";
+        this.#initial = this.name ? this.name[0].toLocaleUpperCase() : "";
 
         return html`<div
             class="container size-${this.size} radius-${this.radius} color-${this.color}"
             part="container"
-            role=${this.appropriateRole}
-            aria-label=${this.computedAriaLabel}
+            role=${this.#appropriateRole}
+            aria-label=${this.#computedAriaLabel}
             aria-describedby=${ifDefined(this.ariaDescribedby)}
             aria-disabled=${this.disabled ? "true" : "false"}
             tabindex=${this.clickable ? this.tabIndex ?? 0 : -1}
@@ -92,7 +73,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                         </div>
                     `
                   : this.name
-                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}" part="image-container"><span>${this.initial}</span></div>`
+                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}" part="image-container"><span>${this.#initial}</span></div>`
                     : html`<div class="image radius-${this.radius}" part="image-container"></div>`}
         </div>`;
     }
@@ -101,13 +82,13 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
         super.connectedCallback();
 
         if (this.name) {
-            this.initial = this.name[0].toUpperCase();
+            this.#initial = this.name[0].toUpperCase();
         }
     }
 
     protected updated(_changedProperties: PropertyValues): void {
         if (_changedProperties.has("name")) {
-            this.initial = this.name ? this.name[0].toUpperCase() : "";
+            this.#initial = this.name ? this.name[0].toUpperCase() : "";
         }
 
         if (_changedProperties.has("src")) {
@@ -125,6 +106,25 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             nameElement.style.backgroundColor = "";
             nameElement.style.color = "";
         }
+    }
+
+    get #appropriateRole() {
+        if (this.clickable) return "button";
+        if (this.src) return "img";
+        return "presentation";
+    }
+
+    get #computedAriaLabel() {
+        if (this.ariaLabel) return this.ariaLabel;
+
+        if (this.clickable) {
+            const nameOrValue = this.name || this.value || "avatar";
+            return `Click to interact with ${nameOrValue}`;
+        }
+        if (this.name) {
+            return `Avatar for ${this.name}`;
+        }
+        return "Avatar";
     }
 
     #colorByInitial() {
@@ -167,8 +167,8 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             "#fff",
         ];
 
-        const bgindex = this.initial.charCodeAt(0) % backgroundColors.length;
-        const fgindex = this.initial.charCodeAt(0) % foregroundColors.length;
+        const bgindex = this.#initial.charCodeAt(0) % backgroundColors.length;
+        const fgindex = this.#initial.charCodeAt(0) % foregroundColors.length;
 
         return [backgroundColors[bgindex], foregroundColors[fgindex]];
     }

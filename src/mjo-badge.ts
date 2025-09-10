@@ -46,41 +46,9 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
 
     @query(".container") private container!: HTMLElement;
 
-    private maxCount = 99;
-    private maxCountSuffix = "+";
-    private backgroundColor = "";
-
-    private get computedRole() {
-        // Auto-detect role based on badge properties
-        if (this.role !== "status") {
-            return this.role === "none" ? "" : this.role;
-        }
-
-        // If it contains SVG, it's decorative
-        if (this.label.includes("<svg")) {
-            return "img";
-        }
-
-        // If it's purely decorative (no meaningful content)
-        if (this.ariaHidden === "true") {
-            return "";
-        }
-
-        // Default to status for informational badges
-        return "status";
-    }
-
-    private get displayedLabel() {
-        if (!this.label) return "";
-
-        // Handle numeric values with max count limit
-        const numericValue = parseInt(this.label, 10);
-        if (!isNaN(numericValue) && numericValue > this.maxCount) {
-            return `${this.maxCount}${this.maxCountSuffix}`;
-        }
-
-        return this.label;
-    }
+    #maxCount = 99;
+    #maxCountSuffix = "+";
+    #backgroundColor = "";
 
     render() {
         return html`
@@ -95,7 +63,7 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
                 ?data-disabled=${this.disabled}
                 ?data-hide-outline=${this.hideOutline}
                 tabindex=${ifDefined(this.clickable && !this.disabled ? 0 : undefined)}
-                role=${ifDefined((this.computedRole as "status") || undefined)}
+                role=${ifDefined((this.#computedRole as "status") || undefined)}
                 aria-label=${ifDefined(this.ariaLabel || undefined)}
                 aria-live=${(this.ariaLive as "polite") || "polite"}
                 aria-hidden=${ifDefined(this.ariaHidden === "true" ? "true" : undefined)}
@@ -104,9 +72,9 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
                 @click=${this.#clickHandler}
                 @keydown=${this.#keydownHandler}
             >
-                ${this.displayedLabel.includes("<svg")
-                    ? html`<mjo-icon src=${this.displayedLabel} exportparts="icon: icon" aria-hidden="true"></mjo-icon>`
-                    : html`<mjo-typography tag="none" size="body2" weight="bold" exportparts="typography: label">${this.displayedLabel}</mjo-typography>`}
+                ${this.#displayedLabel.includes("<svg")
+                    ? html`<mjo-icon src=${this.#displayedLabel} exportparts="icon: icon" aria-hidden="true"></mjo-icon>`
+                    : html`<mjo-typography tag="none" size="body2" weight="bold" exportparts="typography: label">${this.#displayedLabel}</mjo-typography>`}
             </div>
         `;
     }
@@ -128,6 +96,38 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
 
     toggleBadge() {
         this.show = !this.show;
+    }
+
+    get #computedRole() {
+        // Auto-detect role based on badge properties
+        if (this.role !== "status") {
+            return this.role === "none" ? "" : this.role;
+        }
+
+        // If it contains SVG, it's decorative
+        if (this.label.includes("<svg")) {
+            return "img";
+        }
+
+        // If it's purely decorative (no meaningful content)
+        if (this.ariaHidden === "true") {
+            return "";
+        }
+
+        // Default to status for informational badges
+        return "status";
+    }
+
+    get #displayedLabel() {
+        if (!this.label) return "";
+
+        // Handle numeric values with max count limit
+        const numericValue = parseInt(this.label, 10);
+        if (!isNaN(numericValue) && numericValue > this.#maxCount) {
+            return `${this.#maxCount}${this.#maxCountSuffix}`;
+        }
+
+        return this.label;
     }
 
     #keydownHandler = (event: KeyboardEvent) => {
@@ -189,9 +189,9 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
     };
 
     #setBackgroundColor() {
-        this.backgroundColor = getInheritBackgroundColor(this);
+        this.#backgroundColor = getInheritBackgroundColor(this);
 
-        this.style.setProperty("--mjoin-badge-background-color", this.backgroundColor);
+        this.style.setProperty("--mjoin-badge-background-color", this.#backgroundColor);
     }
 
     async #setPosition() {

@@ -38,17 +38,14 @@ export class MjoAlert extends LitElement {
     @property({ type: Boolean }) closable: boolean = false;
     @property({ type: Boolean }) hideIcon: boolean = false;
 
-    // Accessibility properties
     @property({ type: String }) ariaLive: "polite" | "assertive" | "off" = "polite";
     @property({ type: Boolean }) focusOnShow: boolean = false;
 
-    // Auto-close functionality
     @property({ type: Boolean }) autoClose: boolean = false;
     @property({ type: Number }) autoCloseDelay: number = 5000;
 
-    // Animation properties
     @property({ type: String }) animation: "fade" | "slide" | "scale" | "none" = "fade";
-    @property({ type: Number }) animationDuration: number = 300;
+    @property({ type: Number }) animationDuration: number = 100;
 
     // UX properties
     @property({ type: Boolean }) persistent: boolean = false;
@@ -56,8 +53,8 @@ export class MjoAlert extends LitElement {
     @state() private icon: string = "";
     @state() private autoCloseTimer: number | null = null;
 
-    private storeHeight: number = 0;
-    private isAnimating: boolean = false;
+    #storeHeight: number = 0;
+    #isAnimating: boolean = false;
 
     render() {
         const messageId = `alert-message-${Math.random().toString(36).substring(2, 9)}`;
@@ -203,8 +200,8 @@ export class MjoAlert extends LitElement {
     }
 
     #show() {
-        const container = this.shadowRoot?.querySelector(".container") as HTMLElement;
-        if (!container || container.offsetHeight > 0 || this.isAnimating) return;
+        const $container = this.shadowRoot?.querySelector(".container") as HTMLElement;
+        if (!$container || $container.offsetHeight > 0 || this.#isAnimating) return;
 
         this.#dispatchEvent("mjo-alert:will-show");
 
@@ -218,15 +215,15 @@ export class MjoAlert extends LitElement {
             return;
         }
 
-        this.isAnimating = true;
+        this.#isAnimating = true;
 
         let animate: Animation | null = null;
         switch (this.animation) {
             case "fade":
-                animate = container.animate(
+                animate = $container.animate(
                     [
-                        { opacity: 0, height: "0", display: "none" },
-                        { opacity: 1, height: this.storeHeight + "px", display: "block" },
+                        { opacity: 0, display: "none" },
+                        { opacity: 1, display: "block" },
                     ],
                     {
                         duration: this.animationDuration,
@@ -236,15 +233,10 @@ export class MjoAlert extends LitElement {
                 );
                 break;
             case "slide":
-                animate = container.animate(
+                animate = $container.animate(
                     [
-                        { transform: "translateX(-100%)", opacity: 0, height: "0", display: "none" },
-                        {
-                            transform: "translateX(0)",
-                            opacity: 1,
-                            height: this.storeHeight + "px",
-                            display: "block",
-                        },
+                        { opacity: 0, height: 0, display: "none" },
+                        { opacity: 1, height: this.#storeHeight + "px", display: "block" },
                     ],
                     {
                         duration: this.animationDuration,
@@ -254,13 +246,13 @@ export class MjoAlert extends LitElement {
                 );
                 break;
             case "scale":
-                animate = container.animate(
+                animate = $container.animate(
                     [
                         { transform: "scale(0)", opacity: 0, height: "0", display: "none" },
                         {
                             transform: "scale(1)",
                             opacity: 1,
-                            height: this.storeHeight + "px",
+                            height: this.#storeHeight + "px",
                             display: "block",
                         },
                     ],
@@ -276,13 +268,13 @@ export class MjoAlert extends LitElement {
         animate.finished.then(() => {
             this.#dispatchEvent("mjo-alert:opened");
             if (animate) animate.cancel();
-            this.isAnimating = false;
+            this.#isAnimating = false;
         });
     }
 
     #hide() {
-        const container = this.shadowRoot?.querySelector(".container") as HTMLElement;
-        if (!container || container.offsetHeight === 0 || this.isAnimating) return;
+        const $container = this.shadowRoot?.querySelector(".container") as HTMLElement;
+        if (!$container || $container.offsetHeight === 0 || this.#isAnimating) return;
 
         // Dispatch cancel event
         this.#dispatchEvent("mjo-alert:will-close");
@@ -300,15 +292,22 @@ export class MjoAlert extends LitElement {
             return;
         }
 
-        this.isAnimating = true;
-        this.storeHeight = container.offsetHeight;
+        this.#isAnimating = true;
+        this.#storeHeight = $container.offsetHeight;
 
         let animate: Animation | null = null;
         switch (this.animation) {
             case "fade":
-                animate = container.animate(
+                animate = $container.animate([{ opacity: 1 }, { opacity: 0, display: "none" }], {
+                    duration: this.animationDuration,
+                    easing: "ease-in-out",
+                    fill: "forwards",
+                });
+                break;
+            case "slide":
+                animate = $container.animate(
                     [
-                        { opacity: 1, height: this.storeHeight + "px" },
+                        { opacity: 1, height: this.#storeHeight + "px" },
                         { opacity: 0, height: "0", display: "none" },
                     ],
                     {
@@ -318,30 +317,13 @@ export class MjoAlert extends LitElement {
                     },
                 );
                 break;
-            case "slide":
-                animate = container.animate(
-                    [
-                        {
-                            transform: "translateX(0)",
-                            opacity: 1,
-                            height: this.storeHeight + "px",
-                        },
-                        { transform: "translateX(-100%)", opacity: 0, height: "0", display: "none" },
-                    ],
-                    {
-                        duration: this.animationDuration,
-                        easing: "ease-in-out",
-                        fill: "forwards",
-                    },
-                );
-                break;
             case "scale":
-                animate = container.animate(
+                animate = $container.animate(
                     [
                         {
                             transform: "scale(1)",
                             opacity: 1,
-                            height: this.storeHeight + "px",
+                            height: this.#storeHeight + "px",
                         },
                         { transform: "scale(0)", opacity: 0, height: "0", display: "none" },
                     ],
@@ -363,7 +345,7 @@ export class MjoAlert extends LitElement {
                 }
             }
 
-            this.isAnimating = false;
+            this.#isAnimating = false;
             this.#dispatchEvent("mjo-alert:closed");
         });
     }
@@ -378,38 +360,25 @@ export class MjoAlert extends LitElement {
                 --mjo-alert-animation-duration: 300ms;
                 overflow: hidden;
             }
-
+            :host(:focus-visible) {
+                outline: 2px solid currentColor;
+                outline-offset: 2px;
+            }
             :host([hidden]) {
                 display: none !important;
             }
-
             .container {
                 position: relative;
                 padding: var(--mjo-alert-space);
                 transition: padding var(--mjo-alert-animation-duration);
                 box-sizing: border-box;
             }
-
-            /* Animation support */
             .container[data-animation="slide"] {
                 transform-origin: left center;
             }
-
             .container[data-animation="scale"] {
                 transform-origin: center center;
             }
-
-            /* Reduced motion support */
-            @media (prefers-reduced-motion: reduce) {
-                :host {
-                    --mjo-alert-animation-duration: 0ms;
-                }
-                .container {
-                    transition: none;
-                }
-            }
-
-            /* Type-based styling */
             .container[data-type="success"] {
                 background-color: var(--mjo-color-green-50);
                 border: solid 1px var(--mjo-color-success);
@@ -430,8 +399,6 @@ export class MjoAlert extends LitElement {
                 border: solid 1px var(--mjo-color-info);
                 color: var(--mjo-color-info);
             }
-
-            /* Size variants */
             .container[data-size="small"] {
                 font-size: 0.8em;
                 --mjo-alert-space: var(--mjo-space-xsmall);
@@ -439,8 +406,6 @@ export class MjoAlert extends LitElement {
             .container[data-size="large"] {
                 font-size: 1.2em;
             }
-
-            /* Border radius */
             .container[data-rounded="small"] {
                 border-radius: var(--mjo-radius-small);
             }
@@ -450,8 +415,6 @@ export class MjoAlert extends LitElement {
             .container[data-rounded="large"] {
                 border-radius: var(--mjo-radius-large);
             }
-
-            /* Message container */
             .messageContainer {
                 position: relative;
                 display: flex;
@@ -459,7 +422,6 @@ export class MjoAlert extends LitElement {
                 gap: var(--mjo-space-xsmall);
                 align-items: flex-start;
             }
-
             .icon {
                 position: relative;
                 flex-grow: 0;
@@ -468,11 +430,9 @@ export class MjoAlert extends LitElement {
                 display: grid;
                 place-content: center;
             }
-
             .icon mjo-icon {
                 font-size: 1em;
             }
-
             .message {
                 position: relative;
                 flex-grow: 1;
@@ -482,8 +442,6 @@ export class MjoAlert extends LitElement {
                 align-items: center;
                 word-wrap: break-word;
             }
-
-            /* Close button styling */
             .close-button {
                 background: none;
                 border: none;
@@ -499,53 +457,44 @@ export class MjoAlert extends LitElement {
                 min-width: 1.5em;
                 min-height: 1.5em;
             }
-
             .close-button:hover {
                 background-color: rgba(0, 0, 0, 0.1);
             }
-
-            .close-button:focus {
+            .close-button:focus-visible {
                 outline: 2px solid currentColor;
                 outline-offset: 2px;
             }
-
             .close-button:active {
                 transform: scale(0.95);
             }
-
             .close-button mjo-icon {
                 font-size: 1em;
             }
-
-            /* Detail section */
             .detail {
                 position: relative;
                 padding: var(--mjo-alert-space) 0 0 0;
                 font-size: 0.8em;
                 word-wrap: break-word;
             }
-
             .detail[data-icon] {
                 padding-left: calc(1em + var(--mjo-space-xsmall));
             }
-
-            /* Focus management */
-            :host(:focus) {
-                outline: 2px solid currentColor;
-                outline-offset: 2px;
+            @media (prefers-reduced-motion: reduce) {
+                :host {
+                    --mjo-alert-animation-duration: 0ms;
+                }
+                .container {
+                    transition: none;
+                }
             }
-
-            /* High contrast mode support */
             @media (prefers-contrast: high) {
                 .container {
                     border-width: 2px;
                 }
-                .close-button:focus {
+                .close-button:focus-visible {
                     outline-width: 3px;
                 }
             }
-
-            /* Dark mode considerations */
             @media (prefers-color-scheme: dark) {
                 .close-button:hover {
                     background-color: rgba(255, 255, 255, 0.1);
