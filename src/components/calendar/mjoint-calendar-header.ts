@@ -22,40 +22,6 @@ export class MjointCalendarHeader extends LitElement {
     @property({ type: Boolean }) monthPickerOpen = false;
     @property({ type: Boolean }) yearPickerOpen = false;
 
-    get previousMonthLabel() {
-        if (!this.monthNames || !Array.isArray(this.monthNames) || this.monthNames.length < 12) {
-            return "Previous month";
-        }
-        const prevMonth = new Date(this.year, this.month - 1, 1);
-        const monthIndex = prevMonth.getMonth();
-        if (monthIndex < 0 || monthIndex >= this.monthNames.length || !this.monthNames[monthIndex]) {
-            return "Previous month";
-        }
-        return `Go to ${this.monthNames[monthIndex]} ${prevMonth.getFullYear()}`;
-    }
-
-    get nextMonthLabel() {
-        if (!this.monthNames || !Array.isArray(this.monthNames) || this.monthNames.length < 12) {
-            return "Next month";
-        }
-        const nextMonth = new Date(this.year, this.month + 1, 1);
-        const monthIndex = nextMonth.getMonth();
-        if (monthIndex < 0 || monthIndex >= this.monthNames.length || !this.monthNames[monthIndex]) {
-            return "Next month";
-        }
-        return `Go to ${this.monthNames[monthIndex]} ${nextMonth.getFullYear()}`;
-    }
-
-    get currentMonthYearLabel() {
-        if (!this.monthNames || !Array.isArray(this.monthNames) || this.monthNames.length < 12) {
-            return `Month ${this.month + 1} ${this.year}`;
-        }
-        if (this.month < 0 || this.month >= this.monthNames.length || !this.monthNames[this.month]) {
-            return `Month ${this.month + 1} ${this.year}`;
-        }
-        return `${this.monthNames[this.month]} ${this.year}`;
-    }
-
     render() {
         return html`
             <div class="calendar-header" part="header" role="banner">
@@ -64,10 +30,11 @@ export class MjointCalendarHeader extends LitElement {
                         ? html`
                               <button
                                   class="nav-button"
+                                  part="nav-button"
                                   ?disabled=${this.disabled}
-                                  aria-label=${this.previousMonthLabel}
+                                  aria-label=${this.#previousMonthLabel}
                                   tabindex=${this.disabled ? -1 : 0}
-                                  title=${this.previousMonthLabel}
+                                  title=${this.#previousMonthLabel}
                                   @click=${this.#handlePrevious}
                               >
                                   <mjo-icon src=${FaChevronLeft}></mjo-icon>
@@ -75,9 +42,10 @@ export class MjointCalendarHeader extends LitElement {
                           `
                         : nothing}
 
-                    <div class="month-year-selectors" part="month-year" role="group" aria-label=${this.currentMonthYearLabel}>
+                    <div class="month-year-selectors" part="selectors-container" role="group" aria-label=${this.#currentMonthYearLabel}>
                         <button
                             class="selector-button"
+                            part="selector-button"
                             ?disabled=${this.disabled}
                             tabindex=${this.disabled ? -1 : 0}
                             aria-label="Select month"
@@ -92,6 +60,7 @@ export class MjointCalendarHeader extends LitElement {
                         </button>
                         <button
                             class="selector-button"
+                            part="selector-button"
                             ?disabled=${this.disabled}
                             tabindex=${this.disabled ? -1 : 0}
                             aria-label="Select year"
@@ -106,9 +75,10 @@ export class MjointCalendarHeader extends LitElement {
                         ? html`
                               <button
                                   class="nav-button"
+                                  part="nav-button"
                                   ?disabled=${this.disabled}
-                                  aria-label=${this.nextMonthLabel}
-                                  title=${this.nextMonthLabel}
+                                  aria-label=${this.#nextMonthLabel}
+                                  title=${this.#nextMonthLabel}
                                   @click=${this.#handleNext}
                               >
                                   <mjo-icon src=${FaChevronRight}></mjo-icon>
@@ -118,6 +88,40 @@ export class MjointCalendarHeader extends LitElement {
                 </div>
             </div>
         `;
+    }
+
+    get #previousMonthLabel() {
+        if (!this.monthNames || !Array.isArray(this.monthNames) || this.monthNames.length < 12) {
+            return "Previous month";
+        }
+        const prevMonth = new Date(this.year, this.month - 1, 1);
+        const monthIndex = prevMonth.getMonth();
+        if (monthIndex < 0 || monthIndex >= this.monthNames.length || !this.monthNames[monthIndex]) {
+            return "Previous month";
+        }
+        return `Go to ${this.monthNames[monthIndex]} ${prevMonth.getFullYear()}`;
+    }
+
+    get #nextMonthLabel() {
+        if (!this.monthNames || !Array.isArray(this.monthNames) || this.monthNames.length < 12) {
+            return "Next month";
+        }
+        const nextMonth = new Date(this.year, this.month + 1, 1);
+        const monthIndex = nextMonth.getMonth();
+        if (monthIndex < 0 || monthIndex >= this.monthNames.length || !this.monthNames[monthIndex]) {
+            return "Next month";
+        }
+        return `Go to ${this.monthNames[monthIndex]} ${nextMonth.getFullYear()}`;
+    }
+
+    get #currentMonthYearLabel() {
+        if (!this.monthNames || !Array.isArray(this.monthNames) || this.monthNames.length < 12) {
+            return `Month ${this.month + 1} ${this.year}`;
+        }
+        if (this.month < 0 || this.month >= this.monthNames.length || !this.monthNames[this.month]) {
+            return `Month ${this.month + 1} ${this.year}`;
+        }
+        return `${this.monthNames[this.month]} ${this.year}`;
     }
 
     #handlePrevious() {
@@ -212,7 +216,7 @@ export class MjointCalendarHeader extends LitElement {
         }
         .nav-button:hover:not(:disabled),
         .selector-button:hover:not(:disabled) {
-            background-color: var(--mjo-button-selector-button-highlight-color, var(--mjoint-calendar-highlight-color));
+            background-color: var(--mjo-calendar-selector-button-highlight-color, var(--mjoint-calendar-highlight-color));
         }
         .nav-button:focus-visible,
         .selector-button:focus-visible {

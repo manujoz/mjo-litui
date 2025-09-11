@@ -362,43 +362,13 @@ export class ExampleCalendarRange extends LitElement {
 
 ```ts
 import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-calendar";
 
 @customElement("example-calendar-i18n")
 export class ExampleCalendarI18n extends LitElement {
-    @state() private locale: "en" | "es" | "fr" | "de" | "ja" | "zh" = "en";
-    @state() private firstDayOfWeek: "monday" | "sunday" = "monday";
-
-    private locales = [
-        { code: "en", name: "English" },
-        { code: "es", name: "Español" },
-        { code: "fr", name: "Français" },
-        { code: "de", name: "Deutsch" },
-        { code: "ja", name: "日本語" },
-        { code: "zh", name: "中文" },
-    ];
-
     render() {
-        return html`
-            <h3>Internationalization</h3>
-            <div style="margin-bottom: 16px;">
-                <label>
-                    Language:
-                    <select @change=${(e: Event) => (this.locale = (e.target as HTMLSelectElement).value as any)}>
-                        ${this.locales.map((loc) => html` <option value=${loc.code} ?selected=${this.locale === loc.code}>${loc.name}</option> `)}
-                    </select>
-                </label>
-                <label style="margin-left: 16px;">
-                    Week starts on:
-                    <select @change=${(e: Event) => (this.firstDayOfWeek = (e.target as HTMLSelectElement).value as any)}>
-                        <option value="monday" ?selected=${this.firstDayOfWeek === "monday"}>Monday</option>
-                        <option value="sunday" ?selected=${this.firstDayOfWeek === "sunday"}>Sunday</option>
-                    </select>
-                </label>
-            </div>
-            <mjo-calendar mode="single" .locale=${this.locale} .firstDayOfWeek=${this.firstDayOfWeek}></mjo-calendar>
-        `;
+        return html` <mjo-calendar locale="es" mode="single" first-day-of-week="monday"></mjo-calendar> `;
     }
 }
 ```
@@ -407,46 +377,16 @@ export class ExampleCalendarI18n extends LitElement {
 
 ```ts
 import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-calendar";
 
 @customElement("example-calendar-constraints")
 export class ExampleCalendarConstraints extends LitElement {
-    @state() private minDate = "2025-01-01";
-    @state() private maxDate = "2025-12-31";
-    @state() private disabledDates = ["2025-02-14", "2025-07-04", "2025-12-25"];
+    private disabledDates = ["2025-02-14", "2025-07-04", "2025-12-25"];
 
     render() {
-        return html`
-            <h3>Date Constraints</h3>
-            <div style="margin-bottom: 16px;">
-                <label>Min Date: <input type="date" .value=${this.minDate} @input=${this.updateMinDate} /></label>
-                <label style="margin-left: 16px;">Max Date: <input type="date" .value=${this.maxDate} @input=${this.updateMaxDate} /></label>
-            </div>
-
-            <mjo-calendar
-                mode="single"
-                .minDate=${this.minDate}
-                .maxDate=${this.maxDate}
-                .disabledDates=${this.disabledDates}
-                @mjo-calendar:date-selected=${this.handleDateSelected}
-            ></mjo-calendar>
-
-            <p><strong>Disabled dates:</strong> ${this.disabledDates.join(", ")}</p>
-        `;
+        return html` <mjo-calendar mode="single" min-date="2025-01-01" max-date="2025-12-31" .disabledDates=${this.disabledDates}></mjo-calendar> `;
     }
-
-    private updateMinDate = (e: Event) => {
-        this.minDate = (e.target as HTMLInputElement).value;
-    };
-
-    private updateMaxDate = (e: Event) => {
-        this.maxDate = (e.target as HTMLInputElement).value;
-    };
-
-    private handleDateSelected = (e: CustomEvent) => {
-        console.log("Selected date:", e.detail);
-    };
 }
 ```
 
@@ -477,7 +417,7 @@ export class ExampleCalendarForm extends LitElement {
 
     private handleSubmit = (event: CustomEvent) => {
         console.log("Form data:", event.detail);
-        // event.detail will contain: { eventDate: "2025-01-15", vacationPeriod: "2025-07-01,2025-07-14" }
+        // event.detail will contain: { eventDate: "2025-01-15", vacationPeriod: "{\"start\":\"2025-07-01\",\"end\":\"2025-07-14\"}" }
     };
 }
 ```
@@ -488,16 +428,13 @@ export class ExampleCalendarForm extends LitElement {
 
 ```ts
 import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-calendar";
 
 @customElement("example-calendar-theming")
 export class ExampleCalendarTheming extends LitElement {
-    @state() private color: "primary" | "secondary" = "primary";
-    @state() private size: "small" | "medium" | "large" = "medium";
-
     private customTheme = {
-        selectedBackground: "#7C3AED", // Custom purple
+        selectedBackground: "#7C3AED",
         todayBackground: "#DDD6FE",
         todayColor: "#7C3AED",
         borderRadius: "12px",
@@ -505,28 +442,7 @@ export class ExampleCalendarTheming extends LitElement {
     };
 
     render() {
-        return html`
-            <h3>Theme Customization</h3>
-            <div style="margin-bottom: 16px;">
-                <label>
-                    Color:
-                    <select @change=${(e: Event) => (this.color = (e.target as HTMLSelectElement).value as any)}>
-                        <option value="primary" ?selected=${this.color === "primary"}>Primary</option>
-                        <option value="secondary" ?selected=${this.color === "secondary"}>Secondary</option>
-                    </select>
-                </label>
-                <label style="margin-left: 16px;">
-                    Size:
-                    <select @change=${(e: Event) => (this.size = (e.target as HTMLSelectElement).value as any)}>
-                        <option value="small" ?selected=${this.size === "small"}>Small</option>
-                        <option value="medium" ?selected=${this.size === "medium"}>Medium</option>
-                        <option value="large" ?selected=${this.size === "large"}>Large</option>
-                    </select>
-                </label>
-            </div>
-
-            <mjo-calendar mode="single" .color=${this.color} .size=${this.size} .theme=${this.customTheme}></mjo-calendar>
-        `;
+        return html` <mjo-calendar mode="single" color="primary" size="medium" .theme=${this.customTheme}></mjo-calendar> `;
     }
 }
 ```
@@ -804,21 +720,21 @@ The component provides extensive CSS customization through variables with fallba
 
 ### Core Structure
 
-| Variable                       | Fallback                 | Purpose                |
-| ------------------------------ | ------------------------ | ---------------------- |
-| `--mjo-calendar-font-family`   | `--mjo-font-family`      | Font family            |
-| `--mjo-calendar-background`    | `--mjo-background-color` | Calendar background    |
-| `--mjo-calendar-border`        | `--mjo-border-color`     | Calendar border        |
-| `--mjo-calendar-border-radius` | `--mjo-radius`           | Calendar border radius |
-| `--mjo-calendar-shadow`        | calculated               | Calendar shadow        |
-| `--mjo-calendar-padding`       | `16px`                   | Calendar padding       |
+| Variable                       | Fallback                       | Purpose                   |
+| ------------------------------ | ------------------------------ | ------------------------- |
+| `--mjo-calendar-font-family`   | `--mjo-font-family`            | Calendar font family      |
+| `--mjo-calendar-background`    | `--mjo-background-color`       | Calendar background       |
+| `--mjo-calendar-border`        | `1px solid --mjo-border-color` | Calendar border           |
+| `--mjo-calendar-border-radius` | `--mjo-radius-medium`          | Calendar border radius    |
+| `--mjo-calendar-shadow`        | `0 2px 8px rgba(0,0,0,0.1)`    | Calendar shadow           |
+| `--mjo-calendar-padding`       | `16px`                         | Calendar internal padding |
 
 ### Week Headers
 
-| Variable                              | Fallback                     | Purpose                     |
-| ------------------------------------- | ---------------------------- | --------------------------- |
-| `--mjo-calendar-week-day-color`       | `--mjo-foreground-color-low` | Week day labels color       |
-| `--mjo-calendar-week-day-font-weight` | `600`                        | Week day labels font weight |
+| Variable                              | Fallback                     | Purpose                      |
+| ------------------------------------- | ---------------------------- | ---------------------------- |
+| `--mjo-calendar-week-day-color`       | `--mjo-foreground-color-low` | Week day headers text color  |
+| `--mjo-calendar-week-day-font-weight` | `600`                        | Week day headers font weight |
 
 ### Day Cells
 
@@ -826,15 +742,16 @@ The component provides extensive CSS customization through variables with fallba
 | ------------------------------------- | ----------------------------- | ---------------------------- |
 | `--mjo-calendar-day-border-radius`    | `4px`                         | Individual day border radius |
 | `--mjo-calendar-day-hover-background` | `--mjo-background-color-high` | Day hover background         |
+| `--mjo-calendar-focus-outline`        | `--mjo-primary-color`         | Focused day outline color    |
 
-### Today Styling
+### Today's Date
 
-| Variable                          | Fallback                     | Purpose          |
-| --------------------------------- | ---------------------------- | ---------------- |
-| `--mjo-calendar-today-background` | `--mjo-primary-color-alpha2` | Today background |
-| `--mjo-calendar-today-color`      | `--mjo-primary-color`        | Today text color |
+| Variable                          | Fallback                     | Purpose                 |
+| --------------------------------- | ---------------------------- | ----------------------- |
+| `--mjo-calendar-today-background` | `--mjo-primary-color-alpha2` | Today's date background |
+| `--mjo-calendar-today-color`      | `--mjo-primary-color`        | Today's date text color |
 
-### Selection Styling
+### Selected Dates
 
 | Variable                             | Fallback              | Purpose                  |
 | ------------------------------------ | --------------------- | ------------------------ |
@@ -857,42 +774,55 @@ The component provides extensive CSS customization through variables with fallba
 | `--mjo-calendar-disabled-color`      | `--mjo-disabled-foreground-color` | Disabled dates text color |
 | `--mjo-calendar-disabled-background` | `transparent`                     | Disabled dates background |
 
-### Secondary Color Variations
+### Secondary Color Theme
 
 When `color="secondary"`, these variables apply:
 
-| Variable                                       | Fallback                       |
-| ---------------------------------------------- | ------------------------------ |
-| `--mjo-calendar-today-background-secondary`    | `--mjo-secondary-color-alpha2` |
-| `--mjo-calendar-today-color-secondary`         | `--mjo-secondary-color`        |
-| `--mjo-calendar-selected-background-secondary` | `--mjo-secondary-color`        |
-| `--mjo-calendar-selected-color-secondary`      | `white`                        |
-| `--mjo-calendar-range-background-secondary`    | `--mjo-secondary-color-alpha1` |
-| `--mjo-calendar-range-color-secondary`         | `--mjo-secondary-color`        |
-
-### Navigation Controls
-
-| Variable                                       | Fallback                                   | Purpose                                |
-| ---------------------------------------------- | ------------------------------------------ | -------------------------------------- |
-| `--mjo-calendar-nav-background`                | `transparent`                              | Navigation button background           |
-| `--mjo-calendar-nav-border`                    | `--mjo-border-color`                       | Navigation button border               |
-| `--mjo-calendar-nav-color`                     | `--mjo-foreground-color`                   | Navigation button text color           |
-| `--mjo-calendar-nav-hover-background`          | `--mjo-primary-color-alpha2`               | Navigation button hover background     |
-| `--mjo-calendar-nav-radius`                    | `--mjo-radius`                             | Navigation button border radius        |
-| `--mjo-calendar-nav-button-border`             | `solid 1px --mjoint-calendar-accent-color` | Header navigation button border        |
-| `--mjo-calendar-nav-button-color`              | `--mjoint-calendar-accent-color`           | Header navigation button text color    |
-| `--mjo-calendar-selector-button-color`         | `--mjoint-calendar-color-foreground`       | Month/year selector button text color  |
-| `--mjo-button-selector-button-highlight-color` | `--mjoint-calendar-highlight-color`        | Selector button hover background color |
+| Variable                                             | Fallback                       | Purpose                          |
+| ---------------------------------------------------- | ------------------------------ | -------------------------------- |
+| `--mjo-calendar-today-background-secondary`          | `--mjo-secondary-color-alpha2` | Today background (secondary)     |
+| `--mjo-calendar-today-color-secondary`               | `--mjo-secondary-color`        | Today text color (secondary)     |
+| `--mjo-calendar-selected-background-secondary`       | `--mjo-secondary-color`        | Selected background (secondary)  |
+| `--mjo-calendar-selected-color-secondary`            | `white`                        | Selected text color (secondary)  |
+| `--mjo-calendar-range-endpoint-background-secondary` | `--mjo-secondary-color`        | Range endpoints (secondary)      |
+| `--mjo-calendar-range-endpoint-color-secondary`      | `white`                        | Range endpoints text (secondary) |
+| `--mjo-calendar-range-background-secondary`          | `--mjo-secondary-color-alpha1` | Range background (secondary)     |
+| `--mjo-calendar-range-color-secondary`               | `--mjo-secondary-color`        | Range text color (secondary)     |
 
 ### Month/Year Pickers
 
 | Variable                                           | Fallback                         | Purpose                           |
 | -------------------------------------------------- | -------------------------------- | --------------------------------- |
 | `--mjo-calendar-picker-background`                 | `--mjo-background-color`         | Picker overlay background         |
-| `--mjo-calendar-picker-shadow`                     | `0 4px 12px rgba(0, 0, 0, 0.15)` | Picker shadow                     |
+| `--mjo-calendar-picker-radius`                     | `--mjo-radius-medium`            | Picker border radius              |
+| `--mjo-calendar-picker-shadow`                     | `0 4px 12px rgba(0,0,0,0.15)`    | Picker shadow                     |
 | `--mjo-calendar-picker-button-background`          | `transparent`                    | Picker button background          |
+| `--mjo-calendar-picker-button-border`              | `1px solid --mjo-border-color`   | Picker button border              |
+| `--mjo-calendar-picker-button-radius`              | `--mjo-radius-medium`            | Picker button border radius       |
+| `--mjo-calendar-picker-button-color`               | `--mjo-foreground-color-low`     | Picker button text color          |
 | `--mjo-calendar-picker-button-hover-background`    | `--mjo-primary-color-alpha2`     | Picker button hover background    |
+| `--mjo-calendar-picker-button-hover-border`        | `--mjo-primary-color`            | Picker button hover border        |
+| `--mjo-calendar-picker-button-focus-outline`       | `--mjo-primary-color`            | Picker button focus outline       |
 | `--mjo-calendar-picker-button-selected-background` | `--mjo-primary-color`            | Picker button selected background |
+| `--mjo-calendar-picker-button-selected-border`     | `--mjo-primary-color`            | Picker button selected border     |
+| `--mjo-calendar-picker-button-selected-color`      | `--mjo-primary-foreground-color` | Picker button selected text color |
+
+### Navigation Controls
+
+| Variable                                         | Fallback                        | Purpose                                |
+| ------------------------------------------------ | ------------------------------- | -------------------------------------- |
+| `--mjo-calendar-nav-background`                  | `transparent`                   | Navigation button background           |
+| `--mjo-calendar-nav-border`                      | `1px solid --mjo-border-color`  | Navigation button border               |
+| `--mjo-calendar-nav-color`                       | `--mjo-foreground-color`        | Navigation button text color           |
+| `--mjo-calendar-nav-hover-background`            | `--mjo-primary-color-alpha2`    | Navigation button hover background     |
+| `--mjo-calendar-nav-radius`                      | `--mjo-radius-medium`           | Navigation button border radius        |
+| `--mjo-calendar-nav-hover-border`                | `--mjo-primary-color`           | Navigation button hover border         |
+| `--mjo-calendar-nav-focus-outline`               | `--mjo-primary-color`           | Navigation button focus outline        |
+| `--mjo-calendar-decade-label-color`              | `--mjo-foreground-color`        | Year picker decade label text color    |
+| `--mjo-calendar-nav-button-border`               | `1px solid --mjo-primary-color` | Header navigation button border        |
+| `--mjo-calendar-nav-button-color`                | `--mjo-primary-color`           | Header navigation button text color    |
+| `--mjo-calendar-selector-button-color`           | `--mjo-foreground-color`        | Month/year selector button text color  |
+| `--mjo-calendar-selector-button-highlight-color` | `--mjo-background-color-high`   | Selector button hover background color |
 
 ### CSS Customization Examples
 
@@ -1018,7 +948,7 @@ export interface MjoCalendarTheme {
     navButtonBorder?: string; // --mjo-calendar-nav-button-border
     navButtonColor?: string; // --mjo-calendar-nav-button-color
     selectorButtonColor?: string; // --mjo-calendar-selector-button-color
-    buttonSelectorButtonHighlightColor?: string; // --mjo-button-selector-button-highlight-color
+    selectorButtonHighlightColor?: string; // --mjo-calendar-selector-button-highlight-color
 }
 ```
 
@@ -1235,55 +1165,30 @@ const observer = new MutationObserver(() => {
 
 ## CSS Parts
 
-| Part            | Description                             |
-| --------------- | --------------------------------------- |
-| `calendar`      | Main calendar container                 |
-| `header`        | Calendar header with navigation         |
-| `navigation`    | Navigation buttons container            |
-| `month-year`    | Month and year selector buttons         |
-| `calendar-grid` | The calendar grid container             |
-| `day`           | Individual day cell                     |
-| `selected`      | Selected day(s) - automatically applied |
-| `today`         | Today's date - automatically applied    |
-
-## Form Integration
-
-When used with the `name` attribute, the calendar integrates seamlessly with `mjo-form`:
-
-### Data Format
-
--   **Single mode**: Emits the selected date as a string value (YYYY-MM-DD format)
--   **Range mode**: Emits a JSON string `{"start":"YYYY-MM-DD","end":"YYYY-MM-DD"}` once both dates are selected
-
-### Integration Example
-
-```html
-<mjo-form>
-    <!-- Single date selection -->
-    <mjo-calendar name="event-date" mode="single" required></mjo-calendar>
-
-    <!-- Range date selection -->
-    <mjo-calendar name="vacation-dates" mode="range"></mjo-calendar>
-</mjo-form>
-```
-
-### Form Data Access
-
-```ts
-// Form submit handler
-const handleFormSubmit = (e: CustomEvent) => {
-    const formData = e.detail;
-
-    // Single date access
-    console.log("Event date:", formData["event-date"]); // "2025-01-15"
-
-    // Range date access
-    if (formData["vacation-dates"]) {
-        const range = JSON.parse(formData["vacation-dates"]);
-        console.log("Vacation:", range.start, "to", range.end);
-    }
-};
-```
+| Part                       | Description                               |
+| -------------------------- | ----------------------------------------- |
+| `calendar`                 | Main calendar container                   |
+| `header`                   | Calendar header with navigation           |
+| `navigation`               | Navigation buttons container              |
+| `nav-button`               | Previous/next navigation buttons          |
+| `selectors-container`      | Month and year selector buttons container |
+| `selector-button`          | Month and year selector buttons           |
+| `calendar-grid`            | The calendar grid container               |
+| `week-days-container`      | Container for weekday headers             |
+| `week-day`                 | Individual weekday header                 |
+| `days-container`           | Container for calendar days               |
+| `day`                      | Individual day cell                       |
+| `day-selected`             | Selected day(s) - automatically applied   |
+| `day-today`                | Today's date - automatically applied      |
+| `month-picker-container`   | Month picker overlay container            |
+| `month-picker-grid`        | Month picker grid                         |
+| `month-picker-button`      | Individual month selection button         |
+| `year-picker-container`    | Year picker overlay container             |
+| `year-picker-navigation`   | Year picker navigation container          |
+| `year-picker-nav-button`   | Year picker previous/next decade buttons  |
+| `year-picker-decade-label` | Decade range label in year picker         |
+| `year-picker-grid`         | Year picker grid                          |
+| `year-picker-button`       | Individual year selection button          |
 
 ## Browser Support
 

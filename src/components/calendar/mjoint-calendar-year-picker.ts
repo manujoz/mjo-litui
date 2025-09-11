@@ -17,57 +17,51 @@ export class MjointCalendarYearPicker extends LitElement {
     @state() private startYear = Math.floor(new Date().getFullYear() / 10) * 10;
     @state() private focusedYear = new Date().getFullYear();
 
-    get years() {
-        const years = [];
-        for (let i = this.startYear; i < this.startYear + 12; i++) {
-            years.push(i);
-        }
-        return years;
-    }
-
-    get previousDecadeLabel() {
-        return `${this.startYear - 10} - ${this.startYear - 1}`;
-    }
-
-    get nextDecadeLabel() {
-        return `${this.startYear + 12} - ${this.startYear + 21}`;
-    }
-
     render() {
         return html`
-            <div class="year-picker" ?data-disabled=${this.disabled} role="dialog" aria-label="Select year" @keydown=${this.#handleKeydown}>
-                <div class="year-navigation">
+            <div
+                class="year-picker"
+                part="year-picker-container"
+                ?data-disabled=${this.disabled}
+                role="dialog"
+                aria-label="Select year"
+                @keydown=${this.#handleKeydown}
+            >
+                <div class="year-navigation" part="year-picker-navigation">
                     <button
                         class="nav-button"
+                        part="year-picker-nav-button"
                         ?disabled=${this.disabled}
                         @click=${this.#previousDecade}
                         tabindex=${this.disabled ? -1 : 0}
-                        title="Previous decade: ${this.previousDecadeLabel}"
-                        aria-label="Previous decade: ${this.previousDecadeLabel}"
+                        title="Previous decade: ${this.#previousDecadeLabel}"
+                        aria-label="Previous decade: ${this.#previousDecadeLabel}"
                     >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                         </svg>
                     </button>
-                    <span class="decade-label">${this.startYear} - ${this.startYear + 11}</span>
+                    <span class="decade-label" part="year-picker-decade-label">${this.startYear} - ${this.startYear + 11}</span>
                     <button
                         class="nav-button"
+                        part="year-picker-nav-button"
                         ?disabled=${this.disabled}
                         tabindex=${this.disabled ? -1 : 0}
                         @click=${this.#nextDecade}
-                        title="Next decade: ${this.nextDecadeLabel}"
-                        aria-label="Next decade: ${this.nextDecadeLabel}"
+                        title="Next decade: ${this.#nextDecadeLabel}"
+                        aria-label="Next decade: ${this.#nextDecadeLabel}"
                     >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
                         </svg>
                     </button>
                 </div>
-                <div class="years-grid" role="grid" aria-label="Year selection grid">
-                    ${this.years.map(
+                <div class="years-grid" role="grid" part="year-picker-grid" aria-label="Year selection grid">
+                    ${this.#years.map(
                         (year) => html`
                             <button
                                 class="year-button"
+                                part="year-picker-button"
                                 role="gridcell"
                                 ?data-selected=${year === this.selectedYear}
                                 ?disabled=${this.disabled || this.#isYearDisabled(year)}
@@ -84,6 +78,22 @@ export class MjointCalendarYearPicker extends LitElement {
                 </div>
             </div>
         `;
+    }
+
+    get #years() {
+        const years = [];
+        for (let i = this.startYear; i < this.startYear + 12; i++) {
+            years.push(i);
+        }
+        return years;
+    }
+
+    get #previousDecadeLabel() {
+        return `${this.startYear - 10} - ${this.startYear - 1}`;
+    }
+
+    get #nextDecadeLabel() {
+        return `${this.startYear + 12} - ${this.startYear + 21}`;
     }
 
     #isYearDisabled(year: number): boolean {

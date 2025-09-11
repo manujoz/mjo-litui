@@ -29,21 +29,70 @@ import "./components/calendar/mjoint-calendar-header.js";
 import "./components/calendar/mjoint-calendar-month-picker.js";
 import "./components/calendar/mjoint-calendar-year-picker.js";
 
+const AUTO_DUAL_THRESHOLD = 720; // px
+
 /**
  * A configurable calendar component for date selection.
- * Supports single date and date range selection with navigation controls.
+ * Supports single date and date range selection with navigation controls, internationalization,
+ * accessibility features, form integration, and extensive theming capabilities.
  *
- * @slot - Optional content (not commonly used)
+ * @fires mjo-calendar:date-selected - Fired when a date is selected in single mode
+ * @fires mjo-calendar:range-selected - Fired when a date range is selected in range mode
+ * @fires change - Standard change event for form compatibility
+ *
+ * @cssprop --mjo-calendar-font-family - Calendar font family
+ * @cssprop --mjo-calendar-background - Calendar background color
+ * @cssprop --mjo-calendar-border - Calendar border style
+ * @cssprop --mjo-calendar-border-radius - Calendar border radius
+ * @cssprop --mjo-calendar-shadow - Calendar box shadow
+ * @cssprop --mjo-calendar-padding - Calendar internal padding
+ * @cssprop --mjo-calendar-week-day-color - Week day headers text color
+ * @cssprop --mjo-calendar-week-day-font-weight - Week day headers font weight
+ * @cssprop --mjo-calendar-day-border-radius - Individual day cell border radius
+ * @cssprop --mjo-calendar-day-hover-background - Day cell hover background
+ * @cssprop --mjo-calendar-focus-outline - Focused element outline color
+ * @cssprop --mjo-calendar-today-background - Today's date background
+ * @cssprop --mjo-calendar-today-color - Today's date text color
+ * @cssprop --mjo-calendar-selected-background - Selected date background
+ * @cssprop --mjo-calendar-selected-color - Selected date text color
+ * @cssprop --mjo-calendar-range-endpoint-background - Range start/end background
+ * @cssprop --mjo-calendar-range-endpoint-color - Range start/end text color
+ * @cssprop --mjo-calendar-range-background - Range middle dates background
+ * @cssprop --mjo-calendar-range-color - Range middle dates text color
+ * @cssprop --mjo-calendar-disabled-color - Disabled dates text color
+ * @cssprop --mjo-calendar-disabled-background - Disabled dates background
+ * @cssprop --mjo-calendar-picker-background - Month/year picker background
+ * @cssprop --mjo-calendar-picker-radius - Month/year picker border radius
+ * @cssprop --mjo-calendar-picker-shadow - Month/year picker shadow
+ * @cssprop --mjo-calendar-picker-button-background - Picker button background
+ * @cssprop --mjo-calendar-picker-button-hover-background - Picker button hover background
+ * @cssprop --mjo-calendar-picker-button-selected-background - Picker button selected background
+ * @cssprop --mjo-calendar-nav-button-border - Navigation button border
+ * @cssprop --mjo-calendar-nav-button-color - Navigation button text color
+ * @cssprop --mjo-calendar-selector-button-color - Month/year selector text color
+ *
  * @csspart calendar - The main calendar container
- * @csspart header - The calendar header
- * @csspart navigation - Navigation buttons container
- * @csspart month-year - Month and year display
- * @csspart calendar-grid - The days grid
+ * @csspart header - The calendar header container
+ * @csspart navigation - Navigation buttons and selectors toolbar
+ * @csspart nav-button - Navigation buttons (previous/next month)
+ * @csspart selectors-container - Container for month and year selectors
+ * @csspart selector-button - Month and year selector buttons
+ * @csspart calendar-grid - The main calendar grid container
+ * @csspart week-days-container - Container for weekday headers
+ * @csspart week-day - Individual weekday header cell
+ * @csspart days-container - Container for calendar days
  * @csspart day - Individual day cell
- * @csspart selected - Selected day(s)
- * @csspart today - Today's date
- * @fires mjo-calendar:date-selected - Fired when a date is selected
- * @fires mjo-calendar:range-selected - Fired when a date range is selected
+ * @csspart day-selected - Selected day cell (applied with day part)
+ * @csspart day-today - Today's date cell (applied with day part)
+ * @csspart month-picker-container - Month picker overlay container
+ * @csspart month-picker-grid - Month picker grid layout
+ * @csspart month-picker-button - Individual month selection button
+ * @csspart year-picker-container - Year picker overlay container
+ * @csspart year-picker-navigation - Year picker navigation controls
+ * @csspart year-picker-nav-button - Year picker navigation buttons
+ * @csspart year-picker-decade-label - Decade range label in year picker
+ * @csspart year-picker-grid - Year picker grid layout
+ * @csspart year-picker-button - Individual year selection button
  */
 @customElement("mjo-calendar")
 export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IFormMixin, IThemeMixin {
@@ -84,41 +133,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @state() private focusedDate?: Date;
     @state() private announcementText = "";
 
-    static readonly AUTO_DUAL_THRESHOLD = 720; // px
-
     #debounceTimer?: number;
-
-    get currentLocale() {
-        return locales[this.locale] || locales.en;
-    }
-
-    get monthNames() {
-        const locale = this.currentLocale;
-        return locale && locale.calendar ? locale.calendar.months : locales.en.calendar.months;
-    }
-
-    get weekDays() {
-        const locale = this.currentLocale;
-        return locale && locale.calendar ? locale.calendar.weekdaysShort : locales.en.calendar.weekdaysShort;
-    }
-
-    get computedAriaLabel() {
-        if (this.ariaLabel) return this.ariaLabel;
-
-        if (this.mode === "range") {
-            return this.selectedStartDate && this.selectedEndDate
-                ? `Date range picker. Selected from ${CalendarUtils.formatDate(this.selectedStartDate)} to ${CalendarUtils.formatDate(this.selectedEndDate)}`
-                : "Date range picker. Use arrow keys to navigate, Enter to select.";
-        }
-
-        return this.selectedDate
-            ? `Date picker. Selected date: ${CalendarUtils.formatDate(this.selectedDate)}`
-            : "Date picker. Use arrow keys to navigate, Enter to select.";
-    }
-
-    get computedRole() {
-        return "application";
-    }
 
     render() {
         const calendarId = `calendar-${Math.random().toString(36).substring(2, 9)}`;
@@ -128,7 +143,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 id=${calendarId}
                 class="calendar"
                 role="application"
-                aria-label=${this.computedAriaLabel}
+                aria-label=${this.#computedAriaLabel}
                 aria-labelledby=${ifDefined(this.ariaLabelledby || undefined)}
                 aria-describedby=${ifDefined(this.ariaDescribedby || undefined)}
                 aria-live=${this.announcementText ? this.ariaLive : "off"}
@@ -211,9 +226,10 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         return html`
             <div class="calendar-side" data-side=${side}>
                 <mjoint-calendar-header
+                    exportparts="header,navigation,selectors-container,selector-button,nav-button"
                     month=${month}
                     year=${year}
-                    .monthNames=${this.monthNames}
+                    .monthNames=${this.#monthNames}
                     ?disabled=${this.disabled}
                     ?monthPickerOpen=${this.picker.open && this.picker.type === "month" && isPickerSide}
                     ?yearPickerOpen=${this.picker.open && this.picker.type === "year" && isPickerSide}
@@ -223,9 +239,10 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     @year-picker=${this.#handleYearPicker}
                 ></mjoint-calendar-header>
                 <mjoint-calendar-grid
+                    exportparts="calendar-grid,week-days-container,week-day,days-container,day,day-selected,day-today"
                     month=${month}
                     year=${year}
-                    .weekDays=${this.weekDays}
+                    .weekDays=${this.#weekDays}
                     firstDayOfWeek=${this.firstDayOfWeek}
                     mode=${mode}
                     ?showToday=${this.showToday}
@@ -247,8 +264,9 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 ${this.picker.open && this.picker.type === "month" && isPickerSide
                     ? html`
                           <mjoint-calendar-month-picker
+                              exportparts="month-picker-container,month-picker-grid,month-picker-button"
                               selectedMonth=${month}
-                              .monthNames=${this.monthNames}
+                              .monthNames=${this.#monthNames}
                               ?disabled=${this.disabled}
                               @month-selected=${this.#handleMonthSelected}
                               @click=${(e: Event) => e.stopPropagation()}
@@ -257,6 +275,13 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     : this.picker.open && this.picker.type === "year" && isPickerSide
                       ? html`
                             <mjoint-calendar-year-picker
+                                exportparts="
+                                    year-picker-container,
+                                    year-picker-navigation,
+                                    year-picker-nav-button,
+                                    year-picker-decade-label,
+                                    year-picker-grid,
+                                    year-picker-button"
                                 selectedYear=${year}
                                 ?disabled=${this.disabled}
                                 @year-selected=${this.#handleYearSelected}
@@ -280,11 +305,14 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         });
     }
 
-    #setupResizeObserver() {
-        window.addEventListener("resize", this.#handleWindowResize);
+    disconnectedCallback(): void {
+        super.disconnectedCallback();
 
-        // Initial evaluation
-        this.#evaluateAutoDualDebounced();
+        window.removeEventListener("resize", this.#handleWindowResize);
+        if (this.#debounceTimer) {
+            clearTimeout(this.#debounceTimer);
+            this.#debounceTimer = undefined;
+        }
     }
 
     willUpdate(changedProperties: Map<PropertyKey, unknown>): void {
@@ -293,16 +321,6 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         if (changedProperties.has("value") || changedProperties.has("startDate") || changedProperties.has("endDate") || changedProperties.has("mode")) {
             this.#initializeDates();
             this.#syncDisplayedMonthsFromState();
-        }
-    }
-
-    disconnectedCallback(): void {
-        super.disconnectedCallback();
-
-        window.removeEventListener("resize", this.#handleWindowResize);
-        if (this.#debounceTimer) {
-            clearTimeout(this.#debounceTimer);
-            this.#debounceTimer = undefined;
         }
     }
 
@@ -436,6 +454,34 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.#selectDate(date);
     }
 
+    get #currentLocale() {
+        return locales[this.locale] || locales.en;
+    }
+
+    get #monthNames() {
+        const locale = this.#currentLocale;
+        return locale && locale.calendar ? locale.calendar.months : locales.en.calendar.months;
+    }
+
+    get #weekDays() {
+        const locale = this.#currentLocale;
+        return locale && locale.calendar ? locale.calendar.weekdaysShort : locales.en.calendar.weekdaysShort;
+    }
+
+    get #computedAriaLabel() {
+        if (this.ariaLabel) return this.ariaLabel;
+
+        if (this.mode === "range") {
+            return this.selectedStartDate && this.selectedEndDate
+                ? `Date range picker. Selected from ${CalendarUtils.formatDate(this.selectedStartDate)} to ${CalendarUtils.formatDate(this.selectedEndDate)}`
+                : "Date range picker. Use arrow keys to navigate, Enter to select.";
+        }
+
+        return this.selectedDate
+            ? `Date picker. Selected date: ${CalendarUtils.formatDate(this.selectedDate)}`
+            : "Date picker. Use arrow keys to navigate, Enter to select.";
+    }
+
     #shouldRenderDualRange(): boolean {
         if (this.mode !== "range") return false;
 
@@ -469,7 +515,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     #doEvaluateAutoDual(width: number) {
-        const shouldDual = width >= MjoCalendar.AUTO_DUAL_THRESHOLD;
+        const shouldDual = width >= AUTO_DUAL_THRESHOLD;
 
         if (shouldDual !== this.autoDual) {
             this.autoDual = shouldDual;
@@ -633,7 +679,13 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }, 1000);
     }
 
-    /** Sync displayedMonths state */
+    #setupResizeObserver() {
+        window.addEventListener("resize", this.#handleWindowResize);
+
+        // Initial evaluation
+        this.#evaluateAutoDualDebounced();
+    }
+
     #syncDisplayedMonthsFromState() {
         // Only initialize displayedMonths if empty AND no initial values were set
         if (this.displayedMonths.length === 0) {
@@ -1092,17 +1144,14 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 font-size: 12px;
                 min-width: max-content;
             }
-
             .calendar-range-container {
                 display: flex;
                 gap: 24px;
             }
-
             .calendar-side {
                 flex: 1;
                 min-width: max-content;
             }
-
             mjoint-calendar-month-picker,
             mjoint-calendar-year-picker {
                 position: absolute;
@@ -1112,16 +1161,12 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 border-radius: var(--mjo-calendar-picker-radius, var(--mjo-radius-medium, 8px));
                 box-shadow: var(--mjo-calendar-picker-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
             }
-
-            /* Size variations */
             [data-size="small"] {
                 font-size: 10px;
             }
-
             [data-size="large"] {
                 font-size: 14px;
             }
-
             [data-color="secondary"] {
                 --mjoint-calendar-accent-color: var(--mjo-secondary-color, #7dc717);
                 --mjoint-calendar-accent-color-alpha: var(--mjo-secondary-color-alpha2, rgba(125, 199, 23, 0.1));

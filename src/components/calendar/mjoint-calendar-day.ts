@@ -24,30 +24,7 @@ export class MjointCalendarDay extends LitElement {
     @property({ type: Boolean }) showToday = true;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
 
-    @query(".day") $day!: HTMLElement;
-
-    get dateLabel() {
-        if (this.isEmpty || !this.month || !this.year) return "";
-
-        const date = new Date(this.year, this.month, this.day);
-        const formatter = new Intl.DateTimeFormat("en-US", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        });
-
-        let label = formatter.format(date);
-
-        if (this.isToday) label += ", Today";
-        if (this.isSelected) label += ", Selected";
-        if (this.isRangeStart) label += ", Range start";
-        if (this.isRangeEnd) label += ", Range end";
-        if (this.isInRange) label += ", In selected range";
-        if (this.isDisabled) label += ", Disabled";
-
-        return label;
-    }
+    @query(".day") private $day!: HTMLElement;
 
     render() {
         if (this.isEmpty) {
@@ -68,9 +45,9 @@ export class MjointCalendarDay extends LitElement {
         return html`
             <div
                 class=${classMap(dayClasses)}
-                part="day ${this.isSelected ? "selected" : ""} ${this.isToday ? "today" : ""}"
+                part="day ${this.isSelected ? "day-selected" : ""} ${this.isToday ? "day-today" : ""}"
                 role="gridcell"
-                aria-label=${this.dateLabel}
+                aria-label=${this.#dateLabel}
                 aria-selected=${this.isSelected ? "true" : "false"}
                 aria-current=${this.isToday ? "date" : "false"}
                 aria-disabled=${this.isDisabled ? "true" : "false"}
@@ -92,6 +69,29 @@ export class MjointCalendarDay extends LitElement {
                 this.$day?.blur();
             }
         }
+    }
+
+    get #dateLabel() {
+        if (this.isEmpty || !this.month || !this.year) return "";
+
+        const date = new Date(this.year, this.month, this.day);
+        const formatter = new Intl.DateTimeFormat("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+
+        let label = formatter.format(date);
+
+        if (this.isToday) label += ", Today";
+        if (this.isSelected) label += ", Selected";
+        if (this.isRangeStart) label += ", Range start";
+        if (this.isRangeEnd) label += ", Range end";
+        if (this.isInRange) label += ", In selected range";
+        if (this.isDisabled) label += ", Disabled";
+
+        return label;
     }
 
     #handleClick() {

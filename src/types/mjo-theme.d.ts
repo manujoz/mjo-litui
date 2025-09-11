@@ -690,6 +690,7 @@ export interface MjoCalendarTheme {
     weekDayFontWeight?: string;
     dayBorderRadius?: string;
     dayHoverBackground?: string;
+    focusOutline?: string;
     todayBackground?: string;
     todayColor?: string;
     selectedBackground?: string;
@@ -706,7 +707,6 @@ export interface MjoCalendarTheme {
     selectedColorSecondary?: string;
     rangeBackgroundSecondary?: string;
     rangeColorSecondary?: string;
-    focusOutline?: string;
     pickerBackground?: string;
     pickerRadius?: string;
     pickerShadow?: string;
@@ -730,8 +730,7 @@ export interface MjoCalendarTheme {
     decadeLabelColor?: string;
     navButtonBorder?: string;
     navButtonColor?: string;
-    selectorButtonColor?: string;
-    buttonSelectorButtonHighlightColor?: string;
+    selectorButtonHighlightColor?: string;
 }
 
 export interface MjoMenuButtonTheme {
