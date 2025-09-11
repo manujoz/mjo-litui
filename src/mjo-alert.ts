@@ -20,7 +20,6 @@ import "./mjo-icon.js";
  * @fires mjo-alert:will-close - Fired before the alert is closed
  * @fires mjo-alert:closed - Fired after the alert is closed and animation completes
  *
- * @slot - Currently not implemented; content provided via message and detail properties
  * @csspart container - The main alert container
  * @csspart message-container - The container for the message and close button
  * @csspart icon-container - The container for the type icon

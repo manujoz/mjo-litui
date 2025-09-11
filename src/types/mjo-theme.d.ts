@@ -84,6 +84,7 @@ export interface MjoThemeConfig {
         mjoProgress?: MjoProgressTheme;
         mjoRadio?: MjoRadioTheme;
         mjoRipple?: MjoRippleTheme;
+        mjoScrollshadow?: MjoScrollshadowTheme;
         mjoSelect?: MjoSelectTheme;
         mjoSlider?: MjoSliderTheme;
         mjoSwitch?: MjoSwitchTheme;
@@ -285,29 +286,16 @@ export interface MjoBadgeTheme {
 }
 
 export interface MjoButtonTheme {
-    disabledBackgroundColor?: string;
-    disabledForegroundColor?: string;
-    fontFamily?: string;
-    fontSize?: string;
-    fontWeight?: string;
-    padding?: string;
-    pirmaryColor?: string;
-    primaryBorder?: string;
-    primaryColorHover?: string;
-    primaryForegroundColor?: string;
+    /** --mjo-button-border-radius */
     borderRadius?: string;
-    secondaryBorder?: string;
-    secondaryColor?: string;
-    secondaryColorHover?: string;
-    secondaryForegroundColor?: string;
-    flatPrimaryBackgroundColor?: string;
-    flatPrimaryBackgroundColorHover?: string;
-    flatPrimaryForegroundColor?: string;
-    flatPrimaryForegroundColorHover?: string;
-    flatSecondaryBackgroundColor?: string;
-    flatSecondaryBackgroundColorHover?: string;
-    flatSecondaryForegroundColor?: string;
-    flatSecondaryForegroundColorHover?: string;
+    /** --mjo-button-font-family */
+    fontFamily?: string;
+    /** --mjo-button-font-size */
+    fontSize?: string;
+    /** --mjo-button-font-weight */
+    fontWeight?: string;
+    /** --mjo-button-padding */
+    padding?: string;
 }
 
 export interface MjoCheckboxTheme {
@@ -470,6 +458,19 @@ export interface MjoRadioTheme {
 export interface MjoRippleTheme {
     color?: string;
     opacity?: string;
+}
+
+export interface MjoScrollshadowTheme {
+    /** --mjo-scrollshadow-color */
+    color?: string;
+    /** --mjo-scrollshadow-size */
+    size?: string;
+    /** --mjo-scrollshadow-scrollbar-thumb-color */
+    scrollbarThumbColor?: string;
+    /** --mjo-scrollshadow-scrollbar-track */
+    scrollbarTrack?: string;
+    /** --mjo-scrollshadow-scrollbar-width */
+    scrollbarWidth?: string;
 }
 
 export interface MjoSliderTheme {

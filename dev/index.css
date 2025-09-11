@@ -19,4 +19,5 @@ body {
     padding: 10px;
     background-color: var(--mjo-background-color);
     color: var(--mjo-foreground-color);
+    overflow-x: hidden;
 }

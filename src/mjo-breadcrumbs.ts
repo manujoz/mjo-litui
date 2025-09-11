@@ -1,18 +1,47 @@
-import { MjoBreadCrumbsColor, MjoBreadcrumbsItems, MjoBreadcrumbsNavigateEvent, MjoBreadCrumbsSizes, MjoBreadCrumbsVariants } from "./types/mjo-breadcrumbs";
+import type { MjoScrollshadow } from "./mjo-scrollshadow.js";
+import {
+    MjoBreadCrumbsColor,
+    MjoBreadcrumbsItem,
+    MjoBreadcrumbsItems,
+    MjoBreadcrumbsNavigateEvent,
+    MjoBreadCrumbsSizes,
+    MjoBreadCrumbsVariants,
+} from "./types/mjo-breadcrumbs";
 
 import { css, html, LitElement, nothing, PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { repeat } from "lit/directives/repeat.js";
 
-import { HiChevronRight } from "mjo-icons/hi";
+import { BsChevronRight } from "mjo-icons/bs";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-icon.js";
 import "./mjo-link.js";
+import "./mjo-scrollshadow.js";
 import "./mjo-typography.js";
 
+/**
+ * @summary Navigation breadcrumbs component for displaying hierarchical paths with horizontal scroll shadow support.
+ *
+ * @description The mjo-breadcrumbs component provides an accessible way to display navigation breadcrumbs
+ * that help users understand their current location within an application. It automatically enables
+ * horizontal scroll shadows when content overflows the container width, ensuring all breadcrumbs remain
+ * accessible while maintaining a clean visual appearance.
+ *
+ * @fires mjo-breadcrumbs:navigate - Fired when a breadcrumb item is clicked (when not using autoNavigate)
+ *
+ * @csspart container - The main navigation container element
+ * @csspart list - The ul element containing the breadcrumb items
+ * @csspart list-item - Each li element representing a breadcrumb item
+ * @csspart link - The mjo-link element for navigable breadcrumb items (via exportparts)
+ * @csspart link-text - The text content of navigable breadcrumb items (via exportparts)
+ * @csspart icon - Icons within breadcrumb items (via exportparts)
+ * @csspart active-icon - Icons within active/current breadcrumb items (via exportparts)
+ * @csspart active-text - The typography element for active/current breadcrumb items (via exportparts)
+ * @csspart icon-separator - The separator icon between breadcrumb items (via exportparts)
+ */
 @customElement("mjo-breadcrumbs")
 export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) size: MjoBreadCrumbsSizes = "medium";
@@ -25,88 +54,108 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledBy?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedBy?: string;
 
+    @query("mjo-scrollshadow") $scrollshadow!: MjoScrollshadow;
     @query("nav") $nav!: HTMLElement;
+
+    #navObserver!: ResizeObserver;
 
     render() {
         if (this.items.length === 0) return nothing;
 
         return html`
-            <nav
-                part="container"
-                role="navigation"
-                aria-label=${this.#computedAriaLabel}
-                aria-labelledby=${ifDefined(this.ariaLabelledBy)}
-                aria-describedby=${ifDefined(this.ariaDescribedBy)}
-                data-color=${this.color}
-                data-size=${this.size}
-                data-variant=${this.variant}
-            >
-                <ul part="list" role="list">
-                    ${repeat(
-                        this.items,
-                        (item) => item.href || item.label,
-                        (item, index) => {
-                            const isActive = item.active || index === this.items.length - 1;
+            <mjo-scrollshadow overflow="horizontal" hideScrollbar data-variant=${this.variant}>
+                <nav
+                    part="container"
+                    role="navigation"
+                    aria-label=${this.#computedAriaLabel}
+                    aria-labelledby=${ifDefined(this.ariaLabelledBy)}
+                    aria-describedby=${ifDefined(this.ariaDescribedBy)}
+                    data-color=${this.color}
+                    data-size=${this.size}
+                    data-variant=${this.variant}
+                >
+                    <ul part="list" role="list">
+                        ${repeat(
+                            this.items,
+                            (item) => item.href || item.label,
+                            (item, index) => {
+                                const isActive = item.active || index === this.items.length - 1;
+                                const showSeparator = index < this.items.length - 1;
 
-                            return html`
-                                <li ?data-active=${isActive} part="item" role="listitem">
-                                    ${item.href && !isActive
-                                        ? html`
-                                              <mjo-link
-                                                  exportparts="link: link"
-                                                  href=${item.href}
-                                                  @click=${this.autoNavigate ? nothing : (e: Event) => this.#handleNavigate(e, item, index)}
-                                                  aria-current=${ifDefined(isActive ? "page" : undefined)}
-                                              >
+                                return html`
+                                    <li ?data-active=${isActive} part="list-item" role="listitem">
+                                        ${item.href && !isActive
+                                            ? html`
+                                                  <mjo-link
+                                                      exportparts="link: link, link-text: link-text"
+                                                      data-color=${this.color}
+                                                      href=${item.href}
+                                                      @mjo-link:click=${() => this.#handleClick(item, index)}
+                                                      aria-current=${ifDefined(isActive ? "page" : undefined)}
+                                                  >
+                                                      ${item.icon
+                                                          ? html`<mjo-icon
+                                                                class="icon"
+                                                                src=${item.icon}
+                                                                aria-hidden="true"
+                                                                exportparts="icon: icon"
+                                                            ></mjo-icon>`
+                                                          : nothing}
+                                                      ${item.label}
+                                                  </mjo-link>
+                                              `
+                                            : html`
                                                   ${item.icon
-                                                      ? html`<mjo-icon class="icon" src=${item.icon} aria-hidden="true"></mjo-icon>`
-                                                      : nothing}${item.label}
-                                              </mjo-link>
-                                          `
-                                        : html`
-                                              ${item.icon
-                                                  ? html`<mjo-icon
-                                                        class="icon active"
-                                                        src=${item.icon}
-                                                        aria-hidden="true"
-                                                        exportparts="icon: active-icon"
-                                                    ></mjo-icon>`
-                                                  : nothing}
-                                              <mjo-typography
-                                                  tag="span"
-                                                  aria-current=${ifDefined(isActive ? "page" : undefined)}
-                                                  exportparts="typography: active-text"
-                                              >
-                                                  ${item.label}
-                                              </mjo-typography>
-                                          `}
-                                    ${index < this.items.length - 1
-                                        ? html`<mjo-icon
-                                              class="separator"
-                                              src=${this.separator || HiChevronRight}
-                                              aria-hidden="true"
-                                              exportparts="icon: icon-separator"
-                                          ></mjo-icon>`
-                                        : nothing}
-                                </li>
-                            `;
-                        },
-                    )}
-                </ul>
-            </nav>
+                                                      ? html`<mjo-icon
+                                                            class="icon active"
+                                                            src=${item.icon}
+                                                            aria-hidden="true"
+                                                            exportparts="icon: active-icon"
+                                                        ></mjo-icon>`
+                                                      : nothing}
+                                                  <mjo-typography
+                                                      tag="span"
+                                                      aria-current=${ifDefined(isActive ? "page" : undefined)}
+                                                      exportparts="typography: active-text"
+                                                  >
+                                                      ${item.label}
+                                                  </mjo-typography>
+                                              `}
+                                        ${showSeparator
+                                            ? html`
+                                                  <mjo-icon
+                                                      class="separator"
+                                                      src=${this.separator || BsChevronRight}
+                                                      aria-hidden="true"
+                                                      exportparts="icon: icon-separator"
+                                                  ></mjo-icon>
+                                              `
+                                            : nothing}
+                                    </li>
+                                `;
+                            },
+                        )}
+                    </ul>
+                </nav>
+            </mjo-scrollshadow>
         `;
     }
 
     disconnectedCallback(): void {
         super.disconnectedCallback();
-
-        this.$nav.removeEventListener("scroll", this.#handleScroll);
+        this.#navObserver?.disconnect();
     }
 
     protected firstUpdated(_changedProperties: PropertyValues<this>): void {
         super.firstUpdated(_changedProperties);
 
-        this.$nav.addEventListener("scroll", this.#handleScroll);
+        this.#navObserver = new ResizeObserver(() => {
+            this.#setScrollToEnd();
+            this.$scrollshadow.updateShadows();
+        });
+
+        this.#navObserver.observe(this.$nav);
+
         this.updateComplete.then(() => {
             this.#setScrollToEnd();
         });
@@ -122,31 +171,24 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
         }
     }
 
-    #handleScroll = () => {
-        // console.log(this.$nav.scrollLeft);
-    };
-
     get #computedAriaLabel(): string {
         return this.ariaLabel || "breadcrumb";
     }
 
-    #setScrollToEnd() {
-        this.$nav.scrollTo({ left: this.$nav.scrollWidth, behavior: "smooth" });
-    }
-
-    #handleNavigate(event: Event, item: MjoBreadcrumbsItems[0], index: number) {
-        event.preventDefault();
-
+    #handleClick(item: MjoBreadcrumbsItem, index: number) {
         this.dispatchEvent(
             new CustomEvent<MjoBreadcrumbsNavigateEvent["detail"]>("mjo-breadcrumbs:navigate", {
-                detail: {
-                    item,
-                    index,
-                    href: item.href,
-                },
+                detail: { item, href: item.href, index },
                 bubbles: true,
+                composed: true,
             }),
         );
+    }
+
+    #setScrollToEnd() {
+        requestAnimationFrame(() => {
+            this.$scrollshadow.scrollToEnd();
+        });
     }
 
     static styles = [
@@ -156,40 +198,38 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
                 font-family: var(--mjo-breadcrumbs-font-family, inherit);
                 width: 100%;
             }
-
+            mjo-scrollshadow {
+                display: inline-flex;
+                max-width: 100%;
+            }
+            mjo-scrollshadow::part(container) {
+                display: flex;
+                padding: 5px 3px;
+            }
+            mjo-scrollshadow[data-variant="solid"] {
+                background-color: var(--mjo-breadcrumbs-background-color, var(--mjo-background-color-card));
+                border-radius: var(--mjo-breadcrumbs-border-radius, var(--mjo-radius-medium));
+                padding: var(--mjo-breadcrumbs-padding, var(--mjo-space-small) var(--mjo-space-small));
+            }
+            mjo-scrollshadow[data-variant="bordered"] {
+                padding: var(--mjo-breadcrumbs-padding, var(--mjo-space-small) var(--mjo-space-small));
+                border-radius: var(--mjo-breadcrumbs-border-radius, var(--mjo-radius-medium));
+                border: 1px solid var(--mjo-breadcrumbs-border-color, var(--mjo-border-color));
+            }
             nav {
                 position: relative;
                 display: inline-flex;
                 font-size: var(--mjo-breadcrumbs-font-size, inherit);
                 font-weight: var(--mjo-breadcrumbs-font-weight, inherit);
                 max-width: 100%;
-                overflow: hidden;
-                overflow-x: auto;
-                overflow-anchor: auto;
                 box-sizing: border-box;
-                scrollbar-width: none;
             }
-
-            nav[data-variant="solid"] {
-                background-color: var(--mjo-breadcrumbs-background-color, var(--mjo-background-color-card));
-                border-radius: var(--mjo-breadcrumbs-border-radius, var(--mjo-radius-medium));
-                padding: var(--mjo-breadcrumbs-padding, var(--mjo-space-xxsmall) var(--mjo-space-small));
-            }
-
-            nav[data-variant="bordered"] {
-                padding: var(--mjo-breadcrumbs-padding, var(--mjo-space-xxsmall) var(--mjo-space-small));
-                border-radius: var(--mjo-breadcrumbs-border-radius, var(--mjo-radius-medium));
-                border: 1px solid var(--mjo-breadcrumbs-border-color, var(--mjo-border-color));
-            }
-
-            /* Size variants */
             nav[data-size="small"] {
                 font-size: 0.8em;
             }
             nav[data-size="large"] {
                 font-size: 1.2em;
             }
-
             ul {
                 position: relative;
                 list-style: none;
@@ -205,19 +245,21 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
                 white-space: nowrap;
             }
 
-            /* Icon styling */
-            mjo-icon {
+            mjo-icon::part(icon),
+            mjo-typography::part(typography),
+            mjo-link::part(typography) {
                 line-height: 1em;
             }
 
-            mjo-icon.icon {
-                top: var(--mjo-breadcrumbs-icon-top, -1px);
-                margin-right: var(--mjo-space-xxsmall);
+            mjo-icon.icon::part(icon) {
+                margin-right: var(--mjo-space-xsmall);
             }
 
-            mjo-icon.separator {
+            mjo-icon.separator::part(icon) {
+                font-size: 1em;
                 margin: 0 var(--mjo-space-xsmall);
                 color: var(--mjo-breadcrumbs-separator-color, var(--mjo-foreground-color-low));
+                opacity: 0.6;
             }
 
             /* Link styling */
@@ -227,26 +269,15 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
                 --mjo-link-text-decoration-hover: none;
             }
 
+            mjo-link[data-color="secondary"] {
+                --mjo-link-focus-outline-color: var(--mjo-secondary-color, #7dc717);
+            }
             mjo-link:hover {
                 color: var(--mjo-breadcrumbs-link-hover-color, var(--mjo-primary-color, #1aa8ed));
             }
-
-            nav[data-color="secondary"] mjo-link:hover {
+            mjo-link[data-color="secondary"]:hover {
                 color: var(--mjo-breadcrumbs-link-hover-color, var(--mjo-secondary-color, #7dc717));
             }
-
-            /* Focus states for accessibility */
-            mjo-link:focus-visible {
-                outline: var(--mjo-breadcrumbs-focus-outline, 2px solid var(--mjo-primary-color, #1aa8ed));
-                outline-offset: 2px;
-                border-radius: 2px;
-            }
-
-            nav[data-color="secondary"] mjo-link:focus-visible {
-                outline-color: var(--mjo-secondary-color, #7dc717);
-            }
-
-            /* Typography for active/current items */
             mjo-typography {
                 font-size: 1em;
                 color: var(--mjo-breadcrumbs-text-color, var(--mjo-foreground-color-low));
@@ -256,8 +287,6 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
             mjo-icon.active {
                 color: var(--mjo-breadcrumbs-text-color, var(--mjo-foreground-color-low));
             }
-
-            /* High contrast mode support */
             @media (prefers-contrast: high) {
                 mjo-link:focus-visible {
                     outline-width: 3px;

@@ -15,7 +15,6 @@ import { pause } from "./utils/utils.js";
  * @fires mjo-avatar:click - Fired when the avatar is clicked (only when clickable is true)
  * @fires mjo-avatar:error - Fired when the image fails to load
  *
- * @slot - No slots available (content provided via properties)
  * @csspart container - The main avatar container element
  * @csspart image-container - The image/content container
  * @csspart image - The actual image element (when using src)

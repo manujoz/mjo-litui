@@ -39,7 +39,7 @@ export declare class IFormMixin {
     mjoForm: MjoForm | null;
     formIgnore?: boolean;
 
-    submiForm(): void;
+    submitForm(): void;
     updateFormData({ name, value }: { name: string; value: string }): void;
 }
 
@@ -99,7 +99,7 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
             this.dataFormMixin = { name, value };
         }
 
-        submiForm() {
+        submitForm() {
             if (!this.form) return;
 
             new FormData(this.form);

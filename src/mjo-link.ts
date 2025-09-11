@@ -23,15 +23,12 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) cover = false;
     @property({ type: Boolean }) nodecor = false;
     @property({ type: Boolean }) preventDefault = false;
-
-    // ARIA Properties (using Lit's native support)
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledBy?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedBy?: string;
 
     private get computedRel(): string {
         if (this.rel) return this.rel;
 
-        // Auto-add security attributes for external links
         if (this.target === "_blank") {
             return "noopener noreferrer";
         }
@@ -72,7 +69,7 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                 aria-disabled=${ifDefined(this.disabled ? "true" : undefined)}
             >
                 ${this.variant === "link"
-                    ? html`<span class=${`${this.size} ${this.weight}`}><slot></slot></span>`
+                    ? html`<span class=${`${this.size} ${this.weight}`} part="link-text"><slot></slot></span>`
                     : html`
                           <mjo-button
                               type="button"
@@ -80,6 +77,7 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                               color=${this.color === "default" ? "primary" : this.color}
                               ?disabled=${this.disabled}
                               tabindex="-1"
+                              exportparts="button: button, text: button-content"
                           >
                               <slot></slot>
                           </mjo-button>
@@ -133,7 +131,7 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
             }
 
             /* Hover states */
-            a:hover:not(.disabled) {
+            a:hover {
                 text-decoration: var(--mjo-link-text-decoration-hover, underline);
             }
 

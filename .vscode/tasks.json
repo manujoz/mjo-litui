@@ -78,6 +78,11 @@
 			"label": "Validate Build",
 			"type": "shell",
 			"command": "npm run build"
+		},
+		{
+			"label": "Validate TypeScript",
+			"type": "shell",
+			"command": "npm run build"
 		}
 	]
 }

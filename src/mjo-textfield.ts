@@ -334,7 +334,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         );
 
         if (ev.key === "Enter" && this.form) {
-            this.submiForm();
+            this.submitForm();
         }
     };
 

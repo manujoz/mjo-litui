@@ -3,7 +3,8 @@ import type { MjoBreadcrumbsItems } from "../../src/types/mjo-breadcrumbs.js";
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
-import { FaFile, FaFolder, FaHome, FaUser } from "mjo-icons/fa";
+// import { FaFile, FaFolder, FaHome, FaUser } from "mjo-icons/fa";
+import { LiaFile, LiaFolder, LiaHomeSolid, LiaUser } from "mjo-icons/lia";
 
 import "../../src/mjo-breadcrumbs.js";
 import "../../src/mjo-grid.js";
@@ -12,7 +13,7 @@ const basicItems: MjoBreadcrumbsItems = [
     {
         label: "Home",
         href: "#",
-        icon: FaHome,
+        icon: LiaHomeSolid,
     },
     {
         label: "Library",
@@ -21,14 +22,14 @@ const basicItems: MjoBreadcrumbsItems = [
     {
         active: true,
         label: "Data",
-        icon: FaFile,
+        icon: LiaFile,
     },
 ];
 
 const deepNavigationItems: MjoBreadcrumbsItems = [
-    { label: "Home", href: "#", icon: FaHome },
-    { label: "User Management", href: "#", icon: FaUser },
-    { label: "Projects", href: "#", icon: FaFolder },
+    { label: "Home", href: "#", icon: LiaHomeSolid },
+    { label: "User Management", href: "#", icon: LiaUser },
+    { label: "Projects", href: "#", icon: LiaFolder },
     { label: "Web Development", href: "#" },
     { label: "Frontend", href: "#" },
     { label: "React Components", href: "#" },
@@ -42,21 +43,22 @@ export class BreadcrumbsComponent extends LitElement {
         return html`
             <div class="demo-container">
                 <h2>Basic Breadcrumbs</h2>
-                <mjo-breadcrumbs .items=${basicItems} color="secondary" size="small"></mjo-breadcrumbs>
+                <mjo-breadcrumbs .items=${basicItems} color="primary" variant="solid"></mjo-breadcrumbs>
+                <mjo-breadcrumbs .items=${basicItems} color="secondary"></mjo-breadcrumbs>
 
                 <h2>Manual Collapse (max 3 items)</h2>
                 <div class="narrow-container">
-                    <mjo-breadcrumbs .items=${deepNavigationItems} collapseStrategy="manual" .maxVisibleItems=${3} ellipsisText="••• "> </mjo-breadcrumbs>
+                    <mjo-breadcrumbs .items=${deepNavigationItems}> </mjo-breadcrumbs>
                 </div>
 
                 <h2>Responsive Collapse (Container Queries)</h2>
                 <div class="responsive-container">
-                    <mjo-breadcrumbs .items=${deepNavigationItems} collapseStrategy="responsive" color="secondary"> </mjo-breadcrumbs>
+                    <mjo-breadcrumbs .items=${deepNavigationItems} color="secondary"> </mjo-breadcrumbs>
                 </div>
 
                 <h2>Auto Collapse</h2>
                 <div class="auto-container">
-                    <mjo-breadcrumbs .items=${deepNavigationItems} collapseStrategy="auto" variant="bordered" ellipsisText="..."> </mjo-breadcrumbs>
+                    <mjo-breadcrumbs .items=${deepNavigationItems} variant="bordered"> </mjo-breadcrumbs>
                 </div>
 
                 <h2>Different Sizes</h2>
@@ -71,13 +73,13 @@ export class BreadcrumbsComponent extends LitElement {
 
                 <div class="resizable-demo">
                     <div class="resizable-container" style="width: 500px; resize: horizontal; overflow: auto;">
-                        <mjo-breadcrumbs .items=${deepNavigationItems} collapseStrategy="responsive" variant="bordered"> </mjo-breadcrumbs>
+                        <mjo-breadcrumbs .items=${deepNavigationItems} variant="bordered"> </mjo-breadcrumbs>
                     </div>
                 </div>
 
                 <div class="resizable-demo">
                     <div class="resizable-container" style="width: 300px; resize: horizontal; overflow: auto;">
-                        <mjo-breadcrumbs .items=${deepNavigationItems} collapseStrategy="auto" color="secondary"> </mjo-breadcrumbs>
+                        <mjo-breadcrumbs .items=${deepNavigationItems} color="secondary"> </mjo-breadcrumbs>
                     </div>
                 </div>
             </div>

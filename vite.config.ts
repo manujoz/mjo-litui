@@ -30,6 +30,7 @@ export default defineConfig({
                 "mjo-progress": `${__dirname}/dev/mjo-progress.html`,
                 "mjo-radio": `${__dirname}/dev/mjo-radio.html`,
                 "mjo-table": `${__dirname}/dev/mjo-table.html`,
+                "mjo-scrollshadow": `${__dirname}/dev/mjo-scrollshadow.html`,
                 "mjo-slider": `${__dirname}/dev/mjo-slider.html`,
                 "mjo-tabs": `${__dirname}/dev/mjo-tabs.html`,
             },
