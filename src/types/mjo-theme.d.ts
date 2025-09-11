@@ -265,36 +265,22 @@ export interface MjoAvatarTheme {
 }
 
 export interface MjoBadgeTheme {
-    /** --mjo-badge-border-width */
     borderWidth?: string;
-    /** --mjo-badge-font-size-small */
     fontSizeSmall?: string;
-    /** --mjo-badge-font-size-medium */
     fontSizeMedium?: string;
-    /** --mjo-badge-font-size-large */
     fontSizeLarge?: string;
-    /** --mjo-badge-focus-outline-width */
     focusOutlineWidth?: string;
-    /** --mjo-badge-focus-outline-offset */
     focusOutlineOffset?: string;
-    /** --mjo-badge-animation-duration */
     animationDuration?: string;
-    /** --mjo-badge-background-color */
     backgroundColor?: string;
-    /** --mjo-badge-color */
     color?: string;
 }
 
 export interface MjoButtonTheme {
-    /** --mjo-button-border-radius */
     borderRadius?: string;
-    /** --mjo-button-font-family */
     fontFamily?: string;
-    /** --mjo-button-font-size */
     fontSize?: string;
-    /** --mjo-button-font-weight */
     fontWeight?: string;
-    /** --mjo-button-padding */
     padding?: string;
 }
 
@@ -302,9 +288,21 @@ export interface MjoCheckboxTheme {
     borderColor?: string;
     checkedColor?: string;
     checkedBorderColor?: string;
+    checkedIconColor?: string;
+    disabledOpacity?: string;
+    errorBackgroundColor?: string;
+    errorBorderColor?: string;
+    errorIconColor?: string;
+    errorLabelColor?: string;
+    focusColor?: string;
+    focusOutlineColor?: string;
     helperColor?: string;
     helperFontSize?: string;
     helperFontWeight?: string;
+    indeterminateBackgroundColor?: string;
+    indeterminateBorderColor?: string;
+    indeterminateColor?: string;
+    indeterminateIconColor?: string;
     labelColor?: string;
     labelFontSize?: string;
     labelFontWeight?: string;
@@ -355,58 +353,33 @@ export interface MjoImageTheme {
 }
 
 export interface MjoLinkTheme {
-    /** --mjo-link-color-primary */
     colorPrimary?: string;
-    /** --mjo-link-color-secondary */
     colorSecondary?: string;
-    /** --mjo-link-color-default */
     colorDefault?: string;
-    /** --mjo-link-color-disabled */
     colorDisabled?: string;
-    /** --mjo-link-font-family */
     fontFamily?: string;
-    /** --mjo-link-font-weight */
     fontWeight?: string;
-    /** --mjo-link-text-decoration */
     textDecoration?: string;
-    /** --mjo-link-text-decoration-hover */
     textDecorationHover?: string;
-    /** --mjo-link-focus-outline */
     focusOutline?: string;
-    /** --mjo-link-focus-outline-color */
     focusOutlineColor?: string;
-    /** --mjo-link-focus-outline-width */
     focusOutlineWidth?: string;
-    /** --mjo-link-focus-outline-offset */
     focusOutlineOffset?: string;
-    /** --mjo-link-transition */
     transition?: string;
 }
 
 export interface MjoListboxTheme {
-    /** --mjo-listbox-background-color */
     backgroundColor?: string;
-    /** --mjo-listbox-border-radius */
     borderRadius?: string;
-    /** --mjo-listbox-item-gap */
     itemGap?: string;
-    /** --mjo-listbox-item-margin */
     itemMargin?: string;
-    /** --mjo-listbox-item-padding */
     itemPadding?: string;
-    /** --mjo-listbox-item-cursor */
     itemCursor?: string;
-    /** --mjo-listbox-item-border-radius */
     itemBorderRadius?: string;
-    /** --mjo-listbox-item-hover-background-color */
     itemHoverBackgroundColor?: string;
-    /** --mjo-listbox-item-hover-foreground-color */
     itemHoverForegroundColor?: string;
-    /** --mjo-listbox-icon-top */
     iconTop?: string;
-    /** --mjo-listbox-section-border-color */
     sectionBorderColor?: string;
-    /** --mjo-listbox-section-color */
     sectionColor?: string;
 }
 
@@ -461,15 +434,10 @@ export interface MjoRippleTheme {
 }
 
 export interface MjoScrollshadowTheme {
-    /** --mjo-scrollshadow-color */
     color?: string;
-    /** --mjo-scrollshadow-size */
     size?: string;
-    /** --mjo-scrollshadow-scrollbar-thumb-color */
     scrollbarThumbColor?: string;
-    /** --mjo-scrollshadow-scrollbar-track */
     scrollbarTrack?: string;
-    /** --mjo-scrollshadow-scrollbar-width */
     scrollbarWidth?: string;
 }
 
@@ -520,51 +488,28 @@ export interface MjoDatePickerTheme {
 }
 
 export interface MjoTableTheme {
-    /** --mjo-table-background-color */
     backgroundColor?: string;
-    /** --mjo-table-foreground-color */
     foregroundColor?: string;
-    /** --mjo-table-border-radius */
     borderRadius?: string;
-    /** --mjo-table-scrollbar-thumb-color */
     scrollbarThumbColor?: string;
-    /** --mjo-table-header-font-size */
     headerFontSize?: string;
-    /** --mjo-table-header-foreground-color */
     headerForegroundColor?: string;
-    /** --mjo-table-header-border-color */
     headerBorderColor?: string;
-    /** --mjo-table-header-padding */
     headerPadding?: string;
-    /** --mjo-table-header-background-color-stuck */
     headerBackgroundColorStuck?: string;
-    /** --mjo-table-header-foreground-color-stuck */
     headerForegroundColorStuck?: string;
-    /** --mjo-table-body-font-size */
     bodyFontSize?: string;
-    /** --mjo-table-cell-foreground-color */
     cellForegroundColor?: string;
-    /** --mjo-table-row-background-color-even */
     rowBackgroundColorEven?: string;
-    /** --mjo-table-row-foreground-color-even */
     rowForegroundColorEven?: string;
-    /** --mjo-table-row-border-color */
     rowBorderColor?: string;
-    /** --mjo-table-row-background-color-highlight */
     rowBackgroundColorHighlight?: string;
-    /** --mjo-table-row-foreground-color-highlight */
     rowForegroundColorHighlight?: string;
-    /** --mjo-table-row-background-color-hover */
     rowBackgroundColorHover?: string;
-    /** --mjo-table-no-data-padding */
     noDataPadding?: string;
-    /** --mjo-table-no-data-foreground-color */
     noDataForegroundColor?: string;
-    /** --mjo-table-caption-font-size */
     captionFontSize?: string;
-    /** --mjo-table-caption-foreground-color */
     captionForegroundColor?: string;
-    /** --mjo-table-caption-padding-bottom */
     captionPaddingBottom?: string;
 }
 
@@ -660,6 +605,7 @@ export interface MjoNotificationTheme {
 
 export interface MjoCardTheme {
     border?: string;
+    borderColor?: string;
     backgroundColor?: string;
     backgroundColorLow?: string;
     backgroundColorHigh?: string;
@@ -793,65 +739,36 @@ export interface MjoPaginationTheme {
 }
 
 export interface MjoProgressTheme {
-    /** --mjo-progress-label-gap */
     labelGap?: string;
-    /** --mjo-progress-font-size */
     fontSize?: string;
-    /** --mjo-progress-font-weight */
     fontWeight?: string;
-    /** --mjo-progress-font-size-small */
     fontSizeSmall?: string;
-    /** --mjo-progress-font-size-medium */
     fontSizeMedium?: string;
-    /** --mjo-progress-font-size-large */
     fontSizeLarge?: string;
-    /** --mjo-progress-background */
     background?: string;
-    /** --mjo-progress-color */
     color?: string;
-    /** --mjo-progress-bar-border-radius */
     barBorderRadius?: string;
-    /** --mjo-progress-bar-border-radius-small */
     barBorderRadiusSmall?: string;
-    /** --mjo-progress-bar-border-radius-large */
     barBorderRadiusLarge?: string;
-    /** --mjo-progress-animation-duration */
     animationDuration?: string;
-    /** --mjo-progress-circle-dash */
     circleDash?: string;
-    /** --mjo-progress-circle-dash-small */
     circleDashSmall?: string;
-    /** --mjo-progress-circle-dash-large */
     circleDashLarge?: string;
 }
 
 export interface MjoBreadcrumbsTheme {
-    /** --mjo-breadcrumbs-background-color */
     backgroundColor?: string;
-    /** --mjo-breadcrumbs-border-color */
     borderColor?: string;
-    /** --mjo-breadcrumbs-border-radius */
     borderRadius?: string;
-    /** --mjo-breadcrumbs-padding */
     padding?: string;
-    /** --mjo-breadcrumbs-text-color */
     textColor?: string;
-    /** --mjo-breadcrumbs-link-hover-color */
     linkHoverColor?: string;
-    /** --mjo-breadcrumbs-current-color */
     currentColor?: string;
-    /** --mjo-breadcrumbs-current-font-weight */
     currentFontWeight?: string;
-    /** --mjo-breadcrumbs-separator-color */
     separatorColor?: string;
-    /** --mjo-breadcrumbs-icon-size */
     iconSize?: string;
-    /** --mjo-breadcrumbs-focus-outline */
     focusOutline?: string;
-    /** --mjo-breadcrumbs-font-family */
     fontFamily?: string;
-    /** --mjo-breadcrumbs-font-size */
     fontSize?: string;
-    /** --mjo-breadcrumbs-font-weight */
     fontWeight?: string;
 }

@@ -11,18 +11,18 @@ export class MjointInputHelperText extends LitElement {
     @property({ type: String }) successmsg?: string;
 
     render() {
-        return html`<div class="container" role="region" aria-live="polite">
+        return html`<div class="container" role="region" aria-live="polite" part="container">
             ${this.errormsg
-                ? html`<div class="error" role="alert" aria-live="assertive">
-                      <mjo-icon src=${AiFillCloseCircle} aria-hidden="true"></mjo-icon>
+                ? html`<div class="error" role="alert" aria-live="assertive" part="error-message">
+                      <mjo-icon src=${AiFillCloseCircle} aria-hidden="true" exportparts="icon: icon"></mjo-icon>
                       ${this.errormsg}
                   </div>`
                 : this.successmsg
-                  ? html`<div class="success" role="status" aria-live="polite">
-                        <mjo-icon src=${AiFillCheckCircle} aria-hidden="true"></mjo-icon>
+                  ? html`<div class="success" role="status" aria-live="polite" part="success-message">
+                        <mjo-icon src=${AiFillCheckCircle} aria-hidden="true" exportparts="icon: icon"></mjo-icon>
                         ${this.successmsg}
                     </div>`
-                  : html`<mjo-typography tag="none"><slot></slot></mjo-typography>`}
+                  : html`<mjo-typography tag="none" exportparts="typography: helper-text"><slot></slot></mjo-typography>`}
         </div>`;
     }
 

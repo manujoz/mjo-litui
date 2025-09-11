@@ -1,6 +1,22 @@
 # mjo-checkbox
 
-Configurable, theme-aware checkbox component with form integration, validation support, indeterminate state support, and customizable styling through multiple mixins including FormMixin, InputErrorMixin, and ThemeMixin. The component supports accessibility features with proper ARIA attributes and keyboard navigation.
+A versatile checkbox component with comprehensive form integration, validation support, and theme customization. Features standard and indeterminate states, accessibility compliance, and seamless integration with mjo-form for automatic data handling and validation.
+
+## Related Components
+
+### mjo-checkbox-group
+
+The `mjo-checkbox-group` component provides a container for grouping related checkboxes. It automatically discovers and manages child `mjo-checkbox` elements within its slot.
+
+```html
+<mjo-checkbox-group>
+    <mjo-checkbox name="options" value="option1" label="Option 1"></mjo-checkbox>
+    <mjo-checkbox name="options" value="option2" label="Option 2"></mjo-checkbox>
+    <mjo-checkbox name="options" value="option3" label="Option 3"></mjo-checkbox>
+</mjo-checkbox-group>
+```
+
+**Note:** The `mjo-checkbox-group` component is primarily used internally by checkboxes to establish parent-child relationships for validation and state management. You typically don't need to use it explicitly unless you want to create logical groupings.
 
 ## HTML Usage
 
@@ -41,16 +57,10 @@ export class ExampleCheckboxBasic extends LitElement {
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-checkbox";
-import "mjo-litui/mjo-button";
 
 @customElement("example-checkbox-states")
 export class ExampleCheckboxStates extends LitElement {
-    @state() private isDisabled = false;
     @state() private isIndeterminate = false;
-
-    private toggleDisabled() {
-        this.isDisabled = !this.isDisabled;
-    }
 
     private toggleIndeterminate() {
         const checkbox = this.shadowRoot?.querySelector("#indeterminate-checkbox") as any;
@@ -62,21 +72,20 @@ export class ExampleCheckboxStates extends LitElement {
 
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                 <div>
                     <h4>Colors and Sizes</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <mjo-checkbox label="Primary color (default)" name="primary" value="1" color="primary" checked></mjo-checkbox>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <mjo-checkbox label="Primary color" name="primary" value="1" color="primary" checked></mjo-checkbox>
                         <mjo-checkbox label="Secondary color" name="secondary" value="1" color="secondary" checked></mjo-checkbox>
                         <mjo-checkbox label="Small size" name="small" value="1" size="small" checked></mjo-checkbox>
-                        <mjo-checkbox label="Medium size (default)" name="medium" value="1" size="medium" checked></mjo-checkbox>
                         <mjo-checkbox label="Large size" name="large" value="1" size="large" checked></mjo-checkbox>
                     </div>
                 </div>
 
                 <div>
                     <h4>States</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                         <mjo-checkbox label="Normal checkbox" name="normal" value="1"></mjo-checkbox>
                         <mjo-checkbox label="Checked checkbox" name="checked" value="1" checked></mjo-checkbox>
                         <mjo-checkbox
@@ -85,24 +94,11 @@ export class ExampleCheckboxStates extends LitElement {
                             name="indeterminate"
                             value="1"
                             ?indeterminate=${this.isIndeterminate}
-                        >
-                        </mjo-checkbox>
-                        <mjo-checkbox label="Disabled unchecked" name="disabled1" value="1" disabled></mjo-checkbox>
-                        <mjo-checkbox label="Disabled checked" name="disabled2" value="1" disabled checked></mjo-checkbox>
+                        ></mjo-checkbox>
+                        <mjo-checkbox label="Disabled checkbox" name="disabled" value="1" disabled></mjo-checkbox>
                     </div>
-                </div>
 
-                <div>
-                    <h4>Interactive Controls</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
-                        <mjo-checkbox label="Toggle me" name="interactive1" value="1" ?disabled=${this.isDisabled}></mjo-checkbox>
-                        <mjo-checkbox label="I'm checked" name="interactive2" value="1" checked ?disabled=${this.isDisabled}></mjo-checkbox>
-                        <mjo-checkbox label="Secondary disabled" name="interactive3" value="1" color="secondary" ?disabled=${this.isDisabled}></mjo-checkbox>
-                    </div>
-                    <div style="display: flex; gap: 1rem;">
-                        <mjo-button @click=${this.toggleDisabled} variant="ghost"> ${this.isDisabled ? "Enable All" : "Disable All"} </mjo-button>
-                        <mjo-button @click=${this.toggleIndeterminate} variant="ghost"> ${this.isIndeterminate ? "Clear" : "Set"} Indeterminate </mjo-button>
-                    </div>
+                    <button @click=${this.toggleIndeterminate} style="margin-top: 1rem;">${this.isIndeterminate ? "Clear" : "Set"} Indeterminate</button>
                 </div>
             </div>
         `;
@@ -227,68 +223,40 @@ export class ExampleCheckboxIndeterminate extends LitElement {
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-checkbox";
-import "mjo-litui/mjo-button";
 
 @customElement("example-checkbox-messages")
 export class ExampleCheckboxMessages extends LitElement {
     @state() private showError = false;
-    @state() private showSuccess = false;
 
     private toggleError() {
         this.showError = !this.showError;
-        if (this.showError) this.showSuccess = false;
-    }
-
-    private toggleSuccess() {
-        this.showSuccess = !this.showSuccess;
-        if (this.showSuccess) this.showError = false;
     }
 
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                 <div>
                     <h4>Helper Text</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <mjo-checkbox
-                            label="Terms and Conditions"
-                            name="terms"
-                            value="accepted"
-                            helperText="Please read and accept our terms and conditions to continue."
-                        ></mjo-checkbox>
-                        <mjo-checkbox
-                            label="Newsletter Subscription"
-                            name="newsletter"
-                            value="subscribe"
-                            helperText="Receive updates about new features and promotions."
-                            checked
-                        ></mjo-checkbox>
-                    </div>
+                    <mjo-checkbox
+                        label="Terms and Conditions"
+                        name="terms"
+                        value="accepted"
+                        helperText="Please read and accept our terms and conditions."
+                    ></mjo-checkbox>
                 </div>
 
                 <div>
-                    <h4>Error and Success States</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
-                        <mjo-checkbox
-                            label="Required checkbox"
-                            name="required"
-                            value="1"
-                            helperText="This field is required"
-                            ?error=${this.showError}
-                            errormsg=${this.showError ? "You must check this box to continue" : undefined}
-                            ?success=${this.showSuccess}
-                            successmsg=${this.showSuccess ? "Thank you for accepting!" : undefined}
-                        ></mjo-checkbox>
-                    </div>
+                    <h4>Error State</h4>
+                    <mjo-checkbox
+                        label="Required checkbox"
+                        name="required"
+                        value="1"
+                        helperText="This field is required"
+                        ?error=${this.showError}
+                        errormsg=${this.showError ? "You must check this box to continue" : undefined}
+                    ></mjo-checkbox>
 
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-button @click=${this.toggleError} variant="ghost" color="error" size="small">
-                            ${this.showError ? "Hide Error" : "Show Error"}
-                        </mjo-button>
-                        <mjo-button @click=${this.toggleSuccess} variant="ghost" color="success" size="small">
-                            ${this.showSuccess ? "Hide Success" : "Show Success"}
-                        </mjo-button>
-                    </div>
+                    <button @click=${this.toggleError} style="margin-top: 1rem;">${this.showError ? "Hide Error" : "Show Error"}</button>
                 </div>
             </div>
         `;
@@ -302,12 +270,10 @@ export class ExampleCheckboxMessages extends LitElement {
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-checkbox";
-import "mjo-litui/mjo-button";
 
 @customElement("example-checkbox-groups")
 export class ExampleCheckboxGroups extends LitElement {
     @state() private selectedFeatures: string[] = ["notifications"];
-    @state() private selectedCategories: string[] = [];
 
     private handleFeatureChange(event: Event) {
         const checkbox = event.target as HTMLInputElement;
@@ -320,113 +286,38 @@ export class ExampleCheckboxGroups extends LitElement {
         }
     }
 
-    private handleCategoryChange(event: Event) {
-        const checkbox = event.target as HTMLInputElement;
-        const value = checkbox.value;
-
-        if (checkbox.checked) {
-            this.selectedCategories = [...this.selectedCategories, value];
-        } else {
-            this.selectedCategories = this.selectedCategories.filter((c) => c !== value);
-        }
-    }
-
-    private selectAllFeatures() {
-        this.selectedFeatures = ["notifications", "darkMode", "autoSave", "analytics"];
-    }
-
-    private clearAllFeatures() {
-        this.selectedFeatures = [];
-    }
-
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Features Selection</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
-                        <mjo-checkbox
-                            label="Push Notifications"
-                            name="features"
-                            value="notifications"
-                            ?checked=${this.selectedFeatures.includes("notifications")}
-                            @change=${this.handleFeatureChange}
-                            helperText="Receive push notifications for important updates"
-                        ></mjo-checkbox>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <h4>Select Features</h4>
 
-                        <mjo-checkbox
-                            label="Dark Mode"
-                            name="features"
-                            value="darkMode"
-                            ?checked=${this.selectedFeatures.includes("darkMode")}
-                            @change=${this.handleFeatureChange}
-                            helperText="Use dark theme for better night viewing"
-                        ></mjo-checkbox>
+                <mjo-checkbox
+                    label="Push Notifications"
+                    name="features"
+                    value="notifications"
+                    ?checked=${this.selectedFeatures.includes("notifications")}
+                    @change=${this.handleFeatureChange}
+                ></mjo-checkbox>
 
-                        <mjo-checkbox
-                            label="Auto Save"
-                            name="features"
-                            value="autoSave"
-                            ?checked=${this.selectedFeatures.includes("autoSave")}
-                            @change=${this.handleFeatureChange}
-                            helperText="Automatically save your work every 30 seconds"
-                        ></mjo-checkbox>
+                <mjo-checkbox
+                    label="Dark Mode"
+                    name="features"
+                    value="darkMode"
+                    ?checked=${this.selectedFeatures.includes("darkMode")}
+                    @change=${this.handleFeatureChange}
+                ></mjo-checkbox>
 
-                        <mjo-checkbox
-                            label="Usage Analytics"
-                            name="features"
-                            value="analytics"
-                            ?checked=${this.selectedFeatures.includes("analytics")}
-                            @change=${this.handleFeatureChange}
-                            helperText="Help us improve by sharing anonymous usage data"
-                        ></mjo-checkbox>
-                    </div>
+                <mjo-checkbox
+                    label="Auto Save"
+                    name="features"
+                    value="autoSave"
+                    ?checked=${this.selectedFeatures.includes("autoSave")}
+                    @change=${this.handleFeatureChange}
+                ></mjo-checkbox>
 
-                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                        <mjo-button @click=${this.selectAllFeatures} variant="ghost" size="small"> Select All </mjo-button>
-                        <mjo-button @click=${this.clearAllFeatures} variant="ghost" size="small"> Clear All </mjo-button>
-                    </div>
-
-                    <p style="margin: 0; font-size: 0.9rem; color: #6c757d;">
-                        Selected: ${this.selectedFeatures.length > 0 ? this.selectedFeatures.join(", ") : "None"}
-                    </p>
-                </div>
-
-                <div>
-                    <h4>Content Categories</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <mjo-checkbox
-                            label="Technology"
-                            name="categories"
-                            value="tech"
-                            color="secondary"
-                            ?checked=${this.selectedCategories.includes("tech")}
-                            @change=${this.handleCategoryChange}
-                        ></mjo-checkbox>
-
-                        <mjo-checkbox
-                            label="Design"
-                            name="categories"
-                            value="design"
-                            color="secondary"
-                            ?checked=${this.selectedCategories.includes("design")}
-                            @change=${this.handleCategoryChange}
-                        ></mjo-checkbox>
-
-                        <mjo-checkbox
-                            label="Business"
-                            name="categories"
-                            value="business"
-                            color="secondary"
-                            ?checked=${this.selectedCategories.includes("business")}
-                            @change=${this.handleCategoryChange}
-                        ></mjo-checkbox>
-                    </div>
-
-                    <p style="margin: 1rem 0 0 0; font-size: 0.9rem; color: #6c757d;">
-                        Selected categories: ${this.selectedCategories.length > 0 ? this.selectedCategories.join(", ") : "None"}
-                    </p>
-                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #6c757d;">
+                    Selected: ${this.selectedFeatures.length > 0 ? this.selectedFeatures.join(", ") : "None"}
+                </p>
             </div>
         `;
     }
@@ -664,74 +555,22 @@ import "mjo-litui/mjo-checkbox";
 
 @customElement("example-checkbox-themes")
 export class ExampleCheckboxThemes extends LitElement {
-    private redTheme: MjoCheckboxTheme = {
+    private customTheme: MjoCheckboxTheme = {
         borderColor: "#e74c3c",
         checkedColor: "#c0392b",
         checkedBorderColor: "#c0392b",
         labelColor: "#2c3e50",
-        labelFontSize: "1.1rem",
         labelFontWeight: "600",
-    };
-
-    private blueTheme: MjoCheckboxTheme = {
-        borderColor: "#3498db",
-        checkedColor: "#2980b9",
-        checkedBorderColor: "#2980b9",
-        labelColor: "#34495e",
-        helperColor: "#7f8c8d",
-        helperFontSize: "0.8rem",
-    };
-
-    private greenTheme: MjoCheckboxTheme = {
-        borderColor: "#27ae60",
-        checkedColor: "#229954",
-        checkedBorderColor: "#229954",
-        labelColor: "#1e8449",
-        labelFontWeight: "500",
     };
 
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Custom Themes</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                        <mjo-checkbox
-                            label="Red Theme Checkbox"
-                            name="red"
-                            value="1"
-                            checked
-                            helperText="Custom red color scheme"
-                            .theme=${this.redTheme}
-                        ></mjo-checkbox>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <h4>Custom vs Default Theme</h4>
 
-                        <mjo-checkbox
-                            label="Blue Theme Checkbox"
-                            name="blue"
-                            value="1"
-                            checked
-                            helperText="Custom blue color scheme with smaller helper text"
-                            .theme=${this.blueTheme}
-                        ></mjo-checkbox>
+                <mjo-checkbox label="Custom Red Theme" name="custom" value="1" checked .theme=${this.customTheme}></mjo-checkbox>
 
-                        <mjo-checkbox
-                            label="Green Theme Checkbox"
-                            name="green"
-                            value="1"
-                            checked
-                            helperText="Custom green color scheme"
-                            .theme=${this.greenTheme}
-                        ></mjo-checkbox>
-
-                        <mjo-checkbox
-                            label="Default Theme for Comparison"
-                            name="default"
-                            value="1"
-                            checked
-                            helperText="Using default theme colors"
-                        ></mjo-checkbox>
-                    </div>
-                </div>
+                <mjo-checkbox label="Default Theme" name="default" value="1" checked></mjo-checkbox>
             </div>
         `;
     }
@@ -823,6 +662,50 @@ All validation properties from FormMixin are inherited:
 | --------- | ---------------------------------------------------------- |
 | (default) | Currently not implemented; content provided via properties |
 
+## CSS Parts
+
+| Part                              | Description                                                        |
+| --------------------------------- | ------------------------------------------------------------------ |
+| `container`                       | The main checkbox container element                                |
+| `box`                             | The visual checkbox container                                      |
+| `checkbox`                        | The checkbox element itself                                        |
+| `checkbox-inner`                  | The inner area containing the check/indeterminate icon             |
+| `checkbox-icon`                   | The check/indeterminate icon (via exportparts from mjo-icon)       |
+| `label-container`                 | Container for the label text                                       |
+| `label-text`                      | The label typography element (via exportparts from mjo-typography) |
+| `helper-text-container`           | Container for helper text (via exportparts from helper component)  |
+| `helper-text-typography`          | The helper text typography (via exportparts from helper component) |
+| `helper-text-msg-container`       | Container for error/success messages (via exportparts)             |
+| `helper-text-msg-error-message`   | Error message element (via exportparts)                            |
+| `helper-text-msg-success-message` | Success message element (via exportparts)                          |
+| `helper-text-msg-icon`            | Icon in error/success messages (via exportparts)                   |
+
+### CSS Parts Usage Example
+
+```css
+/* Style the main checkbox container */
+mjo-checkbox::part(container) {
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+/* Style the checkbox itself */
+mjo-checkbox::part(checkbox) {
+    border-radius: 50%;
+}
+
+/* Style the check icon */
+mjo-checkbox::part(checkbox-icon) {
+    font-size: 12px;
+}
+
+/* Style the label text */
+mjo-checkbox::part(label-text) {
+    font-weight: bold;
+    color: #333;
+}
+```
+
 ## Events
 
 | Event                               | Detail                                                            | Emitted When                | Notes                                                 |
@@ -856,22 +739,41 @@ interface MjoCheckboxChangeEvent extends CustomEvent {
 
 ## Methods
 
-| Method                                     | Description                                                            |
-| ------------------------------------------ | ---------------------------------------------------------------------- |
-| `getValue(): string`                       | Returns the checkbox value if checked, empty string if not             |
-| `setValue(value: string): void`            | Sets the checkbox value property                                       |
-| `setChecked(checked: boolean): void`       | Programmatically sets the checked state                                |
-| `click(): void`                            | Programmatically clicks the checkbox (toggles state)                   |
-| `toggle(): void`                           | Toggles the checkbox state (same as click)                             |
-| `setIndeterminate(value: boolean): void`   | Sets the indeterminate state and dispatches indeterminate-change event |
-| `reportValidity(): boolean`                | Validates the checkbox and returns validity state                      |
-| `setCustomValidity(message: string): void` | Sets custom validation message                                         |
+| Method                                     | Description                                                            | Returns   |
+| ------------------------------------------ | ---------------------------------------------------------------------- | --------- |
+| `getValue(): string`                       | Returns the checkbox value if checked, empty string if not             | `string`  |
+| `setValue(value: string): void`            | Sets the checkbox value property                                       | `void`    |
+| `setChecked(checked: boolean): void`       | Programmatically sets the checked state                                | `void`    |
+| `click(): void`                            | Programmatically clicks the checkbox (toggles state)                   | `void`    |
+| `toggle(): void`                           | Toggles the checkbox state (same as click)                             | `void`    |
+| `setIndeterminate(value: boolean): void`   | Sets the indeterminate state and dispatches indeterminate-change event | `void`    |
+| `reportValidity(): boolean`                | Validates the checkbox and returns validity state                      | `boolean` |
+| `setCustomValidity(message: string): void` | Sets custom validation message                                         | `void`    |
 
 ### Method Details
 
-#### `setIndeterminate(indeterminate: boolean)`
+#### `getValue(): string`
 
-This method programmatically sets the indeterminate state of the checkbox:
+Returns the current value of the checkbox if it's checked, or an empty string if unchecked:
+
+```ts
+const checkbox = document.querySelector("mjo-checkbox") as MjoCheckbox;
+const value = checkbox.getValue(); // Returns checkbox.value if checked, "" if not
+```
+
+#### `setChecked(checked: boolean): void`
+
+Programmatically sets the checked state and triggers change events:
+
+```ts
+const checkbox = document.querySelector("mjo-checkbox") as MjoCheckbox;
+checkbox.setChecked(true); // Checks the checkbox and fires events
+checkbox.setChecked(false); // Unchecks the checkbox and fires events
+```
+
+#### `setIndeterminate(indeterminate: boolean): void`
+
+Sets the indeterminate state of the checkbox. When set to `true`, the checkbox will show a minus icon instead of a check:
 
 ```ts
 const checkbox = document.querySelector("mjo-checkbox") as MjoCheckbox;
@@ -881,7 +783,29 @@ checkbox.setIndeterminate(false); // Clears indeterminate state
 
 -   Updates both the component property and the internal HTML input's indeterminate property
 -   Dispatches the `mjo-checkbox:indeterminate-change` event
+-   Automatically sets `checked` to `false` when indeterminate is set to `true`
 -   Updates form data automatically
+
+#### `reportValidity(): boolean`
+
+Validates the checkbox according to its constraints (required, mincheck, maxcheck, etc.) and returns the validity state:
+
+```ts
+const checkbox = document.querySelector("mjo-checkbox") as MjoCheckbox;
+const isValid = checkbox.reportValidity(); // Returns true if valid, false if not
+```
+
+#### `setCustomValidity(message: string): void`
+
+Sets a custom validation message. Pass an empty string to clear the custom validity:
+
+```ts
+const checkbox = document.querySelector("mjo-checkbox") as MjoCheckbox;
+checkbox.setCustomValidity("You must accept our terms to continue");
+checkbox.reportValidity(); // Will show the custom message
+
+checkbox.setCustomValidity(""); // Clears the custom validity
+```
 
 ## CSS Variables
 
@@ -889,15 +813,16 @@ The component provides extensive customization through CSS variables with fallba
 
 ### Border and Colors
 
-| Variable                                        | Fallback                                       | Used For                            |
-| ----------------------------------------------- | ---------------------------------------------- | ----------------------------------- |
-| `--mjo-checkbox-border-color`                   | `--mjo-foreground-color-low` → `rgb(51,51,51)` | Unchecked border color              |
-| `--mjo-checkbox-checked-color`                  | `--mjo-primary-color`                          | Checked icon color                  |
-| `--mjo-checkbox-checked-border-color`           | `--mjo-checkbox-checked-color`                 | Checked border color                |
-| `--mjo-checkbox-checked-background-color`       | `transparent`                                  | Background color when checked       |
-| `--mjo-checkbox-indeterminate-color`            | `--mjo-checkbox-checked-color`                 | Indeterminate icon color            |
-| `--mjo-checkbox-indeterminate-border-color`     | `--mjo-checkbox-indeterminate-color`           | Indeterminate border color          |
-| `--mjo-checkbox-indeterminate-background-color` | `transparent`                                  | Background color when indeterminate |
+| Variable                                        | Fallback                                       | Used For                                   |
+| ----------------------------------------------- | ---------------------------------------------- | ------------------------------------------ |
+| `--mjo-checkbox-border-color`                   | `--mjo-foreground-color-low` → `rgb(51,51,51)` | Unchecked border color                     |
+| `--mjo-checkbox-checked-color`                  | `--mjo-primary-color`                          | Checked background and icon color          |
+| `--mjo-checkbox-checked-border-color`           | `--mjo-checkbox-checked-color`                 | Checked border color                       |
+| `--mjo-checkbox-checked-icon-color`             | `--mjo-primary-foreground-color`               | Color of the check icon when checked       |
+| `--mjo-checkbox-indeterminate-color`            | `--mjo-checkbox-checked-color`                 | Indeterminate icon color                   |
+| `--mjo-checkbox-indeterminate-border-color`     | `--mjo-checkbox-indeterminate-color`           | Indeterminate border color                 |
+| `--mjo-checkbox-indeterminate-background-color` | `transparent`                                  | Background color when indeterminate        |
+| `--mjo-checkbox-indeterminate-icon-color`       | `--mjo-checkbox-indeterminate-color`           | Color of the minus icon when indeterminate |
 
 ### Typography
 
@@ -907,21 +832,30 @@ The component provides extensive customization through CSS variables with fallba
 | `--mjo-checkbox-label-font-size`    | `inherit`                    | Label font size         |
 | `--mjo-checkbox-label-font-weight`  | `inherit`                    | Label font weight       |
 | `--mjo-checkbox-helper-color`       | `--mjo-foreground-color-low` | Helper text color       |
-| `--mjo-checkbox-helper-font-size`   | `inherit`                    | Helper text font size   |
-| `--mjo-checkbox-helper-font-weight` | `inherit`                    | Helper text font weight |
+| `--mjo-checkbox-helper-font-size`   | `0.8em`                      | Helper text font size   |
+| `--mjo-checkbox-helper-font-weight` | `normal`                     | Helper text font weight |
 
 ### Focus and Accessibility
 
 | Variable                             | Fallback                  | Used For               |
 | ------------------------------------ | ------------------------- | ---------------------- |
-| `--mjo-checkbox:focus-color`         | `rgba(59, 130, 246, 0.1)` | Focus box shadow color |
-| `--mjo-checkbox:focus-outline-color` | `--mjo-primary-color`     | Focus outline color    |
+| `--mjo-checkbox-focus-color`         | `rgba(59, 130, 246, 0.1)` | Focus box shadow color |
+| `--mjo-checkbox-focus-outline-color` | `--mjo-primary-color`     | Focus outline color    |
 
 ### Disabled State
 
 | Variable                          | Fallback | Used For              |
 | --------------------------------- | -------- | --------------------- |
 | `--mjo-checkbox-disabled-opacity` | `0.5`    | Opacity when disabled |
+
+### Error States
+
+| Variable                                | Fallback                       | Used For                        |
+| --------------------------------------- | ------------------------------ | ------------------------------- |
+| `--mjo-checkbox-error-border-color`     | `--mjo-color-error`            | Border color in error state     |
+| `--mjo-checkbox-error-background-color` | `--mjo-color-error`            | Background color in error state |
+| `--mjo-checkbox-error-icon-color`       | `--mjo-color-error-foreground` | Icon color in error state       |
+| `--mjo-checkbox-error-label-color`      | `--mjo-color-error`            | Label color in error state      |
 
 ### Spacing
 
@@ -937,14 +871,47 @@ This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to c
 
 ```ts
 interface MjoCheckboxTheme {
+    /** --mjo-checkbox-border-color */
     borderColor?: string;
+    /** --mjo-checkbox-checked-color */
     checkedColor?: string;
+    /** --mjo-checkbox-checked-border-color */
     checkedBorderColor?: string;
+    /** --mjo-checkbox-checked-icon-color */
+    checkedIconColor?: string;
+    /** --mjo-checkbox-disabled-opacity */
+    disabledOpacity?: string;
+    /** --mjo-checkbox-error-background-color */
+    errorBackgroundColor?: string;
+    /** --mjo-checkbox-error-border-color */
+    errorBorderColor?: string;
+    /** --mjo-checkbox-error-icon-color */
+    errorIconColor?: string;
+    /** --mjo-checkbox-error-label-color */
+    errorLabelColor?: string;
+    /** --mjo-checkbox-focus-color */
+    focusColor?: string;
+    /** --mjo-checkbox-focus-outline-color */
+    focusOutlineColor?: string;
+    /** --mjo-checkbox-helper-color */
     helperColor?: string;
+    /** --mjo-checkbox-helper-font-size */
     helperFontSize?: string;
+    /** --mjo-checkbox-helper-font-weight */
     helperFontWeight?: string;
+    /** --mjo-checkbox-indeterminate-background-color */
+    indeterminateBackgroundColor?: string;
+    /** --mjo-checkbox-indeterminate-border-color */
+    indeterminateBorderColor?: string;
+    /** --mjo-checkbox-indeterminate-color */
+    indeterminateColor?: string;
+    /** --mjo-checkbox-indeterminate-icon-color */
+    indeterminateIconColor?: string;
+    /** --mjo-checkbox-label-color */
     labelColor?: string;
+    /** --mjo-checkbox-label-font-size */
     labelFontSize?: string;
+    /** --mjo-checkbox-label-font-weight */
     labelFontWeight?: string;
 }
 ```
@@ -968,6 +935,7 @@ export class ExampleCheckboxThemed extends LitElement {
         labelFontWeight: "500",
         helperColor: "#6b7280",
         helperFontSize: "0.875rem",
+        focusOutlineColor: "#9333ea",
     };
 
     render() {
