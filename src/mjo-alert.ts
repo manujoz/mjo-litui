@@ -45,7 +45,7 @@ export class MjoAlert extends LitElement {
     @property({ type: Number }) autoCloseDelay: number = 5000;
 
     @property({ type: String }) animation: "fade" | "slide" | "scale" | "none" = "fade";
-    @property({ type: Number }) animationDuration: number = 100;
+    @property({ type: Number }) animationDuration: number = 250;
 
     // UX properties
     @property({ type: Boolean }) persistent: boolean = false;
@@ -54,6 +54,7 @@ export class MjoAlert extends LitElement {
     @state() private autoCloseTimer: number | null = null;
 
     #storeHeight: number = 0;
+    #storePadding: string = "";
     #isAnimating: boolean = false;
 
     render() {
@@ -201,7 +202,7 @@ export class MjoAlert extends LitElement {
     }
 
     #show() {
-        const $container = this.shadowRoot?.querySelector(".container") as HTMLElement;
+        const $container = this as HTMLElement;
         if (!$container || $container.offsetHeight > 0 || this.#isAnimating) return;
 
         this.#dispatchEvent("mjo-alert:will-show");
@@ -223,7 +224,7 @@ export class MjoAlert extends LitElement {
             case "fade":
                 animate = $container.animate(
                     [
-                        { opacity: 0, display: "none" },
+                        { opacity: 0, display: "none", padding: "0" },
                         { opacity: 1, display: "block" },
                     ],
                     {
@@ -255,6 +256,7 @@ export class MjoAlert extends LitElement {
                             opacity: 1,
                             height: this.#storeHeight + "px",
                             display: "block",
+                            padding: this.#storePadding,
                         },
                     ],
                     {
@@ -274,7 +276,7 @@ export class MjoAlert extends LitElement {
     }
 
     #hide() {
-        const $container = this.shadowRoot?.querySelector(".container") as HTMLElement;
+        const $container = this as HTMLElement;
         if (!$container || $container.offsetHeight === 0 || this.#isAnimating) return;
 
         // Dispatch cancel event
@@ -325,6 +327,7 @@ export class MjoAlert extends LitElement {
                             transform: "scale(1)",
                             opacity: 1,
                             height: this.#storeHeight + "px",
+                            padding: this.#storePadding,
                         },
                         { transform: "scale(0)", opacity: 0, height: "0", display: "none" },
                     ],
@@ -437,7 +440,7 @@ export class MjoAlert extends LitElement {
                 display: flex;
                 flex-flow: row nowrap;
                 gap: var(--mjo-space-medium);
-                align-items: flex-start;
+                align-items: center;
             }
             .icon {
                 position: relative;
@@ -493,15 +496,28 @@ export class MjoAlert extends LitElement {
             .close-button:hover {
                 background-color: rgba(0, 0, 0, 0.1);
             }
+            .container[data-type="info"] .icon,
+            .container[data-type="info"] .close-button:hover {
+                background-color: color-mix(in srgb, var(--mjo-color-info) 25%, transparent);
+            }
+            .container[data-type="success"] .icon,
+            .container[data-type="success"] .close-button:hover {
+                background-color: color-mix(in srgb, var(--mjo-color-success) 25%, transparent);
+            }
+            .container[data-type="warning"] .icon,
+            .container[data-type="warning"] .close-button:hover {
+                background-color: color-mix(in srgb, var(--mjo-color-warning) 25%, transparent);
+            }
+            .container[data-type="error"] .icon,
+            .container[data-type="error"] .close-button:hover {
+                background-color: color-mix(in srgb, var(--mjo-color-error) 25%, transparent);
+            }
             .close-button:focus-visible {
                 outline: 2px solid currentColor;
                 outline-offset: 2px;
             }
-            .close-button:active {
-                transform: scale(0.95);
-            }
             .close-button mjo-icon {
-                font-size: 1em;
+                font-size: 1.2em;
             }
             .detail {
                 position: relative;
