@@ -169,10 +169,10 @@ export class AlertController {
 
                 <h3>Types</h3>
                 <div class="component-showcase vertical">
-                    <mjo-alert type="info" message="This is an info alert" detail="Additional information about this alert."></mjo-alert>
-                    <mjo-alert type="success" message="Operation completed successfully" detail="Your changes have been saved."></mjo-alert>
-                    <mjo-alert type="warning" message="Warning: Please check your data" detail="Some fields may contain invalid information."></mjo-alert>
-                    <mjo-alert type="error" message="Error: Something went wrong" detail="Please try again or contact support."></mjo-alert>
+                    <mjo-alert type="info" message="This is an info alert" details="Additional information about this alert."></mjo-alert>
+                    <mjo-alert type="success" message="Operation completed successfully" details="Your changes have been saved."></mjo-alert>
+                    <mjo-alert type="warning" message="Warning: Please check your data" details="Some fields may contain invalid information."></mjo-alert>
+                    <mjo-alert type="error" message="Error: Something went wrong" details="Please try again or contact support."></mjo-alert>
                 </div>
 
                 <h3>Sizes</h3>
@@ -203,26 +203,26 @@ export class AlertController {
                     <mjo-alert
                         type="info"
                         message="System Update Available"
-                        detail="A new version of the software is available. <strong>Click here</strong> to download and install the update."
+                        details="A new version of the software is available. <strong>Click here</strong> to download and install the update."
                     ></mjo-alert>
                     <mjo-alert
                         type="success"
                         message="Profile Updated"
-                        detail="Your profile information has been successfully updated. Changes will be visible across all your connected devices."
+                        details="Your profile information has been successfully updated. Changes will be visible across all your connected devices."
                     ></mjo-alert>
                     <mjo-alert
                         type="warning"
                         message="Storage Almost Full"
-                        detail="You're using 95% of your storage space. Consider deleting old files or upgrading your plan to avoid service interruption."
+                        details="You're using 95% of your storage space. Consider deleting old files or upgrading your plan to avoid service interruption."
                     ></mjo-alert>
                 </div>
 
                 <h3>Closable Alerts</h3>
                 <div class="component-showcase vertical">
-                    <mjo-alert type="info" closable message="Closable info alert" detail="Click the X button to close this alert."></mjo-alert>
-                    <mjo-alert type="success" closable message="Closable success alert" detail="This alert can be dismissed by the user."></mjo-alert>
-                    <mjo-alert type="warning" closable message="Closable warning alert" detail="User can close this warning when they've read it."></mjo-alert>
-                    <mjo-alert type="error" closable message="Closable error alert" detail="This error message can be dismissed after reading."></mjo-alert>
+                    <mjo-alert type="info" closable message="Closable info alert" details="Click the X button to close this alert."></mjo-alert>
+                    <mjo-alert type="success" closable message="Closable success alert" details="This alert can be dismissed by the user."></mjo-alert>
+                    <mjo-alert type="warning" closable message="Closable warning alert" details="User can close this warning when they've read it."></mjo-alert>
+                    <mjo-alert type="error" closable message="Closable error alert" details="This error message can be dismissed after reading."></mjo-alert>
                 </div>
 
                 <h3>Simple Messages (No Detail)</h3>

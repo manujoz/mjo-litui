@@ -34,7 +34,7 @@ export class MjoAlert extends LitElement {
     @property({ type: String }) rounded: "none" | "small" | "medium" | "large" = "medium";
     @property({ type: String }) variant: "solid" | "flat" = "solid";
     @property({ type: String }) message: string = "";
-    @property({ type: String }) detail: string | TemplateResult<1> = "";
+    @property({ type: String }) details: string | TemplateResult<1> = "";
     @property({ type: Boolean }) closable: boolean = false;
     @property({ type: Boolean }) hideIcon: boolean = false;
 
@@ -74,7 +74,7 @@ export class MjoAlert extends LitElement {
                 aria-live=${isImportant ? "assertive" : this.ariaLive}
                 aria-atomic="true"
                 aria-labelledby=${messageId}
-                aria-describedby=${this.detail ? detailId : nothing}
+                aria-describedby=${this.details ? detailId : nothing}
             >
                 <div class="messageContainer" part="message-container">
                     ${!this.hideIcon && this.icon
@@ -83,7 +83,7 @@ export class MjoAlert extends LitElement {
                     <div class="message" id=${messageId} part="message">${this.message}</div>
                     ${this.closable && !this.persistent ? this.#renderCloseButton() : nothing}
                 </div>
-                ${this.detail ? html`<div class="detail" id=${detailId} ?data-icon=${!this.hideIcon} part="detail">${this.detail}</div>` : nothing}
+                ${this.details ? html`<div class="detail" id=${detailId} ?data-icon=${!this.hideIcon} part="detail">${this.details}</div>` : nothing}
             </div>
         `;
     }

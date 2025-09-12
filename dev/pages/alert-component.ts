@@ -48,7 +48,7 @@ export class AlertComponent extends LitElement {
                         .animation=${this.selectedAnimation}
                         .ariaLive=${this.selectedAriaLive}
                         .message=${this.currentMessage}
-                        .detail=${this.currentDetail}
+                        .details=${this.currentDetail}
                         .autoCloseDelay=${this.autoCloseDelay}
                         .animationDuration=${this.animationDuration}
                         ?closable=${this.isClosable}
@@ -232,29 +232,34 @@ export class AlertComponent extends LitElement {
                     <mjo-alert
                         type="success"
                         message="Operation completed successfully"
-                        detail="Your changes have been saved and applied."
+                        details="Your changes have been saved and applied."
                         closable
                     ></mjo-alert>
 
-                    <mjo-alert type="info" message="Information notice" detail="This is some important information you should know about." closable></mjo-alert>
+                    <mjo-alert
+                        type="info"
+                        message="Information notice"
+                        details="This is some important information you should know about."
+                        closable
+                    ></mjo-alert>
 
-                    <mjo-alert type="warning" message="Warning message" detail="Please review your settings before proceeding." closable></mjo-alert>
+                    <mjo-alert type="warning" message="Warning message" details="Please review your settings before proceeding." closable></mjo-alert>
 
-                    <mjo-alert type="error" message="Error occurred" detail="Something went wrong. Please try again or contact support." closable></mjo-alert>
+                    <mjo-alert type="error" message="Error occurred" details="Something went wrong. Please try again or contact support." closable></mjo-alert>
                 </showcases-grid>
             </section-container>
 
             <section-container label="Different Sizes">
                 <showcases-grid columns="3">
-                    <mjo-alert type="info" size="small" message="Small alert" detail="Compact size for less important messages." closable></mjo-alert>
+                    <mjo-alert type="info" size="small" message="Small alert" details="Compact size for less important messages." closable></mjo-alert>
 
-                    <mjo-alert type="info" size="medium" message="Medium alert" detail="Standard size for most use cases." closable></mjo-alert>
+                    <mjo-alert type="info" size="medium" message="Medium alert" details="Standard size for most use cases." closable></mjo-alert>
 
                     <mjo-alert
                         type="info"
                         size="large"
                         message="Large alert"
-                        detail="Prominent size for important messages that need attention."
+                        details="Prominent size for important messages that need attention."
                         closable
                     ></mjo-alert>
                 </showcases-grid>
@@ -262,13 +267,13 @@ export class AlertComponent extends LitElement {
 
             <section-container label="Border Radius Options">
                 <showcases-grid columns="4">
-                    <mjo-alert type="success" rounded="none" message="No radius" detail="Sharp corners for modern designs." closable></mjo-alert>
+                    <mjo-alert type="success" rounded="none" message="No radius" details="Sharp corners for modern designs." closable></mjo-alert>
 
-                    <mjo-alert type="info" rounded="small" message="Small radius" detail="Subtle rounded corners." closable></mjo-alert>
+                    <mjo-alert type="info" rounded="small" message="Small radius" details="Subtle rounded corners." closable></mjo-alert>
 
-                    <mjo-alert type="warning" rounded="medium" message="Medium radius" detail="Balanced rounded corners." closable></mjo-alert>
+                    <mjo-alert type="warning" rounded="medium" message="Medium radius" details="Balanced rounded corners." closable></mjo-alert>
 
-                    <mjo-alert type="error" rounded="large" message="Large radius" detail="Pronounced rounded corners." closable></mjo-alert>
+                    <mjo-alert type="error" rounded="large" message="Large radius" details="Pronounced rounded corners." closable></mjo-alert>
                 </showcases-grid>
             </section-container>
 
@@ -277,7 +282,7 @@ export class AlertComponent extends LitElement {
                     <mjo-alert
                         type="success"
                         message="Auto-close alert"
-                        detail="This alert will close automatically after 3 seconds."
+                        details="This alert will close automatically after 3 seconds."
                         autoClose
                         autoCloseDelay="3000"
                         closable
@@ -286,7 +291,7 @@ export class AlertComponent extends LitElement {
                     <mjo-alert
                         type="info"
                         message="Longer auto-close"
-                        detail="This alert will close automatically after 7 seconds."
+                        details="This alert will close automatically after 7 seconds."
                         autoClose
                         autoCloseDelay="7000"
                         closable
@@ -296,28 +301,28 @@ export class AlertComponent extends LitElement {
 
             <section-container label="Animation Types" description="Different animation styles for showing and hiding alerts.">
                 <showcases-grid columns="4">
-                    <mjo-alert type="info" animation="fade" message="Fade animation" detail="Smooth fade in/out effect." closable></mjo-alert>
+                    <mjo-alert type="info" animation="fade" message="Fade animation" details="Smooth fade in/out effect." closable></mjo-alert>
 
-                    <mjo-alert type="success" animation="slide" message="Slide animation" detail="Slide in/out from the side." closable></mjo-alert>
+                    <mjo-alert type="success" animation="slide" message="Slide animation" details="Slide in/out from the side." closable></mjo-alert>
 
-                    <mjo-alert type="warning" animation="scale" message="Scale animation" detail="Scale up/down effect." closable></mjo-alert>
+                    <mjo-alert type="warning" animation="scale" message="Scale animation" details="Scale up/down effect." closable></mjo-alert>
 
-                    <mjo-alert type="error" animation="none" message="No animation" detail="Instant show/hide without animation." closable></mjo-alert>
+                    <mjo-alert type="error" animation="none" message="No animation" details="Instant show/hide without animation." closable></mjo-alert>
                 </showcases-grid>
             </section-container>
 
             <section-container label="Special Options" description="Various configuration options and special behaviors.">
                 <showcases-grid columns="2">
-                    <mjo-alert type="warning" message="Alert without icon" detail="Icons can be hidden when not needed." hideIcon closable></mjo-alert>
+                    <mjo-alert type="warning" message="Alert without icon" details="Icons can be hidden when not needed." hideIcon closable></mjo-alert>
 
-                    <mjo-alert type="info" message="Non-closable alert" detail="Some alerts should not be dismissible by users."></mjo-alert>
+                    <mjo-alert type="info" message="Non-closable alert" details="Some alerts should not be dismissible by users."></mjo-alert>
                 </showcases-grid>
 
                 <showcases-grid columns="2">
                     <mjo-alert
                         type="success"
                         message="Focus on show"
-                        detail="This alert will receive focus when shown for accessibility."
+                        details="This alert will receive focus when shown for accessibility."
                         focusOnShow
                         closable
                     ></mjo-alert>
@@ -325,7 +330,7 @@ export class AlertComponent extends LitElement {
                     <mjo-alert
                         type="error"
                         message="Persistent alert"
-                        detail="This alert cannot be closed even with the close button."
+                        details="This alert cannot be closed even with the close button."
                         persistent
                         closable
                     ></mjo-alert>
@@ -334,12 +339,18 @@ export class AlertComponent extends LitElement {
 
             <section-container label="Accessibility Features" description="Screen reader and keyboard navigation support.">
                 <showcases-grid columns="3">
-                    <mjo-alert type="info" message="Polite announcement" detail="Screen readers announce this politely." ariaLive="polite" closable></mjo-alert>
+                    <mjo-alert
+                        type="info"
+                        message="Polite announcement"
+                        details="Screen readers announce this politely."
+                        ariaLive="polite"
+                        closable
+                    ></mjo-alert>
 
                     <mjo-alert
                         type="warning"
                         message="Assertive announcement"
-                        detail="Screen readers interrupt to announce this."
+                        details="Screen readers interrupt to announce this."
                         ariaLive="assertive"
                         closable
                     ></mjo-alert>
@@ -347,7 +358,7 @@ export class AlertComponent extends LitElement {
                     <mjo-alert
                         type="error"
                         message="No announcement"
-                        detail="Screen readers won't announce this automatically."
+                        details="Screen readers won't announce this automatically."
                         ariaLive="off"
                         closable
                     ></mjo-alert>
@@ -360,7 +371,7 @@ export class AlertComponent extends LitElement {
                         id="event-alert"
                         type="info"
                         message="Event tracking alert"
-                        detail="This alert tracks all lifecycle events."
+                        details="This alert tracks all lifecycle events."
                         closable
                         @mjo-alert:will-show=${this.#logEvent}
                         @mjo-alert:opened=${this.#logEvent}
