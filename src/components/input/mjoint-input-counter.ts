@@ -10,8 +10,8 @@ export class MjointInputCounter extends LitElement {
     @property({ type: Boolean }) regressive = false;
 
     render() {
-        return html`<span role="status" aria-live="polite">
-            <mjo-typography tag="none">${this.#setValue()}</mjo-typography>
+        return html`<span role="status" part="counter" aria-live="polite">
+            <mjo-typography tag="none" exportparts="typography: counter-text">${this.#setValue()}</mjo-typography>
         </span>`;
     }
 

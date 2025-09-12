@@ -79,13 +79,11 @@ import "mjo-litui/mjo-date-picker";
 @customElement("example-date-picker-range")
 export class ExampleDatePickerRange extends LitElement {
     @state() private value = "";
-    @state() private rangeDetails = "";
 
     render() {
         return html`
             <mjo-date-picker range label="Report range" clearabled @mjo-date-picker:change=${this.onChange}></mjo-date-picker>
             <p>Range: ${this.value || "(not selected)"}</p>
-            ${this.rangeDetails ? html`<p><small>${this.rangeDetails}</small></p>` : ""}
         `;
     }
 
@@ -94,94 +92,13 @@ export class ExampleDatePickerRange extends LitElement {
         const { startDate, endDate } = e.detail;
         if (startDate && endDate) {
             const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            this.rangeDetails = `Duration: ${days} days`;
+            console.log(`Duration: ${days} days`);
         }
     }
 }
 ```
 
-## Localized Display Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-date-picker";
-
-@customElement("example-date-picker-localized")
-export class ExampleDatePickerLocalized extends LitElement {
-    @state() private locale = "es";
-
-    render() {
-        return html`
-            <div style="display: flex; gap: 16px; align-items: end;">
-                <mjo-date-picker label="Fecha" .locale=${this.locale} display-mode="localized" placeholder="Selecciona fecha"></mjo-date-picker>
-                <select @change=${this.changeLocale}>
-                    <option value="es">Español</option>
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsch</option>
-                </select>
-            </div>
-        `;
-    }
-
-    private changeLocale(e: Event) {
-        this.locale = (e.target as HTMLSelectElement).value;
-    }
-}
-```
-
-## Accessibility Enhanced Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-date-picker";
-
-@customElement("example-date-picker-accessible")
-export class ExampleDatePickerAccessible extends LitElement {
-    @state() private selection = "";
-
-    render() {
-        return html`
-            <!-- Basic accessibility with screen reader support -->
-            <mjo-date-picker label="Meeting Date" aria-describedby="meeting-help" announce-selections @mjo-date-picker:change=${this.onSelectionChange}>
-            </mjo-date-picker>
-            <small id="meeting-help">Select a date for the team meeting. Use arrow keys to open the calendar.</small>
-
-            <!-- Advanced range picker with live announcements -->
-            <mjo-date-picker
-                range
-                label="Project Timeline"
-                aria-describedby="timeline-help"
-                aria-live="polite"
-                announce-selections
-                clearabled
-                @mjo-date-picker:change=${this.onRangeChange}
-            >
-            </mjo-date-picker>
-            <small id="timeline-help">Select start and end dates for the project phase.</small>
-
-            ${this.selection ? html` <div role="status" aria-live="polite">Current selection: ${this.selection}</div> ` : ""}
-        `;
-    }
-
-    private onSelectionChange(e: CustomEvent) {
-        this.selection = `Single date: ${e.detail.value}`;
-    }
-
-    private onRangeChange(e: CustomEvent) {
-        const { startDate, endDate, value } = e.detail;
-        if (startDate && endDate) {
-            this.selection = `Date range: ${value}`;
-        }
-    }
-}
-```
-
-## Form Integration & Validation
-
-Works seamlessly with `mjo-form` providing complete validation support.
+## Form Integration Example
 
 ```ts
 import { LitElement, html } from "lit";
@@ -197,18 +114,8 @@ export class ExampleDatePickerForm extends LitElement {
     render() {
         return html`
             <mjo-form @submit=${this.handleSubmit}>
-                <mjo-date-picker name="startDate" label="Event Start Date" required helperText="Required field"></mjo-date-picker>
-
-                <mjo-date-picker name="period" range label="Event Period" clearabled helperText="Optional date range"></mjo-date-picker>
-
-                <mjo-date-picker
-                    name="deadline"
-                    label="Deadline"
-                    min-date="2025-01-01"
-                    max-date="2025-12-31"
-                    helperText="Must be within 2025"
-                ></mjo-date-picker>
-
+                <mjo-date-picker name="startDate" label="Event Start Date" required></mjo-date-picker>
+                <mjo-date-picker name="period" range label="Event Period" clearabled></mjo-date-picker>
                 <mjo-button type="submit">Submit Form</mjo-button>
             </mjo-form>
 
@@ -225,21 +132,11 @@ export class ExampleDatePickerForm extends LitElement {
 
     private handleSubmit(e: CustomEvent) {
         const { response } = e.detail;
-
         if (response.error) {
             console.error("Form validation error:", response.errmsg);
             return;
         }
-
         this.submittedData = response.data;
-        console.log("Form submitted successfully:", response.data);
-
-        // Reset loading state
-        setTimeout(() => {
-            if (response.submitButton) {
-                response.submitButton.loading = false;
-            }
-        }, 1500);
     }
 }
 ```
@@ -253,27 +150,28 @@ Submitted values follow these formats:
 
 ## Attributes / Properties
 
-| Name                  | Type                             | Default     | Reflects | Description                                                        |
-| --------------------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------ |
-| `name`                | `string \| undefined`            | `undefined` | no       | Form field name (enables inclusion in `mjo-form` data)             |
-| `value`               | `string`                         | `""`        | no       | Current value (single: `YYYY-MM-DD`; range: `start/end`)           |
-| `range`               | `boolean`                        | `false`     | yes      | Enables range mode (`isRange` property)                            |
-| `locale`              | `string`                         | `"en"`      | no       | Locale passed to calendar & Intl formatting                        |
-| `min-date`            | `string \| undefined`            | `undefined` | no       | Minimum selectable date (ISO format)                               |
-| `max-date`            | `string \| undefined`            | `undefined` | no       | Maximum selectable date (ISO format)                               |
-| `disabled-dates`      | `string[] \| undefined`          | `undefined` | no       | Array of disabled dates in ISO format                              |
-| `label`               | `string \| undefined`            | `undefined` | no       | Floating label of inner textfield                                  |
-| `placeholder`         | `string \| undefined`            | `undefined` | no       | Placeholder text (shown when empty)                                |
-| `disabled`            | `boolean`                        | `false`     | yes      | Disables user interaction                                          |
-| `size`                | `"small" \| "medium" \| "large"` | `"medium"`  | no       | Size token forwarded to textfield                                  |
-| `color`               | `"primary" \| "secondary"`       | `"primary"` | no       | Color token forwarded to textfield                                 |
-| `clearabled`          | `boolean`                        | `false`     | no       | Shows a Clear button in dropdown when value present                |
-| `close-on-select`     | `boolean`                        | `true`      | no       | Closes dropdown after selection (single or after range completion) |
-| `required`            | `boolean`                        | `false`     | yes      | Marks as required for form validation                              |
-| `display-mode`        | `"iso" \| "localized"`           | `"iso"`     | no       | Display format: ISO raw value or locale-formatted text             |
-| `aria-describedby`    | `string`                         | `""`        | no       | Links to external elements describing the picker                   |
-| `aria-live`           | `string`                         | `""`        | no       | Live region politeness level for screen reader announcements       |
-| `announce-selections` | `boolean`                        | `false`     | no       | Enables automatic screen reader announcements for date selections  |
+| Name                           | Type                             | Default     | Reflects | Description                                                        |
+| ------------------------------ | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------ |
+| `name`                         | `string \| undefined`            | `undefined` | no       | Form field name (enables inclusion in `mjo-form` data)             |
+| `value`                        | `string`                         | `""`        | no       | Current value (single: `YYYY-MM-DD`; range: `start/end`)           |
+| `range`                        | `boolean`                        | `false`     | yes      | Enables range mode (`isRange` property)                            |
+| `locale`                       | `string`                         | `"en"`      | no       | Locale passed to calendar & Intl formatting                        |
+| `min-date`                     | `string \| undefined`            | `undefined` | no       | Minimum selectable date (ISO format)                               |
+| `max-date`                     | `string \| undefined`            | `undefined` | no       | Maximum selectable date (ISO format)                               |
+| `disabled-dates`               | `string[] \| undefined`          | `undefined` | no       | Array of disabled dates in ISO format                              |
+| `label`                        | `string \| undefined`            | `undefined` | no       | Floating label of inner textfield                                  |
+| `placeholder`                  | `string \| undefined`            | `undefined` | no       | Placeholder text (shown when empty)                                |
+| `disabled`                     | `boolean`                        | `false`     | yes      | Disables user interaction                                          |
+| `size`                         | `"small" \| "medium" \| "large"` | `"medium"`  | no       | Size token forwarded to textfield                                  |
+| `color`                        | `"primary" \| "secondary"`       | `"primary"` | no       | Color token forwarded to textfield                                 |
+| `clearabled`                   | `boolean`                        | `false`     | no       | Shows a Clear button in dropdown when value present                |
+| `close-on-select`              | `boolean`                        | `true`      | no       | Closes dropdown after selection (single or after range completion) |
+| `required`                     | `boolean`                        | `false`     | yes      | Marks as required for form validation                              |
+| `display-mode`                 | `"iso" \| "localized"`           | `"iso"`     | no       | Display format: ISO raw value or locale-formatted text             |
+| `aria-describedby`             | `string`                         | `""`        | no       | Links to external elements describing the picker                   |
+| `aria-live`                    | `string`                         | `"polite"`  | no       | Live region politeness level for screen reader announcements       |
+| `aria-label`                   | `string \| null`                 | `null`      | no       | Accessible label for the date picker                               |
+| `disabled-announce-selections` | `boolean`                        | `false`     | no       | Disables automatic screen reader announcements for date selections |
 
 ### Validation Properties
 
@@ -326,32 +224,66 @@ Inherits all validation properties from `FormMixin`:
 | `getValue()`    | none       | `string` | Returns current raw value                   |
 | `setValue(v)`   | `string`   | `void`   | Sets value (triggers internal state update) |
 
-### Method Usage Example
+## CSS Parts
 
-```ts
-@customElement("example-date-picker-methods")
-export class ExampleDatePickerMethods extends LitElement {
-    @query("mjo-date-picker") picker!: HTMLElement & {
-        openPicker(): void;
-        closePicker(): void;
-        clear(): void;
-        getValue(): string;
-        setValue(value: string): void;
-    };
+The component exposes CSS parts through `exportparts` from its internal textfield and calendar components:
 
-    render() {
-        return html`
-            <mjo-date-picker label="Controlled Picker"></mjo-date-picker>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-                <mjo-button size="small" @click=${() => this.picker.openPicker()}> Open </mjo-button>
-                <mjo-button size="small" @click=${() => this.picker.closePicker()}> Close </mjo-button>
-                <mjo-button size="small" variant="flat" @click=${() => this.picker.clear()}> Clear </mjo-button>
-                <mjo-button size="small" @click=${() => this.picker.setValue("2025-12-25")}> Set Christmas </mjo-button>
-            </div>
-        `;
-    }
-}
-```
+### Textfield Parts (via exportparts)
+
+| Part                                    | Element                  | Description                                 |
+| --------------------------------------- | ------------------------ | ------------------------------------------- |
+| `textfield-container`                   | Main textfield container | The container wrapping the entire textfield |
+| `textfield-input`                       | Input element            | The native input element                    |
+| `textfield-label-container`             | Label container          | Container for the floating label            |
+| `textfield-label-truncate-container`    | Label truncate container | Container for label truncation behavior     |
+| `textfield-label-truncate-wrapper`      | Label truncate wrapper   | Wrapper for label truncation                |
+| `textfield-prefix-text`                 | Prefix text container    | Container for prefix text                   |
+| `textfield-suffix-text`                 | Suffix text container    | Container for suffix text                   |
+| `textfield-start-icon-container`        | Start icon container     | Container for start icon                    |
+| `textfield-start-icon`                  | Start icon element       | The start icon element                      |
+| `textfield-end-icon-container`          | End icon container       | Container for end icon                      |
+| `textfield-end-icon`                    | End icon element         | The end icon element                        |
+| `textfield-start-image-container`       | Start image container    | Container for start image                   |
+| `textfield-start-image`                 | Start image element      | The start image element                     |
+| `textfield-end-image-container`         | End image container      | Container for end image                     |
+| `textfield-end-image`                   | End image element        | The end image element                       |
+| `textfield-clear-button`                | Clear button             | The clear button element                    |
+| `textfield-clear-icon`                  | Clear icon               | Icon within the clear button                |
+| `textfield-password-button`             | Password toggle button   | Password visibility toggle button           |
+| `textfield-password-icon`               | Password toggle icon     | Icon within the password toggle button      |
+| `textfield-helper-text-container`       | Helper text container    | Container for helper text                   |
+| `textfield-helper-text-typography`      | Helper text typography   | Typography element for helper text          |
+| `textfield-helper-text-error-message`   | Error message element    | Error message typography element            |
+| `textfield-helper-text-success-message` | Success message element  | Success message typography element          |
+| `textfield-helper-text-icon`            | Helper text icon         | Icon element in helper text                 |
+| `textfield-counter-container`           | Counter container        | Container for character counter             |
+| `textfield-counter-text`                | Counter text             | Character counter text element              |
+
+### Calendar Parts (via exportparts)
+
+| Part                                | Element                        | Description                                        |
+| ----------------------------------- | ------------------------------ | -------------------------------------------------- |
+| `calendar-container`                | Main calendar container        | The root calendar wrapper                          |
+| `calendar-header`                   | Calendar header                | Header area with navigation and selectors          |
+| `calendar-navigation`               | Navigation container           | Container for navigation buttons                   |
+| `calendar-nav-button`               | Navigation buttons             | Previous/next month navigation buttons             |
+| `calendar-selectors-container`      | Selectors container            | Container for month/year selector buttons          |
+| `calendar-selector-button`          | Month/year selector buttons    | Clickable month and year selector buttons          |
+| `calendar-grid`                     | Calendar grid container        | Main calendar grid layout                          |
+| `calendar-week-days-container`      | Week days header container     | Container for weekday headers                      |
+| `calendar-week-day`                 | Individual weekday header      | Individual weekday header cell                     |
+| `calendar-days-container`           | Days grid container            | Container for calendar day cells                   |
+| `calendar-day`                      | Individual day cell            | Individual date cell                               |
+| `calendar-day-today`                | Today's date cell              | Applied to today's date (used with calendar-day)   |
+| `calendar-day-selected`             | Selected day cell              | Applied to selected dates (used with calendar-day) |
+| `calendar-month-picker-container`   | Month picker overlay           | Container for month selection overlay              |
+| `calendar-month-picker-button`      | Month picker buttons           | Individual month selection buttons                 |
+| `calendar-year-picker-container`    | Year picker overlay            | Container for year selection overlay               |
+| `calendar-year-picker-navigation`   | Year picker navigation         | Navigation controls in year picker                 |
+| `calendar-year-picker-nav-button`   | Year picker navigation buttons | Previous/next decade navigation buttons            |
+| `calendar-year-picker-decade-label` | Decade range label             | Label showing current decade range                 |
+| `calendar-year-picker-grid`         | Year picker grid               | Grid layout for year selection buttons             |
+| `calendar-year-picker-button`       | Year picker buttons            | Individual year selection buttons                  |
 
 ## Display Formatting
 
@@ -359,19 +291,18 @@ The `display-mode` property controls how dates are presented to users while main
 
 ### ISO Mode (`display-mode="iso"`)
 
--   Shows raw ISO values: `2025-03-15` or `2025-03-15/2025-03-20`
--   Direct, unambiguous format
--   Good for technical interfaces
+Shows raw ISO values: `2025-03-15` or `2025-03-15/2025-03-20`. Good for technical interfaces.
 
 ### Localized Mode (`display-mode="localized"`)
 
--   Uses `Intl.DateTimeFormat(locale, { dateStyle: "medium" })`
--   Examples:
-    -   `en`: `Mar 15, 2025`
-    -   `es`: `15 mar 2025`
-    -   `fr`: `15 mars 2025`
+Uses `Intl.DateTimeFormat(locale, { dateStyle: "medium" })`:
+
+-   `en`: `Mar 15, 2025`
+-   `es`: `15 mar 2025`
+-   `fr`: `15 mars 2025`
 -   Range format uses en dash: `Mar 15, 2025 – Mar 20, 2025`
--   Falls back to ISO format if locale is unsupported
+
+Falls back to ISO format if locale is unsupported.
 
 ## Theming
 
@@ -405,21 +336,21 @@ export class ExampleThemedDatePicker extends LitElement {
 
 The component exposes these CSS custom properties for styling:
 
-| Variable                                   | Default                                             | Purpose                          |
-| ------------------------------------------ | --------------------------------------------------- | -------------------------------- |
-| `--mjo-date-picker-panel-padding`          | `var(--mjo-space-small, 8px)`                       | Panel padding                    |
-| `--mjo-date-picker-panel-background-color` | `var(--mjo-background-color)`                       | Panel background                 |
-| `--mjo-date-picker-panel-radius`           | `var(--mjo-radius-medium, 8px)`                     | Panel border-radius              |
-| `--mjo-date-picker-panel-box-shadow`       | `var(--mjo-box-shadow, 0 2px 6px rgba(0,0,0,0.15))` | Panel shadow                     |
-| `--mjo-date-picker-sr-only-position`       | `absolute`                                          | Screen reader only text position |
-| `--mjo-date-picker-sr-only-width`          | `1px`                                               | Screen reader only text width    |
-| `--mjo-date-picker-sr-only-height`         | `1px`                                               | Screen reader only text height   |
-| `--mjo-date-picker-sr-only-padding`        | `0`                                                 | Screen reader only text padding  |
-| `--mjo-date-picker-sr-only-margin`         | `-1px`                                              | Screen reader only text margin   |
-| `--mjo-date-picker-sr-only-overflow`       | `hidden`                                            | Screen reader only text overflow |
-| `--mjo-date-picker-sr-only-clip`           | `rect(0, 0, 0, 0)`                                  | Screen reader only text clipping |
-| `--mjo-date-picker-sr-only-white-space`    | `nowrap`                                            | Screen reader only text wrapping |
-| `--mjo-date-picker-sr-only-border`         | `0`                                                 | Screen reader only text border   |
+| Variable                                   | Default                                             | Purpose                       |
+| ------------------------------------------ | --------------------------------------------------- | ----------------------------- |
+| `--mjo-date-picker-panel-padding`          | `var(--mjo-space-small, 8px)`                       | Panel padding                 |
+| `--mjo-date-picker-panel-background-color` | `var(--mjo-background-color)`                       | Panel background color        |
+| `--mjo-date-picker-panel-radius`           | `var(--mjo-radius-medium, 8px)`                     | Panel border-radius           |
+| `--mjo-date-picker-panel-box-shadow`       | `var(--mjo-box-shadow, 0 2px 6px rgba(0,0,0,0.15))` | Panel shadow                  |
+| `--mjo-date-picker-high-contrast-border`   | `1px solid`                                         | Border for high contrast mode |
+
+**Note**: The date picker also inherits CSS variables from its child components:
+
+-   **mjo-textfield**: All textfield theming variables for input styling
+-   **mjo-calendar**: All calendar theming variables for calendar appearance
+-   **mjo-dropdown**: Dropdown positioning and behavior variables
+
+For a complete list of inherited variables, see the documentation for [mjo-textfield](./mjo-textfield.md), [mjo-calendar](./mjo-calendar.md), and [mjo-dropdown](./mjo-dropdown.md).
 
 ### Global Theme Configuration
 
@@ -512,7 +443,7 @@ The component provides comprehensive accessibility features:
 -   Implements the **combobox pattern** with `role="combobox"`
 -   Proper `aria-expanded` state management for dropdown visibility
 -   `aria-controls` linking to the calendar panel
--   `aria-describedby` support for external descriptions or helper text
+-   `aria-describedby` support for external descriptions
 -   Optional `aria-live` regions for screen reader announcements
 
 ### Keyboard Navigation
@@ -520,10 +451,7 @@ The component provides comprehensive accessibility features:
 -   **Tab**: Navigate to the date picker
 -   **Enter/Space**: Open the dropdown calendar
 -   **Escape**: Close the dropdown (when open)
--   **Arrow Keys**:
-    -   **Down Arrow**: Opens the dropdown when closed
-    -   **Up Arrow**: Opens the dropdown when closed (when closed)
-    -   Within calendar: Delegated to `mjo-calendar` for date navigation
+-   **Arrow Keys**: Open dropdown when closed, navigate dates when open
 
 ### Screen Reader Support
 
@@ -531,125 +459,70 @@ The component provides comprehensive accessibility features:
 -   Live announcements for date selections and changes
 -   Clear announcement of selected dates and ranges
 -   Range separator uses proper en dash character (–) for clarity
--   Optional screen reader feedback via `announce-selections` property
-
-### Focus Management
-
--   Maintains focus on the textfield when dropdown opens
--   Returns focus appropriately when dropdown closes
--   Clear button is properly focusable and labeled
--   Focus outline styles support high contrast mode
+-   Optional screen reader feedback via `disabled-announce-selections` property
 
 ### Enhanced Properties for Accessibility
 
-| Property              | Type      | Default | Description                                        |
-| --------------------- | --------- | ------- | -------------------------------------------------- |
-| `aria-describedby`    | `string`  | `""`    | Links to external elements describing the picker   |
-| `aria-live`           | `string`  | `""`    | Live region politeness for announcements           |
-| `announce-selections` | `boolean` | `false` | Enables screen reader announcements for selections |
+| Property                       | Type             | Default    | Description                                         |
+| ------------------------------ | ---------------- | ---------- | --------------------------------------------------- |
+| `aria-describedby`             | `string`         | `""`       | Links to external elements describing the picker    |
+| `aria-live`                    | `string`         | `"polite"` | Live region politeness for announcements            |
+| `aria-label`                   | `string \| null` | `null`     | Accessible label for the date picker                |
+| `disabled-announce-selections` | `boolean`        | `false`    | Disables screen reader announcements for selections |
 
-## Advanced Examples
-
-### Date Range with Duration Display
+## Advanced Example
 
 ```ts
-@customElement("example-advanced-range")
-export class ExampleAdvancedRange extends LitElement {
-    @state() private startDate?: Date;
-    @state() private endDate?: Date;
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-date-picker";
+
+@customElement("example-date-picker-advanced")
+export class ExampleDatePickerAdvanced extends LitElement {
+    @state() private startDate = "";
+    @state() private endDate = "";
     @state() private duration = 0;
 
     render() {
         return html`
-            <mjo-date-picker range label="Project Timeline" clearabled @mjo-date-picker:change=${this.handleRangeChange}></mjo-date-picker>
-
-            ${this.duration > 0
-                ? html`
-                      <div style="margin-top: 12px; padding: 8px; background: #f0f9ff; border-radius: 4px;">
-                          <strong>Duration:</strong> ${this.duration} days
-                          <br />
-                          <small> From ${this.startDate?.toLocaleDateString()} to ${this.endDate?.toLocaleDateString()} </small>
-                      </div>
-                  `
-                : ""}
-        `;
-    }
-
-    private handleRangeChange(e: CustomEvent) {
-        const { startDate, endDate } = e.detail;
-        this.startDate = startDate;
-        this.endDate = endDate;
-
-        if (startDate && endDate) {
-            this.duration = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-        }
-    }
-}
-```
-
-### Conditional Date Constraints
-
-```ts
-@customElement("example-conditional-constraints")
-export class ExampleConditionalConstraints extends LitElement {
-    @state() private startDate = "";
-    @state() private endDate = "";
-
-    render() {
-        return html`
             <div style="display: grid; gap: 16px;">
-                <mjo-date-picker label="Start Date" max-date="2025-12-31" @mjo-date-picker:change=${this.handleStartChange}></mjo-date-picker>
+                <mjo-date-picker label="Start Date" max-date="2025-12-31" @mjo-date-picker:change=${this.handleStartChange}> </mjo-date-picker>
 
                 <mjo-date-picker
                     label="End Date"
                     .min-date=${this.startDate || "2025-01-01"}
                     max-date="2025-12-31"
                     ?disabled=${!this.startDate}
-                    @date-picker-change=${this.handleEndChange}
-                ></mjo-date-picker>
+                    @mjo-date-picker:change=${this.handleEndChange}
+                >
+                </mjo-date-picker>
+
+                ${this.duration > 0
+                    ? html` <div style="padding: 8px; background: #f0f9ff; border-radius: 4px;"><strong>Duration:</strong> ${this.duration} days</div> `
+                    : ""}
             </div>
         `;
     }
 
     private handleStartChange(e: CustomEvent) {
         this.startDate = e.detail.value;
+        this.calculateDuration();
     }
 
     private handleEndChange(e: CustomEvent) {
         this.endDate = e.detail.value;
+        this.calculateDuration();
+    }
+
+    private calculateDuration() {
+        if (this.startDate && this.endDate) {
+            const start = new Date(this.startDate);
+            const end = new Date(this.endDate);
+            this.duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+        }
     }
 }
 ```
-
-## Behavioral Notes
-
-### Dropdown Behavior
-
--   Portal-based dropdown prevents clipping issues
--   Closes on outside clicks (document click handling)
--   Internal clicks on calendar or Clear button do not close dropdown
--   In range mode, dropdown stays open until range is complete (unless `close-on-select="false"`)
--   Opens on Enter, Space, or Down/Up arrow keys for enhanced keyboard accessibility
-
-### Accessibility Behavior
-
--   Screen reader announcements occur immediately after value changes
--   ARIA attributes update dynamically based on dropdown state
--   Focus management maintains accessibility during dropdown operations
--   High contrast mode is supported through CSS custom properties
-
-### State Management
-
--   Component maintains internal calendar state through `calendarRef`
--   Value updates trigger form data synchronization when `name` is provided
--   Events are emitted after state is completely updated
--   Accessibility announcements are queued and delivered after state changes
-
-### Performance Considerations
-
--   Calendar instances are created on-demand within dropdown
--   Uses `createRef` for efficient calendar reference management
--   Minimal re-rendering through strategic use of `@state()` properties
 
 ## Browser Support
 
@@ -662,52 +535,27 @@ The component relies on these modern web features:
 
 ## Integration Notes
 
-### With mjo-form
-
--   Automatically registers with parent `mjo-form` when `name` is provided
--   Participates in form validation lifecycle
--   Values submitted in consistent ISO format
--   Supports all form validation attributes
-
-### With mjo-calendar
-
--   Delegates calendar functionality to internal `mjo-calendar` instance
--   Inherits calendar theming and localization features
--   Supports all calendar constraints (min/max dates, disabled dates)
-
-### With mjo-dropdown
-
--   Uses dropdown for portal-based positioning
--   Inherits dropdown behavior and styling
--   Supports custom CSS and responsive positioning
+-   **With mjo-form**: Automatically registers when `name` is provided, participates in validation lifecycle
+-   **With mjo-calendar**: Delegates calendar functionality, inherits theming and localization
+-   **With mjo-dropdown**: Uses portal-based positioning, inherits dropdown behavior
 
 ## Troubleshooting
 
-### Common Issues
-
 **Date not displaying in localized format:**
 
--   Ensure `display-mode="localized"` is set
--   Check that the specified `locale` is supported by the browser
--   Component will fallback to ISO format for unsupported locales
+-   Ensure `display-mode="localized"` is set and locale is supported
 
 **Validation not working:**
 
--   Ensure the date picker has a `name` attribute when used in forms
--   Check that validation attributes are properly set (e.g., `required`, `isdate`)
--   Verify parent form is `mjo-form` for custom validation
+-   Ensure date picker has `name` attribute and parent is `mjo-form`
 
-**Dropdown not positioning correctly:**
+**Dropdown positioning issues:**
 
--   Check for CSS transforms or overflow hidden on parent containers
 -   Component uses portal rendering to avoid most positioning issues
--   Ensure adequate viewport space for dropdown
 
 **Range selection not completing:**
 
 -   Component requires both start and end dates before emitting change events
--   Use `close-on-select="false"` if you want dropdown to stay open
--   Clear button resets range and allows new selection
 
 ## Summary
 

@@ -12,8 +12,8 @@ export class MjointInputLabel extends LitElement {
 
     render() {
         return html`${this.label
-            ? html`<div class="container" data-color=${this.color} ?data-focused=${this.focused} ?data-error=${this.error}>
-                  <mjo-text-nowrap>${this.label}</mjo-text-nowrap>
+            ? html`<div class="container" part="container" data-color=${this.color} ?data-focused=${this.focused} ?data-error=${this.error}>
+                  <mjo-text-nowrap exportparts="container: truncate-container, wrapper: truncate-wrapper">${this.label}</mjo-text-nowrap>
               </div>`
             : nothing}`;
     }

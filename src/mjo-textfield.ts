@@ -27,6 +27,45 @@ import "./components/input/mjoint-input-helper-text.js";
 import "./components/input/mjoint-input-label.js";
 import "./mjo-icon.js";
 
+/**
+ * @summary Versatile single-line text input component with comprehensive features including validation,
+ * icons, prefix/suffix text, password visibility toggle, and full form integration.
+ *
+ * @fires mjo-textfield-input - Fired on every input change with detailed value and validation information
+ * @fires mjo-textfield-change - Fired when value changes and field loses focus
+ * @fires mjo-textfield-focus - Fired when the textfield gains focus
+ * @fires mjo-textfield-blur - Fired when the textfield loses focus
+ * @fires mjo-textfield-keyup - Fired on keyup events (Enter key submits parent form)
+ * @fires mjo-textfield-clear - Fired when the clear button is clicked
+ * @fires mjo-textfield-password-toggle - Fired when password visibility is toggled
+ *
+ * @csspart container - The main textfield container
+ * @csspart input - The native input element
+ * @csspart label-container - The label container (via exportparts)
+ * @csspart label-truncate-container - The label truncate container (via exportparts)
+ * @csspart label-truncate-wrapper - The label truncate wrapper (via exportparts)
+ * @csspart prefix-text - Container for prefix text
+ * @csspart suffix-text - Container for suffix text
+ * @csspart start-icon-container - Container for start icon
+ * @csspart start-icon - The start icon element (via exportparts)
+ * @csspart end-icon-container - Container for end icon
+ * @csspart end-icon - The end icon element (via exportparts)
+ * @csspart start-image-container - Container for start image
+ * @csspart start-image - The start image element
+ * @csspart end-image-container - Container for end image
+ * @csspart end-image - The end image element
+ * @csspart clear-button - The clear button element
+ * @csspart clear-icon - The clear icon element (via exportparts)
+ * @csspart password-button - The password toggle button element
+ * @csspart password-icon - The password toggle icon element (via exportparts)
+ * @csspart helper-text-container - Helper text container (via exportparts)
+ * @csspart helper-text-typography - Helper text typography (via exportparts)
+ * @csspart helper-text-error-message - Error message element (via exportparts)
+ * @csspart helper-text-success-message - Success message element (via exportparts)
+ * @csspart helper-text-icon - Helper text icon element (via exportparts)
+ * @csspart counter-container - Character counter container (via exportparts)
+ * @csspart counter-text - Character counter text (via exportparts)
+ */
 @customElement("mjo-textfield")
 export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: String }) autoCapitalize?: MjoTextfieldAutoCapitalize;
@@ -72,6 +111,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         return html`${this.label
                 ? html`<mjoint-input-label
                       id=${ifDefined(labelId)}
+                      exportparts="container: label-container, truncate-container: label-truncate-container, truncate-wrapper: label-truncate-wrapper"
                       color=${this.color}
                       label=${this.label}
                       ?focused=${this.isFocused}
@@ -81,17 +121,24 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                 : nothing}
             <div
                 class="container"
+                part="container"
                 data-color=${this.color}
                 ?data-focused=${this.isFocused}
                 data-size=${this.size}
                 ?data-error=${this.error}
                 ?data-disabled=${this.disabled}
             >
-                ${this.prefixText ? html`<div class="prefixText">${this.prefixText}</div>` : nothing}
-                ${this.startIcon && html`<div class="icon startIcon" aria-hidden="true"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
-                ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
+                ${this.prefixText ? html`<div class="prefixText" part="prefix-text">${this.prefixText}</div>` : nothing}
+                ${this.startIcon &&
+                html`<div class="icon startIcon" part="start-icon-container" aria-hidden="true">
+                    <mjo-icon exportparts="icon: start-icon" src=${this.startIcon}></mjo-icon>
+                </div>`}
+                ${this.startImage && !this.startIcon
+                    ? html`<div class="image startImage" part="start-image-container"><img src=${this.startImage} part="start-image" alt="Input image" /></div>`
+                    : nothing}
                 <input
                     id=${ifDefined(this.id)}
+                    part="input"
                     autocapitalize=${ifDefined(this.autoCapitalize)}
                     autocomplete=${ifDefined(this.autoComplete)}
                     ?disabled=${this.disabled}
@@ -122,39 +169,69 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                     ? html`<button
                           type="button"
                           class="icon endIcon clearabled"
+                          part="clear-button"
                           data-dropdown-noopen
                           ?data-visible=${this.value.length > 0}
                           @click=${this.#handleClearabled}
                           aria-label="Clear input"
                           tabindex="-1"
                       >
-                          <mjo-icon src=${AiFillCloseCircle} aria-hidden="true"></mjo-icon>
+                          <mjo-icon src=${AiFillCloseCircle} exportparts="icon: clear-icon" aria-hidden="true"></mjo-icon>
                       </button>`
                     : nothing}
                 ${this.endIcon && !this.clearabled && this.type !== "password"
-                    ? html`<div class="icon endIcon" aria-hidden="true"><mjo-icon src=${this.endIcon}></mjo-icon></div>`
+                    ? html`<div class="icon endIcon" part="end-icon-container" aria-hidden="true">
+                          <mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>
+                      </div>`
                     : nothing}
-                ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Input image" /></div>` : nothing}
+                ${this.endImage && !this.endIcon
+                    ? html`<div class="image endImage" part="end-image-container"><img src=${this.endImage} part="end-image" alt="Input image" /></div>`
+                    : nothing}
                 ${this.isPassword
                     ? this.type === "password"
-                        ? html`<button type="button" class="icon endIcon passIcon" @click=${this.#handlePassword} aria-label="Show password" tabindex="-1">
-                              <mjo-icon src=${AiFillEye} aria-hidden="true"></mjo-icon>
+                        ? html`<button
+                              type="button"
+                              class="icon endIcon passIcon"
+                              part="password-button"
+                              @click=${this.#handlePassword}
+                              aria-label="Show password"
+                              tabindex="-1"
+                          >
+                              <mjo-icon src=${AiFillEye} exportparts="icon: password-icon" aria-hidden="true"></mjo-icon>
                           </button>`
-                        : html`<button type="button" class="icon endIcon passIcon" @click=${this.#handlePassword} aria-label="Hide password" tabindex="-1">
-                              <mjo-icon src=${AiFillEyeInvisible} aria-hidden="true"></mjo-icon>
+                        : html`<button
+                              type="button"
+                              class="icon endIcon passIcon"
+                              part="password-button"
+                              @click=${this.#handlePassword}
+                              aria-label="Hide password"
+                              tabindex="-1"
+                          >
+                              <mjo-icon src=${AiFillEyeInvisible} exportparts="icon: password-icon" aria-hidden="true"></mjo-icon>
                           </button>`
                     : nothing}
-                ${this.suffixText ? html`<div class="prefixText">${this.suffixText}</div>` : nothing}
+                ${this.suffixText ? html`<div class="prefixText" part="suffix-text">${this.suffixText}</div>` : nothing}
             </div>
             <div class="helper" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
-                    ? html`<mjoint-input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                    ? html`<mjoint-input-helper-text
+                          id=${ifDefined(helperTextId)}
+                          exportparts="
+                            container: helper-text-container,
+                            helper-text: helper-text-typography,
+                            error-message: helper-text-error-message,
+                            success-message: helper-text-success-message,
+                            icon: helper-text-icon
+                          "
+                          errormsg=${ifDefined(this.errormsg)}
+                          successmsg=${ifDefined(this.successmsg)}
                           >${this.helperText}</mjoint-input-helper-text
                       >`
                     : nothing}
                 ${this.counter
                     ? html`<mjoint-input-counter
                           count=${this.valueLength}
+                          exportparts="counter: counter-container, counter-text: counter-text"
                           max=${ifDefined(this.maxlength)}
                           regressive
                           ?data-error=${this.error}

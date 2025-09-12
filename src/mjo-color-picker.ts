@@ -18,6 +18,34 @@ import { ColorFormat, convertColor } from "./utils/colors.js";
 import "./components/input/mjoint-input-helper-text.js";
 import "./components/input/mjoint-input-label.js";
 
+/**
+ * @summary Advanced color picker component with multiple formats, accessibility features, and form integration.
+ *
+ * @description The mjo-color-picker component provides a comprehensive color selection interface that supports
+ * multiple color formats (hex, rgb, rgba, hsl, hsla, hwb), includes real-time value display, and offers
+ * extensive accessibility features. It integrates seamlessly with the mjo-form system and provides
+ * detailed event feedback for color changes and format switching.
+ *
+ * @fires change - Standard HTML change event when color selection is finalized
+ * @fires input - Standard HTML input event during color value changes
+ * @fires mjo-color-picker:change - Custom event with detailed color change information
+ * @fires mjo-color-picker:input - Custom event with detailed input change information
+ * @fires mjo-color-picker:focus - Fired when the color picker gains focus
+ * @fires mjo-color-picker:blur - Fired when the color picker loses focus
+ * @fires mjo-color-picker:format-change - Fired when the color format is changed
+ *
+ * @csspart container - The main color picker container
+ * @csspart color-picker - The visual color display area
+ * @csspart value-display - The color value text display (when showValue is true)
+ * @csspart label-container - The label container (via mjoint-input-label)
+ * @csspart label-truncate-container - The label truncate container (via mjoint-input-label)
+ * @csspart label-truncate-wrapper - The label truncate wrapper (via mjoint-input-label)
+ * @csspart helper-text-container - The helper text container (via mjoint-input-helper-text)
+ * @csspart helper-text-typography - The helper text typography (via mjoint-input-helper-text)
+ * @csspart helper-text-error-message - The error message container (via mjoint-input-helper-text)
+ * @csspart helper-text-success-message - The success message container (via mjoint-input-helper-text)
+ * @csspart helper-text-icon - The helper text icon (via mjoint-input-helper-text)
+ */
 @customElement("mjo-color-picker")
 export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IFormMixin, IInputErrorMixin, IThemeMixin {
     @property({ type: String }) color: "primary" | "secondary" = "primary";
@@ -40,38 +68,19 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
 
     type = "colorpicker";
 
-    private get computedAriaLabel(): string {
-        if (this.ariaLabel) return this.ariaLabel;
-        if (this.label) return this.label;
-        return "Color picker";
-    }
-
-    private get computedAriaInvalid(): "true" | "false" | undefined {
-        if (this.error || this.errormsg) return "true";
-        return this.ariaInvalid as "true" | "false" | undefined;
-    }
-
-    private get computedAriaDescribedBy(): string | undefined {
-        const describedBy: string[] = [];
-
-        if (this.ariaDescribedBy) {
-            describedBy.push(this.ariaDescribedBy);
-        }
-
-        if (this.helperText && !this.errormsg && !this.successmsg) {
-            describedBy.push("helper-text");
-        }
-
-        return describedBy.length > 0 ? describedBy.join(" ") : undefined;
-    }
-
     render() {
         return html`
             ${this.label
-                ? html`<mjoint-input-label color=${this.color} label=${this.label} ?error=${this.error} ?data-disabled=${this.disabled}></mjoint-input-label>`
+                ? html`<mjoint-input-label
+                      exportparts="container: label-container, truncate-container: label-truncate-container, truncate-wrapper: label-truncate-wrapper"
+                      color=${this.color}
+                      label=${this.label}
+                      ?error=${this.error}
+                      ?data-disabled=${this.disabled}
+                  ></mjoint-input-label>`
                 : nothing}
-            <div class="container" ?data-rounded=${this.rounded} data-size=${this.size} ?data-disabled=${this.disabled}>
-                <div class="color-picker" role="presentation" aria-hidden="true"></div>
+            <div class="container" part="container" ?data-rounded=${this.rounded} data-size=${this.size} ?data-disabled=${this.disabled}>
+                <div class="color-picker" part="color-picker" role="presentation" aria-hidden="true"></div>
                 <input
                     @change=${this.#handleChange}
                     @input=${this.#handleInput}
@@ -81,16 +90,25 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
                     name=${ifDefined(this.name)}
                     ?disabled=${this.disabled}
                     value=${this.value}
-                    aria-label=${this.computedAriaLabel}
+                    aria-label=${this.#computedAriaLabel}
                     aria-errormessage=${this.errormsg || nothing}
-                    aria-invalid=${ifDefined(this.computedAriaInvalid)}
+                    aria-invalid=${ifDefined(this.#computedAriaInvalid)}
                     aria-required=${ifDefined(this.required)}
-                    aria-describedby=${ifDefined(this.computedAriaDescribedBy)}
+                    aria-describedby=${ifDefined(this.#computedAriaDescribedBy)}
                 />
             </div>
-            ${this.showValue ? html`<div class="value-display" aria-live="polite">${this.getFormattedValue(this.format)}</div>` : nothing}
+            ${this.showValue ? html`<div class="value-display" part="value-display" aria-live="polite">${this.getFormattedValue(this.format)}</div>` : nothing}
             ${this.helperText || this.errormsg || this.successmsg
-                ? html`<mjoint-input-helper-text errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                ? html`<mjoint-input-helper-text
+                      exportparts="
+                            container: helper-text-container,
+                            helper-text: helper-text-typography,
+                            error-message: helper-text-error-message,
+                            success-message: helper-text-success-message,
+                            icon: helper-text-icon
+                        "
+                      errormsg=${ifDefined(this.errormsg)}
+                      successmsg=${ifDefined(this.successmsg)}
                       >${this.helperText}</mjoint-input-helper-text
                   >`
                 : nothing}
@@ -143,6 +161,31 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
             console.warn(`Failed to convert color ${this.value} to format ${format}:`, error);
             return this.value;
         }
+    }
+
+    get #computedAriaLabel(): string {
+        if (this.ariaLabel) return this.ariaLabel;
+        if (this.label) return this.label;
+        return "Color picker";
+    }
+
+    get #computedAriaInvalid(): "true" | "false" | undefined {
+        if (this.error || this.errormsg) return "true";
+        return this.ariaInvalid as "true" | "false" | undefined;
+    }
+
+    get #computedAriaDescribedBy(): string | undefined {
+        const describedBy: string[] = [];
+
+        if (this.ariaDescribedBy) {
+            describedBy.push(this.ariaDescribedBy);
+        }
+
+        if (this.helperText && !this.errormsg && !this.successmsg) {
+            describedBy.push("helper-text");
+        }
+
+        return describedBy.length > 0 ? describedBy.join(" ") : undefined;
     }
 
     #announceColorChange(): void {
@@ -204,7 +247,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
 
     #handleFocus() {
         this.dispatchEvent(
-            new CustomEvent("mjo-color-picker:focues", {
+            new CustomEvent("mjo-color-picker:focus", {
                 detail: { element: this },
                 bubbles: true,
             }),
@@ -360,7 +403,7 @@ declare global {
     interface HTMLElementEventMap {
         "mjo-color-picker:input": MjoColorPickerInputEvent;
         "mjo-color-picker:change": MjoColorPickerChangeEvent;
-        "mjo-color-picker:focues": MjoColorPickerFocusEvent;
+        "mjo-color-picker:focus": MjoColorPickerFocusEvent;
         "mjo-color-picker:blur": MjoColorPickerBlurEvent;
         "mjo-color-picker:format-change": MjoColorPickerFormatChangeEvent;
     }

@@ -409,6 +409,8 @@ export interface MjoInputTheme {
     paddingLarge?: string;
     prefixTextBackgroundColor?: string;
     prefixTextColor?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
     borderRadius?: string;
 }
 
@@ -485,6 +487,7 @@ export interface MjoDatePickerTheme {
     panelBoxShadow?: string;
     panelPadding?: string;
     clearButtonColor?: string;
+    highContrastBorder?: string;
 }
 
 export interface MjoTableTheme {
@@ -520,18 +523,23 @@ export interface MjoTextareaTheme {
 }
 
 export interface MjoColorPickerTheme {
-    height?: string;
     sizeSmall?: string;
     sizeMedium?: string;
     sizeLarge?: string;
     borderStyle?: string;
     borderWidth?: string;
     borderColor?: string;
+    borderColorFocus?: string;
     borderRadius?: string;
     boxShadow?: string;
+    boxShadowFocus?: string;
+    transition?: string;
     labelColor?: string;
     labelFontSize?: string;
     labelFontWeight?: string;
+    valueColor?: string;
+    valueFontSize?: string;
+    valueFontWeight?: string;
 }
 
 export interface TypographyTheme {

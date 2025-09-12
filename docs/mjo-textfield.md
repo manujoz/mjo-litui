@@ -518,18 +518,15 @@ The textfield integrates with validation systems and displays error/success stat
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-textfield";
-import "mjo-litui/mjo-button";
 
 @customElement("example-textfield-validation")
 export class ExampleTextfieldValidation extends LitElement {
     @state() email = "";
-    @state() username = "";
-    @state() emailError = "";
-    @state() usernameError = "";
-    @state() emailSuccess = "";
-    @state() usernameSuccess = "";
 
     render() {
+        const isValidEmail = this.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email);
+        const showError = this.email && !isValidEmail;
+
         return html`
             <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <mjo-textfield
@@ -537,80 +534,14 @@ export class ExampleTextfieldValidation extends LitElement {
                     type="email"
                     placeholder="your@email.com"
                     .value=${this.email}
-                    @input=${this.#handleEmailInput}
-                    ?error=${!!this.emailError}
-                    errormsg=${this.emailError}
-                    successmsg=${this.emailSuccess}
-                    helperText="We'll send a verification email"
+                    @input=${(e: CustomEvent) => (this.email = (e.target as any).value)}
+                    ?error=${showError}
+                    errormsg=${showError ? "Please enter a valid email address" : ""}
+                    successmsg=${isValidEmail ? "Email format is valid!" : ""}
+                    helperText="Enter a valid email address"
                 ></mjo-textfield>
-
-                <mjo-textfield
-                    label="Username"
-                    placeholder="Choose a unique username"
-                    .value=${this.username}
-                    @input=${this.#handleUsernameInput}
-                    ?error=${!!this.usernameError}
-                    errormsg=${this.usernameError}
-                    successmsg=${this.usernameSuccess}
-                    helperText="3-20 characters, letters and numbers only"
-                    counter
-                    maxlength="20"
-                ></mjo-textfield>
-
-                <div style="display: flex; gap: 1rem;">
-                    <mjo-button @click=${this.#validateEmail}> Validate Email </mjo-button>
-                    <mjo-button @click=${this.#validateUsername}> Check Username </mjo-button>
-                </div>
             </div>
         `;
-    }
-
-    #handleEmailInput(e: CustomEvent) {
-        this.email = (e.target as any).value;
-        this.#clearEmailValidation();
-    }
-
-    #handleUsernameInput(e: CustomEvent) {
-        this.username = (e.target as any).value;
-        this.#clearUsernameValidation();
-    }
-
-    #validateEmail() {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!this.email) {
-            this.emailError = "Email is required";
-            this.emailSuccess = "";
-        } else if (!emailRegex.test(this.email)) {
-            this.emailError = "Please enter a valid email address";
-            this.emailSuccess = "";
-        } else {
-            this.emailError = "";
-            this.emailSuccess = "Email format is valid!";
-        }
-    }
-
-    #validateUsername() {
-        const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
-        if (!this.username) {
-            this.usernameError = "Username is required";
-            this.usernameSuccess = "";
-        } else if (!usernameRegex.test(this.username)) {
-            this.usernameError = "Username must be 3-20 characters, letters and numbers only";
-            this.usernameSuccess = "";
-        } else {
-            this.usernameError = "";
-            this.usernameSuccess = "Username is available!";
-        }
-    }
-
-    #clearEmailValidation() {
-        this.emailError = "";
-        this.emailSuccess = "";
-    }
-
-    #clearUsernameValidation() {
-        this.usernameError = "";
-        this.usernameSuccess = "";
     }
 }
 ```
@@ -811,6 +742,8 @@ export class ExampleTextfieldAdvanced extends LitElement {
 | `disabled`       | `boolean`                                                           | `false`     | Whether the textfield is disabled                   |
 | `endIcon`        | `string`                                                            | `undefined` | Icon to display at the end of the textfield         |
 | `endImage`       | `string`                                                            | `undefined` | Image URL to display at the end of the textfield    |
+| `error`          | `boolean`                                                           | `false`     | Whether the textfield is in error state             |
+| `errormsg`       | `string`                                                            | `undefined` | Error message to display                            |
 | `fullwidth`      | `boolean`                                                           | `false`     | Whether the textfield should take full width        |
 | `helperText`     | `string`                                                            | `undefined` | Helper text displayed below the textfield           |
 | `label`          | `string`                                                            | `undefined` | Label text for the textfield                        |
@@ -829,7 +762,10 @@ export class ExampleTextfieldAdvanced extends LitElement {
 | `startIcon`      | `string`                                                            | `undefined` | Icon to display at the start of the textfield       |
 | `startImage`     | `string`                                                            | `undefined` | Image URL to display at the start of the textfield  |
 | `step`           | `number`                                                            | `undefined` | Step value for number inputs                        |
+| `success`        | `boolean`                                                           | `false`     | Whether the textfield is in success state           |
+| `successmsg`     | `string`                                                            | `undefined` | Success message to display                          |
 | `suffixText`     | `string`                                                            | `undefined` | Text to display after the input                     |
+| `theme`          | `Record<string, string>`                                            | `undefined` | Component-level theme override object               |
 | `type`           | `'text' \| 'password' \| 'email' \| 'number' \| 'tel' \| 'url'`     | `'text'`    | Input type                                          |
 | `value`          | `string`                                                            | `''`        | Current value of the textfield                      |
 
@@ -852,24 +788,47 @@ All events are dispatched with enhanced detail data for better form integration 
 Each event includes comprehensive detail information:
 
 ```ts
-// Example: mjo-input event detail
+// mjo-textfield-input event detail
 {
-    value: string; // Current input value
-    previousValue: string; // Previous value before change
-    length: number; // Character length of value
-    isEmpty: boolean; // Whether input is empty
-    validity: {
-        // Validation state
-        valid: boolean;
-        valueMissing: boolean;
-        typeMismatch: boolean;
-        tooLong: boolean;
-        tooShort: boolean;
-        rangeUnderflow: boolean;
-        rangeOverflow: boolean;
-        stepMismatch: boolean;
-    }
-    formData: FormData; // Current form data if in form
+    element: MjoTextfield;
+    value: string;
+    previousValue: string;
+    inputType: string;
+}
+
+// mjo-textfield-change event detail
+{
+    element: MjoTextfield;
+    value: string;
+    previousValue: string;
+}
+
+// mjo-textfield-focus/blur event detail
+{
+    element: MjoTextfield;
+    value: string;
+}
+
+// mjo-textfield-keyup event detail
+{
+    element: MjoTextfield;
+    key: string;
+    code: string;
+    value: string;
+    originalEvent: KeyboardEvent;
+}
+
+// mjo-textfield-clear event detail
+{
+    element: MjoTextfield;
+    previousValue: string;
+}
+
+// mjo-textfield-password-toggle event detail
+{
+    element: MjoTextfield;
+    visible: boolean;
+    type: "password" | "text";
 }
 ```
 
@@ -886,13 +845,46 @@ Each event includes comprehensive detail information:
 | `removeError()`              | `void`   | Clear error state                           |
 | `getError()`                 | `string` | Get current error message                   |
 
+## CSS Parts
+
+The textfield component exposes several CSS parts for advanced styling:
+
+| Name                          | Description                                        |
+| ----------------------------- | -------------------------------------------------- |
+| `container`                   | The main textfield container                       |
+| `input`                       | The native input element                           |
+| `label-container`             | The label container element                        |
+| `label-truncate-container`    | The label truncate container                       |
+| `label-truncate-wrapper`      | The label truncate wrapper                         |
+| `prefix-text`                 | Container for prefix text                          |
+| `suffix-text`                 | Container for suffix text                          |
+| `start-icon-container`        | Container for start icon                           |
+| `start-icon`                  | The start icon element (via exportparts)           |
+| `end-icon-container`          | Container for end icon                             |
+| `end-icon`                    | The end icon element (via exportparts)             |
+| `start-image-container`       | Container for start image                          |
+| `start-image`                 | The start image element                            |
+| `end-image-container`         | Container for end image                            |
+| `end-image`                   | The end image element                              |
+| `clear-button`                | The clear button element                           |
+| `clear-icon`                  | The clear icon element (via exportparts)           |
+| `password-button`             | The password toggle button element                 |
+| `password-icon`               | The password toggle icon element (via exportparts) |
+| `helper-text-container`       | Helper text container (via exportparts)            |
+| `helper-text-typography`      | Helper text typography (via exportparts)           |
+| `helper-text-error-message`   | Error message element (via exportparts)            |
+| `helper-text-success-message` | Success message element (via exportparts)          |
+| `helper-text-icon`            | Helper text icon element (via exportparts)         |
+| `counter-container`           | Character counter container (via exportparts)      |
+| `counter-text`                | Character counter text (via exportparts)           |
+
 ## CSS Custom Properties
 
 The textfield component provides extensive customization through CSS custom properties:
 
 | Name                                       | Default                                                       | Description                             |
 | ------------------------------------------ | ------------------------------------------------------------- | --------------------------------------- |
-| `--mjo-input-background-color`             | `var(--mjo-background-color-high, #ffffff)`                   | Background color of the textfield       |
+| `--mjo-input-background-color`             | `var(--mjo-background-color-card-low, #ffffff)`               | Background color of the textfield       |
 | `--mjo-input-border-color`                 | `var(--mjo-border-color, #dddddd)`                            | Border color of the textfield           |
 | `--mjo-input-border-color-hover`           | `#cccccc`                                                     | Border color on hover                   |
 | `--mjo-input-border-style`                 | `solid`                                                       | Border style                            |
@@ -957,35 +949,6 @@ export class ExampleTextfieldTheme extends LitElement {
 }
 ```
 
-For component-specific theming using the `theme` property:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-textfield";
-
-@customElement("example-textfield-custom-theme")
-export class ExampleTextfieldCustomTheme extends LitElement {
-    render() {
-        return html`
-            <mjo-textfield
-                label="Custom themed textfield"
-                placeholder="Custom styling applied"
-                .theme=${{
-                    backgroundColor: "#fef3c7",
-                    borderColor: "#f59e0b",
-                    borderColorHover: "#d97706",
-                    color: "#92400e",
-                    fontSize: "18px",
-                    padding: "16px 20px",
-                }}
-                helperText="This textfield has component-level custom styling"
-            ></mjo-textfield>
-        `;
-    }
-}
-```
-
 ## Best Practices
 
 1. **Labels**: Always provide meaningful labels for accessibility
@@ -1037,70 +1000,6 @@ The textfield component follows WCAG accessibility guidelines and includes compr
 -   Error states use `role="alert"` for immediate announcement
 -   Error messages are connected via `aria-describedby`
 -   Visual error indicators are supplemented with screen reader text
-
-### Usage Example with Enhanced Accessibility
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-textfield";
-
-@customElement("example-textfield-accessibility")
-export class ExampleTextfieldAccessibility extends LitElement {
-    @state() email = "";
-    @state() password = "";
-
-    render() {
-        return html`
-            <form @submit=${this.#handleSubmit}>
-                <fieldset>
-                    <legend>Login Information</legend>
-
-                    <mjo-textfield
-                        name="email"
-                        label="Email Address"
-                        type="email"
-                        required
-                        placeholder="your@email.com"
-                        .value=${this.email}
-                        @mjo-input=${this.#handleEmailInput}
-                        helperText="We'll never share your email address"
-                        clearabled
-                        aria-describedby="email-help"
-                    ></mjo-textfield>
-
-                    <mjo-textfield
-                        name="password"
-                        label="Password"
-                        type="password"
-                        required
-                        minlength="8"
-                        .value=${this.password}
-                        @mjo-input=${this.#handlePasswordInput}
-                        helperText="Password must be at least 8 characters"
-                        aria-describedby="password-help"
-                    ></mjo-textfield>
-
-                    <button type="submit">Sign In</button>
-                </fieldset>
-            </form>
-        `;
-    }
-
-    #handleEmailInput(e: CustomEvent) {
-        this.email = e.detail.value;
-    }
-
-    #handlePasswordInput(e: CustomEvent) {
-        this.password = e.detail.value;
-    }
-
-    #handleSubmit(e: Event) {
-        e.preventDefault();
-        console.log("Form submitted with accessibility support");
-    }
-}
-```
 
 ## Browser Compatibility
 

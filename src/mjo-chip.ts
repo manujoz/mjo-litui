@@ -1,3 +1,5 @@
+import { MjoChipClickEvent, MjoChipCloseEvent } from "./types/mjo-chip.js";
+
 import { css, html, LitElement, nothing, PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -8,8 +10,19 @@ import { pause } from "./utils/utils.js";
 
 import "./mjo-icon.js";
 import "./mjo-typography.js";
-import { MjoChipClickEvent, MjoChipCloseEvent } from "./types/mjo-chip.js";
 
+/**
+ * @summary Flexible chip component for displaying compact information with multiple variants, colors, and interactive capabilities.
+ *
+ * @fires mjo-chip:click - Fired when the chip is clicked (when clickable is true)
+ * @fires mjo-chip:close - Fired when the close button is clicked (when closable is true)
+ *
+ * @csspart container - The main chip container element
+ * @csspart label - The text label element (via exportparts from mjo-typography)
+ * @csspart start-icon - The start icon element (via exportparts from mjo-icon)
+ * @csspart end-icon - The end icon element (via exportparts from mjo-icon)
+ * @csspart close-icon - The close button icon element (via exportparts from mjo-icon)
+ */
 @customElement("mjo-chip")
 export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) closable = false;
@@ -24,10 +37,49 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) value?: string;
     @property({ type: String }) variant: "solid" | "bordered" | "light" | "flat" | "faded" | "shadow" | "dot" = "solid";
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
+    @property({ type: String, attribute: "aria-label", reflect: true }) override ariaLabel: string | null = null;
 
     @query(".container") private container!: HTMLElement;
 
-    private get computedAriaLabel() {
+    render() {
+        return html`<div
+            class="container"
+            part="container"
+            role=${ifDefined(this.clickable || this.closable ? "button" : undefined)}
+            aria-label=${this.#computedAriaLabel}
+            aria-describedby=${ifDefined(this.ariaDescribedby)}
+            aria-disabled=${this.disabled ? "true" : "false"}
+            tabindex=${this.#computedTabIndex}
+            data-color=${this.color}
+            data-size=${this.size}
+            data-variant=${this.variant}
+            data-radius=${this.radius}
+            ?data-closable=${this.closable}
+            ?data-clickable=${this.clickable}
+            ?data-disabled=${this.disabled}
+            @click=${this.#handleChipClick}
+            @keydown=${this.#handleKeydown}
+        >
+            ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
+            ${this.startIcon ? html`<mjo-icon src=${this.startIcon} exportparts="icon: start-icon"></mjo-icon>` : nothing}
+            <mjo-typography tag="none" class="label" exportparts="typography: label">${this.label}</mjo-typography>
+            ${this.endIcon ? html`<mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>` : nothing}
+            ${this.closable
+                ? html`<mjo-icon
+                      class="close"
+                      exportparts="icon: close-icon"
+                      src=${AiFillCloseCircle}
+                      @click=${this.#handleCloseClick}
+                      @keydown=${this.#handleCloseKeydown}
+                      role="button"
+                      tabindex=${this.disabled ? "-1" : "0"}
+                      aria-label="Close ${this.label}"
+                  ></mjo-icon>`
+                : nothing}
+        </div>`;
+    }
+
+    get #computedAriaLabel() {
         if (this.ariaLabel) return this.ariaLabel;
 
         if (this.clickable && this.closable) {
@@ -41,45 +93,9 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         return `Chip: ${this.label}`;
     }
 
-    private get computedTabIndex() {
+    get #computedTabIndex() {
         if (this.clickable) return 0;
         return -1;
-    }
-
-    render() {
-        return html`<div
-            class="container"
-            role=${ifDefined(this.clickable || this.closable ? "button" : undefined)}
-            aria-label=${this.computedAriaLabel}
-            aria-describedby=${ifDefined(this.ariaDescribedby)}
-            aria-disabled=${this.disabled ? "true" : "false"}
-            tabindex=${this.computedTabIndex}
-            data-color=${this.color}
-            data-size=${this.size}
-            data-variant=${this.variant}
-            data-radius=${this.radius}
-            ?data-closable=${this.closable}
-            ?data-clickable=${this.clickable}
-            ?data-disabled=${this.disabled}
-            @click=${this.#handleChipClick}
-            @keydown=${this.#handleKeydown}
-        >
-            ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
-            ${this.startIcon ? html`<mjo-icon src=${this.startIcon}></mjo-icon>` : nothing}
-            <mjo-typography tag="none" class="label">${this.label}</mjo-typography>
-            ${this.endIcon ? html`<mjo-icon src=${this.endIcon}></mjo-icon>` : nothing}
-            ${this.closable
-                ? html`<mjo-icon
-                      class="close"
-                      src=${AiFillCloseCircle}
-                      @click=${this.#handleCloseClick}
-                      @keydown=${this.#handleCloseKeydown}
-                      role="button"
-                      tabindex=${this.disabled ? "-1" : "0"}
-                      aria-label="Close ${this.label}"
-                  ></mjo-icon>`
-                : nothing}
-        </div>`;
     }
 
     #handleKeydown(event: KeyboardEvent) {
@@ -222,7 +238,12 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 backgroundColor = "transparent";
                 textColor = currentColor;
                 borderColor = currentColor;
-                borderWidth = this.size === "small" ? "1px" : this.size === "large" ? "3px" : "2px";
+                borderWidth =
+                    this.size === "small"
+                        ? "var(--mjo-chip-border-width-size-small, 1px)"
+                        : this.size === "large"
+                          ? "var(--mjo-chip-border-width-size-large, 3px)"
+                          : "var(--mjo-chip-border-width-size-medium, 2px)";
                 closeIconColor = currentColor;
                 break;
             }
@@ -262,7 +283,12 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 backgroundColor = "transparent";
                 textColor = "var(--mjo-foreground-color)";
                 borderColor = "var(--mjo-foreground-color-low)";
-                borderWidth = "2px";
+                borderWidth =
+                    this.size === "small"
+                        ? "var(--mjo-chip-border-width-size-small, 1px)"
+                        : this.size === "large"
+                          ? "var(--mjo-chip-border-width-size-large, 3px)"
+                          : "var(--mjo-chip-border-width-size-medium, 2px)";
                 closeIconColor = currentColor;
                 // For dot variant, the dot color should match the chip's color
                 break;

@@ -33,7 +33,7 @@ export class MjointDropdownContainer extends ThemeMixin(LitElement) implements I
             ? html`<style type="text/css">
                   ${this.css.toString().replace(/\s+/g, " ")}
               </style>`
-            : nothing}${this.html ? html`<div class="container" role="dialog" aria-modal="false">${this.html}</div>` : nothing}`;
+            : nothing}${this.html ? html`<div class="container" part="dropdown-container" role="dialog" aria-modal="false">${this.html}</div>` : nothing}`;
     }
 
     connectedCallback(): void {

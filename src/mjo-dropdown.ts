@@ -32,8 +32,8 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     /** Optional list of CSS selectors that, if any element in the click composedPath matches, will prevent opening (only for behaviour='click'). */
     @property({ type: Array }) suppressOpenSelectors?: string[];
 
-    dropdownContainer?: MjointDropdownContainer | null;
-    openTimestamp = 0;
+    $dropdownContainer?: MjointDropdownContainer | null;
+    #openTimestamp = 0;
     #lastFocusedElement?: HTMLElement;
 
     render() {
@@ -42,7 +42,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
             tabindex="0"
             aria-haspopup="true"
             aria-expanded=${this.isOpen}
-            aria-controls=${this.dropdownContainer?.id || ""}
+            aria-controls=${this.$dropdownContainer?.id || ""}
         ></slot>`;
     }
 
@@ -62,45 +62,27 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         super.updated(changedProperties);
 
         if (changedProperties.has("html") && this.html) {
-            if (!this.dropdownContainer) return;
-            this.dropdownContainer.html = this.html;
+            if (!this.$dropdownContainer) return;
+            this.$dropdownContainer.html = this.html;
         }
         if (changedProperties.has("css") && this.css) {
-            if (!this.dropdownContainer) return;
-            this.dropdownContainer.css = this.css;
+            if (!this.$dropdownContainer) return;
+            this.$dropdownContainer.css = this.css;
         }
         if (changedProperties.has("preventScroll") && this.preventScroll) {
-            if (!this.dropdownContainer) return;
-            this.dropdownContainer.preventScroll = this.preventScroll;
+            if (!this.$dropdownContainer) return;
+            this.$dropdownContainer.preventScroll = this.preventScroll;
         }
         if (changedProperties.has("width") && this.width !== undefined) {
-            if (!this.dropdownContainer) return;
+            if (!this.$dropdownContainer) return;
 
-            this.dropdownContainer.style.display = this.width;
+            this.$dropdownContainer.style.display = this.width;
         }
 
         if (changedProperties.has("behaviour") && this.behaviour !== undefined) {
             this.#removeListeners();
             this.#setListeners();
         }
-    }
-
-    #setListeners() {
-        if (this.behaviour === "hover") {
-            this.addEventListener("mouseenter", this.#handleOpen);
-            this.dropdownContainer?.addEventListener("mouseleave", this.#handleClose);
-        } else {
-            this.addEventListener("click", this.#handleOpen);
-        }
-
-        document.addEventListener("click", this.#handleClose);
-    }
-
-    #removeListeners() {
-        this.removeEventListener("mouseenter", this.#handleOpen);
-        this.dropdownContainer?.removeEventListener("mouseleave", this.#handleClose);
-        this.removeEventListener("click", this.#handleOpen);
-        document.removeEventListener("click", this.#handleClose);
     }
 
     open() {
@@ -112,19 +94,19 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     }
 
     updatePosition() {
-        this.dropdownContainer?.updatePosition();
+        this.$dropdownContainer?.updatePosition();
     }
 
     scrollToTop(top: number) {
-        this.dropdownContainer?.scrollToTop(top);
+        this.$dropdownContainer?.scrollToTop(top);
     }
 
     getScroll() {
-        return this.dropdownContainer?.getScroll() ?? { top: 0, left: 0 };
+        return this.$dropdownContainer?.getScroll() ?? { top: 0, left: 0 };
     }
 
     getHeigth() {
-        return this.dropdownContainer?.offsetHeight ?? 0;
+        return this.$dropdownContainer?.offsetHeight ?? 0;
     }
 
     #open() {
@@ -135,17 +117,17 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
             this.#lastFocusedElement = document.activeElement as HTMLElement;
         }
 
-        if (this.fullwidth && this.dropdownContainer) {
-            this.dropdownContainer.width = `${this.offsetWidth}px`;
+        if (this.fullwidth && this.$dropdownContainer) {
+            this.$dropdownContainer.width = `${this.offsetWidth}px`;
         }
 
-        if (this.height && this.dropdownContainer) {
-            this.dropdownContainer.height = this.height;
+        if (this.height && this.$dropdownContainer) {
+            this.$dropdownContainer.height = this.height;
         }
 
         this.isOpen = true;
-        this.dropdownContainer?.open();
-        this.openTimestamp = Date.now();
+        this.$dropdownContainer?.open();
+        this.#openTimestamp = Date.now();
 
         // Dispatch custom event with new naming convention
         const openEvent = new CustomEvent("mjo-dropdown:open", {
@@ -162,17 +144,17 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         if (!this.isOpen) return;
         const path = ev?.composedPath();
         const insideHost = !!path?.includes(this);
-        const insideContainer = !!(this.dropdownContainer && path?.includes(this.dropdownContainer));
+        const insideContainer = !!(this.$dropdownContainer && path?.includes(this.$dropdownContainer));
 
-        if (insideHost && this.behaviour === "click" && Date.now() - this.openTimestamp < 100) return;
+        if (insideHost && this.behaviour === "click" && Date.now() - this.#openTimestamp < 100) return;
 
         if (insideContainer && this.preventCloseOnInnerClick) return;
 
         if (insideHost && !insideContainer) return;
 
         this.isOpen = false;
-        this.dropdownContainer?.close();
-        this.openTimestamp = 0;
+        this.$dropdownContainer?.close();
+        this.#openTimestamp = 0;
 
         // Restore focus to the trigger element
         if (this.restoreFocus && this.#lastFocusedElement) {
@@ -195,31 +177,49 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     #createDropdown() {
         const themeElement = searchClosestElement(this as LitElement, "mjo-theme") as MjoTheme | null;
 
-        this.dropdownContainer = document.createElement("mjoint-drawer-container") as unknown as MjointDropdownContainer;
-        this.dropdownContainer.host = this;
-        this.dropdownContainer.html = this.html;
-        this.dropdownContainer.css = this.css;
-        this.dropdownContainer.preventScroll = this.preventScroll;
-        this.dropdownContainer.position = this.position;
+        this.$dropdownContainer = document.createElement("mjoint-drawer-container") as unknown as MjointDropdownContainer;
+        this.$dropdownContainer.host = this;
+        this.$dropdownContainer.html = this.html;
+        this.$dropdownContainer.css = this.css;
+        this.$dropdownContainer.preventScroll = this.preventScroll;
+        this.$dropdownContainer.position = this.position;
 
-        if (this.theme) this.dropdownContainer.theme = this.theme as Record<string, string>;
+        if (this.theme) this.$dropdownContainer.theme = this.theme as Record<string, string>;
 
-        if (this.width) this.dropdownContainer.style.width = this.width;
+        if (this.width) this.$dropdownContainer.style.width = this.width;
 
         // Set up ARIA attributes
         const dropdownId = `dropdown-${Math.random().toString(36).substring(2, 9)}`;
-        this.dropdownContainer.id = dropdownId;
+        this.$dropdownContainer.id = dropdownId;
 
         if (themeElement) {
             const themeClone = document.createElement("mjo-theme") as MjoTheme;
             themeClone.config = themeElement.config;
             themeClone.theme = themeElement.theme;
             themeClone.scope = "local";
-            themeClone.appendChild(this.dropdownContainer);
+            themeClone.appendChild(this.$dropdownContainer);
             document.body.appendChild(themeClone);
         } else {
-            document.body.appendChild(this.dropdownContainer);
+            document.body.appendChild(this.$dropdownContainer);
         }
+    }
+
+    #setListeners() {
+        if (this.behaviour === "hover") {
+            this.addEventListener("mouseenter", this.#handleOpen);
+            this.$dropdownContainer?.addEventListener("mouseleave", this.#handleClose);
+        } else {
+            this.addEventListener("click", this.#handleOpen);
+        }
+
+        document.addEventListener("click", this.#handleClose);
+    }
+
+    #removeListeners() {
+        this.removeEventListener("mouseenter", this.#handleOpen);
+        this.$dropdownContainer?.removeEventListener("mouseleave", this.#handleClose);
+        this.removeEventListener("click", this.#handleOpen);
+        document.removeEventListener("click", this.#handleClose);
     }
 
     #handleKeydown = (ev: KeyboardEvent) => {
