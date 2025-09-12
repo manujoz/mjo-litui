@@ -241,6 +241,8 @@ export interface MjoAccordionTheme {
 }
 
 export interface MjoAlertTheme {
+    borderWidth?: string;
+    messageFontWeight?: string;
     space?: string;
     animationDuration?: string;
 }

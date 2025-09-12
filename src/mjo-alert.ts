@@ -32,6 +32,7 @@ export class MjoAlert extends LitElement {
     @property({ type: String }) type: "success" | "info" | "warning" | "error" = "info";
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) rounded: "none" | "small" | "medium" | "large" = "medium";
+    @property({ type: String }) variant: "solid" | "flat" = "solid";
     @property({ type: String }) message: string = "";
     @property({ type: String }) detail: string | TemplateResult<1> = "";
     @property({ type: Boolean }) closable: boolean = false;
@@ -66,6 +67,7 @@ export class MjoAlert extends LitElement {
                 part="container"
                 data-type=${this.type}
                 data-size=${this.size}
+                data-variant=${this.variant}
                 data-rounded=${this.rounded}
                 data-animation=${this.animation}
                 role="alert"
@@ -380,23 +382,39 @@ export class MjoAlert extends LitElement {
             }
             .container[data-type="success"] {
                 background-color: var(--mjo-color-green-50);
-                border: solid 1px var(--mjo-color-success);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-color-success);
                 color: var(--mjo-color-success);
             }
             .container[data-type="error"] {
                 background-color: var(--mjo-color-red-50);
-                border: solid 1px var(--mjo-color-error);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-color-error);
                 color: var(--mjo-color-error);
             }
             .container[data-type="warning"] {
                 background-color: var(--mjo-color-yellow-50);
-                border: solid 1px var(--mjo-color-warning);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-color-warning);
                 color: var(--mjo-color-warning);
             }
             .container[data-type="info"] {
                 background-color: var(--mjo-color-blue-50);
-                border: solid 1px var(--mjo-color-info);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-color-info);
                 color: var(--mjo-color-info);
+            }
+            .container[data-variant="flat"][data-type="success"] {
+                background-color: color-mix(in srgb, var(--mjo-color-success) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="error"] {
+                background-color: color-mix(in srgb, var(--mjo-color-error) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="warning"] {
+                background-color: color-mix(in srgb, var(--mjo-color-warning) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="info"] {
+                background-color: color-mix(in srgb, var(--mjo-color-info) 10%, transparent);
+                border: none;
             }
             .container[data-size="small"] {
                 font-size: 0.8em;
@@ -418,7 +436,7 @@ export class MjoAlert extends LitElement {
                 position: relative;
                 display: flex;
                 flex-flow: row nowrap;
-                gap: var(--mjo-space-xsmall);
+                gap: var(--mjo-space-medium);
                 align-items: flex-start;
             }
             .icon {
@@ -428,9 +446,24 @@ export class MjoAlert extends LitElement {
                 align-self: stretch;
                 display: grid;
                 place-content: center;
+                border-radius: 50%;
+                width: 2.2em;
+                aspect-ratio: 1 / 1;
+            }
+            .container[data-type="info"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-color-info) 25%, transparent);
+            }
+            .container[data-type="success"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-color-success) 25%, transparent);
+            }
+            .container[data-type="warning"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-color-warning) 25%, transparent);
+            }
+            .container[data-type="error"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-color-error) 25%, transparent);
             }
             .icon mjo-icon {
-                font-size: 1em;
+                font-size: 1.5em;
             }
             .message {
                 position: relative;
@@ -440,6 +473,7 @@ export class MjoAlert extends LitElement {
                 display: flex;
                 align-items: center;
                 word-wrap: break-word;
+                font-weight: var(--mjo-alert-message-font-weight, 600);
             }
             .close-button {
                 background: none;
@@ -472,11 +506,11 @@ export class MjoAlert extends LitElement {
             .detail {
                 position: relative;
                 padding: var(--mjo-alert-space) 0 0 0;
-                font-size: 0.8em;
+                font-size: 0.9em;
                 word-wrap: break-word;
             }
             .detail[data-icon] {
-                padding-left: calc(1em + var(--mjo-space-xsmall));
+                padding-left: calc(3.1em + var(--mjo-space-xsmall));
             }
             @media (prefers-reduced-motion: reduce) {
                 :host {

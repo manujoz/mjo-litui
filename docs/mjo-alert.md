@@ -215,10 +215,12 @@ The component uses semantic color tokens and spacing variables with fallbacks to
 
 ### Component-specific Variables
 
-| Variable                         | Default             | Used For                          |
-| -------------------------------- | ------------------- | --------------------------------- |
-| `--mjo-alert-space`              | `--mjo-space-small` | Internal padding and spacing      |
-| `--mjo-alert-animation-duration` | `300ms`             | Duration for show/hide animations |
+| Variable                          | Default             | Used For                          |
+| --------------------------------- | ------------------- | --------------------------------- |
+| `--mjo-alert-border-width`        | `3px`               | Internal padding and spacing      |
+| `--mjo-alert-message-font-weight` | `600`               | Internal padding and spacing      |
+| `--mjo-alert-space`               | `--mjo-space-small` | Internal padding and spacing      |
+| `--mjo-alert-animation-duration`  | `300ms`             | Duration for show/hide animations |
 
 ### Type-based Colors
 

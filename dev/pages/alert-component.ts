@@ -17,6 +17,7 @@ import "../components/showcases-grid.js";
 export class AlertComponent extends LitElement {
     @state() private selectedType: "success" | "info" | "warning" | "error" = "info";
     @state() private selectedSize: "small" | "medium" | "large" = "medium";
+    @state() private selectedVariant: "solid" | "flat" = "solid";
     @state() private selectedRounded: "none" | "small" | "medium" | "large" = "medium";
     @state() private selectedAnimation: "fade" | "slide" | "scale" | "none" = "fade";
     @state() private selectedAriaLive: "polite" | "assertive" | "off" = "polite";
@@ -40,6 +41,7 @@ export class AlertComponent extends LitElement {
                     <mjo-alert
                         slot="demo"
                         id="playground-alert"
+                        variant=${this.selectedVariant}
                         .type=${this.selectedType}
                         .size=${this.selectedSize}
                         .rounded=${this.selectedRounded}
@@ -93,6 +95,15 @@ export class AlertComponent extends LitElement {
                             @click=${() => this.setType("error")}
                         >
                             Error
+                        </mjo-button>
+                    </control-group>
+
+                    <control-group slot="controls" label="Variant" columns="3">
+                        <mjo-button size="small" variant=${this.selectedVariant === "solid" ? "default" : "ghost"} @click=${() => this.setVariant("solid")}>
+                            Solid
+                        </mjo-button>
+                        <mjo-button size="small" variant=${this.selectedVariant === "flat" ? "default" : "ghost"} @click=${() => this.setVariant("flat")}>
+                            Flat
                         </mjo-button>
                     </control-group>
 
@@ -378,6 +389,10 @@ export class AlertComponent extends LitElement {
 
     private setSize(size: "small" | "medium" | "large") {
         this.selectedSize = size;
+    }
+
+    private setVariant(variant: "solid" | "flat") {
+        this.selectedVariant = variant;
     }
 
     private setRounded(rounded: "none" | "small" | "medium" | "large") {
