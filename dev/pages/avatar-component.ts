@@ -22,7 +22,7 @@ export class AvatarComponent extends LitElement {
     @state() private isDisabled = false;
     @state() private isClickable = false;
     @state() private isNameColoured = false;
-    @state() private currentSrc = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face";
+    @state() private currentSrc = "https://i.pravatar.cc/150?img=36";
     @state() private currentName = "John Doe";
     @state() private currentValue = "";
     @state() private currentAlt = "";

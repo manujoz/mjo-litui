@@ -1,13 +1,17 @@
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
+import { AiOutlineInfo } from "mjo-icons/ai";
+
 import "../../src/mjo-alert.js";
 import "../../src/mjo-button.js";
 import "../../src/mjo-form.js";
 import "../../src/mjo-grid.js";
+import "../../src/mjo-select.js";
 import "../../src/mjo-textarea.js";
 import "../../src/mjo-textfield.js";
 
+import { MjoSelectChangeEvent } from "../../src/types/mjo-select.js";
 import "../components/control-group.js";
 import "../components/playground-grid.js";
 import "../components/section-container.js";
@@ -15,10 +19,11 @@ import "../components/showcases-grid.js";
 
 @customElement("alert-component")
 export class AlertComponent extends LitElement {
-    @state() private selectedType: "success" | "info" | "warning" | "error" = "info";
+    @state() private selectedType: "default" | "primary" | "secondary" | "success" | "info" | "warning" | "error" = "default";
     @state() private selectedSize: "small" | "medium" | "large" = "medium";
     @state() private selectedVariant: "solid" | "flat" = "solid";
     @state() private selectedRounded: "none" | "small" | "medium" | "large" = "medium";
+    @state() private selectedIcon: string = "";
     @state() private selectedAnimation: "fade" | "slide" | "scale" | "none" = "fade";
     @state() private selectedAriaLive: "polite" | "assertive" | "off" = "polite";
     @state() private isClosable = false;
@@ -42,6 +47,7 @@ export class AlertComponent extends LitElement {
                         slot="demo"
                         id="playground-alert"
                         variant=${this.selectedVariant}
+                        icon=${this.selectedIcon}
                         .type=${this.selectedType}
                         .size=${this.selectedSize}
                         .rounded=${this.selectedRounded}
@@ -63,7 +69,31 @@ export class AlertComponent extends LitElement {
                         @mjo-alert:closed=${this.#handleAlertEvent}
                     ></mjo-alert>
 
-                    <control-group slot="controls" label="Type" columns="4">
+                    <control-group slot="controls" label="Type" columns="3">
+                        <mjo-button
+                            size="small"
+                            color="info"
+                            variant=${this.selectedType === "default" ? "default" : "ghost"}
+                            @click=${() => this.setType("default")}
+                        >
+                            Default
+                        </mjo-button>
+                        <mjo-button
+                            size="small"
+                            color="primary"
+                            variant=${this.selectedType === "primary" ? "default" : "ghost"}
+                            @click=${() => this.setType("primary")}
+                        >
+                            Primary
+                        </mjo-button>
+                        <mjo-button
+                            size="small"
+                            color="secondary"
+                            variant=${this.selectedType === "secondary" ? "default" : "ghost"}
+                            @click=${() => this.setType("secondary")}
+                        >
+                            Secondary
+                        </mjo-button>
                         <mjo-button
                             size="small"
                             color="info"
@@ -132,6 +162,13 @@ export class AlertComponent extends LitElement {
                         <mjo-button size="small" variant=${this.selectedRounded === "large" ? "default" : "ghost"} @click=${() => this.setRounded("large")}>
                             Large
                         </mjo-button>
+                    </control-group>
+
+                    <control-group slot="controls" label="Icon" columns="1">
+                        <mjo-select name="select-icon" @mjo-select:change=${this.setIcon}>
+                            <mjo-option value="">Default</mjo-option>
+                            <mjo-option value="info-outlined">Info Outlined</mjo-option>
+                        </mjo-select>
                     </control-group>
 
                     <control-group slot="controls" label="Animation" columns="4">
@@ -394,7 +431,7 @@ export class AlertComponent extends LitElement {
         `;
     }
 
-    private setType(type: "success" | "info" | "warning" | "error") {
+    private setType(type: "default" | "primary" | "secondary" | "success" | "info" | "warning" | "error") {
         this.selectedType = type;
     }
 
@@ -439,6 +476,16 @@ export class AlertComponent extends LitElement {
         const alert = this.shadowRoot?.querySelector("#playground-alert") as any;
         if (alert && alert.show) {
             alert.show();
+        }
+    }
+
+    private setIcon(event: MjoSelectChangeEvent) {
+        const value = event.detail.value;
+
+        if (value === "info-outlined") {
+            this.selectedIcon = AiOutlineInfo;
+        } else {
+            this.selectedIcon = "";
         }
     }
 

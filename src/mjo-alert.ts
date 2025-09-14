@@ -1,7 +1,7 @@
 import { MjoAlertClosedEvent, MjoAlertOpenedEvent, MjoAlertWillCloseEvent, MjoAlertWillShowEvent } from "./types/mjo-alert.js";
 
 import { LitElement, PropertyValues, TemplateResult, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
 
@@ -29,30 +29,25 @@ import "./mjo-icon.js";
  */
 @customElement("mjo-alert")
 export class MjoAlert extends LitElement {
-    @property({ type: String }) type: "success" | "info" | "warning" | "error" = "info";
+    @property({ type: String }) type: "default" | "primary" | "secondary" | "success" | "info" | "warning" | "error" = "info";
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
-    @property({ type: String }) rounded: "none" | "small" | "medium" | "large" = "medium";
+    @property({ type: String }) rounded: "none" | "small" | "medium" | "large" | "full" = "medium";
     @property({ type: String }) variant: "solid" | "flat" = "solid";
+    @property({ type: String }) icon: string = "";
     @property({ type: String }) message: string = "";
     @property({ type: String }) details: string | TemplateResult<1> = "";
     @property({ type: Boolean }) closable: boolean = false;
     @property({ type: Boolean }) hideIcon: boolean = false;
-
-    @property({ type: String }) ariaLive: "polite" | "assertive" | "off" = "polite";
     @property({ type: Boolean }) focusOnShow: boolean = false;
-
     @property({ type: Boolean }) autoClose: boolean = false;
     @property({ type: Number }) autoCloseDelay: number = 5000;
-
     @property({ type: String }) animation: "fade" | "slide" | "scale" | "none" = "fade";
     @property({ type: Number }) animationDuration: number = 250;
-
-    // UX properties
     @property({ type: Boolean }) persistent: boolean = false;
 
-    @state() private icon: string = "";
-    @state() private autoCloseTimer: number | null = null;
+    @property({ type: String }) ariaLive: "polite" | "assertive" | "off" = "polite";
 
+    #autoCloseTimer: number | null = null;
     #storeHeight: number = 0;
     #storePadding: string = "";
     #isAnimating: boolean = false;
@@ -78,8 +73,8 @@ export class MjoAlert extends LitElement {
                 aria-describedby=${this.details ? detailId : nothing}
             >
                 <div class="messageContainer" part="message-container">
-                    ${!this.hideIcon && this.icon
-                        ? html`<div class="icon" part="icon-container"><mjo-icon src=${this.icon} exportparts="icon: icon"></mjo-icon></div>`
+                    ${!this.hideIcon && this.#iconComputed
+                        ? html`<div class="icon" part="icon-container"><mjo-icon src=${this.#iconComputed} exportparts="icon: icon"></mjo-icon></div>`
                         : nothing}
                     <div class="message" id=${messageId} part="message">${this.message}</div>
                     ${this.closable && !this.persistent ? this.#renderCloseButton() : nothing}
@@ -90,21 +85,6 @@ export class MjoAlert extends LitElement {
     }
 
     protected updated(_changedProperties: PropertyValues): void {
-        if (_changedProperties.has("type")) {
-            if (this.type === "warning") {
-                this.icon = AiFillWarning;
-            } else if (this.type === "info") {
-                this.icon = AiFillInfoCircle;
-            } else if (this.type === "error") {
-                this.icon = AiFillCloseCircle;
-            } else if (this.type === "success") {
-                this.icon = AiFillCheckCircle;
-            } else {
-                this.icon = "";
-            }
-        }
-
-        // Handle auto-close
         if (_changedProperties.has("autoClose") || _changedProperties.has("autoCloseDelay")) {
             this.#setupAutoClose();
         }
@@ -160,6 +140,22 @@ export class MjoAlert extends LitElement {
         }
     }
 
+    get #iconComputed(): string {
+        if (this.icon) return this.icon;
+
+        if (this.type === "info" || this.type === "default" || this.type === "primary" || this.type === "secondary") {
+            return AiFillInfoCircle;
+        } else if (this.type === "success") {
+            return AiFillCheckCircle;
+        } else if (this.type === "warning") {
+            return AiFillWarning;
+        } else if (this.type === "error") {
+            return AiFillCloseCircle;
+        }
+
+        return "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'></svg>";
+    }
+
     #renderCloseButton() {
         return html`
             <button class="close-button" type="button" aria-label="Close alert" @click=${this.#hide} @keydown=${this.#handleCloseKeydown}>
@@ -178,16 +174,16 @@ export class MjoAlert extends LitElement {
     #setupAutoClose() {
         this.#clearAutoCloseTimer();
         if (this.autoClose && this.autoCloseDelay > 0) {
-            this.autoCloseTimer = window.setTimeout(() => {
+            this.#autoCloseTimer = window.setTimeout(() => {
                 this.#hide();
             }, this.autoCloseDelay);
         }
     }
 
     #clearAutoCloseTimer() {
-        if (this.autoCloseTimer) {
-            clearTimeout(this.autoCloseTimer);
-            this.autoCloseTimer = null;
+        if (this.#autoCloseTimer) {
+            clearTimeout(this.#autoCloseTimer);
+            this.#autoCloseTimer = null;
         }
     }
 
@@ -360,8 +356,7 @@ export class MjoAlert extends LitElement {
                 display: block;
                 position: relative;
                 text-align: left;
-                --mjo-alert-space: var(--mjo-space-small);
-                --mjo-alert-animation-duration: 300ms;
+                --mjoint-alert-space: var(--mjo-space-small);
                 overflow: hidden;
             }
             :host(:focus-visible) {
@@ -373,8 +368,7 @@ export class MjoAlert extends LitElement {
             }
             .container {
                 position: relative;
-                padding: var(--mjo-alert-space);
-                transition: padding var(--mjo-alert-animation-duration);
+                padding: var(--mjoint-alert-space);
                 box-sizing: border-box;
             }
             .container[data-animation="slide"] {
@@ -382,6 +376,21 @@ export class MjoAlert extends LitElement {
             }
             .container[data-animation="scale"] {
                 transform-origin: center center;
+            }
+            .container[data-type="default"] {
+                background-color: transparent;
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-border-color);
+                color: var(--mjo-foreground-color);
+            }
+            .container[data-type="primary"] {
+                background-color: var(--mjo-primary-color-50);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-primary-color);
+                color: var(--mjo-primary-color);
+            }
+            .container[data-type="secondary"] {
+                background-color: var(--mjo-secondary-color-50);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-secondary-color);
+                color: var(--mjo-secondary-color);
             }
             .container[data-type="success"] {
                 background-color: var(--mjo-color-green-50);
@@ -403,6 +412,18 @@ export class MjoAlert extends LitElement {
                 border: solid var(--mjo-alert-border-width, 3px) var(--mjo-color-info);
                 color: var(--mjo-color-info);
             }
+            .container[data-variant="flat"][data-type="default"] {
+                background-color: color-mix(in srgb, var(--mjo-border-color) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="primary"] {
+                background-color: color-mix(in srgb, var(--mjo-primary-color) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="secondary"] {
+                background-color: color-mix(in srgb, var(--mjo-secondary-color) 10%, transparent);
+                border: none;
+            }
             .container[data-variant="flat"][data-type="success"] {
                 background-color: color-mix(in srgb, var(--mjo-color-success) 10%, transparent);
                 border: none;
@@ -421,7 +442,7 @@ export class MjoAlert extends LitElement {
             }
             .container[data-size="small"] {
                 font-size: 0.8em;
-                --mjo-alert-space: var(--mjo-space-xsmall);
+                --mjoint-alert-space: var(--mjo-space-xsmall);
             }
             .container[data-size="large"] {
                 font-size: 1.2em;
@@ -434,6 +455,9 @@ export class MjoAlert extends LitElement {
             }
             .container[data-rounded="large"] {
                 border-radius: var(--mjo-radius-large);
+            }
+            .container[data-rounded="full"] {
+                border-radius: 9999px;
             }
             .messageContainer {
                 position: relative;
@@ -452,6 +476,15 @@ export class MjoAlert extends LitElement {
                 border-radius: 50%;
                 width: 2.2em;
                 aspect-ratio: 1 / 1;
+            }
+            .container[data-type="default"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-border-color) 25%, transparent);
+            }
+            .container[data-type="primary"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-primary-color) 25%, transparent);
+            }
+            .container[data-type="secondary"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-secondary-color) 25%, transparent);
             }
             .container[data-type="info"] .icon {
                 background-color: color-mix(in srgb, var(--mjo-color-info) 25%, transparent);
@@ -521,7 +554,7 @@ export class MjoAlert extends LitElement {
             }
             .detail {
                 position: relative;
-                padding: var(--mjo-alert-space) 0 0 0;
+                padding: var(--mjoint-alert-space) 0 0 0;
                 font-size: 0.9em;
                 word-wrap: break-word;
             }

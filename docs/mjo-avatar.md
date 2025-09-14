@@ -174,13 +174,6 @@ The component supports standard HTML accessibility attributes through Lit's nati
 | `role`          | Automatically set based on context        | Dynamic: `"button"`, `"img"`, or `"presentation"`     |
 | `aria-disabled` | Automatically set when `disabled` is true | Communicates disabled state to assistive technologies |
 
-### Internal State
-
-| Name      | Type      | Description                                       |
-| --------- | --------- | ------------------------------------------------- |
-| `initial` | `string`  | First letter of the name, automatically uppercase |
-| `error`   | `boolean` | Indicates if the image failed to load             |
-
 ## Slots
 
 | Slot      | Description                                                   |
@@ -207,52 +200,22 @@ The component supports standard HTML accessibility attributes through Lit's nati
 
 The component provides extensive customization through CSS variables with fallbacks to the global design system.
 
-### Size Variables
-
-| Variable                   | Fallback | Used For                 |
-| -------------------------- | -------- | ------------------------ |
-| `--mjo-avatar-size-small`  | `32px`   | Small avatar dimensions  |
-| `--mjo-avatar-size-medium` | `44px`   | Medium avatar dimensions |
-| `--mjo-avatar-size-large`  | `54px`   | Large avatar dimensions  |
-
-### Fallback Icon and Text Sizes
-
-| Variable                            | Fallback | Used For                       |
-| ----------------------------------- | -------- | ------------------------------ |
-| `--mjo-avatar-fallback-size-small`  | `18px`   | Small fallback icon/text size  |
-| `--mjo-avatar-fallback-size-medium` | `28px`   | Medium fallback icon/text size |
-| `--mjo-avatar-fallback-size-large`  | `40px`   | Large fallback icon/text size  |
-
-### Border Radius Variables
-
-| Variable                     | Fallback | Used For                    |
-| ---------------------------- | -------- | --------------------------- |
-| `--mjo-avatar-radius-small`  | `4px`    | Small border radius option  |
-| `--mjo-avatar-radius-medium` | `8px`    | Medium border radius option |
-| `--mjo-avatar-radius-large`  | `12px`   | Large border radius option  |
-
-### Color Variables
-
-| Variable                                  | Fallback               | Used For                                    |
-| ----------------------------------------- | ---------------------- | ------------------------------------------- |
-| `--mjo-avatar-background-color`           | `--mjo-color-gray-400` | Default background color                    |
-| `--mjo-avatar-fallback-color`             | `--mjo-color-gray-100` | Fallback icon color                         |
-| `--mjo-avatar-name-color`                 | `--mjo-color-gray-100` | Name initial text color (when not colored)  |
-| `--mjo-avatar-name-auto-background-color` | Computed               | Auto-generated background for colored names |
-| `--mjo-avatar-name-auto-foreground-color` | Computed               | Auto-generated text color for colored names |
-| `--mjo-avatar-border-color`               | `--mjo-color-gray-300` | Default border color                        |
-
-### Border Variables
-
-| Variable                    | Fallback | Used For         |
-| --------------------------- | -------- | ---------------- |
-| `--mjo-avatar-border-width` | `2px`    | Border thickness |
-
-### Focus and Accessibility Variables
-
-| Variable            | Fallback              | Used For            |
-| ------------------- | --------------------- | ------------------- |
-| `--mjo-focus-color` | `--mjo-primary-color` | Focus outline color |
+| Variable                            | Fallback               | Used For                                   |
+| ----------------------------------- | ---------------------- | ------------------------------------------ |
+| `--mjo-avatar-size-small`           | `32px`                 | Small avatar dimensions                    |
+| `--mjo-avatar-size-medium`          | `44px`                 | Medium avatar dimensions                   |
+| `--mjo-avatar-size-large`           | `54px`                 | Large avatar dimensions                    |
+| `--mjo-avatar-fallback-size-small`  | `18px`                 | Small fallback icon/text size              |
+| `--mjo-avatar-fallback-size-medium` | `28px`                 | Medium fallback icon/text size             |
+| `--mjo-avatar-fallback-size-large`  | `40px`                 | Large fallback icon/text size              |
+| `--mjo-avatar-radius-small`         | `4px`                  | Small border radius option                 |
+| `--mjo-avatar-radius-medium`        | `8px`                  | Medium border radius option                |
+| `--mjo-avatar-radius-large`         | `12px`                 | Large border radius option                 |
+| `--mjo-avatar-background-color`     | `--mjo-color-gray-400` | Default background color                   |
+| `--mjo-avatar-fallback-color`       | `--mjo-color-gray-100` | Fallback icon color                        |
+| `--mjo-avatar-name-color`           | `--mjo-color-gray-100` | Name initial text color (when not colored) |
+| `--mjo-avatar-border-color`         | `--mjo-color-gray-300` | Default border color                       |
+| `--mjo-avatar-border-width`         | `3px`                  | Border thickness                           |
 
 ### Semantic Border Colors
 

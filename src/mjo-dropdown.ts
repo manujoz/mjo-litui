@@ -177,7 +177,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     #createDropdown() {
         const themeElement = searchClosestElement(this as LitElement, "mjo-theme") as MjoTheme | null;
 
-        this.$dropdownContainer = document.createElement("mjoint-drawer-container") as unknown as MjointDropdownContainer;
+        this.$dropdownContainer = document.createElement("mjoint-dropdown-container") as unknown as MjointDropdownContainer;
         this.$dropdownContainer.host = this;
         this.$dropdownContainer.html = this.html;
         this.$dropdownContainer.css = this.css;
