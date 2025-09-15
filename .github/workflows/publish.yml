@@ -27,6 +27,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
+      - name: Configure NPM authentication
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          echo "registry=https://registry.npmjs.org/" >> .npmrc
+      
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
       
@@ -43,13 +48,14 @@ jobs:
       - name: Build for production
         run: npm run build
       
+      - name: Copy NPM config to dist
+        run: cp .npmrc dist/
+      
       - name: Dry run publish (for validation)
         run: cd dist && npm publish --dry-run
       
       - name: Publish to NPM
         run: cd dist && npm publish --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
       - name: Create GitHub Release
         uses: actions/create-release@v1
