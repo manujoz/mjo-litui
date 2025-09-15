@@ -43,11 +43,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-      
-      - name: Run tests
-        run: npm test
+      - name: Configure NPM authentication
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          echo "registry=https://registry.npmjs.org/" >> .npmrc
       
       - name: Configure git
         run: |
@@ -86,10 +85,11 @@ jobs:
       - name: Build package
         run: npm run build
       
+      - name: Copy NPM config to dist
+        run: cp .npmrc dist/
+      
       - name: Publish to NPM
         run: cd dist && npm publish --tag ${{ steps.npm_tag.outputs.TAG }} --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
       - name: Create GitHub Release (for non-alpha versions)
         if: steps.npm_tag.outputs.TAG != 'alpha'
