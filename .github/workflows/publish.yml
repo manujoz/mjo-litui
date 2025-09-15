@@ -30,11 +30,8 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
       
-      - name: Build package
-        run: npm run build
-      
       - name: Run tests
-        run: npm test
+        run: npm run test
       
       - name: Extract version from tag
         id: version
