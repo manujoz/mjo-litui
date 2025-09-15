@@ -1,12 +1,23 @@
 name: Publish Alpha
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - '.github/**'
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Type of version bump'
+        required: true
+        default: 'prerelease'
+        type: choice
+        options:
+        - prerelease
+        - patch
+        - minor
+        - major
+      prerelease_id:
+        description: 'Prerelease identifier (alpha, beta, rc)'
+        required: false
+        default: 'alpha'
+        type: string
 
 jobs:
   publish-alpha:
@@ -32,13 +43,42 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      
+      - name: Run tests
+        run: npm test
+      
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       
-      - name: Bump alpha version
-        run: npm version prerelease --preid=alpha
+      - name: Bump version
+        id: version
+        run: |
+          if [ "${{ github.event.inputs.version_type }}" = "prerelease" ]; then
+            NEW_VERSION=$(npm version prerelease --preid=${{ github.event.inputs.prerelease_id || 'alpha' }})
+          else
+            NEW_VERSION=$(npm version ${{ github.event.inputs.version_type }})
+          fi
+          echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_OUTPUT
+          echo "VERSION_WITHOUT_V=${NEW_VERSION#v}" >> $GITHUB_OUTPUT
+      
+      - name: Determine NPM tag
+        id: npm_tag
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION_WITHOUT_V }}"
+          if [[ "$VERSION" == *"alpha"* ]]; then
+            echo "TAG=alpha" >> $GITHUB_OUTPUT
+          elif [[ "$VERSION" == *"beta"* ]]; then
+            echo "TAG=beta" >> $GITHUB_OUTPUT
+          elif [[ "$VERSION" == *"rc"* ]]; then
+            echo "TAG=rc" >> $GITHUB_OUTPUT
+          else
+            echo "TAG=latest" >> $GITHUB_OUTPUT
+          fi
+          echo "Publishing to NPM with tag: $(cat $GITHUB_OUTPUT | grep TAG= | cut -d= -f2)"
       
       - name: Push version bump
         run: git push && git push --tags
@@ -46,7 +86,18 @@ jobs:
       - name: Build package
         run: npm run build
       
-      - name: Publish alpha to NPM
-        run: cd dist && npm publish --tag alpha --provenance
+      - name: Publish to NPM
+        run: cd dist && npm publish --tag ${{ steps.npm_tag.outputs.TAG }} --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: Create GitHub Release (for non-alpha versions)
+        if: steps.npm_tag.outputs.TAG != 'alpha'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.NEW_VERSION }}
+          release_name: Release ${{ steps.version.outputs.VERSION_WITHOUT_V }}
+          draft: false
+          prerelease: true
