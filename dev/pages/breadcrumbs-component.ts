@@ -43,29 +43,29 @@ export class BreadcrumbsComponent extends LitElement {
         return html`
             <div class="demo-container">
                 <h2>Basic Breadcrumbs</h2>
-                <mjo-breadcrumbs .items=${basicItems} color="primary" variant="solid"></mjo-breadcrumbs>
-                <mjo-breadcrumbs .items=${basicItems} color="secondary"></mjo-breadcrumbs>
+                <mjo-breadcrumbs preventDefault .items=${basicItems} color="primary" variant="solid"></mjo-breadcrumbs>
+                <mjo-breadcrumbs preventDefault .items=${basicItems} color="secondary"></mjo-breadcrumbs>
 
                 <h2>Manual Collapse (max 3 items)</h2>
                 <div class="narrow-container">
-                    <mjo-breadcrumbs .items=${deepNavigationItems}> </mjo-breadcrumbs>
+                    <mjo-breadcrumbs preventDefault .items=${deepNavigationItems}> </mjo-breadcrumbs>
                 </div>
 
                 <h2>Responsive Collapse (Container Queries)</h2>
                 <div class="responsive-container">
-                    <mjo-breadcrumbs .items=${deepNavigationItems} color="secondary"> </mjo-breadcrumbs>
+                    <mjo-breadcrumbs preventDefault .items=${deepNavigationItems} color="secondary"> </mjo-breadcrumbs>
                 </div>
 
                 <h2>Auto Collapse</h2>
                 <div class="auto-container">
-                    <mjo-breadcrumbs .items=${deepNavigationItems} variant="bordered"> </mjo-breadcrumbs>
+                    <mjo-breadcrumbs preventDefault .items=${deepNavigationItems} variant="bordered"> </mjo-breadcrumbs>
                 </div>
 
                 <h2>Different Sizes</h2>
                 <div class="size-demo">
-                    <mjo-breadcrumbs .items=${basicItems} size="small" variant="solid"></mjo-breadcrumbs>
-                    <mjo-breadcrumbs .items=${basicItems} size="medium" variant="solid"></mjo-breadcrumbs>
-                    <mjo-breadcrumbs .items=${basicItems} size="large" variant="solid"></mjo-breadcrumbs>
+                    <mjo-breadcrumbs preventDefault .items=${basicItems} size="small" variant="solid"></mjo-breadcrumbs>
+                    <mjo-breadcrumbs preventDefault .items=${basicItems} size="medium" variant="solid"></mjo-breadcrumbs>
+                    <mjo-breadcrumbs preventDefault .items=${basicItems} size="large" variant="solid"></mjo-breadcrumbs>
                 </div>
 
                 <h2>Test Responsive Behavior</h2>
@@ -73,17 +73,22 @@ export class BreadcrumbsComponent extends LitElement {
 
                 <div class="resizable-demo">
                     <div class="resizable-container" style="width: 500px; resize: horizontal; overflow: auto;">
-                        <mjo-breadcrumbs .items=${deepNavigationItems} variant="bordered"> </mjo-breadcrumbs>
+                        <mjo-breadcrumbs preventDefault .items=${deepNavigationItems} variant="bordered"> </mjo-breadcrumbs>
                     </div>
                 </div>
 
                 <div class="resizable-demo">
                     <div class="resizable-container" style="width: 300px; resize: horizontal; overflow: auto;">
-                        <mjo-breadcrumbs .items=${deepNavigationItems} color="secondary"> </mjo-breadcrumbs>
+                        <mjo-breadcrumbs preventDefault @mjo-breadcrumbs:navigate=${this.#handleNavigate} .items=${deepNavigationItems} color="secondary">
+                        </mjo-breadcrumbs>
                     </div>
                 </div>
             </div>
         `;
+    }
+
+    #handleNavigate(event: CustomEvent) {
+        console.log(event);
     }
 
     static styles = [

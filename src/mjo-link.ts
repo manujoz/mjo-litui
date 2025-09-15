@@ -26,24 +26,6 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledBy?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedBy?: string;
 
-    private get computedRel(): string {
-        if (this.rel) return this.rel;
-
-        if (this.target === "_blank") {
-            return "noopener noreferrer";
-        }
-
-        return "";
-    }
-
-    private get computedTabIndex(): number {
-        return this.disabled ? -1 : 0;
-    }
-
-    private get roleAssignment(): string | undefined {
-        return this.variant !== "link" || !this.href ? "button" : undefined;
-    }
-
     render() {
         const aClasses = classMap({
             disabled: this.disabled,
@@ -57,9 +39,9 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                 @click=${this.#handleClick}
                 target=${this.target}
                 part="link"
-                rel=${ifDefined(this.computedRel || undefined)}
-                role=${ifDefined(this.roleAssignment as "")}
-                tabindex=${this.computedTabIndex}
+                rel=${ifDefined(this.#computedRel || undefined)}
+                role=${ifDefined(this.#roleAssignment as "")}
+                tabindex=${this.#computedTabIndex}
                 aria-label=${ifDefined(this.ariaLabel || undefined)}
                 aria-labelledby=${ifDefined(this.ariaLabelledBy)}
                 aria-describedby=${ifDefined(this.ariaDescribedBy)}
@@ -84,6 +66,24 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                       `}
             </a>
         `;
+    }
+
+    get #computedRel(): string {
+        if (this.rel) return this.rel;
+
+        if (this.target === "_blank") {
+            return "noopener noreferrer";
+        }
+
+        return "";
+    }
+
+    get #computedTabIndex(): number {
+        return this.disabled ? -1 : 0;
+    }
+
+    get #roleAssignment(): string | undefined {
+        return this.variant !== "link" || !this.href ? "button" : undefined;
     }
 
     #handleClick = (ev: Event) => {

@@ -50,6 +50,7 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
     @property({ type: Array }) items: MjoBreadcrumbsItems = [];
     @property({ type: Boolean }) autoNavigate = false;
     @property({ type: String }) separator?: string;
+    @property({ type: Boolean }) preventDefault = false;
 
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledBy?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedBy?: string;
@@ -90,6 +91,7 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
                                                       exportparts="link: link, link-text: link-text"
                                                       data-color=${this.color}
                                                       href=${item.href}
+                                                      ?preventDefault=${this.preventDefault}
                                                       @mjo-link:click=${() => this.#handleClick(item, index)}
                                                       aria-current=${ifDefined(isActive ? "page" : undefined)}
                                                   >

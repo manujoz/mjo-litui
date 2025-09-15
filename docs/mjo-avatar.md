@@ -193,6 +193,8 @@ The component supports standard HTML accessibility attributes through Lit's nati
 | ----------------- | -------------------------------------------------- |
 | `container`       | The main avatar container element                  |
 | `image-container` | The image/content container                        |
+| `fallback`        | The fallback content container                     |
+| `name`            | The name content container                         |
 | `image`           | The actual image element (when using src)          |
 | `icon`            | The fallback icon element (exported from mjo-icon) |
 

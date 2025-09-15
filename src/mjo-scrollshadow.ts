@@ -1,6 +1,7 @@
 import { LitElement, PropertyValues, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { getInheritBackgroundColor } from "./utils/shadow-dom";
+
+import { getInheritBackgroundColor } from "./utils/shadow-dom.js";
 
 /**
  * @summary Container component that adds visual scroll shadows to indicate scrollable content.
@@ -14,13 +15,10 @@ import { getInheritBackgroundColor } from "./utils/shadow-dom";
  */
 @customElement("mjo-scrollshadow")
 export class MjoScrollshadow extends LitElement {
-    /** Scroll direction - determines shadow placement and scroll behavior */
     @property({ type: String }) overflow: "horizontal" | "vertical" = "vertical";
-
-    /** Hides native scrollbar while maintaining scroll functionality */
     @property({ type: Boolean }) hideScrollbar = false;
 
-    @query(".container") $container!: HTMLDivElement;
+    @query(".container") private $container!: HTMLDivElement;
 
     render() {
         return html`
@@ -92,13 +90,13 @@ export class MjoScrollshadow extends LitElement {
     }
 
     #handleWheel = (event: WheelEvent) => {
-        if (this.overflow === "horizontal" && event.deltaX === 0) {
+        if (this.overflow === "horizontal" && event.deltaX === 0 && Math.abs(event.deltaY) > 5 && this.$container.scrollWidth > this.$container.clientWidth) {
             event.preventDefault();
             this.$container.scrollTo({
                 left: this.$container.scrollLeft + event.deltaY,
                 behavior: "smooth",
             });
-        } else if (this.overflow === "vertical" && event.deltaY === 0) {
+        } else if (this.overflow === "vertical" && event.deltaY === 0 && this.$container.scrollHeight > this.$container.clientHeight) {
             event.preventDefault();
             this.$container.scrollTo({
                 top: this.$container.scrollTop + event.deltaX,

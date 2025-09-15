@@ -49,7 +49,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             aria-label=${this.#computedAriaLabel}
             aria-describedby=${ifDefined(this.ariaDescribedby)}
             aria-disabled=${this.disabled ? "true" : "false"}
-            tabindex=${this.clickable ? this.tabIndex ?? 0 : -1}
+            tabindex=${this.clickable ? (this.tabIndex ?? 0) : -1}
             ?data-bordered=${this.bordered}
             ?data-disabled=${this.disabled}
             ?data-clickable=${this.clickable}
@@ -65,12 +65,12 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                   `
                 : this.fallbackIcon
                   ? html`
-                        <div class="image fallback radius-${this.radius} font-size-${this.size}" part="image-container">
+                        <div class="image fallback radius-${this.radius} font-size-${this.size}" part="image-container fallback">
                             <mjo-icon src=${this.fallbackIcon} exportparts="icon: icon"></mjo-icon>
                         </div>
                     `
                   : this.name
-                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}" part="image-container"><span>${this.#initial}</span></div>`
+                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}" part="image-container name"><span>${this.#initial}</span></div>`
                     : html`<div class="image radius-${this.radius}" part="image-container"></div>`}
         </div>`;
     }

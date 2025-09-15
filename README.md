@@ -2,7 +2,7 @@
 
 A collection of Web Components built with Lit 3 to create reusable, themeable interfaces with no framework dependencies.
 
-Status: alpha (0.0.1-alpha.49). The API may change.
+**Status: alpha (0.7.0). The component library is under active development, but it is already very advanced and should not experience breaking changes. Until version 1.0.0, minor issues will be fixed, some functionalities will be added, and some styles may be modified.**
 
 ## Features
 
