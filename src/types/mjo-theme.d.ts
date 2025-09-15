@@ -773,7 +773,6 @@ export interface MjoBreadcrumbsTheme {
     currentColor?: string;
     currentFontWeight?: string;
     separatorColor?: string;
-    iconSize?: string;
     focusOutline?: string;
     fontFamily?: string;
     fontSize?: string;
