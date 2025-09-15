@@ -1,7 +1,7 @@
 import { MjoAlertClosedEvent, MjoAlertOpenedEvent, MjoAlertWillCloseEvent, MjoAlertWillShowEvent } from "./types/mjo-alert.js";
 
 import { LitElement, PropertyValues, TemplateResult, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
 
@@ -20,7 +20,6 @@ import "./mjo-icon.js";
  * @fires mjo-alert:will-close - Fired before the alert is closed
  * @fires mjo-alert:closed - Fired after the alert is closed and animation completes
  *
- * @slot - Currently not implemented; content provided via message and detail properties
  * @csspart container - The main alert container
  * @csspart message-container - The container for the message and close button
  * @csspart icon-container - The container for the type icon
@@ -30,34 +29,28 @@ import "./mjo-icon.js";
  */
 @customElement("mjo-alert")
 export class MjoAlert extends LitElement {
-    @property({ type: String }) type: "success" | "info" | "warning" | "error" = "info";
+    @property({ type: String }) type: "default" | "primary" | "secondary" | "success" | "info" | "warning" | "error" = "info";
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
-    @property({ type: String }) rounded: "none" | "small" | "medium" | "large" = "medium";
+    @property({ type: String }) rounded: "none" | "small" | "medium" | "large" | "full" = "medium";
+    @property({ type: String }) variant: "solid" | "flat" = "solid";
+    @property({ type: String }) icon: string = "";
     @property({ type: String }) message: string = "";
-    @property({ type: String }) detail: string | TemplateResult<1> = "";
+    @property({ type: String }) details: string | TemplateResult<1> = "";
     @property({ type: Boolean }) closable: boolean = false;
     @property({ type: Boolean }) hideIcon: boolean = false;
-
-    // Accessibility properties
-    @property({ type: String }) ariaLive: "polite" | "assertive" | "off" = "polite";
     @property({ type: Boolean }) focusOnShow: boolean = false;
-
-    // Auto-close functionality
     @property({ type: Boolean }) autoClose: boolean = false;
     @property({ type: Number }) autoCloseDelay: number = 5000;
-
-    // Animation properties
     @property({ type: String }) animation: "fade" | "slide" | "scale" | "none" = "fade";
-    @property({ type: Number }) animationDuration: number = 300;
-
-    // UX properties
+    @property({ type: Number }) animationDuration: number = 250;
     @property({ type: Boolean }) persistent: boolean = false;
 
-    @state() private icon: string = "";
-    @state() private autoCloseTimer: number | null = null;
+    @property({ type: String }) ariaLive: "polite" | "assertive" | "off" = "polite";
 
-    private storeHeight: number = 0;
-    private isAnimating: boolean = false;
+    #autoCloseTimer: number | null = null;
+    #storeHeight: number = 0;
+    #storePadding: string = "";
+    #isAnimating: boolean = false;
 
     render() {
         const messageId = `alert-message-${Math.random().toString(36).substring(2, 9)}`;
@@ -70,42 +63,28 @@ export class MjoAlert extends LitElement {
                 part="container"
                 data-type=${this.type}
                 data-size=${this.size}
+                data-variant=${this.variant}
                 data-rounded=${this.rounded}
                 data-animation=${this.animation}
                 role="alert"
                 aria-live=${isImportant ? "assertive" : this.ariaLive}
                 aria-atomic="true"
                 aria-labelledby=${messageId}
-                aria-describedby=${this.detail ? detailId : nothing}
+                aria-describedby=${this.details ? detailId : nothing}
             >
                 <div class="messageContainer" part="message-container">
-                    ${!this.hideIcon && this.icon
-                        ? html`<div class="icon" part="icon-container"><mjo-icon src=${this.icon} exportparts="icon: icon"></mjo-icon></div>`
+                    ${!this.hideIcon && this.#iconComputed
+                        ? html`<div class="icon" part="icon-container"><mjo-icon src=${this.#iconComputed} exportparts="icon: icon"></mjo-icon></div>`
                         : nothing}
                     <div class="message" id=${messageId} part="message">${this.message}</div>
                     ${this.closable && !this.persistent ? this.#renderCloseButton() : nothing}
                 </div>
-                ${this.detail ? html`<div class="detail" id=${detailId} ?data-icon=${!this.hideIcon} part="detail">${this.detail}</div>` : nothing}
+                ${this.details ? html`<div class="detail" id=${detailId} ?data-icon=${!this.hideIcon} part="detail">${this.details}</div>` : nothing}
             </div>
         `;
     }
 
     protected updated(_changedProperties: PropertyValues): void {
-        if (_changedProperties.has("type")) {
-            if (this.type === "warning") {
-                this.icon = AiFillWarning;
-            } else if (this.type === "info") {
-                this.icon = AiFillInfoCircle;
-            } else if (this.type === "error") {
-                this.icon = AiFillCloseCircle;
-            } else if (this.type === "success") {
-                this.icon = AiFillCheckCircle;
-            } else {
-                this.icon = "";
-            }
-        }
-
-        // Handle auto-close
         if (_changedProperties.has("autoClose") || _changedProperties.has("autoCloseDelay")) {
             this.#setupAutoClose();
         }
@@ -161,6 +140,22 @@ export class MjoAlert extends LitElement {
         }
     }
 
+    get #iconComputed(): string {
+        if (this.icon) return this.icon;
+
+        if (this.type === "info" || this.type === "default" || this.type === "primary" || this.type === "secondary") {
+            return AiFillInfoCircle;
+        } else if (this.type === "success") {
+            return AiFillCheckCircle;
+        } else if (this.type === "warning") {
+            return AiFillWarning;
+        } else if (this.type === "error") {
+            return AiFillCloseCircle;
+        }
+
+        return "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'></svg>";
+    }
+
     #renderCloseButton() {
         return html`
             <button class="close-button" type="button" aria-label="Close alert" @click=${this.#hide} @keydown=${this.#handleCloseKeydown}>
@@ -179,16 +174,16 @@ export class MjoAlert extends LitElement {
     #setupAutoClose() {
         this.#clearAutoCloseTimer();
         if (this.autoClose && this.autoCloseDelay > 0) {
-            this.autoCloseTimer = window.setTimeout(() => {
+            this.#autoCloseTimer = window.setTimeout(() => {
                 this.#hide();
             }, this.autoCloseDelay);
         }
     }
 
     #clearAutoCloseTimer() {
-        if (this.autoCloseTimer) {
-            clearTimeout(this.autoCloseTimer);
-            this.autoCloseTimer = null;
+        if (this.#autoCloseTimer) {
+            clearTimeout(this.#autoCloseTimer);
+            this.#autoCloseTimer = null;
         }
     }
 
@@ -203,8 +198,8 @@ export class MjoAlert extends LitElement {
     }
 
     #show() {
-        const container = this.shadowRoot?.querySelector(".container") as HTMLElement;
-        if (!container || container.offsetHeight > 0 || this.isAnimating) return;
+        const $container = this as HTMLElement;
+        if (!$container || $container.offsetHeight > 0 || this.#isAnimating) return;
 
         this.#dispatchEvent("mjo-alert:will-show");
 
@@ -218,15 +213,15 @@ export class MjoAlert extends LitElement {
             return;
         }
 
-        this.isAnimating = true;
+        this.#isAnimating = true;
 
         let animate: Animation | null = null;
         switch (this.animation) {
             case "fade":
-                animate = container.animate(
+                animate = $container.animate(
                     [
-                        { opacity: 0, height: "0", display: "none" },
-                        { opacity: 1, height: this.storeHeight + "px", display: "block" },
+                        { opacity: 0, display: "none", padding: "0" },
+                        { opacity: 1, display: "block" },
                     ],
                     {
                         duration: this.animationDuration,
@@ -236,15 +231,10 @@ export class MjoAlert extends LitElement {
                 );
                 break;
             case "slide":
-                animate = container.animate(
+                animate = $container.animate(
                     [
-                        { transform: "translateX(-100%)", opacity: 0, height: "0", display: "none" },
-                        {
-                            transform: "translateX(0)",
-                            opacity: 1,
-                            height: this.storeHeight + "px",
-                            display: "block",
-                        },
+                        { opacity: 0, height: 0, display: "none" },
+                        { opacity: 1, height: this.#storeHeight + "px", display: "block" },
                     ],
                     {
                         duration: this.animationDuration,
@@ -254,14 +244,15 @@ export class MjoAlert extends LitElement {
                 );
                 break;
             case "scale":
-                animate = container.animate(
+                animate = $container.animate(
                     [
                         { transform: "scale(0)", opacity: 0, height: "0", display: "none" },
                         {
                             transform: "scale(1)",
                             opacity: 1,
-                            height: this.storeHeight + "px",
+                            height: this.#storeHeight + "px",
                             display: "block",
+                            padding: this.#storePadding,
                         },
                     ],
                     {
@@ -276,13 +267,13 @@ export class MjoAlert extends LitElement {
         animate.finished.then(() => {
             this.#dispatchEvent("mjo-alert:opened");
             if (animate) animate.cancel();
-            this.isAnimating = false;
+            this.#isAnimating = false;
         });
     }
 
     #hide() {
-        const container = this.shadowRoot?.querySelector(".container") as HTMLElement;
-        if (!container || container.offsetHeight === 0 || this.isAnimating) return;
+        const $container = this as HTMLElement;
+        if (!$container || $container.offsetHeight === 0 || this.#isAnimating) return;
 
         // Dispatch cancel event
         this.#dispatchEvent("mjo-alert:will-close");
@@ -300,15 +291,22 @@ export class MjoAlert extends LitElement {
             return;
         }
 
-        this.isAnimating = true;
-        this.storeHeight = container.offsetHeight;
+        this.#isAnimating = true;
+        this.#storeHeight = $container.offsetHeight;
 
         let animate: Animation | null = null;
         switch (this.animation) {
             case "fade":
-                animate = container.animate(
+                animate = $container.animate([{ opacity: 1 }, { opacity: 0, display: "none" }], {
+                    duration: this.animationDuration,
+                    easing: "ease-in-out",
+                    fill: "forwards",
+                });
+                break;
+            case "slide":
+                animate = $container.animate(
                     [
-                        { opacity: 1, height: this.storeHeight + "px" },
+                        { opacity: 1, height: this.#storeHeight + "px" },
                         { opacity: 0, height: "0", display: "none" },
                     ],
                     {
@@ -318,30 +316,14 @@ export class MjoAlert extends LitElement {
                     },
                 );
                 break;
-            case "slide":
-                animate = container.animate(
-                    [
-                        {
-                            transform: "translateX(0)",
-                            opacity: 1,
-                            height: this.storeHeight + "px",
-                        },
-                        { transform: "translateX(-100%)", opacity: 0, height: "0", display: "none" },
-                    ],
-                    {
-                        duration: this.animationDuration,
-                        easing: "ease-in-out",
-                        fill: "forwards",
-                    },
-                );
-                break;
             case "scale":
-                animate = container.animate(
+                animate = $container.animate(
                     [
                         {
                             transform: "scale(1)",
                             opacity: 1,
-                            height: this.storeHeight + "px",
+                            height: this.#storeHeight + "px",
+                            padding: this.#storePadding,
                         },
                         { transform: "scale(0)", opacity: 0, height: "0", display: "none" },
                     ],
@@ -363,7 +345,7 @@ export class MjoAlert extends LitElement {
                 }
             }
 
-            this.isAnimating = false;
+            this.#isAnimating = false;
             this.#dispatchEvent("mjo-alert:closed");
         });
     }
@@ -374,73 +356,97 @@ export class MjoAlert extends LitElement {
                 display: block;
                 position: relative;
                 text-align: left;
-                --mjo-alert-space: var(--mjo-space-small);
-                --mjo-alert-animation-duration: 300ms;
+                --mjoint-alert-space: var(--mjo-space-small);
                 overflow: hidden;
             }
-
+            :host(:focus-visible) {
+                outline: 2px solid currentColor;
+                outline-offset: 2px;
+            }
             :host([hidden]) {
                 display: none !important;
             }
-
             .container {
                 position: relative;
-                padding: var(--mjo-alert-space);
-                transition: padding var(--mjo-alert-animation-duration);
+                padding: var(--mjoint-alert-space);
                 box-sizing: border-box;
             }
-
-            /* Animation support */
             .container[data-animation="slide"] {
                 transform-origin: left center;
             }
-
             .container[data-animation="scale"] {
                 transform-origin: center center;
             }
-
-            /* Reduced motion support */
-            @media (prefers-reduced-motion: reduce) {
-                :host {
-                    --mjo-alert-animation-duration: 0ms;
-                }
-                .container {
-                    transition: none;
-                }
+            .container[data-type="default"] {
+                background-color: transparent;
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-border-color);
+                color: var(--mjo-foreground-color);
             }
-
-            /* Type-based styling */
+            .container[data-type="primary"] {
+                background-color: var(--mjo-primary-color-50);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-primary-color);
+                color: var(--mjo-primary-color);
+            }
+            .container[data-type="secondary"] {
+                background-color: var(--mjo-secondary-color-50);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-secondary-color);
+                color: var(--mjo-secondary-color);
+            }
             .container[data-type="success"] {
                 background-color: var(--mjo-color-green-50);
-                border: solid 1px var(--mjo-color-success);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-color-success);
                 color: var(--mjo-color-success);
             }
             .container[data-type="error"] {
                 background-color: var(--mjo-color-red-50);
-                border: solid 1px var(--mjo-color-error);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-color-error);
                 color: var(--mjo-color-error);
             }
             .container[data-type="warning"] {
                 background-color: var(--mjo-color-yellow-50);
-                border: solid 1px var(--mjo-color-warning);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-color-warning);
                 color: var(--mjo-color-warning);
             }
             .container[data-type="info"] {
                 background-color: var(--mjo-color-blue-50);
-                border: solid 1px var(--mjo-color-info);
+                border: solid var(--mjo-alert-border-width, 3px) var(--mjo-color-info);
                 color: var(--mjo-color-info);
             }
-
-            /* Size variants */
+            .container[data-variant="flat"][data-type="default"] {
+                background-color: color-mix(in srgb, var(--mjo-border-color) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="primary"] {
+                background-color: color-mix(in srgb, var(--mjo-primary-color) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="secondary"] {
+                background-color: color-mix(in srgb, var(--mjo-secondary-color) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="success"] {
+                background-color: color-mix(in srgb, var(--mjo-color-success) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="error"] {
+                background-color: color-mix(in srgb, var(--mjo-color-error) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="warning"] {
+                background-color: color-mix(in srgb, var(--mjo-color-warning) 10%, transparent);
+                border: none;
+            }
+            .container[data-variant="flat"][data-type="info"] {
+                background-color: color-mix(in srgb, var(--mjo-color-info) 10%, transparent);
+                border: none;
+            }
             .container[data-size="small"] {
                 font-size: 0.8em;
-                --mjo-alert-space: var(--mjo-space-xsmall);
+                --mjoint-alert-space: var(--mjo-space-xsmall);
             }
             .container[data-size="large"] {
                 font-size: 1.2em;
             }
-
-            /* Border radius */
             .container[data-rounded="small"] {
                 border-radius: var(--mjo-radius-small);
             }
@@ -450,16 +456,16 @@ export class MjoAlert extends LitElement {
             .container[data-rounded="large"] {
                 border-radius: var(--mjo-radius-large);
             }
-
-            /* Message container */
+            .container[data-rounded="full"] {
+                border-radius: 9999px;
+            }
             .messageContainer {
                 position: relative;
                 display: flex;
                 flex-flow: row nowrap;
-                gap: var(--mjo-space-xsmall);
-                align-items: flex-start;
+                gap: var(--mjo-space-medium);
+                align-items: center;
             }
-
             .icon {
                 position: relative;
                 flex-grow: 0;
@@ -467,12 +473,34 @@ export class MjoAlert extends LitElement {
                 align-self: stretch;
                 display: grid;
                 place-content: center;
+                border-radius: 50%;
+                width: 2.2em;
+                aspect-ratio: 1 / 1;
             }
-
+            .container[data-type="default"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-border-color) 25%, transparent);
+            }
+            .container[data-type="primary"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-primary-color) 25%, transparent);
+            }
+            .container[data-type="secondary"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-secondary-color) 25%, transparent);
+            }
+            .container[data-type="info"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-color-info) 25%, transparent);
+            }
+            .container[data-type="success"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-color-success) 25%, transparent);
+            }
+            .container[data-type="warning"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-color-warning) 25%, transparent);
+            }
+            .container[data-type="error"] .icon {
+                background-color: color-mix(in srgb, var(--mjo-color-error) 25%, transparent);
+            }
             .icon mjo-icon {
-                font-size: 1em;
+                font-size: 1.5em;
             }
-
             .message {
                 position: relative;
                 flex-grow: 1;
@@ -481,9 +509,8 @@ export class MjoAlert extends LitElement {
                 display: flex;
                 align-items: center;
                 word-wrap: break-word;
+                font-weight: var(--mjo-alert-message-font-weight, 600);
             }
-
-            /* Close button styling */
             .close-button {
                 background: none;
                 border: none;
@@ -499,53 +526,57 @@ export class MjoAlert extends LitElement {
                 min-width: 1.5em;
                 min-height: 1.5em;
             }
-
             .close-button:hover {
                 background-color: rgba(0, 0, 0, 0.1);
             }
-
-            .close-button:focus {
+            .container[data-type="info"] .icon,
+            .container[data-type="info"] .close-button:hover {
+                background-color: color-mix(in srgb, var(--mjo-color-info) 25%, transparent);
+            }
+            .container[data-type="success"] .icon,
+            .container[data-type="success"] .close-button:hover {
+                background-color: color-mix(in srgb, var(--mjo-color-success) 25%, transparent);
+            }
+            .container[data-type="warning"] .icon,
+            .container[data-type="warning"] .close-button:hover {
+                background-color: color-mix(in srgb, var(--mjo-color-warning) 25%, transparent);
+            }
+            .container[data-type="error"] .icon,
+            .container[data-type="error"] .close-button:hover {
+                background-color: color-mix(in srgb, var(--mjo-color-error) 25%, transparent);
+            }
+            .close-button:focus-visible {
                 outline: 2px solid currentColor;
                 outline-offset: 2px;
             }
-
-            .close-button:active {
-                transform: scale(0.95);
-            }
-
             .close-button mjo-icon {
-                font-size: 1em;
+                font-size: 1.2em;
             }
-
-            /* Detail section */
             .detail {
                 position: relative;
-                padding: var(--mjo-alert-space) 0 0 0;
-                font-size: 0.8em;
+                padding: var(--mjoint-alert-space) 0 0 0;
+                font-size: 0.9em;
                 word-wrap: break-word;
             }
-
             .detail[data-icon] {
-                padding-left: calc(1em + var(--mjo-space-xsmall));
+                padding-left: calc(3.1em + var(--mjo-space-xsmall));
             }
-
-            /* Focus management */
-            :host(:focus) {
-                outline: 2px solid currentColor;
-                outline-offset: 2px;
+            @media (prefers-reduced-motion: reduce) {
+                :host {
+                    --mjo-alert-animation-duration: 0ms;
+                }
+                .container {
+                    transition: none;
+                }
             }
-
-            /* High contrast mode support */
             @media (prefers-contrast: high) {
                 .container {
                     border-width: 2px;
                 }
-                .close-button:focus {
+                .close-button:focus-visible {
                     outline-width: 3px;
                 }
             }
-
-            /* Dark mode considerations */
             @media (prefers-color-scheme: dark) {
                 .close-button:hover {
                     background-color: rgba(255, 255, 255, 0.1);

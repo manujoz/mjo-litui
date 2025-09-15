@@ -18,6 +18,8 @@ export default defineConfig({
             input: {
                 main: `${__dirname}/dev/index.html`,
                 "mjo-accordion": `${__dirname}/dev/mjo-accordion.html`,
+                "mjo-alert": `${__dirname}/dev/mjo-alert.html`,
+                "mjo-avatar": `${__dirname}/dev/mjo-avatar.html`,
                 "mjo-link": `${__dirname}/dev/mjo-link.html`,
                 "mjo-badge": `${__dirname}/dev/mjo-badge.html`,
                 "mjo-breadcrumbs": `${__dirname}/dev/mjo-breadcrumbs.html`,
@@ -28,6 +30,7 @@ export default defineConfig({
                 "mjo-progress": `${__dirname}/dev/mjo-progress.html`,
                 "mjo-radio": `${__dirname}/dev/mjo-radio.html`,
                 "mjo-table": `${__dirname}/dev/mjo-table.html`,
+                "mjo-scrollshadow": `${__dirname}/dev/mjo-scrollshadow.html`,
                 "mjo-slider": `${__dirname}/dev/mjo-slider.html`,
                 "mjo-tabs": `${__dirname}/dev/mjo-tabs.html`,
             },

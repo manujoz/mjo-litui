@@ -195,7 +195,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
             .container[data-variant="solid"],
             .container[data-variant="shadow"] {
                 border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
-                background: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
+                background: var(--mjo-accordion-background-color, var(--mjo-background-color-card));
             }
             .container[data-variant="shadow"] {
                 box-shadow: var(--mjo-accordion-box-shadow, var(--mjo-box-shadow-2));
@@ -223,7 +223,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
             }
             .container[data-variant="splitted"] ::slotted(mjo-accordion-item) {
                 border-radius: var(--mjo-accordion-border-radius, var(--mjo-radius-large));
-                background: var(--mjo-accordion-background-color, var(--mjo-background-color-high));
+                background: var(--mjo-accordion-background-color, var(--mjo-background-color-card));
             }
         `,
     ];

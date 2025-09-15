@@ -28,17 +28,17 @@ export class MjoGrid extends LitElement {
     }
 
     #setProperties() {
-        this.style.setProperty("--grid-gap", this.gap as string);
-        this.style.setProperty("--grid-auto-flow", this.flow as string);
-        this.style.setProperty("--grid-auto-rows", this.autoRows as string);
+        this.style.setProperty("--mjoint-grid-gap", this.gap as string);
+        this.style.setProperty("--mjoint-grid-auto-flow", this.flow as string);
+        this.style.setProperty("--mjoint-grid-auto-rows", this.autoRows as string);
 
         if (this.mode === "columns") {
-            this.style.setProperty("--grid-template-columns", `repeat(${this.columns}, 1fr)`);
+            this.style.setProperty("--mjoint-grid-template-columns", `repeat(${this.columns}, minmax(0, 1fr))`);
         } else {
             const fillMode = this.mode === "fill" ? "auto-fill" : "auto-fit";
             const min = this.minWidthRow ? this.minWidthRow : "100px";
             const max = this.maxWidthRow ? this.maxWidthRow : "1fr";
-            this.style.setProperty("--grid-template-columns", `repeat(${fillMode}, minmax(min(100%, ${min}), ${max}))`);
+            this.style.setProperty("--mjoint-grid-template-columns", `repeat(${fillMode}, minmax(min(100%, ${min}), ${max}))`);
         }
     }
 
@@ -46,10 +46,10 @@ export class MjoGrid extends LitElement {
         css`
             :host {
                 display: grid;
-                gap: var(--grid-gap, 1em);
-                grid-auto-flow: var(--grid-auto-flow, initial);
-                grid-auto-rows: var(--grid-auto-rows, auto);
-                grid-template-columns: var(--grid-template-columns, repeat(4, 1fr));
+                gap: var(--mjoint-grid-gap, 1em);
+                grid-auto-flow: var(--mjoint-grid-auto-flow, initial);
+                grid-auto-rows: var(--mjoint-grid-auto-rows, auto);
+                grid-template-columns: var(--mjoint-grid-template-columns, repeat(4, 1fr));
             }
         `,
     ];

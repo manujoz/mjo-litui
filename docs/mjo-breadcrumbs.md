@@ -1,12 +1,50 @@
 # mjo-breadcrumbs
 
-Navigation breadcrumbs component that displays a hierarchical path to help users understand their current location within an application. Provides excellent accessibility support including ARIA compliance, keyboard navigation, and screen reader compatibility.
+Navigation breadcrumbs component that displays a hierarchical path to help users understand their current location within an application. Features automatic horizontal scroll shadows when content overflows, excellent accessibility support including ARIA compliance, keyboard navigation, and screen reader compatibility.
+
+## Features
+
+-   **Automatic Horizontal Scroll**: When breadcrumbs exceed container width, horizontal scroll shadows are automatically enabled
+-   **Accessibility Compliant**: Full WCAG 2.1 support with proper ARIA attributes and keyboard navigation
+-   **Visual Variants**: Multiple styles including default, solid, and bordered variants
+-   **Icon Support**: Optional icons for enhanced visual hierarchy
+-   **Custom Separators**: Configurable separator icons between breadcrumb items
+-   **Event Handling**: Custom navigation events for application integration
 
 ## Installation
 
 ```bash
 npm install mjo-litui
 ```
+
+## Horizontal Scroll Shadow
+
+The component automatically enables horizontal scroll shadows when the breadcrumb content exceeds the container width. This provides visual cues about scrollable content while maintaining accessibility.
+
+### How it Works
+
+-   **Automatic Detection**: The component uses a `ResizeObserver` to detect when content overflows
+-   **Scroll Shadows**: Gradient shadows appear at the edges to indicate scrollable content
+-   **Auto-scroll to End**: When items are updated, the component automatically scrolls to show the current (last) item
+-   **Smooth Scrolling**: All scroll animations use smooth behavior for better user experience
+
+### Key Features
+
+-   **Responsive**: Adapts to container size changes automatically
+-   **Accessible**: Maintains full keyboard navigation and screen reader support during horizontal scrolling
+-   **Performance**: Uses efficient shadow updates only when necessary
+-   **Visual Integration**: Shadows match the component's background color automatically
+
+### Example Usage
+
+```html
+<!-- Long breadcrumb that will activate horizontal scrolling -->
+<mjo-breadcrumbs style="max-width: 400px;">
+    <!-- Component will automatically enable horizontal scroll when content overflows -->
+</mjo-breadcrumbs>
+```
+
+The scroll shadow functionality is powered by the internal `mjo-scrollshadow` component and requires no additional configuration.
 
 ## Usage
 
@@ -86,45 +124,12 @@ export class ExampleBreadcrumbsNavigation extends LitElement {
 
     private handleNavigation(event: MjoBreadcrumbsNavigateEvent) {
         const { item, index, href } = event.detail;
-
-        // Custom navigation logic
         console.log(`Navigating to: ${item.label}`, { index, href });
-
-        // Update your router or application state
-        // this.router.navigate(href);
+        // Update your router or application state here
     }
 
     render() {
         return html` <mjo-breadcrumbs .items=${this.items} @mjo-breadcrumbs:navigate=${this.handleNavigation}></mjo-breadcrumbs> `;
-    }
-}
-```
-
-### Accessibility Enhanced
-
-```ts
-@customElement("example-breadcrumbs-accessibility")
-export class ExampleBreadcrumbsAccessibility extends LitElement {
-    render() {
-        return html`
-            <div>
-                <h2 id="page-title">User Profile Settings</h2>
-                <p id="breadcrumb-help">Use breadcrumbs to navigate back to parent sections</p>
-
-                <mjo-breadcrumbs
-                    .items=${[
-                        { label: "Home", href: "/" },
-                        { label: "Users", href: "/users" },
-                        { label: "Profile Settings", active: true },
-                    ]}
-                    aria-label="Current page location"
-                    aria-labelledby="page-title"
-                    aria-describedby="breadcrumb-help"
-                    color="primary"
-                    variant="bordered"
-                ></mjo-breadcrumbs>
-            </div>
-        `;
     }
 }
 ```
@@ -144,9 +149,7 @@ export class ExampleBreadcrumbsTheme extends LitElement {
                         mjoBreadcrumbs: {
                             backgroundColor: "#f8f9fa",
                             borderRadius: "8px",
-                            currentColor: "#495057",
                             linkHoverColor: "#007bff",
-                            separatorColor: "#6c757d",
                         },
                     },
                 }}
@@ -154,12 +157,6 @@ export class ExampleBreadcrumbsTheme extends LitElement {
                 <mjo-breadcrumbs
                     .items=${[{ label: "Store", href: "/store" }, { label: "Category", href: "/store/category" }, { label: "Product Details" }]}
                     variant="solid"
-                    .theme=${{
-                        mjoBreadcrumbs: {
-                            padding: "12px 16px",
-                            fontSize: "14px",
-                        },
-                    }}
                 ></mjo-breadcrumbs>
             </mjo-theme>
         `;
@@ -212,36 +209,85 @@ interface MjoBreadcrumbsNavigateEvent extends CustomEvent {
 }
 ```
 
+## CSS Parts
+
+The component exposes the following CSS parts for styling:
+
+| Part Name        | Description                                           | Element          |
+| ---------------- | ----------------------------------------------------- | ---------------- |
+| `container`      | The main navigation container                         | `<nav>`          |
+| `list`           | The ul element containing breadcrumb items            | `<ul>`           |
+| `list-item`      | Individual li elements for each breadcrumb            | `<li>`           |
+| `link`           | Link elements for navigable breadcrumbs (exportparts) | `mjo-link`       |
+| `link-text`      | Text content within link elements (exportparts)       | `mjo-link`       |
+| `icon`           | Icons within breadcrumb items (exportparts)           | `mjo-icon`       |
+| `active-icon`    | Icons within active/current items (exportparts)       | `mjo-icon`       |
+| `active-text`    | Typography for active/current items (exportparts)     | `mjo-typography` |
+| `icon-separator` | Separator icons between items (exportparts)           | `mjo-icon`       |
+
+### CSS Parts Usage Example
+
+```css
+/* Style the main container */
+mjo-breadcrumbs::part(container) {
+    background: var(--custom-background);
+    border-radius: 8px;
+}
+
+/* Style individual breadcrumb items */
+mjo-breadcrumbs::part(list-item) {
+    padding: 4px 8px;
+}
+
+/* Style the active text */
+mjo-breadcrumbs::part(active-text) {
+    font-weight: 700;
+    color: var(--custom-active-color);
+}
+
+/* Style separator icons */
+mjo-breadcrumbs::part(icon-separator) {
+    opacity: 0.5;
+}
+```
+
 ## CSS Custom Properties
 
 ### Component Variables
 
-| Variable                                | Default                                           | Description                                  |
-| --------------------------------------- | ------------------------------------------------- | -------------------------------------------- |
-| `--mjo-breadcrumbs-background-color`    | `var(--mjo-background-color-card)`                | Background color for solid/bordered variants |
-| `--mjo-breadcrumbs-border-color`        | `var(--mjo-border-color)`                         | Border color for bordered variant            |
-| `--mjo-breadcrumbs-border-radius`       | `var(--mjo-radius-medium)`                        | Border radius for containers                 |
-| `--mjo-breadcrumbs-padding`             | `var(--mjo-space-xxsmall) var(--mjo-space-small)` | Internal padding                             |
-| `--mjo-breadcrumbs-text-color`          | `var(--mjo-foreground-color-low)`                 | Text color for inactive items                |
-| `--mjo-breadcrumbs-link-hover-color`    | `var(--mjo-primary-color)`                        | Hover color for links                        |
-| `--mjo-breadcrumbs-current-color`       | `var(--mjo-foreground-color-high)`                | Color for current/active item                |
-| `--mjo-breadcrumbs-current-font-weight` | `500`                                             | Font weight for current/active item          |
-| `--mjo-breadcrumbs-separator-color`     | `var(--mjo-foreground-color-low)`                 | Color for separator icons                    |
-| `--mjo-breadcrumbs-icon-top`            | `-1px`                                            | Top of icons                                 |
-| `--mjo-breadcrumbs-icon-size`           | `1em`                                             | Size of icons                                |
-| `--mjo-breadcrumbs-focus-outline`       | `2px solid var(--mjo-primary-color)`              | Focus outline for accessibility              |
-| `--mjo-breadcrumbs-font-family`         | `inherit`                                         | Font family                                  |
-| `--mjo-breadcrumbs-font-size`           | `inherit`                                         | Base font size                               |
-| `--mjo-breadcrumbs-font-weight`         | `inherit`                                         | Base font weight                             |
+| Variable                                | Default                                         | Description                                  |
+| --------------------------------------- | ----------------------------------------------- | -------------------------------------------- |
+| `--mjo-breadcrumbs-font-family`         | `inherit`                                       | Font family for the breadcrumbs              |
+| `--mjo-breadcrumbs-background-color`    | `var(--mjo-background-color-card)`              | Background color for solid/bordered variants |
+| `--mjo-breadcrumbs-border-color`        | `var(--mjo-border-color)`                       | Border color for bordered variant            |
+| `--mjo-breadcrumbs-border-radius`       | `var(--mjo-radius-medium)`                      | Border radius for containers                 |
+| `--mjo-breadcrumbs-padding`             | `var(--mjo-space-small) var(--mjo-space-small)` | Internal padding                             |
+| `--mjo-breadcrumbs-font-size`           | `inherit`                                       | Base font size                               |
+| `--mjo-breadcrumbs-font-weight`         | `inherit`                                       | Base font weight                             |
+| `--mjo-breadcrumbs-text-color`          | `var(--mjo-foreground-color-low)`               | Text color for inactive items                |
+| `--mjo-breadcrumbs-link-hover-color`    | `var(--mjo-primary-color)`                      | Hover color for links                        |
+| `--mjo-breadcrumbs-current-font-weight` | `600`                                           | Font weight for current/active item          |
+| `--mjo-breadcrumbs-separator-color`     | `var(--mjo-foreground-color-low)`               | Color for separator icons                    |
+
+### Link Component Variables
+
+The component also inherits variables from the `mjo-link` component:
+
+| Variable                           | Description                   |
+| ---------------------------------- | ----------------------------- |
+| `--mjo-link-text-decoration-hover` | Link text decoration on hover |
+| `--mjo-link-focus-outline-color`   | Focus outline color for links |
 
 ### Global Design Tokens
 
-The component also uses global design tokens for consistent theming:
+The component uses global design tokens for consistent theming:
 
 -   `--mjo-primary-color`, `--mjo-secondary-color`
--   `--mjo-foreground-color-high`, `--mjo-foreground-color-low`
--   `--mjo-space-xxsmall`, `--mjo-space-small`, `--mjo-space-xsmall`
+-   `--mjo-foreground-color-low`
+-   `--mjo-space-small`, `--mjo-space-xsmall`
 -   `--mjo-radius-medium`
+-   `--mjo-background-color-card`
+-   `--mjo-border-color`
 
 ## Accessibility Features
 
@@ -269,16 +315,14 @@ The component also uses global design tokens for consistent theming:
 ### Best Practices
 
 ```html
-<!-- ✅ Good: Semantic structure with proper labels -->
-<nav aria-label="Breadcrumb navigation">
-    <mjo-breadcrumbs .items="${items}" aria-label="Current page location"></mjo-breadcrumbs>
-</nav>
+<!-- ✅ Good: Proper semantic structure -->
+<mjo-breadcrumbs .items="${items}" aria-label="Current page location"></mjo-breadcrumbs>
 
 <!-- ✅ Good: Connected to page context -->
 <h1 id="page-title">Product Details</h1>
 <mjo-breadcrumbs .items="${items}" aria-labelledby="page-title"></mjo-breadcrumbs>
 
-<!-- ❌ Avoid: Missing context or labels -->
+<!-- ❌ Avoid: Missing ARIA labels -->
 <mjo-breadcrumbs .items="${items}"></mjo-breadcrumbs>
 ```
 
@@ -293,7 +337,6 @@ const breadcrumbsTheme = {
             backgroundColor: "#ffffff",
             borderColor: "#e9ecef",
             borderRadius: "6px",
-            currentColor: "#212529",
             linkHoverColor: "#0056b3",
             separatorColor: "#6c757d",
         },
@@ -304,7 +347,6 @@ const breadcrumbsTheme = {
 ### Component-Level Theming
 
 ```ts
-// Apply theme directly to component instance
 html`
     <mjo-breadcrumbs
         .items=${items}
@@ -338,7 +380,7 @@ export class ExampleDynamicBreadcrumbs extends LitElement {
             const isLast = index === segments.length - 1;
 
             items.push({
-                label: this.formatSegment(segment),
+                label: segment.charAt(0).toUpperCase() + segment.slice(1),
                 href: isLast ? undefined : currentPath,
                 active: isLast,
             });
@@ -347,20 +389,15 @@ export class ExampleDynamicBreadcrumbs extends LitElement {
         return items;
     }
 
-    private formatSegment(segment: string): string {
-        return segment.charAt(0).toUpperCase() + segment.slice(1);
-    }
-
     render() {
         return html` <mjo-breadcrumbs .items=${this.breadcrumbItems}></mjo-breadcrumbs> `;
     }
 }
 ```
 
-### Integration with Router
+### Router Integration
 
 ```ts
-// Example with a hypothetical router
 @customElement("example-router-breadcrumbs")
 export class ExampleRouterBreadcrumbs extends LitElement {
     private handleNavigation(event: MjoBreadcrumbsNavigateEvent) {
@@ -381,14 +418,15 @@ export class ExampleRouterBreadcrumbs extends LitElement {
 
 The `mjo-breadcrumbs` component provides a comprehensive navigation solution with:
 
--   **Full Accessibility**: WCAG 2.1 compliant with ARIA support
--   **Custom Events**: New event naming convention `mjo-breadcrumbs:navigate`
--   **Flexible Styling**: Multiple variants and comprehensive CSS variables
+-   **Automatic Horizontal Scroll**: Smart scroll shadows when content overflows container width
+-   **Full Accessibility**: WCAG 2.1 compliant with ARIA support and keyboard navigation
+-   **Custom Events**: Flexible navigation events with `mjo-breadcrumbs:navigate`
+-   **Visual Variants**: Multiple styles (default, solid, bordered) with comprehensive CSS variables
 -   **Icon Support**: Optional icons for enhanced visual hierarchy
 -   **Theme Integration**: Full support for global and component-level theming
 -   **TypeScript Support**: Complete type definitions for all interfaces
 
-Use breadcrumbs for hierarchical navigation, settings panels, multi-step processes, and any scenario where users need to understand their current location within a larger structure. The component automatically handles accessibility concerns while providing full customization control through CSS variables and theming.
+Use breadcrumbs for hierarchical navigation, settings panels, multi-step processes, and any scenario where users need to understand their current location. The component automatically handles scroll overflow and accessibility concerns while providing full customization control.
 
 ### Accessibility Compliance
 

@@ -22,7 +22,11 @@ import "./mjo-ripple.js";
 import "./mjo-typography.js";
 
 /**
- * A fully accessible button component with loading states, toggle functionality, and comprehensive ARIA support.
+ * @summary Fully accessible button component with multiple variants, interactive states, and comprehensive ARIA support.
+ *
+ * @description The mjo-button component provides a complete button solution with multiple visual variants,
+ * semantic colors, loading states, toggle functionality, and comprehensive accessibility features.
+ * It integrates seamlessly with forms and supports both global and per-instance theming.
  *
  * @fires mjo-button:click - Fired when the button is clicked
  * @fires mjo-button:toggle - Fired when toggle state changes (only when toggleable=true)
@@ -30,13 +34,10 @@ import "./mjo-typography.js";
  *
  * @slot - Button text content
  * @csspart button - The native button element
- *
- * @example
- * ```html
- * <mjo-button variant="primary" size="large">Click me</mjo-button>
- * <mjo-button toggleable>Toggle Button</mjo-button>
- * <mjo-button loading>Loading...</mjo-button>
- * ```
+ * @csspart start-icon - The start icon element
+ * @csspart end-icon - The end icon element
+ * @csspart text - The typography wrapper around the button text
+ * @csspart loading - The loading indicator element (visible when `loading` is true)
  */
 @customElement("mjo-button")
 export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThemeMixin {
@@ -66,6 +67,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
 
         return html`<button
             type=${this.type}
+            part="button"
             data-color=${this.color}
             data-variant=${this.variant}
             data-size=${this.size}
@@ -80,11 +82,11 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             tabindex=${ifDefined(this.tabIndex)}
             @click=${this.#handleClick}
         >
-            ${this.startIcon && html` <mjo-icon src=${this.startIcon}></mjo-icon>`}
-            <mjo-typography tag="none"><slot></slot></mjo-typography>
-            ${this.endIcon && html` <mjo-icon src=${this.endIcon}></mjo-icon>`}
+            ${this.startIcon && html` <mjo-icon exportparts="icon: start-icon" src=${this.startIcon}></mjo-icon>`}
+            <mjo-typography tag="none" exportparts="typography: text"><slot></slot></mjo-typography>
+            ${this.endIcon && html` <mjo-icon exportparts="icon: end-icon" src=${this.endIcon}></mjo-icon>`}
             ${!this.noink && !this.disabled && !this.loading ? html`<mjo-ripple></mjo-ripple>` : nothing}
-            ${this.loading ? html`<div class="loading" aria-hidden="true"></div>` : nothing}
+            ${this.loading ? html`<div class="loading" aria-hidden="true" part="loading"></div>` : nothing}
         </button>`;
     }
 
@@ -170,9 +172,9 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             this.toggle = !this.toggle;
         }
 
-        // Handle form submission (Note: submiForm is a typo in form-mixin, should be submitForm)
+        // Handle form submission
         if (this.form && this.type === "submit") {
-            this.submiForm();
+            this.submitForm();
         }
 
         // Dispatch custom click event

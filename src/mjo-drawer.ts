@@ -8,11 +8,8 @@ import "./components/drawer/mjoint-drawer-container.js";
 
 @customElement("mjo-drawer")
 export class MjoDrawer extends ThemeMixin(LitElement) implements IThemeMixin {
-    // Accessibility properties using native Lit ARIA support
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledby?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
-
-    // Additional accessibility configuration properties
     @property({ type: String }) label?: string; // Alternative label for drawer content
     @property({ type: Boolean }) trapFocus = true; // Enable/disable focus trapping
     @property({ type: Boolean }) restoreFocus = true; // Enable/disable focus restoration

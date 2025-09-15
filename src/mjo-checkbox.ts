@@ -15,12 +15,36 @@ import { FaCheck, FaMinus } from "mjo-icons/fa";
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
-
-import "./components/input/mjoint-input-helper-text.js";
-import "./mjo-icon.js";
-import "./mjo-typography.js";
 import { searchParentElement } from "./utils/shadow-dom.js";
 
+import "./components/input/mjoint-input-helper-text.js";
+
+import "./mjo-icon.js";
+import "./mjo-typography.js";
+
+/**
+ * @summary A customizable checkbox component with form integration, validation support, and indeterminate state.
+ *
+ * @fires change - Standard HTML input change event for form compatibility
+ * @fires mjo-checkbox:change - Enhanced custom event with detailed state information
+ * @fires mjo-checkbox:indeterminate-change - Fired when indeterminate state changes
+ * @fires mjo-checkbox:focus - Fired when checkbox receives focus
+ * @fires mjo-checkbox:blur - Fired when checkbox loses focus
+ *
+ * @csspart container - The main checkbox container
+ * @csspart box - The checkbox visual container
+ * @csspart checkbox - The checkbox itself
+ * @csspart checkbox-inner - The inner area containing the check/indeterminate icon
+ * @csspart checkbox-icon - The check/indeterminate icon (via exportparts)
+ * @csspart label-container - Container for the label text
+ * @csspart label-text - The label typography element (via exportparts)
+ * @csspart helper-text-container - Container for helper text (via exportparts)
+ * @csspart helper-text-typography - The helper text typography element (via exportparts)
+ * @csspart helper-text-msg-container - Container for error/success messages (via exportparts)
+ * @csspart helper-text-msg-error-message - Error message element (via exportparts)
+ * @csspart helper-text-msg-success-message - Success message element (via exportparts)
+ * @csspart helper-text-msg-icon - Icon in error/success messages (via exportparts)
+ */
 @customElement("mjo-checkbox")
 export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
     @property({ type: String }) color: MjoCheckboxColor = "primary";
@@ -68,6 +92,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size} ?data-error=${this.error}>
             <div
                 class="checkbox-container"
+                part="container"
                 role="checkbox"
                 aria-checked=${this.computedAriaChecked}
                 aria-label=${ifDefined(this.computedAriaLabel)}
@@ -80,22 +105,28 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 @focus=${this.#handleFocus}
                 @blur=${this.#handleBlur}
             >
-                <div class="box">
-                    <div class="checkbox" ?data-checked=${this.checked} ?data-indeterminate=${this.indeterminate}>
+                <div class="box" part="box">
+                    <div class="checkbox" part="checkbox" ?data-checked=${this.checked} ?data-indeterminate=${this.indeterminate}>
                         ${this.indeterminate
                             ? html`
-                                  <div class="inner">
-                                      <mjo-icon src=${FaMinus}></mjo-icon>
+                                  <div class="inner" part="checkbox-inner">
+                                      <mjo-icon src=${FaMinus} exportparts="icon: checkbox-icon"></mjo-icon>
                                   </div>
                               `
                             : html`
-                                  <div class="inner">
-                                      <mjo-icon src=${FaCheck}></mjo-icon>
+                                  <div class="inner" part="checkbox-inner">
+                                      <mjo-icon src=${FaCheck} exportparts="icon: checkbox-icon"></mjo-icon>
                                   </div>
                               `}
                     </div>
                 </div>
-                ${this.label ? html`<div class="label-container"><mjo-typography tag="none" class="label">${this.label}</mjo-typography></div>` : nothing}
+                ${this.label
+                    ? html`
+                          <div class="label-container" part="label-container">
+                              <mjo-typography tag="none" class="label" exportparts="typography: label-text">${this.label}</mjo-typography>
+                          </div>
+                      `
+                    : nothing}
                 <input
                     id=${ifDefined(this.id)}
                     type="checkbox"
@@ -109,9 +140,27 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                     tabindex="-1"
                 />
             </div>
-            ${this.helperText ? html`<mjoint-input-helper-text>${this.helperText}</mjoint-input-helper-text> ` : nothing}
+            ${this.helperText
+                ? html`
+                      <mjoint-input-helper-text
+                          exportparts="
+                            container: helper-text-container,
+                            helper-text: helper-text-typography"
+                      >
+                          ${this.helperText}
+                      </mjoint-input-helper-text>
+                  `
+                : nothing}
             ${this.errormsg || this.successmsg
-                ? html`<mjoint-input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}></mjoint-input-helper-text> `
+                ? html`<mjoint-input-helper-text
+                      exportparts="
+                            container: helper-text-msg-container,
+                            error-message: helper-text-msg-error-message,
+                            success-message: helper-text-msg-success-message,
+                            icon: helper-text-msg-icon"
+                      .errormsg=${this.errormsg}
+                      .successmsg=${this.successmsg}
+                  ></mjoint-input-helper-text> `
                 : nothing}
         </div>`;
     }
@@ -122,13 +171,6 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         this.#searchGroup();
 
         this.updateFormData({ name: this.name || "", value: this.checked ? this.value || "1" : "" });
-    }
-
-    #searchGroup() {
-        this.group = searchParentElement(this, "mjo-checkbox-group") as MjoCheckboxGroup | null;
-        if (this.group) {
-            this.group.pushCheckbox(this);
-        }
     }
 
     getValue() {
@@ -178,6 +220,13 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
 
     setCustomValidity(message: string): void {
         this.inputElement.setCustomValidity(message);
+    }
+
+    #searchGroup() {
+        this.group = searchParentElement(this, "mjo-checkbox-group") as MjoCheckboxGroup | null;
+        if (this.group) {
+            this.group.pushCheckbox(this);
+        }
     }
 
     #handleClick(newValue?: boolean) {

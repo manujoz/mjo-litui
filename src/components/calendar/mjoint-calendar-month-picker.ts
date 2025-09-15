@@ -17,12 +17,20 @@ export class MjointCalendarMonthPicker extends LitElement {
 
     render() {
         return html`
-            <div class="month-picker" ?data-disabled=${this.disabled} role="dialog" aria-label="Select month" @keydown=${this.#handleKeydown}>
-                <div class="months-grid" role="grid" aria-label="Month selection grid">
+            <div
+                class="month-picker"
+                part="month-picker-container"
+                ?data-disabled=${this.disabled}
+                role="dialog"
+                aria-label="Select month"
+                @keydown=${this.#handleKeydown}
+            >
+                <div class="months-grid" part="month-picker-grid" role="grid" aria-label="Month selection grid">
                     ${this.monthNames.map(
                         (month, index) => html`
                             <button
                                 class="month-button"
+                                part="month-picker-button"
                                 role="gridcell"
                                 ?data-selected=${index === this.selectedMonth}
                                 ?disabled=${this.disabled}

@@ -1,8 +1,9 @@
-import { LitElement, PropertyValues, css, html } from "lit";
+import { LitElement, PropertyValues, css, html, isServer } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { MjoAvatarColor, MjoAvatarRadius, MjoAvatarSize } from "./types/mjo-avatar.js";
 import { pause } from "./utils/utils.js";
 
 /**
@@ -15,7 +16,6 @@ import { pause } from "./utils/utils.js";
  * @fires mjo-avatar:click - Fired when the avatar is clicked (only when clickable is true)
  * @fires mjo-avatar:error - Fired when the image fails to load
  *
- * @slot - No slots available (content provided via properties)
  * @csspart container - The main avatar container element
  * @csspart image-container - The image/content container
  * @csspart image - The actual image element (when using src)
@@ -29,53 +29,31 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) nameColoured = false;
     @property({ type: String }) fallbackIcon?: string;
     @property({ type: String }) alt?: string;
-    @property({ type: String }) color: "default" | "primary" | "secondary" | "success" | "warning" | "info" | "error" = "default";
+    @property({ type: String }) color: MjoAvatarColor = "default";
     @property({ type: String }) name?: string;
-    @property({ type: String }) radius: "small" | "medium" | "large" | "full" | "none" = "full";
-    @property({ type: String }) size: "small" | "medium" | "large" = "medium";
+    @property({ type: String }) radius: MjoAvatarRadius = "full";
+    @property({ type: String }) size: MjoAvatarSize = "medium";
     @property({ type: String }) src?: string;
     @property({ type: String }) value?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
 
     @state() private error = false;
 
-    @query(".container") private container!: HTMLElement;
-
-    private initial = "";
-
-    private get appropriateRole() {
-        if (this.clickable) return "button";
-        if (this.src) return "img";
-        return "presentation";
-    }
-
-    private get computedAriaLabel() {
-        if (this.ariaLabel) return this.ariaLabel;
-
-        if (this.clickable) {
-            const nameOrValue = this.name || this.value || "avatar";
-            return `Click to interact with ${nameOrValue}`;
-        }
-        if (this.name) {
-            return `Avatar for ${this.name}`;
-        }
-        return "Avatar";
-    }
+    @query(".container") private $container!: HTMLElement;
 
     render() {
-        this.initial = this.name ? this.name[0].toLocaleUpperCase() : "";
-
         return html`<div
             class="container size-${this.size} radius-${this.radius} color-${this.color}"
             part="container"
-            role=${this.appropriateRole}
-            aria-label=${this.computedAriaLabel}
+            role=${this.#appropriateRole}
+            aria-label=${this.#computedAriaLabel}
             aria-describedby=${ifDefined(this.ariaDescribedby)}
             aria-disabled=${this.disabled ? "true" : "false"}
-            tabindex=${this.clickable ? this.tabIndex ?? 0 : -1}
+            tabindex=${this.clickable ? (this.tabIndex ?? 0) : -1}
             ?data-bordered=${this.bordered}
             ?data-disabled=${this.disabled}
             ?data-clickable=${this.clickable}
+            ?data-ssr=${isServer}
             @click=${this.#handleClick}
             @keydown=${this.#handleKeydown}
         >
@@ -87,30 +65,24 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                   `
                 : this.fallbackIcon
                   ? html`
-                        <div class="image fallback radius-${this.radius} font-size-${this.size}" part="image-container">
+                        <div class="image fallback radius-${this.radius} font-size-${this.size}" part="image-container fallback">
                             <mjo-icon src=${this.fallbackIcon} exportparts="icon: icon"></mjo-icon>
                         </div>
                     `
                   : this.name
-                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}" part="image-container"><span>${this.initial}</span></div>`
+                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}" part="image-container name"><span>${this.#initial}</span></div>`
                     : html`<div class="image radius-${this.radius}" part="image-container"></div>`}
         </div>`;
     }
 
-    connectedCallback(): void {
-        super.connectedCallback();
-
-        if (this.name) {
-            this.initial = this.name[0].toUpperCase();
+    protected firstUpdated(_changedProperties: PropertyValues<this>): void {
+        if (_changedProperties.has("src")) {
+            this.#checkImageStatusSsr();
         }
     }
 
-    protected updated(_changedProperties: PropertyValues): void {
-        if (_changedProperties.has("name")) {
-            this.initial = this.name ? this.name[0].toUpperCase() : "";
-        }
-
-        if (_changedProperties.has("src")) {
+    protected updated(_changedProperties: PropertyValues<this>): void {
+        if (_changedProperties.has("src") && this.error) {
             this.error = false;
         }
 
@@ -125,6 +97,33 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             nameElement.style.backgroundColor = "";
             nameElement.style.color = "";
         }
+    }
+
+    get #appropriateRole() {
+        if (this.clickable) return "button";
+        if (this.src) return "img";
+        return "presentation";
+    }
+
+    get #computedAriaLabel() {
+        if (this.ariaLabel) return this.ariaLabel;
+
+        if (this.clickable) {
+            const nameOrValue = this.name || this.value || "avatar";
+            return `Click to interact with ${nameOrValue}`;
+        }
+        if (this.name) {
+            return `Avatar for ${this.name}`;
+        }
+        return "Avatar";
+    }
+
+    get #initial() {
+        return this.name ? this.name[0].toLocaleUpperCase() : "";
+    }
+
+    click(): void {
+        this.#handleClick();
     }
 
     #colorByInitial() {
@@ -167,8 +166,8 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             "#fff",
         ];
 
-        const bgindex = this.initial.charCodeAt(0) % backgroundColors.length;
-        const fgindex = this.initial.charCodeAt(0) % foregroundColors.length;
+        const bgindex = this.#initial.charCodeAt(0) % backgroundColors.length;
+        const fgindex = this.#initial.charCodeAt(0) % foregroundColors.length;
 
         return [backgroundColors[bgindex], foregroundColors[fgindex]];
     }
@@ -186,11 +185,34 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
 
         this.dispatchEvent(new CustomEvent("mjo-avatar:click", { detail: { value: this.value || this.name || "" } }));
 
-        this.container.style.transform = "scale(0.9)";
+        this.$container.style.transform = "scale(0.9)";
         await pause(100);
-        this.container.style.transform = "scale(1.1)";
+        this.$container.style.transform = "scale(1.1)";
         await pause(150);
-        this.container.removeAttribute("style");
+        this.$container.removeAttribute("style");
+    }
+
+    /**
+     * For SSR environments, check if the image has already failed to load
+     * This is a no-op in CSR as event listeners handle errors
+     * If the component is not rendered with SSR or has no src, do nothing
+     */
+    #checkImageStatusSsr() {
+        if (!this.$container.hasAttribute("data-ssr") || !this.src) return;
+
+        this.$container.removeAttribute("data-ssr");
+
+        requestAnimationFrame(() => {
+            const imgElement = this.shadowRoot?.querySelector("img") as HTMLImageElement | null;
+            if (!imgElement) return;
+
+            // Check if image failed to load (common indicators)
+            const imageError = imgElement.complete && imgElement.naturalWidth === 0 && imgElement.naturalHeight === 0;
+
+            if (imageError) {
+                this.#handleError();
+            }
+        });
     }
 
     #handleError() {
@@ -224,14 +246,13 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 height: 100%;
                 overflow: hidden;
                 background: var(--mjo-avatar-background-color, var(--mjo-color-gray-400));
-                transition-property: background-color border-color border-radius;
+                transition-property: background-color, border-color, border-radius;
                 transition-duration: 0.3s;
             }
             .image img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-                vertical-align: middle;
             }
 
             .fallback {
@@ -243,8 +264,8 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 display: grid;
                 place-content: center;
                 font-weight: bold;
-                background-color: var(--mjo-avatar-name-auto-background-color, var(--mjo-avatar-background-color, var(--mjo-color-gray-400)));
-                color: var(--mjo-avatar-name-auto-foreground-color, var(--mjo-avatar-name-color, var(--mjo-color-gray-100)));
+                background-color: var(--mjo-avatar-background-color, var(--mjo-color-gray-400));
+                color: var(--mjo-avatar-name-color, var(--mjo-color-gray-100));
             }
 
             .size-small {
@@ -268,11 +289,20 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
             .radius-small {
                 border-radius: var(--mjo-avatar-radius-small, 4px);
             }
+            .image.radius-small {
+                border-radius: calc(var(--mjo-avatar-radius-small, 4px) - 2px);
+            }
             .radius-medium {
                 border-radius: var(--mjo-avatar-radius-medium, 8px);
             }
+            .image.radius-medium {
+                border-radius: calc(var(--mjo-avatar-radius-medium, 8px) - 3px);
+            }
             .radius-large {
                 border-radius: var(--mjo-avatar-radius-large, 12px);
+            }
+            .image.radius-large {
+                border-radius: calc(var(--mjo-avatar-radius-large, 12px) - 4px);
             }
             .radius-full {
                 border-radius: 50%;
@@ -290,7 +320,7 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
                 height: var(--mjo-avatar-size-large, 54px);
             }
             .color-default {
-                border-color: var(--mjo-avatar-name-auto-background-color, var(--mjo-avatar-border-color, var(--mjo-color-gray-300)));
+                border-color: var(--mjo-avatar-border-color, var(--mjo-color-gray-300));
             }
             .color-primary {
                 border-color: var(--mjo-primary-color, #1976d2);
@@ -313,32 +343,32 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
 
             .container[data-bordered] {
                 border-style: solid;
-                border-width: var(--mjo-avatar-border-width, 2px);
+                border-width: var(--mjo-avatar-border-width, 3px);
                 padding: 2px;
             }
             .container[data-bordered].size-small {
-                width: calc(var(--mjo-avatar-size-small, 32px) - var(--mjo-avatar-border-width, 2px));
-                height: calc(var(--mjo-avatar-size-small, 32px) - var(--mjo-avatar-border-width, 2px));
-                font-size: calc(var(--mjo-avatar-fallback-size-small, 18px) - var(--mjo-avatar-border-width, 2px));
+                width: calc(var(--mjo-avatar-size-small, 32px) - var(--mjo-avatar-border-width, 3px));
+                height: calc(var(--mjo-avatar-size-small, 32px) - var(--mjo-avatar-border-width, 3px));
+                font-size: calc(var(--mjo-avatar-fallback-size-small, 18px) - var(--mjo-avatar-border-width, 3px));
             }
             .container[data-bordered].size-medium {
-                width: calc(var(--mjo-avatar-size-medium, 44px) - var(--mjo-avatar-border-width, 2px));
-                height: calc(var(--mjo-avatar-size-medium, 44px) - var(--mjo-avatar-border-width, 2px));
-                font-size: calc(var(--mjo-avatar-fallback-size-medium, 26px) - var(--mjo-avatar-border-width, 2px));
+                width: calc(var(--mjo-avatar-size-medium, 44px) - var(--mjo-avatar-border-width, 3px));
+                height: calc(var(--mjo-avatar-size-medium, 44px) - var(--mjo-avatar-border-width, 3px));
+                font-size: calc(var(--mjo-avatar-fallback-size-medium, 26px) - var(--mjo-avatar-border-width, 3px));
             }
             .container[data-bordered].size-large {
-                width: calc(var(--mjo-avatar-size-large, 54px) - var(--mjo-avatar-border-width, 2px));
-                height: calc(var(--mjo-avatar-size-large, 54px) - var(--mjo-avatar-border-width, 2px));
-                font-size: calc(var(--mjo-avatar-fallback-size-large, 36px) - var(--mjo-avatar-border-width, 2px));
+                width: calc(var(--mjo-avatar-size-large, 54px) - var(--mjo-avatar-border-width, 3px));
+                height: calc(var(--mjo-avatar-size-large, 54px) - var(--mjo-avatar-border-width, 3px));
+                font-size: calc(var(--mjo-avatar-fallback-size-large, 36px) - var(--mjo-avatar-border-width, 3px));
             }
             .container[data-bordered].size-small mjo-icon {
-                font-size: calc(var(--mjo-avatar-fallback-size-small, 18px) - var(--mjo-avatar-border-width, 2px));
+                font-size: calc(var(--mjo-avatar-fallback-size-small, 18px) - var(--mjo-avatar-border-width, 3px));
             }
             .container[data-bordered].size-medium mjo-icon {
-                font-size: calc(var(--mjo-avatar-fallback-size-medium, 26px) - var(--mjo-avatar-border-width, 2px));
+                font-size: calc(var(--mjo-avatar-fallback-size-medium, 26px) - var(--mjo-avatar-border-width, 3px));
             }
             .container[data-bordered].size-large mjo-icon {
-                font-size: calc(var(--mjo-avatar-fallback-size-large, 36px) - var(--mjo-avatar-border-width, 2px));
+                font-size: calc(var(--mjo-avatar-fallback-size-large, 36px) - var(--mjo-avatar-border-width, 3px));
             }
             .container[data-clickable] {
                 cursor: pointer;

@@ -33,10 +33,6 @@ export class MjointCalendarGrid extends LitElement {
     @property({ type: Object }) hoverDate?: Date;
     @property({ type: Object }) focusedDate?: Date;
 
-    get gridLabel() {
-        return `Calendar grid for ${this.year}-${String(this.month + 1).padStart(2, "0")}`;
-    }
-
     render() {
         const firstDay = new Date(this.year, this.month, 1);
         const lastDay = new Date(this.year, this.month + 1, 0);
@@ -76,6 +72,7 @@ export class MjointCalendarGrid extends LitElement {
             days.push(html`
                 <mjoint-calendar-day
                     day=${day}
+                    exportparts="day,day-selected,day-today"
                     month=${this.month}
                     year=${this.year}
                     ?isToday=${isToday}
@@ -96,21 +93,25 @@ export class MjointCalendarGrid extends LitElement {
         }
 
         return html`
-            <div class="calendar-grid" part="calendar-grid" role="grid" aria-label=${this.gridLabel}>
+            <div class="calendar-grid" part="calendar-grid" role="grid" aria-label=${this.#gridLabel}>
                 <!-- Week day headers -->
-                <div class="week-header" role="row">
+                <div class="week-header" part="week-days-container" role="row">
                     ${weekDaysAdjusted.map(
                         (day) => html`
-                            <div class="week-day" role="columnheader">
+                            <div class="week-day" role="columnheader" part="week-day">
                                 <mjo-typography tag="none" size="body1">${day}</mjo-typography>
                             </div>
                         `,
                     )}
                 </div>
                 <!-- Days grid -->
-                <div class="days-grid">${days}</div>
+                <div class="days-grid" part="days-container">${days}</div>
             </div>
         `;
+    }
+
+    get #gridLabel() {
+        return `Calendar grid for ${this.year}-${String(this.month + 1).padStart(2, "0")}`;
     }
 
     #handleDayClick(event: CalendarDayClickEvent) {

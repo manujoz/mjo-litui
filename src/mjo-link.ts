@@ -23,29 +23,8 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) cover = false;
     @property({ type: Boolean }) nodecor = false;
     @property({ type: Boolean }) preventDefault = false;
-
-    // ARIA Properties (using Lit's native support)
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledBy?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedBy?: string;
-
-    private get computedRel(): string {
-        if (this.rel) return this.rel;
-
-        // Auto-add security attributes for external links
-        if (this.target === "_blank") {
-            return "noopener noreferrer";
-        }
-
-        return "";
-    }
-
-    private get computedTabIndex(): number {
-        return this.disabled ? -1 : 0;
-    }
-
-    private get roleAssignment(): string | undefined {
-        return this.variant !== "link" || !this.href ? "button" : undefined;
-    }
 
     render() {
         const aClasses = classMap({
@@ -59,9 +38,10 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                 href=${ifDefined(this.href)}
                 @click=${this.#handleClick}
                 target=${this.target}
-                rel=${ifDefined(this.computedRel || undefined)}
-                role=${ifDefined(this.roleAssignment as "")}
-                tabindex=${this.computedTabIndex}
+                part="link"
+                rel=${ifDefined(this.#computedRel || undefined)}
+                role=${ifDefined(this.#roleAssignment as "")}
+                tabindex=${this.#computedTabIndex}
                 aria-label=${ifDefined(this.ariaLabel || undefined)}
                 aria-labelledby=${ifDefined(this.ariaLabelledBy)}
                 aria-describedby=${ifDefined(this.ariaDescribedBy)}
@@ -71,7 +51,7 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                 aria-disabled=${ifDefined(this.disabled ? "true" : undefined)}
             >
                 ${this.variant === "link"
-                    ? html`<span class=${`${this.size} ${this.weight}`}><slot></slot></span>`
+                    ? html`<span class=${`${this.size} ${this.weight}`} part="link-text"><slot></slot></span>`
                     : html`
                           <mjo-button
                               type="button"
@@ -79,12 +59,31 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
                               color=${this.color === "default" ? "primary" : this.color}
                               ?disabled=${this.disabled}
                               tabindex="-1"
+                              exportparts="button: button, text: button-content"
                           >
                               <slot></slot>
                           </mjo-button>
                       `}
             </a>
         `;
+    }
+
+    get #computedRel(): string {
+        if (this.rel) return this.rel;
+
+        if (this.target === "_blank") {
+            return "noopener noreferrer";
+        }
+
+        return "";
+    }
+
+    get #computedTabIndex(): number {
+        return this.disabled ? -1 : 0;
+    }
+
+    get #roleAssignment(): string | undefined {
+        return this.variant !== "link" || !this.href ? "button" : undefined;
     }
 
     #handleClick = (ev: Event) => {
@@ -132,7 +131,7 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
             }
 
             /* Hover states */
-            a:hover:not(.disabled) {
+            a:hover {
                 text-decoration: var(--mjo-link-text-decoration-hover, underline);
             }
 

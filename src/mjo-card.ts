@@ -6,6 +6,18 @@ import { customElement, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
+/**
+ * @summary Flexible card component with background, padding, shadow, radius, and variant customization.
+ *
+ * @description The mjo-card component provides a versatile container with theme-aware styling.
+ * It supports multiple contrast levels for background adaptation, configurable border radius,
+ * different spacing options, and visual variants including modern geometric shapes.
+ * The component integrates with the global design system through CSS variables.
+ *
+ * @slot - Content to be displayed inside the card container
+ * @csspart container - The main card container element
+ * @csspart content - The internal content wrapper element
+ */
 @customElement("mjo-card")
 export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) contrast?: MjoCardContrast;
@@ -18,12 +30,13 @@ export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
             ${this.variant !== "default" ? html`<div class="border" data-variant=${this.variant}></div>` : nothing}
             <div
                 class="container"
+                part="container"
                 data-space=${this.space}
                 data-contrast=${ifDefined(this.contrast)}
                 data-radius=${ifDefined(this.radius)}
                 data-variant=${this.variant}
             >
-                <div class="content"><slot></slot></div>
+                <div class="content" part="content"><slot></slot></div>
             </div>
         `;
     }

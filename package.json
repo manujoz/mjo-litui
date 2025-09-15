@@ -1,6 +1,6 @@
 {
     "name": "mjo-litui",
-    "version": "0.7.11",
+    "version": "0.7.23",
     "description": "A collection of web components for building user interfaces with LitElement.",
     "type": "module",
     "main": "index.js",
@@ -91,6 +91,8 @@
         "build:minify-css": "node scripts/minify-css.js",
         "build:unminified": "rm -rf dist && tsc -p tsconfig.build.json && ncp src/types dist/types && ncp src/styles dist/styles && cp dist/styles/theme.css dist/styles/theme.min.css && ncp cli dist/cli && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
         "build:publish": "npm run build && cd dist && npm publish",
+        "lint": "eslint src --ext .ts,.js",
+        "lint:fix": "eslint src --ext .ts,.js --fix",
         "preview": "vite preview",
         "test": "npm run build && web-test-runner",
         "test:once": "npm run build && echo 'Running tests once (Note: web-test-runner may still enter watch mode in interactive terminals due to a known limitation)'",
@@ -152,7 +154,7 @@
         "tsx": "^4.20.4",
         "typescript": "^5.2.2",
         "validate-branch-name": "^1.3.0",
-        "vite": "^5.0.8",
+        "vite": "^7.1.5",
         "vite-plugin-svgo": "^1.4.0",
         "ws": "^8.18.3"
     }

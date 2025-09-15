@@ -1,7 +1,7 @@
 import type { MjoTheme } from "../../src";
 import { MjoThemeModes } from "../../src/types/mjo-theme";
 
-import { LitElement, PropertyValues, css, html } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
 @customElement("theme-toggle")
@@ -16,12 +16,15 @@ export class ThemeToggle extends LitElement {
         `;
     }
 
-    protected firstUpdated(_changedProperties: PropertyValues): void {
-        super.firstUpdated(_changedProperties);
-        const mjoTheme = document.querySelector("mjo-theme") as MjoTheme;
-        if (mjoTheme) {
-            this.theme = mjoTheme.theme;
-        }
+    connectedCallback(): void {
+        super.connectedCallback();
+
+        this.updateComplete.then(() => {
+            const mjoTheme = document.querySelector("mjo-theme") as MjoTheme;
+            if (mjoTheme) {
+                this.theme = mjoTheme.theme;
+            }
+        });
     }
 
     #toggleTheme = () => {

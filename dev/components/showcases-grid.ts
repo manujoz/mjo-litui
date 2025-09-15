@@ -25,7 +25,7 @@ export class ShowcasesGrid extends LitElement {
                 display: block;
             }
             .container {
-                background-color: var(--mjo-background-color-card-low, #f9f9f9);
+                background-color: var(--mjo-background-color, #f9f9f9);
                 padding: 12px;
                 border-radius: var(--mjo-radius-large);
             }

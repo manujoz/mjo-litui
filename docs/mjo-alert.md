@@ -149,22 +149,23 @@ export class ExampleAlertControl extends LitElement {
 
 ## Attributes / Properties
 
-| Name                | Type                                          | Default    | Reflects | Description                                                              |
-| ------------------- | --------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------ |
-| `type`              | `"success" \| "info" \| "warning" \| "error"` | `"info"`   | no       | Semantic type that determines color scheme and default icon              |
-| `size`              | `"small" \| "medium" \| "large"`              | `"medium"` | no       | Controls font size and padding                                           |
-| `rounded`           | `"none" \| "small" \| "medium" \| "large"`    | `"medium"` | no       | Border radius applied to the alert container                             |
-| `message`           | `string`                                      | `""`       | no       | Main alert message displayed prominently                                 |
-| `detail`            | `string \| TemplateResult`                    | `""`       | no       | Additional detail text (supports HTML content, use trusted content only) |
-| `closable`          | `boolean`                                     | `false`    | no       | Shows close button and enables dismissal functionality                   |
-| `hideIcon`          | `boolean`                                     | `false`    | no       | Hides the default type-based icon                                        |
-| `ariaLive`          | `"polite" \| "assertive" \| "off"`            | `"polite"` | no       | Controls aria-live announcement behavior for screen readers              |
-| `focusOnShow`       | `boolean`                                     | `false`    | no       | Automatically focus the alert when shown                                 |
-| `autoClose`         | `boolean`                                     | `false`    | no       | Automatically close the alert after a delay                              |
-| `autoCloseDelay`    | `number`                                      | `5000`     | no       | Delay in milliseconds before auto-closing (when enabled)                 |
-| `animation`         | `"fade" \| "slide" \| "scale" \| "none"`      | `"fade"`   | no       | Animation type for show/hide transitions                                 |
-| `animationDuration` | `number`                                      | `300`      | no       | Animation duration in milliseconds                                       |
-| `persistent`        | `boolean`                                     | `false`    | no       | Prevents the alert from being closed manually                            |
+| Name                | Type                                                                                   | Default    | Reflects | Description                                                              |
+| ------------------- | -------------------------------------------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------ |
+| `type`              | `"default" \| "primary" \| "secondary" \| "success" \| "info" \| "warning" \| "error"` | `"info"`   | no       | Semantic type that determines color scheme and default icon              |
+| `size`              | `"small" \| "medium" \| "large"`                                                       | `"medium"` | no       | Controls font size and padding                                           |
+| `rounded`           | `"none" \| "small" \| "medium" \| "large"`                                             | `"medium"` | no       | Border radius applied to the alert container                             |
+| `icon`              | `string`                                                                               | `""`       | no       | The icon to display in the alert (must be SVG)                           |
+| `message`           | `string`                                                                               | `""`       | no       | Main alert message displayed prominently                                 |
+| `detail`            | `string \| TemplateResult`                                                             | `""`       | no       | Additional detail text (supports HTML content, use trusted content only) |
+| `closable`          | `boolean`                                                                              | `false`    | no       | Shows close button and enables dismissal functionality                   |
+| `hideIcon`          | `boolean`                                                                              | `false`    | no       | Hides the default type-based icon                                        |
+| `ariaLive`          | `"polite" \| "assertive" \| "off"`                                                     | `"polite"` | no       | Controls aria-live announcement behavior for screen readers              |
+| `focusOnShow`       | `boolean`                                                                              | `false`    | no       | Automatically focus the alert when shown                                 |
+| `autoClose`         | `boolean`                                                                              | `false`    | no       | Automatically close the alert after a delay                              |
+| `autoCloseDelay`    | `number`                                                                               | `5000`     | no       | Delay in milliseconds before auto-closing (when enabled)                 |
+| `animation`         | `"fade" \| "slide" \| "scale" \| "none"`                                               | `"fade"`   | no       | Animation type for show/hide transitions                                 |
+| `animationDuration` | `number`                                                                               | `300`      | no       | Animation duration in milliseconds                                       |
+| `persistent`        | `boolean`                                                                              | `false`    | no       | Prevents the alert from being closed manually                            |
 
 ### Internal State
 
@@ -215,10 +216,10 @@ The component uses semantic color tokens and spacing variables with fallbacks to
 
 ### Component-specific Variables
 
-| Variable                         | Default             | Used For                          |
-| -------------------------------- | ------------------- | --------------------------------- |
-| `--mjo-alert-space`              | `--mjo-space-small` | Internal padding and spacing      |
-| `--mjo-alert-animation-duration` | `300ms`             | Duration for show/hide animations |
+| Variable                          | Default | Used For                     |
+| --------------------------------- | ------- | ---------------------------- |
+| `--mjo-alert-border-width`        | `3px`   | Internal padding and spacing |
+| `--mjo-alert-message-font-weight` | `600`   | Internal padding and spacing |
 
 ### Type-based Colors
 

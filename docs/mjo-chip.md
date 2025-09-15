@@ -39,7 +39,7 @@ export class ExampleChipBasic extends LitElement {
 }
 ```
 
-## Interactive and Clickable Example
+## Interactive Example
 
 ```ts
 import { LitElement, html } from "lit";
@@ -51,59 +51,29 @@ export class ExampleChipInteractive extends LitElement {
     @state() private lastAction = "";
 
     private handleChipClick(event: CustomEvent) {
-        this.lastAction = `Clicked chip: ${event.detail.value}`;
+        this.lastAction = `Clicked: ${event.detail.value}`;
     }
 
     private handleChipClose(event: CustomEvent) {
-        this.lastAction = `Closed chip: ${event.detail.value}`;
+        this.lastAction = `Closed: ${event.detail.value}`;
     }
 
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div>
-                    <h4>Clickable Chips</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip label="Click Me" color="primary" clickable value="clickable-chip" @mjo-chip:click=${this.handleChipClick}></mjo-chip>
-                        <mjo-chip label="Filter Active" color="success" clickable startIcon="check" @mjo-chip:click=${this.handleChipClick}></mjo-chip>
-                    </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <mjo-chip label="Click Me" color="primary" clickable @mjo-chip:click=${this.handleChipClick}></mjo-chip>
+                    <mjo-chip label="Remove Me" color="error" closable @mjo-chip:close=${this.handleChipClose}></mjo-chip>
+                    <mjo-chip
+                        label="Interactive"
+                        color="info"
+                        clickable
+                        closable
+                        @mjo-chip:click=${this.handleChipClick}
+                        @mjo-chip:close=${this.handleChipClose}
+                    ></mjo-chip>
                 </div>
-
-                <div>
-                    <h4>Closable Chips</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip label="Remove Me" color="error" closable @mjo-chip:close=${this.handleChipClose}></mjo-chip>
-                        <mjo-chip label="Tag: JavaScript" color="info" closable value="javascript-tag" @mjo-chip:close=${this.handleChipClose}></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Both Interactive</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip
-                            label="Interactive Filter"
-                            color="primary"
-                            clickable
-                            closable
-                            value="interactive-filter"
-                            @mjo-chip:click=${this.handleChipClick}
-                            @mjo-chip:close=${this.handleChipClose}
-                        ></mjo-chip>
-                        <mjo-chip
-                            label="Smart Tag"
-                            color="secondary"
-                            clickable
-                            closable
-                            startIcon="star"
-                            @mjo-chip:click=${this.handleChipClick}
-                            @mjo-chip:close=${this.handleChipClose}
-                        ></mjo-chip>
-                    </div>
-                </div>
-
-                ${this.lastAction
-                    ? html` <div style="padding: 0.5rem; background: #f5f5f5; border-radius: 4px;"><strong>Last action:</strong> ${this.lastAction}</div> `
-                    : ""}
+                ${this.lastAction ? html`<p><strong>Last action:</strong> ${this.lastAction}</p>` : ""}
             </div>
         `;
     }
@@ -116,82 +86,25 @@ export class ExampleChipInteractive extends LitElement {
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-chip";
-import "mjo-litui/mjo-icon";
 
 @customElement("example-chip-variants")
 export class ExampleChipVariants extends LitElement {
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <div>
-                    <h4>Solid Variant (Default)</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Default" variant="solid"></mjo-chip>
-                        <mjo-chip label="Primary" color="primary" variant="solid"></mjo-chip>
-                        <mjo-chip label="Success" color="success" variant="solid"></mjo-chip>
-                        <mjo-chip label="Warning" color="warning" variant="solid"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Bordered Variant</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Default" variant="bordered"></mjo-chip>
-                        <mjo-chip label="Primary" color="primary" variant="bordered"></mjo-chip>
-                        <mjo-chip label="Success" color="success" variant="bordered"></mjo-chip>
-                        <mjo-chip label="Error" color="error" variant="bordered"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Light Variant</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Default" variant="light"></mjo-chip>
-                        <mjo-chip label="Primary" color="primary" variant="light"></mjo-chip>
-                        <mjo-chip label="Secondary" color="secondary" variant="light"></mjo-chip>
-                        <mjo-chip label="Info" color="info" variant="light"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Flat Variant</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Default" variant="flat"></mjo-chip>
-                        <mjo-chip label="Primary" color="primary" variant="flat"></mjo-chip>
-                        <mjo-chip label="Warning" color="warning" variant="flat"></mjo-chip>
-                        <mjo-chip label="Error" color="error" variant="flat"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Faded Variant</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Default" variant="faded"></mjo-chip>
-                        <mjo-chip label="Primary" color="primary" variant="faded"></mjo-chip>
-                        <mjo-chip label="Success" color="success" variant="faded"></mjo-chip>
-                        <mjo-chip label="Info" color="info" variant="faded"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Shadow Variant</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Default" variant="shadow"></mjo-chip>
-                        <mjo-chip label="Primary" color="primary" variant="shadow"></mjo-chip>
-                        <mjo-chip label="Secondary" color="secondary" variant="shadow"></mjo-chip>
-                        <mjo-chip label="Warning" color="warning" variant="shadow"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Dot Variant</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Default" variant="dot"></mjo-chip>
-                        <mjo-chip label="Primary" color="primary" variant="dot"></mjo-chip>
-                        <mjo-chip label="Success" color="success" variant="dot"></mjo-chip>
-                        <mjo-chip label="Error" color="error" variant="dot"></mjo-chip>
-                    </div>
-                </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                ${["solid", "bordered", "flat", "shadow", "dot"].map(
+                    (variant) => html`
+                        <div>
+                            <h4>${variant.charAt(0).toUpperCase() + variant.slice(1)} Variant</h4>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <mjo-chip label="Primary" color="primary" variant=${variant as any}></mjo-chip>
+                                <mjo-chip label="Success" color="success" variant=${variant as any}></mjo-chip>
+                                <mjo-chip label="Warning" color="warning" variant=${variant as any}></mjo-chip>
+                                <mjo-chip label="Error" color="error" variant=${variant as any}></mjo-chip>
+                            </div>
+                        </div>
+                    `,
+                )}
             </div>
         `;
     }
@@ -204,57 +117,29 @@ export class ExampleChipVariants extends LitElement {
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-chip";
-import "mjo-litui/mjo-icon";
 
 @customElement("example-chip-sizes")
 export class ExampleChipSizes extends LitElement {
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                 <div>
                     <h4>Sizes</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
                         <mjo-chip label="Small" color="primary" size="small"></mjo-chip>
-                        <mjo-chip label="Medium (Default)" color="primary" size="medium"></mjo-chip>
+                        <mjo-chip label="Medium" color="primary" size="medium"></mjo-chip>
                         <mjo-chip label="Large" color="primary" size="large"></mjo-chip>
                     </div>
                 </div>
 
                 <div>
-                    <h4>Border Radius Options</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+                    <h4>Border Radius</h4>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
                         <mjo-chip label="None" color="secondary" radius="none"></mjo-chip>
                         <mjo-chip label="Small" color="secondary" radius="small"></mjo-chip>
                         <mjo-chip label="Medium" color="secondary" radius="medium"></mjo-chip>
                         <mjo-chip label="Large" color="secondary" radius="large"></mjo-chip>
-                        <mjo-chip label="Full (Default)" color="secondary" radius="full"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Size and Variant Combinations</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
-                            <span style="min-width: 80px; font-weight: 500;">Small:</span>
-                            <mjo-chip label="Solid" color="success" size="small" variant="solid"></mjo-chip>
-                            <mjo-chip label="Bordered" color="success" size="small" variant="bordered"></mjo-chip>
-                            <mjo-chip label="Flat" color="success" size="small" variant="flat"></mjo-chip>
-                            <mjo-chip label="Dot" color="success" size="small" variant="dot"></mjo-chip>
-                        </div>
-                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
-                            <span style="min-width: 80px; font-weight: 500;">Medium:</span>
-                            <mjo-chip label="Solid" color="warning" size="medium" variant="solid"></mjo-chip>
-                            <mjo-chip label="Bordered" color="warning" size="medium" variant="bordered"></mjo-chip>
-                            <mjo-chip label="Flat" color="warning" size="medium" variant="flat"></mjo-chip>
-                            <mjo-chip label="Dot" color="warning" size="medium" variant="dot"></mjo-chip>
-                        </div>
-                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
-                            <span style="min-width: 80px; font-weight: 500;">Large:</span>
-                            <mjo-chip label="Solid" color="error" size="large" variant="solid"></mjo-chip>
-                            <mjo-chip label="Bordered" color="error" size="large" variant="bordered"></mjo-chip>
-                            <mjo-chip label="Flat" color="error" size="large" variant="flat"></mjo-chip>
-                            <mjo-chip label="Dot" color="error" size="large" variant="dot"></mjo-chip>
-                        </div>
+                        <mjo-chip label="Full" color="secondary" radius="full"></mjo-chip>
                     </div>
                 </div>
             </div>
@@ -263,211 +148,34 @@ export class ExampleChipSizes extends LitElement {
 }
 ```
 
-## Icons and Closable Example
+## Icons Example
 
 ```ts
 import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-chip";
-import "mjo-litui/mjo-icon";
-import "mjo-litui/mjo-button";
 
 @customElement("example-chip-icons")
 export class ExampleChipIcons extends LitElement {
-    @state() private removedChips: Set<string> = new Set();
-
-    private handleChipClose(event: CustomEvent) {
-        const chipValue = event.detail.value;
-        if (chipValue) {
-            this.removedChips = new Set([...this.removedChips, chipValue]);
-        }
-    }
-
-    private resetChips() {
-        this.removedChips = new Set();
-    }
-
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                 <div>
-                    <h4>Start Icons</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <h4>With Icons</h4>
+                    <div style="display: flex; gap: 0.5rem;">
                         <mjo-chip label="Star" startIcon="star" color="primary"></mjo-chip>
-                        <mjo-chip label="Heart" startIcon="heart" color="error" variant="flat"></mjo-chip>
-                        <mjo-chip label="Home" startIcon="home" color="info" variant="bordered"></mjo-chip>
-                        <mjo-chip label="User" startIcon="user" color="success" variant="dot"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>End Icons</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <mjo-chip label="Heart" startIcon="heart" color="error"></mjo-chip>
                         <mjo-chip label="Download" endIcon="download" color="secondary"></mjo-chip>
-                        <mjo-chip label="Upload" endIcon="upload" color="warning" variant="flat"></mjo-chip>
-                        <mjo-chip label="Settings" endIcon="settings" color="default" variant="bordered"></mjo-chip>
-                        <mjo-chip label="External" endIcon="external-link" color="info" variant="light"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Both Start and End Icons</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
                         <mjo-chip label="Complete" startIcon="check" endIcon="arrow-right" color="success"></mjo-chip>
-                        <mjo-chip label="Processing" startIcon="clock" endIcon="refresh" color="warning" variant="flat"></mjo-chip>
-                        <mjo-chip label="Error" startIcon="alert-triangle" endIcon="x" color="error" variant="bordered"></mjo-chip>
                     </div>
                 </div>
 
                 <div>
-                    <h4>Closable Chips</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
-                        ${!this.removedChips.has("tag1")
-                            ? html` <mjo-chip label="JavaScript" color="primary" value="tag1" closable @close=${this.handleChipClose}></mjo-chip> `
-                            : ""} ${!this.removedChips.has("tag2")
-                            ? html` <mjo-chip label="TypeScript" color="info" value="tag2" closable variant="flat" @close=${this.handleChipClose}></mjo-chip> `
-                            : ""} ${!this.removedChips.has("tag3")
-                            ? html`
-                                  <mjo-chip
-                                      label="Web Components"
-                                      color="success"
-                                      value="tag3"
-                                      closable
-                                      variant="bordered"
-                                      @close=${this.handleChipClose}
-                                  ></mjo-chip>
-                              `
-                            : ""} ${!this.removedChips.has("tag4")
-                            ? html` <mjo-chip label="CSS" color="warning" value="tag4" closable @close=${this.handleChipClose}></mjo-chip> `
-                            : ""} ${!this.removedChips.has("tag5")
-                            ? html` <mjo-chip label="HTML" color="error" value="tag5" closable variant="dot" @close=${this.handleChipClose}></mjo-chip> `
-                            : ""}
-                    </div>
-                    <mjo-button @click=${this.resetChips} variant="ghost" size="small"> Reset All Tags </mjo-button>
-                </div>
-
-                <div>
-                    <h4>Complex Chips with Icons and Close</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Active User" startIcon="user-check" color="success" closable value="user1" @close=${this.handleChipClose}></mjo-chip>
-                        <mjo-chip
-                            label="Premium Plan"
-                            startIcon="crown"
-                            color="warning"
-                            variant="shadow"
-                            closable
-                            value="plan1"
-                            @close=${this.handleChipClose}
-                        ></mjo-chip>
-                        <mjo-chip
-                            label="Notification"
-                            startIcon="bell"
-                            color="info"
-                            variant="flat"
-                            closable
-                            value="notif1"
-                            @close=${this.handleChipClose}
-                        ></mjo-chip>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## States and Interactive Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-chip";
-import "mjo-litui/mjo-icon";
-import "mjo-litui/mjo-button";
-
-@customElement("example-chip-states")
-export class ExampleChipStates extends LitElement {
-    @state() private isDisabled = false;
-    @state() private selectedTags: Set<string> = new Set(["web"]);
-
-    private toggleDisabled() {
-        this.isDisabled = !this.isDisabled;
-    }
-
-    private toggleTag(tag: string) {
-        const newSelection = new Set(this.selectedTags);
-        if (newSelection.has(tag)) {
-            newSelection.delete(tag);
-        } else {
-            newSelection.add(tag);
-        }
-        this.selectedTags = newSelection;
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Disabled State</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
-                        <mjo-chip label="Normal" color="primary" ?disabled=${this.isDisabled}></mjo-chip>
-                        <mjo-chip label="With Icon" startIcon="star" color="success" ?disabled=${this.isDisabled}></mjo-chip>
-                        <mjo-chip label="Closable" color="warning" closable ?disabled=${this.isDisabled}></mjo-chip>
-                        <mjo-chip label="Bordered" color="error" variant="bordered" ?disabled=${this.isDisabled}></mjo-chip>
-                    </div>
-                    <mjo-button @click=${this.toggleDisabled} variant="ghost"> ${this.isDisabled ? "Enable All" : "Disable All"} </mjo-button>
-                </div>
-
-                <div>
-                    <h4>Interactive Tag Selection</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
-                        ${["web", "mobile", "desktop", "api", "database"].map(
-                            (tag) => html`
-                                <mjo-chip
-                                    label=${tag.charAt(0).toUpperCase() + tag.slice(1)}
-                                    color=${this.selectedTags.has(tag) ? "primary" : "default"}
-                                    variant=${this.selectedTags.has(tag) ? "solid" : "bordered"}
-                                    startIcon=${this.selectedTags.has(tag) ? "check" : undefined}
-                                    style="cursor: pointer;"
-                                    @click=${() => this.toggleTag(tag)}
-                                ></mjo-chip>
-                            `,
-                        )}
-                    </div>
-                    <p style="margin: 0; font-size: 0.9rem; color: #6c757d;">
-                        Selected: ${this.selectedTags.size > 0 ? Array.from(this.selectedTags).join(", ") : "None"}
-                    </p>
-                </div>
-
-                <div>
-                    <h4>Status Indicators</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Server Status:</span>
-                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                                <mjo-chip label="Online" color="success" variant="dot" startIcon="server"></mjo-chip>
-                                <mjo-chip label="API Healthy" color="success" variant="flat" startIcon="check-circle"></mjo-chip>
-                                <mjo-chip label="Database Connected" color="info" variant="bordered" startIcon="database"></mjo-chip>
-                            </div>
-                        </div>
-
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Build Status:</span>
-                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                                <mjo-chip label="Tests Passing" color="success" variant="shadow" startIcon="check"></mjo-chip>
-                                <mjo-chip label="Coverage 95%" color="warning" variant="flat" startIcon="shield"></mjo-chip>
-                                <mjo-chip label="Build #1234" color="info" variant="light" startIcon="package"></mjo-chip>
-                            </div>
-                        </div>
-
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">User Permissions:</span>
-                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                                <mjo-chip label="Admin" color="error" variant="solid" startIcon="shield-check"></mjo-chip>
-                                <mjo-chip label="Write Access" color="warning" variant="flat" startIcon="edit"></mjo-chip>
-                                <mjo-chip label="Read Only" color="default" variant="bordered" startIcon="eye"></mjo-chip>
-                            </div>
-                        </div>
+                    <h4>Closable with Icons</h4>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <mjo-chip label="JavaScript" color="primary" startIcon="code" closable></mjo-chip>
+                        <mjo-chip label="TypeScript" color="info" startIcon="file-text" closable></mjo-chip>
+                        <mjo-chip label="CSS" color="warning" startIcon="palette" closable></mjo-chip>
                     </div>
                 </div>
             </div>
@@ -482,32 +190,21 @@ export class ExampleChipStates extends LitElement {
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-chip";
-import "mjo-litui/mjo-icon";
 import "mjo-litui/mjo-textfield";
 import "mjo-litui/mjo-button";
 
 @customElement("example-chip-dynamic")
 export class ExampleChipDynamic extends LitElement {
-    @state() private tags: Array<{ id: string; label: string; color: string }> = [
-        { id: "1", label: "React", color: "info" },
-        { id: "2", label: "Vue", color: "success" },
-        { id: "3", label: "Angular", color: "error" },
+    @state() private tags: Array<{ id: string; label: string }> = [
+        { id: "1", label: "React" },
+        { id: "2", label: "Vue" },
+        { id: "3", label: "Angular" },
     ];
     @state() private newTagValue = "";
 
-    private tagColors = ["primary", "secondary", "success", "warning", "info", "error"];
-
     private addTag() {
         if (this.newTagValue.trim()) {
-            const randomColor = this.tagColors[Math.floor(Math.random() * this.tagColors.length)];
-            this.tags = [
-                ...this.tags,
-                {
-                    id: Date.now().toString(),
-                    label: this.newTagValue.trim(),
-                    color: randomColor,
-                },
-            ];
+            this.tags = [...this.tags, { id: Date.now().toString(), label: this.newTagValue.trim() }];
             this.newTagValue = "";
         }
     }
@@ -517,82 +214,31 @@ export class ExampleChipDynamic extends LitElement {
         this.tags = this.tags.filter((tag) => tag.id !== tagId);
     }
 
-    private handleInputKeyDown(event: KeyboardEvent) {
-        if (event.key === "Enter") {
-            this.addTag();
-        }
-    }
-
-    private clearAllTags() {
-        this.tags = [];
-    }
-
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Dynamic Tag Manager</h4>
-
-                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
-                        <mjo-textfield
-                            placeholder="Enter tag name"
-                            .value=${this.newTagValue}
-                            @input=${(e: InputEvent) => (this.newTagValue = (e.target as HTMLInputElement).value)}
-                            @keydown=${this.handleInputKeyDown}
-                            style="min-width: 200px;"
-                        ></mjo-textfield>
-                        <mjo-button @click=${this.addTag} color="primary" ?disabled=${!this.newTagValue.trim()}> Add Tag </mjo-button>
-                        <mjo-button @click=${this.clearAllTags} variant="ghost" color="error" ?disabled=${this.tags.length === 0}> Clear All </mjo-button>
-                    </div>
-
-                    <div style="min-height: 100px; padding: 1rem; border: 2px dashed #e5e7eb; border-radius: 8px; background: #f9fafb;">
-                        ${this.tags.length > 0
-                            ? html`
-                                  <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                                      ${this.tags.map(
-                                          (tag) => html`
-                                              <mjo-chip
-                                                  label=${tag.label}
-                                                  color=${tag.color as any}
-                                                  closable
-                                                  value=${tag.id}
-                                                  variant="flat"
-                                                  @close=${this.removeTag}
-                                              ></mjo-chip>
-                                          `,
-                                      )}
-                                  </div>
-                              `
-                            : html` <div style="text-align: center; color: #6b7280; font-style: italic;">No tags yet. Add some tags above!</div> `}
-                    </div>
-
-                    <p style="margin: 0; font-size: 0.9rem; color: #6c757d;">Total tags: ${this.tags.length}</p>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; gap: 0.5rem;">
+                    <mjo-textfield
+                        placeholder="Enter tag name"
+                        .value=${this.newTagValue}
+                        @input=${(e: InputEvent) => (this.newTagValue = (e.target as HTMLInputElement).value)}
+                        @keydown=${(e: KeyboardEvent) => e.key === "Enter" && this.addTag()}
+                    ></mjo-textfield>
+                    <mjo-button @click=${this.addTag} ?disabled=${!this.newTagValue.trim()}>Add</mjo-button>
                 </div>
 
-                <div>
-                    <h4>Filter Chips</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Categories:</span>
-                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                                <mjo-chip label="All" color="default" variant="bordered" startIcon="grid"></mjo-chip>
-                                <mjo-chip label="Frontend" color="primary" variant="flat" startIcon="monitor"></mjo-chip>
-                                <mjo-chip label="Backend" color="success" variant="flat" startIcon="server"></mjo-chip>
-                                <mjo-chip label="DevOps" color="warning" variant="flat" startIcon="settings"></mjo-chip>
-                                <mjo-chip label="Mobile" color="info" variant="flat" startIcon="smartphone"></mjo-chip>
-                            </div>
-                        </div>
-
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Experience:</span>
-                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                                <mjo-chip label="Beginner" color="success" variant="dot"></mjo-chip>
-                                <mjo-chip label="Intermediate" color="warning" variant="dot"></mjo-chip>
-                                <mjo-chip label="Advanced" color="error" variant="dot"></mjo-chip>
-                                <mjo-chip label="Expert" color="primary" variant="shadow"></mjo-chip>
-                            </div>
-                        </div>
-                    </div>
+                <div style="min-height: 60px; padding: 1rem; border: 2px dashed #e5e7eb; border-radius: 8px;">
+                    ${this.tags.length > 0
+                        ? html`
+                              <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                  ${this.tags.map(
+                                      (tag) => html`
+                                          <mjo-chip label=${tag.label} color="primary" closable value=${tag.id} @mjo-chip:close=${this.removeTag}></mjo-chip>
+                                      `,
+                                  )}
+                              </div>
+                          `
+                        : html`<div style="text-align: center; color: #6b7280;">No tags yet. Add some above!</div>`}
                 </div>
             </div>
         `;
@@ -600,110 +246,50 @@ export class ExampleChipDynamic extends LitElement {
 }
 ```
 
-## Custom Themes Example
+## ThemeMixin Example
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import type { MjoChipTheme } from "mjo-litui/types";
 import "mjo-litui/mjo-chip";
-import "mjo-litui/mjo-icon";
 
-@customElement("example-chip-themes")
-export class ExampleChipThemes extends LitElement {
+@customElement("example-chip-themed")
+export class ExampleChipThemed extends LitElement {
     private compactTheme: MjoChipTheme = {
-        fontSizeSmallSize: "0.6rem",
-        fontSizeMediumSize: "0.75rem",
-        fontSizeLargeSize: "0.9rem",
-        lineHeightSmallSize: "0.6rem",
-        lineHeightMediumSize: "0.75rem",
-        lineHeightLargeSize: "0.9rem",
+        fontSizeMediumSize: "0.8rem",
         padding: "0 0.5rem",
-        gap: "0.25rem",
+        gap: "0.3rem",
     };
 
     private spaciousTheme: MjoChipTheme = {
-        fontSizeSmallSize: "0.9rem",
         fontSizeMediumSize: "1.1rem",
-        fontSizeLargeSize: "1.3rem",
-        lineHeightSmallSize: "1rem",
-        lineHeightMediumSize: "1.2rem",
-        lineHeightLargeSize: "1.4rem",
-        padding: "0 1.5rem",
-        gap: "0.75rem",
-    };
-
-    private boldTheme: MjoChipTheme = {
-        borderWidthSizeSmall: "2px",
-        borderWidthSizeMedium: "3px",
-        borderWidthSizeLarge: "4px",
-        fontSizeSmallSize: "0.8rem",
-        fontSizeMediumSize: "1rem",
-        fontSizeLargeSize: "1.2rem",
-        padding: "0 1rem",
+        padding: "0 1.2rem",
+        gap: "0.6rem",
     };
 
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <h4>Default</h4>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <mjo-chip label="Standard" color="primary"></mjo-chip>
+                        <mjo-chip label="With Icon" startIcon="star" color="success"></mjo-chip>
+                    </div>
+                </div>
                 <div>
                     <h4>Compact Theme</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Small" size="small" color="primary" .theme=${this.compactTheme}></mjo-chip>
-                        <mjo-chip label="Medium" size="medium" color="success" .theme=${this.compactTheme}></mjo-chip>
-                        <mjo-chip label="Large" size="large" color="warning" .theme=${this.compactTheme}></mjo-chip>
-                        <mjo-chip label="With Icon" startIcon="star" color="info" .theme=${this.compactTheme}></mjo-chip>
-                        <mjo-chip label="Closable" closable color="error" .theme=${this.compactTheme}></mjo-chip>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <mjo-chip label="Compact" color="primary" .theme=${this.compactTheme}></mjo-chip>
+                        <mjo-chip label="Compact Icon" startIcon="star" color="success" .theme=${this.compactTheme}></mjo-chip>
                     </div>
                 </div>
-
                 <div>
                     <h4>Spacious Theme</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Small" size="small" color="primary" variant="flat" .theme=${this.spaciousTheme}></mjo-chip>
-                        <mjo-chip label="Medium" size="medium" color="success" variant="flat" .theme=${this.spaciousTheme}></mjo-chip>
-                        <mjo-chip label="Large" size="large" color="warning" variant="flat" .theme=${this.spaciousTheme}></mjo-chip>
-                        <mjo-chip label="With Icon" startIcon="heart" color="error" .theme=${this.spaciousTheme}></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Bold Borders Theme</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Small Border" size="small" color="primary" variant="bordered" .theme=${this.boldTheme}></mjo-chip>
-                        <mjo-chip label="Medium Border" size="medium" color="success" variant="bordered" .theme=${this.boldTheme}></mjo-chip>
-                        <mjo-chip label="Large Border" size="large" color="error" variant="bordered" .theme=${this.boldTheme}></mjo-chip>
-                        <mjo-chip label="Faded Style" color="info" variant="faded" .theme=${this.boldTheme}></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Comparison with Default</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Default:</span>
-                            <div style="display: inline-flex; flex-wrap: wrap; gap: 0.5rem;">
-                                <mjo-chip label="Standard" color="primary"></mjo-chip>
-                                <mjo-chip label="With Icon" startIcon="check" color="success"></mjo-chip>
-                                <mjo-chip label="Bordered" variant="bordered" color="warning"></mjo-chip>
-                            </div>
-                        </div>
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Compact:</span>
-                            <div style="display: inline-flex; flex-wrap: wrap; gap: 0.5rem;">
-                                <mjo-chip label="Standard" color="primary" .theme=${this.compactTheme}></mjo-chip>
-                                <mjo-chip label="With Icon" startIcon="check" color="success" .theme=${this.compactTheme}></mjo-chip>
-                                <mjo-chip label="Bordered" variant="bordered" color="warning" .theme=${this.compactTheme}></mjo-chip>
-                            </div>
-                        </div>
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Spacious:</span>
-                            <div style="display: inline-flex; flex-wrap: wrap; gap: 0.5rem;">
-                                <mjo-chip label="Standard" color="primary" .theme=${this.spaciousTheme}></mjo-chip>
-                                <mjo-chip label="With Icon" startIcon="check" color="success" .theme=${this.spaciousTheme}></mjo-chip>
-                                <mjo-chip label="Bordered" variant="bordered" color="warning" .theme=${this.spaciousTheme}></mjo-chip>
-                            </div>
-                        </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <mjo-chip label="Spacious" color="primary" .theme=${this.spaciousTheme}></mjo-chip>
+                        <mjo-chip label="Spacious Icon" startIcon="star" color="success" .theme=${this.spaciousTheme}></mjo-chip>
                     </div>
                 </div>
             </div>
@@ -714,20 +300,21 @@ export class ExampleChipThemes extends LitElement {
 
 ## Attributes / Properties
 
-| Name              | Type                                                                                   | Default     | Reflects | Description                                                        |
-| ----------------- | -------------------------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------ |
-| `label`           | `string`                                                                               | `""`        | no       | Text content displayed in the chip                                 |
-| `color`           | `"primary" \| "secondary" \| "default" \| "success" \| "warning" \| "info" \| "error"` | `"default"` | no       | Semantic color scheme applied to the chip                          |
-| `variant`         | `"solid" \| "bordered" \| "light" \| "flat" \| "faded" \| "shadow" \| "dot"`           | `"solid"`   | no       | Visual styling variant that affects appearance and background      |
-| `size`            | `"small" \| "medium" \| "large"`                                                       | `"medium"`  | no       | Controls the overall size including font size and padding          |
-| `radius`          | `"small" \| "medium" \| "large" \| "full" \| "none"`                                   | `"full"`    | no       | Border radius applied to the chip (full creates pill shape)        |
-| `startIcon`       | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the beginning of the chip content                |
-| `endIcon`         | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the end of the chip content                      |
-| `clickable`       | `boolean`                                                                              | `false`     | no       | Makes the chip clickable and dispatches `mjo-chip:click` events    |
-| `closable`        | `boolean`                                                                              | `false`     | no       | Adds a close button that emits `mjo-chip:close` event when clicked |
-| `disabled`        | `boolean`                                                                              | `false`     | no       | Disables interaction and applies disabled styling                  |
-| `value`           | `string \| undefined`                                                                  | `undefined` | no       | Optional value passed in event details (falls back to label)       |
-| `ariaDescribedby` | `string \| undefined`                                                                  | `undefined` | no       | References additional descriptive content for screen readers       |
+| Name              | Type                                                                                   | Default     | Reflects | Description                                                           |
+| ----------------- | -------------------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------- |
+| `label`           | `string`                                                                               | `""`        | no       | Text content displayed in the chip                                    |
+| `color`           | `"primary" \| "secondary" \| "default" \| "success" \| "warning" \| "info" \| "error"` | `"default"` | no       | Semantic color scheme applied to the chip                             |
+| `variant`         | `"solid" \| "bordered" \| "light" \| "flat" \| "faded" \| "shadow" \| "dot"`           | `"solid"`   | no       | Visual styling variant that affects appearance and background         |
+| `size`            | `"small" \| "medium" \| "large"`                                                       | `"medium"`  | no       | Controls the overall size including font size and padding             |
+| `radius`          | `"small" \| "medium" \| "large" \| "full" \| "none"`                                   | `"full"`    | no       | Border radius applied to the chip (full creates pill shape)           |
+| `startIcon`       | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the beginning of the chip content                   |
+| `endIcon`         | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the end of the chip content                         |
+| `clickable`       | `boolean`                                                                              | `false`     | no       | Makes the chip clickable and dispatches `mjo-chip:click` events       |
+| `closable`        | `boolean`                                                                              | `false`     | no       | Adds a close button that emits `mjo-chip:close` event when clicked    |
+| `disabled`        | `boolean`                                                                              | `false`     | no       | Disables interaction and applies disabled styling                     |
+| `value`           | `string \| undefined`                                                                  | `undefined` | no       | Optional value passed in event details (falls back to label)          |
+| `ariaDescribedby` | `string \| undefined`                                                                  | `undefined` | no       | References additional descriptive content for screen readers          |
+| `ariaLabel`       | `string \| null`                                                                       | `null`      | yes      | Custom accessible label for screen readers (overrides computed label) |
 
 ### Accessibility Properties (Native Lit Support)
 
@@ -879,162 +466,6 @@ export class ExampleChipThemed extends LitElement {
 }
 ```
 
-## CSS Custom Properties Example
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-chip";
-
-@customElement("example-chip-css-custom")
-export class ExampleChipCssCustom extends LitElement {
-    static styles = css`
-        .custom-chip {
-            --mjo-chip-padding: 0.5rem 1.25rem;
-            --mjo-chip-gap: 0.6rem;
-            --mjo-chip-font-size-medium-size: 1.1rem;
-            --mjo-chip-border-width-size-medium: 3px;
-        }
-
-        .minimal-chip {
-            --mjo-chip-padding: 0.125rem 0.5rem;
-            --mjo-chip-gap: 0.25rem;
-            --mjo-chip-font-size-medium-size: 0.8rem;
-        }
-    `;
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div>
-                    <h4>Custom Styled Chips</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip class="custom-chip" label="Large Custom" color="primary" startIcon="star"></mjo-chip>
-                        <mjo-chip class="custom-chip" label="Bordered Custom" color="success" variant="bordered"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Minimal Styled Chips</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip class="minimal-chip" label="Compact" color="info"></mjo-chip>
-                        <mjo-chip class="minimal-chip" label="Small" color="warning" startIcon="zap"></mjo-chip>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Real-World Use Cases Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-chip";
-import "mjo-litui/mjo-icon";
-
-@customElement("example-chip-use-cases")
-export class ExampleChipUseCases extends LitElement {
-    @state() private selectedFilters: Set<string> = new Set();
-
-    private toggleFilter(filter: string) {
-        const newFilters = new Set(this.selectedFilters);
-        if (newFilters.has(filter)) {
-            newFilters.delete(filter);
-        } else {
-            newFilters.add(filter);
-        }
-        this.selectedFilters = newFilters;
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <!-- User Tags -->
-                <div>
-                    <h4>User Profile Tags</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="React Expert" color="info" variant="flat" startIcon="code"></mjo-chip>
-                        <mjo-chip label="Senior Developer" color="primary" variant="shadow" startIcon="star"></mjo-chip>
-                        <mjo-chip label="Team Lead" color="warning" variant="solid" startIcon="users"></mjo-chip>
-                        <mjo-chip label="Full Stack" color="success" variant="bordered" startIcon="layers"></mjo-chip>
-                        <mjo-chip label="Remote" color="default" variant="dot"></mjo-chip>
-                    </div>
-                </div>
-
-                <!-- Product Categories -->
-                <div>
-                    <h4>Product Categories</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="Electronics" color="info" variant="flat"></mjo-chip>
-                        <mjo-chip label="Bestseller" color="warning" variant="shadow" startIcon="trophy"></mjo-chip>
-                        <mjo-chip label="On Sale" color="error" variant="solid" startIcon="tag"></mjo-chip>
-                        <mjo-chip label="New Arrival" color="success" variant="dot"></mjo-chip>
-                        <mjo-chip label="Limited Edition" color="secondary" variant="faded" startIcon="clock"></mjo-chip>
-                    </div>
-                </div>
-
-                <!-- Task Status -->
-                <div>
-                    <h4>Task Management</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Priority:</span>
-                            <mjo-chip label="High" color="error" variant="solid" size="small"></mjo-chip>
-                            <mjo-chip label="Medium" color="warning" variant="flat" size="small"></mjo-chip>
-                            <mjo-chip label="Low" color="success" variant="light" size="small"></mjo-chip>
-                        </div>
-                        <div>
-                            <span style="font-weight: 500; margin-right: 1rem;">Status:</span>
-                            <mjo-chip label="To Do" color="default" variant="bordered" startIcon="circle"></mjo-chip>
-                            <mjo-chip label="In Progress" color="info" variant="flat" startIcon="clock"></mjo-chip>
-                            <mjo-chip label="Review" color="warning" variant="solid" startIcon="eye"></mjo-chip>
-                            <mjo-chip label="Done" color="success" variant="shadow" startIcon="check"></mjo-chip>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Interactive Filters -->
-                <div>
-                    <h4>Search Filters</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
-                        ${["price", "rating", "brand", "category", "availability"].map(
-                            (filter) => html`
-                                <mjo-chip
-                                    label=${filter.charAt(0).toUpperCase() + filter.slice(1)}
-                                    color=${this.selectedFilters.has(filter) ? "primary" : "default"}
-                                    variant=${this.selectedFilters.has(filter) ? "solid" : "bordered"}
-                                    startIcon=${this.selectedFilters.has(filter) ? "check" : "filter"}
-                                    style="cursor: pointer;"
-                                    @click=${() => this.toggleFilter(filter)}
-                                ></mjo-chip>
-                            `,
-                        )}
-                    </div>
-                    <p style="margin: 0; font-size: 0.9rem; color: #6c757d;">
-                        Active filters: ${this.selectedFilters.size > 0 ? Array.from(this.selectedFilters).join(", ") : "None"}
-                    </p>
-                </div>
-
-                <!-- Notification Types -->
-                <div>
-                    <h4>Notification Types</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <mjo-chip label="System Alert" color="error" variant="shadow" startIcon="alert-triangle"></mjo-chip>
-                        <mjo-chip label="New Message" color="info" variant="flat" startIcon="message-circle"></mjo-chip>
-                        <mjo-chip label="Friend Request" color="success" variant="bordered" startIcon="user-plus"></mjo-chip>
-                        <mjo-chip label="Update Available" color="warning" variant="solid" startIcon="download"></mjo-chip>
-                        <mjo-chip label="Reminder" color="default" variant="dot" startIcon="bell"></mjo-chip>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
 ## Accessibility Features
 
 The `mjo-chip` component includes comprehensive accessibility support following WCAG 2.1 guidelines:
@@ -1111,129 +542,15 @@ The `mjo-chip` component includes comprehensive accessibility support following 
 -   Complex chips with multiple actions have clear role separation
 -   Loading and error states can be announced through custom event handling
 
-### Accessibility Example
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-chip";
-
-@customElement("example-chip-accessibility")
-export class ExampleChipAccessibility extends LitElement {
-    @state() private selectedFilters: Set<string> = new Set();
-    @state() private announceText = "";
-
-    private handleFilterToggle(event: CustomEvent) {
-        const filter = event.detail.value;
-        const newFilters = new Set(this.selectedFilters);
-
-        if (newFilters.has(filter)) {
-            newFilters.delete(filter);
-            this.announceText = `${filter} filter removed`;
-        } else {
-            newFilters.add(filter);
-            this.announceText = `${filter} filter added`;
-        }
-
-        this.selectedFilters = newFilters;
-    }
-
-    private handleTagClose(event: CustomEvent) {
-        const tag = event.detail.value;
-        this.announceText = `${tag} tag removed from project`;
-    }
-
-    render() {
-        return html`
-            <div role="main" aria-label="Chip accessibility demonstration">
-                <!-- Screen reader announcements -->
-                <div aria-live="polite" aria-atomic="true" class="sr-only">${this.announceText}</div>
-
-                <section>
-                    <h3 id="filter-section">Technology Filters</h3>
-                    <div role="group" aria-labelledby="filter-section" style="display: flex; gap: 0.5rem;">
-                        ${["JavaScript", "TypeScript", "React", "Vue"].map(
-                            (tech) => html`
-                                <mjo-chip
-                                    label="${tech}"
-                                    clickable
-                                    color="${this.selectedFilters.has(tech) ? "primary" : "default"}"
-                                    variant="${this.selectedFilters.has(tech) ? "solid" : "bordered"}"
-                                    value="${tech.toLowerCase()}"
-                                    aria-pressed="${this.selectedFilters.has(tech) ? "true" : "false"}"
-                                    aria-describedby="filter-help"
-                                    @mjo-chip:click="${this.handleFilterToggle}"
-                                ></mjo-chip>
-                            `,
-                        )}
-                    </div>
-                    <p id="filter-help" style="font-size: 0.9rem; color: #666;">
-                        Click chips to toggle technology filters. Selected filters will be highlighted.
-                    </p>
-                </section>
-
-                <section>
-                    <h3 id="tags-section">Project Tags</h3>
-                    <div role="group" aria-labelledby="tags-section" style="display: flex; gap: 0.5rem;">
-                        <mjo-chip
-                            label="Frontend"
-                            closable
-                            color="info"
-                            value="frontend"
-                            aria-describedby="tag-help"
-                            @mjo-chip:close="${this.handleTagClose}"
-                        ></mjo-chip>
-                        <mjo-chip
-                            label="High Priority"
-                            closable
-                            color="error"
-                            value="high-priority"
-                            aria-describedby="tag-help"
-                            @mjo-chip:close="${this.handleTagClose}"
-                        ></mjo-chip>
-                        <mjo-chip
-                            label="Team Alpha"
-                            closable
-                            color="success"
-                            value="team-alpha"
-                            aria-describedby="tag-help"
-                            @mjo-chip:close="${this.handleTagClose}"
-                        ></mjo-chip>
-                    </div>
-                    <p id="tag-help" style="font-size: 0.9rem; color: #666;">Press the close button or use Escape key to remove tags from the project.</p>
-                </section>
-
-                <!-- Status summary for screen readers -->
-                <div role="status" aria-label="Current selection summary">
-                    ${this.selectedFilters.size} filters selected: ${Array.from(this.selectedFilters).join(", ")}
-                </div>
-            </div>
-        `;
-    }
-
-    static styles = css`
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-    `;
-}
-```
-
 ## CSS Parts
 
-| Part        | Description                     |
-| ----------- | ------------------------------- |
-| `container` | The main chip container         |
-| `dot`       | The dot indicator (dot variant) |
-| `label`     | The text label element          |
+| Part         | Description                                                   |
+| ------------ | ------------------------------------------------------------- |
+| `container`  | The main chip container element                               |
+| `label`      | The text label element (via exportparts from mjo-typography)  |
+| `start-icon` | The start icon element (via exportparts from mjo-icon)        |
+| `end-icon`   | The end icon element (via exportparts from mjo-icon)          |
+| `close-icon` | The close button icon element (via exportparts from mjo-icon) |
 
 ## Performance Considerations
 

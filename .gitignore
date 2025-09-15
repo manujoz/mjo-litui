@@ -20,6 +20,8 @@ node_modules
 *.sln
 *.sw?
 
+.env
+
 /coverage
 /actions-plan
 /server/public/js/*.js

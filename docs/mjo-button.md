@@ -23,124 +23,41 @@ import "mjo-litui/mjo-button";
 export class ExampleButtonBasic extends LitElement {
     render() {
         return html`
-            <mjo-button color="primary">Primary</mjo-button>
-            <mjo-button color="secondary" variant="ghost">Ghost Secondary</mjo-button>
-            <mjo-button color="success" variant="flat" startIcon="check">Flat Success</mjo-button>
+            <mjo-button color="primary">Primary Button</mjo-button>
+            <mjo-button color="secondary" variant="ghost">Ghost Button</mjo-button>
+            <mjo-button color="success" variant="flat" startIcon="check">Flat Button</mjo-button>
+            <mjo-button toggleable>Toggle Button</mjo-button>
+            <mjo-button loading>Loading Button</mjo-button>
         `;
     }
 }
 ```
 
-## Accessibility Features Example
+## Interactive Features Example
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-button";
 
-@customElement("example-button-accessibility")
-export class ExampleButtonAccessibility extends LitElement {
-    @state() private isLoading = false;
-    @state() private menuExpanded = false;
+@customElement("example-button-interactive")
+export class ExampleButtonInteractive extends LitElement {
+    @state() private loading = false;
 
-    render() {
-        return html`
-            <div>
-                <h4>Loading State (uses aria-busy)</h4>
-                <mjo-button .loading=${this.isLoading} @mjo-button:loading-change=${this.handleLoadingChange} @click=${this.simulateLoading}>
-                    ${this.isLoading ? "Loading..." : "Start Task"}
-                </mjo-button>
-            </div>
-
-            <div>
-                <h4>Toggle Button (uses aria-pressed)</h4>
-                <mjo-button toggleable button-label="Toggle notifications" @mjo-button:toggle=${this.handleToggle}> Notifications </mjo-button>
-            </div>
-
-            <div>
-                <h4>Described Button</h4>
-                <mjo-button color="error" described-by="delete-warning"> Delete Item </mjo-button>
-                <div id="delete-warning">This action cannot be undone</div>
-            </div>
-        `;
-    }
-
-    private simulateLoading() {
-        this.isLoading = true;
-        setTimeout(() => (this.isLoading = false), 2000);
-    }
-
-    private handleLoadingChange(e: CustomEvent) {
-        console.log("Loading changed:", e.detail.loading);
+    private handleClick() {
+        this.loading = true;
+        setTimeout(() => (this.loading = false), 2000);
     }
 
     private handleToggle(e: CustomEvent) {
         console.log("Toggle state:", e.detail.pressed);
     }
-}
-```
-
-## Variants & Colors Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-button";
-
-@customElement("example-button-variants")
-export class ExampleButtonVariants extends LitElement {
-    render() {
-        return html`
-            <div>
-                <h4>Default Variant</h4>
-                <mjo-button color="primary">Primary</mjo-button>
-                <mjo-button color="secondary">Secondary</mjo-button>
-                <mjo-button color="success">Success</mjo-button>
-                <mjo-button color="error">Error</mjo-button>
-            </div>
-            <div>
-                <h4>Ghost Variant</h4>
-                <mjo-button color="primary" variant="ghost">Primary Ghost</mjo-button>
-                <mjo-button color="secondary" variant="ghost">Secondary Ghost</mjo-button>
-            </div>
-            <div>
-                <h4>Flat Variant</h4>
-                <mjo-button color="primary" variant="flat">Primary Flat</mjo-button>
-                <mjo-button color="secondary" variant="flat">Secondary Flat</mjo-button>
-            </div>
-        `;
-    }
-}
-```
-
-## Interactive States Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-button";
-
-@customElement("example-button-states")
-export class ExampleButtonStates extends LitElement {
-    @state() private loading = false;
-    @state() private toggled = false;
-
-    private simulateLoad() {
-        this.loading = true;
-        setTimeout(() => (this.loading = false), 1500);
-    }
 
     render() {
         return html`
-            <mjo-button color="primary" .loading=${this.loading} @click=${this.simulateLoad}> ${this.loading ? "Loading..." : "Simulate Load"} </mjo-button>
+            <mjo-button color="primary" .loading=${this.loading} @click=${this.handleClick}> ${this.loading ? "Processing..." : "Start Task"} </mjo-button>
 
-            <mjo-button color="secondary" toggleable @click=${() => (this.toggled = !this.toggled)}> Toggle (${this.toggled ? "ON" : "OFF"}) </mjo-button>
-
-            <mjo-button disabled>Disabled Button</mjo-button>
-
-            <mjo-button color="primary" startIcon="home">With Icon</mjo-button>
-
-            <mjo-button color="success" rounded startIcon="check"></mjo-button>
+            <mjo-button toggleable button-label="Toggle notifications" @mjo-button:toggle=${this.handleToggle}> Notifications </mjo-button>
         `;
     }
 }
@@ -237,7 +154,7 @@ const button = document.querySelector("mjo-button") as MjoButton;
 button.focus();
 
 // Set loading state
-button.setBusy(true);
+button.setLoading(true);
 
 // Toggle pressed state (if toggleable)
 button.togglePressed();
@@ -248,61 +165,47 @@ button.click();
 
 ## CSS Variables
 
-The component consumes a broad set of CSS variables with fallbacks. Custom values can be injected globally (`<mjo-theme>`) or per-instance via ThemeMixin.
+The component uses CSS variables that inherit from the global theme system. Variables can be customized globally via `<mjo-theme>` or per-instance via ThemeMixin.
 
-### Core Colors
+### Component-Specific Variables
 
-| Variable                                  | Fallback                           | Used For                              |
-| ----------------------------------------- | ---------------------------------- | ------------------------------------- |
-| `--mjo-button-primary-color`              | `--mjo-primary-color`              | Default variant background / border   |
-| `--mjo-button-primary-color-hover`        | `--mjo-primary-color-hover`        | Hover background / border             |
-| `--mjo-button-primary-foreground-color`   | `--mjo-primary-foreground-color`   | Text/icon color                       |
-| `--mjo-button-secondary-color`            | `--mjo-secondary-color`            | Secondary variant background / border |
-| `--mjo-button-secondary-color-hover`      | `--mjo-secondary-color-hover`      | Secondary hover                       |
-| `--mjo-button-secondary-foreground-color` | `--mjo-secondary-foreground-color` | Secondary text/icon                   |
+| Variable                     | Default                                   | Purpose                     |
+| ---------------------------- | ----------------------------------------- | --------------------------- |
+| `--mjo-button-border-radius` | `var(--mjo-radius-medium, 5px)`           | Corner radius (non-rounded) |
+| `--mjo-button-font-size`     | `1em`                                     | Font size                   |
+| `--mjo-button-font-weight`   | `normal`                                  | Font weight                 |
+| `--mjo-button-font-family`   | `inherit`                                 | Font family                 |
+| `--mjo-button-padding`       | `calc(1em / 2 - 1px) calc(1em / 2 + 2px)` | Button padding              |
 
-### Structure & Typography
+### Global Theme Variables Used
 
-| Variable                     | Fallback       | Purpose                     |
-| ---------------------------- | -------------- | --------------------------- |
-| `--mjo-button-border-radius` | `--mjo-radius` | Corner radius (non-rounded) |
-| `--mjo-button-font-size`     | (none)         | Font size override          |
-| `--mjo-button-font-weight`   | `normal`       | Font weight                 |
-| `--mjo-button-font-family`   | `inherit`      | Font family                 |
-| `--mjo-button-padding`       | calculated     | Padding box                 |
+The component leverages these global theme variables:
 
-### Flat Variant
+#### Primary & Secondary Colors
 
-| Variable                                             | Fallback                           | Purpose                     |
-| ---------------------------------------------------- | ---------------------------------- | --------------------------- |
-| `--mjo-button-flat-primary-background-color`         | `--mjo-primary-color-alpha2`       | Flat base fill (primary)    |
-| `--mjo-button-flat-primary-background-color-hover`   | `--mjo-primary-color-alpha1`       | Flat hover fill (primary)   |
-| `--mjo-button-flat-primary-foreground-color`         | `--mjo-primary-foreground-color`   | Foreground (primary)        |
-| `--mjo-button-flat-secondary-background-color`       | `--mjo-secondary-color-alpha2`     | Flat base fill (secondary)  |
-| `--mjo-button-flat-secondary-background-color-hover` | `--mjo-secondary-color-alpha1`     | Flat hover fill (secondary) |
-| `--mjo-button-flat-secondary-foreground-color`       | `--mjo-secondary-foreground-color` | Foreground (secondary)      |
+-   `--mjo-primary-color`
+-   `--mjo-primary-color-hover`
+-   `--mjo-primary-foreground-color`
+-   `--mjo-primary-color-alpha1`
+-   `--mjo-primary-color-alpha2`
+-   `--mjo-secondary-color`
+-   `--mjo-secondary-color-hover`
+-   `--mjo-secondary-foreground-color`
+-   `--mjo-secondary-color-alpha1`
+-   `--mjo-secondary-color-alpha2`
 
-### Status Colors (Success / Info / Warning / Error)
+#### Status Colors
 
-These variants use the global status color tokens:
+-   `--mjo-color-success` / `--mjo-color-success-foreground`
+-   `--mjo-color-info` / `--mjo-color-info-foreground`
+-   `--mjo-color-warning` / `--mjo-color-warning-foreground`
+-   `--mjo-color-error` / `--mjo-color-error-foreground`
 
--   `--mjo-color-success`
--   `--mjo-color-info`
--   `--mjo-color-warning`
--   `--mjo-color-error`
+#### Background & Disabled States
 
-### Ghost / Dashed / Link / Text Variants
-
-| Variable                      | Purpose                                      |
-| ----------------------------- | -------------------------------------------- |
-| `--mjo-background-color-high` | Hover background for ghost & dashed variants |
-
-### Disabled State
-
-| Variable                                 | Fallback                          | Purpose             |
-| ---------------------------------------- | --------------------------------- | ------------------- |
-| `--mjo-button-disabled-background-color` | `--mjo-disabled-color`            | Disabled background |
-| `--mjo-button-disabled-foreground-color` | `--mjo-disabled-foreground-color` | Disabled text/icon  |
+-   `--mjo-background-color-high` (for ghost/dashed/text variant hovers)
+-   `--mjo-disabled-color`
+-   `--mjo-disabled-foreground-color`
 
 ## ThemeMixin Customization
 
@@ -312,29 +215,11 @@ This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to c
 
 ```ts
 interface MjoButtonTheme {
-    disabledBackgroundColor?: string;
-    disabledForegroundColor?: string;
+    borderRadius?: string;
     fontFamily?: string;
     fontSize?: string;
     fontWeight?: string;
     padding?: string;
-    primaryColor?: string;
-    primaryBorder?: string;
-    primaryColorHover?: string;
-    primaryForegroundColor?: string;
-    borderRadius?: string;
-    secondaryBorder?: string;
-    secondaryColor?: string;
-    secondaryColorHover?: string;
-    secondaryForegroundColor?: string;
-    flatPrimaryBackgroundColor?: string;
-    flatPrimaryBackgroundColorHover?: string;
-    flatPrimaryForegroundColor?: string;
-    flatPrimaryForegroundColorHover?: string;
-    flatSecondaryBackgroundColor?: string;
-    flatSecondaryBackgroundColorHover?: string;
-    flatSecondaryForegroundColor?: string;
-    flatSecondaryForegroundColorHover?: string;
 }
 ```
 
@@ -348,9 +233,7 @@ import "mjo-litui/mjo-button";
 @customElement("example-button-themed")
 export class ExampleButtonThemed extends LitElement {
     private customTheme = {
-        primaryColor: "#7C3AED",
-        primaryColorHover: "#6D28D9",
-        primaryForegroundColor: "#ffffff",
+        fontSize: "1.1em",
         fontWeight: "600",
         padding: "0.75rem 1.25rem",
         borderRadius: "8px",
@@ -392,9 +275,18 @@ export class ExampleButtonForm extends LitElement {
 
 ## CSS Parts
 
-| Part     | Description               |
-| -------- | ------------------------- |
-| `button` | The native button element |
+| Part      | Description                                                    |
+| --------- | -------------------------------------------------------------- |
+| `button`  | The native button element                                      |
+| `loading` | The loading indicator element (visible when `loading` is true) |
+
+### Parts from child components
+
+When using `startIcon` or `endIcon`, the following parts are exposed via `exportparts`:
+
+-   `start-icon` - The start icon element
+-   `end-icon` - The end icon element
+-   `text` - The text typography wrapper element
 
 ## Accessibility Notes
 
@@ -402,35 +294,10 @@ This component follows WCAG 2.1 guidelines and provides comprehensive accessibil
 
 ### ARIA Support
 
--   **aria-busy**: Automatically set to "true" when `loading` is active, informing screen readers that the button is processing
+-   **aria-busy**: Automatically set to "true" when `loading` is active
 -   **aria-pressed**: Automatically managed for toggle buttons when `toggleable` is true
 -   **aria-label**: Custom accessible name via `button-label` property
 -   **aria-describedby**: Reference to descriptive text via `described-by` property
--   **aria-expanded**: Shows popup state via `expanded` property
-
-### Keyboard Navigation
-
--   Inherits native button keyboard behavior (Space, Enter)
--   Focus management with visible focus indicators
--   Proper tab order integration
-
-### Screen Reader Support
-
--   State changes are announced immediately
--   Loading states are communicated via aria-busy
--   Toggle states use appropriate pressed/unpressed announcements
--   Custom labels override default content when needed
-
-### Motion & Animation
-
--   Respects `prefers-reduced-motion` setting
--   Loading animation is replaced with static pattern when motion is reduced
--   Transitions are disabled for users who prefer reduced motion
-
-### High Contrast Support
-
--   Enhanced borders and focus indicators in high contrast mode
--   Maintains readability across different contrast preferences
 
 ### Best Practices
 
@@ -442,31 +309,21 @@ This component follows WCAG 2.1 guidelines and provides comprehensive accessibil
 <mjo-button rounded startIcon="close" button-label="Close dialog"></mjo-button>
 
 <!-- Good: Toggle with clear context -->
-<mjo-button toggleable button-label="Enable notifications"> Notifications </mjo-button>
+<mjo-button toggleable button-label="Enable notifications">Notifications</mjo-button>
 
 <!-- Good: Loading state -->
 <mjo-button loading>Processing payment...</mjo-button>
-
-<!-- Good: Menu button -->
-<mjo-button has-popup="menu" expanded="false"> Options </mjo-button>
 ```
-
-## Performance Considerations
-
--   Avoid setting `loading` for long periods purely to block user interaction; prefer disabling only when necessary.
--   The ripple element is skipped when disabled/loading to reduce unnecessary DOM updates.
 
 ## Summary
 
-`<mjo-button>` is a fully accessible, feature-rich button component that provides:
+`<mjo-button>` is a comprehensive button component that provides:
 
--   **Complete Accessibility**: WCAG 2.1 compliant with comprehensive ARIA support
--   **Multiple Variants**: Various visual styles (default, ghost, flat, dashed, link, text)
--   **Semantic Colors**: Primary, secondary, and status colors (success, info, warning, error)
--   **Interactive States**: Loading with aria-busy, toggle with aria-pressed, disabled states
--   **Flexible Theming**: Global theming via `<mjo-theme>` and per-instance via ThemeMixin
+-   **Multiple Variants**: default, ghost, flat, dashed, link, text
+-   **Semantic Colors**: primary, secondary, success, info, warning, error
+-   **Interactive States**: loading, toggle, disabled
+-   **Accessibility**: WCAG 2.1 compliant with comprehensive ARIA support
 -   **Form Integration**: Seamless form submission via FormMixin
--   **Motion Respect**: Honors user motion preferences
--   **High Contrast**: Enhanced visibility in high contrast modes
+-   **Flexible Theming**: Global and per-instance customization
 
-The component is designed to be the primary interactive element for user actions, providing excellent usability for all users including those using assistive technologies. Start with semantic HTML and enhance with the specific properties needed for your use case.
+Perfect for building interactive interfaces with consistent styling and excellent accessibility support.
