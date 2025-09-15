@@ -91,6 +91,8 @@
         "build:minify-css": "node scripts/minify-css.js",
         "build:unminified": "rm -rf dist && tsc -p tsconfig.build.json && ncp src/types dist/types && ncp src/styles dist/styles && cp dist/styles/theme.css dist/styles/theme.min.css && ncp cli dist/cli && ncp package.json ./dist/package.json && ncp .npmignore ./dist/.npmignore && ncp README.md ./dist/README.md",
         "build:publish": "npm run build && cd dist && npm publish",
+        "lint": "eslint src --ext .ts,.js",
+        "lint:fix": "eslint src --ext .ts,.js --fix",
         "preview": "vite preview",
         "test": "npm run build && web-test-runner",
         "test:once": "npm run build && echo 'Running tests once (Note: web-test-runner may still enter watch mode in interactive terminals due to a known limitation)'",
