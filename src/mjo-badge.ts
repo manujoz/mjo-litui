@@ -74,7 +74,7 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
             >
                 ${this.#displayedLabel.includes("<svg")
                     ? html`<mjo-icon src=${this.#displayedLabel} exportparts="icon: icon" aria-hidden="true"></mjo-icon>`
-                    : html`<mjo-typography tag="none" size="body2" weight="bold" exportparts="typography: label">${this.#displayedLabel}</mjo-typography>`}
+                    : html`<mjo-typography tag="span" weight="bold" exportparts="typography: label">${this.#displayedLabel}</mjo-typography>`}
             </div>
         `;
     }
@@ -212,8 +212,8 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
 
         switch (this.position) {
             case "top-left":
-                this.container.style.top = `-${(height + offsety) / 2}px`;
-                this.container.style.left = `-${(width + offsetx) / 2}px`;
+                this.container.style.top = `-${(height + offsety * -1) / 2}px`;
+                this.container.style.left = `-${(width + offsetx * -1) / 2}px`;
                 break;
             case "bottom-right":
                 this.container.style.bottom = `-${(height + offsety) / 2}px`;
@@ -221,10 +221,10 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
                 break;
             case "bottom-left":
                 this.container.style.bottom = `-${(height + offsety) / 2}px`;
-                this.container.style.left = `-${(width + offsetx) / 2}px`;
+                this.container.style.left = `-${(width + offsetx * -1) / 2}px`;
                 break;
             default:
-                this.container.style.top = `-${(height + offsety) / 2}px`;
+                this.container.style.top = `-${(height + offsety * -1) / 2}px`;
                 this.container.style.right = `-${(width + offsetx) / 2}px`;
                 break;
         }
@@ -255,12 +255,6 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
             error: "var(--mjo-color-error-foreground, currentColor)",
         };
 
-        // Alpha color mapping for flat variant (only available for primary/secondary)
-        const alphaColorMap: Partial<Record<MjoBadgeColors, string>> = {
-            primary: "var(--mjo-primary-color-alpha3)",
-            secondary: "var(--mjo-secondary-color-alpha3)",
-        };
-
         const currentColor = colorMap[this.color];
         const currentForegroundColor = foregroundColorMap[this.color];
 
@@ -268,9 +262,6 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
         let backgroundColor = `var(--mjo-badge-background-color, ${currentColor})`;
         let textColor = `var(--mjo-badge-color, ${currentForegroundColor})`;
         let boxShadow = "none";
-        let pseudoBackground = "none";
-        let pseudoOpacity = "0";
-        let overflow = "visible";
 
         // Variant-specific styling
         switch (this.variant) {
@@ -280,24 +271,20 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
             }
             case "flat": {
                 textColor = currentColor;
-                const alphaColor = alphaColorMap[this.color];
-                if (alphaColor) {
-                    backgroundColor = alphaColor;
-                } else {
-                    backgroundColor = "transparent";
-                    pseudoBackground = currentColor;
-                    pseudoOpacity = "0.2";
-                    overflow = "hidden";
-                }
+                backgroundColor = `color-mix(in srgb, ${currentColor} 30%, rgba(0, 0, 0, 0.88))`;
                 break;
             }
             case "ghost": {
-                backgroundColor = "rgba(200, 200, 200, 0.2)";
+                backgroundColor = "rgba(60, 60, 60, 0.85)";
                 textColor = currentColor;
                 break;
             }
             case "brilliant": {
                 boxShadow = `0 0 1em ${currentColor}`;
+                break;
+            }
+            case "shadow": {
+                boxShadow = "var(--mjo-badge-box-shadow, var(--mjo-box-shadow-2, 0 0 6px rgba(0, 0, 0, 1)))";
                 break;
             }
         }
@@ -306,16 +293,13 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
         this.style.setProperty("--mjoint-badge-background-color", backgroundColor);
         this.style.setProperty("--mjoint-badge-text-color", textColor);
         this.style.setProperty("--mjoint-badge-box-shadow", boxShadow);
-        this.style.setProperty("--mjoint-badge-pseudo-background", pseudoBackground);
-        this.style.setProperty("--mjoint-badge-pseudo-opacity", pseudoOpacity);
-        this.style.setProperty("--mjoint-badge-overflow", overflow);
         this.style.setProperty("--mjoint-badge-focus-outline-color", currentColor);
     }
 
     static styles = [
         css`
             :host {
-                display: block;
+                display: inline-block;
                 position: relative;
             }
 
@@ -331,19 +315,10 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
                 transition: transform var(--mjo-badge-animation-duration, 0.2s) ease-in-out;
                 z-index: 1;
                 outline: none;
-
-                /* Dynamic styles via CSS variables */
                 background-color: var(--mjoint-badge-background-color);
                 color: var(--mjoint-badge-text-color);
                 box-shadow: var(--mjoint-badge-box-shadow);
                 overflow: var(--mjoint-badge-overflow);
-            }
-            .container::before {
-                position: absolute;
-                content: "";
-                inset: 0;
-                opacity: var(--mjoint-badge-pseudo-opacity, 0);
-                background-color: var(--mjoint-badge-pseudo-background, transparent);
             }
             .container.show {
                 transform: scale(1);
@@ -352,21 +327,23 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
                 animation: badge-click 0.2s ease-out;
             }
             .container:focus-visible {
-                outline: var(--mjo-badge-focus-outline-width, 2px) solid var(--mjoint-badge-focus-outline-color);
-                outline-offset: var(--mjo-badge-focus-outline-offset, 1px);
+                outline: 2px solid var(--mjoint-badge-focus-outline-color);
+                outline-offset: 2px;
             }
-            .container[data-hide-outline] {
+            .container[data-hide-outline],
+            .container[data-variant="brilliant"],
+            .container[data-variant="shadow"] {
                 border: none;
                 outline: none;
             }
             .container[data-size="small"] {
-                font-size: 12px;
+                font-size: var(--mjo-font-size-xxsmall, 10px);
             }
             .container[data-size="medium"] {
-                font-size: 14px;
+                font-size: var(--mjo-font-size-small, 14px);
             }
             .container[data-size="large"] {
-                font-size: 18px;
+                font-size: var(--mjo-font-size-medium, 18px);
             }
             .container[data-clickable] {
                 cursor: pointer;
@@ -385,6 +362,7 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
                 font-weight: bold;
                 font-size: 1em;
                 line-height: 1em;
+                --mjo-typography-base-line-height: 1em;
                 white-space: nowrap;
                 margin: 0;
             }

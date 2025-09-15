@@ -269,11 +269,10 @@ export interface MjoBadgeTheme {
     fontSizeSmall?: string;
     fontSizeMedium?: string;
     fontSizeLarge?: string;
-    focusOutlineWidth?: string;
-    focusOutlineOffset?: string;
     animationDuration?: string;
     backgroundColor?: string;
     color?: string;
+    boxShadow?: string;
 }
 
 export interface MjoButtonTheme {

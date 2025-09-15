@@ -71,14 +71,13 @@ export class ExampleBadgeBasic extends LitElement {
 
 ## CSS Custom Properties
 
-| Property                           | Default | Description                             |
-| ---------------------------------- | ------- | --------------------------------------- |
-| `--mjo-badge-border-width`         | `2px`   | Border width of the badge               |
-| `--mjo-badge-animation-duration`   | `0.2s`  | Animation duration for scaling          |
-| `--mjo-badge-focus-outline-width`  | `2px`   | Width of focus outline                  |
-| `--mjo-badge-focus-outline-offset` | `1px`   | Offset of focus outline                 |
-| `--mjo-badge-background-color`     | Dynamic | Background color (varies by color prop) |
-| `--mjo-badge-color`                | Dynamic | Text color (varies by color prop)       |
+| Property                         | Default                   | Description                             |
+| -------------------------------- | ------------------------- | --------------------------------------- |
+| `--mjo-badge-border-width`       | `2px`                     | Border width of the badge               |
+| `--mjo-badge-animation-duration` | `0.2s`                    | Animation duration for scaling          |
+| `--mjo-badge-box-shadow`         | `var(--mjo-box-shadow-2)` | Offset of focus outline                 |
+| `--mjo-badge-background-color`   | Dynamic                   | Background color (varies by color prop) |
+| `--mjo-badge-color`              | Dynamic                   | Text color (varies by color prop)       |
 
 > **Note:** Additional theme-level variables are available via the global theming system and color tokens.
 
