@@ -1,8 +1,8 @@
 import { html } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-
 import { AiFillAndroid, AiFillApple, AiFillAudio, AiFillBackward, AiFillWindows } from "mjo-icons/ai";
 
+import { MjoButtonTheme } from "@src/types/mjo-theme.js";
 import { componentDiscovery } from "../services/component-discovery.js";
 import { ssrRenderer } from "../services/ssr-renderer.js";
 import { TemplateHelper } from "../utils/template-helper.js";
@@ -28,6 +28,10 @@ export class ButtonController {
             previous: previousComponent ? previousComponent.path : undefined,
         });
 
+        const theme: MjoButtonTheme = {
+            color: "red",
+        };
+
         const buttonTemplate = html`
             ${unsafeHTML(headerTemplate)}
 
@@ -38,7 +42,7 @@ export class ButtonController {
 
                 <div class="playground-container interactive-demo">
                     <div class="playground-showcase">
-                        <mjo-button id="playground-button">Interactive Button</mjo-button>
+                        <mjo-button id="playground-button" .theme=${theme}>Interactive Button</mjo-button>
                     </div>
 
                     <div class="controls-panel">

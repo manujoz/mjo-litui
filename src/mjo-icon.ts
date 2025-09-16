@@ -5,7 +5,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-ripple.js";
 
@@ -59,6 +59,7 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
         const classes = this.#getClasses();
 
         return html`
+            ${this.applyThemeSsr()}
             <div
                 class="icon-container ${classes}"
                 part="icon"

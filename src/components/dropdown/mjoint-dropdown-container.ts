@@ -4,7 +4,7 @@ import type { MjoDropdownPosition } from "../../types/mjo-dropdown.d.ts";
 import { LitElement, TemplateResult, css, html, nothing, type CSSResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import { ThemeMixin, type IThemeMixin } from "../../mixins/theme-mixin.js";
 
 import {
     getLeftInCenterPOsition,

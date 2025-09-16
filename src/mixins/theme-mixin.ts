@@ -1,42 +1,58 @@
+import type { DirectiveResult } from "lit/directive.js";
 import { type MixinConstructor } from "../types/mixins";
 
-import { LitElement } from "lit";
+import { LitElement, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
+import { unsafeHTML, type UnsafeHTMLDirective } from "lit/directives/unsafe-html.js";
 
 /** @prop theme */
 export declare class IThemeMixin {
     theme?: Record<string, string>;
+
+    applyThemeSsr(): DirectiveResult<typeof UnsafeHTMLDirective> | undefined;
 }
 
 export const ThemeMixin = <T extends MixinConstructor<LitElement>>(superClass: T) => {
     class ThemeMx extends superClass {
         @property({ type: Object }) theme?: Record<string, string>;
 
-        cssStyles = "";
+        #styleTagThemeMixin?: string;
 
-        connectedCallback(): void {
-            super.connectedCallback();
+        willUpdate(_changedProperties: PropertyValues<this>): void {
+            super.willUpdate(_changedProperties);
 
             if (this.theme) {
-                this.#applyTheme();
+                this.#setStyles();
             }
         }
 
-        #applyTheme() {
+        applyThemeSsr() {
+            if (!this.#styleTagThemeMixin) return;
+
+            return unsafeHTML(this.#styleTagThemeMixin);
+        }
+
+        #setStyles() {
+            let cssStyles = "";
             const key = this.tagName.toLowerCase();
             for (const componentKey in this.theme) {
                 const value = this.theme[componentKey];
-                this.cssStyles += `--${this.#kamelCaseToKebabCase(key)}-${this.#kamelCaseToKebabCase(componentKey)}: ${value};`;
+                cssStyles += `--${this.#kamelCaseToKebabCase(key)}-${this.#kamelCaseToKebabCase(componentKey)}: ${value};`;
             }
 
-            let style = this.shadowRoot?.querySelector("#mjo-theme") as HTMLStyleElement;
-            if (!style) {
-                style = document.createElement("style");
-                style.setAttribute("id", "mjo-theme");
-                this.shadowRoot?.appendChild(style);
+            if (this.shadowRoot) {
+                let style = this.shadowRoot?.querySelector("#mjo-theme") as HTMLStyleElement;
+                if (!style) {
+                    style = document.createElement("style");
+                    style.setAttribute("id", "mjo-theme");
+                    this.shadowRoot?.appendChild(style);
+                }
+
+                style.innerHTML = `:host{${cssStyles}}`;
+                return;
             }
 
-            style.innerHTML = `:host {${this.cssStyles}}`;
+            this.#styleTagThemeMixin = `<style id="mjo-theme">:host{${cssStyles}}</style>`;
         }
 
         #kamelCaseToKebabCase(str: string) {

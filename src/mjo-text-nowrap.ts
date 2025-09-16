@@ -4,13 +4,16 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+
 @customElement("mjo-text-nowrap")
-export class MjoTextNowrap extends LitElement {
+export class MjoTextNowrap extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) tag: MjoTextNowrapTag = "span";
     @property({ type: String, attribute: "aria-label" }) override ariaLabel: string | null = null;
 
     render() {
         return html`
+            ${this.applyThemeSsr()}
             <div
                 class="truncate-container"
                 part="container"

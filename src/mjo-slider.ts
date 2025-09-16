@@ -15,9 +15,9 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 import { createRef, ref } from "lit/directives/ref.js";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { MJO_SLIDER_SIZES } from "./utils/mjo-slider.js";
 
 import "./components/input/mjoint-input-label.js";
@@ -104,7 +104,9 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         const handleTwoId = this.isRange ? `${this.id || "slider"}-handle-two-${Math.random().toString(36).substring(2, 9)}` : undefined;
         const labelId = this.label ? `${this.id || "slider"}-label-${Math.random().toString(36).substring(2, 9)}` : undefined;
 
-        return html`<div class="label">
+        return html`
+            ${this.applyThemeSsr()}
+            <div class="label">
                 ${this.label
                     ? html`<mjoint-input-label
                           id=${ifDefined(labelId)}
@@ -188,7 +190,8 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                       ></mjoint-slider-handle>`
                     : nothing}
                 <input name=${ifDefined(this.name)} type="hidden" .value=${live(this.value)} />
-            </div>`;
+            </div>
+        `;
     }
 
     connectedCallback() {

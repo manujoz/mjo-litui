@@ -18,7 +18,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { repeat } from "lit/directives/repeat.js";
 import { styleMap } from "lit/directives/style-map.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { normalizeText, uniqueId } from "./utils/strings.js";
 
 import "./components/table/mjoint-filtrable-button.js";
@@ -103,6 +103,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
         });
 
         return html`
+            ${this.applyThemeSsr()}
             <div class="container" style=${containerStyles} role="region" aria-label=${this.caption || "Data table"}>
                 <div class="sentinel"></div>
                 ${this.#ariaLiveMessage ? html`<div class="sr-only" aria-live="polite" aria-atomic="true">${this.#ariaLiveMessage}</div>` : nothing}

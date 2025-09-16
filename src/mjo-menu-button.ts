@@ -28,6 +28,7 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
 
     render() {
         return html`
+            ${this.applyThemeSsr()}
             <button
                 class="container"
                 @click=${this.#handleClick}

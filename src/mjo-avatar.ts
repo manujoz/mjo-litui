@@ -1,9 +1,10 @@
+import { MjoAvatarColor, MjoAvatarRadius, MjoAvatarSize } from "./types/mjo-avatar.js";
+
 import { LitElement, PropertyValues, css, html, isServer } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
-import { MjoAvatarColor, MjoAvatarRadius, MjoAvatarSize } from "./types/mjo-avatar.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { pause } from "./utils/utils.js";
 
 /**
@@ -42,37 +43,42 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
     @query(".container") private $container!: HTMLElement;
 
     render() {
-        return html`<div
-            class="container size-${this.size} radius-${this.radius} color-${this.color}"
-            part="container"
-            role=${this.#appropriateRole}
-            aria-label=${this.#computedAriaLabel}
-            aria-describedby=${ifDefined(this.ariaDescribedby)}
-            aria-disabled=${this.disabled ? "true" : "false"}
-            tabindex=${this.clickable ? (this.tabIndex ?? 0) : -1}
-            ?data-bordered=${this.bordered}
-            ?data-disabled=${this.disabled}
-            ?data-clickable=${this.clickable}
-            ?data-ssr=${isServer}
-            @click=${this.#handleClick}
-            @keydown=${this.#handleKeydown}
-        >
-            ${this.src && !this.error
-                ? html`
-                      <div class="image radius-${this.radius}" part="image-container">
-                          <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${this.#handleError} part="image" />
-                      </div>
-                  `
-                : this.fallbackIcon
-                  ? html`
-                        <div class="image fallback radius-${this.radius} font-size-${this.size}" part="image-container fallback">
-                            <mjo-icon src=${this.fallbackIcon} exportparts="icon: icon"></mjo-icon>
-                        </div>
-                    `
-                  : this.name
-                    ? html`<div class="image name radius-${this.radius} font-size-${this.size}" part="image-container name"><span>${this.#initial}</span></div>`
-                    : html`<div class="image radius-${this.radius}" part="image-container"></div>`}
-        </div>`;
+        return html`
+            ${this.applyThemeSsr()}
+            <div
+                class="container size-${this.size} radius-${this.radius} color-${this.color}"
+                part="container"
+                role=${this.#appropriateRole}
+                aria-label=${this.#computedAriaLabel}
+                aria-describedby=${ifDefined(this.ariaDescribedby)}
+                aria-disabled=${this.disabled ? "true" : "false"}
+                tabindex=${this.clickable ? (this.tabIndex ?? 0) : -1}
+                ?data-bordered=${this.bordered}
+                ?data-disabled=${this.disabled}
+                ?data-clickable=${this.clickable}
+                ?data-ssr=${isServer}
+                @click=${this.#handleClick}
+                @keydown=${this.#handleKeydown}
+            >
+                ${this.src && !this.error
+                    ? html`
+                          <div class="image radius-${this.radius}" part="image-container">
+                              <img src=${this.src} alt=${ifDefined(this.alt || this.name)} @error=${this.#handleError} part="image" />
+                          </div>
+                      `
+                    : this.fallbackIcon
+                      ? html`
+                            <div class="image fallback radius-${this.radius} font-size-${this.size}" part="image-container fallback">
+                                <mjo-icon src=${this.fallbackIcon} exportparts="icon: icon"></mjo-icon>
+                            </div>
+                        `
+                      : this.name
+                        ? html`<div class="image name radius-${this.radius} font-size-${this.size}" part="image-container name">
+                              <span>${this.#initial}</span>
+                          </div>`
+                        : html`<div class="image radius-${this.radius}" part="image-container"></div>`}
+            </div>
+        `;
     }
 
     protected firstUpdated(_changedProperties: PropertyValues<this>): void {

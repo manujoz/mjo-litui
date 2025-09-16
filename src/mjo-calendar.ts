@@ -20,8 +20,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { locales } from "./locales/locales.js";
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { CalendarUtils } from "./utils/calendar.js";
 
 import "./components/calendar/mjoint-calendar-grid.js";
@@ -139,6 +139,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         const calendarId = `calendar-${Math.random().toString(36).substring(2, 9)}`;
 
         return html`
+            ${this.applyThemeSsr()}
             <div
                 id=${calendarId}
                 class="calendar"

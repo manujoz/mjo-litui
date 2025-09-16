@@ -15,8 +15,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
-import { FormMixin } from "./mixins/form-mixin.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-icon.js";
 import "./mjo-ripple.js";
@@ -41,7 +41,7 @@ import "./mjo-typography.js";
  * @csspart loading - The loading indicator element (visible when `loading` is true)
  */
 @customElement("mjo-button")
-export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThemeMixin {
+export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThemeMixin, IFormMixin {
     @property({ type: Boolean, reflect: true }) fullwidth = false;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean, reflect: true }) loading = false;
@@ -65,10 +65,12 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     #styles = "";
 
     render() {
+        super.render();
         const ariaBusy = this.loading ? "true" : "false";
         const ariaPressed = this.toggleable ? (this.toggle ? "true" : "false") : undefined;
 
-        return html`${unsafeHTML(this.#styles)}
+        return html`
+            ${this.applyThemeSsr()} ${unsafeHTML(this.#styles)}
             <button
                 type=${this.type}
                 part="button"
@@ -91,12 +93,8 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 ${this.endIcon && html` <mjo-icon exportparts="icon: end-icon" src=${this.endIcon}></mjo-icon>`}
                 ${!this.noink && !this.disabled && !this.loading ? html`<mjo-ripple></mjo-ripple>` : nothing}
                 ${this.loading ? html`<div class="loading" aria-hidden="true" part="loading"></div>` : nothing}
-            </button>`;
-    }
-
-    connectedCallback(): void {
-        super.connectedCallback();
-        this.#setButtonCssVars();
+            </button>
+        `;
     }
 
     protected willUpdate(_changedProperties: PropertyValues<this>): void {

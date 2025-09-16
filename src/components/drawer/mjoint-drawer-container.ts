@@ -5,7 +5,7 @@ import { LitElement, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { AiOutlineClose } from "mjo-icons/ai";
 
-import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
 @customElement("mjoint-drawer-container")
 export class MjointDrawerContainer extends ThemeMixin(LitElement) implements IThemeMixin {

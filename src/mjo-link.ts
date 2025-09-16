@@ -34,6 +34,7 @@ export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
         });
 
         return html`
+            ${this.applyThemeSsr()}
             <a
                 href=${ifDefined(this.href)}
                 @click=${this.#handleClick}

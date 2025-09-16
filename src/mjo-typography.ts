@@ -1,9 +1,9 @@
 import type { MjoTypographyColor, MjoTypographySize, MjoTypographyTag, MjoTypographyWeight } from "./types/mjo-typography";
 
-import { LitElement, css, html } from "lit";
+import { LitElement, TemplateResult, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 /**
  * @summary Semantic typography component with configurable sizes, weights, and semantic HTML tags.
@@ -28,24 +28,36 @@ export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin
     @property({ type: String, attribute: "aria-level", reflect: true }) ariaLevel: string | null = null;
 
     render() {
+        let template: TemplateResult<1>;
+
         switch (this.tag) {
             case "h1":
-                return html`<h1 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h1>`;
+                template = html`<h1 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h1>`;
+                break;
             case "h2":
-                return html`<h2 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h2>`;
+                template = html`<h2 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h2>`;
+                break;
             case "h3":
-                return html`<h3 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h3>`;
+                template = html`<h3 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h3>`;
+                break;
             case "h4":
-                return html`<h4 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h4>`;
+                template = html`<h4 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h4>`;
+                break;
             case "h5":
-                return html`<h5 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h5>`;
+                template = html`<h5 class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></h5>`;
+                break;
             case "span":
-                return html`<span class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></span>`;
+                template = html`<span class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></span>`;
+                break;
             case "p":
-                return html`<p class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></p>`;
+                template = html`<p class=${`${this.size} ${this.weight} ${this.color}`} part="typography"><slot></slot></p>`;
+                break;
             default:
-                return html`<slot></slot>`;
+                template = html`<slot></slot>`;
+                break;
         }
+
+        return html`${this.applyThemeSsr()}${template}`;
     }
 
     static styles = [

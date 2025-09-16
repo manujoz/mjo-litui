@@ -4,7 +4,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { ifDefined } from "lit/directives/if-defined.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 /**
  * @summary Flexible card component with background, padding, shadow, radius, and variant customization.
@@ -27,7 +27,7 @@ export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
 
     render() {
         return html`
-            ${this.variant !== "default" ? html`<div class="border" data-variant=${this.variant}></div>` : nothing}
+            ${this.applyThemeSsr()}${this.variant !== "default" ? html`<div class="border" data-variant=${this.variant}></div>` : nothing}
             <div
                 class="container"
                 part="container"

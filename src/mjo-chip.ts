@@ -4,9 +4,9 @@ import { css, html, LitElement, nothing, PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-
 import { AiFillCloseCircle } from "mjo-icons/ai";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { pause } from "./utils/utils.js";
 
 import "./mjo-icon.js";
@@ -45,7 +45,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
     #styles = "";
 
     render() {
-        return html`${unsafeHTML(this.#styles)}
+        return html`${this.applyThemeSsr()}${unsafeHTML(this.#styles)}
             <div
                 class="container"
                 part="container"

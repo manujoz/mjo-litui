@@ -15,9 +15,9 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { TextAreaAutoSize } from "./utils/textarea-autosize.js";
 
 import "./components/input/mjoint-input-counter.js";
@@ -65,7 +65,9 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         const helperTextId = this.helperText || this.errormsg || this.successmsg ? `${this.#uniqueId}-helper` : undefined;
         const labelId = this.label ? `${this.#uniqueId}-label` : undefined;
 
-        return html`${this.label
+        return html`
+            ${this.applyThemeSsr()}
+            ${this.label
                 ? html`<mjoint-input-label
                       id=${ifDefined(labelId)}
                       color=${this.color}
@@ -129,7 +131,8 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                           data-color=${this.color}
                       ></mjoint-input-counter>`
                     : nothing}
-            </div>`;
+            </div>
+        `;
     }
 
     connectedCallback(): void {

@@ -3,8 +3,10 @@ import { Properties } from "csstype";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+
 @customElement("mjo-grid")
-export class MjoGrid extends LitElement {
+export class MjoGrid extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Number }) columns: number = 4;
     @property({ type: String }) autoRows: Properties["gridAutoRows"] = "auto";
     @property({ type: String }) flow: Properties["gridAutoFlow"] = "";
@@ -14,7 +16,7 @@ export class MjoGrid extends LitElement {
     @property({ type: String }) mode: "fill" | "fit" | "columns" = "columns";
 
     render() {
-        return html`<slot></slot>`;
+        return html`${this.applyThemeSsr()}<slot></slot>`;
     }
 
     connectedCallback(): void {

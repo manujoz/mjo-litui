@@ -12,9 +12,9 @@ import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { FaCheck, FaMinus } from "mjo-icons/fa";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { searchParentElement } from "./utils/shadow-dom.js";
 
 import "./components/input/mjoint-input-helper-text.js";
@@ -89,80 +89,83 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     }
 
     render() {
-        return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size} ?data-error=${this.error}>
-            <div
-                class="checkbox-container"
-                part="container"
-                role="checkbox"
-                aria-checked=${this.computedAriaChecked}
-                aria-label=${ifDefined(this.computedAriaLabel)}
-                aria-describedby=${ifDefined(this.ariaDescribedby)}
-                aria-disabled=${this.disabled ? "true" : "false"}
-                aria-invalid=${this.error ? "true" : "false"}
-                tabindex=${this.computedTabIndex}
-                @click=${this.#handleClick}
-                @keydown=${this.#handleKeydown}
-                @focus=${this.#handleFocus}
-                @blur=${this.#handleBlur}
-            >
-                <div class="box" part="box">
-                    <div class="checkbox" part="checkbox" ?data-checked=${this.checked} ?data-indeterminate=${this.indeterminate}>
-                        ${this.indeterminate
-                            ? html`
-                                  <div class="inner" part="checkbox-inner">
-                                      <mjo-icon src=${FaMinus} exportparts="icon: checkbox-icon"></mjo-icon>
-                                  </div>
-                              `
-                            : html`
-                                  <div class="inner" part="checkbox-inner">
-                                      <mjo-icon src=${FaCheck} exportparts="icon: checkbox-icon"></mjo-icon>
-                                  </div>
-                              `}
+        return html`
+            ${this.applyThemeSsr()}
+            <div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size} ?data-error=${this.error}>
+                <div
+                    class="checkbox-container"
+                    part="container"
+                    role="checkbox"
+                    aria-checked=${this.computedAriaChecked}
+                    aria-label=${ifDefined(this.computedAriaLabel)}
+                    aria-describedby=${ifDefined(this.ariaDescribedby)}
+                    aria-disabled=${this.disabled ? "true" : "false"}
+                    aria-invalid=${this.error ? "true" : "false"}
+                    tabindex=${this.computedTabIndex}
+                    @click=${this.#handleClick}
+                    @keydown=${this.#handleKeydown}
+                    @focus=${this.#handleFocus}
+                    @blur=${this.#handleBlur}
+                >
+                    <div class="box" part="box">
+                        <div class="checkbox" part="checkbox" ?data-checked=${this.checked} ?data-indeterminate=${this.indeterminate}>
+                            ${this.indeterminate
+                                ? html`
+                                      <div class="inner" part="checkbox-inner">
+                                          <mjo-icon src=${FaMinus} exportparts="icon: checkbox-icon"></mjo-icon>
+                                      </div>
+                                  `
+                                : html`
+                                      <div class="inner" part="checkbox-inner">
+                                          <mjo-icon src=${FaCheck} exportparts="icon: checkbox-icon"></mjo-icon>
+                                      </div>
+                                  `}
+                        </div>
                     </div>
+                    ${this.label
+                        ? html`
+                              <div class="label-container" part="label-container">
+                                  <mjo-typography tag="none" class="label" exportparts="typography: label-text">${this.label}</mjo-typography>
+                              </div>
+                          `
+                        : nothing}
+                    <input
+                        id=${ifDefined(this.id)}
+                        type="checkbox"
+                        name=${ifDefined(this.name)}
+                        value=${ifDefined(this.value)}
+                        ?checked=${this.checked}
+                        .indeterminate=${this.indeterminate}
+                        ?disabled=${this.disabled}
+                        ?required=${this.required}
+                        aria-hidden="true"
+                        tabindex="-1"
+                    />
                 </div>
-                ${this.label
+                ${this.helperText
                     ? html`
-                          <div class="label-container" part="label-container">
-                              <mjo-typography tag="none" class="label" exportparts="typography: label-text">${this.label}</mjo-typography>
-                          </div>
-                      `
-                    : nothing}
-                <input
-                    id=${ifDefined(this.id)}
-                    type="checkbox"
-                    name=${ifDefined(this.name)}
-                    value=${ifDefined(this.value)}
-                    ?checked=${this.checked}
-                    .indeterminate=${this.indeterminate}
-                    ?disabled=${this.disabled}
-                    ?required=${this.required}
-                    aria-hidden="true"
-                    tabindex="-1"
-                />
-            </div>
-            ${this.helperText
-                ? html`
-                      <mjoint-input-helper-text
-                          exportparts="
+                          <mjoint-input-helper-text
+                              exportparts="
                             container: helper-text-container,
                             helper-text: helper-text-typography"
-                      >
-                          ${this.helperText}
-                      </mjoint-input-helper-text>
-                  `
-                : nothing}
-            ${this.errormsg || this.successmsg
-                ? html`<mjoint-input-helper-text
-                      exportparts="
+                          >
+                              ${this.helperText}
+                          </mjoint-input-helper-text>
+                      `
+                    : nothing}
+                ${this.errormsg || this.successmsg
+                    ? html`<mjoint-input-helper-text
+                          exportparts="
                             container: helper-text-msg-container,
                             error-message: helper-text-msg-error-message,
                             success-message: helper-text-msg-success-message,
                             icon: helper-text-msg-icon"
-                      .errormsg=${this.errormsg}
-                      .successmsg=${this.successmsg}
-                  ></mjoint-input-helper-text> `
-                : nothing}
-        </div>`;
+                          .errormsg=${this.errormsg}
+                          .successmsg=${this.successmsg}
+                      ></mjoint-input-helper-text> `
+                    : nothing}
+            </div>
+        `;
     }
 
     connectedCallback(): void {

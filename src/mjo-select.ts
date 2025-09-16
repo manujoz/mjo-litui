@@ -6,12 +6,12 @@ import {
     MjoSelectChangeEvent,
     MjoSelectClearEvent,
     MjoSelectCloseEvent,
+    type MjoSelectColor,
     MjoSelectFocusEvent,
     MjoSelectKeydownEvent,
     MjoSelectOpenEvent,
     MjoSelectOptionPreselectEvent,
     MjoSelectSearchEvent,
-    type MjoSelectColor,
     type MjoSelectSize,
 } from "./types/mjo-select.js";
 import { type MjoDropdownTheme } from "./types/mjo-theme.js";
@@ -23,9 +23,9 @@ import { live } from "lit/directives/live.js";
 import { createRef, ref } from "lit/directives/ref.js";
 import { AiOutlineDown } from "mjo-icons/ai";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./components/input/mjoint-input-helper-text.js";
 import "./components/input/mjoint-input-label.js";
@@ -93,7 +93,8 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         const labelId = this.label ? `${this.#uniqueId}-label` : undefined;
         const listboxId = `${this.#uniqueId}-listbox`;
 
-        return html`${this.label
+        return html`${this.applyThemeSsr()}
+            ${this.label
                 ? html`<mjoint-input-label
                       id=${ifDefined(labelId)}
                       color=${this.color}

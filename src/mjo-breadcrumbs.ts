@@ -12,7 +12,6 @@ import { css, html, LitElement, nothing, PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { repeat } from "lit/directives/repeat.js";
-
 import { BsChevronRight } from "mjo-icons/bs";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
@@ -64,6 +63,7 @@ export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixi
         if (this.items.length === 0) return nothing;
 
         return html`
+            ${this.applyThemeSsr()}
             <mjo-scrollshadow overflow="horizontal" hideScrollbar data-variant=${this.variant}>
                 <nav
                     part="container"

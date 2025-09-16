@@ -10,9 +10,9 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { PiCalendarDotsLight } from "mjo-icons/pi";
 
 import { createRef, ref } from "lit/directives/ref.js";
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import { ifDefined } from "lit/directives/if-defined.js";
 import "./mjo-button.js";
@@ -112,7 +112,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         const computedAriaLabel = this.ariaLabel || this.label || (this.isRange ? "Date range picker" : "Date picker");
 
         return html`
-            <!-- Accessibility announcements region -->
+            ${this.applyThemeSsr()}
             <div aria-live=${this.ariaLive} aria-atomic="true" class="sr-only" .textContent=${this.announcementText}></div>
 
             <mjo-dropdown

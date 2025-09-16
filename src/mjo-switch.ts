@@ -1,11 +1,12 @@
+import { MjoSwitchBlurEvent, MjoSwitchChangeEvent, MjoSwitchColor, MjoSwitchFocusEvent, MjoSwitchSize } from "./types/mjo-switch.js";
+
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
-import { MjoSwitchBlurEvent, MjoSwitchChangeEvent, MjoSwitchColor, MjoSwitchFocusEvent, MjoSwitchSize } from "./types/mjo-switch.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import { GiCheckMark } from "mjo-icons/gi";
 
@@ -54,6 +55,7 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
     render() {
         return html`
+            ${this.applyThemeSsr()}
             ${this.label ? html`<mjoint-input-label color=${this.color} label=${this.label} ?error=${this.error}></mjoint-input-label>` : nothing}
             <div
                 class="container"

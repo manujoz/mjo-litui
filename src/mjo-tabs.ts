@@ -5,7 +5,7 @@ import { LitElement, PropertyValues, css, html, isServer, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { uniqueId } from "./utils/strings.js";
 
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
@@ -27,7 +27,7 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
 
     render() {
         return html`
-            ${unsafeHTML(this.#styles)}
+            ${this.applyThemeSsr()}${unsafeHTML(this.#styles)}
             <section class="container" ?data-vertical=${this.vertical} data-ssr=${isServer}>
                 ${this.tabs.length > 0
                     ? html`

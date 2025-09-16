@@ -6,9 +6,9 @@ import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { FaCheck } from "mjo-icons/fa";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { searchParentElement } from "./utils/shadow-dom.js";
 
 import "./components/input/mjoint-input-helper-text.js";
@@ -55,46 +55,49 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
     }
 
     render() {
-        return html`<div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size} ?data-error=${this.error}>
-            <div
-                class="radio-container"
-                role="radio"
-                aria-checked=${this.computedAriaChecked}
-                aria-label=${ifDefined(this.computedAriaLabel)}
-                aria-describedby=${ifDefined(this.ariaDescribedby)}
-                aria-disabled=${this.disabled ? "true" : "false"}
-                aria-invalid=${this.error ? "true" : "false"}
-                tabindex=${this.computedTabIndex}
-                @click=${this.#handleClick}
-                @keydown=${this.#handleKeydown}
-                @focus=${this.#handleFocus}
-                @blur=${this.#handleBlur}
-            >
-                <div class="box">
-                    <div class="checkbox" ?data-checked=${this.checked}>
-                        <div class="inner">
-                            <mjo-icon src=${FaCheck}></mjo-icon>
+        return html`
+            ${this.applyThemeSsr()}
+            <div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size} ?data-error=${this.error}>
+                <div
+                    class="radio-container"
+                    role="radio"
+                    aria-checked=${this.computedAriaChecked}
+                    aria-label=${ifDefined(this.computedAriaLabel)}
+                    aria-describedby=${ifDefined(this.ariaDescribedby)}
+                    aria-disabled=${this.disabled ? "true" : "false"}
+                    aria-invalid=${this.error ? "true" : "false"}
+                    tabindex=${this.computedTabIndex}
+                    @click=${this.#handleClick}
+                    @keydown=${this.#handleKeydown}
+                    @focus=${this.#handleFocus}
+                    @blur=${this.#handleBlur}
+                >
+                    <div class="box">
+                        <div class="checkbox" ?data-checked=${this.checked}>
+                            <div class="inner">
+                                <mjo-icon src=${FaCheck}></mjo-icon>
+                            </div>
                         </div>
                     </div>
+                    ${this.label ? html`<div class="label-container"><mjo-typography tag="none" class="label">${this.label}</mjo-typography></div>` : nothing}
+                    <input
+                        id=${ifDefined(this.id)}
+                        type="radio"
+                        name=${ifDefined(this.name)}
+                        value=${ifDefined(this.value)}
+                        ?checked=${this.checked}
+                        ?disabled=${this.disabled}
+                        ?required=${this.required}
+                        aria-hidden="true"
+                        tabindex="-1"
+                    />
                 </div>
-                ${this.label ? html`<div class="label-container"><mjo-typography tag="none" class="label">${this.label}</mjo-typography></div>` : nothing}
-                <input
-                    id=${ifDefined(this.id)}
-                    type="radio"
-                    name=${ifDefined(this.name)}
-                    value=${ifDefined(this.value)}
-                    ?checked=${this.checked}
-                    ?disabled=${this.disabled}
-                    ?required=${this.required}
-                    aria-hidden="true"
-                    tabindex="-1"
-                />
+                ${this.helperText ? html`<mjoint-input-helper-text>${this.helperText}</mjoint-input-helper-text> ` : nothing}
+                ${this.errormsg || this.successmsg
+                    ? html`<mjoint-input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}></mjoint-input-helper-text> `
+                    : nothing}
             </div>
-            ${this.helperText ? html`<mjoint-input-helper-text>${this.helperText}</mjoint-input-helper-text> ` : nothing}
-            ${this.errormsg || this.successmsg
-                ? html`<mjoint-input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}></mjoint-input-helper-text> `
-                : nothing}
-        </div>`;
+        `;
     }
 
     connectedCallback(): void {

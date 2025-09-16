@@ -14,13 +14,14 @@ import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { repeat } from "lit/directives/repeat.js";
 
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { uniqueId } from "./utils/strings.js";
 
 import "./components/listbox/mjoint-listbox-item.js";
 import "./components/listbox/mjoint-listbox-section.js";
 
 @customElement("mjo-listbox")
-export class MjoListbox extends LitElement {
+export class MjoListbox extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Array }) items: MjoListboxItems = [];
     @property({ type: String }) variant: MjoListboxVariant = "solid";
     @property({ type: String }) size: MjoListboxSize = "medium";
@@ -33,6 +34,7 @@ export class MjoListbox extends LitElement {
 
     render() {
         return html`
+            ${this.applyThemeSsr()}
             <div
                 id=${this.#uniqueId}
                 class="container"

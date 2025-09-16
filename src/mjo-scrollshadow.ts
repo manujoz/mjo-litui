@@ -1,6 +1,7 @@
 import { LitElement, PropertyValues, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { getInheritBackgroundColor } from "./utils/shadow-dom.js";
 
 /**
@@ -14,7 +15,7 @@ import { getInheritBackgroundColor } from "./utils/shadow-dom.js";
  * @csspart container - The internal scrollable container element
  */
 @customElement("mjo-scrollshadow")
-export class MjoScrollshadow extends LitElement {
+export class MjoScrollshadow extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) overflow: "horizontal" | "vertical" = "vertical";
     @property({ type: Boolean }) hideScrollbar = false;
 
@@ -22,6 +23,7 @@ export class MjoScrollshadow extends LitElement {
 
     render() {
         return html`
+            ${this.applyThemeSsr()}
             <div class="container" part="container" @scroll=${this.#handleScroll} data-overflow=${this.overflow} ?data-hidescrollbar=${this.hideScrollbar}>
                 <slot></slot>
             </div>

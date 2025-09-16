@@ -12,7 +12,7 @@ import {
 import { LitElement, PropertyValues, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./components/accordion/mjo-accordion-item.js";
 
@@ -42,6 +42,7 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
 
     render() {
         return html`
+            ${this.applyThemeSsr()}
             <div class="container" part="accordion" role="tablist" data-variant=${this.variant} ?data-compact=${this.compact}>
                 <slot></slot>
             </div>

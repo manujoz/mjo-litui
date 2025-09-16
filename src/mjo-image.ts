@@ -5,7 +5,7 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import ImageNotAvailable from "./utils/svg/no-image.js";
 
@@ -81,11 +81,13 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
         `;
 
         if (this.loading) {
-            return html`<div class="container loading" role="img" aria-label=${this.computedAriaLabel || "Loading image"}>${loadingSpinner}</div>`;
+            return html`${this.applyThemeSsr()}
+                <div class="container loading" role="img" aria-label=${this.computedAriaLabel || "Loading image"}>${loadingSpinner}</div>`;
         }
 
         if (this.error) {
             return html`
+                ${this.applyThemeSsr()}
                 <div
                     class="container error ${this.clickable ? "clickable" : ""}"
                     role=${this.roleAssignment}
@@ -103,6 +105,7 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
         }
 
         return html`
+            ${this.applyThemeSsr()}
             <div
                 class="container ${this.clickable ? "clickable" : ""}"
                 role=${this.roleAssignment}

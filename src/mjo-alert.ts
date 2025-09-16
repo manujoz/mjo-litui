@@ -2,8 +2,9 @@ import { MjoAlertClosedEvent, MjoAlertOpenedEvent, MjoAlertWillCloseEvent, MjoAl
 
 import { LitElement, PropertyValues, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
-
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
+
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-icon.js";
 
@@ -28,7 +29,7 @@ import "./mjo-icon.js";
  * @csspart icon - The icon element (via exportparts from mjo-icon)
  */
 @customElement("mjo-alert")
-export class MjoAlert extends LitElement {
+export class MjoAlert extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) type: "default" | "primary" | "secondary" | "success" | "info" | "warning" | "error" = "info";
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) rounded: "none" | "small" | "medium" | "large" | "full" = "medium";
@@ -58,6 +59,7 @@ export class MjoAlert extends LitElement {
         const isImportant = this.type === "error" || this.type === "warning";
 
         return html`
+            ${this.applyThemeSsr()}
             <div
                 class="container"
                 part="container"

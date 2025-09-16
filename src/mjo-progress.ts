@@ -3,9 +3,9 @@ import { MjoProgressChangeEvent, MjoProgressColor, MjoProgressCompleteEvent, Mjo
 import { css, html, LitElement, PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-
 import { styleMap } from "lit/directives/style-map.js";
-import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin";
+
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 @customElement("mjo-progress")
 export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -92,6 +92,7 @@ export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
 
     render() {
         return html`
+            ${this.applyThemeSsr()}
             <div
                 class="progress-wrapper"
                 data-variant=${this.variant}

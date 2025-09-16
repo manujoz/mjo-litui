@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 @customElement("mjo-ripple")
 export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -9,7 +9,10 @@ export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
     timeoutRipple?: NodeJS.Timeout;
 
     render() {
-        return html`<div class="container" hidden></div>`;
+        return html`
+            ${this.applyThemeSsr()}
+            <div class="container" hidden></div>
+        `;
     }
 
     connectedCallback(): void {

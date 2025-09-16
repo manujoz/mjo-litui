@@ -18,9 +18,9 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 import { AiFillCloseCircle, AiFillEye, AiFillEyeInvisible } from "mjo-icons/ai";
 
-import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
-import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
+import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./components/input/mjoint-input-counter.js";
 import "./components/input/mjoint-input-helper-text.js";
@@ -108,7 +108,9 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         const helperTextId = this.helperText || this.errormsg || this.successmsg ? `${this.#uniqueId}-helper` : undefined;
         const labelId = this.label ? `${this.#uniqueId}-label` : undefined;
 
-        return html`${this.label
+        return html`
+            ${this.applyThemeSsr()}
+            ${this.label
                 ? html`<mjoint-input-label
                       id=${ifDefined(labelId)}
                       exportparts="container: label-container, truncate-container: label-truncate-container, truncate-wrapper: label-truncate-wrapper"
@@ -239,7 +241,8 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                           data-color=${this.color}
                       ></mjoint-input-counter>`
                     : nothing}
-            </div>`;
+            </div>
+        `;
     }
 
     connectedCallback(): void {

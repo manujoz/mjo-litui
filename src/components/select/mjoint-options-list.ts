@@ -7,7 +7,7 @@ import { customElement, property, query } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { AiOutlineSearch } from "mjo-icons/ai";
 
-import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 import { getDictionary } from "../../utils/dictionary.js";
 
 import "../../mjo-icon.js";
@@ -32,40 +32,43 @@ export class MjointOptionsList extends ThemeMixin(LitElement) implements IThemeM
     };
 
     render() {
-        return html`<div role="listbox" aria-multiselectable="false">
-            ${this.searchable
-                ? html`<div class="search" @click=${this.#handleInputClick}>
-                      <div class="input">
-                          <input
-                              id="optionsListsInputSearch"
-                              type="text"
-                              placeholder=${this.dictionary.search}
-                              @input=${this.#hanldeInput}
-                              tabindex="0"
-                              aria-label="Search options"
-                          />
-                      </div>
-                      <div class="icon" aria-hidden="true">
-                          <mjo-icon src=${AiOutlineSearch}></mjo-icon>
-                      </div>
-                  </div>`
-                : nothing}
-            ${repeat(
-                this.options,
-                (option) => option.value,
-                (option) => {
-                    if (
-                        this.filter &&
-                        !option.text.toLowerCase().includes(this.filter.toLowerCase()) &&
-                        !option.value.toLowerCase().includes(this.filter.toLowerCase())
-                    ) {
-                        return nothing;
-                    }
+        return html`
+            ${this.applyThemeSsr()}
+            <div role="listbox" aria-multiselectable="false">
+                ${this.searchable
+                    ? html`<div class="search" @click=${this.#handleInputClick}>
+                          <div class="input">
+                              <input
+                                  id="optionsListsInputSearch"
+                                  type="text"
+                                  placeholder=${this.dictionary.search}
+                                  @input=${this.#hanldeInput}
+                                  tabindex="0"
+                                  aria-label="Search options"
+                              />
+                          </div>
+                          <div class="icon" aria-hidden="true">
+                              <mjo-icon src=${AiOutlineSearch}></mjo-icon>
+                          </div>
+                      </div>`
+                    : nothing}
+                ${repeat(
+                    this.options,
+                    (option) => option.value,
+                    (option) => {
+                        if (
+                            this.filter &&
+                            !option.text.toLowerCase().includes(this.filter.toLowerCase()) &&
+                            !option.value.toLowerCase().includes(this.filter.toLowerCase())
+                        ) {
+                            return nothing;
+                        }
 
-                    return html`${option}`;
-                },
-            )}
-        </div>`;
+                        return html`${option}`;
+                    },
+                )}
+            </div>
+        `;
     }
 
     connectedCallback(): void {

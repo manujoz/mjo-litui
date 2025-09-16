@@ -4,9 +4,8 @@ import { LitElement, PropertyValues, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
-import { getInheritBackgroundColor } from "./utils/shadow-dom.js";
-
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { getInheritBackgroundColor } from "./utils/shadow-dom.js";
 import { pause } from "./utils/utils.js";
 
 import "./mjo-icon.js";
@@ -52,6 +51,7 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
 
     render() {
         return html`
+            ${this.applyThemeSsr()}
             <slot></slot>
             <div
                 class="container"

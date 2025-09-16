@@ -12,7 +12,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { locales } from "./locales/locales.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { MjoSelect } from "./mjo-select.js";
 
 import "./components/pagination/mjoint-pagination-ellipsis.js";
@@ -80,6 +80,7 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
         }
 
         return html`
+            ${this.applyThemeSsr()}
             <nav
                 class=${classMap({
                     pagination: true,
