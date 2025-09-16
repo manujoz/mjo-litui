@@ -96,9 +96,9 @@ export class ExampleButtonInteractive extends LitElement {
 
 ### Behavior Notes
 
--   When `disabled` or `loading`, toggle state is reset to `false`.
--   Form submission only occurs if a parent form is wired via FormMixin and `type="submit"`.
--   Ripple (`<mjo-ripple>`) is omitted when `loading`, `disabled`, or `noink`.
+- When `disabled` or `loading`, toggle state is reset to `false`.
+- Form submission only occurs if a parent form is wired via FormMixin and `type="submit"`.
+- Ripple (`<mjo-ripple>`) is omitted when `loading`, `disabled`, or `noink`.
 
 ## Slots
 
@@ -119,20 +119,20 @@ export class ExampleButtonInteractive extends LitElement {
 
 #### MjoButtonClickEvent
 
--   `element`: Reference to the button instance
--   `toggle`: Current toggle state (only present if toggleable)
--   `originalEvent`: The original MouseEvent or KeyboardEvent
+- `element`: Reference to the button instance
+- `toggle`: Current toggle state (only present if toggleable)
+- `originalEvent`: The original MouseEvent or KeyboardEvent
 
 #### MjoButtonToggleEvent
 
--   `element`: Reference to the button instance
--   `pressed`: New toggle/pressed state
--   `previousState`: Previous toggle state
+- `element`: Reference to the button instance
+- `pressed`: New toggle/pressed state
+- `previousState`: Previous toggle state
 
 #### MjoButtonLoadingChangeEvent
 
--   `element`: Reference to the button instance
--   `loading`: New loading state
+- `element`: Reference to the button instance
+- `loading`: New loading state
 
 ## Public Methods
 
@@ -169,13 +169,20 @@ The component uses CSS variables that inherit from the global theme system. Vari
 
 ### Component-Specific Variables
 
-| Variable                     | Default                                   | Purpose                     |
-| ---------------------------- | ----------------------------------------- | --------------------------- |
-| `--mjo-button-border-radius` | `var(--mjo-radius-medium, 5px)`           | Corner radius (non-rounded) |
-| `--mjo-button-font-size`     | `1em`                                     | Font size                   |
-| `--mjo-button-font-weight`   | `normal`                                  | Font weight                 |
-| `--mjo-button-font-family`   | `inherit`                                 | Font family                 |
-| `--mjo-button-padding`       | `calc(1em / 2 - 1px) calc(1em / 2 + 2px)` | Button padding              |
+| Variable                              | Default                                   | Purpose                               |
+| ------------------------------------- | ----------------------------------------- | ------------------------------------- |
+| `--mjo-button-background-color`       | Dynamic based on variant/color            | Background color                      |
+| `--mjo-button-border-radius`          | `var(--mjo-radius-medium, 5px)`           | Corner radius (non-rounded)           |
+| `--mjo-button-border`                 | Dynamic based on variant/color            | Border property (style, width, color) |
+| `--mjo-button-color`                  | Dynamic based on variant/color            | Text color                            |
+| `--mjo-button-font-size`              | `1rem`                                    | Font size                             |
+| `--mjo-button-font-weight`            | `normal`                                  | Font weight                           |
+| `--mjo-button-font-family`            | `inherit`                                 | Font family                           |
+| `--mjo-button-gap`                    | `5px`                                     | Gap between icon and text             |
+| `--mjo-button-padding`                | `calc(1em / 2 - 1px) calc(1em / 2 + 2px)` | Button padding                        |
+| `--mjo-button-background-color-hover` | Dynamic based on variant/color            | Background color on hover             |
+| `--mjo-button-opacity-hover`          | `1`                                       | Opacity on hover                      |
+| `--mjo-button-loading-color`          | Dynamic based on color                    | Loading indicator color               |
 
 ### Global Theme Variables Used
 
@@ -183,29 +190,29 @@ The component leverages these global theme variables:
 
 #### Primary & Secondary Colors
 
--   `--mjo-primary-color`
--   `--mjo-primary-color-hover`
--   `--mjo-primary-foreground-color`
--   `--mjo-primary-color-alpha1`
--   `--mjo-primary-color-alpha2`
--   `--mjo-secondary-color`
--   `--mjo-secondary-color-hover`
--   `--mjo-secondary-foreground-color`
--   `--mjo-secondary-color-alpha1`
--   `--mjo-secondary-color-alpha2`
+- `--mjo-primary-color`
+- `--mjo-primary-color-hover`
+- `--mjo-primary-foreground-color`
+- `--mjo-primary-color-alpha1`
+- `--mjo-primary-color-alpha2`
+- `--mjo-secondary-color`
+- `--mjo-secondary-color-hover`
+- `--mjo-secondary-foreground-color`
+- `--mjo-secondary-color-alpha1`
+- `--mjo-secondary-color-alpha2`
 
 #### Status Colors
 
--   `--mjo-color-success` / `--mjo-color-success-foreground`
--   `--mjo-color-info` / `--mjo-color-info-foreground`
--   `--mjo-color-warning` / `--mjo-color-warning-foreground`
--   `--mjo-color-error` / `--mjo-color-error-foreground`
+- `--mjo-color-success` / `--mjo-color-success-foreground`
+- `--mjo-color-info` / `--mjo-color-info-foreground`
+- `--mjo-color-warning` / `--mjo-color-warning-foreground`
+- `--mjo-color-error` / `--mjo-color-error-foreground`
 
 #### Background & Disabled States
 
--   `--mjo-background-color-high` (for ghost/dashed/text variant hovers)
--   `--mjo-disabled-color`
--   `--mjo-disabled-foreground-color`
+- `--mjo-background-color-high` (for ghost/dashed/text variant hovers)
+- `--mjo-disabled-color`
+- `--mjo-disabled-foreground-color`
 
 ## ThemeMixin Customization
 
@@ -215,10 +222,17 @@ This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to c
 
 ```ts
 interface MjoButtonTheme {
+    backgroundColor?: string;
+    backgroundColorHover?: string;
+    border?: string;
     borderRadius?: string;
+    color?: string;
     fontFamily?: string;
     fontSize?: string;
     fontWeight?: string;
+    gap?: string;
+    loadingColor?: string;
+    opacityHover?: string;
     padding?: string;
 }
 ```
@@ -237,6 +251,12 @@ export class ExampleButtonThemed extends LitElement {
         fontWeight: "600",
         padding: "0.75rem 1.25rem",
         borderRadius: "8px",
+        gap: "8px",
+        backgroundColor: "#2563eb",
+        backgroundColorHover: "#1d4ed8",
+        color: "white",
+        loadingColor: "#60a5fa",
+        opacityHover: "0.9",
     };
 
     render() {
@@ -284,9 +304,9 @@ export class ExampleButtonForm extends LitElement {
 
 When using `startIcon` or `endIcon`, the following parts are exposed via `exportparts`:
 
--   `start-icon` - The start icon element
--   `end-icon` - The end icon element
--   `text` - The text typography wrapper element
+- `start-icon` - The start icon element
+- `end-icon` - The end icon element
+- `text` - The text typography wrapper element
 
 ## Accessibility Notes
 
@@ -294,10 +314,10 @@ This component follows WCAG 2.1 guidelines and provides comprehensive accessibil
 
 ### ARIA Support
 
--   **aria-busy**: Automatically set to "true" when `loading` is active
--   **aria-pressed**: Automatically managed for toggle buttons when `toggleable` is true
--   **aria-label**: Custom accessible name via `button-label` property
--   **aria-describedby**: Reference to descriptive text via `described-by` property
+- **aria-busy**: Automatically set to "true" when `loading` is active
+- **aria-pressed**: Automatically managed for toggle buttons when `toggleable` is true
+- **aria-label**: Custom accessible name via `button-label` property
+- **aria-describedby**: Reference to descriptive text via `described-by` property
 
 ### Best Practices
 
@@ -319,11 +339,11 @@ This component follows WCAG 2.1 guidelines and provides comprehensive accessibil
 
 `<mjo-button>` is a comprehensive button component that provides:
 
--   **Multiple Variants**: default, ghost, flat, dashed, link, text
--   **Semantic Colors**: primary, secondary, success, info, warning, error
--   **Interactive States**: loading, toggle, disabled
--   **Accessibility**: WCAG 2.1 compliant with comprehensive ARIA support
--   **Form Integration**: Seamless form submission via FormMixin
--   **Flexible Theming**: Global and per-instance customization
+- **Multiple Variants**: default, ghost, flat, dashed, link, text
+- **Semantic Colors**: primary, secondary, success, info, warning, error
+- **Interactive States**: loading, toggle, disabled
+- **Accessibility**: WCAG 2.1 compliant with comprehensive ARIA support
+- **Form Integration**: Seamless form submission via FormMixin
+- **Flexible Theming**: Global and per-instance customization
 
 Perfect for building interactive interfaces with consistent styling and excellent accessibility support.

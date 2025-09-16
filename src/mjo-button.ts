@@ -402,19 +402,18 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             }
             button {
                 align-items: center;
-                background-color: var(--mjoint-button-background-color);
+                background: var(--mjo-button-background-color, var(--mjoint-button-background-color));
                 border-radius: var(--mjo-button-border-radius, var(--mjo-radius-medium, 5px));
-                border: var(--mjoint-button-border-style, solid) 1px var(--mjoint-button-border-color);
+                border: var(--mjo-button-border, var(--mjoint-button-border-style, solid) 1px var(--mjoint-button-border-color));
                 box-sizing: border-box;
-                color: var(--mjoint-button-text-color);
+                color: var(--mjo-button-color, var(--mjoint-button-text-color));
                 cursor: inherit;
                 display: flex;
                 flex-flow: row nowrap;
-                font-size: var(--mjo-button-font-size, 1em);
+                font-size: var(--mjo-button-font-size, 1rem);
                 font-weight: var(--mjo-button-font-weight, normal);
                 font-family: var(--mjo-button-font-family, inherit);
-                line-height: var(--mjo-button-font-size, 1em);
-                gap: 5px;
+                gap: var(--mjo-button-gap, 5px);
                 justify-content: center;
                 overflow: hidden;
                 padding: var(--mjo-button-padding, calc(1em / 2 - 1px) calc(1em / 2 + 2px));
@@ -434,12 +433,12 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 background-color: var(--mjoint-button-pseudo-background, transparent);
             }
             button:hover {
-                background-color: var(--mjoint-button-hover-background-color);
+                background: var(--mjo-button-background-color-hover, var(--mjoint-button-hover-background-color));
                 border-color: var(--mjoint-button-hover-border-color);
-                opacity: var(--mjoint-button-hover-opacity, 1);
+                opacity: var(--mjo-button-opacity-hover, var(--mjoint-button-hover-opacity, 1));
             }
             button:focus-visible {
-                outline-color: var(--mjoint-button-focus-outline-color);
+                outline-color: var(--mjo-button-background-color, var(--mjoint-button-focus-outline-color));
             }
             /* Ensure high contrast mode compatibility */
             @media (prefers-contrast: high) {
@@ -486,6 +485,9 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
             button mjo-icon {
                 font-size: 1em;
             }
+            mjo-typography {
+                line-height: 1em;
+            }
             /* Loading indicator */
             .loading {
                 position: absolute;
@@ -493,7 +495,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
                 left: 0;
                 width: 100%;
                 height: 0.2em;
-                background-color: var(--mjoint-button-loading-color);
+                background-color: var(--mjo-button-loading-color, var(--mjoint-button-loading-color));
                 animation: loading 1.5s infinite;
             }
             button[data-size="small"] .loading {

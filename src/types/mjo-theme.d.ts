@@ -276,10 +276,17 @@ export interface MjoBadgeTheme {
 }
 
 export interface MjoButtonTheme {
+    backgroundColor?: string;
+    backgroundColorHover?: string;
+    border?: string;
     borderRadius?: string;
+    color?: string;
     fontFamily?: string;
     fontSize?: string;
     fontWeight?: string;
+    gap?: string;
+    loadingColor?: string;
+    opacityHover?: string;
     padding?: string;
 }
 
