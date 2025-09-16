@@ -10,9 +10,10 @@ import type {
     MjoButtonVariant,
 } from "./types/mjo-button";
 
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import { FormMixin } from "./mixins/form-mixin.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
@@ -61,38 +62,50 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
 
     @state() private toggle = false;
 
+    #styles = "";
+
     render() {
         const ariaBusy = this.loading ? "true" : "false";
         const ariaPressed = this.toggleable ? (this.toggle ? "true" : "false") : undefined;
 
-        return html`<button
-            type=${this.type}
-            part="button"
-            data-color=${this.color}
-            data-variant=${this.variant}
-            data-size=${this.size}
-            ?data-rounded=${this.rounded}
-            ?data-toggle=${this.toggle}
-            ?data-small-caps=${this.smallCaps}
-            aria-busy=${ariaBusy}
-            aria-pressed=${ifDefined(ariaPressed)}
-            aria-label=${ifDefined(this.buttonLabel)}
-            aria-describedby=${ifDefined(this.describedBy)}
-            ?disabled=${this.disabled || this.loading}
-            tabindex=${ifDefined(this.tabIndex)}
-            @click=${this.#handleClick}
-        >
-            ${this.startIcon && html` <mjo-icon exportparts="icon: start-icon" src=${this.startIcon}></mjo-icon>`}
-            <mjo-typography tag="none" exportparts="typography: text"><slot></slot></mjo-typography>
-            ${this.endIcon && html` <mjo-icon exportparts="icon: end-icon" src=${this.endIcon}></mjo-icon>`}
-            ${!this.noink && !this.disabled && !this.loading ? html`<mjo-ripple></mjo-ripple>` : nothing}
-            ${this.loading ? html`<div class="loading" aria-hidden="true" part="loading"></div>` : nothing}
-        </button>`;
+        return html`${unsafeHTML(this.#styles)}
+            <button
+                type=${this.type}
+                part="button"
+                data-color=${this.color}
+                data-variant=${this.variant}
+                data-size=${this.size}
+                ?data-rounded=${this.rounded}
+                ?data-toggle=${this.toggle}
+                ?data-small-caps=${this.smallCaps}
+                aria-busy=${ariaBusy}
+                aria-pressed=${ifDefined(ariaPressed)}
+                aria-label=${ifDefined(this.buttonLabel)}
+                aria-describedby=${ifDefined(this.describedBy)}
+                ?disabled=${this.disabled || this.loading}
+                tabindex=${ifDefined(this.tabIndex)}
+                @click=${this.#handleClick}
+            >
+                ${this.startIcon && html` <mjo-icon exportparts="icon: start-icon" src=${this.startIcon}></mjo-icon>`}
+                <mjo-typography tag="none" exportparts="typography: text"><slot></slot></mjo-typography>
+                ${this.endIcon && html` <mjo-icon exportparts="icon: end-icon" src=${this.endIcon}></mjo-icon>`}
+                ${!this.noink && !this.disabled && !this.loading ? html`<mjo-ripple></mjo-ripple>` : nothing}
+                ${this.loading ? html`<div class="loading" aria-hidden="true" part="loading"></div>` : nothing}
+            </button>`;
     }
 
     connectedCallback(): void {
         super.connectedCallback();
         this.#setButtonCssVars();
+    }
+
+    protected willUpdate(_changedProperties: PropertyValues<this>): void {
+        super.willUpdate(_changedProperties);
+
+        // Update button CSS variables when color or variant changes
+        if (_changedProperties.has("color") || _changedProperties.has("variant") || _changedProperties.has("disabled") || _changedProperties.has("loading")) {
+            this.#setButtonCssVars();
+        }
     }
 
     protected updated(_changedProperties: Map<PropertyKey, unknown>): void {
@@ -101,11 +114,6 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
         // Reset toggle state when disabled or loading
         if ((this.disabled || this.loading) && this.toggle) {
             this.toggle = false;
-        }
-
-        // Update button CSS variables when color or variant changes
-        if (_changedProperties.has("color") || _changedProperties.has("variant") || _changedProperties.has("disabled") || _changedProperties.has("loading")) {
-            this.#setButtonCssVars();
         }
 
         // Dispatch loading change event
@@ -379,17 +387,8 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
         }
 
         // Apply CSS variables
-        this.style.setProperty("--mjoint-button-background-color", backgroundColor);
-        this.style.setProperty("--mjoint-button-border-color", borderColor);
-        this.style.setProperty("--mjoint-button-border-style", borderStyle);
-        this.style.setProperty("--mjoint-button-text-color", textColor);
-        this.style.setProperty("--mjoint-button-hover-background-color", hoverBackgroundColor);
-        this.style.setProperty("--mjoint-button-hover-border-color", hoverBorderColor);
-        this.style.setProperty("--mjoint-button-hover-opacity", hoverOpacity);
-        this.style.setProperty("--mjoint-button-pseudo-background", pseudoBackground);
-        this.style.setProperty("--mjoint-button-pseudo-opacity", pseudoOpacity);
-        this.style.setProperty("--mjoint-button-focus-outline-color", currentColor);
-        this.style.setProperty("--mjoint-button-loading-color", currentColor);
+        // eslint-disable-next-line max-len
+        this.#styles = `<style>:host{--mjoint-button-background-color: ${backgroundColor};--mjoint-button-border-color: ${borderColor};--mjoint-button-border-style: ${borderStyle};--mjoint-button-text-color: ${textColor};--mjoint-button-hover-background-color: ${hoverBackgroundColor};--mjoint-button-hover-border-color: ${hoverBorderColor};--mjoint-button-hover-opacity: ${hoverOpacity};--mjoint-button-pseudo-background: ${pseudoBackground};--mjoint-button-pseudo-opacity: ${pseudoOpacity};--mjoint-button-focus-outline-color: ${currentColor};--mjoint-button-loading-color: ${currentColor};}</style>`;
     }
 
     static styles = [

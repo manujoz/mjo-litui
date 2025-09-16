@@ -21,6 +21,7 @@ node_modules
 *.sw?
 
 .env
+.npmrc
 
 /coverage
 /actions-plan

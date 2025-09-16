@@ -3,6 +3,7 @@ import { MjoChipClickEvent, MjoChipCloseEvent } from "./types/mjo-chip.js";
 import { css, html, LitElement, nothing, PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import { AiFillCloseCircle } from "mjo-icons/ai";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
@@ -41,42 +42,45 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
 
     @query(".container") private container!: HTMLElement;
 
+    #styles = "";
+
     render() {
-        return html`<div
-            class="container"
-            part="container"
-            role=${ifDefined(this.clickable || this.closable ? "button" : undefined)}
-            aria-label=${this.#computedAriaLabel}
-            aria-describedby=${ifDefined(this.ariaDescribedby)}
-            aria-disabled=${this.disabled ? "true" : "false"}
-            tabindex=${this.#computedTabIndex}
-            data-color=${this.color}
-            data-size=${this.size}
-            data-variant=${this.variant}
-            data-radius=${this.radius}
-            ?data-closable=${this.closable}
-            ?data-clickable=${this.clickable}
-            ?data-disabled=${this.disabled}
-            @click=${this.#handleChipClick}
-            @keydown=${this.#handleKeydown}
-        >
-            ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
-            ${this.startIcon ? html`<mjo-icon src=${this.startIcon} exportparts="icon: start-icon"></mjo-icon>` : nothing}
-            <mjo-typography tag="none" class="label" exportparts="typography: label">${this.label}</mjo-typography>
-            ${this.endIcon ? html`<mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>` : nothing}
-            ${this.closable
-                ? html`<mjo-icon
-                      class="close"
-                      exportparts="icon: close-icon"
-                      src=${AiFillCloseCircle}
-                      @click=${this.#handleCloseClick}
-                      @keydown=${this.#handleCloseKeydown}
-                      role="button"
-                      tabindex=${this.disabled ? "-1" : "0"}
-                      aria-label="Close ${this.label}"
-                  ></mjo-icon>`
-                : nothing}
-        </div>`;
+        return html`${unsafeHTML(this.#styles)}
+            <div
+                class="container"
+                part="container"
+                role=${ifDefined(this.clickable || this.closable ? "button" : undefined)}
+                aria-label=${this.#computedAriaLabel}
+                aria-describedby=${ifDefined(this.ariaDescribedby)}
+                aria-disabled=${this.disabled ? "true" : "false"}
+                tabindex=${this.#computedTabIndex}
+                data-color=${this.color}
+                data-size=${this.size}
+                data-variant=${this.variant}
+                data-radius=${this.radius}
+                ?data-closable=${this.closable}
+                ?data-clickable=${this.clickable}
+                ?data-disabled=${this.disabled}
+                @click=${this.#handleChipClick}
+                @keydown=${this.#handleKeydown}
+            >
+                ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
+                ${this.startIcon ? html`<mjo-icon src=${this.startIcon} exportparts="icon: start-icon"></mjo-icon>` : nothing}
+                <mjo-typography tag="none" class="label" exportparts="typography: label">${this.label}</mjo-typography>
+                ${this.endIcon ? html`<mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>` : nothing}
+                ${this.closable
+                    ? html`<mjo-icon
+                          class="close"
+                          exportparts="icon: close-icon"
+                          src=${AiFillCloseCircle}
+                          @click=${this.#handleCloseClick}
+                          @keydown=${this.#handleCloseKeydown}
+                          role="button"
+                          tabindex=${this.disabled ? "-1" : "0"}
+                          aria-label="Close ${this.label}"
+                      ></mjo-icon>`
+                    : nothing}
+            </div>`;
     }
 
     get #computedAriaLabel() {
@@ -161,12 +165,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         this.remove();
     }
 
-    connectedCallback(): void {
-        super.connectedCallback();
-        this.#setChipCssVars();
-    }
-
-    updated(_changedProperties: PropertyValues): void {
+    protected willUpdate(_changedProperties: PropertyValues<this>): void {
         if (_changedProperties.has("color") || _changedProperties.has("variant") || _changedProperties.has("size") || _changedProperties.has("radius")) {
             this.#setChipCssVars();
         }
@@ -334,20 +333,8 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         }
 
         // Apply CSS variables
-        this.style.setProperty("--mjoint-chip-background-color", backgroundColor);
-        this.style.setProperty("--mjoint-chip-text-color", textColor);
-        this.style.setProperty("--mjoint-chip-border-color", borderColor);
-        this.style.setProperty("--mjoint-chip-border-width", borderWidth);
-        this.style.setProperty("--mjoint-chip-box-shadow", boxShadow);
-        this.style.setProperty("--mjoint-chip-pseudo-background", pseudoBackground);
-        this.style.setProperty("--mjoint-chip-pseudo-opacity", pseudoOpacity);
-        this.style.setProperty("--mjoint-chip-close-icon-color", closeIconColor);
-        this.style.setProperty("--mjoint-chip-font-size", fontSize);
-        this.style.setProperty("--mjoint-chip-line-height", lineHeight);
-        this.style.setProperty("--mjoint-chip-height", height);
-        this.style.setProperty("--mjoint-chip-border-radius", borderRadius);
-        this.style.setProperty("--mjoint-chip-focus-outline-color", currentColor);
-        this.style.setProperty("--mjoint-chip-dot-color", currentColor);
+        // eslint-disable-next-line max-len
+        this.#styles = `<style>:host{--mjoint-chip-background-color: ${backgroundColor};--mjoint-chip-text-color: ${textColor};--mjoint-chip-border-color: ${borderColor};--mjoint-chip-border-width: ${borderWidth};--mjoint-chip-box-shadow: ${boxShadow};--mjoint-chip-pseudo-background: ${pseudoBackground};--mjoint-chip-pseudo-opacity: ${pseudoOpacity};--mjoint-chip-close-icon-color: ${closeIconColor};--mjoint-chip-font-size: ${fontSize};--mjoint-chip-line-height: ${lineHeight};--mjoint-chip-height: ${height};--mjoint-chip-border-radius: ${borderRadius};--mjoint-chip-focus-outline-color: ${currentColor};--mjoint-chip-dot-color: ${currentColor};}</style>`;
     }
 
     static styles = [

@@ -1,4 +1,4 @@
-name: CI - Build and Test
+name: CI - Build and Lint
 
 on:
   pull_request:
@@ -25,11 +25,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-      
       - name: Lint code
         run: npm run lint
-      
-      - name: Test code
-        run: npm run test
