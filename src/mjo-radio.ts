@@ -92,7 +92,7 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
             </div>
             ${this.helperText ? html`<mjoint-input-helper-text>${this.helperText}</mjoint-input-helper-text> ` : nothing}
             ${this.errormsg || this.successmsg
-                ? html`<input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}></mjoint-input-helper-text> `
+                ? html`<mjoint-input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}></mjoint-input-helper-text> `
                 : nothing}
         </div>`;
     }

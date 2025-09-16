@@ -8,6 +8,7 @@ import { repeat } from "lit/directives/repeat.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { uniqueId } from "./utils/strings.js";
 
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import "./components/tabs/mjo-tab.js";
 
 @customElement("mjo-tabs")
@@ -22,8 +23,11 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
 
     tabs: MjoTab[] = [];
 
+    #styles = "";
+
     render() {
         return html`
+            ${unsafeHTML(this.#styles)}
             <section class="container" ?data-vertical=${this.vertical} data-ssr=${isServer}>
                 ${this.tabs.length > 0
                     ? html`
@@ -60,6 +64,14 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
         `;
     }
 
+    protected willUpdate(_changedProperties: PropertyValues<this>): void {
+        super.willUpdate(_changedProperties);
+
+        if (_changedProperties.has("color") || _changedProperties.has("variant")) {
+            this.#setCssVars();
+        }
+    }
+
     protected firstUpdated(_changedProperties: PropertyValues<this>): void {
         super.firstUpdated(_changedProperties);
 
@@ -72,9 +84,6 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
     protected updated(_changedProperties: PropertyValues<this>): void {
         super.updated(_changedProperties);
 
-        if (_changedProperties.has("color") || _changedProperties.has("variant")) {
-            this.#setCssVars();
-        }
         if (_changedProperties.has("variant") || _changedProperties.has("vertical")) {
             setTimeout(() => this.#updateIndicator(), 0);
         }
@@ -115,25 +124,47 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
         const activeTab = this.container.querySelector(".tab-button[data-active]") as HTMLElement;
         if (!activeTab) return;
 
-        indicator.removeAttribute("style");
-
-        if (!this.vertical) {
-            indicator.style.width = `${activeTab.offsetWidth}px`;
-            indicator.style.transform = `translateX(${activeTab.offsetLeft}px)`;
-        } else {
-            indicator.style.height = `${activeTab.offsetHeight}px`;
-            indicator.style.transform = `translateY(${activeTab.offsetTop}px)`;
-        }
-
-        if (this.variant !== "light") {
+        requestAnimationFrame(() => {
+            // Clean conflicting properties based on orientation and variant
             if (!this.vertical) {
-                indicator.style.top = `${activeTab.offsetTop}px`;
-                indicator.style.height = activeTab.offsetHeight + "px";
+                // Horizontal: clean vertical-specific properties
+                indicator.style.removeProperty("height");
+                indicator.style.removeProperty("left");
+
+                // Set horizontal properties
+                indicator.style.width = `${activeTab.offsetWidth}px`;
+                indicator.style.transform = `translateX(${activeTab.offsetLeft}px)`;
+
+                // Clean variant-specific properties for light variant
+                if (this.variant === "light") {
+                    indicator.style.removeProperty("top");
+                }
             } else {
-                indicator.style.left = `${activeTab.offsetLeft}px`;
-                indicator.style.width = activeTab.offsetWidth + "px";
+                // Vertical: clean horizontal-specific properties
+                indicator.style.removeProperty("width");
+                indicator.style.removeProperty("top");
+
+                // Set vertical properties
+                indicator.style.height = `${activeTab.offsetHeight}px`;
+                indicator.style.transform = `translateY(${activeTab.offsetTop}px)`;
+
+                // Clean variant-specific properties for light variant
+                if (this.variant === "light") {
+                    indicator.style.removeProperty("left");
+                }
             }
-        }
+
+            // Apply additional properties for non-light variants
+            if (this.variant !== "light") {
+                if (!this.vertical) {
+                    indicator.style.top = `${activeTab.offsetTop}px`;
+                    indicator.style.height = activeTab.offsetHeight + "px";
+                } else {
+                    indicator.style.left = `${activeTab.offsetLeft}px`;
+                    indicator.style.width = activeTab.offsetWidth + "px";
+                }
+            }
+        });
     }
 
     #updateTabs() {
@@ -228,11 +259,8 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
         const outlinedColor = colorMap[this.color] || "transparent";
 
         // Aplicar las variables CSS
-        this.style.setProperty("--mjoint-tab-indicator-outlined-color", outlinedColor);
-        this.style.setProperty("--mjoint-tab-button-color", buttonColor);
-        this.style.setProperty("--mjoint-tab-indicator-bgcolor", indicatorBgColor);
-        this.style.setProperty("--mjoint-tab-indicator-border", indicatorBorder);
-        this.style.setProperty("--mjoint-tab-indicator-radius", indicatorRadius);
+        // eslint-disable-next-line max-len
+        this.#styles = `<style>:host{--mjoint-tab-indicator-outlined-color: ${outlinedColor};--mjoint-tab-button-color: ${buttonColor};--mjoint-tab-indicator-bgcolor: ${indicatorBgColor};--mjoint-tab-indicator-border: ${indicatorBorder};--mjoint-tab-indicator-radius: ${indicatorRadius};}</style>`;
     }
 
     static styles = [
@@ -297,32 +325,18 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
                 background-color: var(--mjoint-tab-indicator-bgcolor);
                 border: var(--mjoint-tab-indicator-border);
                 border-radius: var(--mjoint-tab-indicator-radius);
-                transition:
-                    width 0.3s ease,
-                    background 0.3s ease,
-                    border 0.3s ease,
-                    transform 0.3s ease;
+                transition: all 0.25s ease;
                 box-sizing: border-box;
             }
             .container:not([data-vertical]) .indicator {
                 bottom: 0;
                 left: 0;
                 height: 2px;
-                transition:
-                    width 0.3s ease,
-                    background 0.3s ease,
-                    border 0.3s ease,
-                    transform 0.3s ease;
             }
             .container[data-vertical] .indicator {
                 right: 0;
                 top: 0;
                 width: 2px;
-                transition:
-                    height 0.3s ease,
-                    background 0.3s ease,
-                    border 0.3s ease,
-                    transform 0.3s ease;
             }
             .content {
                 position: relative;

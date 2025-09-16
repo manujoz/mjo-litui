@@ -18,10 +18,10 @@ import { createRef, ref } from "lit/directives/ref.js";
 import { FormMixin, IFormMixin } from "./mixins/form-mixin.js";
 import { IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import { MJO_SLIDER_SIZES } from "./utils/mjo-slider.js";
 
 import "./components/input/mjoint-input-label.js";
 import "./components/slider/mjoint-slider-handle.js";
-import { MJO_SLIDER_SIZES } from "./utils/mjo-slider.js";
 
 @customElement("mjo-slider")
 export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
@@ -137,14 +137,14 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     ${ref(this.sliderOneRef)}
                     id=${handleOneId}
                     .role=${"slider"}
-                    .aria-valuemin=${this.min}
-                    .aria-valuemax=${this.max}
-                    .aria-valuenow=${this.#getSliderValue("one")}
-                    .aria-valuetext=${this.computedAriaValueText}
-                    .aria-labelledby=${this.ariaLabelledby || labelId}
-                    .aria-describedby=${this.ariaDescribedby}
-                    .aria-orientation=${this.ariaOrientation}
-                    .aria-disabled=${this.disabled ? "true" : "false"}
+                    aria-valuemin=${this.min}
+                    aria-valuemax=${this.max}
+                    aria-valuenow=${this.#getSliderValue("one")}
+                    aria-valuetext=${this.computedAriaValueText}
+                    aria-labelledby=${ifDefined(this.ariaLabelledby || labelId)}
+                    aria-describedby=${ifDefined(this.ariaDescribedby)}
+                    aria-orientation=${this.ariaOrientation}
+                    aria-disabled=${this.disabled ? "true" : "false"}
                     .tabindex=${this.computedTabIndex}
                     @move=${this.#handleMove}
                     @focus=${this.#handleSliderFocus}
@@ -164,14 +164,14 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                           ${ref(this.sliderTwoRef)}
                           id=${ifDefined(handleTwoId)}
                           .role=${"slider"}
-                          .aria-valuemin=${this.min}
-                          .aria-valuemax=${this.max}
-                          .aria-valuenow=${this.#getSliderValue("two")}
-                          .aria-valuetext=${this.computedAriaValueText}
-                          .aria-labelledby=${this.ariaLabelledby || labelId}
-                          .aria-describedby=${this.ariaDescribedby}
-                          .ariaorientation=${this.ariaOrientation}
-                          .aria-disabled=${this.disabled ? "true" : "false"}
+                          aria-valuemin=${this.min}
+                          aria-valuemax=${this.max}
+                          aria-valuenow=${this.#getSliderValue("two")}
+                          aria-valuetext=${this.computedAriaValueText}
+                          aria-labelledby=${ifDefined(this.ariaLabelledby || labelId)}
+                          aria-describedby=${ifDefined(this.ariaDescribedby)}
+                          aria-orientation=${this.ariaOrientation}
+                          aria-disabled=${this.disabled ? "true" : "false"}
                           .tabindex=${this.computedTabIndex}
                           @move=${this.#handleMove}
                           @focus=${this.#handleSliderFocus}
