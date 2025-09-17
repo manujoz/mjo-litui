@@ -40,6 +40,7 @@ import "./mjo-typography.js";
  * @csspart label-text - The label typography element (via exportparts)
  * @csspart helper-text-container - Container for helper text (via exportparts)
  * @csspart helper-text-typography - The helper text typography element (via exportparts)
+ * @csspart helper-text-typography-tag - The helper text typography tag element (via exportparts)
  * @csspart helper-text-msg-container - Container for error/success messages (via exportparts)
  * @csspart helper-text-msg-error-message - Error message element (via exportparts)
  * @csspart helper-text-msg-success-message - Success message element (via exportparts)
@@ -147,7 +148,8 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                           <mjoint-input-helper-text
                               exportparts="
                             container: helper-text-container,
-                            helper-text: helper-text-typography"
+                            typography: helper-text-typography,
+                            helper-text: helper-text-typography-tag"
                           >
                               ${this.helperText}
                           </mjoint-input-helper-text>
@@ -438,15 +440,28 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 color: var(--mjo-checkbox-label-color, inherit);
                 font-size: var(--mjo-checkbox-label-font-size, inherit);
                 font-weight: var(--mjo-checkbox-label-font-weight, inherit);
+                line-height: 1em;
             }
             input {
                 display: none;
             }
             mjoint-input-helper-text {
-                padding-left: calc(calc(1.3rem + var(--mjo-space-small, 5px)) + 2px);
                 color: var(--mjo-checkbox-helper-color, var(--mjo-foreground-color-low));
                 font-size: var(--mjo-checkbox-helper-font-size, 0.8em);
                 font-weight: var(--mjo-checkbox-helper-font-weight, normal);
+                margin-top: var(--mjo-space-xxsmall, 2px);
+            }
+            mjoint-input-helper-text::part(typography) {
+                line-height: 1em;
+            }
+            .container[data-size="small"] mjoint-input-helper-text {
+                padding-left: calc(16px + var(--mjo-space-small, 5px));
+            }
+            .container[data-size="medium"] mjoint-input-helper-text {
+                padding-left: calc(18px + var(--mjo-space-small, 5px));
+            }
+            .container[data-size="large"] mjoint-input-helper-text {
+                padding-left: calc(20px + var(--mjo-space-small, 5px));
             }
             .container[data-error] .checkbox {
                 border-color: var(--mjo-checkbox-error-border-color, var(--mjo-color-error));

@@ -6,10 +6,42 @@ import { customElement, property } from "lit/decorators.js";
 import { NotificationController } from "./controllers/notification-controller.js";
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
-import "./components/notifications/mjoint-notification-container.js";
+import "./components/notifications/mjo-notification-container.js";
 
+/**
+ * A notification system for displaying positioned toast notifications with controller
+ * architecture and comprehensive accessibility support.
+ *
+ * The notification system renders in a `mjo-notification-container` that is mounted directly
+ * in the document body, providing proper overlay management and positioning control.
+ *
+ * @cssprop --mjo-notification-background-color - Background color for notification items
+ * @cssprop --mjo-notification-box-shadow - Box shadow for notification items
+ * @cssprop --mjo-notification-border-radius - Border radius for notification items
+ * @cssprop --mjo-notification-margin - Margin between notification items
+ * @cssprop --mjo-notification-space-vertical - Vertical spacing from screen edge
+ * @cssprop --mjo-notification-space-horizontal - Horizontal spacing from screen edge
+ * @cssprop --mjo-notification-title-font-size - Font size for notification titles
+ * @cssprop --mjo-notification-title-font-weight - Font weight for notification titles
+ * @cssprop --mjo-notification-title-color - Color for notification titles
+ * @cssprop --mjo-notification-message-font-size - Font size for notification messages
+ * @cssprop --mjo-notification-message-color - Color for notification messages
+ * @cssprop --mjo-notification-close-hover-background-color - Close button hover background
+ * @cssprop --mjo-notification-animation-duration - Duration of notification animations
+ * @cssprop --mjo-notification-focus-outline - Focus outline for interactive elements
+ *
+ * @csspart container - The main notification container mounted in document body
+ * @csspart notification-icon-container - Container for the notification type icon
+ * @csspart notification-icon - The notification type icon element
+ * @csspart notification-wrapper - Wrapper for the notification content
+ * @csspart notification-title - The notification title element
+ * @csspart notification-message - The notification message element
+ * @csspart close-button - The close button element
+ * @csspart icon-close - The close icon element
+ */
 @customElement("mjo-notification")
 export class MjoNotification extends ThemeMixin(LitElement) implements IThemeMixin {
+    @property({ type: String }) idNotification?: string;
     @property({ type: String }) position: NotificationPositions = "top-right";
     @property({ type: Number }) threshold = 4;
     @property({ type: String, attribute: "aria-live" }) ariaLive: "polite" | "assertive" | "off" = "polite";

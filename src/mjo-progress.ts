@@ -7,6 +7,31 @@ import { styleMap } from "lit/directives/style-map.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
+/**
+ * @summary Accessible progress indicators supporting bar and circular variants with determinate and indeterminate states.
+ *
+ * @description The mjo-progress component provides flexible progress visualization with support for both
+ * bar and circular variants. It offers determinate progress tracking with value changes, indeterminate
+ * animations for ongoing processes, multiple semantic colors, three size variants, and real-time event
+ * tracking with comprehensive accessibility support.
+ *
+ * @fires mjo-progress:change - Fired when progress value, min, or max changes
+ * @fires mjo-progress:complete - Fired when progress value reaches or exceeds maximum
+ *
+ * @slot - No slots available
+ * @csspart container - The main progress wrapper element
+ * @csspart bar-container - Container for the bar variant
+ * @csspart bar-labels - Container for label and value text (bar variant)
+ * @csspart bar-label - Label text element (bar variant)
+ * @csspart bar-value - Value text element (bar variant)
+ * @csspart bar-track - Background track of the progress bar
+ * @csspart bar-fill - Filled portion of the progress bar
+ * @csspart circle-container - Container for the circle variant
+ * @csspart circle-label - Label text for circle variant
+ * @csspart circle-wrapper - Wrapper around the SVG circle
+ * @csspart circle-svg - The SVG element containing the progress circle
+ * @csspart circle-value - Value text inside the circle
+ */
 @customElement("mjo-progress")
 export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Number }) min = 0;
@@ -21,6 +46,27 @@ export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) variant: MjoProgressVariant = "bar";
 
     @state() private previousValue?: number;
+
+    render() {
+        return html`
+            ${this.applyThemeSsr()}
+            <div
+                class="progress-wrapper"
+                part="container"
+                data-variant=${this.variant}
+                data-color=${this.color}
+                data-size=${this.size}
+                ?data-indeterminate=${this.indeterminate}
+                role="progressbar"
+                aria-valuenow=${ifDefined(!this.indeterminate ? this.#currentValue : undefined)}
+                aria-valuemin=${this.min}
+                aria-valuemax=${this.max}
+                aria-label=${ifDefined(this.ariaLabel || this.label || undefined)}
+            >
+                ${this.#renderContent()}
+            </div>
+        `;
+    }
 
     // Circle SVG constants
     get #circleStrokeWidth(): number {
@@ -90,26 +136,6 @@ export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
         return this.#svgSize / 2;
     }
 
-    render() {
-        return html`
-            ${this.applyThemeSsr()}
-            <div
-                class="progress-wrapper"
-                data-variant=${this.variant}
-                data-color=${this.color}
-                data-size=${this.size}
-                ?data-indeterminate=${this.indeterminate}
-                role="progressbar"
-                aria-valuenow=${ifDefined(!this.indeterminate ? this.#currentValue : undefined)}
-                aria-valuemin=${this.min}
-                aria-valuemax=${this.max}
-                aria-label=${ifDefined(this.ariaLabel || this.label || undefined)}
-            >
-                ${this.#renderContent()}
-            </div>
-        `;
-    }
-
     #renderContent() {
         if (this.variant === "circle") {
             return this.#renderCircle();
@@ -123,17 +149,17 @@ export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
         });
 
         return html`
-            <div class="bar-container">
+            <div class="bar-container" part="bar-container">
                 ${this.label || this.showValue
                     ? html`
-                          <div class="bar-labels">
-                              ${this.label ? html`<span class="label">${this.label}</span>` : ""}
-                              ${this.showValue ? html`<span class="value">${this.#formattedValue}</span>` : ""}
+                          <div class="bar-labels" part="bar-labels">
+                              ${this.label ? html`<span class="label" part="bar-label">${this.label}</span>` : ""}
+                              ${this.showValue ? html`<span class="value" part="bar-value">${this.#formattedValue}</span>` : ""}
                           </div>
                       `
                     : ""}
-                <div class="bar-track">
-                    <div class="bar-fill" style=${stylesBar}></div>
+                <div class="bar-track" part="bar-track">
+                    <div class="bar-fill" part="bar-fill" style=${stylesBar}></div>
                 </div>
             </div>
         `;
@@ -141,10 +167,10 @@ export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
 
     #renderCircle() {
         return html`
-            <div class="circle-container">
-                ${this.label ? html`<div class="circle-label">${this.label}</div>` : ""}
-                <div class="circle-wrapper">
-                    <svg class="circle-svg" width=${this.#svgSize} height=${this.#svgSize} viewBox="0 0 ${this.#svgSize} ${this.#svgSize}">
+            <div class="circle-container" part="circle-container">
+                ${this.label ? html`<div class="circle-label" part="circle-label">${this.label}</div>` : ""}
+                <div class="circle-wrapper" part="circle-wrapper">
+                    <svg class="circle-svg" part="circle-svg" width=${this.#svgSize} height=${this.#svgSize} viewBox="0 0 ${this.#svgSize} ${this.#svgSize}">
                         <!-- Background circle -->
                         <circle
                             class="circle-bg"
@@ -167,7 +193,7 @@ export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
                             transform="rotate(-90 ${this.#svgCenter} ${this.#svgCenter})"
                         ></circle>
                     </svg>
-                    ${this.showValue ? html`<div class="circle-value">${this.#formattedValue}</div>` : ""}
+                    ${this.showValue ? html`<div class="circle-value" part="circle-value">${this.#formattedValue}</div>` : ""}
                 </div>
             </div>
         `;

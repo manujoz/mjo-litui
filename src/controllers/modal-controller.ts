@@ -1,14 +1,14 @@
-import type { MjointModalContainer } from "../components/modal/mjoint-modal-container";
+import type { MjoModalContainer } from "../components/modal/mjo-modal-container";
 import type { MjoModal } from "../mjo-modal";
 import { ModalShowParams } from "../types/mjo-modal";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
 
-import "../components/modal/mjoint-modal-container.js";
+import "../components/modal/mjo-modal-container.js";
 
 export class ModalController implements ReactiveController {
     host: ReactiveControllerHost;
-    modalContainer!: MjointModalContainer;
+    modalContainer!: MjoModalContainer;
 
     constructor(host: ReactiveControllerHost) {
         (this.host = host).addController(this);
@@ -33,8 +33,11 @@ export class ModalController implements ReactiveController {
     #createModalElement() {
         const hostModal = this.host as MjoModal;
 
-        this.modalContainer = document.createElement("mjoint-modal-container") as MjointModalContainer;
+        this.modalContainer = document.createElement("mjo-modal-container") as MjoModalContainer;
         this.modalContainer.style.zIndex = window.getComputedStyle(this.host as MjoModal).zIndex;
+
+        const id = hostModal.idModal;
+        if (id) this.modalContainer.id = id;
 
         // Transfer theme
         const theme = hostModal.theme as Record<string, string>;

@@ -35,24 +35,13 @@ export class ExampleMenuButtonBasic extends LitElement {
 
 ```html
 <!-- Basic hamburger menu with external navigation -->
-<mjo-menu-button
-    aria-label="Toggle main navigation"
-    aria-controls="navigation-menu"
-    color="primary">
-</mjo-menu-button>
+<mjo-menu-button aria-label="Toggle main navigation" aria-controls="navigation-menu" color="primary"> </mjo-menu-button>
 
 <!-- Menu button for sidebar control -->
-<mjo-menu-button
-    aria-label="Toggle sidebar"
-    .ariaControls=${"sidebar-panel"}
-    color="secondary">
-</mjo-menu-button>
+<mjo-menu-button aria-label="Toggle sidebar" aria-controls="sidebar-panel" color="secondary"> </mjo-menu-button>
 
-<!-- Menu button without external control (no aria-haspopup) -->
-<mjo-menu-button
-    aria-label="Menu options"
-    color="primary">
-</mjo-menu-button>
+<!-- Menu button without external control -->
+<mjo-menu-button aria-label="Menu options" color="primary"> </mjo-menu-button>
 ```
 
 ## Attributes / Properties
@@ -78,24 +67,6 @@ The component leverages both Lit's native ARIA support and custom properties for
 | `aria-controls` | `string` (custom property)    | ID of the element controlled by this button   | `aria-controls="main-navigation"` |
 | `aria-expanded` | Read-only (automatic)         | Automatically managed based on `isOpen` state | Managed internally based on state |
 | `aria-haspopup` | Read-only (automatic)         | Set to "menu" when `ariaControls` is provided | Managed internally                |
-
-### ARIA Usage Examples
-
-```html
-<!-- Using aria-label directly -->
-<mjo-menu-button
-    aria-label="Toggle main navigation"
-    aria-controls="navigation-menu"
-    color="primary">
-</mjo-menu-button>
-
-<!-- Using ariaControls property (alternative) -->
-<mjo-menu-button
-    aria-label="Toggle sidebar"
-    .ariaControls=${"sidebar-panel"}
-    color="secondary">
-</mjo-menu-button>
-```
 
 ### Effect Types
 
@@ -185,6 +156,14 @@ export class ExampleMenuButtonMethods extends LitElement {
 | `mjo-menu-button:close`  | `{ isOpen: false }`   | Menu button is closed programmatically | Custom event with state information |
 | `mjo-menu-button:toggle` | `{ isOpen: boolean }` | Menu button state is toggled           | Custom event with current state     |
 
+## CSS Parts
+
+| Part          | Description                                                     |
+| ------------- | --------------------------------------------------------------- |
+| `container`   | The main button element that contains the entire menu button    |
+| `menu-button` | The inner container that holds the hamburger menu lines         |
+| `line`        | Individual lines that form the hamburger menu (4 span elements) |
+
 ## CSS Custom Properties
 
 | Property                        | Default                    | Description                                     |
@@ -195,12 +174,12 @@ export class ExampleMenuButtonMethods extends LitElement {
 
 The component automatically uses different hover colors based on the `color` attribute:
 
--   **Primary**: `var(--mjo-menu-button-color-hover, var(--mjo-primary-color, #1aa8ed))`
--   **Secondary**: `var(--mjo-menu-button-color-hover, var(--mjo-secondary-color, #7dc717))`
--   **Success**: `var(--mjo-menu-button-color-hover, var(--mjo-color-success, #20d338))`
--   **Info**: `var(--mjo-menu-button-color-hover, var(--mjo-color-info, #2065cc))`
--   **Warning**: `var(--mjo-menu-button-color-hover, var(--mjo-color-warning, #df950c))`
--   **Error**: `var(--mjo-menu-button-color-hover, var(--mjo-color-error, #cf2a2a))`
+- **Primary**: `var(--mjo-menu-button-color-hover, var(--mjo-primary-color, #1aa8ed))`
+- **Secondary**: `var(--mjo-menu-button-color-hover, var(--mjo-secondary-color, #7dc717))`
+- **Success**: `var(--mjo-menu-button-color-hover, var(--mjo-color-success, #20d338))`
+- **Info**: `var(--mjo-menu-button-color-hover, var(--mjo-color-info, #2065cc))`
+- **Warning**: `var(--mjo-menu-button-color-hover, var(--mjo-color-warning, #df950c))`
+- **Error**: `var(--mjo-menu-button-color-hover, var(--mjo-color-error, #cf2a2a))`
 
 ## Theme Interface
 
@@ -268,23 +247,23 @@ The `mjo-menu-button` component is built with comprehensive accessibility featur
 
 ### Built-in Accessibility Features
 
--   **Semantic HTML**: Uses a native `<button>` element for proper keyboard navigation and screen reader support
--   **ARIA Attributes**: Automatically includes `aria-expanded`, `aria-haspopup` (when controlling external elements), and optionally `aria-controls`
--   **Smart ARIA Management**: `aria-haspopup="menu"` is automatically set when `ariaControls` is provided, indicating this button controls an external menu
--   **Keyboard Support**: Full keyboard interaction (Enter, Space, Tab navigation)
--   **Focus Management**: Clear focus indicators with `:focus-visible` support and programmatic focus methods
--   **State Announcements**: Screen readers are informed of state changes through ARIA attributes
--   **Reduced Motion**: Respects `prefers-reduced-motion` user preference with simplified animations
--   **Disabled State**: Proper disabled state handling with visual and functional changes
+- **Semantic HTML**: Uses a native `<button>` element for proper keyboard navigation and screen reader support
+- **ARIA Attributes**: Automatically includes `aria-expanded`, `aria-haspopup` (when controlling external elements), and optionally `aria-controls`
+- **Smart ARIA Management**: `aria-haspopup="menu"` is automatically set when `ariaControls` is provided, indicating this button controls an external menu
+- **Keyboard Support**: Full keyboard interaction (Enter, Space, Tab navigation)
+- **Focus Management**: Clear focus indicators with `:focus-visible` support and programmatic focus methods
+- **State Announcements**: Screen readers are informed of state changes through ARIA attributes
+- **Reduced Motion**: Respects `prefers-reduced-motion` user preference with simplified animations
+- **Disabled State**: Proper disabled state handling with visual and functional changes
 
 ### ARIA Labels and Controls
 
 The component supports ARIA labeling and control relationships for hamburger menu buttons:
 
--   Use native `aria-label` attribute to provide accessible names for the button
--   Use `ariaControls` property to establish relationships with controlled elements (navigation menus, panels, etc.)
--   `aria-haspopup="menu"` is automatically added when `ariaControls` is set
--   Labels should clearly indicate the button's purpose (e.g., "Toggle navigation menu")
+- Use native `aria-label` attribute to provide accessible names for the button
+- Use `ariaControls` property to establish relationships with controlled elements (navigation menus, panels, etc.)
+- `aria-haspopup="menu"` is automatically added when `ariaControls` is set
+- Labels should clearly indicate the button's purpose (e.g., "Toggle navigation menu")
 
 ### Enhanced Accessibility Example
 
@@ -303,28 +282,22 @@ export class ExampleMenuButtonAccessible extends LitElement {
 
     render() {
         return html`
-            <header>
-                <h1>My Application</h1>
-                <mjo-menu-button
-                    color="primary"
-                    effect="cross"
-                    .isOpen=${this.menuOpen}
-                    aria-label="Toggle navigation menu"
-                    aria-controls="main-navigation"
-                    @mjo-menu-button:toggle=${this.handleMenuToggle}
-                ></mjo-menu-button>
-            </header>
+            <mjo-menu-button
+                color="primary"
+                effect="cross"
+                .isOpen=${this.menuOpen}
+                aria-label="Toggle navigation menu"
+                aria-controls="main-navigation"
+                @mjo-menu-button:toggle=${this.handleMenuToggle}
+            ></mjo-menu-button>
 
-            <nav id="main-navigation" ?hidden=${!this.menuOpen} aria-label="Main navigation">
+            <nav id="main-navigation" ?hidden=${!this.menuOpen}>
                 <ul>
                     <li><a href="/home">Home</a></li>
                     <li><a href="/about">About</a></li>
                     <li><a href="/services">Services</a></li>
-                    <li><a href="/contact">Contact</a></li>
                 </ul>
             </nav>
-        `;
-    }
         `;
     }
 }
@@ -332,7 +305,7 @@ export class ExampleMenuButtonAccessible extends LitElement {
 
 ### Reduced Motion Support
 
-The component automatically detects when users prefer reduced motion:
+The component automatically detects when users prefer reduced motion and uses simplified animations.
 
 ```ts
 import { LitElement, html } from "lit";
@@ -343,15 +316,9 @@ import "mjo-litui/mjo-menu-button";
 export class ExampleMenuButtonReducedMotion extends LitElement {
     render() {
         return html`
-            <div>
-                <h4>Accessibility-Aware Menu Buttons</h4>
-                <p>These buttons respect the user's motion preferences:</p>
-
-                <!-- These will use simple cross animation if user prefers reduced motion -->
-                <mjo-menu-button color="primary" effect="bounce" aria-label="Navigation menu"></mjo-menu-button>
-                <mjo-menu-button color="secondary" effect="spin" aria-label="Options menu"></mjo-menu-button>
-                <mjo-menu-button color="success" effect="rotate" aria-label="Actions menu"></mjo-menu-button>
-            </div>
+            <!-- These buttons respect the user's motion preferences -->
+            <mjo-menu-button color="primary" effect="bounce" aria-label="Navigation"></mjo-menu-button>
+            <mjo-menu-button color="secondary" effect="spin" aria-label="Options"></mjo-menu-button>
         `;
     }
 }
@@ -368,26 +335,14 @@ import "mjo-litui/mjo-menu-button";
 export class ExampleMenuButtonDisabled extends LitElement {
     @state() private isLoading = false;
 
-    private simulateLoading() {
-        this.isLoading = true;
-        setTimeout(() => {
-            this.isLoading = false;
-        }, 3000);
+    private toggleLoading() {
+        this.isLoading = !this.isLoading;
     }
 
     render() {
         return html`
-            <div>
-                <h4>Disabled State Handling</h4>
-                <mjo-menu-button
-                    color="primary"
-                    effect="cross"
-                    .disabled=${this.isLoading}
-                    aria-label=${this.isLoading ? "Menu unavailable" : "Toggle menu"}
-                ></mjo-menu-button>
-
-                <button @click=${this.simulateLoading} ?disabled=${this.isLoading}>${this.isLoading ? "Loading..." : "Simulate Loading"}</button>
-            </div>
+            <mjo-menu-button color="primary" .disabled=${this.isLoading} aria-label=${this.isLoading ? "Menu unavailable" : "Toggle menu"}></mjo-menu-button>
+            <button @click=${this.toggleLoading}>${this.isLoading ? "Enable" : "Disable"} Menu</button>
         `;
     }
 }
@@ -462,58 +417,21 @@ export class ExampleMenuButtonVariants extends LitElement {
 }
 ```
 
-## Interactive State Management
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-menu-button";
-
-@customElement("example-menu-button-interactive")
-export class ExampleMenuButtonInteractive extends LitElement {
-    @state() private menuOpen = false;
-
-    private handleMenuToggle() {
-        this.menuOpen = !this.menuOpen;
-    }
-
-    render() {
-        return html`
-            <div>
-                <h4>Controlled Menu State</h4>
-                <mjo-menu-button
-                    color="primary"
-                    effect="cross"
-                    .isOpen=${this.menuOpen}
-                    @click=${this.handleMenuToggle}
-                    aria-label="Toggle navigation menu"
-                ></mjo-menu-button>
-
-                <p>Status: <strong>${this.menuOpen ? "Open" : "Closed"}</strong></p>
-
-                <!-- No ripple variant -->
-                <mjo-menu-button color="secondary" effect="bounce" noink aria-label="Menu without ripple"></mjo-menu-button>
-            </div>
-        `;
-    }
-}
-```
-
 ## Performance Considerations
 
--   **Animation Blocking**: During animations, the `isAnimated` flag prevents rapid state changes that could cause visual glitches
--   **CSS Transitions**: Uses CSS transitions for smooth, hardware-accelerated animations
--   **Event Handling**: Efficient click handling with proper event delegation
--   **Memory Management**: Automatic cleanup of animation timeouts to prevent memory leaks
+- **Animation Blocking**: During animations, the `isAnimated` flag prevents rapid state changes that could cause visual glitches
+- **CSS Transitions**: Uses CSS transitions for smooth, hardware-accelerated animations
+- **Event Handling**: Efficient click handling with proper event delegation
+- **Memory Management**: Automatic cleanup of animation timeouts to prevent memory leaks
 
 ## Best Practices
 
--   **Consistent Effects**: Use the same effect across your application for consistency
--   **Appropriate Sizing**: Choose size based on your UI layout (sm for compact layouts, lg for touch interfaces)
--   **Color Coordination**: Match the color prop with your overall design system
--   **State Management**: Use controlled state when you need to sync with other components
--   **Accessibility**: Always provide appropriate ARIA labels and roles
--   **Testing**: Test animations on different devices to ensure smooth performance
+- **Consistent Effects**: Use the same effect across your application for consistency
+- **Appropriate Sizing**: Choose size based on your UI layout (sm for compact layouts, lg for touch interfaces)
+- **Color Coordination**: Match the color prop with your overall design system
+- **State Management**: Use controlled state when you need to sync with other components
+- **Accessibility**: Always provide appropriate ARIA labels and roles
+- **Testing**: Test animations on different devices to ensure smooth performance
 
 ## Common Use Cases
 

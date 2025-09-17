@@ -7,8 +7,8 @@ import { AiOutlineClose } from "mjo-icons/ai";
 
 import { type IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
-@customElement("mjoint-drawer-container")
-export class MjointDrawerContainer extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("mjo-drawer-container")
+export class MjoDrawerContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) titleMsg = "";
     @property({ type: String }) content: string | TemplateResult<1> = "";
 
@@ -35,9 +35,10 @@ export class MjointDrawerContainer extends ThemeMixin(LitElement) implements ITh
         if (!this.contentId) this.contentId = `drawer-content-${Math.random().toString(36).substr(2, 9)}`;
 
         return html`
-            <div class="background" @click=${this.#handleClose} aria-hidden="true"></div>
+            <div class="background" part="backdrop" @click=${this.#handleClose} aria-hidden="true"></div>
             <div
                 class="container"
+                part="container"
                 data-position=${this.position}
                 role="dialog"
                 aria-modal="true"
@@ -46,19 +47,35 @@ export class MjointDrawerContainer extends ThemeMixin(LitElement) implements ITh
             >
                 ${this.titleMsg
                     ? html`
-                          <div class="title">
-                              <mjo-typography id=${this.titleId} size="heading3" tag="h2" weight="medium"> ${this.titleMsg} </mjo-typography>
+                          <div class="title" part="title">
+                              <mjo-typography
+                                  id=${this.titleId}
+                                  size="heading3"
+                                  tag="h2"
+                                  weight="medium"
+                                  part="typography"
+                                  exportparts="typography: typography-tag"
+                              >
+                                  ${this.titleMsg}
+                              </mjo-typography>
                               ${this.blocked
                                   ? nothing
                                   : html`
-                                        <button type="button" class="close" @click=${this.#handleClose} aria-label="Close drawer" tabindex="0">
+                                        <button
+                                            type="button"
+                                            part="close-button"
+                                            class="close"
+                                            @click=${this.#handleClose}
+                                            aria-label="Close drawer"
+                                            tabindex="0"
+                                        >
                                             <mjo-icon src=${AiOutlineClose}></mjo-icon>
                                         </button>
                                     `}
                           </div>
                       `
                     : ""}
-                <div class="content" id=${this.contentId} role="document">${this.content}</div>
+                <div class="content" id=${this.contentId} part="content" role="document">${this.content}</div>
             </div>
         `;
     }
@@ -217,8 +234,8 @@ export class MjointDrawerContainer extends ThemeMixin(LitElement) implements ITh
                 top: 0;
                 left: 0;
                 inset: 0;
-                background-color: rgba(0, 0, 0, 0.5);
-                backdrop-filter: blur(5px);
+                background-color: var(--mjo-drawer-backdrop-background-color, rgba(0, 0, 0, 0.5));
+                backdrop-filter: var(--mjo-drawer-backdrop-filter, blur(5px));
             }
             .container {
                 position: absolute;
@@ -227,10 +244,8 @@ export class MjointDrawerContainer extends ThemeMixin(LitElement) implements ITh
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
-
-                /* Accessibility: Focus visible styles */
-                outline: none;
                 border: var(--mjo-drawer-border-width, 1px) solid var(--mjo-drawer-border-color, transparent);
+                outline: none;
             }
 
             .container:focus-visible {
@@ -309,8 +324,8 @@ export class MjointDrawerContainer extends ThemeMixin(LitElement) implements ITh
                 padding: 2px;
                 transition: background-color 0.2s;
                 cursor: pointer;
-                border-radius: var(--mjo-radius-small, 3px);
-                color: var(--mjo-foreground-color, currentColor);
+                border-radius: var(--mjo-drawer-close-icon-border-radius, var(--mjo-radius-small, 3px));
+                color: var(--mjo-drawer-close-icon-color, var(--mjo-foreground-color, currentColor));
             }
             .title mjo-icon:hover {
                 background-color: var(--mjo-background-color-high, #ffffff);
@@ -326,6 +341,6 @@ export class MjointDrawerContainer extends ThemeMixin(LitElement) implements ITh
 
 declare global {
     interface HTMLElementTagNameMap {
-        "mjoint-drawer-container": MjointDrawerContainer;
+        "mjo-drawer-container": MjoDrawerContainer;
     }
 }

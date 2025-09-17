@@ -10,12 +10,12 @@ The component includes comprehensive accessibility features including focus trap
 
 ## Accessibility Features
 
--   **Focus Management**: Automatic focus trapping within the modal with configurable initial focus
--   **Keyboard Navigation**: ESC key to close, Tab navigation within modal content
--   **ARIA Support**: Proper dialog role, aria-modal, aria-labelledby, and aria-describedby attributes
--   **Screen Reader**: Announces modal opening and provides accessible labels
--   **Body Scroll**: Prevents background scrolling when modal is open (configurable)
--   **Focus Restoration**: Returns focus to the triggering element when closed
+- **Focus Management**: Automatic focus trapping within the modal with configurable initial focus
+- **Keyboard Navigation**: ESC key to close, Tab navigation within modal content
+- **ARIA Support**: Proper dialog role, aria-modal, aria-labelledby, and aria-describedby attributes
+- **Screen Reader**: Announces modal opening and provides accessible labels
+- **Body Scroll**: Prevents background scrolling when modal is open (configurable)
+- **Focus Restoration**: Returns focus to the triggering element when closed
 
 ## Basic Usage
 
@@ -610,7 +610,7 @@ Closes the currently open modal.
 
 ## Types
 
-````ts
+```ts
 interface ModalShowParams {
     title?: string;
     content: string | TemplateResult<1>;
@@ -630,20 +630,125 @@ interface MjoModalTheme {
     boxShadow?: string;
     width?: string;
 }
-```## Events
+```
+
+## Events
 
 This component does not emit custom events. The modal container handles internal events for user interactions.
 
 ## CSS Custom Properties
 
-| Property                         | Default                                               | Description            |
-| -------------------------------- | ----------------------------------------------------- | ---------------------- |
-| `--mjo-modal-background-color`   | `var(--mjo-background-color, #fff)`                   | Modal background color |
-| `--mjo-modal-box-shadow`         | `var(--mjo-box-shadow3, 0 0 10px rgba(0, 0, 0, 0.5))` | Modal box shadow       |
-| `--mjo-modal-border-radius`             | `var(--mjo-border-radius, 5px)`                       | Modal border radius    |
-| `--mjo-modal-width`              | `450px`                                               | Default modal width    |
-| `--mjo-modal-icon-close-size`    | `16px` (inside), `30px` (outside)                     | Close button icon size |
-| `--mjo-modal-title-border-color` | `var(--mjo-border-color, #ccc)`                       | Title border color     |
+| Property                                        | Default                                               | Description                       |
+| ----------------------------------------------- | ----------------------------------------------------- | --------------------------------- |
+| `--mjo-modal-background-color`                  | `var(--mjo-background-color, #fff)`                   | Modal background color            |
+| `--mjo-modal-backdrop-background-color`         | `rgba(0, 0, 0, 0.5)`                                  | Backdrop background color         |
+| `--mjo-modal-backdrop-filter`                   | `blur(5px)`                                           | Backdrop filter effect            |
+| `--mjo-modal-box-shadow`                        | `var(--mjo-box-shadow3, 0 0 10px rgba(0, 0, 0, 0.5))` | Modal box shadow                  |
+| `--mjo-modal-border-radius`                     | `var(--mjo-border-radius, 5px)`                       | Modal border radius               |
+| `--mjo-modal-width`                             | `450px`                                               | Default modal width               |
+| `--mjo-modal-icon-close-size`                   | `16px` (inside), `30px` (outside)                     | Close button icon size            |
+| `--mjo-modal-icon-close-offset`                 | `5px`                                                 | Close icon position offset        |
+| `--mjo-modal-icon-close-background-color-hover` | `rgba(0, 0, 0, 0.5)`                                  | Close icon hover background color |
+| `--mjo-modal-title-border-color`                | `var(--mjo-border-color, #ccc)`                       | Title border color                |
+
+## CSS Parts
+
+The modal component uses CSS parts to allow styling of internal elements. Since the modal container is mounted directly in the document body, CSS parts must be applied globally:
+
+```css
+/* Global styling for all modals */
+mjo-modal-container::part(backdrop) {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+mjo-modal-container::part(container) {
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+mjo-modal-container::part(title) {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+mjo-modal-container::part(content) {
+    padding: 25px;
+    min-height: 200px;
+}
+
+mjo-modal-container::part(icon-close-container) {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    padding: 8px;
+}
+```
+
+### Available CSS Parts
+
+| Part                   | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `backdrop`             | The modal backdrop/overlay                |
+| `container`            | The main modal container                  |
+| `title`                | The modal title element                   |
+| `title-tag`            | The typography element used for the title |
+| `content`              | The modal content area                    |
+| `icon-close-container` | Container for the internal close icon     |
+| `icon-close-out`       | External close icon (outside modal)       |
+| `icon-close-in`        | Internal close icon (inside modal)        |
+
+### Important: Global Modal Container
+
+The `mjo-modal` component works by dynamically creating a `mjo-modal-container` element that is mounted directly in the document `<body>`. This architecture provides several benefits:
+
+- **Overlay Management**: Ensures the modal appears above all other content
+- **Z-index Control**: Prevents z-index conflicts with parent containers
+- **Overflow Prevention**: Bypasses any parent `overflow: hidden` styles
+- **Focus Management**: Enables proper focus trapping and restoration
+
+Because the actual modal content is rendered in the `mjo-modal-container` (mounted in the body), CSS variables and CSS parts cannot be applied directly to the `mjo-modal` component. Instead, you need to target the container globally.
+
+### Global vs Component-Specific Styling
+
+#### Global Styling (All Modals)
+
+```css
+/* Apply to all modal containers */
+:root {
+    --mjo-modal-width: 500px;
+    --mjo-modal-backdrop-background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Target all modal containers */
+mjo-modal-container {
+    --mjo-modal-background-color: #ffffff;
+}
+
+mjo-modal-container::part(title) {
+    font-weight: bold;
+    color: #333;
+}
+```
+
+#### Specific Modal Styling Using Custom Properties
+
+For component-specific styling, you can use the `theme` property or CSS custom properties with specific selectors:
+
+```ts
+// Using theme property
+this.modal.controller.show({
+    content: "Modal content",
+    title: "Custom Modal",
+});
+
+// Set custom styles for this specific modal instance
+const modalContainer = document.querySelector("mjo-modal-container");
+if (modalContainer) {
+    modalContainer.style.setProperty("--mjo-modal-width", "600px");
+    modalContainer.style.setProperty("--mjo-modal-background-color", "#f8f9fa");
+}
+```
 
 ### Theme Interface
 
@@ -656,55 +761,55 @@ interface MjoModalTheme {
     boxShadow?: string;
     width?: string;
 }
-````
+```
 
 ## Technical Notes
 
--   **Global Container**: Modals are rendered in a container appended to `document.body`
--   **Z-Index Management**: The container inherits z-index from the host component
--   **Backdrop Filter**: Uses CSS backdrop-filter for modern blur effects
--   **Animation System**: Smooth scale and fade animations with configurable duration
--   **Content Flexibility**: Supports both HTML strings and Lit templates
--   **Theme Inheritance**: Modal container inherits theme from the host component
--   **Responsive Design**: Automatically adapts to viewport size with max-width constraints
+- **Global Container**: Modals are rendered in a container appended to `document.body`
+- **Z-Index Management**: The container inherits z-index from the host component
+- **Backdrop Filter**: Uses CSS backdrop-filter for modern blur effects
+- **Animation System**: Smooth scale and fade animations with configurable duration
+- **Content Flexibility**: Supports both HTML strings and Lit templates
+- **Theme Inheritance**: Modal container inherits theme from the host component
+- **Responsive Design**: Automatically adapts to viewport size with max-width constraints
 
 ## Accessibility
 
--   **Focus Management**: Automatic focus trapping within modal with configurable initial focus
--   **Keyboard Navigation**: Full keyboard support including ESC key to close and Tab navigation
--   **ARIA Support**: Complete ARIA implementation with dialog role, modal attribute, and labeling
--   **Screen Reader**: Proper announcements and accessible content structure
--   **Body Scroll Control**: Prevents background scrolling when modal is active
--   **Focus Restoration**: Automatically returns focus to the triggering element when closed
--   **Customizable Behavior**: All accessibility features can be configured or disabled as needed
+- **Focus Management**: Automatic focus trapping within modal with configurable initial focus
+- **Keyboard Navigation**: Full keyboard support including ESC key to close and Tab navigation
+- **ARIA Support**: Complete ARIA implementation with dialog role, modal attribute, and labeling
+- **Screen Reader**: Proper announcements and accessible content structure
+- **Body Scroll Control**: Prevents background scrolling when modal is active
+- **Focus Restoration**: Automatically returns focus to the triggering element when closed
+- **Customizable Behavior**: All accessibility features can be configured or disabled as needed
 
 ## Best Practices
 
 ### General Usage
 
--   Use descriptive titles for better user understanding
--   Keep modal content focused and concise
--   Use blocking modals sparingly for critical actions
--   Provide clear action buttons for user guidance
--   Consider mobile viewport constraints when setting width
--   Use context sharing for large applications with multiple components
--   Implement proper error handling in onClose callbacks
+- Use descriptive titles for better user understanding
+- Keep modal content focused and concise
+- Use blocking modals sparingly for critical actions
+- Provide clear action buttons for user guidance
+- Consider mobile viewport constraints when setting width
+- Use context sharing for large applications with multiple components
+- Implement proper error handling in onClose callbacks
 
 ### Accessibility
 
--   Always provide either `ariaLabelledby` or `label` for screen readers
--   Use `ariaDescribedby` to reference content that describes the modal's purpose
--   Set `initialFocus` to the most important interactive element (like a confirm button)
--   Keep focus trap enabled (`trapFocus: true`) unless there's a specific reason not to
--   Allow ESC key closing (`closeOnEscape: true`) for keyboard users
--   Use semantic HTML structure within modal content
--   Ensure sufficient color contrast for all text and interactive elements
--   Test with screen readers and keyboard-only navigation
+- Always provide either `ariaLabelledby` or `label` for screen readers
+- Use `ariaDescribedby` to reference content that describes the modal's purpose
+- Set `initialFocus` to the most important interactive element (like a confirm button)
+- Keep focus trap enabled (`trapFocus: true`) unless there's a specific reason not to
+- Allow ESC key closing (`closeOnEscape: true`) for keyboard users
+- Use semantic HTML structure within modal content
+- Ensure sufficient color contrast for all text and interactive elements
+- Test with screen readers and keyboard-only navigation
 
 ### Performance
 
--   Avoid creating multiple modal instances; reuse a single instance when possible
--   Use the controller pattern for complex modal workflows
--   Implement proper cleanup in `onClose` callbacks to prevent memory leaks
+- Avoid creating multiple modal instances; reuse a single instance when possible
+- Use the controller pattern for complex modal workflows
+- Implement proper cleanup in `onClose` callbacks to prevent memory leaks
 
 For additional theming options, see the [Theming Guide](./theming.md).

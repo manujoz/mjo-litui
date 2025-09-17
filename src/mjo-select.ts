@@ -33,6 +33,60 @@ import "./components/select/mjo-option.js";
 import "./components/select/mjoint-options-list.js";
 import "./mjo-dropdown.js";
 
+/**
+ * @summary Comprehensive dropdown select component with search functionality, rich options support, and full form integration.
+ *
+ * @description The mjo-select component provides a sophisticated dropdown selection interface with support for
+ * icons, images, search functionality, and comprehensive form integration. It works with mjo-option elements
+ * to create flexible and user-friendly selection experiences with full accessibility support.
+ *
+ * @fires mjo-select:change - Fired when the selected value changes with detailed information
+ * @fires mjo-select:open - Fired when the dropdown opens
+ * @fires mjo-select:close - Fired when the dropdown closes
+ * @fires mjo-select:search - Fired when searching through options (when searchable is enabled)
+ * @fires mjo-select:focus - Fired when the select gains focus
+ * @fires mjo-select:blur - Fired when the select loses focus
+ * @fires mjo-select:option-preselect - Fired when an option is preselected via keyboard navigation
+ * @fires change - Standard HTML change event
+ * @fires focus - Standard HTML focus event
+ * @fires invalid - Fired when validation fails
+ *
+ * @slot - Contains mjo-option elements that define the available selections
+ *
+ * @csspart container - The main select input container
+ * @csspart input - The native input element (hidden for select display)
+ * @csspart label-container - The label container (via exportparts from mjoint-input-label)
+ * @csspart label-truncate-container - The label truncate container (via exportparts)
+ * @csspart label-truncate-wrapper - The label truncate wrapper (via exportparts)
+ * @csspart prefix-text - Container for prefix text
+ * @csspart suffix-text - Container for suffix text
+ * @csspart start-icon-container - Container for start icon
+ * @csspart start-icon - The start icon element (via exportparts from mjo-icon)
+ * @csspart end-icon-container - Container for end icon
+ * @csspart end-icon - The end icon element (via exportparts from mjo-icon)
+ * @csspart end-icon-option-container - Container for end icon from selected option
+ * @csspart end-option-icon - The end icon from selected option (via exportparts from mjo-icon)
+ * @csspart start-image-container - Container for start image
+ * @csspart start-image - The start image element
+ * @csspart end-image-container - Container for end image
+ * @csspart end-image - The end image element
+ * @csspart end-image-option-container - Container for end image from selected option
+ * @csspart end-option-image - The end image from selected option
+ * @csspart select-dropdown-icon - The dropdown arrow icon
+ * @csspart helper-container - Helper container (via exportparts from mjoint-input-helper-text)
+ * @csspart helper-text-container - Helper text container (via exportparts)
+ * @csspart helper-text-typography - Helper text typography (via exportparts)
+ * @csspart helper-text-typography-tag - Helper text typography tag (via exportparts)
+ * @csspart helper-text-error-message - Error message element (via exportparts)
+ * @csspart helper-text-success-message - Success message element (via exportparts)
+ * @csspart helper-text-icon - Helper text icon element (via exportparts)
+ * @csspart options-list-container - The options list container (from mjoint-options-list)
+ * @csspart select-search-container - The search container when searchable is enabled
+ * @csspart select-search-input-wrapper - The search input wrapper element
+ * @csspart select-search-input - The search input element
+ * @csspart select-search-icon-container - Container for the search icon
+ * @csspart select-search-icon - The search icon element
+ */
 @customElement("mjo-select")
 export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: Boolean }) autoFocus = false;
@@ -97,6 +151,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             ${this.label
                 ? html`<mjoint-input-label
                       id=${ifDefined(labelId)}
+                      exportparts="container: label-container, truncate-container: label-truncate-container, truncate-wrapper: label-truncate-wrapper"
                       color=${this.color}
                       label=${this.label}
                       ?focused=${this.isFocused}
@@ -108,6 +163,14 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 .html=${html`<mjoint-options-list
                     ${ref(this.optionListRef)}
                     id=${listboxId}
+                    exportparts="
+                        container: options-list-container,
+                        select-search-container: select-search-container,
+                        select-search-input-wrapper: select-search-input-wrapper,
+                        select-search-input: select-search-input,
+                        select-search-icon-container: select-search-icon-container,
+                        select-search-icon: select-search-icon,
+                    "
                     .options=${this.options}
                     .mjoSelect=${this as MjoSelect}
                     ?searchable=${this.searchable}
@@ -128,15 +191,25 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             >
                 <div
                     class="container"
+                    part="container"
                     data-color=${this.color}
                     ?data-focused=${this.isFocused}
                     data-size=${this.size}
                     ?data-error=${this.error}
                     ?data-disabled=${this.disabled}
                 >
-                    ${this.prefixText ? html`<div class="prefixText">${this.prefixText}</div>` : nothing}
-                    ${this.startIcon && html`<div class="icon startIcon" aria-hidden="true"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
-                    ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
+                    ${this.prefixText ? html`<div class="prefixText" part="prefix-text">${this.prefixText}</div>` : nothing}
+                    ${this.startIcon &&
+                    html`
+                        <div class="icon startIcon" part="start-icon-container" aria-hidden="true">
+                            <mjo-icon exportparts="icon: start-icon" src=${this.startIcon}></mjo-icon>
+                        </div>
+                    `}
+                    ${this.startImage && !this.startIcon
+                        ? html`<div class="image startImage" part="start-image-container">
+                              <img src=${this.startImage} part="start-image" alt="Input image" />
+                          </div>`
+                        : nothing}
                     ${this.startOptionIcon &&
                     html`<div class="icon startIcon optionImage" aria-hidden="true"><mjo-icon src=${this.startOptionIcon}></mjo-icon></div>`}
                     ${this.startOptionImage && !this.startOptionIcon
@@ -144,6 +217,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                         : nothing}
                     <input
                         role="combobox"
+                        part="input"
                         ?autofocus=${this.autoFocus}
                         ?disabled=${this.disabled}
                         placeholder=${ifDefined(this.placeholder)}
@@ -167,22 +241,58 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     <input type="hidden" name=${ifDefined(this.name)} .value=${live(this.value)} />
 
                     ${this.endOptionIcon
-                        ? html`<div class="icon endIcon optionImage" aria-hidden="true"><mjo-icon src=${this.endOptionIcon}></mjo-icon></div>`
+                        ? html`
+                              <div class="icon endIcon optionImage" part="end-icon-container end-icon-option-container" aria-hidden="true">
+                                  <mjo-icon src=${this.endOptionIcon} exportparts="icon: end-option-icon"></mjo-icon>
+                              </div>
+                          `
                         : nothing}
                     ${this.endOptionImage && !this.endOptionIcon
-                        ? html`<div class="image endImage optionImage"><img src=${this.endOptionImage} alt="Selected option image" /></div>`
+                        ? html`
+                              <div class="image endImage optionImage" part="end-image-container end-image-option-container">
+                                  <img src=${this.endOptionImage} part="end-option-image" alt="Selected option image" />
+                              </div>
+                          `
                         : nothing}
-                    ${this.endIcon ? html`<div class="icon endIcon" aria-hidden="true"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
-                    ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Input image" /></div>` : nothing}
-                    ${this.suffixText ? html`<div class="prefixText">${this.suffixText}</div>` : nothing}
-                    <div class="icon endIcon arrowDown" aria-hidden="true"><mjo-icon src=${AiOutlineDown}></mjo-icon></div>
+                    ${this.endIcon
+                        ? html`
+                              <div class="icon endIcon" part="end-icon-container" aria-hidden="true">
+                                  <mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>
+                              </div>
+                          `
+                        : nothing}
+                    ${this.endImage && !this.endIcon
+                        ? html`
+                              <div class="image endImage" part="end-image-container">
+                                  <img src=${this.endImage} part="end-image" alt="Input image" />
+                              </div>
+                          `
+                        : nothing}
+                    ${this.suffixText ? html`<div class="prefixText" part="suffix-text">${this.suffixText}</div>` : nothing}
+                    <div class="icon endIcon arrowDown" part="select-dropdown-icon" aria-hidden="true">
+                        <mjo-icon src=${AiOutlineDown}></mjo-icon>
+                    </div>
                 </div>
             </mjo-dropdown>
-            <div class="helper" ?data-disabled=${this.disabled}>
+            <div class="helper" part="helper-container" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
-                    ? html`<mjoint-input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
-                          >${this.helperText}</mjoint-input-helper-text
-                      >`
+                    ? html`
+                          <mjoint-input-helper-text
+                              id=${ifDefined(helperTextId)}
+                              exportparts="
+                                    container: helper-text-container,
+                                    typography: helper-text-typography,
+                                    helper-text: helper-text-typography-tag,
+                                    error-message: helper-text-error-message,
+                                    success-message: helper-text-success-message,
+                                    icon: helper-text-icon
+                                "
+                              errormsg=${ifDefined(this.errormsg)}
+                              successmsg=${ifDefined(this.successmsg)}
+                          >
+                              ${this.helperText}
+                          </mjoint-input-helper-text>
+                      `
                     : nothing}
             </div>`;
     }

@@ -1,8 +1,8 @@
-import type { MjointDropdownContainer } from "../components/dropdown/mjoint-dropdown-container";
+import type { MjoDropdownContainer } from "../components/dropdown/mjo-dropdown-container";
 
 const DROPDOWN_MARGIN = 15;
 
-export const getTopInTopPosition = ({ dropDown, container }: { dropDown: MjointDropdownContainer; container: HTMLElement }): number => {
+export const getTopInTopPosition = ({ dropDown, container }: { dropDown: MjoDropdownContainer; container: HTMLElement }): number => {
     let top = container.getBoundingClientRect().top + window.scrollY - dropDown.offsetHeight - 5;
 
     if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
@@ -24,7 +24,7 @@ export const getTopInTopPosition = ({ dropDown, container }: { dropDown: MjointD
 
     return top;
 };
-export const getTopInBottomPosition = ({ dropDown, container }: { dropDown: MjointDropdownContainer; container: HTMLElement }): number => {
+export const getTopInBottomPosition = ({ dropDown, container }: { dropDown: MjoDropdownContainer; container: HTMLElement }): number => {
     let top = container.getBoundingClientRect().top + window.scrollY + container.offsetHeight + 5;
 
     if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
@@ -46,7 +46,7 @@ export const getTopInBottomPosition = ({ dropDown, container }: { dropDown: Mjoi
 
     return top;
 };
-export const getTopInMiddlePosition = ({ dropDown, container }: { dropDown: MjointDropdownContainer; container: HTMLElement }): number => {
+export const getTopInMiddlePosition = ({ dropDown, container }: { dropDown: MjoDropdownContainer; container: HTMLElement }): number => {
     const top = container.getBoundingClientRect().top + window.scrollY + container.offsetHeight / 2 - dropDown.offsetHeight / 2;
 
     if (dropDown.offsetHeight >= window.innerHeight - DROPDOWN_MARGIN * 2) {
@@ -64,7 +64,7 @@ export const getTopInMiddlePosition = ({ dropDown, container }: { dropDown: Mjoi
 
     return top;
 };
-export const getLeftInLeftPosition = ({ dropDown, container }: { dropDown: MjointDropdownContainer; container: HTMLElement }): number => {
+export const getLeftInLeftPosition = ({ dropDown, container }: { dropDown: MjoDropdownContainer; container: HTMLElement }): number => {
     let left = container.getBoundingClientRect().left + window.scrollX - dropDown.offsetWidth - 5;
 
     if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2) return DROPDOWN_MARGIN;
@@ -81,7 +81,7 @@ export const getLeftInLeftPosition = ({ dropDown, container }: { dropDown: Mjoin
 
     return left;
 };
-export const getLeftInCenterPOsition = ({ dropDown, container }: { dropDown: MjointDropdownContainer; container: HTMLElement }): number => {
+export const getLeftInCenterPOsition = ({ dropDown, container }: { dropDown: MjoDropdownContainer; container: HTMLElement }): number => {
     const left = container.getBoundingClientRect().left + window.scrollX + container.offsetWidth / 2 - dropDown.offsetWidth / 2;
 
     if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2) return DROPDOWN_MARGIN;
@@ -94,7 +94,7 @@ export const getLeftInCenterPOsition = ({ dropDown, container }: { dropDown: Mjo
 
     return left;
 };
-export const getLeftInRightPosition = ({ dropDown, container }: { dropDown: MjointDropdownContainer; container: HTMLElement }): number => {
+export const getLeftInRightPosition = ({ dropDown, container }: { dropDown: MjoDropdownContainer; container: HTMLElement }): number => {
     let left = container.getBoundingClientRect().left + window.scrollX + container.offsetWidth + 5;
 
     if (dropDown.offsetWidth >= window.innerWidth - DROPDOWN_MARGIN * 2) return DROPDOWN_MARGIN;

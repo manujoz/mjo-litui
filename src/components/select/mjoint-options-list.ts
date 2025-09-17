@@ -34,12 +34,13 @@ export class MjointOptionsList extends ThemeMixin(LitElement) implements IThemeM
     render() {
         return html`
             ${this.applyThemeSsr()}
-            <div role="listbox" aria-multiselectable="false">
+            <div role="listbox" part="container" aria-multiselectable="false">
                 ${this.searchable
-                    ? html`<div class="search" @click=${this.#handleInputClick}>
-                          <div class="input">
+                    ? html`<div class="search" part="select-search-container" @click=${this.#handleInputClick}>
+                          <div class="input" part="select-search-input-wrapper">
                               <input
                                   id="optionsListsInputSearch"
+                                  part="select-search-input"
                                   type="text"
                                   placeholder=${this.dictionary.search}
                                   @input=${this.#hanldeInput}
@@ -47,8 +48,8 @@ export class MjointOptionsList extends ThemeMixin(LitElement) implements IThemeM
                                   aria-label="Search options"
                               />
                           </div>
-                          <div class="icon" aria-hidden="true">
-                              <mjo-icon src=${AiOutlineSearch}></mjo-icon>
+                          <div class="icon" part="select-search-icon-container" aria-hidden="true">
+                              <mjo-icon src=${AiOutlineSearch} part="select-search-icon"></mjo-icon>
                           </div>
                       </div>`
                     : nothing}

@@ -149,13 +149,13 @@ export class ExampleDropdownForm extends LitElement {
 
 ### Behavior Notes
 
--   The dropdown container is created dynamically and appended to `document.body`
--   Position is automatically calculated and updated on scroll/resize
--   Click behavior includes a 100ms debounce to prevent immediate close on trigger click
--   When `preventScroll` is true, the dropdown locks scroll position during display
--   When `preventCloseOnInnerClick` is true, clicking inside the dropdown content will not close the dropdown
--   `suppressOpenSelectors` array allows preventing dropdown opening when click events originate from matching elements (only applies to `behaviour="click"`)
--   Theme inheritance: dropdown inherits theme from closest `<mjo-theme>` ancestor
+- The dropdown container is created dynamically and appended to `document.body`
+- Position is automatically calculated and updated on scroll/resize
+- Click behavior includes a 100ms debounce to prevent immediate close on trigger click
+- When `preventScroll` is true, the dropdown locks scroll position during display
+- When `preventCloseOnInnerClick` is true, clicking inside the dropdown content will not close the dropdown
+- `suppressOpenSelectors` array allows preventing dropdown opening when click events originate from matching elements (only applies to `behaviour="click"`)
+- Theme inheritance: dropdown inherits theme from closest `<mjo-theme>` ancestor
 
 ## Slots
 
@@ -178,25 +178,25 @@ The `mjo-dropdown` component implements comprehensive accessibility features fol
 
 ### ARIA Attributes
 
--   **aria-haspopup="true"**: Indicates trigger element has a popup
--   **aria-expanded**: Reflects current open/closed state
--   **aria-controls**: Links trigger to dropdown content via ID
--   **role="region"**: Applied to dropdown container for screen readers
--   **aria-labelledby**: Links dropdown content to trigger element
+- **aria-haspopup="true"**: Indicates trigger element has a popup
+- **aria-expanded**: Reflects current open/closed state
+- **aria-controls**: Links trigger to dropdown content via ID
+- **role="region"**: Applied to dropdown container for screen readers
+- **aria-labelledby**: Links dropdown content to trigger element
 
 ### Keyboard Navigation
 
--   **Escape**: Closes dropdown and restores focus to trigger
--   **Tab**: Normal tab navigation through dropdown content
--   **Shift+Tab**: Reverse tab navigation
--   **Space/Enter**: Opens dropdown when trigger is focused (click mode)
+- **Escape**: Closes dropdown and restores focus to trigger
+- **Tab**: Normal tab navigation through dropdown content
+- **Shift+Tab**: Reverse tab navigation
+- **Space/Enter**: Opens dropdown when trigger is focused (click mode)
 
 ### Focus Management
 
--   Focus is automatically moved to dropdown content when opened
--   Focus is restored to trigger element when closed (configurable via `restoreFocus`)
--   Focus trap prevents tabbing outside dropdown when open
--   Screen reader announcements for state changes
+- Focus is automatically moved to dropdown content when opened
+- Focus is restored to trigger element when closed (configurable via `restoreFocus`)
+- Focus trap prevents tabbing outside dropdown when open
+- Screen reader announcements for state changes
 
 ## Public Methods
 
@@ -205,6 +205,235 @@ The `mjo-dropdown` component implements comprehensive accessibility features fol
 | `open()`           | none         | `void`  | Programmatically opens the dropdown        |
 | `close()`          | `ev?: Event` | `void`  | Programmatically closes the dropdown       |
 | `updatePosition()` | none         | `void`  | Recalculates and updates dropdown position |
+
+## Styling Architecture
+
+### Important: Dropdown Container Mounting
+
+The `mjo-dropdown` component works by dynamically creating a `mjo-dropdown-container` element that is mounted directly in the document `<body>`. This architecture provides several benefits:
+
+- **Overlay Management**: Ensures dropdowns appear above all other content
+- **Z-index Control**: Prevents z-index conflicts with parent containers
+- **Overflow Prevention**: Bypasses any parent `overflow: hidden` styles
+- **Theme Inheritance**: Automatically inherits theme from the closest `mjo-theme` ancestor
+
+### CSS Variables and Parts Application
+
+Because the actual dropdown content is rendered in the `mjo-dropdown-container` (mounted in the body), CSS variables and CSS parts cannot be applied directly to the `mjo-dropdown` component. Instead, you need to target the dynamically created container using the `idDropdown` property or apply styles globally.
+
+### Usage with `idDropdown` Property
+
+The `idDropdown` property allows you to assign a specific ID to the dynamically created dropdown container, enabling targeted styling:
+
+```html
+<mjo-dropdown idDropdown="my-settings-dropdown">
+    <button>Settings</button>
+</mjo-dropdown>
+```
+
+This creates a container with `id="my-settings-dropdown"` in the document body, which you can then style:
+
+```css
+/* Target the specific dropdown container */
+#my-settings-dropdown {
+    --mjo-dropdown-background-color: #f8f9fa;
+    --mjo-dropdown-border-radius: 12px;
+}
+
+/* Apply CSS parts to the specific dropdown */
+#my-settings-dropdown::part(dropdown-container) {
+    border: 2px solid #e9ecef;
+    backdrop-filter: blur(10px);
+}
+```
+
+### Global vs Specific Styling
+
+#### Global Styling (All Dropdowns)
+
+```css
+/* Apply to all dropdown containers */
+:root {
+    --mjo-dropdown-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    --mjo-dropdown-border-radius: 8px;
+}
+
+/* Target all dropdown containers */
+mjo-dropdown-container {
+    --mjo-dropdown-background-color: #ffffff;
+}
+```
+
+#### Specific Styling (Individual Dropdowns)
+
+```css
+/* Apply only to dropdowns with specific idDropdown */
+#user-menu-dropdown {
+    --mjo-dropdown-background-color: #1f2937;
+    --mjo-dropdown-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+#tooltip-dropdown {
+    --mjo-dropdown-background-color: #374151;
+    --mjo-dropdown-border-radius: 4px;
+}
+```
+
+### Complete Styling Example
+
+```ts
+import { LitElement, html, css } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import type { MjoDropdown } from "mjo-litui/types";
+import "mjo-litui/mjo-dropdown";
+import "mjo-litui/mjo-button";
+
+@customElement("app-with-styled-dropdowns")
+export class AppWithStyledDropdowns extends LitElement {
+    @query("#menu-dropdown") menuDropdown!: MjoDropdown;
+
+    private showMenu() {
+        this.menuDropdown.open();
+    }
+
+    render() {
+        return html`
+            <mjo-dropdown
+                id="menu-dropdown"
+                idDropdown="styled-menu"
+                behaviour="click"
+                .html=${html`
+                    <div style="padding: 1rem;">
+                        <h3>Styled Menu</h3>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li><a href="#">Profile</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                `}
+            >
+                <mjo-button @click=${this.showMenu}>Show Styled Menu</mjo-button>
+            </mjo-dropdown>
+        `;
+    }
+
+    static styles = css`
+        /* Global styles applied to the document */
+        :host {
+            --mjo-dropdown-background-color: #f8fafc;
+            --mjo-dropdown-border-radius: 12px;
+            --mjo-dropdown-box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+    `;
+}
+
+// Add global styles to the document
+const globalStyles = document.createElement("style");
+globalStyles.textContent = `
+    /* Global dropdown container styling */
+    #styled-menu::part(dropdown-container) {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Hover effects for menu items */
+    #styled-menu a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+    #styled-menu a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+`;
+document.head.appendChild(globalStyles);
+```
+
+### Best Practices for Styling
+
+1. **Use `idDropdown` for specific styling**: Always provide a unique `idDropdown` when you need custom styling
+2. **Global defaults in `:root`**: Set common variables in `:root` for consistency across all dropdowns
+3. **Semantic naming**: Use descriptive IDs like `"user-menu-dropdown"` or `"search-suggestions"`
+4. **CSS parts for advanced styling**: Use `::part()` selectors for styling internal elements
+5. **Test with multiple dropdowns**: Ensure your styling doesn't conflict when multiple dropdowns exist
+
+## CSS Parts
+
+The dropdown system exposes the following CSS part for advanced styling:
+
+| Part                 | Element                  | Description                                     |
+| -------------------- | ------------------------ | ----------------------------------------------- |
+| `dropdown-container` | `mjo-dropdown-container` | The main container holding the dropdown content |
+
+### CSS Parts Usage Examples
+
+```css
+/* Style the dropdown container */
+mjo-dropdown-container::part(dropdown-container) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Interactive states */
+mjo-dropdown-container:hover::part(dropdown-container) {
+    transform: translateY(-2px);
+    box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.35);
+}
+
+/* Dark theme dropdown */
+mjo-dropdown-container[theme="dark"]::part(dropdown-container) {
+    background: #1f2937;
+    border: 1px solid #374151;
+    color: #f9fafb;
+}
+
+/* Light theme dropdown */
+mjo-dropdown-container[theme="light"]::part(dropdown-container) {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    color: #111827;
+}
+```
+
+### Specific Dropdown Styling with idDropdown
+
+```css
+/* Style specific dropdown using idDropdown */
+#user-profile-dropdown::part(dropdown-container) {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+}
+
+#search-suggestions::part(dropdown-container) {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#tooltip-info::part(dropdown-container) {
+    background: #374151;
+    color: white;
+    border-radius: 6px;
+    padding: 0.75rem;
+    max-width: 250px;
+    font-size: 0.875rem;
+}
+```
 
 ## CSS Variables
 
@@ -217,12 +446,7 @@ The dropdown component uses a minimal set of CSS variables with comprehensive fa
 | `--mjo-dropdown-box-shadow`       | `--mjo-box-shadow` (fallback: standard)    | Dropdown shadow        |
 | `--mjo-dropdown-border-radius`    | `--mjo-radius-medium` (fallback: 5px)      | Dropdown border radius |
 | `--mjo-dropdown-background-color` | `--mjo-background-color` (fallback: white) | Dropdown background    |
-
-### Container Specific
-
-| Variable                               | Fallback                          | Used For                      |
-| -------------------------------------- | --------------------------------- | ----------------------------- |
-| `--dropdow-container-background-color` | `--mjo-dropdown-background-color` | Container background override |
+| `--mjo-dropdown-foreground-color` | `--mjo-background-color` (fallback: white) | Dropdown background    |
 
 ### Position & Sizing
 
@@ -319,9 +543,9 @@ export class ExampleDropdownGlobalTheme extends LitElement {
 
 The dropdown automatically selects the best position based on available viewport space. The positioning system supports 8 different positions:
 
--   **Bottom positions**: `left-bottom`, `center-bottom`, `right-bottom`
--   **Top positions**: `left-top`, `center-top`, `right-top`
--   **Middle positions**: `left-middle`, `right-middle`
+- **Bottom positions**: `left-bottom`, `center-bottom`, `right-bottom`
+- **Top positions**: `left-top`, `center-top`, `right-top`
+- **Middle positions**: `left-middle`, `right-middle`
 
 Position is calculated dynamically by the `DropdownContainer` using utilities that consider available space, dropdown dimensions, viewport boundaries, and scroll position.
 

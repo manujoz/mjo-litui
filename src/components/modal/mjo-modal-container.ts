@@ -10,8 +10,8 @@ import { FocusTrap } from "../../utils/focus-trap.js";
 import "../../mjo-icon.js";
 import "../../mjo-typography.js";
 
-@customElement("mjoint-modal-container")
-export class MjointModalContainer extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("mjo-modal-container")
+export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) isOpen = false;
     @property({ type: String }) titleMsg = "";
     @property({ type: String }) content: string | TemplateResult<1> = "";
@@ -40,9 +40,10 @@ export class MjointModalContainer extends ThemeMixin(LitElement) implements IThe
 
     render() {
         return html`
-            <div class="background" @click=${this.#handleClose}></div>
+            <div class="background" part="backdrop" @click=${this.#handleClose}></div>
             ${!this.blocked && this.closePosition === "out"
                 ? html`<mjo-icon
+                      exportparts="icon: icon-close-out"
                       class="closeOut"
                       src=${AiOutlineClose}
                       @click=${this.#handleClose}
@@ -54,17 +55,25 @@ export class MjointModalContainer extends ThemeMixin(LitElement) implements IThe
                 : nothing}
             <div
                 class="container"
+                part="container"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby=${this.ariaLabelledby || nothing}
                 aria-describedby=${this.ariaDescribedby || nothing}
                 aria-label=${!this.ariaLabelledby && (this.label || this.titleMsg) ? this.label || this.titleMsg : nothing}
             >
-                ${this.titleMsg ? html`<mjo-typography class="title" size="heading3" tag="h5" weight="medium">${this.titleMsg}</mjo-typography>` : ""}
-                <div class="content">${this.content}</div>
+                ${this.titleMsg
+                    ? html`
+                          <mjo-typography class="title" part="title" exportparts="typography: title-tag" size="heading3" tag="h5" weight="medium">
+                              ${this.titleMsg}
+                          </mjo-typography>
+                      `
+                    : ""}
+                <div class="content" part="content">${this.content}</div>
                 ${!this.blocked && this.closePosition === "in"
-                    ? html`<div class="closeIn">
+                    ? html`<div class="closeIn" part="icon-close-container">
                           <mjo-icon
+                              exportparts="icon: icon-close-in"
                               class="close"
                               @click=${this.#handleClose}
                               @keydown=${this.#handleKeyDown}
@@ -223,8 +232,8 @@ export class MjointModalContainer extends ThemeMixin(LitElement) implements IThe
                 top: 0;
                 left: 0;
                 inset: 0;
-                background-color: rgba(0, 0, 0, 0.5);
-                backdrop-filter: blur(5px);
+                background-color: var(--mjo-modal-backdrop-background-color, rgba(0, 0, 0, 0.5));
+                backdrop-filter: var(--mjo-modal-backdrop-filter, blur(5px));
             }
             .closeOut {
                 position: absolute;
@@ -236,8 +245,8 @@ export class MjointModalContainer extends ThemeMixin(LitElement) implements IThe
             }
             .closeIn {
                 position: absolute;
-                top: 5px;
-                right: 5px;
+                top: var(--mjo-modal-icon-close-offset, 5px);
+                right: var(--mjo-modal-icon-close-offset, 5px);
             }
             .closeIn mjo-icon {
                 font-size: var(--mjo-modal-icon-close-size, 16px);
@@ -247,7 +256,7 @@ export class MjointModalContainer extends ThemeMixin(LitElement) implements IThe
                 padding: 2px;
             }
             .closeIn mjo-icon:hover {
-                background-color: var(--mjo-background-color-low);
+                background-color: var(--mjo-modal-icon-close-background-color-hover, rgba(0, 0, 0, 0.5));
             }
             .container {
                 position: relative;
@@ -279,6 +288,6 @@ export class MjointModalContainer extends ThemeMixin(LitElement) implements IThe
 
 declare global {
     interface HTMLElementTagNameMap {
-        "mjoint-modal-container": MjointModalContainer;
+        "mjo-modal-container": MjoModalContainer;
     }
 }

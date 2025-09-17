@@ -315,6 +315,8 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                 data-reset-key=${resetKey}
                 mode=${this.isRange ? "range" : "single"}
                 locale=${this.locale}
+                size="small"
+                color=${this.color}
                 aria-label=${this.isRange ? "Date range calendar" : "Date selection calendar"}
                 value=${ifDefined(value)}
                 startDate=${ifDefined(startDate)}

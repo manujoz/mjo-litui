@@ -22,8 +22,9 @@ export class MjointNotificationItem extends LitElement {
         return html`
             ${this.type
                 ? html`
-                      <div class="icon" data-type=${this.type} aria-hidden="true">
+                      <div class="icon" part="notification-icon-container" data-type=${this.type} aria-hidden="true">
                           <mjo-icon
+                              exportparts="notification-icon"
                               src=${this.type === "info"
                                   ? AiFillInfoCircle
                                   : this.type === "warning"
@@ -35,12 +36,22 @@ export class MjointNotificationItem extends LitElement {
                       </div>
                   `
                 : nothing}
-            <div class="container">
-                ${this.notificationTitle ? html`<div class="title" id=${uniqueId}>${this.notificationTitle}</div>` : nothing}
-                <div class="close" @click=${this.#removeNotification} role="button" tabindex="0" aria-label="Close notification" title="Close notification">
-                    <mjo-icon src=${AiOutlineClose}></mjo-icon>
+            <div class="container" part="notification-wrapper">
+                ${this.notificationTitle ? html`<div class="title" part="notification-title" id=${uniqueId}>${this.notificationTitle}</div>` : nothing}
+                <div
+                    class="close"
+                    part="close-button"
+                    @click=${this.#removeNotification}
+                    role="button"
+                    tabindex="0"
+                    aria-label="Close notification"
+                    title="Close notification"
+                >
+                    <mjo-icon exportparts="icon: icon-close" src=${AiOutlineClose}></mjo-icon>
                 </div>
-                <div class="message" role="alert" aria-describedby=${this.notificationTitle ? uniqueId : nothing}>${this.message}</div>
+                <div class="message" part="notification-message" role="alert" aria-describedby=${this.notificationTitle ? uniqueId : nothing}>
+                    ${this.message}
+                </div>
             </div>
         `;
     }

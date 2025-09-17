@@ -8,16 +8,17 @@ import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
 import "./mjoint-message-item.js";
 
-@customElement("mjoint-message-container")
-export class MjointMessageContainer extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("mjo-message-container")
+export class MjoMessageContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @query(".container") container!: HTMLDivElement;
 
     render() {
-        return html`<div class="container" role="region" aria-label="Message notifications" aria-live="polite"></div>`;
+        return html`<div class="container" part="container" role="region" aria-label="Message notifications" aria-live="polite"></div>`;
     }
 
     async show({ message, type = "info", time, onClose }: MessageShowParams, maxMessages = 4) {
         const messageItem = document.createElement("mjoint-message-item") as MjointMessageItem;
+        messageItem.setAttribute("exportparts", "icon-container,icon,message");
         messageItem.message = message;
         messageItem.type = type;
         if (time) messageItem.time = time;
@@ -55,6 +56,6 @@ export class MjointMessageContainer extends ThemeMixin(LitElement) implements IT
 
 declare global {
     interface HTMLElementTagNameMap {
-        "mjoint-message-container": MjointMessageContainer;
+        "mjo-message-container": MjoMessageContainer;
     }
 }

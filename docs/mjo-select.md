@@ -192,129 +192,35 @@ Enable search functionality for large option lists:
 
 ```ts
 import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-select";
 import "mjo-litui/mjo-option";
 
 @customElement("example-select-searchable")
 export class ExampleSelectSearchable extends LitElement {
-    @state()
-    private countries = [
-        { value: "us", name: "United States" },
-        { value: "ca", name: "Canada" },
-        { value: "mx", name: "Mexico" },
-        { value: "br", name: "Brazil" },
-        { value: "ar", name: "Argentina" },
-        { value: "fr", name: "France" },
-        { value: "de", name: "Germany" },
-        { value: "it", name: "Italy" },
-        { value: "es", name: "Spain" },
-        { value: "gb", name: "United Kingdom" },
-        { value: "jp", name: "Japan" },
-        { value: "cn", name: "China" },
-        { value: "in", name: "India" },
-        { value: "au", name: "Australia" },
-        { value: "nz", name: "New Zealand" },
-    ];
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <!-- Basic Searchable -->
-                <div>
-                    <h4>Searchable Country Select</h4>
-                    <mjo-select label="Country" placeholder="Search and select country" searchable helperText="Type to search through options">
-                        ${this.countries.map((country) => html` <mjo-option value=${country.value}>${country.name}</mjo-option> `)}
-                    </mjo-select>
-                </div>
-
-                <!-- Large Dataset Example -->
-                <div>
-                    <h4>Large Dataset with Search</h4>
-                    <mjo-select label="Programming Language" placeholder="Search programming languages" searchable size="large">
-                        <mjo-option value="javascript">JavaScript</mjo-option>
-                        <mjo-option value="typescript">TypeScript</mjo-option>
-                        <mjo-option value="python">Python</mjo-option>
-                        <mjo-option value="java">Java</mjo-option>
-                        <mjo-option value="csharp">C#</mjo-option>
-                        <mjo-option value="cpp">C++</mjo-option>
-                        <mjo-option value="rust">Rust</mjo-option>
-                        <mjo-option value="go">Go</mjo-option>
-                        <mjo-option value="swift">Swift</mjo-option>
-                        <mjo-option value="kotlin">Kotlin</mjo-option>
-                        <mjo-option value="php">PHP</mjo-option>
-                        <mjo-option value="ruby">Ruby</mjo-option>
-                        <mjo-option value="dart">Dart</mjo-option>
-                        <mjo-option value="scala">Scala</mjo-option>
-                        <mjo-option value="clojure">Clojure</mjo-option>
-                    </mjo-select>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Clearable Select
-
-Add clear functionality to reset selections:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
-import "mjo-litui/mjo-button";
-
-@customElement("example-select-clearable")
-export class ExampleSelectClearable extends LitElement {
-    @state()
-    private selectedPriority = "medium";
-
-    @state()
-    private selectedCategory = "";
-
-    private clearPriority() {
-        this.selectedPriority = "";
-    }
-
-    private resetToDefault() {
-        this.selectedPriority = "medium";
-        this.selectedCategory = "general";
-    }
-
     render() {
         return html`
             <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <!-- Clearable Select -->
-                <mjo-select label="Priority Level" .value=${this.selectedPriority} clearabled helperText="Click the X to clear selection">
-                    <mjo-option value="low">Low Priority</mjo-option>
-                    <mjo-option value="medium">Medium Priority</mjo-option>
-                    <mjo-option value="high">High Priority</mjo-option>
-                    <mjo-option value="urgent">Urgent</mjo-option>
+                <mjo-select label="Country" placeholder="Search and select country" searchable helperText="Type to search through options">
+                    <mjo-option value="us">United States</mjo-option>
+                    <mjo-option value="ca">Canada</mjo-option>
+                    <mjo-option value="mx">Mexico</mjo-option>
+                    <mjo-option value="br">Brazil</mjo-option>
+                    <mjo-option value="fr">France</mjo-option>
+                    <mjo-option value="de">Germany</mjo-option>
+                    <mjo-option value="jp">Japan</mjo-option>
+                    <mjo-option value="au">Australia</mjo-option>
                 </mjo-select>
 
-                <!-- Another Clearable Select -->
-                <mjo-select label="Category" .value=${this.selectedCategory} clearabled searchable placeholder="Choose a category">
-                    <mjo-option value="general">General</mjo-option>
-                    <mjo-option value="support">Support</mjo-option>
-                    <mjo-option value="billing">Billing</mjo-option>
-                    <mjo-option value="technical">Technical</mjo-option>
-                    <mjo-option value="feature">Feature Request</mjo-option>
+                <mjo-select label="Programming Language" placeholder="Search programming languages" searchable size="large">
+                    <mjo-option value="javascript">JavaScript</mjo-option>
+                    <mjo-option value="typescript">TypeScript</mjo-option>
+                    <mjo-option value="python">Python</mjo-option>
+                    <mjo-option value="java">Java</mjo-option>
+                    <mjo-option value="csharp">C#</mjo-option>
+                    <mjo-option value="rust">Rust</mjo-option>
+                    <mjo-option value="go">Go</mjo-option>
                 </mjo-select>
-
-                <!-- Control Buttons -->
-                <div style="display: flex; gap: 1rem;">
-                    <mjo-button @click=${this.clearPriority} variant="ghost"> Clear Priority </mjo-button>
-                    <mjo-button @click=${this.resetToDefault}> Reset to Defaults </mjo-button>
-                </div>
-
-                <!-- Current Values Display -->
-                <div style="padding: 1rem; background: #f5f5f5; border-radius: 4px;">
-                    <p><strong>Current Values:</strong></p>
-                    <p>Priority: ${this.selectedPriority || "None selected"}</p>
-                    <p>Category: ${this.selectedCategory || "None selected"}</p>
-                </div>
             </div>
         `;
     }
@@ -327,8 +233,7 @@ Use select components within forms with validation:
 
 ```ts
 import { LitElement, html } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
-import type { MjoForm } from "mjo-litui/types";
+import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-form";
 import "mjo-litui/mjo-select";
 import "mjo-litui/mjo-option";
@@ -337,46 +242,18 @@ import "mjo-litui/mjo-button";
 
 @customElement("example-select-form")
 export class ExampleSelectForm extends LitElement {
-    @query("mjo-form")
-    private form!: MjoForm;
-
     @state()
     private formData = {
         name: "",
         email: "",
         country: "",
+        department: "",
         priority: "",
-        category: "",
-        language: "",
     };
 
-    @state()
-    private isSubmitting = false;
-
-    private async handleSubmit() {
-        if (!this.form.validate()) {
-            console.log("Form validation failed");
-            return;
-        }
-
-        this.isSubmitting = true;
-
-        try {
-            // Get form data
-            const data = this.form.getFormData();
-            console.log("Form submitted with data:", data);
-
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-
-            alert("Form submitted successfully!");
-            this.form.reset();
-        } catch (error) {
-            console.error("Submission error:", error);
-            alert("Failed to submit form");
-        } finally {
-            this.isSubmitting = false;
-        }
+    private handleSubmit(event: Event) {
+        event.preventDefault();
+        console.log("Form submitted:", this.formData);
     }
 
     private handleFormChange(event: Event) {
@@ -391,97 +268,35 @@ export class ExampleSelectForm extends LitElement {
 
     render() {
         return html`
-            <mjo-form @change=${this.handleFormChange}>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                    <!-- Personal Information -->
-                    <div>
-                        <h4>Personal Information</h4>
-                        <div style="display: flex; flex-direction: column; gap: 1rem;">
-                            <mjo-textfield label="Full Name" name="name" required rules="required|min:2" helperText="Enter your full name"> </mjo-textfield>
+            <mjo-form @submit=${this.handleSubmit} @change=${this.handleFormChange}>
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <mjo-textfield label="Full Name" name="name" required></mjo-textfield>
 
-                            <mjo-textfield label="Email" name="email" type="email" required rules="required|email" helperText="We'll use this to contact you">
-                            </mjo-textfield>
+                    <mjo-textfield label="Email" name="email" type="email" required></mjo-textfield>
 
-                            <mjo-select
-                                label="Country"
-                                name="country"
-                                required
-                                rules="required"
-                                placeholder="Select your country"
-                                searchable
-                                helperText="Choose your country of residence"
-                            >
-                                <mjo-option value="us">United States</mjo-option>
-                                <mjo-option value="ca">Canada</mjo-option>
-                                <mjo-option value="gb">United Kingdom</mjo-option>
-                                <mjo-option value="de">Germany</mjo-option>
-                                <mjo-option value="fr">France</mjo-option>
-                                <mjo-option value="es">Spain</mjo-option>
-                                <mjo-option value="it">Italy</mjo-option>
-                                <mjo-option value="au">Australia</mjo-option>
-                                <mjo-option value="jp">Japan</mjo-option>
-                                <mjo-option value="br">Brazil</mjo-option>
-                            </mjo-select>
-                        </div>
-                    </div>
+                    <mjo-select label="Country" name="country" required placeholder="Select your country" searchable>
+                        <mjo-option value="us">United States</mjo-option>
+                        <mjo-option value="ca">Canada</mjo-option>
+                        <mjo-option value="gb">United Kingdom</mjo-option>
+                        <mjo-option value="de">Germany</mjo-option>
+                        <mjo-option value="fr">France</mjo-option>
+                    </mjo-select>
 
-                    <!-- Request Details -->
-                    <div>
-                        <h4>Request Details</h4>
-                        <div style="display: flex; flex-direction: column; gap: 1rem;">
-                            <mjo-select
-                                label="Priority Level"
-                                name="priority"
-                                required
-                                rules="required"
-                                clearabled
-                                helperText="Select the urgency of your request"
-                            >
-                                <mjo-option value="low">Low - General inquiry</mjo-option>
-                                <mjo-option value="medium">Medium - Standard request</mjo-option>
-                                <mjo-option value="high">High - Important issue</mjo-option>
-                                <mjo-option value="urgent">Urgent - Critical problem</mjo-option>
-                            </mjo-select>
+                    <mjo-select label="Department" name="department" required placeholder="Choose department">
+                        <mjo-option value="engineering">Engineering</mjo-option>
+                        <mjo-option value="design">Design</mjo-option>
+                        <mjo-option value="marketing">Marketing</mjo-option>
+                        <mjo-option value="sales">Sales</mjo-option>
+                    </mjo-select>
 
-                            <mjo-select label="Category" name="category" required rules="required" searchable placeholder="Choose request category">
-                                <mjo-option value="general">General Information</mjo-option>
-                                <mjo-option value="support">Technical Support</mjo-option>
-                                <mjo-option value="billing">Billing & Payments</mjo-option>
-                                <mjo-option value="feature">Feature Request</mjo-option>
-                                <mjo-option value="bug">Bug Report</mjo-option>
-                                <mjo-option value="account">Account Management</mjo-option>
-                                <mjo-option value="integration">Integration Help</mjo-option>
-                            </mjo-select>
+                    <mjo-select label="Priority" name="priority" size="small">
+                        <mjo-option value="low">Low</mjo-option>
+                        <mjo-option value="medium">Medium</mjo-option>
+                        <mjo-option value="high">High</mjo-option>
+                    </mjo-select>
 
-                            <mjo-select label="Preferred Language" name="language" clearabled helperText="Optional - for support communications">
-                                <mjo-option value="en">English</mjo-option>
-                                <mjo-option value="es">Español</mjo-option>
-                                <mjo-option value="fr">Français</mjo-option>
-                                <mjo-option value="de">Deutsch</mjo-option>
-                                <mjo-option value="it">Italiano</mjo-option>
-                                <mjo-option value="pt">Português</mjo-option>
-                            </mjo-select>
-                        </div>
-                    </div>
+                    <mjo-button type="submit">Submit Form</mjo-button>
                 </div>
-
-                <!-- Form Actions -->
-                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
-                    <mjo-button type="button" variant="ghost" @click=${() => this.form.reset()}> Reset Form </mjo-button>
-
-                    <mjo-button @click=${this.handleSubmit} .loading=${this.isSubmitting}>
-                        ${this.isSubmitting ? "Submitting..." : "Submit Request"}
-                    </mjo-button>
-                </div>
-
-                <!-- Current Form Data Display -->
-                <details style="margin-top: 2rem;">
-                    <summary>View Current Form Data</summary>
-                    <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto;">
-${JSON.stringify(this.formData, null, 2)}
-          </pre
-                    >
-                </details>
             </mjo-form>
         `;
     }
@@ -820,29 +635,41 @@ export class ExampleOptionProperties extends LitElement {
 
 ### mjo-select Properties
 
-| Name            | Type                             | Default     | Description                                  |
-| --------------- | -------------------------------- | ----------- | -------------------------------------------- |
-| `autoFocus`     | `boolean`                        | `false`     | Automatically focus the select when mounted  |
-| `disabled`      | `boolean`                        | `false`     | Disable the select component                 |
-| `fullwidth`     | `boolean`                        | `false`     | Make the select take full width of container |
-| `name`          | `string`                         | -           | Form field name for form submission          |
-| `placeholder`   | `string`                         | -           | Placeholder text when no option is selected  |
-| `value`         | `string`                         | `""`        | Currently selected value                     |
-| `label`         | `string`                         | -           | Label text displayed above the select        |
-| `size`          | `"small" \| "medium" \| "large"` | `"medium"`  | Size variant of the select                   |
-| `color`         | `"primary" \| "secondary"`       | `"primary"` | Color scheme for focus states                |
-| `startIcon`     | `string`                         | -           | Icon displayed at the start of the select    |
-| `endIcon`       | `string`                         | -           | Icon displayed at the end of the select      |
-| `startImage`    | `string`                         | -           | Image displayed at the start of the select   |
-| `endImage`      | `string`                         | -           | Image displayed at the end of the select     |
-| `prefixText`    | `string`                         | -           | Text displayed before the input area         |
-| `suffixText`    | `string`                         | -           | Text displayed after the input area          |
-| `helperText`    | `string`                         | -           | Helper text displayed below the select       |
-| `selectOnFocus` | `boolean`                        | `false`     | Select all text when focused                 |
-| `clearabled`    | `boolean`                        | `false`     | Show a clear button to reset selection       |
-| `searchable`    | `boolean`                        | `false`     | Enable search functionality in dropdown      |
-| `dropDownTheme` | `MjoDropdownTheme`               | -           | Theme configuration for the dropdown         |
-| `theme`         | `MjoSelectTheme`                 | `{}`        | Theme configuration for the select           |
+| Name            | Type                             | Default     | Description                                     |
+| --------------- | -------------------------------- | ----------- | ----------------------------------------------- |
+| `autoFocus`     | `boolean`                        | `false`     | Automatically focus the select when mounted     |
+| `disabled`      | `boolean`                        | `false`     | Disable the select component                    |
+| `required`      | `boolean`                        | `false`     | Mark the select as required for form validation |
+| `fullwidth`     | `boolean`                        | `false`     | Make the select take full width of container    |
+| `name`          | `string`                         | -           | Form field name for form submission             |
+| `placeholder`   | `string`                         | -           | Placeholder text when no option is selected     |
+| `value`         | `string`                         | `""`        | Currently selected value                        |
+| `label`         | `string`                         | -           | Label text displayed above the select           |
+| `size`          | `"small" \| "medium" \| "large"` | `"medium"`  | Size variant of the select                      |
+| `color`         | `"primary" \| "secondary"`       | `"primary"` | Color scheme for focus states                   |
+| `startIcon`     | `string`                         | -           | Icon displayed at the start of the select       |
+| `endIcon`       | `string`                         | -           | Icon displayed at the end of the select         |
+| `startImage`    | `string`                         | -           | Image displayed at the start of the select      |
+| `endImage`      | `string`                         | -           | Image displayed at the end of the select        |
+| `prefixText`    | `string`                         | -           | Text displayed before the input area            |
+| `suffixText`    | `string`                         | -           | Text displayed after the input area             |
+| `helperText`    | `string`                         | -           | Helper text displayed below the select          |
+| `selectOnFocus` | `boolean`                        | `false`     | Select all text when focused                    |
+| `searchable`    | `boolean`                        | `false`     | Enable search functionality in dropdown         |
+| `dropDownTheme` | `MjoDropdownTheme`               | -           | Theme configuration for the dropdown            |
+| `theme`         | `MjoSelectTheme`                 | `{}`        | Theme configuration for the select              |
+
+### ARIA Properties
+
+The select component includes comprehensive ARIA support for accessibility:
+
+| Name                   | Type                                     | Default | Description                           |
+| ---------------------- | ---------------------------------------- | ------- | ------------------------------------- |
+| `ariaDescribedby`      | `string`                                 | -       | ID(s) of elements that describe input |
+| `ariaLabelledby`       | `string`                                 | -       | ID(s) of elements that label input    |
+| `ariaErrormessage`     | `string`                                 | -       | ID of error message element           |
+| `ariaAutocomplete`     | `"none" \| "inline" \| "list" \| "both"` | -       | Indicates autocomplete behavior       |
+| `ariaActivedescendant` | `string`                                 | -       | ID of active option during navigation |
 
 ### mjo-option Properties
 
@@ -863,121 +690,217 @@ export class ExampleOptionProperties extends LitElement {
 
 ### mjo-select Methods
 
-| Method                                          | Description                                    |
-| ----------------------------------------------- | ---------------------------------------------- |
-| `focus()`                                       | Focus the select input                         |
-| `isOpen()`                                      | Returns whether the dropdown is currently open |
-| `setValue(value: string, noDispatch?: boolean)` | Set the selected value programmatically        |
-| `getValue()`                                    | Get the currently selected value               |
+| Method                                          | Description                                        |
+| ----------------------------------------------- | -------------------------------------------------- |
+| `focus()`                                       | Focus the select input                             |
+| `blur()`                                        | Blur the select input                              |
+| `checkValidity(): boolean`                      | Check validity according to validation constraints |
+| `reportValidity(): boolean`                     | Report validity and display validation messages    |
+| `setCustomValidity(message: string): void`      | Set a custom validation message                    |
+| `get validationMessage(): string`               | Get the current validation message                 |
+| `openDropdown(): void`                          | Open the select dropdown                           |
+| `closeDropdown(): void`                         | Close the select dropdown                          |
+| `toggleDropdown(): void`                        | Toggle the select dropdown open/closed state       |
+| `getSelectedOption(): MjoOption \| null`        | Get the currently selected option element          |
+| `getOptions(): MjoOption[]`                     | Get all available option elements                  |
+| `filterOptions(query: string): void`            | Filter options based on a search query             |
+| `resetFilter(): void`                           | Reset the filter to show all options               |
+| `isOpen(): boolean`                             | Check if the dropdown is currently open            |
+| `setValue(value: string, noDispatch?: boolean)` | Set the selected value programmatically            |
+| `getValue(): string`                            | Get the currently selected value                   |
 
 ## Events
 
 ### mjo-select Events
 
-| Event    | Description                           |
-| -------- | ------------------------------------- |
-| `change` | Fired when the selected value changes |
-| `focus`  | Fired when the select receives focus  |
-| `blur`   | Fired when the select loses focus     |
+| Event                         | Description                                            |
+| ----------------------------- | ------------------------------------------------------ |
+| `mjo-select:change`           | Fired when the selected value changes with detail data |
+| `mjo-select:open`             | Fired when the dropdown opens                          |
+| `mjo-select:close`            | Fired when the dropdown closes                         |
+| `mjo-select:search`           | Fired when searching through options (searchable mode) |
+| `mjo-select:focus`            | Fired when the select gains focus                      |
+| `mjo-select:blur`             | Fired when the select loses focus                      |
+| `mjo-select:option-preselect` | Fired when an option is preselected via keyboard       |
+| `change`                      | Standard HTML change event                             |
+| `focus`                       | Standard HTML focus event                              |
+| `blur`                        | Standard HTML blur event                               |
+| `invalid`                     | Fired when validation fails                            |
 
-## CSS Custom Properties
+### Event Details
 
-### Select Styling
+#### mjo-select:change
 
-| Property                         | Default                                                       | Description           |
-| -------------------------------- | ------------------------------------------------------------- | --------------------- |
-| `--mjo-input-border-radius`      | `var(--mjo-radius-medium, 5px)`                               | Border radius         |
-| `--mjo-input-border-color`       | `var(--mjo-border-color, #dddddd)`                            | Border color          |
-| `--mjo-input-border-color-hover` | `#cccccc`                                                     | Border color on hover |
-| `--mjo-input-background-color`   | `var(--mjo-background-color-high, #ffffff)`                   | Background color      |
-| `--mjo-input-color`              | `var(--mjo-foreground-color, #222222)`                        | Text color            |
-| `--mjo-input-font-size`          | `1em`                                                         | Font size             |
-| `--mjo-input-padding`            | `calc(1em / 2 - 3px) calc(1em / 2 - 2px) calc(1em / 2 - 4px)` | Input padding         |
-| `--mjo-input-primary-color`      | `var(--mjo-primary-color, #1aa8ed)`                           | Primary focus color   |
-| `--mjo-input-secondary-color`    | `var(--mjo-secondary-color, #7dc717)`                         | Secondary focus color |
-
-### Option Styling
-
-| Property                                           | Default                                        | Description                     |
-| -------------------------------------------------- | ---------------------------------------------- | ------------------------------- |
-| `--mjo-select-option-padding`                      | `5px`                                          | Option padding                  |
-| `--mjo-select-option-font-size`                    | `0.8em`                                        | Option font size                |
-| `--mjo-select-option-preselected-background-color` | `var(--mjo-background-color-hover, #eeeeee)`   | Pre-selected background         |
-| `--mjo-select-option-selected-primary-color`       | `var(--mjo-primary-foreground-color, white)`   | Selected text color (primary)   |
-| `--mjo-select-option-selected-secondary-color`     | `var(--mjo-secondary-foreground-color, white)` | Selected text color (secondary) |
-
-### Theme Interfaces
-
-```ts
-interface MjoSelectTheme extends MjoInputTheme {
-    arrowColor?: string;
-    optionPadding?: string;
-    optionPreselectedBackgroundColor?: string;
-    optionPreselectedColor?: string;
-    optionSelectedPrimaryColor?: string;
-    optionSelectedSecondaryColor?: string;
-    optionFontSize?: string;
-    optionPrimaryColor?: string;
-    optionSecondaryColor?: string;
-}
-
-interface MjoInputTheme {
-    backgroundColor?: string;
-    borderColor?: string;
-    borderColorHover?: string;
-    borderStyle?: string;
-    borderStyleFocus?: string;
-    borderStyleHover?: string;
-    borderWidth?: string;
-    borderWidthFocus?: string;
-    borderWidthHover?: string;
-    boxShadow?: string;
-    color?: string;
-    fontFamily?: string;
-    fontSize?: string;
-    fontWeight?: string;
-    helperColor?: string;
-    helperFontSize?: string;
-    helperFontWeight?: string;
-    labelColor?: string;
-    labelFontSize?: string;
-    labelFontWeight?: string;
-    padding?: string;
-    paddingSmall?: string;
-    paddingLarge?: string;
-    prefixTextBackgroundColor?: string;
-    prefixTextColor?: string;
-    radius?: string;
+```typescript
+detail: {
+    element: MjoSelect;
+    value: string;
+    previousValue: string;
+    option: MjoOption | null;
+    previousOption: MjoOption | null;
 }
 ```
 
+#### mjo-select:open
+
+```typescript
+detail: {
+    element: MjoSelect;
+    value: string;
+    optionsCount: number;
+}
+```
+
+#### mjo-select:close
+
+```typescript
+detail: {
+    element: MjoSelect;
+    value: string;
+    reason: "selection" | "escape" | "blur" | "clickOutside";
+}
+```
+
+## CSS Custom Properties
+
+### Select Input Styling
+
+| Property                         | Default                                                       | Description                  |
+| -------------------------------- | ------------------------------------------------------------- | ---------------------------- |
+| `--mjo-input-border-radius`      | `var(--mjo-radius-medium, 5px)`                               | Border radius                |
+| `--mjo-input-border-style`       | `solid`                                                       | Border style                 |
+| `--mjo-input-border-width`       | `1px`                                                         | Border width                 |
+| `--mjo-input-border-color`       | `var(--mjo-border-color, #dddddd)`                            | Default border color         |
+| `--mjo-input-border-style-hover` | `solid`                                                       | Border style on hover        |
+| `--mjo-input-border-width-hover` | `1px`                                                         | Border width on hover        |
+| `--mjo-input-border-color-hover` | `#cccccc`                                                     | Border color on hover        |
+| `--mjo-input-border-style-focus` | `solid`                                                       | Border style on focus        |
+| `--mjo-input-border-width-focus` | `1px`                                                         | Border width on focus        |
+| `--mjo-input-background-color`   | `var(--mjo-background-color-card-low, #ffffff)`               | Background color             |
+| `--mjo-input-box-shadow`         | `none`                                                        | Box shadow                   |
+| `--mjo-input-color`              | `var(--mjo-foreground-color, #222222)`                        | Text color                   |
+| `--mjo-input-font-size`          | `1em`                                                         | Font size                    |
+| `--mjo-input-font-weight`        | `normal`                                                      | Font weight                  |
+| `--mjo-input-font-family`        | `inherit`                                                     | Font family                  |
+| `--mjo-input-padding`            | `calc(1em / 2 - 3px) calc(1em / 2 - 2px) calc(1em / 2 - 4px)` | Input padding                |
+| `--mjo-input-padding-small`      | `calc(1em / 2 - 4px) calc(1em / 2)`                           | Input padding for small size |
+| `--mjo-input-padding-large`      | `calc(1em / 2 - 2px) calc(1em / 2 + 3px) calc(1em / 2 - 3px)` | Input padding for large size |
+| `--mjo-input-primary-color`      | `var(--mjo-primary-color, #1aa8ed)`                           | Primary focus color          |
+| `--mjo-input-secondary-color`    | `var(--mjo-secondary-color, #7dc717)`                         | Secondary focus color        |
+
+### Prefix/Suffix Text Styling
+
+| Property                                   | Default                    | Description                  |
+| ------------------------------------------ | -------------------------- | ---------------------------- |
+| `--mjo-input-prefix-text-background-color` | `rgba(220, 220, 220, 0.5)` | Prefix text background color |
+| `--mjo-input-prefix-text-color`            | `currentColor`             | Prefix text color            |
+
+### Label Styling
+
+| Property                         | Default           | Description       |
+| -------------------------------- | ----------------- | ----------------- |
+| `--mjo-select-label-font-size`   | `calc(1em * 0.8)` | Label font size   |
+| `--mjo-select-label-font-weight` | `normal`          | Label font weight |
+| `--mjo-select-label-color`       | `currentColor`    | Label color       |
+
+### Helper Text Styling
+
+| Property                         | Default                                         | Description             |
+| -------------------------------- | ----------------------------------------------- | ----------------------- |
+| `--mjo-input-helper-font-size`   | `calc(1em * 0.8)`                               | Helper text font size   |
+| `--mjo-input-helper-font-weight` | `normal`                                        | Helper text font weight |
+| `--mjo-input-helper-color`       | `var(--mjo-foreground-color-low, currentColor)` | Helper text color       |
+
+### Option Styling
+
+| Property                                           | Default                                        | Description                      |
+| -------------------------------------------------- | ---------------------------------------------- | -------------------------------- |
+| `--mjo-select-option-padding`                      | `5px`                                          | Option padding                   |
+| `--mjo-select-option-font-size`                    | `0.8em`                                        | Option font size                 |
+| `--mjo-select-option-preselected-background-color` | `var(--mjo-background-color-hover, #eeeeee)`   | Pre-selected option background   |
+| `--mjo-select-option-preselected-color`            | `var(--mjo-foreground-color, currentColor)`    | Pre-selected option text color   |
+| `--mjo-select-option-selected-primary-color`       | `var(--mjo-primary-foreground-color, white)`   | Selected option text (primary)   |
+| `--mjo-select-option-selected-secondary-color`     | `var(--mjo-secondary-foreground-color, white)` | Selected option text (secondary) |
+
+### Search Styling (when searchable is enabled)
+
+| Property                          | Default                                                      | Description                 |
+| --------------------------------- | ------------------------------------------------------------ | --------------------------- |
+| `--mjo-dropdown-background-color` | `var(--mjo-background-color-low, white)`                     | Search container background |
+| `--mjo-dropdown-box-shadow`       | `var(--mjo-box-shadow-1, 0px 2px 3px rgba(50, 50, 50, 0.5))` | Search container shadow     |
+
+### Global Color Variables
+
+These are used as fallbacks throughout the component:
+
+| Property                          | Default   | Description           |
+| --------------------------------- | --------- | --------------------- |
+| `--mjo-color-error`               | `#d31616` | Error state color     |
+| `--mjo-primary-color`             | `#1aa8ed` | Primary theme color   |
+| `--mjo-secondary-color`           | `#7dc717` | Secondary theme color |
+| `--mjo-foreground-color`          | `#222222` | Default text color    |
+| `--mjo-background-color-card-low` | `#ffffff` | Default background    |
+| `--mjo-border-color`              | `#dddddd` | Default border color  |
+
+### CSS Parts
+
+| Part                          | Description                                         |
+| ----------------------------- | --------------------------------------------------- |
+| `container`                   | The main select input container                     |
+| `input`                       | The native input element (hidden for display)       |
+| `label-container`             | The label container (via exportparts)               |
+| `label-truncate-container`    | The label truncate container (via exportparts)      |
+| `label-truncate-wrapper`      | The label truncate wrapper (via exportparts)        |
+| `prefix-text`                 | Container for prefix text                           |
+| `suffix-text`                 | Container for suffix text                           |
+| `start-icon-container`        | Container for start icon                            |
+| `start-icon`                  | The start icon element (via exportparts)            |
+| `end-icon-container`          | Container for end icon                              |
+| `end-icon`                    | The end icon element (via exportparts)              |
+| `end-icon-option-container`   | Container for end icon from selected option         |
+| `end-option-icon`             | The end icon from selected option (via exportparts) |
+| `start-image-container`       | Container for start image                           |
+| `start-image`                 | The start image element                             |
+| `end-image-container`         | Container for end image                             |
+| `end-image`                   | The end image element                               |
+| `end-image-option-container`  | Container for end image from selected option        |
+| `end-option-image`            | The end image from selected option                  |
+| `select-dropdown-icon`        | The dropdown arrow icon                             |
+| `helper-container`            | Helper container (via exportparts)                  |
+| `helper-text-container`       | Helper text container (via exportparts)             |
+| `helper-text-typography`      | Helper text typography (via exportparts)            |
+| `helper-text-typography-tag`  | Helper text typography tag (via exportparts)        |
+| `helper-text-error-message`   | Error message element (via exportparts)             |
+| `helper-text-success-message` | Success message element (via exportparts)           |
+| `helper-text-icon`            | Helper text icon element (via exportparts)          |
+
 ## Technical Notes
 
--   **Form Integration**: Automatically integrates with `mjo-form` for validation and data collection
--   **Keyboard Navigation**: Full keyboard support with arrow keys, Enter, and Tab
--   **Search Functionality**: Built-in filtering when `searchable` is enabled
--   **Dynamic Options**: Options can be added/removed dynamically with automatic re-rendering
--   **Accessibility**: Full ARIA support with proper labeling and keyboard navigation
--   **Performance**: Uses efficient option rendering with change detection
--   **Theme Inheritance**: Options automatically inherit theme from parent select
+- **Form Integration**: Automatically integrates with `mjo-form` for validation and data collection
+- **Keyboard Navigation**: Full keyboard support with arrow keys, Enter, and Tab
+- **Search Functionality**: Built-in filtering when `searchable` is enabled
+- **Dynamic Options**: Options can be added/removed dynamically with automatic re-rendering
+- **Accessibility**: Full ARIA support with proper labeling and keyboard navigation
+- **Performance**: Uses efficient option rendering with change detection
+- **Theme Inheritance**: Options automatically inherit theme from parent select
 
 ## Accessibility
 
--   Full keyboard navigation support (Arrow keys, Enter, Escape, Tab)
--   Proper ARIA attributes for screen readers
--   Focus management and visual indicators
--   Support for assistive technologies
--   Semantic HTML structure with proper labeling
+- Full keyboard navigation support (Arrow keys, Enter, Escape, Tab)
+- Proper ARIA attributes for screen readers
+- Focus management and visual indicators
+- Support for assistive technologies
+- Semantic HTML structure with proper labeling
 
 ## Best Practices
 
--   Always provide meaningful labels for accessibility
--   Use helper text to guide users when needed
--   Enable search for lists with more than 10-15 options
--   Use icons and images to enhance option recognition
--   Implement proper validation when used in forms
--   Consider using clearable functionality for optional selections
--   Group related options logically
--   Provide default selections when appropriate
+- Always provide meaningful labels for accessibility
+- Use helper text to guide users when needed
+- Enable search for lists with more than 10-15 options
+- Use icons and images to enhance option recognition
+- Implement proper validation when used in forms
+- Consider using clearable functionality for optional selections
+- Group related options logically
+- Provide default selections when appropriate
 
 For additional theming options, see the [Theming Guide](./theming.md).

@@ -70,6 +70,7 @@ export interface MjoThemeConfig {
         mjoChip?: MjoChipTheme;
         mjoColorPicker?: MjoColorPickerTheme;
         mjoDatePicker?: MjoDatePickerTheme;
+        mjoDrawer?: MjoDrawerTheme;
         mjoDropdown?: MjoDropdownTheme;
         mjoIcon?: MjoIconTheme;
         mjoImage?: MjoImageTheme;
@@ -330,6 +331,7 @@ export interface MjoChipTheme {
 
 export interface MjoDropdownTheme {
     backgroundColor?: string;
+    foregroundColor?: string;
     borderRadius?: string;
     boxShadow?: string;
 }
@@ -475,7 +477,7 @@ export interface MjoSliderTheme {
     disabledOpacity?: string;
 }
 
-export interface MjoSelectTheme {
+export interface MjoSelectTheme extends MjoInputTheme {
     arrowColor?: string;
     optionPadding?: string;
     optionPreselectedBackgroundColor?: string;
@@ -611,7 +613,6 @@ export interface MjoNotificationTheme {
     closeHoverBackgroundColor?: string;
     messageFontSize?: string;
     messageColor?: string;
-    animationDuration?: string;
     focusOutline?: string;
     spaceVertical?: string;
     spaceHorizontal?: string;
@@ -631,7 +632,11 @@ export interface MjoCardTheme {
 }
 
 export interface MjoModalTheme {
+    backdropBackgroundColor?: string;
+    backdropFilter?: string;
     iconCloseSize?: string;
+    iconCloseOffset?: string;
+    iconCloseBackgroundColorHover?: string;
     titleBorderColor?: string;
     backgroundColor?: string;
     borderRadius?: string;
@@ -775,6 +780,23 @@ export interface MjoProgressTheme {
     circleDash?: string;
     circleDashSmall?: string;
     circleDashLarge?: string;
+}
+
+export interface MjoDrawerTheme {
+    width?: string;
+    height?: string;
+    backgroundColor?: string;
+    boxShadow?: string;
+    titleBorderColor?: string;
+    backdropBackgroundColor?: string;
+    backdropFilter?: string;
+    closeIconColor?: string;
+    closeIconBorderRadius?: string;
+    focusOutlineColor?: string;
+    focusOutlineWidth?: string;
+    focusOutlineOffset?: string;
+    borderWidth?: string;
+    borderColor?: string;
 }
 
 export interface MjoBreadcrumbsTheme {

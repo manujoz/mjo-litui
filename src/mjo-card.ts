@@ -17,6 +17,7 @@ import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
  * @slot - Content to be displayed inside the card container
  * @csspart container - The main card container element
  * @csspart content - The internal content wrapper element
+ * @csspart border - The decorative border element for skew and modern variants
  */
 @customElement("mjo-card")
 export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -27,7 +28,7 @@ export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
 
     render() {
         return html`
-            ${this.applyThemeSsr()}${this.variant !== "default" ? html`<div class="border" data-variant=${this.variant}></div>` : nothing}
+            ${this.applyThemeSsr()}${this.variant !== "default" ? html`<div class="border" part="border" data-variant=${this.variant}></div>` : nothing}
             <div
                 class="container"
                 part="container"

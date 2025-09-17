@@ -870,6 +870,7 @@ The textfield component exposes several CSS parts for advanced styling:
 | `clear-icon`                  | The clear icon element (via exportparts)           |
 | `password-button`             | The password toggle button element                 |
 | `password-icon`               | The password toggle icon element (via exportparts) |
+| `helper-container`            | Helper container (via exportparts)                 |
 | `helper-text-container`       | Helper text container (via exportparts)            |
 | `helper-text-typography`      | Helper text typography (via exportparts)           |
 | `helper-text-error-message`   | Error message element (via exportparts)            |
@@ -966,67 +967,67 @@ The textfield component follows WCAG accessibility guidelines and includes compr
 
 ### ARIA Support
 
--   **aria-labelledby**: Automatically connects to associated labels
--   **aria-describedby**: Links to helper text, error messages, and character counter
--   **aria-invalid**: Set to `true` when in error state for screen readers
--   **aria-required**: Indicates required fields
--   **role**: Proper semantic roles for all interactive elements
+- **aria-labelledby**: Automatically connects to associated labels
+- **aria-describedby**: Links to helper text, error messages, and character counter
+- **aria-invalid**: Set to `true` when in error state for screen readers
+- **aria-required**: Indicates required fields
+- **role**: Proper semantic roles for all interactive elements
 
 ### Keyboard Navigation
 
--   **Tab**: Navigate to/from the textfield
--   **Enter**: Submit parent form (if applicable)
--   **Escape**: Clear field when clearable is enabled
--   **Tab/Shift+Tab**: Navigate between clear button, password toggle, etc.
+- **Tab**: Navigate to/from the textfield
+- **Enter**: Submit parent form (if applicable)
+- **Escape**: Clear field when clearable is enabled
+- **Tab/Shift+Tab**: Navigate between clear button, password toggle, etc.
 
 ### Screen Reader Support
 
--   Labels are properly associated with inputs
--   Error messages are announced when validation fails
--   Success messages provide positive feedback
--   Helper text provides additional context
--   Character counter updates are announced
--   Password visibility changes are announced
+- Labels are properly associated with inputs
+- Error messages are announced when validation fails
+- Success messages provide positive feedback
+- Helper text provides additional context
+- Character counter updates are announced
+- Password visibility changes are announced
 
 ### Interactive Elements
 
--   Clear button has proper `aria-label` and keyboard support
--   Password toggle button includes descriptive `aria-label`
--   All interactive icons are converted to proper `<button>` elements
--   Focus management maintains logical tab order
+- Clear button has proper `aria-label` and keyboard support
+- Password toggle button includes descriptive `aria-label`
+- All interactive icons are converted to proper `<button>` elements
+- Focus management maintains logical tab order
 
 ### Error Handling
 
--   Error states use `role="alert"` for immediate announcement
--   Error messages are connected via `aria-describedby`
--   Visual error indicators are supplemented with screen reader text
+- Error states use `role="alert"` for immediate announcement
+- Error messages are connected via `aria-describedby`
+- Visual error indicators are supplemented with screen reader text
 
 ## Browser Compatibility
 
--   **Input Types**: Full support for all specified input types
--   **Auto-complete**: Supported in all modern browsers
--   **Form Integration**: Universal form API support
--   **CSS Custom Properties**: Supported in all modern browsers
+- **Input Types**: Full support for all specified input types
+- **Auto-complete**: Supported in all modern browsers
+- **Form Integration**: Universal form API support
+- **CSS Custom Properties**: Supported in all modern browsers
 
 ## Notes
 
--   Password fields automatically include visibility toggle functionality
--   Character counter updates in real-time during input
--   Clear button appears only when there's content to clear
--   Icons and images can be combined with prefix/suffix text
--   Enter key in textfield submits the parent form automatically
--   Component inherits styling from the input theme system
--   Form validation integrates seamlessly with `mjo-form`
--   **Enhanced Accessibility**: Full ARIA support with proper labelledby and describedby associations
--   **Shadow DOM Compatible**: All ID relationships work properly within shadow boundaries
--   **Improved Events**: All events include comprehensive detail objects for better integration
--   **Interactive Icons**: Icons are converted to proper semantic buttons with accessibility labels
--   **Screen Reader Support**: Error states, success messages, and counter updates are announced
--   **Keyboard Navigation**: Full keyboard support including Tab, Enter, and Escape keys
+- Password fields automatically include visibility toggle functionality
+- Character counter updates in real-time during input
+- Clear button appears only when there's content to clear
+- Icons and images can be combined with prefix/suffix text
+- Enter key in textfield submits the parent form automatically
+- Component inherits styling from the input theme system
+- Form validation integrates seamlessly with `mjo-form`
+- **Enhanced Accessibility**: Full ARIA support with proper labelledby and describedby associations
+- **Shadow DOM Compatible**: All ID relationships work properly within shadow boundaries
+- **Improved Events**: All events include comprehensive detail objects for better integration
+- **Interactive Icons**: Icons are converted to proper semantic buttons with accessibility labels
+- **Screen Reader Support**: Error states, success messages, and counter updates are announced
+- **Keyboard Navigation**: Full keyboard support including Tab, Enter, and Escape keys
 
 ## Related Components
 
--   [mjo-textarea](./mjo-textarea.md) - For multi-line text input
--   [mjo-form](./mjo-form.md) - For form integration and validation
--   [mjo-icon](./mjo-icon.md) - For textfield icons
--   [mjo-theme](./mjo-theme.md) - For theme configuration
+- [mjo-textarea](./mjo-textarea.md) - For multi-line text input
+- [mjo-form](./mjo-form.md) - For form integration and validation
+- [mjo-icon](./mjo-icon.md) - For textfield icons
+- [mjo-theme](./mjo-theme.md) - For theme configuration

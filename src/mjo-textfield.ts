@@ -58,8 +58,10 @@ import "./mjo-icon.js";
  * @csspart clear-icon - The clear icon element (via exportparts)
  * @csspart password-button - The password toggle button element
  * @csspart password-icon - The password toggle icon element (via exportparts)
+ * @csspart helper-container - Helper container (via exportparts)
  * @csspart helper-text-container - Helper text container (via exportparts)
  * @csspart helper-text-typography - Helper text typography (via exportparts)
+ * @csspart helper-text-typography-tag - Helper text typography tag (via exportparts)
  * @csspart helper-text-error-message - Error message element (via exportparts)
  * @csspart helper-text-success-message - Success message element (via exportparts)
  * @csspart helper-text-icon - Helper text icon element (via exportparts)
@@ -182,12 +184,18 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                       </button>`
                     : nothing}
                 ${this.endIcon && !this.clearabled && this.type !== "password"
-                    ? html`<div class="icon endIcon" part="end-icon-container" aria-hidden="true">
-                          <mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>
-                      </div>`
+                    ? html`
+                          <div class="icon endIcon" part="end-icon-container" aria-hidden="true">
+                              <mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>
+                          </div>
+                      `
                     : nothing}
                 ${this.endImage && !this.endIcon
-                    ? html`<div class="image endImage" part="end-image-container"><img src=${this.endImage} part="end-image" alt="Input image" /></div>`
+                    ? html`
+                          <div class="image endImage" part="end-image-container">
+                              <img src=${this.endImage} part="end-image" alt="Input image" />
+                          </div>
+                      `
                     : nothing}
                 ${this.isPassword
                     ? this.type === "password"
@@ -214,13 +222,14 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                     : nothing}
                 ${this.suffixText ? html`<div class="prefixText" part="suffix-text">${this.suffixText}</div>` : nothing}
             </div>
-            <div class="helper" ?data-disabled=${this.disabled}>
+            <div class="helper" part="helper-container" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
                     ? html`<mjoint-input-helper-text
                           id=${ifDefined(helperTextId)}
                           exportparts="
                             container: helper-text-container,
-                            helper-text: helper-text-typography,
+                            typography: helper-text-typography,
+                            helper-text: helper-text-typography-tag,
                             error-message: helper-text-error-message,
                             success-message: helper-text-success-message,
                             icon: helper-text-icon
