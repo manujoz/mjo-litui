@@ -1,9 +1,9 @@
 import { SupportedLocale } from "./types/locales.js";
 import {
-    CalendarDateClickEvent,
-    CalendarDateHoverEvent,
     CalendarDateSelectedEvent,
-    CalendarHeaderSide,
+    CalendarDayClickEvent,
+    CalendarDayHoverEvent,
+    CalendarDayLeaveEvent,
     CalendarMonthPickerEvent,
     CalendarMonthSelectedEvent,
     CalendarNavigateEvent,
@@ -13,12 +13,13 @@ import {
     GoToDateOptions,
     GoToMonthOptions,
     GoToYearOptions,
+    MjoCalendarEventMarker,
+    MjoCalendarHeaderSide,
 } from "./types/mjo-calendar.js";
 
-import { LitElement, css, html, nothing } from "lit";
+import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-
 import { locales } from "./locales/locales.js";
 import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
@@ -38,6 +39,9 @@ const AUTO_DUAL_THRESHOLD = 720; // px
  *
  * @fires mjo-calendar:date-selected - Fired when a date is selected in single mode
  * @fires mjo-calendar:range-selected - Fired when a date range is selected in range mode
+ * @fires mjo-calendar:day-click - Fired when a day is clicked
+ * @fires mjo-calendar:day-hover - Fired when a day is hovered
+ * @fires mjo-calendar:day-leave - Fired when mouse leaves a day
  * @fires change - Standard change event for form compatibility
  *
  * @cssprop --mjo-calendar-font-family - Calendar font family
@@ -53,6 +57,13 @@ const AUTO_DUAL_THRESHOLD = 720; // px
  * @cssprop --mjo-calendar-focus-outline - Focused element outline color
  * @cssprop --mjo-calendar-today-background - Today's date background
  * @cssprop --mjo-calendar-today-color - Today's date text color
+ * @cssprop --mjo-calendar-event-offset - Event indicator offset from bottom-right corner
+ * @cssprop --mjo-calendar-event-font-size - Event indicator font size
+ * @cssprop --mjo-calendar-event-font-weight - Event indicator font weight
+ * @cssprop --mjo-calendar-event-background-color - Event indicator background color
+ * @cssprop --mjo-calendar-event-foreground-color - Event indicator foreground color
+ * @cssprop --mjo-calendar-event-single-size - Single event indicator size
+ * @cssprop --mjo-calendar-event-multiple-size - Multiple events indicator size
  * @cssprop --mjo-calendar-selected-background - Selected date background
  * @cssprop --mjo-calendar-selected-color - Selected date text color
  * @cssprop --mjo-calendar-range-endpoint-background - Range start/end background
@@ -84,6 +95,9 @@ const AUTO_DUAL_THRESHOLD = 720; // px
  * @csspart day - Individual day cell
  * @csspart day-selected - Selected day cell (applied with day part)
  * @csspart day-today - Today's date cell (applied with day part)
+ * @csspart event-indicator - Event indicator container
+ * @csspart event-indicator-single - Single event indicator (applied with event-indicator part)
+ * @csspart event-indicator-multiple - Multiple events indicator (applied with event-indicator part)
  * @csspart month-picker-container - Month picker overlay container
  * @csspart month-picker-grid - Month picker grid layout
  * @csspart month-picker-button - Individual month selection button
@@ -111,14 +125,9 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @property({ type: Boolean }) showToday = true;
     @property({ type: String }) firstDayOfWeek: "sunday" | "monday" = "monday";
     @property({ type: String }) rangeCalendars: "1" | "2" | "auto" = "auto";
-
-    // Enhanced functionality properties
-    // TODO: Implement event markers
-    @property({ type: Array }) eventMarkers?: { date: string; color?: string; tooltip?: string }[];
+    @property({ type: Array }) eventMarkers?: MjoCalendarEventMarker[];
     @property({ type: Boolean }) enableKeyboardNavigation = true;
     @property({ type: Boolean }) announceSelections = true;
-
-    // Accessibility properties
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledby: string | null = null;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby: string | null = null;
     @property({ type: String, attribute: "aria-live" }) ariaLive: "polite" | "assertive" | "off" = "polite";
@@ -132,6 +141,9 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @state() private displayedMonths: { month: number; year: number }[] = [];
     @state() private focusedDate?: Date;
     @state() private announcementText = "";
+
+    // Events map for calendar markers
+    @state() private eventsMap = new Map<string, MjoCalendarEventMarker[]>();
 
     #debounceTimer?: number;
 
@@ -240,7 +252,17 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     @year-picker=${this.#handleYearPicker}
                 ></mjoint-calendar-header>
                 <mjoint-calendar-grid
-                    exportparts="calendar-grid,week-days-container,week-day,days-container,day,day-selected,day-today"
+                    exportparts="
+                        calendar-grid,
+                        week-days-container,
+                        week-day,
+                        days-container,
+                        day,
+                        day-selected,
+                        day-today,
+                        event-indicator,
+                        event-indicator-single,
+                        event-indicator-multiple"
                     month=${month}
                     year=${year}
                     .weekDays=${this.#weekDays}
@@ -257,10 +279,11 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     .selectedEndDate=${this.selectedEndDate}
                     .hoverDate=${this.hoverDate}
                     .focusedDate=${this.focusedDate}
+                    .eventsMap=${this.eventsMap}
                     side=${side}
-                    @date-click=${this.#handleDateClick}
-                    @date-hover=${this.#handleDateHover}
-                    @date-leave=${this.#handleDateLeave}
+                    @mjo-calendar:day-click=${this.#handleDayClick}
+                    @mjo-calendar:day-hover=${this.#handleDayHover}
+                    @mjo-calendar:day-leave=${this.#handleDayLeave}
                 ></mjoint-calendar-grid>
                 ${this.picker.open && this.picker.type === "month" && isPickerSide
                     ? html`
@@ -322,6 +345,10 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         if (changedProperties.has("value") || changedProperties.has("startDate") || changedProperties.has("endDate") || changedProperties.has("mode")) {
             this.#initializeDates();
             this.#syncDisplayedMonthsFromState();
+        }
+
+        if (changedProperties.has("eventMarkers")) {
+            this.#updateEventsMap();
         }
     }
 
@@ -745,12 +772,12 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.#openPicker("year", side);
     }
 
-    #handleDateClick(event: CalendarDateClickEvent) {
+    #handleDayClick(event: CalendarDayClickEvent) {
         const { date } = event.detail;
         this.#selectDate(date);
     }
 
-    #handleDateHover(event: CalendarDateHoverEvent) {
+    #handleDayHover(event: CalendarDayHoverEvent) {
         const { date } = event.detail;
 
         if (this.mode === "range" && this.selectedStartDate && !this.selectedEndDate) {
@@ -758,7 +785,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }
     }
 
-    #handleDateLeave() {
+    #handleDayLeave() {
         this.hoverDate = undefined;
     }
 
@@ -870,7 +897,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }
     }
 
-    #setYear(year: number, side: CalendarHeaderSide) {
+    #setYear(year: number, side: MjoCalendarHeaderSide) {
         if (this.displayedMonths.length === 0) this.#syncDisplayedMonthsFromState();
 
         // Defensive check - ensure we have at least one displayedMonth
@@ -1034,7 +1061,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
      * Determines the automatic side to use for navigation when no side is specified.
      * Returns the appropriate side based on the current mode and rangeCalendars setting.
      */
-    #getAutomaticSide(): CalendarHeaderSide {
+    #getAutomaticSide(): MjoCalendarHeaderSide {
         if (this.mode === "single") {
             return "single";
         }
@@ -1049,7 +1076,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     /** Validate side parameter and return it if valid, null if invalid */
-    #validateSide(side: string | undefined): CalendarHeaderSide | null {
+    #validateSide(side: string | undefined): MjoCalendarHeaderSide | null {
         if (side === "single" || side === "left" || side === "right") {
             return side;
         }
@@ -1060,7 +1087,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
      * Sets both month and year simultaneously to avoid multiple re-renders.
      * This is more efficient than calling setMonth and setYear separately.
      */
-    #setMonthAndYear(month: number, year: number, side: CalendarHeaderSide) {
+    #setMonthAndYear(month: number, year: number, side: MjoCalendarHeaderSide) {
         if (this.displayedMonths.length === 0) this.#syncDisplayedMonthsFromState();
 
         if (side === "single") {
@@ -1080,6 +1107,21 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             const leftDate = new Date(year, month - 1, 1);
             this.displayedMonths = [{ month: leftDate.getMonth(), year: leftDate.getFullYear() }, newRight];
         }
+    }
+
+    /**
+     * Update the events map when eventMarkers property changes
+     */
+    #updateEventsMap() {
+        const eventsMap = new Map<string, MjoCalendarEventMarker[]>();
+
+        this.eventMarkers?.forEach((marker) => {
+            const existing = eventsMap.get(marker.date) || [];
+            existing.push(marker);
+            eventsMap.set(marker.date, existing);
+        });
+
+        this.eventsMap = eventsMap;
     }
 
     /** Add delta months to a reference month/year. */
@@ -1185,5 +1227,8 @@ declare global {
     interface HTMLElementEventMap {
         "mjo-calendar:date-selected": CalendarDateSelectedEvent;
         "mjo-calendar:range-selected": CalendarRangeSelectedEvent;
+        "mjo-calendar:day-click": CalendarDayClickEvent;
+        "mjo-calendar:day-hover": CalendarDayHoverEvent;
+        "mjo-calendar:day-leave": CalendarDayLeaveEvent;
     }
 }

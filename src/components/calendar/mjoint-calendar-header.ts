@@ -1,4 +1,4 @@
-import { CalendarHeaderSide } from "../../types/mjo-calendar.js";
+import { MjoCalendarHeaderSide } from "../../types/mjo-calendar.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -16,7 +16,7 @@ import "../../mjo-typography.js";
 export class MjointCalendarHeader extends LitElement {
     @property({ type: Number }) month!: number;
     @property({ type: Number }) year!: number;
-    @property({ type: String }) side: CalendarHeaderSide = "single";
+    @property({ type: String }) side: MjoCalendarHeaderSide = "single";
     @property({ type: Array }) monthNames!: string[];
     @property({ type: Boolean }) disabled = false;
     @property({ type: Boolean }) monthPickerOpen = false;

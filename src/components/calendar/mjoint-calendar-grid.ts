@@ -1,4 +1,4 @@
-import { CalendarDayClickEvent, CalendarDayHoverEvent } from "../../types/mjo-calendar.js";
+import { MjoCalendarEventMarker } from "../../types/mjo-calendar.js";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -32,6 +32,9 @@ export class MjointCalendarGrid extends LitElement {
     @property({ type: Object }) selectedEndDate?: Date;
     @property({ type: Object }) hoverDate?: Date;
     @property({ type: Object }) focusedDate?: Date;
+
+    // Events map for event markers
+    @property({ type: Object }) eventsMap = new Map<string, MjoCalendarEventMarker[]>();
 
     render() {
         const firstDay = new Date(this.year, this.month, 1);
@@ -68,11 +71,12 @@ export class MjointCalendarGrid extends LitElement {
             const isRangeEnd = this.mode === "range" && this.#isRangeEnd(date);
             const isDisabled = CalendarUtils.isDateDisabled(date, this.disabled, this.minDate, this.maxDate, this.disabledDates);
             const isHovered = this.mode === "range" && this.#isHoveredInRange(date);
+            const dayEvents = this.#getEventsForDate(date);
 
             days.push(html`
                 <mjoint-calendar-day
                     day=${day}
-                    exportparts="day,day-selected,day-today"
+                    exportparts="day,day-selected,day-today,event-indicator,event-indicator-single,event-indicator-multiple"
                     month=${this.month}
                     year=${this.year}
                     ?isToday=${isToday}
@@ -85,9 +89,7 @@ export class MjointCalendarGrid extends LitElement {
                     ?isFocused=${this.#isFocusedDate(date)}
                     ?showToday=${this.showToday}
                     size=${this.size}
-                    @day-click=${this.#handleDayClick}
-                    @day-hover=${this.#handleDayHover}
-                    @day-leave=${this.#handleDayLeave}
+                    .dayEvents=${dayEvents}
                 ></mjoint-calendar-day>
             `);
         }
@@ -112,41 +114,6 @@ export class MjointCalendarGrid extends LitElement {
 
     get #gridLabel() {
         return `Calendar grid for ${this.year}-${String(this.month + 1).padStart(2, "0")}`;
-    }
-
-    #handleDayClick(event: CalendarDayClickEvent) {
-        const day = event.detail.day;
-        const date = new Date(this.year, this.month, day);
-
-        this.dispatchEvent(
-            new CustomEvent("date-click", {
-                detail: { date, formattedDate: CalendarUtils.formatDate(date) },
-                bubbles: true,
-                composed: true,
-            }),
-        );
-    }
-
-    #handleDayHover(event: CalendarDayHoverEvent) {
-        const day = event.detail.day;
-        const date = new Date(this.year, this.month, day);
-
-        this.dispatchEvent(
-            new CustomEvent("date-hover", {
-                detail: { date },
-                bubbles: true,
-                composed: true,
-            }),
-        );
-    }
-
-    #handleDayLeave() {
-        this.dispatchEvent(
-            new CustomEvent("date-leave", {
-                bubbles: true,
-                composed: true,
-            }),
-        );
     }
 
     #isSelectedDate(date: Date): boolean {
@@ -192,9 +159,18 @@ export class MjointCalendarGrid extends LitElement {
         return CalendarUtils.isSameDay(date, this.focusedDate);
     }
 
+    /**
+     * Get all events for a specific date
+     */
+    #getEventsForDate(date: Date): MjoCalendarEventMarker[] {
+        const dateStr = CalendarUtils.formatDate(date);
+        return this.eventsMap.get(dateStr) || [];
+    }
+
     static styles = css`
         .calendar-grid {
             width: 100%;
+            user-select: none;
         }
 
         .week-header,

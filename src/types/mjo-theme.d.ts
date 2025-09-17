@@ -691,6 +691,13 @@ export interface MjoCalendarTheme {
     navButtonBorder?: string;
     navButtonColor?: string;
     selectorButtonHighlightColor?: string;
+    eventOffset?: string;
+    eventBackgroundColor?: string;
+    eventForegroundColor?: string;
+    eventSingleSize?: string;
+    eventMultipleSize?: string;
+    eventFontSize?: string;
+    eventFontWeight?: string;
 }
 
 export interface MjoMenuButtonTheme {

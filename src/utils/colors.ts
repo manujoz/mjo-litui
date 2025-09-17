@@ -5,7 +5,7 @@
  * supporting various color formats including HEX, RGB, RGBA, HSL, HSLA, and HWB.
  */
 
-export type ColorFormat = "hex" | "hexalpha" | "rgb" | "rgba" | "hsl" | "hsla" | "hwb" | "hwba" | "oklch" | "lab" | "lch" | "oklab" | "color";
+export type ColorFormat = "hex" | "hexalpha" | "rgb" | "rgba" | "hsl" | "hsla" | "hwb" | "oklch" | "lab" | "lch" | "oklab" | "color";
 
 export interface RGBColor {
     r: number;
@@ -43,7 +43,7 @@ export interface HWBAColor {
     h: number;
     w: number;
     b: number;
-    a: number;
+    a?: number;
 }
 
 export interface OKLCHColor {
@@ -600,37 +600,10 @@ function parseHslString(hslString: string): HSLColor & { a?: number } {
  * @param hwbString - HWB string (e.g., "hwb(0 0% 0%)")
  * @returns HWB color object
  */
-function parseHwbString(hwbString: string): HWBColor {
+function parseHwbString(hwbString: string): HWBAColor {
     const match = hwbString.match(/hwb\(([^)]+)\)/);
     if (!match) {
         throw new Error(`Invalid HWB string: ${hwbString}`);
-    }
-
-    const values = match[1].split(/\s+/).map((v, i) => {
-        if (i === 0) return parseFloat(v); // Hue
-        return parseFloat(v.replace("%", "")); // Whiteness, Blackness
-    });
-
-    if (values.length !== 3) {
-        throw new Error(`Invalid HWB string: ${hwbString}`);
-    }
-
-    return {
-        h: values[0],
-        w: values[1],
-        b: values[2],
-    };
-}
-
-/**
- * Parse HWBA string to HWBA values
- * @param hwbaString - HWBA string (e.g., "hwba(0, 0%, 0%, 0.5)" or "hwba(0 0% 0% / 0.5)")
- * @returns HWBA color object
- */
-function parseHwbaString(hwbaString: string): HWBAColor {
-    const match = hwbaString.match(/hwba\(([^)]+)\)/);
-    if (!match) {
-        throw new Error(`Invalid HWBA string: ${hwbaString}`);
     }
 
     const content = match[1].trim();
@@ -648,7 +621,7 @@ function parseHwbaString(hwbaString: string): HWBAColor {
         });
 
         if (values.length !== 3) {
-            throw new Error(`Invalid HWBA string: ${hwbaString}`);
+            throw new Error(`Invalid HWB string: ${hwbString}`);
         }
 
         h = values[0];
@@ -657,21 +630,21 @@ function parseHwbaString(hwbaString: string): HWBAColor {
         a = parseFloat(alphaPart);
     } else {
         // Handle comma-separated format: "hwba(h, w%, b%, a)"
-        const values = content.split(",").map((v) => v.trim());
+        const values = content.includes(",") ? content.split(",").map((v) => v.trim()) : content.split(" ").map((v) => v.trim());
 
-        if (values.length !== 4) {
-            throw new Error(`Invalid HWBA string: ${hwbaString}`);
+        if (values.length < 3) {
+            throw new Error(`Invalid HWB string: ${hwbString}`);
         }
 
         h = parseFloat(values[0]);
         w = parseFloat(values[1].replace("%", ""));
         b = parseFloat(values[2].replace("%", ""));
-        a = parseFloat(values[3]);
+        a = values[3] ? parseFloat(values[3]) : 1;
     }
 
     // Validate ranges
     if (h < 0 || h > 360 || w < 0 || w > 100 || b < 0 || b > 100 || a < 0 || a > 1) {
-        throw new Error(`Invalid HWBA string: ${hwbaString}`);
+        throw new Error(`Invalid HWBA string: ${hwbString}`);
     }
 
     return { h, w, b, a };
@@ -688,16 +661,26 @@ function parseOklchString(oklchString: string): OKLCHColor {
         throw new Error(`Invalid OKLCH string: ${oklchString}`);
     }
 
-    const values = match[1].split(/\s+/).map((v) => parseFloat(v));
+    const values = match[1].split(/\s+/);
 
     if (values.length !== 3) {
         throw new Error(`Invalid OKLCH string: ${oklchString}`);
     }
 
+    // Parse lightness - handle percentage format
+    let l = parseFloat(values[0]);
+    if (values[0].includes("%")) {
+        l = l / 100;
+    }
+
+    // Parse chroma and hue - no percentage handling needed
+    const c = parseFloat(values[1]);
+    const h = parseFloat(values[2]);
+
     return {
-        l: values[0],
-        c: values[1],
-        h: values[2],
+        l: l,
+        c: c,
+        h: h,
     };
 }
 
@@ -736,16 +719,27 @@ function parseLchString(lchString: string): LCHColor {
         throw new Error(`Invalid LCH string: ${lchString}`);
     }
 
-    const values = match[1].split(/\s+/).map((v) => parseFloat(v));
+    const values = match[1].split(/\s+/);
 
     if (values.length !== 3) {
         throw new Error(`Invalid LCH string: ${lchString}`);
     }
 
+    // Parse lightness - handle percentage format
+    let l = parseFloat(values[0]);
+    if (values[0].includes("%")) {
+        // Keep as is for LCH since lightness can be 0-100
+        l = parseFloat(values[0].replace("%", ""));
+    }
+
+    // Parse chroma and hue
+    const c = parseFloat(values[1]);
+    const h = parseFloat(values[2]);
+
     return {
-        l: values[0],
-        c: values[1],
-        h: values[2],
+        l: l,
+        c: c,
+        h: h,
     };
 }
 
@@ -883,12 +877,6 @@ export function toHex(color: string, sourceFormat?: ColorFormat): string {
             const rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
             return rgbToHex(rgb.r, rgb.g, rgb.b);
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
-            const rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            return rgbToHex(rgb.r, rgb.g, rgb.b);
-        }
         case "oklch": {
             const oklch = parseOklchString(color);
             const oklab = oklchToOklab(oklch.l, oklch.c, oklch.h);
@@ -966,13 +954,6 @@ export function toHexAlpha(color: string, alpha?: number, sourceFormat?: ColorFo
             rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
             break;
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
-            rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            if (alpha === undefined) finalAlpha = hwba.a;
-            break;
-        }
         case "oklch": {
             const oklch = parseOklchString(color);
             const oklab = oklchToOklab(oklch.l, oklch.c, oklch.h);
@@ -1045,12 +1026,6 @@ export function toRgb(color: string, sourceFormat?: ColorFormat): string {
             const rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
             return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
-            const rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-        }
         case "oklch": {
             const oklch = parseOklchString(color);
             const oklab = oklchToOklab(oklch.l, oklch.c, oklch.h);
@@ -1116,12 +1091,6 @@ export function toRgba(color: string, alpha?: number, sourceFormat?: ColorFormat
             if (alpha === undefined && hsla.a !== undefined) finalAlpha = hsla.a;
             break;
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            rgb = hwbToRgb(hwba.h, hwba.w, hwba.b);
-            if (alpha === undefined) finalAlpha = hwba.a;
-            break;
-        }
         case "color": {
             const colorRgb = parseColorString(color);
             rgb = colorRgb;
@@ -1172,12 +1141,6 @@ export function toHsl(color: string, sourceFormat?: ColorFormat): string {
         }
         case "hwb": {
             const hwb = parseHwbString(color);
-            rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            break;
-        }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
             rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
             break;
         }
@@ -1249,13 +1212,6 @@ export function toHsla(color: string, alpha?: number, sourceFormat?: ColorFormat
             if (alpha === undefined) finalAlpha = rgba.a;
             break;
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const rgb = hwbToRgb(hwba.h, hwba.w, hwba.b);
-            hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-            if (alpha === undefined) finalAlpha = hwba.a;
-            break;
-        }
         case "color": {
             const colorRgb = parseColorString(color);
             hsl = rgbToHsl(colorRgb.r, colorRgb.g, colorRgb.b);
@@ -1275,87 +1231,17 @@ export function toHsla(color: string, alpha?: number, sourceFormat?: ColorFormat
 /**
  * Convert any supported color format to HWB
  * @param color - Color string in any supported format
+ * @param alpha - Alpha value (0-1), optional. If not provided, will preserve intrinsic alpha from source color, or default to undefined (no alpha)
  * @param sourceFormat - Source color format (optional, will auto-detect if not provided)
  * @returns HWB color string
  */
-export function toHwb(color: string, sourceFormat?: ColorFormat): string {
+export function toHwb(color: string, alpha?: number, sourceFormat?: ColorFormat): string {
     if (!sourceFormat) {
         sourceFormat = detectColorFormat(color);
     }
 
     let rgb: RGBColor;
-
-    switch (sourceFormat) {
-        case "hex":
-            rgb = parseHexToRgb(color);
-            break;
-        case "hexalpha":
-            rgb = parseHexAlphaToRgba(color);
-            break;
-        case "rgb":
-        case "rgba":
-            rgb = parseRgbString(color);
-            break;
-        case "hsl":
-        case "hsla": {
-            const hsl = parseHslString(color);
-            rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
-            break;
-        }
-        case "hwb":
-            return color;
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            return `hwb(${Math.round(hwba.h)} ${Math.round(hwba.w)}% ${Math.round(hwba.b)}%)`;
-        }
-        case "oklch": {
-            const oklch = parseOklchString(color);
-            const oklab = oklchToOklab(oklch.l, oklch.c, oklch.h);
-            rgb = oklabToRgb(oklab.l, oklab.a, oklab.b);
-            break;
-        }
-        case "lab": {
-            const lab = parseLabString(color);
-            rgb = labToRgb(lab.l, lab.a, lab.b);
-            break;
-        }
-        case "lch": {
-            const lch = parseLchString(color);
-            const lab = lchToLab(lch.l, lch.c, lch.h);
-            rgb = labToRgb(lab.l, lab.a, lab.b);
-            break;
-        }
-        case "oklab": {
-            const oklab = parseOklabString(color);
-            rgb = oklabToRgb(oklab.l, oklab.a, oklab.b);
-            break;
-        }
-        case "color": {
-            rgb = parseColorString(color);
-            break;
-        }
-        default:
-            throw new Error(`Unsupported color format: ${sourceFormat}`);
-    }
-
-    const hwb = rgbToHwb(rgb.r, rgb.g, rgb.b);
-    return `hwb(${Math.round(hwb.h)} ${Math.round(hwb.w)}% ${Math.round(hwb.b)}%)`;
-}
-
-/**
- * Convert any supported color format to HWBA (HWB with alpha)
- * @param color - Color string in any supported format
- * @param alpha - Alpha value (0-1), optional. If not provided, will preserve intrinsic alpha from source color, or default to 1
- * @param sourceFormat - Source color format (optional, will auto-detect if not provided)
- * @returns HWBA color string
- */
-export function toHwba(color: string, alpha?: number, sourceFormat?: ColorFormat): string {
-    if (!sourceFormat) {
-        sourceFormat = detectColorFormat(color);
-    }
-
-    let rgb: RGBColor;
-    let finalAlpha = alpha !== undefined ? alpha : 1;
+    let finalAlpha: number | undefined = alpha;
 
     switch (sourceFormat) {
         case "hex":
@@ -1376,22 +1262,19 @@ export function toHwba(color: string, alpha?: number, sourceFormat?: ColorFormat
             if (alpha === undefined && rgba.a !== undefined) finalAlpha = rgba.a;
             break;
         }
-        case "hsl":
-        case "hsla": {
+        case "hsl": {
             const hsl = parseHslString(color);
             rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
-            if (alpha === undefined && hsl.a !== undefined) finalAlpha = hsl.a;
             break;
         }
-        case "hwb": {
-            const hwb = parseHwbString(color);
-            return `hwba(${Math.round(hwb.h)}, ${Math.round(hwb.w)}%, ${Math.round(hwb.b)}%, ${finalAlpha})`;
+        case "hsla": {
+            const hsla = parseHslString(color);
+            rgb = hslToRgb(hsla.h, hsla.s, hsla.l);
+            if (alpha === undefined && hsla.a !== undefined) finalAlpha = hsla.a;
+            break;
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            if (alpha === undefined) finalAlpha = hwba.a;
-            return `hwba(${Math.round(hwba.h)}, ${Math.round(hwba.w)}%, ${Math.round(hwba.b)}%, ${finalAlpha})`;
-        }
+        case "hwb":
+            return color;
         case "oklch": {
             const oklch = parseOklchString(color);
             const oklab = oklchToOklab(oklch.l, oklch.c, oklch.h);
@@ -1425,7 +1308,17 @@ export function toHwba(color: string, alpha?: number, sourceFormat?: ColorFormat
     }
 
     const hwb = rgbToHwb(rgb.r, rgb.g, rgb.b);
-    return `hwba(${Math.round(hwb.h)}, ${Math.round(hwb.w)}%, ${Math.round(hwb.b)}%, ${finalAlpha})`;
+
+    // Format HWB with precise decimal values but clean formatting
+    const hue = parseFloat(hwb.h.toFixed(5));
+    const whiteness = parseFloat(hwb.w.toFixed(4));
+    const blackness = parseFloat(hwb.b.toFixed(4));
+
+    if (finalAlpha !== undefined) {
+        return `hwb(${hue} ${whiteness}% ${blackness}% / ${finalAlpha})`;
+    }
+
+    return `hwb(${hue} ${whiteness}% ${blackness}%)`;
 }
 
 /**
@@ -1463,12 +1356,6 @@ export function toOklch(color: string, sourceFormat?: ColorFormat): string {
             rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
             break;
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
-            rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            break;
-        }
         case "oklch":
             return color;
         case "lab": {
@@ -1497,7 +1384,7 @@ export function toOklch(color: string, sourceFormat?: ColorFormat): string {
 
     const oklab = rgbToOklab(rgb.r, rgb.g, rgb.b);
     const oklch = oklabToOklch(oklab.l, oklab.a, oklab.b);
-    return `oklch(${oklch.l.toFixed(4)} ${oklch.c.toFixed(4)} ${Math.round(oklch.h)})`;
+    return `oklch(${(oklch.l * 100).toFixed(2)}% ${oklch.c.toFixed(4)} ${oklch.h.toFixed(2)})`;
 }
 
 /**
@@ -1532,12 +1419,6 @@ export function toLab(color: string, sourceFormat?: ColorFormat): string {
         }
         case "hwb": {
             const hwb = parseHwbString(color);
-            rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            break;
-        }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
             rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
             break;
         }
@@ -1614,13 +1495,6 @@ export function toLch(color: string, sourceFormat?: ColorFormat): string {
             lab = rgbToLab(rgb.r, rgb.g, rgb.b);
             break;
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
-            const rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            lab = rgbToLab(rgb.r, rgb.g, rgb.b);
-            break;
-        }
         case "oklch": {
             const oklch = parseOklchString(color);
             const oklab = oklchToOklab(oklch.l, oklch.c, oklch.h);
@@ -1649,7 +1523,7 @@ export function toLch(color: string, sourceFormat?: ColorFormat): string {
     }
 
     const lch = labToLch(lab.l, lab.a, lab.b);
-    return `lch(${Math.round(lch.l)} ${Math.round(lch.c)} ${Math.round(lch.h)})`;
+    return `lch(${lch.l.toFixed(2)}% ${lch.c.toFixed(2)} ${lch.h.toFixed(2)})`;
 }
 
 /**
@@ -1687,12 +1561,6 @@ export function toOklab(color: string, sourceFormat?: ColorFormat): string {
             rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
             break;
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
-            rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            break;
-        }
         case "oklch": {
             const oklch = parseOklchString(color);
             const oklab = oklchToOklab(oklch.l, oklch.c, oklch.h);
@@ -1724,6 +1592,71 @@ export function toOklab(color: string, sourceFormat?: ColorFormat): string {
 }
 
 /**
+ * Convert any supported color format to color() function format
+ * @param color - Color string in any supported format
+ * @param alpha - Alpha value (0-1), optional. If not provided, will preserve intrinsic alpha from source color, or default to 1
+ * @param sourceFormat - Source color format (optional, will auto-detect if not provided)
+ * @returns color() function string (e.g., "color(srgb 0.5 0.3 0.8 / 0.5)")
+ */
+export function toColor(color: string, alpha?: number, sourceFormat?: ColorFormat): string {
+    if (!sourceFormat) {
+        sourceFormat = detectColorFormat(color);
+    }
+
+    let finalAlpha = alpha !== undefined ? alpha : 1;
+    let rgb: RGBColor;
+
+    switch (sourceFormat) {
+        case "hexalpha": {
+            const rgba = parseHexAlphaToRgba(color);
+            rgb = rgba;
+            if (alpha === undefined) finalAlpha = rgba.a;
+            break;
+        }
+        case "rgba": {
+            const rgba = parseRgbString(color);
+            rgb = rgba;
+            if (alpha === undefined && rgba.a !== undefined) finalAlpha = rgba.a;
+            break;
+        }
+        case "hsla": {
+            const hsla = parseHslString(color);
+            rgb = hslToRgb(hsla.h, hsla.s, hsla.l);
+            if (alpha === undefined && hsla.a !== undefined) finalAlpha = hsla.a;
+            break;
+        }
+        case "color": {
+            const colorRgb = parseColorString(color);
+            rgb = colorRgb;
+            if (alpha === undefined && colorRgb.a !== undefined) finalAlpha = colorRgb.a;
+            break;
+        }
+        default: {
+            // For all other formats, convert to RGB first
+            const rgbString = toRgb(color, sourceFormat);
+            rgb = parseRgbString(rgbString);
+            break;
+        }
+    }
+
+    // Convert RGB (0-255) to decimal (0-1) for color() format
+    const r = (rgb.r / 255).toFixed(6);
+    const g = (rgb.g / 255).toFixed(6);
+    const b = (rgb.b / 255).toFixed(6);
+
+    // Clean up the decimals (remove trailing zeros)
+    const rClean = parseFloat(r);
+    const gClean = parseFloat(g);
+    const bClean = parseFloat(b);
+
+    if (finalAlpha !== 1) {
+        return `color(srgb ${rClean} ${gClean} ${bClean} / ${finalAlpha})`;
+    }
+
+    return `color(srgb ${rClean} ${gClean} ${bClean})`;
+}
+
+/**
  * Convert any supported color format to RGB object
  * @param color - Color string in any supported format
  * @param sourceFormat - Source color format (optional, will auto-detect if not provided)
@@ -1749,11 +1682,6 @@ export function toRgbObject(color: string, sourceFormat?: ColorFormat): RGBColor
         }
         case "hwb": {
             const hwb = parseHwbString(color);
-            return hwbToRgb(hwb.h, hwb.w, hwb.b);
-        }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
             return hwbToRgb(hwb.h, hwb.w, hwb.b);
         }
         case "oklch": {
@@ -1812,13 +1740,6 @@ export function toRgbaObject(color: string, alpha?: number, sourceFormat?: Color
             const hsla = parseHslString(color);
             rgb = hslToRgb(hsla.h, hsla.s, hsla.l);
             if (alpha === undefined && hsla.a !== undefined) finalAlpha = hsla.a;
-            break;
-        }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
-            rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            if (alpha === undefined) finalAlpha = hwba.a;
             break;
         }
         case "color": {
@@ -1891,14 +1812,6 @@ export function toHslaObject(color: string, alpha?: number, sourceFormat?: Color
             if (alpha === undefined) finalAlpha = rgba.a;
             break;
         }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
-            const rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
-            hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-            if (alpha === undefined) finalAlpha = hwba.a;
-            break;
-        }
         case "color": {
             const colorRgb = parseColorString(color);
             hsl = rgbToHsl(colorRgb.r, colorRgb.g, colorRgb.b);
@@ -1928,71 +1841,11 @@ export function toHwbObject(color: string, sourceFormat?: ColorFormat): HWBColor
     switch (sourceFormat) {
         case "hwb":
             return parseHwbString(color);
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            return { h: hwba.h, w: hwba.w, b: hwba.b };
-        }
         default: {
             const rgb = toRgbObject(color, sourceFormat);
             return rgbToHwb(rgb.r, rgb.g, rgb.b);
         }
     }
-}
-
-/**
- * Convert any supported color format to HWBA object (HWB with alpha)
- * @param color - Color string in any supported format
- * @param alpha - Alpha value (0-1), optional. If not provided, will preserve intrinsic alpha from source color, or default to 1
- * @param sourceFormat - Source color format (optional, will auto-detect if not provided)
- * @returns HWBA color object
- */
-export function toHwbaObject(color: string, alpha?: number, sourceFormat?: ColorFormat): HWBAColor {
-    if (!sourceFormat) {
-        sourceFormat = detectColorFormat(color);
-    }
-
-    let finalAlpha = alpha !== undefined ? alpha : 1;
-    let hwb: HWBColor;
-
-    // Handle alpha extraction from source formats
-    switch (sourceFormat) {
-        case "rgba": {
-            const rgba = parseRgbString(color);
-            hwb = rgbToHwb(rgba.r, rgba.g, rgba.b);
-            if (alpha === undefined && rgba.a !== undefined) finalAlpha = rgba.a;
-            break;
-        }
-        case "hsla": {
-            const hsla = parseHslString(color);
-            const rgb = hslToRgb(hsla.h, hsla.s, hsla.l);
-            hwb = rgbToHwb(rgb.r, rgb.g, rgb.b);
-            if (alpha === undefined && hsla.a !== undefined) finalAlpha = hsla.a;
-            break;
-        }
-        case "hexalpha": {
-            const rgba = parseHexAlphaToRgba(color);
-            hwb = rgbToHwb(rgba.r, rgba.g, rgba.b);
-            if (alpha === undefined) finalAlpha = rgba.a;
-            break;
-        }
-        case "hwba": {
-            const hwba = parseHwbaString(color);
-            if (alpha === undefined) finalAlpha = hwba.a;
-            return { h: hwba.h, w: hwba.w, b: hwba.b, a: finalAlpha };
-        }
-        case "color": {
-            const colorRgb = parseColorString(color);
-            hwb = rgbToHwb(colorRgb.r, colorRgb.g, colorRgb.b);
-            if (alpha === undefined && colorRgb.a !== undefined) finalAlpha = colorRgb.a;
-            break;
-        }
-        default: {
-            hwb = toHwbObject(color, sourceFormat);
-            break;
-        }
-    }
-
-    return { h: hwb.h, w: hwb.w, b: hwb.b, a: finalAlpha };
 }
 
 /**
@@ -2119,9 +1972,7 @@ export function convertColor(color: string, targetFormat: ColorFormat, sourceFor
         case "hsla":
             return toHsla(color, alpha, sourceFormat);
         case "hwb":
-            return toHwb(color, sourceFormat);
-        case "hwba":
-            return toHwba(color, alpha, sourceFormat);
+            return toHwb(color, alpha, sourceFormat);
         case "oklch":
             return toOklch(color, sourceFormat);
         case "lab":
@@ -2131,8 +1982,7 @@ export function convertColor(color: string, targetFormat: ColorFormat, sourceFor
         case "oklab":
             return toOklab(color, sourceFormat);
         case "color":
-            // For color() format, convert to rgba format since color() is mainly for parsing
-            return toRgba(color, alpha, sourceFormat);
+            return toColor(color, alpha, sourceFormat);
         default:
             throw new Error(`Unsupported target format: ${targetFormat}`);
     }
@@ -2175,9 +2025,6 @@ export function detectColorFormat(color: string): ColorFormat {
     }
     if (trimmed.startsWith("hwb(")) {
         return "hwb";
-    }
-    if (trimmed.startsWith("hwba(")) {
-        return "hwba";
     }
     if (trimmed.startsWith("oklch(")) {
         return "oklch";
@@ -2227,9 +2074,6 @@ export function isValidColor(color: string, format?: ColorFormat): boolean {
                 return true;
             case "hwb":
                 parseHwbString(color);
-                return true;
-            case "hwba":
-                parseHwbaString(color);
                 return true;
             case "oklch":
                 parseOklchString(color);

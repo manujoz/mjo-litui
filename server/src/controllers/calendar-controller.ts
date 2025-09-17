@@ -34,6 +34,92 @@ export class CalendarController {
             return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
         });
 
+        // Sample events for calendar examples
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+
+        const sampleEvents = [
+            {
+                date: `${year}-${month}-05`,
+                tooltip: "Team Meeting",
+                backgroundColor: "var(--mjo-primary-color)",
+                foregroundColor: "white",
+            },
+            {
+                date: `${year}-${month}-05`,
+                tooltip: "Project Deadline",
+                backgroundColor: "var(--mjo-color-error)",
+                foregroundColor: "white",
+            },
+            {
+                date: `${year}-${month}-18`,
+                tooltip: "Holiday Party",
+                backgroundColor: "var(--mjo-color-success)",
+                foregroundColor: "white",
+            },
+            {
+                date: `${year}-${month}-25`,
+                tooltip: "Important Event",
+                backgroundColor: "var(--mjo-color-warning)",
+                foregroundColor: "white",
+            },
+        ];
+
+        const workEvents = [
+            {
+                date: `${year}-${month}-03`,
+                tooltip: "Sprint Planning",
+                backgroundColor: "#1976d2",
+                foregroundColor: "white",
+            },
+            {
+                date: `${year}-${month}-08`,
+                tooltip: "Code Review",
+                backgroundColor: "#388e3c",
+                foregroundColor: "white",
+            },
+            {
+                date: `${year}-${month}-15`,
+                tooltip: "Client Presentation",
+                backgroundColor: "#f57c00",
+                foregroundColor: "white",
+            },
+            {
+                date: `${year}-${month}-22`,
+                tooltip: "Team Building",
+                backgroundColor: "#7b1fa2",
+                foregroundColor: "white",
+            },
+        ];
+
+        const holidayEvents = [
+            {
+                date: `${year}-${month}-01`,
+                tooltip: "Monthly Start",
+                backgroundColor: "#c62828",
+                foregroundColor: "white",
+            },
+            {
+                date: `${year}-${month}-10`,
+                tooltip: "Mid-month Event",
+                backgroundColor: "#2e7d32",
+                foregroundColor: "white",
+            },
+            {
+                date: `${year}-${month}-20`,
+                tooltip: "Special Day",
+                backgroundColor: "#1565c0",
+                foregroundColor: "white",
+            },
+            {
+                date: `${year}-${month}-28`,
+                tooltip: "Month End Event",
+                backgroundColor: "#ef6c00",
+                foregroundColor: "white",
+            },
+        ];
+
         const calendarTemplate = html`
             ${unsafeHTML(headerTemplate)}
 
@@ -158,6 +244,22 @@ export class CalendarController {
                                 <button onclick="resetCalendar()" class="reset-btn">Reset Calendar</button>
                                 <button onclick="setToday()" class="today-btn">Set to Today</button>
                                 <button onclick="clearSelection()" class="clear-btn">Clear Selection</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <h4>Event Markers</h4>
+                            <div class="button-group">
+                                <button onclick="addSampleEvents()" class="add-events-btn">Add Sample Events</button>
+                                <button onclick="addWorkEvents()" class="work-events-btn">Add Work Events</button>
+                                <button onclick="addHolidayEvents()" class="holiday-events-btn">Add Holiday Events</button>
+                                <button onclick="clearEvents()" class="clear-events-btn">Clear Events</button>
+                            </div>
+                            <div class="input-row">
+                                <label>Add Event Date:</label>
+                                <input id="event-date" type="date" />
+                                <input id="event-tooltip" type="text" placeholder="Event tooltip" />
+                                <button onclick="addCustomEvent()" class="add-custom-btn">Add Event</button>
                             </div>
                         </div>
                     </div>
@@ -290,11 +392,63 @@ export class CalendarController {
                     </div>
                 </div>
 
-                <h3>Event Markers (Future Feature)</h3>
+                <h3>Event Markers</h3>
                 <div class="component-showcase calendar-examples">
                     <div class="calendar-example">
-                        <h4>With Event Markers</h4>
-                        <mjo-calendar mode="single" id="event-markers-example"> </mjo-calendar>
+                        <h4>Basic Events</h4>
+                        <mjo-calendar mode="single" id="basic-events-example" eventMarkers=${JSON.stringify(sampleEvents)}></mjo-calendar>
+                    </div>
+                    <div class="calendar-example">
+                        <h4>Work Events</h4>
+                        <mjo-calendar mode="single" id="work-events-example" eventMarkers=${JSON.stringify(workEvents)}></mjo-calendar>
+                    </div>
+                </div>
+
+                <h3>Holiday Calendar</h3>
+                <div class="component-showcase calendar-examples">
+                    <div class="calendar-example">
+                        <h4>Holiday Events</h4>
+                        <mjo-calendar mode="single" id="holiday-events-example" eventMarkers=${JSON.stringify(holidayEvents)}></mjo-calendar>
+                    </div>
+                    <div class="calendar-example">
+                        <h4>Combined Events</h4>
+                        <mjo-calendar
+                            mode="single"
+                            id="combined-events-example"
+                            eventMarkers=${JSON.stringify([...sampleEvents, ...workEvents])}
+                        ></mjo-calendar>
+                    </div>
+                </div>
+
+                <h3>Events with Range Selection</h3>
+                <div class="component-showcase calendar-examples">
+                    <div class="calendar-example wide">
+                        <h4>Range Mode with Events</h4>
+                        <mjo-calendar
+                            mode="range"
+                            id="range-events-example"
+                            eventMarkers=${JSON.stringify(sampleEvents)}
+                            startDate="2024-12-20"
+                            endDate="2024-12-27"
+                        ></mjo-calendar>
+                    </div>
+                </div>
+
+                <h3>Interactive Event Handling</h3>
+                <div class="component-showcase calendar-examples">
+                    <div class="calendar-example">
+                        <h4>Click Events Demo</h4>
+                        <mjo-calendar
+                            mode="single"
+                            id="interactive-events-example"
+                            eventMarkers=${JSON.stringify(sampleEvents)}
+                            @mjo-calendar:day-click=${(e) => console.log("Day clicked:", e.detail)}
+                            @mjo-calendar:day-hover=${(e) => console.log("Day hovered:", e.detail)}
+                            @mjo-calendar:day-leave=${(e) => console.log("Day leave:", e.detail)}
+                        ></mjo-calendar>
+                        <div class="event-info">
+                            <small>Open browser console to see event logs</small>
+                        </div>
                     </div>
                 </div>
             </div>

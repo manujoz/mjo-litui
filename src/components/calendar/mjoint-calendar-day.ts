@@ -1,6 +1,9 @@
-import { LitElement, PropertyValues, css, html } from "lit";
+import { MjoCalendarEventMarker } from "../../types/mjo-calendar.js";
+
+import { css, html, LitElement, PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
 
 import "../../mjo-typography.js";
 
@@ -24,6 +27,9 @@ export class MjointCalendarDay extends LitElement {
     @property({ type: Boolean }) showToday = true;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
 
+    // Events for this specific day
+    @property({ type: Array }) dayEvents?: MjoCalendarEventMarker[];
+
     @query(".day") private $day!: HTMLElement;
 
     render() {
@@ -40,6 +46,7 @@ export class MjointCalendarDay extends LitElement {
             "range-end": this.isRangeEnd,
             disabled: this.isDisabled,
             "hovered-range": this.isHovered,
+            "has-events": this.#hasEvents,
         };
 
         return html`
@@ -52,11 +59,13 @@ export class MjointCalendarDay extends LitElement {
                 aria-current=${this.isToday ? "date" : "false"}
                 aria-disabled=${this.isDisabled ? "true" : "false"}
                 tabindex=${this.isFocused ? 0 : -1}
+                title=${this.#hasEvents ? this.#eventTooltip : ""}
                 @click=${this.#handleClick}
                 @mouseenter=${this.#handleMouseEnter}
                 @mouseleave=${this.#handleMouseLeave}
             >
                 <mjo-typography tag="none">${this.day}</mjo-typography>
+                ${this.#hasEvents ? this.#renderEventIndicator() : ""}
             </div>
         `;
     }
@@ -69,6 +78,49 @@ export class MjointCalendarDay extends LitElement {
                 this.$day?.blur();
             }
         }
+    }
+
+    #renderEventIndicator() {
+        const styles = styleMap({
+            backgroundColor: this.#eventBackgroundColor,
+            color: this.#eventForegroundColor,
+        });
+
+        const eventCount = this.#dayEvents.length;
+        if (eventCount === 1) {
+            return html`<span class="event-indicator single" part="event-indicator event-indicator-single" style=${styles}></span>`;
+        } else {
+            return html`
+                <span class="event-indicator multiple" part="event-indicator event-indicator-multiple" style=${styles} data-count=${eventCount}></span>
+                    ${this.#eventCount}
+                </span>
+            `;
+        }
+    }
+
+    // Computed properties for events
+    get #dayEvents(): MjoCalendarEventMarker[] {
+        return this.dayEvents || [];
+    }
+
+    get #hasEvents(): boolean {
+        return this.#dayEvents.length > 0;
+    }
+
+    get #eventTooltip(): string {
+        return this.#dayEvents.map((evt: MjoCalendarEventMarker) => evt.tooltip || "Event").join("\n");
+    }
+
+    get #eventCount(): string {
+        return this.#dayEvents.length < 10 ? String(this.#dayEvents.length) : "+9";
+    }
+
+    get #eventBackgroundColor(): string | undefined {
+        return this.#dayEvents[0]?.backgroundColor;
+    }
+
+    get #eventForegroundColor(): string | undefined {
+        return this.#dayEvents[0]?.foregroundColor;
     }
 
     get #dateLabel() {
@@ -97,9 +149,14 @@ export class MjointCalendarDay extends LitElement {
     #handleClick() {
         if (this.isDisabled) return;
 
+        const date = new Date(this.year, this.month, this.day);
         this.dispatchEvent(
-            new CustomEvent("day-click", {
-                detail: { day: this.day },
+            new CustomEvent("mjo-calendar:day-click", {
+                detail: {
+                    day: this.day,
+                    date,
+                    events: this.#dayEvents,
+                },
                 bubbles: true,
                 composed: true,
             }),
@@ -109,9 +166,14 @@ export class MjointCalendarDay extends LitElement {
     #handleMouseEnter() {
         if (this.isDisabled) return;
 
+        const date = new Date(this.year, this.month, this.day);
         this.dispatchEvent(
-            new CustomEvent("day-hover", {
-                detail: { day: this.day },
+            new CustomEvent("mjo-calendar:day-hover", {
+                detail: {
+                    day: this.day,
+                    date,
+                    events: this.#dayEvents,
+                },
                 bubbles: true,
                 composed: true,
             }),
@@ -119,9 +181,14 @@ export class MjointCalendarDay extends LitElement {
     }
 
     #handleMouseLeave() {
+        const date = new Date(this.year, this.month, this.day);
         this.dispatchEvent(
-            new CustomEvent("day-leave", {
-                detail: { day: this.day },
+            new CustomEvent("mjo-calendar:day-leave", {
+                detail: {
+                    day: this.day,
+                    date,
+                    events: this.#dayEvents,
+                },
                 bubbles: true,
                 composed: true,
             }),
@@ -130,6 +197,7 @@ export class MjointCalendarDay extends LitElement {
 
     static styles = css`
         .day {
+            position: relative;
             aspect-ratio: 1;
             display: flex;
             align-items: center;
@@ -186,6 +254,28 @@ export class MjointCalendarDay extends LitElement {
 
         :host([size="large"]) .day {
             min-height: 40px;
+        }
+        .event-indicator {
+            position: absolute;
+            bottom: var(--mjo-calendar-event-offset, 2px);
+            right: var(--mjo-calendar-event-offset, 2px);
+            background: var(--mjo-calendar-event-background-color, #ff6b6b);
+            color: var(--mjo-calendar-event-foreground-color, white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .event-indicator.multiple {
+            width: var(--mjo-calendar-event-multiple-size, 12px);
+            height: var(--mjo-calendar-event-multiple-size, 12px);
+            font-size: var(--mjo-calendar-event-font-size, 8px);
+            font-weight: var(--mjo-calendar-event-font-weight, bold);
+            line-height: 1em;
+        }
+        .event-indicator.single {
+            width: var(--mjo-calendar-event-single-size, 6px);
+            height: var(--mjo-calendar-event-single-size, 6px);
         }
     `;
 }

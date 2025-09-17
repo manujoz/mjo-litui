@@ -2,7 +2,7 @@
 // This functionality loads after client hydration
 
 import { MjoCalendar } from "../../src/mjo-calendar";
-import type { CalendarDateSelectedEvent, CalendarRangeSelectedEvent } from "../../src/types/mjo-calendar";
+import type { CalendarDateSelectedEvent, CalendarRangeSelectedEvent, MjoCalendarEventMarker } from "../../src/types/mjo-calendar";
 
 // Playground interactions
 function changeCalendarProp(prop: string, value: string | boolean): void {
@@ -82,6 +82,166 @@ function clearSelection(): void {
         calendar.removeAttribute("endDate");
         logEvent("Selection attributes cleared");
     }
+}
+
+// Event management functions
+function addSampleEvents(): void {
+    const calendar = document.getElementById("playground-calendar") as any;
+    if (!calendar) return;
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+
+    const sampleEvents: MjoCalendarEventMarker[] = [
+        {
+            date: `${year}-${month}-05`,
+            tooltip: "Team Meeting",
+            backgroundColor: "var(--mjo-primary-color)",
+            foregroundColor: "white",
+        },
+        {
+            date: `${year}-${month}-05`,
+            tooltip: "Project Deadline",
+            backgroundColor: "var(--mjo-color-error)",
+            foregroundColor: "white",
+        },
+        {
+            date: `${year}-${month}-18`,
+            tooltip: "Holiday Party",
+            backgroundColor: "var(--mjo-color-success)",
+            foregroundColor: "white",
+        },
+        {
+            date: `${year}-${month}-25`,
+            tooltip: "Important Event",
+            backgroundColor: "var(--mjo-color-warning)",
+            foregroundColor: "white",
+        },
+    ];
+
+    calendar.eventMarkers = sampleEvents;
+    logEvent(`Added ${sampleEvents.length} sample events`);
+}
+
+function addWorkEvents(): void {
+    const calendar = document.getElementById("playground-calendar") as any;
+    if (!calendar) return;
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+
+    const workEvents: MjoCalendarEventMarker[] = [
+        {
+            date: `${year}-${month}-03`,
+            tooltip: "Sprint Planning",
+            backgroundColor: "#1976d2",
+            foregroundColor: "white",
+        },
+        {
+            date: `${year}-${month}-08`,
+            tooltip: "Code Review",
+            backgroundColor: "#388e3c",
+            foregroundColor: "white",
+        },
+        {
+            date: `${year}-${month}-15`,
+            tooltip: "Client Presentation",
+            backgroundColor: "#f57c00",
+            foregroundColor: "white",
+        },
+        {
+            date: `${year}-${month}-22`,
+            tooltip: "Team Building",
+            backgroundColor: "#7b1fa2",
+            foregroundColor: "white",
+        },
+    ];
+
+    calendar.eventMarkers = workEvents;
+    logEvent(`Added ${workEvents.length} work events`);
+}
+
+function addHolidayEvents(): void {
+    const calendar = document.getElementById("playground-calendar") as any;
+    if (!calendar) return;
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+
+    const holidayEvents: MjoCalendarEventMarker[] = [
+        {
+            date: `${year}-${month}-01`,
+            tooltip: "Monthly Start",
+            backgroundColor: "#c62828",
+            foregroundColor: "white",
+        },
+        {
+            date: `${year}-${month}-10`,
+            tooltip: "Mid-month Event",
+            backgroundColor: "#2e7d32",
+            foregroundColor: "white",
+        },
+        {
+            date: `${year}-${month}-20`,
+            tooltip: "Special Day",
+            backgroundColor: "#1565c0",
+            foregroundColor: "white",
+        },
+        {
+            date: `${year}-${month}-28`,
+            tooltip: "Month End Event",
+            backgroundColor: "#ef6c00",
+            foregroundColor: "white",
+        },
+    ];
+
+    calendar.eventMarkers = holidayEvents;
+    logEvent(`Added ${holidayEvents.length} holiday events`);
+}
+
+function clearEvents(): void {
+    const calendar = document.getElementById("playground-calendar") as any;
+    if (!calendar) return;
+
+    calendar.eventMarkers = [];
+    logEvent("All events cleared");
+}
+
+function addCustomEvent(): void {
+    const calendar = document.getElementById("playground-calendar") as any;
+    const dateInput = document.getElementById("event-date") as HTMLInputElement;
+    const tooltipInput = document.getElementById("event-tooltip") as HTMLInputElement;
+
+    if (!calendar || !dateInput || !tooltipInput) return;
+
+    const date = dateInput.value;
+    const tooltip = tooltipInput.value;
+
+    if (!date) {
+        logEvent("Please select a date for the event");
+        return;
+    }
+
+    const existingEvents = calendar.eventMarkers || [];
+    const colors = ["#1976d2", "#388e3c", "#f57c00", "#7b1fa2", "#c62828", "#2e7d32", "#1565c0", "#ef6c00"];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+    const newEvent: MjoCalendarEventMarker = {
+        date: date,
+        tooltip: tooltip || `Event on ${date}`,
+        backgroundColor: randomColor,
+        foregroundColor: "white",
+    };
+
+    calendar.eventMarkers = [...existingEvents, newEvent];
+    logEvent(`Added custom event: ${newEvent.tooltip} on ${date}`);
+
+    // Clear inputs
+    dateInput.value = "";
+    tooltipInput.value = "";
 }
 
 // Event logging function
@@ -167,6 +327,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         });
+
+        // Add event listeners for new day-specific events
+        calendar.addEventListener("mjo-calendar:day-click", (ev: Event) => {
+            const event = ev as CustomEvent;
+            const { day, date, events } = event.detail;
+            const dateStr = date.toLocaleDateString();
+            const eventsCount = events?.length || 0;
+            logEvent(`Day clicked: ${dateStr} (Day ${day}) - ${eventsCount} events`);
+        });
+
+        calendar.addEventListener("mjo-calendar:day-hover", (ev: Event) => {
+            const event = ev as CustomEvent;
+            const { day, date, events } = event.detail;
+            const dateStr = date.toLocaleDateString();
+            const eventsCount = events?.length || 0;
+            logEvent(`Day hovered: ${dateStr} (Day ${day}) - ${eventsCount} events`);
+        });
+
+        calendar.addEventListener("mjo-calendar:day-leave", (ev: Event) => {
+            const event = ev as CustomEvent;
+            const { day, date, events } = event.detail;
+            const dateStr = date.toLocaleDateString();
+            const eventsCount = events?.length || 0;
+            logEvent(`Day leave: ${dateStr} (Day ${day}) - ${eventsCount} events`);
+        });
     });
 
     // Initialize event log
@@ -178,6 +363,11 @@ window.changeCalendarProp = changeCalendarProp;
 window.resetCalendar = resetCalendar;
 window.setToday = setToday;
 window.clearSelection = clearSelection;
+window.addSampleEvents = addSampleEvents;
+window.addWorkEvents = addWorkEvents;
+window.addHolidayEvents = addHolidayEvents;
+window.clearEvents = clearEvents;
+window.addCustomEvent = addCustomEvent;
 
 // Type declarations for global functions
 declare global {
@@ -186,5 +376,10 @@ declare global {
         resetCalendar: () => void;
         setToday: () => void;
         clearSelection: () => void;
+        addSampleEvents: () => void;
+        addWorkEvents: () => void;
+        addHolidayEvents: () => void;
+        clearEvents: () => void;
+        addCustomEvent: () => void;
     }
 }
