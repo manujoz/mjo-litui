@@ -5,7 +5,7 @@
  * supporting various color formats including HEX, RGB, RGBA, HSL, HSLA, and HWB.
  */
 
-export type ColorFormat = "hex" | "hexalpha" | "rgb" | "rgba" | "hsl" | "hsla" | "hwb" | "hwba" | "oklch" | "lab" | "lch" | "oklab";
+export type ColorFormat = "hex" | "hexalpha" | "rgb" | "rgba" | "hsl" | "hsla" | "hwb" | "hwba" | "oklch" | "lab" | "lch" | "oklab" | "color";
 
 export interface RGBColor {
     r: number;
@@ -774,6 +774,82 @@ function parseOklabString(oklabString: string): OKLABColor {
 }
 
 /**
+ * Parse color() function to RGB values
+ * @param colorString - Color function string (e.g., "color(srgb 0.5 0.3 0.8)" or "color(srgb 0.5 0.3 0.8 / 0.5)")
+ * @returns RGB color object with optional alpha
+ */
+function parseColorString(colorString: string): RGBColor & { a?: number } {
+    const match = colorString.match(/color\(\s*([^)]+)\s*\)/);
+    if (!match) {
+        throw new Error(`Invalid color() string: ${colorString}`);
+    }
+
+    const content = match[1].trim();
+
+    // Split by slash to separate alpha
+    const parts = content.split("/").map((p) => p.trim());
+    const colorPart = parts[0];
+    const alphaPart = parts[1];
+
+    // Parse the color space and values
+    const values = colorPart.split(/\s+/);
+    const colorSpace = values[0].toLowerCase();
+    const channels = values.slice(1).map((v) => parseFloat(v));
+
+    if (channels.length < 3) {
+        throw new Error(`Invalid color() string: ${colorString}`);
+    }
+
+    // Validate channel values are in range 0-1
+    if (channels.some((channel) => channel < 0 || channel > 1 || isNaN(channel))) {
+        throw new Error(`Invalid color() values: ${colorString}`);
+    }
+
+    let r: number, g: number, b: number;
+
+    switch (colorSpace) {
+        case "srgb": {
+            // sRGB values are typically in range 0-1, convert to 0-255
+            r = Math.round(channels[0] * 255);
+            g = Math.round(channels[1] * 255);
+            b = Math.round(channels[2] * 255);
+            break;
+        }
+        case "display-p3": {
+            // Display P3 is similar to sRGB but with wider gamut
+            // For simplicity, treat as sRGB for now
+            r = Math.round(channels[0] * 255);
+            g = Math.round(channels[1] * 255);
+            b = Math.round(channels[2] * 255);
+            break;
+        }
+        case "rec2020": {
+            // Rec2020 is another wide gamut color space
+            // For simplicity, treat as sRGB for now
+            r = Math.round(channels[0] * 255);
+            g = Math.round(channels[1] * 255);
+            b = Math.round(channels[2] * 255);
+            break;
+        }
+        default:
+            throw new Error(`Unsupported color space in color() function: ${colorSpace}`);
+    }
+
+    const result: RGBColor & { a?: number } = { r, g, b };
+
+    // Parse alpha if present
+    if (alphaPart) {
+        const alpha = parseFloat(alphaPart);
+        if (alpha < 0 || alpha > 1 || isNaN(alpha)) {
+            throw new Error(`Invalid alpha value in color() string: ${colorString}`);
+        }
+        result.a = alpha;
+    }
+
+    return result;
+}
+
+/**
  * Convert any supported color format to HEX
  * @param color - Color string in any supported format
  * @param sourceFormat - Source color format (optional, will auto-detect if not provided)
@@ -833,6 +909,10 @@ export function toHex(color: string, sourceFormat?: ColorFormat): string {
         case "oklab": {
             const oklab = parseOklabString(color);
             const rgb = oklabToRgb(oklab.l, oklab.a, oklab.b);
+            return rgbToHex(rgb.r, rgb.g, rgb.b);
+        }
+        case "color": {
+            const rgb = parseColorString(color);
             return rgbToHex(rgb.r, rgb.g, rgb.b);
         }
         default:
@@ -915,6 +995,12 @@ export function toHexAlpha(color: string, alpha?: number, sourceFormat?: ColorFo
             rgb = oklabToRgb(oklab.l, oklab.a, oklab.b);
             break;
         }
+        case "color": {
+            const colorRgb = parseColorString(color);
+            rgb = colorRgb;
+            if (alpha === undefined && colorRgb.a !== undefined) finalAlpha = colorRgb.a;
+            break;
+        }
         default:
             throw new Error(`Unsupported color format: ${sourceFormat}`);
     }
@@ -987,6 +1073,10 @@ export function toRgb(color: string, sourceFormat?: ColorFormat): string {
             const rgb = oklabToRgb(oklab.l, oklab.a, oklab.b);
             return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
         }
+        case "color": {
+            const rgb = parseColorString(color);
+            return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+        }
         default:
             throw new Error(`Unsupported color format: ${sourceFormat}`);
     }
@@ -1030,6 +1120,12 @@ export function toRgba(color: string, alpha?: number, sourceFormat?: ColorFormat
             const hwba = parseHwbaString(color);
             rgb = hwbToRgb(hwba.h, hwba.w, hwba.b);
             if (alpha === undefined) finalAlpha = hwba.a;
+            break;
+        }
+        case "color": {
+            const colorRgb = parseColorString(color);
+            rgb = colorRgb;
+            if (alpha === undefined && colorRgb.a !== undefined) finalAlpha = colorRgb.a;
             break;
         }
         default: {
@@ -1107,6 +1203,10 @@ export function toHsl(color: string, sourceFormat?: ColorFormat): string {
             rgb = oklabToRgb(oklab.l, oklab.a, oklab.b);
             break;
         }
+        case "color": {
+            rgb = parseColorString(color);
+            break;
+        }
         default:
             throw new Error(`Unsupported color format: ${sourceFormat}`);
     }
@@ -1154,6 +1254,12 @@ export function toHsla(color: string, alpha?: number, sourceFormat?: ColorFormat
             const rgb = hwbToRgb(hwba.h, hwba.w, hwba.b);
             hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
             if (alpha === undefined) finalAlpha = hwba.a;
+            break;
+        }
+        case "color": {
+            const colorRgb = parseColorString(color);
+            hsl = rgbToHsl(colorRgb.r, colorRgb.g, colorRgb.b);
+            if (alpha === undefined && colorRgb.a !== undefined) finalAlpha = colorRgb.a;
             break;
         }
         default: {
@@ -1222,6 +1328,10 @@ export function toHwb(color: string, sourceFormat?: ColorFormat): string {
         case "oklab": {
             const oklab = parseOklabString(color);
             rgb = oklabToRgb(oklab.l, oklab.a, oklab.b);
+            break;
+        }
+        case "color": {
+            rgb = parseColorString(color);
             break;
         }
         default:
@@ -1304,6 +1414,12 @@ export function toHwba(color: string, alpha?: number, sourceFormat?: ColorFormat
             rgb = oklabToRgb(oklab.l, oklab.a, oklab.b);
             break;
         }
+        case "color": {
+            const colorRgb = parseColorString(color);
+            rgb = colorRgb;
+            if (alpha === undefined && colorRgb.a !== undefined) finalAlpha = colorRgb.a;
+            break;
+        }
         default:
             throw new Error(`Unsupported color format: ${sourceFormat}`);
     }
@@ -1371,6 +1487,10 @@ export function toOklch(color: string, sourceFormat?: ColorFormat): string {
             const oklch = oklabToOklch(oklab.l, oklab.a, oklab.b);
             return `oklch(${oklch.l.toFixed(4)} ${oklch.c.toFixed(4)} ${Math.round(oklch.h)})`;
         }
+        case "color": {
+            rgb = parseColorString(color);
+            break;
+        }
         default:
             throw new Error(`Unsupported color format: ${sourceFormat}`);
     }
@@ -1437,6 +1557,10 @@ export function toLab(color: string, sourceFormat?: ColorFormat): string {
         case "oklab": {
             const oklab = parseOklabString(color);
             rgb = oklabToRgb(oklab.l, oklab.a, oklab.b);
+            break;
+        }
+        case "color": {
+            rgb = parseColorString(color);
             break;
         }
         default:
@@ -1515,6 +1639,11 @@ export function toLch(color: string, sourceFormat?: ColorFormat): string {
             lab = rgbToLab(rgb.r, rgb.g, rgb.b);
             break;
         }
+        case "color": {
+            const rgb = parseColorString(color);
+            lab = rgbToLab(rgb.r, rgb.g, rgb.b);
+            break;
+        }
         default:
             throw new Error(`Unsupported color format: ${sourceFormat}`);
     }
@@ -1582,6 +1711,10 @@ export function toOklab(color: string, sourceFormat?: ColorFormat): string {
         }
         case "oklab":
             return color;
+        case "color": {
+            rgb = parseColorString(color);
+            break;
+        }
         default:
             throw new Error(`Unsupported color format: ${sourceFormat}`);
     }
@@ -1641,6 +1774,9 @@ export function toRgbObject(color: string, sourceFormat?: ColorFormat): RGBColor
             const oklab = parseOklabString(color);
             return oklabToRgb(oklab.l, oklab.a, oklab.b);
         }
+        case "color": {
+            return parseColorString(color);
+        }
         default:
             throw new Error(`Unsupported color format: ${sourceFormat}`);
     }
@@ -1683,6 +1819,12 @@ export function toRgbaObject(color: string, alpha?: number, sourceFormat?: Color
             const hwb = { h: hwba.h, w: hwba.w, b: hwba.b };
             rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
             if (alpha === undefined) finalAlpha = hwba.a;
+            break;
+        }
+        case "color": {
+            const colorRgb = parseColorString(color);
+            rgb = colorRgb;
+            if (alpha === undefined && colorRgb.a !== undefined) finalAlpha = colorRgb.a;
             break;
         }
         default: {
@@ -1755,6 +1897,12 @@ export function toHslaObject(color: string, alpha?: number, sourceFormat?: Color
             const rgb = hwbToRgb(hwb.h, hwb.w, hwb.b);
             hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
             if (alpha === undefined) finalAlpha = hwba.a;
+            break;
+        }
+        case "color": {
+            const colorRgb = parseColorString(color);
+            hsl = rgbToHsl(colorRgb.r, colorRgb.g, colorRgb.b);
+            if (alpha === undefined && colorRgb.a !== undefined) finalAlpha = colorRgb.a;
             break;
         }
         default: {
@@ -1831,6 +1979,12 @@ export function toHwbaObject(color: string, alpha?: number, sourceFormat?: Color
             const hwba = parseHwbaString(color);
             if (alpha === undefined) finalAlpha = hwba.a;
             return { h: hwba.h, w: hwba.w, b: hwba.b, a: finalAlpha };
+        }
+        case "color": {
+            const colorRgb = parseColorString(color);
+            hwb = rgbToHwb(colorRgb.r, colorRgb.g, colorRgb.b);
+            if (alpha === undefined && colorRgb.a !== undefined) finalAlpha = colorRgb.a;
+            break;
         }
         default: {
             hwb = toHwbObject(color, sourceFormat);
@@ -1976,6 +2130,9 @@ export function convertColor(color: string, targetFormat: ColorFormat, sourceFor
             return toLch(color, sourceFormat);
         case "oklab":
             return toOklab(color, sourceFormat);
+        case "color":
+            // For color() format, convert to rgba format since color() is mainly for parsing
+            return toRgba(color, alpha, sourceFormat);
         default:
             throw new Error(`Unsupported target format: ${targetFormat}`);
     }
@@ -2034,6 +2191,9 @@ export function detectColorFormat(color: string): ColorFormat {
     if (trimmed.startsWith("oklab(")) {
         return "oklab";
     }
+    if (trimmed.startsWith("color(")) {
+        return "color";
+    }
 
     throw new Error(`Cannot detect color format for: ${color}`);
 }
@@ -2082,6 +2242,9 @@ export function isValidColor(color: string, format?: ColorFormat): boolean {
                 return true;
             case "oklab":
                 parseOklabString(color);
+                return true;
+            case "color":
+                parseColorString(color);
                 return true;
             default:
                 return false;
