@@ -1,6 +1,6 @@
 {
     "name": "mjo-litui",
-    "version": "0.8.0",
+    "version": "0.8.1-beta.0",
     "description": "A collection of web components for building user interfaces with LitElement.",
     "type": "module",
     "main": "index.js",
