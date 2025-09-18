@@ -1193,11 +1193,11 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 border: var(--mjo-calendar-border, 1px solid var(--mjo-border-color, #e0e0e0));
                 border-radius: var(--mjo-calendar-border-radius, var(--mjo-radius-medium, 8px));
                 box-shadow: var(--mjo-calendar-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
-                padding: var(--mjo-calendar-padding, 12px);
+                padding: var(--mjo-calendar-padding, 14px);
                 font-size: 12px;
             }
             .calendar-container[data-compact] {
-                padding: 6px;
+                padding: var(--mjo-calendar-padding-compact, 6px);
             }
             .calendar-range-container {
                 display: flex;

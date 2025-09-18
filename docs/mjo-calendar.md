@@ -649,7 +649,8 @@ The component provides extensive CSS customization through variables with fallba
 | `--mjo-calendar-border`                              | `1px solid --mjo-border-color`    | Calendar border                          |
 | `--mjo-calendar-border-radius`                       | `--mjo-radius-medium`             | Calendar border radius                   |
 | `--mjo-calendar-shadow`                              | `0 2px 8px rgba(0,0,0,0.1)`       | Calendar shadow                          |
-| `--mjo-calendar-padding`                             | `16px`                            | Calendar internal padding                |
+| `--mjo-calendar-padding`                             | `14px`                            | Calendar internal padding                |
+| `--mjo-calendar-padding-compact`                     | `6px`                             | Calendar internal padding when compact   |
 | `--mjo-calendar-week-day-color`                      | `--mjo-foreground-color-low`      | Week day headers text color              |
 | `--mjo-calendar-week-day-font-weight`                | `600`                             | Week day headers font weight             |
 | `--mjo-calendar-day-border-radius`                   | `4px`                             | Individual day border radius             |

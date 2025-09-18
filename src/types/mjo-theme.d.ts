@@ -746,6 +746,7 @@ export interface MjoCalendarTheme {
     borderRadius?: string;
     shadow?: string;
     padding?: string;
+    paddingCompact?: string;
     weekDayColor?: string;
     weekDayFontWeight?: string;
     dayBorderRadius?: string;
