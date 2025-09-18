@@ -22,9 +22,10 @@ export class MjointFiltrableButton extends LitElement {
         const buttonLabel = hasActiveFilter ? `Clear filter for ${columnName}, currently filtering by "${this.filter}"` : `Filter ${columnName}`;
 
         return html`
-            <search ?data-open=${this.isOpen} role="search" aria-label=${`Filter by ${columnName}`}>
+            <search ?data-open=${this.isOpen} role="search" part="search-container" aria-label=${`Filter by ${columnName}`}>
                 <input
                     type="hidden"
+                    part="search-input"
                     value=${this.filter || ""}
                     @input=${this.#handleInput}
                     aria-label=${`Filter by ${columnName}`}
@@ -34,6 +35,7 @@ export class MjointFiltrableButton extends LitElement {
             </search>
             <button
                 class="sort-button"
+                part="button"
                 type="button"
                 data-color=${this.color}
                 aria-label=${buttonLabel}
@@ -41,7 +43,7 @@ export class MjointFiltrableButton extends LitElement {
                 aria-expanded=${this.isOpen ? "true" : "false"}
                 @click=${this.#openFilter}
             >
-                <mjo-icon src=${MdSearch}></mjo-icon>
+                <mjo-icon src=${MdSearch} exportparts="icon"></mjo-icon>
             </button>
         `;
     }

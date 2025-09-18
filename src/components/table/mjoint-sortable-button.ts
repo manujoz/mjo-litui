@@ -22,6 +22,7 @@ export class MjointSortableButton extends LitElement {
         return html`
             <button
                 class="sort-button"
+                part="button"
                 type="button"
                 aria-label=${`${nextAction} by ${columnName}, ${currentState}`}
                 aria-describedby=${ifDefined(this.columnname ? `header-${this.columnname}` : undefined)}
@@ -30,7 +31,7 @@ export class MjointSortableButton extends LitElement {
                 @click=${this.#handleSort}
                 @keydown=${this.#handleKeyDown}
             >
-                <mjo-icon src=${MdKeyboardArrowDown}></mjo-icon>
+                <mjo-icon src=${MdKeyboardArrowDown} exportparts="icon"></mjo-icon>
             </button>
         `;
     }

@@ -360,9 +360,7 @@ ${JSON.stringify(this.formData, null, 2)}
 }
 ```
 
-## Advanced Usage
-
-### Custom Event Handling
+## Event Handling
 
 ```ts
 import { LitElement, html } from "lit";
@@ -371,44 +369,30 @@ import "mjo-litui/mjo-textarea";
 
 @customElement("example-textarea-events")
 export class ExampleTextareaEvents extends LitElement {
-    @state() logs: string[] = [];
+    @state() message = "";
 
     render() {
         return html`
             <mjo-textarea
-                label="Event Tracking"
-                placeholder="Type to see events..."
+                label="Message"
+                placeholder="Type your message..."
+                .value=${this.message}
                 @mjo-textarea:input=${this.#onInput}
-                @mjo-textarea:focus=${this.#onFocus}
-                @mjo-textarea:blur=${this.#onBlur}
-                @mjo-textarea:keyup=${this.#onKeyup}
+                @mjo-textarea:change=${this.#onChange}
+                helperText="Events logged below"
             ></mjo-textarea>
 
-            <div style="margin-top: 1rem; max-height: 200px; overflow-y: auto;">
-                <h4>Event Log:</h4>
-                ${this.logs.map((log) => html`<div style="font-family: monospace; font-size: 0.9em;">${log}</div>`)}
-            </div>
+            <p><strong>Current value:</strong> ${this.message}</p>
         `;
     }
 
     #onInput(e: CustomEvent) {
-        this.#addLog(`input: "${e.detail.value}" (${e.detail.inputType})`);
+        this.message = e.detail.value;
+        console.log("Input:", e.detail);
     }
 
-    #onFocus(e: CustomEvent) {
-        this.#addLog(`focus: "${e.detail.value}"`);
-    }
-
-    #onBlur(e: CustomEvent) {
-        this.#addLog(`blur: "${e.detail.value}"`);
-    }
-
-    #onKeyup(e: CustomEvent) {
-        this.#addLog(`keyup: ${e.detail.key} (${e.detail.code})`);
-    }
-
-    #addLog(message: string) {
-        this.logs = [...this.logs.slice(-9), `${new Date().toLocaleTimeString()}: ${message}`];
+    #onChange(e: CustomEvent) {
+        console.log("Change:", e.detail);
     }
 }
 ```
@@ -574,8 +558,35 @@ export class ExampleTextareaEvents extends LitElement {
 | `setError(errormsg: string)`    | `void`                    | Set error state with message                  |
 | `removeError()`                 | `void`                    | Remove error state and message                |
 | `getForm()`                     | `HTMLFormElement \| null` | Get the closest form element                  |
-| `submiForm()`                   | `void`                    | Programmatically submit the form              |
 | `updateFormData({name, value})` | `void`                    | Update form data for form integration         |
+
+## CSS Parts
+
+The textarea component exposes these CSS parts for styling:
+
+| Name                          | Description                                    |
+| ----------------------------- | ---------------------------------------------- |
+| `container`                   | The main textarea container                    |
+| `textarea`                    | The native textarea element                    |
+| `start-icon-container`        | Container for start icon                       |
+| `start-icon`                  | The start icon element (via exportparts)       |
+| `end-icon-container`          | Container for end icon                         |
+| `end-icon`                    | The end icon element (via exportparts)         |
+| `start-image-container`       | Container for start image                      |
+| `start-image`                 | The start image element                        |
+| `end-image-container`         | Container for end image                        |
+| `end-image`                   | The end image element                          |
+| `label-container`             | The label container (via exportparts)          |
+| `label-truncate-container`    | The label truncate container (via exportparts) |
+| `label-truncate-wrapper`      | The label truncate wrapper (via exportparts)   |
+| `helper-text-container`       | Helper text container (via exportparts)        |
+| `helper-text-typography`      | Helper text typography (via exportparts)       |
+| `helper-text-typography-tag`  | Helper text typography tag (via exportparts)   |
+| `helper-text-error-message`   | Error message element (via exportparts)        |
+| `helper-text-success-message` | Success message element (via exportparts)      |
+| `helper-text-icon`            | Helper text icon element (via exportparts)     |
+| `counter-container`           | Character counter container (via exportparts)  |
+| `counter-text`                | Character counter text (via exportparts)       |
 
 ## CSS Custom Properties
 
@@ -697,11 +708,11 @@ The textarea uses the `TextAreaAutoSize` utility for automatic height adjustment
 
 The textarea automatically integrates with form systems through the FormMixin:
 
--   **Form Data**: Automatically added to `FormData` on form submission
--   **Validation**: Supports all FormMixin validation rules
--   **Event Bubbling**: Form-compatible events bubble up properly
--   **Native Behavior**: Works with native form validation APIs
--   **Custom Forms**: Integrates seamlessly with `mjo-form` component
+- **Form Data**: Automatically added to `FormData` on form submission
+- **Validation**: Supports all FormMixin validation rules
+- **Event Bubbling**: Form-compatible events bubble up properly
+- **Native Behavior**: Works with native form validation APIs
+- **Custom Forms**: Integrates seamlessly with `mjo-form` component
 
 ```ts
 // The textarea updates form data automatically
@@ -725,12 +736,12 @@ The textarea automatically integrates with form systems through the FormMixin:
 
 The textarea component follows accessibility best practices:
 
--   Uses semantic `<textarea>` element for proper screen reader support
--   Supports ARIA attributes (`aria-label`, `aria-labelledby`, `aria-describedby`, etc.)
--   Maintains proper focus management with keyboard navigation
--   Error states are announced to assistive technologies via `aria-invalid`
--   Required fields indicated with `aria-required` attribute
--   Helper text properly associated with `aria-describedby`
+- Uses semantic `<textarea>` element for proper screen reader support
+- Supports ARIA attributes (`aria-label`, `aria-labelledby`, `aria-describedby`, etc.)
+- Maintains proper focus management with keyboard navigation
+- Error states are announced to assistive technologies via `aria-invalid`
+- Required fields indicated with `aria-required` attribute
+- Helper text properly associated with `aria-describedby`
 
 ```html
 <!-- Example with full accessibility features -->
@@ -750,35 +761,35 @@ The textarea component follows accessibility best practices:
 
 ### Performance Considerations
 
--   Auto-resize uses `TextAreaAutoSize` utility with optimized DOM measurements
--   Character counter updates are debounced for performance
--   Event handlers use efficient event delegation
+- Auto-resize uses `TextAreaAutoSize` utility with optimized DOM measurements
+- Character counter updates are debounced for performance
+- Event handlers use efficient event delegation
 
 ### Browser Compatibility
 
--   **Auto-resize**: Supported in all modern browsers with fallback
--   **Custom Properties**: Full support in all target browsers
--   **Form Integration**: Works with both native forms and custom form libraries
--   **Events**: Custom events work in all browsers supporting CustomEvent API
+- **Auto-resize**: Supported in all modern browsers with fallback
+- **Custom Properties**: Full support in all target browsers
+- **Form Integration**: Works with both native forms and custom form libraries
+- **Events**: Custom events work in all browsers supporting CustomEvent API
 
 ### Technical Details
 
--   Component extends LitElement with ThemeMixin, InputErrorMixin, and FormMixin
--   Uses Shadow DOM for style encapsulation
--   Auto-resize utility manages textarea height efficiently
--   Form data automatically synchronized on input changes
--   ARIA attributes managed automatically for accessibility
+- Component extends LitElement with ThemeMixin, InputErrorMixin, and FormMixin
+- Uses Shadow DOM for style encapsulation
+- Auto-resize utility manages textarea height efficiently
+- Form data automatically synchronized on input changes
+- ARIA attributes managed automatically for accessibility
 
 ### Migration Notes
 
--   Custom events now use `mjo-textarea:` prefix (e.g., `mjo-textarea:input`)
--   `clear()` method now accepts optional `focus` parameter
--   Form validation properties inherited from FormMixin
--   Theme customization available through both global config and component-level `theme` prop
+- Custom events now use `mjo-textarea:` prefix (e.g., `mjo-textarea:input`)
+- `clear()` method now accepts optional `focus` parameter
+- Form validation properties inherited from FormMixin
+- Theme customization available through both global config and component-level `theme` prop
 
 ## Related Components
 
--   [mjo-textfield](./mjo-textfield.md) - For single-line text input
--   [mjo-form](./mjo-form.md) - For form integration and validation
--   [mjo-icon](./mjo-icon.md) - For textarea icons
--   [mjo-theme](./mjo-theme.md) - For theme configuration
+- [mjo-textfield](./mjo-textfield.md) - For single-line text input
+- [mjo-form](./mjo-form.md) - For form integration and validation
+- [mjo-icon](./mjo-icon.md) - For textarea icons
+- [mjo-theme](./mjo-theme.md) - For theme configuration

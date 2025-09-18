@@ -13,6 +13,7 @@ import {
     MjoSelectOptionPreselectEvent,
     MjoSelectSearchEvent,
     type MjoSelectSize,
+    MjoSelectVariant,
 } from "./types/mjo-select.js";
 import { type MjoDropdownTheme } from "./types/mjo-theme.js";
 
@@ -99,6 +100,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     @property({ type: String }) label?: string;
     @property({ type: String }) size: MjoSelectSize = "medium";
     @property({ type: String }) color: MjoSelectColor = "primary";
+    @property({ type: String }) variant: MjoSelectVariant = "default";
     @property({ type: String }) startIcon?: string;
     @property({ type: String }) endIcon?: string;
     @property({ type: String }) startImage?: string;
@@ -193,6 +195,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     class="container"
                     part="container"
                     data-color=${this.color}
+                    data-variant=${this.variant}
                     ?data-focused=${this.isFocused}
                     data-size=${this.size}
                     ?data-error=${this.error}
@@ -697,13 +700,15 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 border-style: var(--mjo-input-border-style, solid);
                 border-width: var(--mjo-input-border-width, 1px);
                 border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
-                background-color: var(--mjo-input-background-color, var(--mjo-background-color-card-low, #ffffff));
+                background: var(--mjo-input-background-color, var(--mjo-background-color-card-low, #ffffff));
                 box-shadow: var(--mjo-input-box-shadow, none);
                 display: flex;
                 flex-flow: row nowrap;
                 overflow: hidden;
                 position: relative;
-                transition: border-color 0.3s;
+                transition:
+                    border-color 0.3s,
+                    background-color 0.3s;
                 user-select: none;
             }
             .container::after {
@@ -729,13 +734,50 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 border-width: var(--mjo-input-border-width-focus, 1px);
                 border-color: var(--mjo-input-secondary-color, var(--mjo-secondary-color, #7dc717));
             }
-            .container[data-error],
-            .container[data-error][data-color="secondary"] {
-                border-color: var(--mjo-color-error, #d31616);
+            .container[data-variant="flat"] {
+                border-color: transparent;
+                border-radius: 0;
+                background: color-mix(in srgb, var(--mjo-textarea-color, var(--mjo-foreground-color, #222222)) 7%, transparent);
+            }
+            .container[data-variant="flat"]:hover,
+            .container[data-variant="flat"][data-focused] {
+                border-color: transparent;
+                background: color-mix(in srgb, var(--mjo-textarea-primary-color, var(--mjo-primary-color, #1aa8ed)) 10%, transparent);
+            }
+            .container[data-variant="flat"][data-color="secondary"]:hover,
+            .container[data-variant="flat"][data-color="secondary"][data-focused] {
+                border-color: transparent;
+                background: color-mix(in srgb, var(--mjo-textarea-secondary-color, var(--mjo-secondary-color, #7dc717)) 10%, transparent);
+            }
+            .container[data-variant="ghost"] {
+                border-color: transparent;
+                background: transparent;
+            }
+            .container[data-variant="ghost"]:hover,
+            .container[data-variant="ghost"][data-focused] {
+                border-color: transparent;
+                background: transparent;
+            }
+            .container[data-variant="ghost"] input {
+                padding-left: 2px;
+                padding-right: 2px;
             }
             .container[data-disabled] {
                 border-color: var(--mjo-input-border-color, var(--mjo-border-color, #dddddd));
                 opacity: 0.5;
+            }
+            .container[data-error],
+            .container[data-error][data-color="secondary"] {
+                border-color: var(--mjo-color-error, #d31616);
+            }
+            .container[data-error][data-variant="flat"],
+            .container[data-error][data-variant="ghost"] {
+                border-color: transparent;
+                background: color-mix(in srgb, var(--mjo-color-error, #d31616) 10%, transparent);
+            }
+            .container[data-variant="flat"][data-disabled],
+            .container[data-variant="ghost"][data-disabled] {
+                border-color: transparent;
             }
             mjoint-input-label[data-disabled],
             .helper[data-disabled] {

@@ -23,6 +23,35 @@ import { MJO_SLIDER_SIZES } from "./utils/mjo-slider.js";
 import "./components/input/mjoint-input-label.js";
 import "./components/slider/mjoint-slider-handle.js";
 
+/**
+ * @summary Customizable range slider component with accessibility support, keyboard navigation, and range selection.
+ *
+ * @description The mjo-slider component provides an interactive slider interface for selecting numeric values
+ * within a specified range. It supports both single-value selection and range selection with dual handles,
+ * includes comprehensive accessibility features with ARIA attributes, keyboard navigation, screen reader support,
+ * and customizable appearance with seamless form integration.
+ *
+ * @fires mjo-slider:change - Fired when the slider value changes and handle is released
+ * @fires mjo-slider:input - Fired during slider handle movement for real-time updates
+ * @fires mjo-slider:focus - Fired when a slider handle receives focus
+ * @fires mjo-slider:blur - Fired when a slider handle loses focus
+ * @fires mjo-slider:valuechange - Fired when value changes programmatically
+ * @fires change - Standard change event for form compatibility
+ *
+ * @slot - No slots available (uses properties for configuration)
+ * @csspart container - The main slider container
+ * @csspart value - Value display element next to the label
+ * @csspart rangebar - Slider track container
+ * @csspart track - Background track of the slider
+ * @csspart progress - Progress/filled portion of the track
+ * @csspart label-container - Container for the input label (via mjoint-input-label)
+ * @csspart label-truncate-container - Truncate container within the label
+ * @csspart label-truncate-wrapper - Truncate wrapper within the label
+ * @csspart tooltip-container - Container for slider handle tooltips
+ * @csspart tooltip - Tooltip content for handle values
+ * @csspart handle-wrapper - Wrapper for slider handles
+ * @csspart handle-item - Individual slider handle element
+ */
 @customElement("mjo-slider")
 export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: Boolean }) hideValue = false;
@@ -40,9 +69,9 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     @property({ type: String }) valuePrefix = "";
     @property({ type: String }) valueSuffix = "";
 
-    // Accessibility properties using custom attributes
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledby?: string;
+    @property({ type: String, attribute: "aria-label" }) declare ariaLabel: string | null;
     @property({ type: String, attribute: "aria-valuetext" }) ariaValuetext?: string;
     @property({ type: String, attribute: "aria-orientation" }) ariaOrientation: "horizontal" | "vertical" = "horizontal";
     @property({ type: String, attribute: "aria-required" }) ariaRequiredAttr?: string;
@@ -57,47 +86,12 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     @query("input") inputElement!: HTMLInputElement;
 
     type = "slider";
-    private stepsLeftsPx = [0];
-    private stepsValues = [0];
-    private rangebarRef = createRef<HTMLDivElement>();
-    private progressbarRef = createRef<HTMLDivElement>();
-    private sliderOneRef = createRef<MjointSliderHandle>();
-    private sliderTwoRef = createRef<MjointSliderHandle>();
-
-    // Computed properties for accessibility
-    private get computedAriaValueText(): string {
-        if (this.formatValueText) {
-            return this.formatValueText(this.value);
-        }
-
-        if (this.ariaValuetext) {
-            return this.ariaValuetext;
-        }
-
-        // Default format with prefix and suffix
-        if (this.isRange) {
-            const [min, max] = this.value.split("-");
-            return `${this.valuePrefix}${min}${this.valueSuffix} to ${this.valuePrefix}${max}${this.valueSuffix}`;
-        }
-
-        return `${this.valuePrefix}${this.value}${this.valueSuffix}`;
-    }
-
-    private get computedAriaLabel(): string {
-        if (this.ariaLabel) return this.ariaLabel;
-        if (this.label) return this.label;
-        return this.isRange ? "Range slider" : "Slider";
-    }
-
-    private get computedTabIndex(): number {
-        return this.disabled ? -1 : 0;
-    }
-
-    private listeners = {
-        resize: () => {
-            this.#setSteps();
-        },
-    };
+    #stepsLeftsPx = [0];
+    #stepsValues = [0];
+    #rangebarRef = createRef<HTMLDivElement>();
+    #progressbarRef = createRef<HTMLDivElement>();
+    #sliderOneRef = createRef<MjointSliderHandle>();
+    #sliderTwoRef = createRef<MjointSliderHandle>();
 
     render() {
         const handleOneId = `${this.id || "slider"}-handle-one-${Math.random().toString(36).substring(2, 9)}`;
@@ -110,6 +104,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 ${this.label
                     ? html`<mjoint-input-label
                           id=${ifDefined(labelId)}
+                          exportparts="container: label-container, truncate-container: label-truncate-container, truncate-wrapper: label-truncate-wrapper"
                           color=${this.color}
                           label=${this.label}
                           ?focused=${this.isFocused}
@@ -118,36 +113,44 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                       ></mjoint-input-label>`
                     : nothing}
                 ${!this.hideValue
-                    ? html`<div class="value" ?data-disabled=${this.disabled} aria-live="polite" aria-atomic="true">
-                          ${this.valuePrefix}${this.value}${this.valueSuffix}
-                      </div>`
+                    ? html`
+                          <div class="value" part="value" ?data-disabled=${this.disabled} aria-live="polite" aria-atomic="true">
+                              ${this.valuePrefix}${this.value}${this.valueSuffix}
+                          </div>
+                      `
                     : nothing}
             </div>
             <div
                 class="container"
+                part="container"
                 ?data-disabled=${this.disabled}
                 data-color=${this.color}
                 role="group"
-                aria-label=${this.computedAriaLabel}
+                aria-label=${this.#computedAriaLabel}
                 aria-describedby=${ifDefined(this.ariaDescribedby)}
             >
-                <div ${ref(this.rangebarRef)} class="rangebar" aria-hidden="true">
-                    <div class="track"></div>
-                    <div class="progress" data-color=${this.color} ${ref(this.progressbarRef)}></div>
+                <div ${ref(this.#rangebarRef)} class="rangebar" part="rangebar" aria-hidden="true">
+                    <div class="track" part="track"></div>
+                    <div class="progress" part="progress" data-color=${this.color} ${ref(this.#progressbarRef)}></div>
                 </div>
                 <mjoint-slider-handle
-                    ${ref(this.sliderOneRef)}
+                    ${ref(this.#sliderOneRef)}
                     id=${handleOneId}
+                    exportparts="
+                        tooltip-container,
+                        tooltip,
+                        handle-wrapper,
+                        handle-item"
                     .role=${"slider"}
                     aria-valuemin=${this.min}
                     aria-valuemax=${this.max}
                     aria-valuenow=${this.#getSliderValue("one")}
-                    aria-valuetext=${this.computedAriaValueText}
+                    aria-valuetext=${this.#computedAriaValueText}
                     aria-labelledby=${ifDefined(this.ariaLabelledby || labelId)}
                     aria-describedby=${ifDefined(this.ariaDescribedby)}
                     aria-orientation=${this.ariaOrientation}
                     aria-disabled=${this.disabled ? "true" : "false"}
-                    .tabindex=${this.computedTabIndex}
+                    .tabindex=${this.#computedTabIndex}
                     @move=${this.#handleMove}
                     @focus=${this.#handleSliderFocus}
                     @blur=${this.#handleSliderBlur}
@@ -163,18 +166,23 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 ></mjoint-slider-handle>
                 ${this.isRange
                     ? html`<mjoint-slider-handle
-                          ${ref(this.sliderTwoRef)}
+                          ${ref(this.#sliderTwoRef)}
                           id=${ifDefined(handleTwoId)}
+                          exportparts="
+                            tooltip-container,
+                            tooltip,
+                            handle-wrapper,
+                            handle-item"
                           .role=${"slider"}
                           aria-valuemin=${this.min}
                           aria-valuemax=${this.max}
                           aria-valuenow=${this.#getSliderValue("two")}
-                          aria-valuetext=${this.computedAriaValueText}
+                          aria-valuetext=${this.#computedAriaValueText}
                           aria-labelledby=${ifDefined(this.ariaLabelledby || labelId)}
                           aria-describedby=${ifDefined(this.ariaDescribedby)}
                           aria-orientation=${this.ariaOrientation}
                           aria-disabled=${this.disabled ? "true" : "false"}
-                          .tabindex=${this.computedTabIndex}
+                          .tabindex=${this.#computedTabIndex}
                           @move=${this.#handleMove}
                           @focus=${this.#handleSliderFocus}
                           @blur=${this.#handleSliderBlur}
@@ -197,7 +205,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     connectedCallback() {
         super.connectedCallback();
 
-        window.addEventListener("resize", this.listeners.resize);
+        window.addEventListener("resize", this.#resizeHandler);
 
         this.updateFormData({ name: this.name || "", value: this.value });
     }
@@ -205,7 +213,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     disconnectedCallback() {
         super.disconnectedCallback();
 
-        window.removeEventListener("resize", this.listeners.resize);
+        window.removeEventListener("resize", this.#resizeHandler);
     }
 
     protected firstUpdated(_changedProperties: Map<PropertyKey, unknown>) {
@@ -221,16 +229,14 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             this.value = this.#checkValue(this.value);
         }
 
-        // Use requestAnimationFrame to ensure the elements are fully rendered
-        // and have proper dimensions before calculating steps
         requestAnimationFrame(() => {
             this.#setSteps();
 
-            if (this.sliderOneRef.value) {
-                this.#setSliderPosition(this.sliderOneRef.value, this.#getSliderValue("one"));
+            if (this.#sliderOneRef.value) {
+                this.#setSliderPosition(this.#sliderOneRef.value, this.#getSliderValue("one"));
             }
-            if (this.sliderTwoRef.value) {
-                this.#setSliderPosition(this.sliderTwoRef.value, this.#getSliderValue("two"));
+            if (this.#sliderTwoRef.value) {
+                this.#setSliderPosition(this.#sliderTwoRef.value, this.#getSliderValue("two"));
             }
         });
     }
@@ -268,6 +274,35 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 }),
             );
         }
+    }
+
+    // Computed properties for accessibility
+    get #computedAriaValueText(): string {
+        if (this.formatValueText) {
+            return this.formatValueText(this.value);
+        }
+
+        if (this.ariaValuetext) {
+            return this.ariaValuetext;
+        }
+
+        // Default format with prefix and suffix
+        if (this.isRange) {
+            const [min, max] = this.value.split("-");
+            return `${this.valuePrefix}${min}${this.valueSuffix} to ${this.valuePrefix}${max}${this.valueSuffix}`;
+        }
+
+        return `${this.valuePrefix}${this.value}${this.valueSuffix}`;
+    }
+
+    get #computedAriaLabel(): string {
+        if (this.ariaLabel) return this.ariaLabel;
+        if (this.label) return this.label;
+        return this.isRange ? "Range slider" : "Slider";
+    }
+
+    get #computedTabIndex(): number {
+        return this.disabled ? -1 : 0;
     }
 
     #checkValue(value: string) {
@@ -349,9 +384,9 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         const target = event.target as MjointSliderHandle;
 
         // Determine which handle is focused
-        if (target === this.sliderOneRef.value) {
+        if (target === this.#sliderOneRef.value) {
             this.activeHandle = "one";
-        } else if (target === this.sliderTwoRef.value) {
+        } else if (target === this.#sliderTwoRef.value) {
             this.activeHandle = "two";
         }
 
@@ -370,7 +405,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     #handleSliderBlur(event: FocusEvent) {
         // Check if focus is moving to another handle
         const relatedTarget = event.relatedTarget as Element;
-        const isMovingToAnotherHandle = relatedTarget === this.sliderOneRef.value || relatedTarget === this.sliderTwoRef.value;
+        const isMovingToAnotherHandle = relatedTarget === this.#sliderOneRef.value || relatedTarget === this.#sliderTwoRef.value;
 
         if (!isMovingToAnotherHandle) {
             this.isFocused = false;
@@ -393,7 +428,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         if (this.disabled) return;
 
         const target = event.target as MjointSliderHandle;
-        const isHandleOne = target === this.sliderOneRef.value;
+        const isHandleOne = target === this.#sliderOneRef.value;
         const currentValue = Number(this.#getSliderValue(isHandleOne ? "one" : "two"));
         let newValue = currentValue;
         let handled = false;
@@ -474,25 +509,25 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     }
 
     #setSteps() {
-        const width = this.rangebarRef.value?.getBoundingClientRect().width || 0;
+        const width = this.#rangebarRef.value?.getBoundingClientRect().width || 0;
         const steps = (this.max - this.min) / this.step + 1;
         const decimals = this.step.toString().split(".")[1]?.length || 0;
         const pixels = width / (steps - 1);
 
         let value = this.min;
-        this.stepsLeftsPx = [0];
-        this.stepsValues = [value];
+        this.#stepsLeftsPx = [0];
+        this.#stepsValues = [value];
         for (let i = 1; i < steps; i++) {
             value += this.step;
             const leftPx = pixels * i;
 
-            this.stepsLeftsPx.push(Number(leftPx.toFixed(decimals)));
-            this.stepsValues.push(Number(value.toFixed(decimals)));
+            this.#stepsLeftsPx.push(Number(leftPx.toFixed(decimals)));
+            this.#stepsValues.push(Number(value.toFixed(decimals)));
         }
     }
 
     #handleMove(ev: CustomEvent<{ diff: number; target: MjointSliderHandle }>) {
-        const rangebar = this.rangebarRef.value;
+        const rangebar = this.#rangebarRef.value;
         if (!rangebar) return;
 
         const slider = ev.detail.target;
@@ -500,13 +535,13 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         const sliderLeft = slider.left;
         const left = sliderLeft + diff;
 
-        const closestPosition = this.stepsLeftsPx.reduce((prev, curr) => (Math.abs(curr - left) < Math.abs(prev - left) ? curr : prev));
-        const index = this.stepsLeftsPx.indexOf(closestPosition);
-        let value = String(this.stepsValues[index]);
+        const closestPosition = this.#stepsLeftsPx.reduce((prev, curr) => (Math.abs(curr - left) < Math.abs(prev - left) ? curr : prev));
+        const index = this.#stepsLeftsPx.indexOf(closestPosition);
+        let value = String(this.#stepsValues[index]);
 
         if (this.isRange) {
-            if (slider === this.sliderOneRef.value) {
-                const sliderTwo = this.sliderTwoRef.value;
+            if (slider === this.#sliderOneRef.value) {
+                const sliderTwo = this.#sliderTwoRef.value;
                 if (!sliderTwo) return;
 
                 const sliderTwoLeft = sliderTwo.left;
@@ -516,7 +551,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
                 value = `${value}-${this.value.split("-")[1]}`;
             } else {
-                const sliderOne = this.sliderOneRef.value;
+                const sliderOne = this.#sliderOneRef.value;
                 if (!sliderOne) return;
 
                 const sliderOneLeft = sliderOne.left;
@@ -538,7 +573,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     value,
                     name: this.name,
                     isRange: this.isRange,
-                    handle: slider === this.sliderOneRef.value ? "one" : "two",
+                    handle: slider === this.#sliderOneRef.value ? "one" : "two",
                 },
                 bubbles: true,
                 composed: true,
@@ -551,11 +586,11 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     }
 
     #setSliderPosition(slider: MjointSliderHandle, value: string) {
-        const rangebar = this.rangebarRef.value;
+        const rangebar = this.#rangebarRef.value;
         if (!rangebar) return;
 
-        const index = this.stepsValues.indexOf(Number(value));
-        const left = this.stepsLeftsPx[index];
+        const index = this.#stepsValues.indexOf(Number(value));
+        const left = this.#stepsLeftsPx[index];
 
         slider.setLeftPosition(left);
         slider.setLeft();
@@ -563,15 +598,15 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     }
 
     #setProgress() {
-        const progressbar = this.progressbarRef.value;
+        const progressbar = this.#progressbarRef.value;
         if (!progressbar) return;
 
-        const indexOne = this.stepsValues.indexOf(Number(this.#getSliderValue("one")));
-        const leftOne = this.stepsLeftsPx[indexOne];
+        const indexOne = this.#stepsValues.indexOf(Number(this.#getSliderValue("one")));
+        const leftOne = this.#stepsLeftsPx[indexOne];
 
         if (this.isRange) {
-            const indexTwo = this.stepsValues.indexOf(Number(this.#getSliderValue("two")));
-            const leftTwo = this.stepsLeftsPx[indexTwo];
+            const indexTwo = this.#stepsValues.indexOf(Number(this.#getSliderValue("two")));
+            const leftTwo = this.#stepsLeftsPx[indexTwo];
 
             progressbar.style.left = `${leftOne}px`;
             progressbar.style.width = `${leftTwo - leftOne}px`;
@@ -580,6 +615,10 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
             progressbar.style.width = `${leftOne}px`;
         }
     }
+
+    #resizeHandler = () => {
+        this.#setSteps();
+    };
 
     static styles = [
         css`
@@ -625,7 +664,7 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 border-radius: var(--mjo-slider-border-radius, var(--mjo-radius-medium, 5px));
                 padding: 8px 0;
                 margin: -8px 0;
-                touch-action: pan-y; /* Allow vertical scrolling, prevent horizontal pan */
+                touch-action: pan-y;
             }
             .progress,
             .track {
@@ -646,7 +685,6 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 background-color: var(--mjo-slider-secondary-color, var(--mjo-input-secondary-color, var(--mjo-secondary-color, #ff8800)));
             }
 
-            /* Reduced motion support */
             @media (prefers-reduced-motion: reduce) {
                 .container:focus-within,
                 .progress,
@@ -655,7 +693,6 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 }
             }
 
-            /* High contrast mode support */
             @media (prefers-contrast: high) {
                 .container:focus-within {
                     outline-width: var(--mjo-slider-focus-outline-width-high-contrast, 3px);
@@ -672,19 +709,17 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 }
             }
 
-            /* Touch improvements for mobile */
             @media (pointer: coarse) {
                 .container {
-                    height: 32px; /* Aumentar altura del contenedor para mejor toque */
+                    height: 32px;
                 }
                 .rangebar {
-                    padding: 14px 0; /* Aumentar área de toque */
+                    padding: 14px 0;
                     margin: -14px 0;
-                    touch-action: pan-y; /* Ensure vertical scroll is preserved on mobile */
+                    touch-action: pan-y;
                 }
-                /* Improve touch target for slider handles */
                 mjoint-slider-handle {
-                    touch-action: none; /* Handles can prevent all touch actions when being dragged */
+                    touch-action: none;
                 }
             }
         `,

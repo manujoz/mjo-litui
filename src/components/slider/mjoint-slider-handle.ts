@@ -47,12 +47,13 @@ export class MjointSliderHandle extends LitElement {
     render() {
         return html`
             ${this.tooltip
-                ? html`<div class="tooltip">
-                      <div class="text" data-color=${this.color}>${this.valuePrefix}${this.value}${this.valueSuffix}</div>
+                ? html`<div class="tooltip" part="tooltip-container">
+                      <div class="text" part="tooltip" data-color=${this.color}>${this.valuePrefix}${this.value}${this.valueSuffix}</div>
                   </div>`
                 : nothing}
             <div
                 class="outter hidden"
+                part="handle-wrapper"
                 ?data-pressed=${this.pressed}
                 ?data-focused=${this.isFocused}
                 data-color=${this.color}
@@ -71,7 +72,7 @@ export class MjointSliderHandle extends LitElement {
                 @blur=${this.#handleBlur}
                 @keydown=${this.#handleKeydown}
             >
-                <div class="inner" ?data-pressed=${this.pressed}></div>
+                <div class="inner" part="handle-item" ?data-pressed=${this.pressed}></div>
             </div>
         `;
     }

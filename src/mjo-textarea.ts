@@ -8,6 +8,7 @@ import type {
     MjoTextareaInputEvent,
     MjoTextareaKeyupEvent,
     MjoTextareaSize,
+    MjoTextareaVariant,
 } from "./types/mjo-textarea.js";
 
 import { LitElement, css, html, nothing } from "lit";
@@ -25,6 +26,40 @@ import "./components/input/mjoint-input-helper-text.js";
 import "./components/input/mjoint-input-label.js";
 import "./mjo-icon.js";
 
+/**
+ * @summary Multi-line text input component with auto-resize functionality, character counting,
+ * form integration, and comprehensive validation support.
+ *
+ * @fires mjo-textarea:input - Fired on every input change with detailed value and validation information
+ * @fires mjo-textarea:change - Fired when value changes and field loses focus
+ * @fires mjo-textarea:focus - Fired when the textarea gains focus
+ * @fires mjo-textarea:blur - Fired when the textarea loses focus
+ * @fires mjo-textarea:keyup - Fired on keyup events (Enter key submits parent form)
+ * @fires mjo-textarea:clear - Fired when the textarea is cleared programmatically
+ *
+ * @slot - No slots available (self-contained component)
+ * @csspart container - The main textarea container
+ * @csspart textarea - The native textarea element
+ * @csspart start-icon-container - Container for start icon
+ * @csspart start-icon - The start icon element (via exportparts)
+ * @csspart end-icon-container - Container for end icon
+ * @csspart end-icon - The end icon element (via exportparts)
+ * @csspart start-image-container - Container for start image
+ * @csspart start-image - The start image element
+ * @csspart end-image-container - Container for end image
+ * @csspart end-image - The end image element
+ * @csspart label-container - The label container (via exportparts)
+ * @csspart label-truncate-container - The label truncate container (via exportparts)
+ * @csspart label-truncate-wrapper - The label truncate wrapper (via exportparts)
+ * @csspart helper-text-container - Helper text container (via exportparts)
+ * @csspart helper-text-typography - Helper text typography (via exportparts)
+ * @csspart helper-text-typography-tag - Helper text typography tag (via exportparts)
+ * @csspart helper-text-error-message - Error message element (via exportparts)
+ * @csspart helper-text-success-message - Success message element (via exportparts)
+ * @csspart helper-text-icon - Helper text icon element (via exportparts)
+ * @csspart counter-container - Character counter container (via exportparts)
+ * @csspart counter-text - Character counter text (via exportparts)
+ */
 @customElement("mjo-textarea")
 export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: String }) autoCapitalize?: MjoTextareaAutoCapitalize;
@@ -41,6 +76,7 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     @property({ type: String }) label?: string;
     @property({ type: String }) size: MjoTextareaSize = "medium";
     @property({ type: String }) color: MjoTextareaColor = "primary";
+    @property({ type: String }) variant: MjoTextareaVariant = "default";
     @property({ type: String }) startIcon?: string;
     @property({ type: String }) endIcon?: string;
     @property({ type: String }) startImage?: string;
@@ -68,27 +104,44 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         return html`
             ${this.applyThemeSsr()}
             ${this.label
-                ? html`<mjoint-input-label
-                      id=${ifDefined(labelId)}
-                      color=${this.color}
-                      label=${this.label}
-                      ?focused=${this.isFocused}
-                      ?error=${this.error}
-                      ?data-disabled=${this.disabled}
-                  ></mjoint-input-label>`
+                ? html`
+                      <mjoint-input-label
+                          id=${ifDefined(labelId)}
+                          exportparts="container: label-container, truncate-container: label-truncate-container, truncate-wrapper: label-truncate-wrapper"
+                          color=${this.color}
+                          label=${this.label}
+                          ?focused=${this.isFocused}
+                          ?error=${this.error}
+                          ?data-disabled=${this.disabled}
+                      ></mjoint-input-label>
+                  `
                 : nothing}
             <div
                 class="container"
+                part="container"
                 data-color=${this.color}
+                data-variant=${this.variant}
                 ?data-focused=${this.isFocused}
                 data-size=${this.size}
                 ?data-error=${this.error}
                 ?data-disabled=${this.disabled}
             >
-                ${this.startIcon && html`<div class="icon startIcon"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
-                ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Input image" /></div>` : nothing}
+                ${this.startIcon &&
+                html`
+                    <div class="icon startIcon" part="start-icon-container">
+                        <mjo-icon src=${this.startIcon} exportparts="icon: start-icon"></mjo-icon>
+                    </div>
+                `}
+                ${this.startImage && !this.startIcon
+                    ? html`
+                          <div class="image startImage" part="start-image-container">
+                              <img src=${this.startImage} part="start-image" alt="Input image" />
+                          </div>
+                      `
+                    : nothing}
                 <textarea
                     id=${this.id}
+                    part="textarea"
                     autocapitalize=${ifDefined(this.autoCapitalize)}
                     autocomplete=${ifDefined(this.autoComplete)}
                     ?autofocus=${this.autoFocus}
@@ -112,18 +165,42 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                     aria-invalid=${this.error ? "true" : "false"}
                     aria-required=${ifDefined(this.required)}
                 ></textarea>
-                ${this.endIcon ? html`<div class="icon endIcon"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
-                ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Input image" /></div>` : nothing}
+                ${this.endIcon
+                    ? html`
+                          <div class="icon endIcon" part="end-icon-container">
+                              <mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>
+                          </div>
+                      `
+                    : nothing}
+                ${this.endImage && !this.endIcon
+                    ? html`
+                          <div class="image endImage" part="end-image-container">
+                              <img src=${this.endImage} part="end-image" alt="Input image" />
+                          </div>
+                      `
+                    : nothing}
             </div>
             <div class="helper" ?data-disabled=${this.disabled}>
                 ${this.helperText || this.errormsg || this.successmsg
-                    ? html`<mjoint-input-helper-text id=${ifDefined(helperTextId)} errormsg=${ifDefined(this.errormsg)} successmsg=${ifDefined(this.successmsg)}
+                    ? html`<mjoint-input-helper-text
+                          id=${ifDefined(helperTextId)}
+                          exportparts="
+                            container: helper-text-container,
+                            typography: helper-text-typography,
+                            helper-text: helper-text-typography-tag,
+                            error-message: helper-text-error-message,
+                            success-message: helper-text-success-message,
+                            icon: helper-text-icon
+                          "
+                          errormsg=${ifDefined(this.errormsg)}
+                          successmsg=${ifDefined(this.successmsg)}
                           >${this.helperText}</mjoint-input-helper-text
                       >`
                     : nothing}
                 ${this.counter
                     ? html`<mjoint-input-counter
                           count=${this.valueLength}
+                          exportparts="counter: counter-container, counter-text: counter-text"
                           max=${ifDefined(this.maxlength)}
                           regressive
                           ?data-error=${this.error}
@@ -330,26 +407,20 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 border-style: var(--mjo-textarea-border-style, var(--mjo-input-border-style, solid));
                 border-width: var(--mjo-textarea-border-width, var(--mjo-input-border-width, 1px));
                 border-color: var(--mjo-textarea-border-color, var(--mjo-input-border-color, var(--mjo-border-color, #dddddd)));
-                background-color: var(--mjo-textarea-background-color, var(--mjo-input-background-color, var(--mjo-background-color-card-low, #ffffff)));
+                background: var(--mjo-textarea-background-color, var(--mjo-input-background-color, var(--mjo-background-color-card-low, #ffffff)));
                 box-shadow: var(--mjo-textarea-box-shadow, var(--mjo-input-box-shadow, none));
                 display: flex;
                 flex-flow: row nowrap;
                 overflow: hidden;
                 position: relative;
-                transition: border-color 0.3s;
+                transition:
+                    border-color 0.3s,
+                    background-color 0.3s;
             }
             .container:hover {
                 border-style: var(--mjo-textarea-border-style-hover, var(--mjo-input-border-style-hover, solid));
                 border-width: var(--mjo-textarea-border-width-hover, var(--mjo-input-border-width-hover, 1px));
                 border-color: var(--mjo-textarea-border-color-hover, var(--mjo-input-border-color-hover, #cccccc));
-            }
-            .container[data-disabled] {
-                border-color: var(--mjo-textarea-border-color, var(--mjo-input-border-color, var(--mjo-border-color, #dddddd)));
-                opacity: 0.5;
-            }
-            mjoint-input-label[data-disabled],
-            .helper[data-disabled] {
-                opacity: 0.5;
             }
             .container[data-focused] {
                 border-style: var(--mjo-textarea-border-style-focus, var(--mjo-input-border-style-focus, solid));
@@ -364,6 +435,55 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             .container[data-error],
             .container[data-error][data-color="secondary"] {
                 border-color: var(--mjo-color-error, #d31616);
+            }
+            .container[data-variant="flat"] {
+                border-color: transparent;
+                border-radius: 0;
+                background: color-mix(in srgb, var(--mjo-textarea-color, var(--mjo-foreground-color, #222222)) 7%, transparent);
+            }
+            .container[data-variant="flat"]:hover,
+            .container[data-variant="flat"][data-focused] {
+                border-color: transparent;
+                background: color-mix(in srgb, var(--mjo-textarea-primary-color, var(--mjo-primary-color, #1aa8ed)) 10%, transparent);
+            }
+            .container[data-variant="flat"][data-color="secondary"]:hover,
+            .container[data-variant="flat"][data-color="secondary"][data-focused] {
+                border-color: transparent;
+                background: color-mix(in srgb, var(--mjo-textarea-secondary-color, var(--mjo-secondary-color, #7dc717)) 10%, transparent);
+            }
+            .container[data-variant="ghost"] {
+                border-color: transparent;
+                background: transparent;
+            }
+            .container[data-variant="ghost"]:hover,
+            .container[data-variant="ghost"][data-focused] {
+                border-color: transparent;
+                background: transparent;
+            }
+            .container[data-variant="ghost"] textarea {
+                padding-left: 2px;
+                padding-right: 2px;
+            }
+            .container[data-error],
+            .container[data-error][data-color="secondary"] {
+                border-color: var(--mjo-color-error, #d31616);
+            }
+            .container[data-error][data-variant="flat"],
+            .container[data-error][data-variant="ghost"] {
+                border-color: transparent;
+                background: color-mix(in srgb, var(--mjo-color-error, #d31616) 10%, transparent);
+            }
+            .container[data-disabled] {
+                border-color: var(--mjo-textarea-border-color, var(--mjo-border-color, #dddddd));
+                opacity: 0.5;
+            }
+            .container[data-variant="flat"][data-disabled],
+            .container[data-variant="ghost"][data-disabled] {
+                border-color: transparent;
+            }
+            mjoint-input-label[data-disabled],
+            .helper[data-disabled] {
+                opacity: 0.5;
             }
             textarea {
                 background-color: transparent;

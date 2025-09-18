@@ -74,7 +74,6 @@ export interface MjoThemeConfig {
         mjoDropdown?: MjoDropdownTheme;
         mjoIcon?: MjoIconTheme;
         mjoImage?: MjoImageTheme;
-        mjoIonic?: MjoIonicTheme;
         mjoLink?: MjoLinkTheme;
         mjoListbox?: MjoListboxTheme;
         mjoMenuButton?: MjoMenuButtonTheme;
@@ -90,6 +89,7 @@ export interface MjoThemeConfig {
         mjoSlider?: MjoSliderTheme;
         mjoSwitch?: MjoSwitchTheme;
         mjoTable?: MjoTableTheme;
+        mjoTabs?: MjoTabsTheme;
         mjoTextarea?: MjoTextareaTheme;
         mjoInput?: MjoInputTheme;
         mjoTypography?: TypographyTheme;
@@ -423,18 +423,39 @@ export interface MjoInputTheme {
 }
 
 export interface MjoRadioTheme {
+    /** --mjo-radio-border-color */
     borderColor?: string;
+    /** --mjo-radio-checked-color */
     checkedColor?: string;
+    /** --mjo-radio-checked-border-color */
     checkedBorderColor?: string;
-    checkedBackgroundColor?: string;
+    /** --mjo-radio-checked-icon-color */
+    checkedIconColor?: string;
+    /** --mjo-radio-disabled-opacity */
     disabledOpacity?: string;
+    /** --mjo-radio-error-background-color */
+    errorBackgroundColor?: string;
+    /** --mjo-radio-error-border-color */
+    errorBorderColor?: string;
+    /** --mjo-radio-error-icon-color */
+    errorIconColor?: string;
+    /** --mjo-radio-error-label-color */
+    errorLabelColor?: string;
+    /** --mjo-radio-focus-color */
     focusColor?: string;
+    /** --mjo-radio-focus-outline-color */
     focusOutlineColor?: string;
+    /** --mjo-radio-helper-color */
     helperColor?: string;
+    /** --mjo-radio-helper-font-size */
     helperFontSize?: string;
+    /** --mjo-radio-helper-font-weight */
     helperFontWeight?: string;
+    /** --mjo-radio-label-color */
     labelColor?: string;
+    /** --mjo-radio-label-font-size */
     labelFontSize?: string;
+    /** --mjo-radio-label-font-weight */
     labelFontWeight?: string;
 }
 
@@ -452,29 +473,66 @@ export interface MjoScrollshadowTheme {
 }
 
 export interface MjoSliderTheme {
+    /** --mjo-slider-background-color */
     backgroundColor?: string;
+    /** --mjo-slider-border-radius */
+    borderRadius?: string;
+    /** --mjo-slider-progress-color (deprecated: use primaryColor) */
     progressColor?: string;
+    /** --mjo-slider-primary-color */
     primaryColor?: string;
+    /** --mjo-slider-secondary-color */
     secondaryColor?: string;
+    /** --mjo-slider-label-color */
     labelColor?: string;
+    /** --mjo-slider-label-font-size */
     labelFontSize?: string;
+    /** --mjo-slider-label-font-weight */
     labelFontWeight?: string;
+    /** --mjo-slider-primary-foreground-color */
     primaryForegroundColor?: string;
+    /** --mjo-slider-secondary-foreground-color */
     secondaryForegroundColor?: string;
+    /** --mjo-slider-value-color */
     valueColor?: string;
+    /** --mjo-slider-value-font-size */
     valueFontSize?: string;
+    /** --mjo-slider-value-font-weight */
     valueFontWeight?: string;
+    /** --mjo-slider-focus-outline-color */
     focusOutlineColor?: string;
+    /** --mjo-slider-focus-outline-width */
     focusOutlineWidth?: string;
+    /** --mjo-slider-focus-outline-offset */
     focusOutlineOffset?: string;
+    /** --mjo-slider-focus-outline-radius */
+    focusOutlineRadius?: string;
+    /** --mjo-slider-handle-focus-ring-color */
     handleFocusRingColor?: string;
+    /** --mjo-slider-handle-focus-ring-width */
     handleFocusRingWidth?: string;
+    /** --mjo-slider-handle-disabled-color */
     handleDisabledColor?: string;
+    /** --mjo-slider-tooltip-background-color (deprecated: use tooltipTextColor) */
     tooltipBackgroundColor?: string;
+    /** --mjo-slider-tooltip-text-color (deprecated: use primaryForegroundColor/secondaryForegroundColor) */
     tooltipTextColor?: string;
+    /** --mjo-slider-tooltip-radius */
     tooltipRadius?: string;
+    /** --mjo-slider-tooltip-box-shadow */
     tooltipBoxShadow?: string;
+    /** --mjo-slider-disabled-opacity */
     disabledOpacity?: string;
+    /** --mjo-slider-background-color-high-contrast */
+    backgroundColorHighContrast?: string;
+    /** --mjo-slider-border-color-high-contrast */
+    borderColorHighContrast?: string;
+    /** --mjo-slider-primary-color-high-contrast */
+    primaryColorHighContrast?: string;
+    /** --mjo-slider-secondary-color-high-contrast */
+    secondaryColorHighContrast?: string;
+    /** --mjo-slider-focus-outline-width-high-contrast */
+    focusOutlineWidthHighContrast?: string;
 }
 
 export interface MjoSelectTheme extends MjoInputTheme {
@@ -525,9 +583,46 @@ export interface MjoTableTheme {
 }
 
 export interface MjoTextareaTheme {
+    /** --mjo-textarea-background-color */
+    backgroundColor?: string;
+    /** --mjo-textarea-border-color */
+    borderColor?: string;
+    /** --mjo-textarea-border-color-hover */
+    borderColorHover?: string;
+    /** --mjo-textarea-border-style */
+    borderStyle?: string;
+    /** --mjo-textarea-border-style-focus */
+    borderStyleFocus?: string;
+    /** --mjo-textarea-border-style-hover */
+    borderStyleHover?: string;
+    /** --mjo-textarea-border-width */
+    borderWidth?: string;
+    /** --mjo-textarea-border-width-focus */
+    borderWidthFocus?: string;
+    /** --mjo-textarea-border-width-hover */
+    borderWidthHover?: string;
+    /** --mjo-textarea-box-shadow */
+    boxShadow?: string;
+    /** --mjo-textarea-color */
+    color?: string;
+    /** --mjo-textarea-font-family */
+    fontFamily?: string;
+    /** --mjo-textarea-font-size */
+    fontSize?: string;
+    /** --mjo-textarea-font-weight */
+    fontWeight?: string;
+    /** --mjo-textarea-padding */
     padding?: string;
+    /** --mjo-textarea-padding-small */
     paddingSmall?: string;
+    /** --mjo-textarea-padding-large */
     paddingLarge?: string;
+    /** --mjo-textarea-primary-color */
+    primaryColor?: string;
+    /** --mjo-textarea-radius */
+    radius?: string;
+    /** --mjo-textarea-secondary-color */
+    secondaryColor?: string;
 }
 
 export interface MjoColorPickerTheme {
@@ -710,57 +805,93 @@ export interface MjoMenuButtonTheme {
 }
 
 export interface MjoPaginationTheme {
+    /** --mjo-pagination-gap */
     gap?: string;
+    /** --mjo-pagination-items-gap */
     itemsGap?: string;
+    /** --mjo-pagination-container-padding */
     containerPadding?: string;
+    /** --mjo-pagination-container-border-radius */
     containerBorderRadius?: string;
+    /** --mjo-pagination-container-border */
     containerBorder?: string;
+    /** --mjo-pagination-background-color */
     backgroundColor?: string;
+    /** --mjo-pagination-font-family */
     fontFamily?: string;
+    /** --mjo-pagination-font-size */
     fontSize?: string;
+    /** --mjo-pagination-font-weight */
     fontWeight?: string;
+    /** --mjo-pagination-active-font-weight */
     activeFontWeight?: string;
+    /** --mjo-pagination-small-font-size */
     smallFontSize?: string;
+    /** --mjo-pagination-large-font-size */
     largeFontSize?: string;
+    /** --mjo-pagination-item-width */
     itemWidth?: string;
-    padding?: string;
+    /** --mjo-pagination-color */
     color?: string;
+    /** --mjo-pagination-primary-color */
     primaryColor?: string;
+    /** --mjo-pagination-secondary-color */
     secondaryColor?: string;
+    /** --mjo-pagination-primary-foreground-color */
     primaryForegroundColor?: string;
+    /** --mjo-pagination-secondary-foreground-color */
     secondaryForegroundColor?: string;
+    /** --mjo-pagination-disabled-color */
     disabledColor?: string;
+    /** --mjo-pagination-hover-background-color */
     hoverBackgroundColor?: string;
+    /** --mjo-pagination-primary-color-hover */
     primaryColorHover?: string;
+    /** --mjo-pagination-secondary-color-hover */
     secondaryColorHover?: string;
-    indicatorOpacity?: string;
+    /** --mjo-pagination-secondary-color-alpha1 */
+    secondaryColorAlpha1?: string;
+    /** --mjo-pagination-indicator-border-radius */
     indicatorBorderRadius?: string;
+    /** --mjo-pagination-animation-duration */
     animationDuration?: string;
+    /** --mjo-pagination-animation-timing */
     animationTiming?: string;
+    /** --mjo-pagination-primary-color-alpha */
     primaryColorAlpha?: string;
+    /** --mjo-pagination-secondary-color-alpha */
     secondaryColorAlpha?: string;
+    /** --mjo-pagination-ellipsis-color */
     ellipsisColor?: string;
+    /** --mjo-pagination-ellipsis-font-weight */
     ellipsisFontWeight?: string;
+    /** --mjo-pagination-border-radius */
     borderRadius?: string;
+    /** --mjo-pagination-nav-color */
     navColor?: string;
+    /** --mjo-pagination-nav-min-width */
     navMinWidth?: string;
+    /** --mjo-pagination-nav-padding */
     navPadding?: string;
+    /** --mjo-pagination-nav-disabled-color */
     navDisabledColor?: string;
-    navSmallMinWidth?: string;
-    navSmallPadding?: string;
-    navLargeMinWidth?: string;
-    navLargePadding?: string;
+    /** --mjo-pagination-small-min-width */
     smallMinWidth?: string;
-    smallPadding?: string;
-    largeMinWidth?: string;
-    largePadding?: string;
+    /** --mjo-pagination-page-size-gap */
     pageSizeGap?: string;
+    /** --mjo-pagination-page-size-font-size */
     pageSizeFontSize?: string;
+    /** --mjo-pagination-page-size-color */
     pageSizeColor?: string;
+    /** --mjo-pagination-select-background-color */
     selectBackgroundColor?: string;
+    /** --mjo-pagination-select-border-color */
     selectBorderColor?: string;
+    /** --mjo-pagination-select-border-radius */
     selectBorderRadius?: string;
+    /** --mjo-pagination-select-color */
     selectColor?: string;
+    /** --mjo-pagination-select-padding */
     selectPadding?: string;
 }
 
@@ -813,4 +944,15 @@ export interface MjoBreadcrumbsTheme {
     fontFamily?: string;
     fontSize?: string;
     fontWeight?: string;
+}
+
+export interface MjoTabsTheme {
+    /** --mjo-tabs-border-color */
+    borderColor?: string;
+    /** --mjo-tabs-button-font-weight */
+    buttonFontWeight?: string;
+    /** --mjo-tabs-button-padding */
+    buttonPadding?: string;
+    /** --mjo-tabs-button-border-radius */
+    buttonBorderRadius?: string;
 }

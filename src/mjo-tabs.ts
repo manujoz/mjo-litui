@@ -4,13 +4,30 @@ import { MjoTabsChangeEvent, MjoTabsColor, MjoTabsUpdatedEvent, MjoTabsVariant }
 import { LitElement, PropertyValues, css, html, isServer, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { uniqueId } from "./utils/strings.js";
 
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import "./components/tabs/mjo-tab.js";
 
+/**
+ * @summary Versatile tab navigation component with multiple variants, color themes and layout options.
+ *
+ * @description The mjo-tabs component provides organized content switching with multiple visual styles
+ * and layout options. It supports light, solid and bordered variants, semantic color schemes,
+ * horizontal and vertical orientations, and includes comprehensive keyboard navigation and ARIA support.
+ *
+ * @fires mjo-tabs:changed - Fired when the active tab changes
+ * @fires mjo-tabs:updated - Fired when the tabs collection is updated
+ *
+ * @slot - Contains mjo-tab elements
+ * @csspart container - The main tabs container
+ * @csspart header - The tab navigation header containing buttons
+ * @csspart indicator - The visual indicator that shows active tab
+ * @csspart tab-button - Individual tab buttons
+ * @csspart content - The content area containing tab panels
+ */
 @customElement("mjo-tabs")
 export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) variant: MjoTabsVariant = "light";
@@ -28,11 +45,11 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
     render() {
         return html`
             ${this.applyThemeSsr()}${unsafeHTML(this.#styles)}
-            <section class="container" ?data-vertical=${this.vertical} data-ssr=${isServer}>
+            <section class="container" part="container" ?data-vertical=${this.vertical} data-ssr=${isServer}>
                 ${this.tabs.length > 0
                     ? html`
-                          <header role="tablist" aria-label="Tab Navigation" data-variant=${this.variant} data-color=${this.color}>
-                              <div class="indicator"></div>
+                          <header role="tablist" part="header" aria-label="Tab Navigation" data-variant=${this.variant} data-color=${this.color}>
+                              <div class="indicator" part="indicator"></div>
                               ${repeat(
                                   this.tabs,
                                   (tab, index) => `${tab.label}-${index}`,
@@ -40,6 +57,7 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
                                       <button
                                           id=${`tab-${tab.id}`}
                                           class="tab-button"
+                                          part="tab-button"
                                           type="button"
                                           ?data-active=${index === this.activeIndex}
                                           data-index=${index}
@@ -57,7 +75,7 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
                           </header>
                       `
                     : nothing}
-                <div class="content">
+                <div class="content" part="content">
                     <slot @slotchange=${this.#updateTabs}></slot>
                 </div>
             </section>
