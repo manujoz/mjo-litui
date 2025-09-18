@@ -4,17 +4,18 @@ A comprehensive calendar component for date selection that supports both single 
 
 ## Key Features
 
--   **Dual Selection Modes**: Single date or date range selection
--   **Adaptive Layout**: Intelligent dual-calendar layout in range mode based on container width
--   **Full Accessibility**: ARIA roles, keyboard navigation, screen reader announcements, and focus management
--   **Internationalization**: Support for 15 languages with localized month names and weekdays
--   **Smart Constraints**: Min/max dates and individual disabled dates support
--   **Form Integration**: Native form support with validation capabilities
--   **Advanced Theming**: Extensive customization via CSS variables and ThemeMixin
--   **Programmatic Control**: Complete API for external date manipulation
--   **Responsive Design**: Adaptive sizing and responsive dual-calendar behavior
--   **Event Markers**: Support for custom event indicators on dates (planned feature)
--   **Keyboard Navigation**: Full keyboard support with arrow keys, Page Up/Down, Home/End, and shortcuts
+- **Dual Selection Modes**: Single date or date range selection
+- **Adaptive Layout**: Intelligent dual-calendar layout in range mode based on container width
+- **Compact Mode**: Automatic responsive sizing with reduced padding when enabled for narrow containers
+- **Full Accessibility**: ARIA roles, keyboard navigation, screen reader announcements, and focus management
+- **Internationalization**: Support for 15 languages with localized month names and weekdays
+- **Smart Constraints**: Min/max dates and individual disabled dates support
+- **Form Integration**: Native form support with validation capabilities
+- **Advanced Theming**: Extensive customization via CSS variables and ThemeMixin
+- **Programmatic Control**: Complete API for external date manipulation
+- **Responsive Design**: Adaptive sizing and responsive dual-calendar behavior
+- **Event Markers**: Support for custom event indicators on dates (planned feature)
+- **Keyboard Navigation**: Full keyboard support with arrow keys, Page Up/Down, Home/End, and shortcuts
 
 ## Form Integration
 
@@ -35,8 +36,8 @@ The `mjo-calendar` component integrates seamlessly with `mjo-form` through the `
 
 When integrated with forms, the calendar component submits data in the following formats:
 
--   **Single mode**: `{ fieldName: "2025-01-15" }` (string in YYYY-MM-DD format)
--   **Range mode**: `{ fieldName: "{\"start\":\"2025-01-10\",\"end\":\"2025-01-20\"}" }` (JSON string format)
+- **Single mode**: `{ fieldName: "2025-01-15" }` (string in YYYY-MM-DD format)
+- **Range mode**: `{ fieldName: "{\"start\":\"2025-01-10\",\"end\":\"2025-01-20\"}" }` (JSON string format)
 
 ### Validation Support
 
@@ -87,29 +88,29 @@ The `mjo-calendar` component is designed with comprehensive accessibility featur
 
 ### Keyboard Navigation
 
--   **Arrow Keys**: Navigate between dates (Left/Right for days, Up/Down for weeks)
--   **Page Up/Page Down**: Navigate by month (Ctrl+Page Up/Down for year navigation)
--   **Home/End**: Move to start/end of current week
--   **Enter/Space**: Select focused date
--   **Escape**: Close month/year pickers or clear focus
--   **Tab**: Navigate between interactive elements (month/year buttons, navigation)
--   **T**: Jump to today's date (quick shortcut)
+- **Arrow Keys**: Navigate between dates (Left/Right for days, Up/Down for weeks)
+- **Page Up/Page Down**: Navigate by month (Ctrl+Page Up/Down for year navigation)
+- **Home/End**: Move to start/end of current week
+- **Enter/Space**: Select focused date
+- **Escape**: Close month/year pickers or clear focus
+- **Tab**: Navigate between interactive elements (month/year buttons, navigation)
+- **T**: Jump to today's date (quick shortcut)
 
 ### ARIA Support
 
--   **Roles**: Proper semantic structure with `application`, `grid`, `gridcell`, `button`, `dialog` roles
--   **Labels**: Contextual labels for dates, navigation, and pickers
--   **States**: `aria-selected`, `aria-current`, `aria-disabled`, `aria-expanded` attributes
--   **Live Regions**: Screen reader announcements for selection changes and navigation
--   **Focus Management**: Proper focus indicators and focus trapping in pickers
+- **Roles**: Proper semantic structure with `application`, `grid`, `gridcell`, `button`, `dialog` roles
+- **Labels**: Contextual labels for dates, navigation, and pickers
+- **States**: `aria-selected`, `aria-current`, `aria-disabled`, `aria-expanded` attributes
+- **Live Regions**: Screen reader announcements for selection changes and navigation
+- **Focus Management**: Proper focus indicators and focus trapping in pickers
 
 ### Screen Reader Support
 
--   **Date Announcements**: Full date context with day of week, date, and status
--   **Selection Feedback**: Automatic announcements when dates are selected
--   **Navigation Context**: Clear indication of current month/year being viewed
--   **Range Context**: Proper announcement of range start, end, and in-between dates
--   **Picker Context**: Clear indication when entering/exiting month/year selection mode
+- **Date Announcements**: Full date context with day of week, date, and status
+- **Selection Feedback**: Automatic announcements when dates are selected
+- **Navigation Context**: Clear indication of current month/year being viewed
+- **Range Context**: Proper announcement of range start, end, and in-between dates
+- **Picker Context**: Clear indication when entering/exiting month/year selection mode
 
 ### Best Practices
 
@@ -187,6 +188,9 @@ The `mjo-calendar` component is designed with comprehensive accessibility featur
 
 <!-- Disable features for controlled environments -->
 <mjo-calendar mode="single" enable-keyboard-navigation="false" announce-selections="false" show-today="false"></mjo-calendar>
+
+<!-- Enable compact mode for responsive layouts -->
+<mjo-calendar mode="single" allow-compact></mjo-calendar>
 ```
 
 ## Basic Examples
@@ -407,6 +411,7 @@ export class ExampleCalendarCustom extends LitElement {
 | `eventMarkers`             | `Array<{date: string; color?: string; tooltip?: string}>` | `undefined` | no       | Event markers for specific dates (visual only)      |
 | `enableKeyboardNavigation` | `boolean`                                                 | `true`      | no       | Enable/disable keyboard navigation                  |
 | `announceSelections`       | `boolean`                                                 | `true`      | no       | Enable/disable selection announcements              |
+| `allowCompact`             | `boolean`                                                 | `false`     | no       | Enable compact mode when parent container is narrow |
 | `theme`                    | `Record<string, string>`                                  | `undefined` | no       | Theme object for ThemeMixin customization           |
 
 ### Supported Locales
@@ -443,15 +448,16 @@ The auto mode uses a `ResizeObserver` for responsive adaptation. The threshold i
 
 ### Behavior Notes
 
--   **Single Mode**: Clicking a date selects it and fires `mjo-calendar:date-selected` + `change` events.
--   **Range Mode**: First valid click sets start date, second sets end date and fires `mjo-calendar:range-selected` + `change` events.
--   **Date Ordering**: If the second selected date is earlier than the first, dates are automatically swapped (start ≤ end guarantee).
--   **Navigation**: Month/year navigation ignores constraints; constraints only block selection.
--   **Constraints**: Selection is vetoed by `minDate`, `maxDate`, and `disabledDates`.
--   **Adjacent Months**: In range mode with two calendars, months are always adjacent (left is month N, right is N+1).
--   **Responsive**: `range-calendars="auto"` dynamically toggles dual layout depending on 720px width threshold.
--   **Form Integration**: Automatically integrates with `mjo-form` when `name` property is set.
--   **Today Highlighting**: Today's date is automatically highlighted unless `showToday` is false.
+- **Single Mode**: Clicking a date selects it and fires `mjo-calendar:date-selected` + `change` events.
+- **Range Mode**: First valid click sets start date, second sets end date and fires `mjo-calendar:range-selected` + `change` events.
+- **Date Ordering**: If the second selected date is earlier than the first, dates are automatically swapped (start ≤ end guarantee).
+- **Navigation**: Month/year navigation ignores constraints; constraints only block selection.
+- **Constraints**: Selection is vetoed by `minDate`, `maxDate`, and `disabledDates`.
+- **Adjacent Months**: In range mode with two calendars, months are always adjacent (left is month N, right is N+1).
+- **Responsive**: `range-calendars="auto"` dynamically toggles dual layout depending on 720px width threshold.
+- **Form Integration**: Automatically integrates with `mjo-form` when `name` property is set.
+- **Today Highlighting**: Today's date is automatically highlighted unless `showToday` is false.
+- **Compact Mode**: When `allowCompact` is enabled, the calendar automatically reduces padding and sizing when the parent container is narrower than the calendar's minimum width.
 
 ## Events
 
@@ -459,17 +465,17 @@ The auto mode uses a `ResizeObserver` for responsive adaptation. The threshold i
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
 | `mjo-calendar:date-selected`  | `{ date?: Date, value?: string }`                                                                                                                                             | Date is selected (single mode)        |
 | `mjo-calendar:range-selected` | `{ startDate?: Date, endDate?: Date, startDateValue?: string, endDateValue?: string }`                                                                                        | Date range fully selected (both ends) |
-| `mjo-calendar:day-click`      | `{ day: number, date: Date, events: CalendarEventMarker[] }`                                                                                                                  | Day cell is clicked                   |
-| `mjo-calendar:day-hover`      | `{ day: number, date: Date, events: CalendarEventMarker[] }`                                                                                                                  | Day cell is hovered                   |
-| `mjo-calendar:day-leave`      | `{ day: number, date: Date, events: CalendarEventMarker[] }`                                                                                                                  | Mouse leaves day cell                 |
+| `mjo-calendar:day-click`      | `{ day: number, date: Date, events: MjoCalendarEventMarker[] }`                                                                                                               | Day cell is clicked                   |
+| `mjo-calendar:day-hover`      | `{ day: number, date: Date, events: MjoCalendarEventMarker[] }`                                                                                                               | Day cell is hovered                   |
+| `mjo-calendar:day-leave`      | `{ day: number, date: Date, events: MjoCalendarEventMarker[] }`                                                                                                               | Mouse leaves day cell                 |
 | `change`                      | Mirrors `mjo-calendar:date-selected` (single) or `mjo-calendar-` (range) with identical detail fields (adds compatibility for generic form handlers & change event listeners) | Date selection changes                |
 
 ### Event Details
 
 All events expose date(s) in two forms:
 
--   **Date objects** (`date`, `startDate`, `endDate`) – Native JavaScript Date objects for programmatic use.
--   **String values** (`value`, `startDateValue`, `endDateValue`) – ISO format `YYYY-MM-DD` strings for display, forms, and storage.
+- **Date objects** (`date`, `startDate`, `endDate`) – Native JavaScript Date objects for programmatic use.
+- **String values** (`value`, `startDateValue`, `endDateValue`) – ISO format `YYYY-MM-DD` strings for display, forms, and storage.
 
 ### Event Examples
 
@@ -538,8 +544,8 @@ The calendar provides a comprehensive API for programmatic control without direc
 
 ### Side Semantics
 
--   `"single"`: Used when `mode="single"` (always index 0).
--   `"left"`, `"right"`: Applicable only in range mode. In dual calendar mode they map to calendar indices 0 and 1 respectively.
+- `"single"`: Used when `mode="single"` (always index 0).
+- `"left"`, `"right"`: Applicable only in range mode. In dual calendar mode they map to calendar indices 0 and 1 respectively.
 
 ### API Usage Examples
 
@@ -940,25 +946,25 @@ The `range-calendars="auto"` mode uses a `ResizeObserver` to detect container wi
 
 ### Memory Management
 
--   The component automatically cleans up event listeners and ResizeObserver on disconnection
--   Date calculations are optimized to minimize object creation
--   Month/year picker components are created on-demand
+- The component automatically cleans up event listeners and ResizeObserver on disconnection
+- Date calculations are optimized to minimize object creation
+- Month/year picker components are created on-demand
 
 ## Browser Support
 
 The `mjo-calendar` component is built on modern web standards and supports:
 
--   **Modern browsers**: Chrome 80+, Firefox 72+, Safari 13+, Edge 80+
--   **Web Components**: Uses standard Custom Elements v1 and Shadow DOM
--   **ES2020 features**: Requires modern JavaScript support
--   **ResizeObserver**: Used for responsive behavior (has polyfill fallback)
+- **Modern browsers**: Chrome 80+, Firefox 72+, Safari 13+, Edge 80+
+- **Web Components**: Uses standard Custom Elements v1 and Shadow DOM
+- **ES2020 features**: Requires modern JavaScript support
+- **ResizeObserver**: Used for responsive behavior (has polyfill fallback)
 
 ## Related Components
 
--   **`mjo-date-picker`**: Input field with calendar popup for form inputs
--   **`mjo-form`**: Form container with validation and data collection
--   **`mjo-theme`**: Global theme management
--   **`mjo-button`**: Used in navigation controls
+- **`mjo-date-picker`**: Input field with calendar popup for form inputs
+- **`mjo-form`**: Form container with validation and data collection
+- **`mjo-theme`**: Global theme management
+- **`mjo-button`**: Used in navigation controls
 
 ### Code Migration Examples
 
@@ -983,33 +989,33 @@ const [{ month }] = calendar.getDisplayedMonths();
 
 **Calendar not showing dates**
 
--   Ensure the component is properly connected to the DOM
--   Check that locale is supported (defaults to "en")
--   Verify no CSS is hiding the calendar content
+- Ensure the component is properly connected to the DOM
+- Check that locale is supported (defaults to "en")
+- Verify no CSS is hiding the calendar content
 
 **Range selection not working**
 
--   Confirm `mode="range"` is set
--   Check that dates aren't disabled by constraints
--   Verify event listeners are properly attached
+- Confirm `mode="range"` is set
+- Check that dates aren't disabled by constraints
+- Verify event listeners are properly attached
 
 **Responsive layout not switching**
 
--   Ensure `range-calendars="auto"` (default)
--   Check that ResizeObserver is supported (modern browsers)
--   Verify container width calculations
+- Ensure `range-calendars="auto"` (default)
+- Check that ResizeObserver is supported (modern browsers)
+- Verify container width calculations
 
 **Keyboard navigation not working**
 
--   Check that `enableKeyboardNavigation` is `true` (default)
--   Ensure the calendar has proper focus (click on it or tab to it)
--   Verify no other elements are preventing keyboard events
+- Check that `enableKeyboardNavigation` is `true` (default)
+- Ensure the calendar has proper focus (click on it or tab to it)
+- Verify no other elements are preventing keyboard events
 
 **Accessibility announcements not working**
 
--   Check that `announceSelections` is `true` (default)
--   Ensure `ariaLive` is set to `"polite"` or `"assertive"`
--   Verify screen reader is running and configured properly
+- Check that `announceSelections` is `true` (default)
+- Ensure `ariaLive` is set to `"polite"` or `"assertive"`
+- Verify screen reader is running and configured properly
 
 ### Debug Mode
 
@@ -1063,27 +1069,27 @@ const observer = new MutationObserver(() => {
 
 The `mjo-calendar` component is built on modern web standards and supports:
 
--   **Modern browsers**: Chrome 80+, Firefox 72+, Safari 13+, Edge 80+
--   **Web Components**: Uses standard Custom Elements v1 and Shadow DOM
--   **ES2020 features**: Requires modern JavaScript support
--   **ResizeObserver**: Used for responsive behavior (graceful fallback for older browsers)
--   **Internationalization**: Relies on `Intl.DateTimeFormat` for localized date formatting
+- **Modern browsers**: Chrome 80+, Firefox 72+, Safari 13+, Edge 80+
+- **Web Components**: Uses standard Custom Elements v1 and Shadow DOM
+- **ES2020 features**: Requires modern JavaScript support
+- **ResizeObserver**: Used for responsive behavior (graceful fallback for older browsers)
+- **Internationalization**: Relies on `Intl.DateTimeFormat` for localized date formatting
 
 ## Performance Notes
 
--   **Efficient Rendering**: Uses Lit's reactive update system for optimal performance
--   **Memory Management**: Automatic cleanup of event listeners and observers
--   **Date Calculations**: Optimized algorithms for calendar generation and navigation
--   **Range Hover**: Debounced hover effects to minimize unnecessary redraws
--   **Responsive Layout**: Uses `ResizeObserver` for efficient responsive behavior
--   **On-Demand Pickers**: Month/year picker components are created only when needed
+- **Efficient Rendering**: Uses Lit's reactive update system for optimal performance
+- **Memory Management**: Automatic cleanup of event listeners and observers
+- **Date Calculations**: Optimized algorithms for calendar generation and navigation
+- **Range Hover**: Debounced hover effects to minimize unnecessary redraws
+- **Responsive Layout**: Uses `ResizeObserver` for efficient responsive behavior
+- **On-Demand Pickers**: Month/year picker components are created only when needed
 
 ## Related Components
 
--   **`mjo-date-picker`**: Input field with calendar popup for form inputs
--   **`mjo-form`**: Form container with validation and data collection
--   **`mjo-theme`**: Global theme management component
--   **`mjo-button`**: Button component used in navigation controls
+- **`mjo-date-picker`**: Input field with calendar popup for form inputs
+- **`mjo-form`**: Form container with validation and data collection
+- **`mjo-theme`**: Global theme management component
+- **`mjo-button`**: Button component used in navigation controls
 
 ## Contributing
 

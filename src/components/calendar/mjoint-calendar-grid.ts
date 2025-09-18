@@ -22,6 +22,7 @@ export class MjointCalendarGrid extends LitElement {
     @property({ type: Boolean }) showToday = true;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean }) compact = false;
     @property({ type: String }) minDate: string = "";
     @property({ type: String }) maxDate: string = "";
     @property({ type: Array }) disabledDates?: string[];
@@ -101,7 +102,7 @@ export class MjointCalendarGrid extends LitElement {
                     ${weekDaysAdjusted.map(
                         (day) => html`
                             <div class="week-day" role="columnheader" part="week-day">
-                                <mjo-typography tag="none" size="body1">${day}</mjo-typography>
+                                <mjo-typography tag="none" size="body1">${!this.compact ? day : day.substring(0, 1)}</mjo-typography>
                             </div>
                         `,
                     )}
@@ -178,7 +179,6 @@ export class MjointCalendarGrid extends LitElement {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 2px;
-            min-width: max-content;
         }
         .week-header {
             margin-bottom: 8px;
@@ -191,7 +191,6 @@ export class MjointCalendarGrid extends LitElement {
             color: var(--mjo-calendar-week-day-color, var(--mjoint-calendar-color-foreground-low));
             font-weight: var(--mjo-calendar-week-day-font-weight, 600);
             box-sizing: border-box;
-            width: 3em;
         }
     `;
 }

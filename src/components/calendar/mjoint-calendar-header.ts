@@ -175,7 +175,6 @@ export class MjointCalendarHeader extends LitElement {
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            min-width: max-content;
             --mjo-button-disabled-background-color: transparent;
         }
         .nav-button {

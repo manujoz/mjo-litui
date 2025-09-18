@@ -67,14 +67,14 @@ export interface GoToDateOptions {
  * Calendar navigation events
  */
 
-export interface CalendarDateSelectedEvent extends CustomEvent {
+export interface MjoCalendarDateSelectedEvent extends CustomEvent {
     detail: {
         date?: Date;
         value?: string;
     };
 }
 
-export interface CalendarRangeSelectedEvent extends CustomEvent {
+export interface MjoCalendarRangeSelectedEvent extends CustomEvent {
     detail: {
         startDate?: Date;
         endDate?: Date;
@@ -83,38 +83,38 @@ export interface CalendarRangeSelectedEvent extends CustomEvent {
     };
 }
 
-export interface CalendarYearSelectedEvent extends CustomEvent {
+export interface MjoCalendarYearSelectedEvent extends CustomEvent {
     detail: {
         year: number;
     };
 }
 
-export interface CalendarMonthSelectedEvent extends CustomEvent {
+export interface MjoCalendarMonthSelectedEvent extends CustomEvent {
     detail: {
         month: number;
     };
 }
 
-export interface CalendarNavigateEvent extends CustomEvent {
+export interface MjoCalendarNavigateEvent extends CustomEvent {
     detail: {
         direction: 1 | -1;
         side: MjoCalendarHeaderSide;
     };
 }
 
-export interface CalendarMonthPickerEvent extends CustomEvent {
+export interface MjoCalendarMonthPickerEvent extends CustomEvent {
     detail: {
         side: MjoCalendarHeaderSide;
     };
 }
 
-export interface CalendarYearPickerEvent extends CustomEvent {
+export interface MjoCalendarYearPickerEvent extends CustomEvent {
     detail: {
         side: MjoCalendarHeaderSide;
     };
 }
 
-export interface CalendarDateClickEvent extends CustomEvent {
+export interface MjoCalendarDateClickEvent extends CustomEvent {
     detail: {
         date: Date;
         formattedDate: string;
@@ -122,14 +122,14 @@ export interface CalendarDateClickEvent extends CustomEvent {
     };
 }
 
-export interface CalendarDateHoverEvent extends CustomEvent {
+export interface MjoCalendarDateHoverEvent extends CustomEvent {
     detail: {
         date: Date;
         events: MjoCalendarEventMarker[];
     };
 }
 
-export interface CalendarDateLeaveEvent extends CustomEvent {
+export interface MjoCalendarDateLeaveEvent extends CustomEvent {
     detail: null;
 }
 
@@ -141,7 +141,7 @@ export interface CalendarDayClickEvent extends CustomEvent {
     };
 }
 
-export interface CalendarDayHoverEvent extends CustomEvent {
+export interface MjoCalendarDayHoverEvent extends CustomEvent {
     detail: {
         day: number;
         date: Date;
@@ -149,7 +149,7 @@ export interface CalendarDayHoverEvent extends CustomEvent {
     };
 }
 
-export interface CalendarDayLeaveEvent extends CustomEvent {
+export interface MjoCalendarDayLeaveEvent extends CustomEvent {
     detail: {
         day: number;
         date: Date;

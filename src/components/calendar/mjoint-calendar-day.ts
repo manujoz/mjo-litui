@@ -91,7 +91,7 @@ export class MjointCalendarDay extends LitElement {
             return html`<span class="event-indicator single" part="event-indicator event-indicator-single" style=${styles}></span>`;
         } else {
             return html`
-                <span class="event-indicator multiple" part="event-indicator event-indicator-multiple" style=${styles} data-count=${eventCount}></span>
+                <span class="event-indicator multiple" part="event-indicator event-indicator-multiple" style=${styles} data-count=${eventCount}>
                     ${this.#eventCount}
                 </span>
             `;

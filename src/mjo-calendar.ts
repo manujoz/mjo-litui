@@ -1,20 +1,20 @@
 import { SupportedLocale } from "./types/locales.js";
 import {
-    CalendarDateSelectedEvent,
     CalendarDayClickEvent,
-    CalendarDayHoverEvent,
-    CalendarDayLeaveEvent,
-    CalendarMonthPickerEvent,
-    CalendarMonthSelectedEvent,
-    CalendarNavigateEvent,
-    CalendarRangeSelectedEvent,
-    CalendarYearPickerEvent,
-    CalendarYearSelectedEvent,
     GoToDateOptions,
     GoToMonthOptions,
     GoToYearOptions,
+    MjoCalendarDateSelectedEvent,
+    MjoCalendarDayHoverEvent,
+    MjoCalendarDayLeaveEvent,
     MjoCalendarEventMarker,
     MjoCalendarHeaderSide,
+    MjoCalendarMonthPickerEvent,
+    MjoCalendarMonthSelectedEvent,
+    MjoCalendarNavigateEvent,
+    MjoCalendarRangeSelectedEvent,
+    MjoCalendarYearPickerEvent,
+    MjoCalendarYearSelectedEvent,
 } from "./types/mjo-calendar.js";
 
 import { css, html, LitElement, nothing } from "lit";
@@ -24,13 +24,12 @@ import { locales } from "./locales/locales.js";
 import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { CalendarUtils } from "./utils/calendar.js";
+import { getParentNodes } from "./utils/shadow-dom.js";
 
 import "./components/calendar/mjoint-calendar-grid.js";
 import "./components/calendar/mjoint-calendar-header.js";
 import "./components/calendar/mjoint-calendar-month-picker.js";
 import "./components/calendar/mjoint-calendar-year-picker.js";
-
-const AUTO_DUAL_THRESHOLD = 720; // px
 
 /**
  * A configurable calendar component for date selection.
@@ -128,6 +127,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @property({ type: Array }) eventMarkers?: MjoCalendarEventMarker[];
     @property({ type: Boolean }) enableKeyboardNavigation = true;
     @property({ type: Boolean }) announceSelections = true;
+    @property({ type: Boolean }) allowCompact = false;
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledby: string | null = null;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby: string | null = null;
     @property({ type: String, attribute: "aria-live" }) ariaLive: "polite" | "assertive" | "off" = "polite";
@@ -137,15 +137,17 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @state() private selectedEndDate?: Date;
     @state() private hoverDate?: Date;
     @state() private picker: { open: boolean; type?: "month" | "year"; index: number } = { open: false, type: undefined, index: 0 };
-    @state() private autoDual = false;
     @state() private displayedMonths: { month: number; year: number }[] = [];
     @state() private focusedDate?: Date;
     @state() private announcementText = "";
+    @state() private compact = false;
 
-    // Events map for calendar markers
     @state() private eventsMap = new Map<string, MjoCalendarEventMarker[]>();
 
-    #debounceTimer?: number;
+    #resizeObserver?: ResizeObserver;
+    #autoDual = false;
+    #dualWidth = 0;
+    #minWidth = 99999;
 
     render() {
         const calendarId = `calendar-${Math.random().toString(36).substring(2, 9)}`;
@@ -189,7 +191,14 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }
         const dm = this.displayedMonths[0];
         return html`
-            <div class="calendar-container" part="calendar" data-size=${this.size} data-color=${this.color} ?data-disabled=${this.disabled}>
+            <div
+                class="calendar-container"
+                part="calendar"
+                ?data-compact=${this.compact}
+                data-size=${this.size}
+                data-color=${this.color}
+                ?data-disabled=${this.disabled}
+            >
                 ${this.#renderCalendarSide({
                     month: dm.month,
                     year: dm.year,
@@ -229,7 +238,6 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         `;
     }
 
-    /** Helper to render a calendar side (single/left/right) */
     #renderCalendarSide(args: { month: number; year: number; side: "single" | "left" | "right"; forceMode?: "single" | "range" }) {
         const { month, year, side, forceMode } = args;
         const calendarIndex = this.#calendarIndexForSide(side);
@@ -273,6 +281,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     ?disabled=${this.disabled}
                     minDate=${this.minDate || ""}
                     maxDate=${this.maxDate || ""}
+                    ?compact=${this.compact}
                     .disabledDates=${this.disabledDates}
                     .selectedDate=${this.selectedDate}
                     .selectedStartDate=${this.selectedStartDate}
@@ -332,11 +341,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     disconnectedCallback(): void {
         super.disconnectedCallback();
 
-        window.removeEventListener("resize", this.#handleWindowResize);
-        if (this.#debounceTimer) {
-            clearTimeout(this.#debounceTimer);
-            this.#debounceTimer = undefined;
-        }
+        this.#resizeObserver?.disconnect();
     }
 
     willUpdate(changedProperties: Map<PropertyKey, unknown>): void {
@@ -518,57 +523,59 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         if (setting === "2") return true;
         if (setting === "1") return false;
 
-        return this.autoDual;
+        return this.#autoDual;
     }
 
-    #evaluateAutoDual() {
+    #handleCompact(parentElement: Element) {
+        if (!this.allowCompact) return;
+        if (this.#minWidth > this.offsetWidth && !this.compact) this.#minWidth = this.offsetWidth;
+
+        const parentStyle = getComputedStyle(parentElement);
+        const parentPaddingLeft = parseFloat(parentStyle.paddingLeft);
+        const parentPaddingRight = parseFloat(parentStyle.paddingRight);
+        const parentWidth = parentElement.clientWidth - parentPaddingLeft - parentPaddingRight;
+
+        if (parentWidth <= this.#minWidth) {
+            this.compact = true;
+        } else {
+            this.compact = false;
+        }
+    }
+
+    #handleWindowResize = (parentElement: Element) => {
+        this.#handleCompact(parentElement);
+
         if (this.rangeCalendars !== "auto" || this.mode !== "range") return;
 
-        // Measure parent width preferentially (wrapper may define layout), fallback to host, then window
-        const parentWidth = this.parentElement?.getBoundingClientRect().width;
-        const hostRect = this.getBoundingClientRect();
-        const width = parentWidth || hostRect.width || window.innerWidth;
+        const parentStyle = getComputedStyle(parentElement);
+        const parentPaddingLeft = parseFloat(parentStyle.paddingLeft);
+        const parentPaddingRight = parseFloat(parentStyle.paddingRight);
+        const parentWidth = parentElement.clientWidth - parentPaddingLeft - parentPaddingRight;
 
-        this.#doEvaluateAutoDual(width);
-    }
+        const shouldDual = this.#dualWidth < parentWidth;
 
-    #evaluateAutoDualDebounced() {
-        if (this.#debounceTimer) {
-            clearTimeout(this.#debounceTimer);
-        }
+        if (shouldDual !== this.#autoDual) {
+            this.#autoDual = shouldDual;
+            if (this.#autoDual) this.compact = false;
+            if (this.mode !== "range") return;
 
-        this.#debounceTimer = window.setTimeout(() => {
-            this.#evaluateAutoDual();
-        }, 16);
-    }
+            if (this.#autoDual && this.displayedMonths.length === 1) {
+                const first = this.displayedMonths[0];
+                const second = new Date(first.year, first.month + 1, 1);
+                this.displayedMonths = [first, { month: second.getMonth(), year: second.getFullYear() }];
+                requestAnimationFrame(() => {
+                    const prevDualWidth = this.#dualWidth;
+                    this.#dualWidth = this.offsetWidth;
 
-    #doEvaluateAutoDual(width: number) {
-        const shouldDual = width >= AUTO_DUAL_THRESHOLD;
+                    if (prevDualWidth === 0) this.#handleWindowResize(parentElement);
+                });
+            } else if (!this.#autoDual && this.displayedMonths.length === 2) {
+                this.displayedMonths = [this.displayedMonths[0]];
+            }
 
-        if (shouldDual !== this.autoDual) {
-            this.autoDual = shouldDual;
-            // Reorganizar displayedMonths cuando cambia autoDual
-            this.#handleAutoDualChange();
-            // Forzar actualización para asegurar re-render
             this.requestUpdate();
         }
-    }
-
-    #handleAutoDualChange() {
-        if (this.mode !== "range") return;
-
-        if (this.autoDual && this.displayedMonths.length === 1) {
-            // Cambio a dual: agregar segundo mes
-            const first = this.displayedMonths[0];
-            const second = new Date(first.year, first.month + 1, 1);
-            this.displayedMonths = [first, { month: second.getMonth(), year: second.getFullYear() }];
-        } else if (!this.autoDual && this.displayedMonths.length === 2) {
-            // Cambio a single: mantener solo el primer mes
-            this.displayedMonths = [this.displayedMonths[0]];
-        }
-    }
-
-    #handleWindowResize = () => this.#evaluateAutoDualDebounced();
+    };
 
     #handleKeydown(event: KeyboardEvent) {
         if (this.disabled || this.picker.open) return;
@@ -708,10 +715,13 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     #setupResizeObserver() {
-        window.addEventListener("resize", this.#handleWindowResize);
+        const parentElement = getParentNodes(this).next().value;
+        if (!parentElement) return;
 
-        // Initial evaluation
-        this.#evaluateAutoDualDebounced();
+        this.#resizeObserver = new ResizeObserver(() => {
+            this.#handleWindowResize(parentElement);
+        });
+        this.#resizeObserver.observe(parentElement);
     }
 
     #syncDisplayedMonthsFromState() {
@@ -757,17 +767,17 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }
     }
 
-    #handleNavigate(event: CalendarNavigateEvent) {
+    #handleNavigate(event: MjoCalendarNavigateEvent) {
         const { direction, side } = event.detail;
         this.#navigateMonth(direction, side);
     }
 
-    #handleMonthPicker(event: CalendarMonthPickerEvent) {
+    #handleMonthPicker(event: MjoCalendarMonthPickerEvent) {
         const { side } = event.detail;
         this.#openPicker("month", side);
     }
 
-    #handleYearPicker(event: CalendarYearPickerEvent) {
+    #handleYearPicker(event: MjoCalendarYearPickerEvent) {
         const { side } = event.detail;
         this.#openPicker("year", side);
     }
@@ -777,7 +787,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.#selectDate(date);
     }
 
-    #handleDayHover(event: CalendarDayHoverEvent) {
+    #handleDayHover(event: MjoCalendarDayHoverEvent) {
         const { date } = event.detail;
 
         if (this.mode === "range" && this.selectedStartDate && !this.selectedEndDate) {
@@ -789,7 +799,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.hoverDate = undefined;
     }
 
-    #handleMonthSelected(event: CalendarMonthSelectedEvent) {
+    #handleMonthSelected(event: MjoCalendarMonthSelectedEvent) {
         const { month } = event.detail;
         const side = this.#sideForCalendarIndex(this.picker.index);
 
@@ -797,7 +807,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.#closePicker();
     }
 
-    #handleYearSelected(event: CalendarYearSelectedEvent) {
+    #handleYearSelected(event: MjoCalendarYearSelectedEvent) {
         const { year } = event.detail;
         const side = this.#sideForCalendarIndex(this.picker.index);
 
@@ -943,7 +953,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.picker = { open: false, type: undefined, index: 0 };
         // Reset displayed months so next render initializes fresh (current month)
         this.displayedMonths = [];
-        this.autoDual = false; // will be recalculated if in auto mode
+        this.#autoDual = false; // will be recalculated if in auto mode
         this.#syncDisplayedMonthsFromState();
     }
 
@@ -993,7 +1003,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     #dispatchDateSelected() {
-        const eventDetail: CalendarDateSelectedEvent["detail"] & { value?: string } = {
+        const eventDetail: MjoCalendarDateSelectedEvent["detail"] & { value?: string } = {
             date: this.value ? new Date(this.value) : undefined,
             value: this.value,
         };
@@ -1024,7 +1034,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     #dispatchRangeSelected() {
-        const eventDetail: CalendarRangeSelectedEvent["detail"] = {
+        const eventDetail: MjoCalendarRangeSelectedEvent["detail"] = {
             startDate: this.startDate ? new Date(this.startDate) : undefined,
             endDate: this.endDate ? new Date(this.endDate) : undefined,
             startDateValue: this.startDate,
@@ -1145,6 +1155,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 display: inline-block;
                 font-family: var(--mjo-calendar-font-family, var(--mjo-font-family, inherit));
                 min-width: max-content;
+                max-width: 100%;
             }
 
             :host([disabled]) {
@@ -1153,7 +1164,6 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             }
             .calendar {
                 position: relative;
-                min-width: max-content;
                 --mjoint-calendar-color-foreground: var(--mjo-foreground-color, white);
                 --mjoint-calendar-color-foreground-low: var(--mjo-foreground-color-low, #666);
                 --mjoint-calendar-border-color: var(--mjo-border-color, #e0e0e0);
@@ -1183,9 +1193,11 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 border: var(--mjo-calendar-border, 1px solid var(--mjo-border-color, #e0e0e0));
                 border-radius: var(--mjo-calendar-border-radius, var(--mjo-radius-medium, 8px));
                 box-shadow: var(--mjo-calendar-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
-                padding: var(--mjo-calendar-padding, 16px);
+                padding: var(--mjo-calendar-padding, 12px);
                 font-size: 12px;
-                min-width: max-content;
+            }
+            .calendar-container[data-compact] {
+                padding: 6px;
             }
             .calendar-range-container {
                 display: flex;
@@ -1193,7 +1205,6 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             }
             .calendar-side {
                 flex: 1;
-                min-width: max-content;
             }
             mjoint-calendar-month-picker,
             mjoint-calendar-year-picker {
@@ -1225,10 +1236,10 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-calendar:date-selected": CalendarDateSelectedEvent;
-        "mjo-calendar:range-selected": CalendarRangeSelectedEvent;
+        "mjo-calendar:date-selected": MjoCalendarDateSelectedEvent;
+        "mjo-calendar:range-selected": MjoCalendarRangeSelectedEvent;
         "mjo-calendar:day-click": CalendarDayClickEvent;
-        "mjo-calendar:day-hover": CalendarDayHoverEvent;
-        "mjo-calendar:day-leave": CalendarDayLeaveEvent;
+        "mjo-calendar:day-hover": MjoCalendarDayHoverEvent;
+        "mjo-calendar:day-leave": MjoCalendarDayLeaveEvent;
     }
 }

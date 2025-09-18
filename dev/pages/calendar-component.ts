@@ -8,6 +8,7 @@ import "../../src/mjo-grid.ts";
 import "../../src/mjo-textfield.ts";
 
 import { MjoCalendarEventMarker } from "../../src/types/mjo-calendar";
+import { MjoFormSubmitEvent } from "../../src/types/mjo-form";
 import "../components/control-group.js";
 import "../components/playground-grid.js";
 import "../components/section-container.js";
@@ -51,7 +52,6 @@ export class CalendarComponent extends LitElement {
     render() {
         return html`
             <h1>Calendar Component Examples</h1>
-
             <section-container label="Interactive Calendar Playground">
                 <playground-grid>
                     <mjo-calendar
@@ -256,8 +256,12 @@ export class CalendarComponent extends LitElement {
 
             <section-container label="Basic Usage Examples" description="Common calendar implementations with different modes and configurations.">
                 <showcases-grid columns="2">
-                    <mjo-calendar mode="single" size="medium" color="primary"></mjo-calendar>
-                    <mjo-calendar mode="range" size="medium" color="secondary" rangeCalendars="2"></mjo-calendar>
+                    <div>
+                        <mjo-calendar mode="single" size="medium" color="primary"></mjo-calendar>
+                    </div>
+                    <div>
+                        <mjo-calendar mode="range" size="medium" color="secondary" rangeCalendars="auto"></mjo-calendar>
+                    </div>
                 </showcases-grid>
             </section-container>
 
@@ -315,16 +319,16 @@ export class CalendarComponent extends LitElement {
             </section-container>
 
             <section-container label="Form Integration Example">
-                <mjo-form>
+                <mjo-form @submit=${this.handleSubmit}>
                     <mjo-grid columns="2" gap="20px">
                         <div class="form-field">
                             <label>Event Date</label>
-                            <mjo-calendar mode="single" size="medium" color="primary" name="eventDate"></mjo-calendar>
+                            <mjo-calendar mode="single" name="primary" size="medium" color="primary" name="eventDate"></mjo-calendar>
                         </div>
 
                         <div class="form-field">
                             <label>Date Range</label>
-                            <mjo-calendar mode="range" size="medium" color="secondary" name="dateRange"></mjo-calendar>
+                            <mjo-calendar mode="range" name="secondary" size="medium" color="secondary" name="dateRange"></mjo-calendar>
                         </div>
                     </mjo-grid>
 
@@ -358,6 +362,12 @@ export class CalendarComponent extends LitElement {
                 </div>
             </section-container>
         `;
+    }
+
+    private handleSubmit(event: MjoFormSubmitEvent) {
+        console.log("Form submitted:", event.detail.response);
+        const loadingButton = event.detail.response.submitButton;
+        if (loadingButton) loadingButton.loading = true;
     }
 
     private setMode(mode: "single" | "range") {
