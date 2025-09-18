@@ -300,7 +300,7 @@ export class CheckboxComponent extends LitElement {
                         label="Error State"
                         color="primary"
                         size="medium"
-                        error
+                        errormsg="There is an error with this selection"
                         helperText="This field has an error"
                     ></mjo-checkbox>
                 </showcases-grid>

@@ -12,24 +12,24 @@ The `mjo-message` component includes comprehensive accessibility support:
 
 ### Screen Reader Support
 
--   **ARIA Live Regions**: Messages use appropriate `aria-live` attributes:
-    -   `"assertive"` for error and warning messages (announced immediately)
-    -   `"polite"` for info and success messages (announced when convenient)
--   **Message Roles**: Each message has semantic roles:
-    -   `role="alert"` for urgent messages (error/warning)
-    -   `role="status"` for informational messages (info/success)
--   **Atomic Announcements**: Messages use `aria-atomic="true"` for complete message reading
+- **ARIA Live Regions**: Messages use appropriate `aria-live` attributes:
+    - `"assertive"` for error and warning messages (announced immediately)
+    - `"polite"` for info and success messages (announced when convenient)
+- **Message Roles**: Each message has semantic roles:
+    - `role="alert"` for urgent messages (error/warning)
+    - `role="status"` for informational messages (info/success)
+- **Atomic Announcements**: Messages use `aria-atomic="true"` for complete message reading
 
 ### Keyboard Navigation
 
--   Messages are properly announced by screen readers without interfering with keyboard navigation
--   The message container is marked as a landmark region with `role="region"`
+- Messages are properly announced by screen readers without interfering with keyboard navigation
+- The message container is marked as a landmark region with `role="region"`
 
 ### Visual Accessibility
 
--   Color-coded message types with distinct icons for each type
--   High contrast support through CSS custom properties
--   Appropriate color choices that work with system themes
+- Color-coded message types with distinct icons for each type
+- High contrast support through CSS custom properties
+- Appropriate color choices that work with system themes
 
 ### Configuration
 
@@ -336,6 +336,214 @@ export class ExampleMessageThemeMixin extends ThemeMixin(LitElement) {
 }
 ```
 
+## Styling Architecture
+
+### Important: Message Container Mounting
+
+The `mjo-message` component works by dynamically creating a `mjo-message-container` element that is mounted directly in the document `<body>`. This architecture provides several benefits:
+
+- **Overlay Management**: Ensures messages appear above all other content
+- **Z-index Control**: Prevents z-index conflicts with parent containers
+- **Overflow Prevention**: Bypasses any parent `overflow: hidden` styles
+- **Global Accessibility**: Enables proper ARIA live region management
+
+### CSS Variables and Parts Application
+
+Because the actual message content is rendered in the `mjo-message-container` (mounted in the body), CSS variables and CSS parts cannot be applied directly to the `mjo-message` component. Instead, you need to apply styles globally to target the dynamically created container and message items.
+
+### Global Styling Pattern
+
+Since the message container is created in the document body, all styling must be applied globally:
+
+```css
+/* Global styling for all message containers */
+mjo-message-container {
+    --mjo-message-background-color: #f8f9fa;
+    --mjo-message-top: 20px;
+}
+
+/* Global styling for all message items using CSS parts */
+mjo-message-container::part(container) {
+    backdrop-filter: blur(5px);
+}
+
+mjoint-message-item::part(icon-container) {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    padding: 4px;
+}
+
+mjoint-message-item::part(message) {
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+mjoint-message-item::part(icon) {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+```
+
+### Complete Styling Example
+
+```ts
+import { LitElement, html, css } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import type { MjoMessage } from "mjo-litui/types";
+import "mjo-litui/mjo-message";
+import "mjo-litui/mjo-button";
+
+@customElement("app-with-styled-messages")
+export class AppWithStyledMessages extends LitElement {
+    @query("mjo-message") private messageComponent!: MjoMessage;
+
+    private showStyledMessage() {
+        this.messageComponent.show({
+            message: "This message uses custom styling applied globally",
+            type: "success",
+            time: 5000,
+        });
+    }
+
+    render() {
+        return html`
+            <mjo-message region-label="Styled notifications"></mjo-message>
+            <mjo-button @click=${this.showStyledMessage}>Show Styled Message</mjo-button>
+        `;
+    }
+
+    static styles = css`
+        /* Global styles applied to the document */
+        :host {
+            --mjo-message-background-color: #e8f5e8;
+            --mjo-message-border-radius: 12px;
+            --mjo-message-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+    `;
+}
+
+// Add global styles to the document
+const globalStyles = document.createElement("style");
+globalStyles.textContent = `
+    /* Global message container styling */
+    mjo-message-container::part(container) {
+        padding: 20px;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    /* Global message item styling */
+    mjoint-message-item::part(icon-container) {
+        background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+        border-radius: 8px;
+        padding: 6px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    mjoint-message-item::part(message) {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.025em;
+    }
+
+    mjoint-message-item::part(icon) {
+        filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+    }
+`;
+document.head.appendChild(globalStyles);
+```
+
+### Best Practices for Styling
+
+1. **Use global styles**: Apply CSS variables and parts globally since the container is mounted in the body
+2. **Semantic styling**: Use type-specific styling through CSS variables for consistent theming
+3. **Performance considerations**: Avoid excessive global styles that might affect other components
+4. **CSS containment**: Use appropriate CSS containment for better performance when styling many messages
+
+## CSS Parts
+
+The message system exposes several CSS parts for advanced styling:
+
+| Part             | Element                 | Description                                  |
+| ---------------- | ----------------------- | -------------------------------------------- |
+| `container`      | `mjo-message-container` | The main container holding all message items |
+| `icon-container` | `mjoint-message-item`   | Container wrapping the message type icon     |
+| `message`        | `mjoint-message-item`   | Container holding the message text content   |
+| `icon`           | `mjo-icon`              | The icon element (exported from `mjo-icon`)  |
+
+### CSS Parts Usage Examples
+
+```css
+/* Style the message container */
+mjo-message-container::part(container) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+}
+
+/* Style icon containers for all message types */
+mjoint-message-item::part(icon-container) {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    padding: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Style message text */
+mjoint-message-item::part(message) {
+    color: #2d3748;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    line-height: 1.5;
+}
+
+/* Style the icon itself */
+mjoint-message-item::part(icon) {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition: transform 0.2s ease;
+}
+
+/* Interactive states */
+mjoint-message-item:hover::part(icon-container) {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+mjoint-message-item:hover::part(icon) {
+    transform: scale(1.1);
+}
+```
+
+### Type-specific Part Styling
+
+You can also style parts based on message type using attribute selectors:
+
+```css
+/* Success message styling */
+mjoint-message-item[type="success"]::part(icon-container) {
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+}
+
+/* Error message styling */
+mjoint-message-item[type="error"]::part(icon-container) {
+    background: linear-gradient(135deg, #f56565, #e53e3e);
+    box-shadow: 0 4px 12px rgba(245, 101, 101, 0.3);
+}
+
+/* Warning message styling */
+mjoint-message-item[type="warning"]::part(icon-container) {
+    background: linear-gradient(135deg, #ed8936, #dd6b20);
+    box-shadow: 0 4px 12px rgba(237, 137, 54, 0.3);
+}
+
+/* Info message styling */
+mjoint-message-item[type="info"]::part(icon-container) {
+    background: linear-gradient(135deg, #4299e1, #3182ce);
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+}
+```
+
 ## Properties
 
 | Name          | Type                               | Default                   | Description                                              |
@@ -427,12 +635,12 @@ interface MjoMessageTheme {
 
 ## Accessibility Notes
 
--   Messages use ARIA live regions for screen reader announcements
--   `role="alert"` for urgent messages (error, warning)
--   `role="status"` for informational messages (info, success)
--   Icons are hidden from assistive technology with `aria-hidden="true"`
--   Container uses `role="region"` with configurable `aria-label`
--   Supports custom `aria-live` settings (assertive/polite)
+- Messages use ARIA live regions for screen reader announcements
+- `role="alert"` for urgent messages (error, warning)
+- `role="status"` for informational messages (info, success)
+- Icons are hidden from assistive technology with `aria-hidden="true"`
+- Container uses `role="region"` with configurable `aria-label`
+- Supports custom `aria-live` settings (assertive/polite)
 
 ## Browser Support
 

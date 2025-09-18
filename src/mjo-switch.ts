@@ -14,6 +14,28 @@ import "./components/input/mjoint-input-helper-text.js";
 import "./components/input/mjoint-input-label.js";
 import "./mjo-icon.js";
 
+/**
+ * @summary Toggle switch component with customizable themes, sizes, and comprehensive form integration.
+ *
+ * @fires change - Standard form change event when the switch state changes
+ * @fires mjo-switch:change - Custom event with detailed information about the switch state change
+ * @fires mjo-switch:focus - Fired when the switch gains focus
+ * @fires mjo-switch:blur - Fired when the switch loses focus
+ *
+ * @slot - Not applicable (component uses properties for content)
+ * @csspart container - The main switch container
+ * @csspart check-item - The switch ball/handle container
+ * @csspart label-container - The label container (via exportparts)
+ * @csspart label-truncate-container - The label truncate container (via exportparts)
+ * @csspart label-truncate-wrapper - The label truncate wrapper (via exportparts)
+ * @csspart check-icon - The check icon inside the switch ball (via exportparts)
+ * @csspart helper-text-container - The helper text container (via exportparts)
+ * @csspart helper-text-typography - The helper text typography element (via exportparts)
+ * @csspart helper-text-typography-tag - The helper text typography tag (via exportparts)
+ * @csspart helper-text-error-message - The error message container (via exportparts)
+ * @csspart helper-text-success-message - The success message container (via exportparts)
+ * @csspart helper-text-icon - The helper text status icon (via exportparts)
+ */
 @customElement("mjo-switch")
 export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
     @property({ type: String }) color: MjoSwitchColor = "primary";
@@ -29,54 +51,44 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
 
     @query("input") inputElement!: HTMLInputElement;
-    @query(".container") switchContainer!: HTMLDivElement;
+    @query(".container") private $switchContainer!: HTMLDivElement;
 
     type = "switch";
-
-    // Computed properties for accessibility
-    private get computedAriaChecked(): "true" | "false" {
-        return this.checked ? "true" : "false";
-    }
-
-    private get computedAriaLabel(): string | undefined {
-        if (this.ariaLabel) return this.ariaLabel;
-        if (!this.label) return undefined;
-
-        let baseLabel = this.label;
-        if (this.required || this.ariaRequired) baseLabel += " (required)";
-        baseLabel += this.checked ? " (on)" : " (off)";
-
-        return baseLabel;
-    }
-
-    private get computedTabIndex(): number {
-        return this.disabled ? -1 : 0;
-    }
 
     render() {
         return html`
             ${this.applyThemeSsr()}
-            ${this.label ? html`<mjoint-input-label color=${this.color} label=${this.label} ?error=${this.error}></mjoint-input-label>` : nothing}
+            ${this.label
+                ? html`
+                      <mjoint-input-label
+                          exportparts="container: label-container, truncate-container: label-truncate-container, truncate-wrapper: label-truncate-wrapper"
+                          color=${this.color}
+                          label=${this.label}
+                          ?error=${this.error}
+                      ></mjoint-input-label>
+                  `
+                : nothing}
             <div
                 class="container"
+                part="container"
                 data-color=${this.color}
                 ?data-disabled=${this.disabled}
                 ?data-checked=${this.checked}
                 data-size=${this.size}
                 role="switch"
-                aria-checked=${this.computedAriaChecked}
-                aria-label=${ifDefined(this.computedAriaLabel)}
+                aria-checked=${this.#computedAriaChecked}
+                aria-label=${ifDefined(this.#computedAriaLabel)}
                 aria-describedby=${ifDefined(this.ariaDescribedby)}
                 aria-disabled=${this.disabled ? "true" : "false"}
                 aria-invalid=${this.error ? "true" : "false"}
-                tabindex=${this.computedTabIndex}
+                tabindex=${this.#computedTabIndex}
                 @click=${this.#handleClick}
                 @keydown=${this.#handleKeydown}
                 @focus=${this.#handleFocus}
                 @blur=${this.#handleBlur}
             >
-                <div class="checkItem">
-                    <mjo-icon src=${GiCheckMark}></mjo-icon>
+                <div class="checkItem" part="check-item">
+                    <mjo-icon src=${GiCheckMark} exportparts="icon: check-icon"></mjo-icon>
                 </div>
                 <input
                     id=${ifDefined(this.id)}
@@ -91,7 +103,22 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                 />
             </div>
             ${this.helperText || this.errormsg || this.successmsg
-                ? html`<mjoint-input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}>${this.helperText}</mjoint-input-helper-text>`
+                ? html`
+                      <mjoint-input-helper-text
+                          exportparts="
+                            container: helper-text-container,
+                            typography: helper-text-typography,
+                            helper-text: helper-text-typography-tag,
+                            error-message: helper-text-error-message,
+                            success-message: helper-text-success-message,
+                            icon: helper-text-icon
+                          "
+                          .errormsg=${this.errormsg}
+                          .successmsg=${this.successmsg}
+                      >
+                          ${this.helperText}
+                      </mjoint-input-helper-text>
+                  `
                 : nothing}
         `;
     }
@@ -118,12 +145,12 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
     focus() {
         if (!this.disabled) {
-            this.switchContainer?.focus();
+            this.$switchContainer?.focus();
         }
     }
 
     blur() {
-        this.switchContainer?.blur();
+        this.$switchContainer?.blur();
     }
 
     reportValidity(): boolean {
@@ -132,6 +159,25 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
 
     setCustomValidity(message: string): void {
         this.inputElement.setCustomValidity(message);
+    }
+
+    get #computedAriaChecked(): "true" | "false" {
+        return this.checked ? "true" : "false";
+    }
+
+    get #computedAriaLabel(): string | undefined {
+        if (this.ariaLabel) return this.ariaLabel;
+        if (!this.label) return undefined;
+
+        let baseLabel = this.label;
+        if (this.required || this.ariaRequired) baseLabel += " (required)";
+        baseLabel += this.checked ? " (on)" : " (off)";
+
+        return baseLabel;
+    }
+
+    get #computedTabIndex(): number {
+        return this.disabled ? -1 : 0;
     }
 
     #handleClick() {
@@ -203,13 +249,6 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         css`
             :host {
                 display: inline-block;
-                width: calc(var(--mjo-switch-size-medium, 28px) * 2);
-            }
-            :host([size="small"]) {
-                width: calc(var(--mjo-switch-size-small, 20px) * 2);
-            }
-            :host([size="large"]) {
-                width: calc(var(--mjo-switch-size-large, 36px) * 2);
             }
             .container {
                 position: relative;

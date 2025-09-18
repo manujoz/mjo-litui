@@ -9,3 +9,8 @@ export const uniqueId = () => {
     // eslint-disable-next-line max-len
     return `${Math.random().toString(36).substring(2, 10)}-${Math.random().toString(36).substring(2, 10)}-${Math.random().toString(36).substring(2, 10)}-${Math.random().toString(36).substring(2, 10)}`;
 };
+
+export const convertToPx = (value: string | null): string | null => {
+    if (value === null) return value;
+    return isNaN(Number(value)) ? value : `${value}px`;
+};

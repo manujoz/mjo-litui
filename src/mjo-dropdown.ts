@@ -1,22 +1,34 @@
-import type { MjointDropdownContainer } from "./components/dropdown/mjoint-dropdown-container";
+import type { MjoDropdownContainer } from "./components/dropdown/mjo-dropdown-container";
 import type { MjoTheme } from "./mjo-theme.js";
-import type { MjoDropdownBehaviour, MjoDropdownCloseEvent, MjoDropdownOpenEvent, MjoDropdownPosition } from "./types/mjo-dropdown.d.ts";
+import type { MjoDropdownBehaviour, MjoDropdownCloseEvent, MjoDropdownOpenEvent, MjoDropdownPosition } from "./types/mjo-dropdown.d.js";
 
 import { CSSResult, LitElement, TemplateResult, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { searchClosestElement } from "./utils/shadow-dom.js";
+import { convertToPx } from "./utils/strings.js";
 
-import "./components/dropdown/mjoint-dropdown-container.js";
+import "./components/dropdown/mjo-dropdown-container.js";
 
-const convertToPx = (value: string | null): string | null => {
-    if (value === null) return value;
-    return isNaN(Number(value)) ? value : `${value}px`;
-};
-
+/**
+ * @summary Accessible dropdown component that displays floating content relative to its trigger element.
+ *
+ * @description The mjo-dropdown component provides a flexible dropdown system with hover/click behaviors,
+ * intelligent positioning, keyboard navigation, and comprehensive accessibility features. It creates a
+ * dynamic container in the document body, allowing dropdowns to appear above any content regardless of
+ * parent element constraints. The component supports multiple positioning strategies and automatic
+ * collision detection for optimal user experience.
+ *
+ * @fires mjo-dropdown:open - Fired when the dropdown opens
+ * @fires mjo-dropdown:close - Fired when the dropdown closes
+ *
+ * @slot - Trigger element that activates the dropdown (button, input, etc.)
+ * @csspart dropdown-container - The floating container element (applied to mjo-dropdown-container in document body)
+ */
 @customElement("mjo-dropdown")
 export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
+    @property({ type: String }) idDropdown?: string;
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: Boolean }) disabled = false;
     @property({ type: Boolean }) preventScroll = false;
@@ -32,7 +44,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     /** Optional list of CSS selectors that, if any element in the click composedPath matches, will prevent opening (only for behaviour='click'). */
     @property({ type: Array }) suppressOpenSelectors?: string[];
 
-    $dropdownContainer?: MjointDropdownContainer | null;
+    $dropdownContainer?: MjoDropdownContainer | null;
     #openTimestamp = 0;
     #lastFocusedElement?: HTMLElement;
 
@@ -177,12 +189,15 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     #createDropdown() {
         const themeElement = searchClosestElement(this as LitElement, "mjo-theme") as MjoTheme | null;
 
-        this.$dropdownContainer = document.createElement("mjoint-dropdown-container") as unknown as MjointDropdownContainer;
+        this.$dropdownContainer = document.createElement("mjo-dropdown-container") as unknown as MjoDropdownContainer;
         this.$dropdownContainer.host = this;
         this.$dropdownContainer.html = this.html;
         this.$dropdownContainer.css = this.css;
         this.$dropdownContainer.preventScroll = this.preventScroll;
         this.$dropdownContainer.position = this.position;
+
+        const id = this.idDropdown;
+        if (id) this.$dropdownContainer.id = id;
 
         if (this.theme) this.$dropdownContainer.theme = this.theme as Record<string, string>;
 

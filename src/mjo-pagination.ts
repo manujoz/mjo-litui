@@ -22,17 +22,23 @@ import "./components/select/mjo-option.js";
 import "./mjo-select.js";
 
 /**
- * A comprehensive pagination component with animated page indicator and full accessibility support.
+ * @summary Comprehensive pagination component with animated page indicator and full accessibility support.
  *
- * @fires mjo-pagination:change - Fired when the current page changes
- * @fires mjo-pagination:page-click - Fired when a page number is clicked
- * @fires mjo-pagination:navigation - Fired when navigation buttons are clicked
+ * @description The mjo-pagination component provides a complete pagination solution with an animated page indicator,
+ * navigation buttons, intelligent page range calculation with ellipsis, optional page size selector, and comprehensive
+ * internationalization support. It includes full ARIA support and keyboard navigation for accessibility.
  *
- * @example
- * ```html
- * <mjo-pagination totalItems="100" pageSize="10" currentPage="1"></mjo-pagination>
- * <mjo-pagination totalItems="500" pageSize="25" size="large" color="secondary"></mjo-pagination>
- * ```
+ * @fires mjo-pagination:change - Fired when the current page or page size changes
+ * @fires mjo-pagination:page-click - Fired when a specific page number is clicked
+ * @fires mjo-pagination:navigation - Fired when navigation buttons (first, previous, next, last) are used
+ *
+ * @slot - Not applicable (component doesn't use slots)
+ * @csspart container - The main pagination navigation container
+ * @csspart wrapper - The pagination container wrapper with items
+ * @csspart indicator - The animated page indicator element
+ * @csspart nav-button - Navigation buttons (first, previous, next, last)
+ * @csspart page-button - Individual page number buttons
+ * @csspart ellipsis - Ellipsis elements for truncated page ranges
  */
 @customElement("mjo-pagination")
 export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -52,24 +58,6 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
     @state() private totalPages!: number;
     @state() private pageRange: (number | "ellipsis")[] = [];
 
-    get currentLocale() {
-        return locales[this.locale] || locales.en;
-    }
-
-    get labels() {
-        const locale = this.currentLocale;
-        return {
-            first: locale.pagination?.first || "First",
-            previous: locale.pagination?.previous || "Previous",
-            next: locale.pagination?.next || "Next",
-            last: locale.pagination?.last || "Last",
-            page: locale.pagination?.page || "Page",
-            of: locale.pagination?.of || "of",
-            itemsPerPage: locale.pagination?.itemsPerPage || "Items per page",
-            goToPage: locale.pagination?.goToPage || "Go to page",
-        };
-    }
-
     render() {
         if (this.totalPages === undefined) {
             this.#calculatePagination();
@@ -82,6 +70,7 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
         return html`
             ${this.applyThemeSsr()}
             <nav
+                part="container"
                 class=${classMap({
                     pagination: true,
                     disabled: this.disabled,
@@ -91,34 +80,37 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
                 role="navigation"
                 aria-label="Pagination Navigation"
             >
-                <div class="pagination-container">
-                    <div class="pagination-indicator" data-current-page=${this.currentPage} data-total-pages=${this.totalPages}></div>
+                <div class="pagination-container" part="wrapper">
+                    <div class="pagination-indicator" part="indicator" data-current-page=${this.currentPage} data-total-pages=${this.totalPages}></div>
 
                     ${!this.hideFirstLast
                         ? html`<mjoint-pagination-nav-button
+                              exportparts="button: nav-button"
                               direction="first"
                               size=${this.size}
                               color=${this.color}
                               ?disabled=${this.disabled || this.currentPage === 1}
-                              label=${this.labels.first}
+                              label=${this.#labels.first}
                               @pagination-nav-click=${this.#handleNavigation}
                           ></mjoint-pagination-nav-button>`
                         : nothing}
                     ${!this.hidePrevNext
                         ? html`<mjoint-pagination-nav-button
+                              exportparts="button: nav-button"
                               direction="previous"
                               size=${this.size}
                               color=${this.color}
                               ?disabled=${this.disabled || this.currentPage === 1}
-                              label=${this.labels.previous}
+                              label=${this.#labels.previous}
                               @pagination-nav-click=${this.#handleNavigation}
                           ></mjoint-pagination-nav-button>`
                         : nothing}
                     ${this.pageRange.map((item) =>
                         item === "ellipsis"
-                            ? html`<mjoint-pagination-ellipsis size=${this.size}></mjoint-pagination-ellipsis>`
+                            ? html`<mjoint-pagination-ellipsis exportparts="ellipsis" size=${this.size}></mjoint-pagination-ellipsis>`
                             : html`<mjoint-pagination-page-item
                                   page=${item}
+                                  exportparts="button: page-button"
                                   size=${this.size}
                                   color=${this.color}
                                   ?active=${item === this.currentPage}
@@ -128,21 +120,23 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
                     )}
                     ${!this.hidePrevNext
                         ? html`<mjoint-pagination-nav-button
+                              exportparts="button: nav-button"
                               direction="next"
                               size=${this.size}
                               color=${this.color}
                               ?disabled=${this.disabled || this.currentPage === this.totalPages}
-                              label=${this.labels.next}
+                              label=${this.#labels.next}
                               @pagination-nav-click=${this.#handleNavigation}
                           ></mjoint-pagination-nav-button>`
                         : nothing}
                     ${!this.hideFirstLast
                         ? html`<mjoint-pagination-nav-button
+                              exportparts="button: nav-button"
                               direction="last"
                               size=${this.size}
                               color=${this.color}
                               ?disabled=${this.disabled || this.currentPage === this.totalPages}
-                              label=${this.labels.last}
+                              label=${this.#labels.last}
                               @pagination-nav-click=${this.#handleNavigation}
                           ></mjoint-pagination-nav-button>`
                         : nothing}
@@ -239,6 +233,24 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
         this.currentPage = Math.floor(currentItemStart / this.pageSize) + 1;
 
         this.#dispatchChangeEvent(previousPage);
+    }
+
+    get #currentLocale() {
+        return locales[this.locale] || locales.en;
+    }
+
+    get #labels() {
+        const locale = this.#currentLocale;
+        return {
+            first: locale.pagination?.first || "First",
+            previous: locale.pagination?.previous || "Previous",
+            next: locale.pagination?.next || "Next",
+            last: locale.pagination?.last || "Last",
+            page: locale.pagination?.page || "Page",
+            of: locale.pagination?.of || "of",
+            itemsPerPage: locale.pagination?.itemsPerPage || "Items per page",
+            goToPage: locale.pagination?.goToPage || "Go to page",
+        };
     }
 
     #calculatePagination() {
@@ -360,7 +372,7 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
     #renderPageSizeSelector() {
         return html`
             <div class="page-size-selector">
-                <label for="page-size">${this.labels.itemsPerPage}:</label>
+                <label for="page-size">${this.#labels.itemsPerPage}:</label>
                 <mjo-select
                     id="page-size"
                     .value=${this.pageSize.toString()}

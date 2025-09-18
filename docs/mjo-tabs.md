@@ -4,13 +4,13 @@ A versatile tab navigation component that provides organized content switching w
 
 ## Features
 
--   **Multiple Variants**: Light, solid, and bordered visual styles
--   **Color Theming**: Support for semantic color schemes (primary, secondary, success, warning, error, info)
--   **Layout Options**: Horizontal and vertical tab orientations
--   **Dynamic Content**: Programmatic tab management and content updates
--   **Keyboard Navigation**: Full accessibility support with arrow key navigation
--   **SSR Compatible**: Works seamlessly with server-side rendering
--   **Theme Integration**: Built-in theme system support
+- **Multiple Variants**: Light, solid, and bordered visual styles
+- **Color Theming**: Support for semantic color schemes (primary, secondary, success, warning, error, info)
+- **Layout Options**: Horizontal and vertical tab orientations
+- **Dynamic Content**: Programmatic tab management and content updates
+- **Keyboard Navigation**: Full accessibility support with arrow key navigation
+- **SSR Compatible**: Works seamlessly with server-side rendering
+- **Theme Integration**: Built-in theme system support
 
 ## Usage
 
@@ -56,13 +56,15 @@ export class ExampleTabsDemo extends LitElement {
 
 ## Attributes/Properties
 
+### mjo-tabs
+
 | Name       | Type             | Default     | Description                                                                                         |
 | ---------- | ---------------- | ----------- | --------------------------------------------------------------------------------------------------- |
 | `variant`  | `MjoTabsVariant` | `"light"`   | Visual style variant: `"light"`, `"solid"`, `"bordered"`                                            |
 | `color`    | `MjoTabsColor`   | `"default"` | Color theme: `"default"`, `"primary"`, `"secondary"`, `"success"`, `"warning"`, `"error"`, `"info"` |
 | `vertical` | `boolean`        | `false`     | Enable vertical tab layout                                                                          |
 
-## mjo-tab Attributes/Properties
+### mjo-tab
 
 | Name     | Type      | Default | Description                                              |
 | -------- | --------- | ------- | -------------------------------------------------------- |
@@ -82,6 +84,38 @@ export class ExampleTabsDemo extends LitElement {
 | ------------------ | -------------------------------- | ----------------------------------------- |
 | `mjo-tabs:changed` | `{ index: number, tab: MjoTab }` | Fired when the active tab changes         |
 | `mjo-tabs:updated` | `{ tabs: MjoTab[] }`             | Fired when the tabs collection is updated |
+
+## CSS Parts
+
+### mjo-tabs Parts
+
+| Name         | Description                                  |
+| ------------ | -------------------------------------------- |
+| `container`  | The main tabs container                      |
+| `header`     | The tab navigation header containing buttons |
+| `indicator`  | The visual indicator that shows active tab   |
+| `tab-button` | Individual tab buttons                       |
+| `content`    | The content area containing tab panels       |
+
+### mjo-tab Parts
+
+| Name                               | Description |
+| ---------------------------------- | ----------- |
+| (No CSS parts exported by mjo-tab) |             |
+
+## Slots
+
+### mjo-tabs Slots
+
+| Name      | Description               |
+| --------- | ------------------------- |
+| (default) | Contains mjo-tab elements |
+
+### mjo-tab Slots
+
+| Name      | Description                           |
+| --------- | ------------------------------------- |
+| (default) | Content to display when tab is active |
 
 ## Variants
 
@@ -153,31 +187,6 @@ Enable vertical layout for sidebar-style navigation:
 
 ## Dynamic Tab Management
 
-### Adding Tabs Programmatically
-
-```ts
-const tabsElement = document.querySelector("mjo-tabs");
-const newTab = document.createElement("mjo-tab");
-newTab.label = "New Tab";
-newTab.innerHTML = "<p>Dynamic content added at runtime</p>";
-
-tabsElement.appendChild(newTab);
-```
-
-### Listening to Tab Changes
-
-```ts
-const tabs = document.querySelector("mjo-tabs");
-
-tabs.addEventListener("mjo-tabs:changed", (event) => {
-    console.log(`Switched to tab ${event.detail.index}: ${event.detail.tab.label}`);
-});
-
-tabs.addEventListener("mjo-tabs:updated", (event) => {
-    console.log(`Tabs updated. Total: ${event.detail.tabs.length}`);
-});
-```
-
 ### Programmatic Tab Switching
 
 ```ts
@@ -191,68 +200,23 @@ const firstTab = tabs.getTab(0);
 console.log("First tab label:", firstTab.label);
 ```
 
-## Advanced Usage
+### Event Handling
 
-### Complex Content Structure
+```ts
+const tabs = document.querySelector("mjo-tabs");
 
-```html
-<mjo-tabs variant="bordered" color="default">
-    <mjo-tab label="Overview">
-        <div style="padding: 20px;">
-            <h3>📊 Project Overview</h3>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0;">
-                <div style="background: var(--mjo-background-color-high); padding: 20px; border-radius: 8px; text-align: center;">
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--mjo-primary-color);">1,234</div>
-                    <div style="color: var(--mjo-foreground-color-low);">Total Users</div>
-                </div>
-                <div style="background: var(--mjo-background-color-high); padding: 20px; border-radius: 8px; text-align: center;">
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--mjo-primary-color);">98.5%</div>
-                    <div style="color: var(--mjo-foreground-color-low);">Uptime</div>
-                </div>
-                <div style="background: var(--mjo-background-color-high); padding: 20px; border-radius: 8px; text-align: center;">
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--mjo-primary-color);">42</div>
-                    <div style="color: var(--mjo-foreground-color-low);">Active Projects</div>
-                </div>
-            </div>
-        </div>
-    </mjo-tab>
-    <mjo-tab label="Details">
-        <div style="padding: 20px;">
-            <h3>📋 Detailed Information</h3>
-            <p>This tab demonstrates complex content organization.</p>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0;">
-                <div><strong>Created:</strong> January 2024</div>
-                <div><strong>Status:</strong> Active</div>
-                <div><strong>Last Updated:</strong> Today</div>
-                <div><strong>Version:</strong> 1.2.3</div>
-            </div>
-        </div>
-    </mjo-tab>
-</mjo-tabs>
-```
+tabs.addEventListener("mjo-tabs:changed", (event) => {
+    console.log(`Switched to tab ${event.detail.index}: ${event.detail.tab.label}`);
+});
 
-### Integration with Forms
-
-```html
-<mjo-tabs variant="light" color="primary">
-    <mjo-tab label="Personal Info">
-        <form style="padding: 20px;">
-            <mjo-textfield label="Full Name" required></mjo-textfield>
-            <mjo-textfield label="Email" type="email" required></mjo-textfield>
-        </form>
-    </mjo-tab>
-    <mjo-tab label="Preferences">
-        <div style="padding: 20px;">
-            <mjo-switch label="Email Notifications"></mjo-switch>
-            <mjo-switch label="Dark Mode"></mjo-switch>
-        </div>
-    </mjo-tab>
-</mjo-tabs>
+tabs.addEventListener("mjo-tabs:updated", (event) => {
+    console.log(`Tabs updated. Total: ${event.detail.tabs.length}`);
+});
 ```
 
 ## Relevant CSS Variables
 
-The tabs component inherits from global theme tokens and supports these specific customizations:
+The tabs component supports these specific customizations:
 
 | Variable                          | Default                                          | Description                       |
 | --------------------------------- | ------------------------------------------------ | --------------------------------- |
@@ -265,77 +229,36 @@ The tabs component inherits from global theme tokens and supports these specific
 
 Tabs inherit from the global theme system. Refer to the [theming documentation](./theming.md) for complete token reference:
 
--   Color tokens: `--mjo-primary-color`, `--mjo-secondary-color`, etc.
--   Spacing tokens: `--mjo-space-*`
--   Radius tokens: `--mjo-radius-*`
--   Typography tokens: Font family, weights, sizes
+- Color tokens: `--mjo-primary-color`, `--mjo-secondary-color`, etc.
+- Spacing tokens: `--mjo-space-*`
+- Radius tokens: `--mjo-radius-*`
+- Typography tokens: Font family, weights, sizes
 
 ## Accessibility
 
 The tabs component follows WAI-ARIA guidelines:
 
--   **Role Management**: Proper `tablist`, `tab`, and `tabpanel` roles
--   **Keyboard Navigation**: Arrow keys for tab navigation, Enter/Space for activation
--   **Screen Reader Support**: Proper labeling and state announcements
--   **Focus Management**: Visible focus indicators and logical tab sequence
+- **Role Management**: Proper `tablist`, `tab`, and `tabpanel` roles
+- **Keyboard Navigation**: Arrow keys for tab navigation, Enter/Space for activation
+- **Screen Reader Support**: Proper labeling and state announcements
+- **Focus Management**: Visible focus indicators and logical tab sequence
 
 ### Keyboard Shortcuts
 
--   **Arrow Keys**: Navigate between tabs
--   **Enter/Space**: Activate focused tab
--   **Tab**: Move focus to tab content
--   **Shift+Tab**: Move focus back to tab list
+- **Arrow Keys**: Navigate between tabs
+- **Enter/Space**: Activate focused tab
+- **Tab**: Move focus to tab content
+- **Shift+Tab**: Move focus back to tab list
 
 ## Browser Support
 
--   **Modern Browsers**: Full support in Chrome, Firefox, Safari, Edge
--   **Internet Explorer**: Not supported (requires modern JavaScript features)
--   **Mobile Browsers**: Full touch and accessibility support
-
-## Best Practices
-
-1. **Content Organization**: Group related content logically
-2. **Label Clarity**: Use descriptive, concise tab labels
-3. **Performance**: Lazy load complex tab content when possible
-4. **Accessibility**: Provide keyboard navigation and screen reader support
-5. **Visual Hierarchy**: Choose appropriate variants and colors for context
-6. **Mobile Consideration**: Test vertical layout for mobile interfaces
-
-## Troubleshooting
-
-### Common Issues
-
-**Issue**: Tabs not updating when content changes
-
-```ts
-// Solution: Force update after DOM changes
-const tabs = document.querySelector("mjo-tabs");
-tabs.requestUpdate();
-```
-
-**Issue**: Event listeners not firing
-
-```ts
-// Solution: Ensure proper event listener setup
-tabs.addEventListener("mjo-tabs:changed", (e) => {
-    console.log("Tab changed:", e.detail);
-});
-```
-
-**Issue**: Vertical layout not working properly
-
-```html
-<!-- Solution: Ensure proper container styling -->
-<div style="height: 400px; display: flex;">
-    <mjo-tabs vertical>
-        <!-- tabs content -->
-    </mjo-tabs>
-</div>
-```
+- **Modern Browsers**: Full support in Chrome, Firefox, Safari, Edge
+- **Internet Explorer**: Not supported (requires modern JavaScript features)
+- **Mobile Browsers**: Full touch and accessibility support
 
 ## Related Components
 
--   [`mjo-button`](./mjo-button.md) - For tab-style button groups
--   [`mjo-accordion`](./mjo-accordion.md) - Alternative content organization
--   [`mjo-drawer`](./mjo-drawer.md) - Side navigation panels
--   [`mjo-breadcrumbs`](./mjo-breadcrumbs.md) - Hierarchical navigation
+- [`mjo-button`](./mjo-button.md) - For tab-style button groups
+- [`mjo-accordion`](./mjo-accordion.md) - Alternative content organization
+- [`mjo-drawer`](./mjo-drawer.md) - Side navigation panels
+- [`mjo-breadcrumbs`](./mjo-breadcrumbs.md) - Hierarchical navigation

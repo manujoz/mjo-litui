@@ -6,7 +6,7 @@ export class MjointPaginationEllipsis extends LitElement {
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
 
     render() {
-        return html`<span data-size=${this.size} aria-hidden="true" role="presentation"> … </span>`;
+        return html`<span data-size=${this.size} part="ellipsis" aria-hidden="true" role="presentation"> … </span>`;
     }
 
     static styles = [

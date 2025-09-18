@@ -1,4 +1,5 @@
 import { MjoCheckboxChangeEvent } from "./types/mjo-checkbox.js";
+import { MjoPaginationChangeEvent } from "./types/mjo-pagination.js";
 import {
     MjoTableColumns,
     MjoTableFilterEvent,
@@ -26,8 +27,30 @@ import "./components/table/mjoint-sortable-button.js";
 import "./mjo-checkbox.js";
 import "./mjo-icon.js";
 import "./mjo-pagination.js";
-import { MjoPaginationChangeEvent } from "./types/mjo-pagination.js";
 
+/**
+ * @summary Comprehensive and accessible data table component with advanced features.
+ *
+ * @fires mjo-table:sort - Fired when column sort changes
+ * @fires mjo-table:filter - Fired when column filter changes
+ * @fires mjo-table:select - Fired when row selection changes
+ * @fires mjo-table:row-click - Fired when a row is clicked
+ * @fires mjo-table:load-more - Fired when infinite scroll triggers
+ *
+ * @csspart container - The main table container element
+ * @csspart table - The HTML table element
+ * @csspart caption - The table caption element
+ * @csspart thead - The table header section
+ * @csspart body - The table body section
+ * @csspart row - Table rows (both header and body)
+ * @csspart header-row - Header table row
+ * @csspart header-cell - Header cells
+ * @csspart header-container - Header cell content container
+ * @csspart header-label - Header cell text label
+ * @csspart cell - Body cells
+ * @csspart loading-indicator - Loading state container
+ * @csspart loading-text - Loading spinner text
+ */
 @customElement("mjo-table")
 export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
@@ -104,23 +127,23 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
 
         return html`
             ${this.applyThemeSsr()}
-            <div class="container" style=${containerStyles} role="region" aria-label=${this.caption || "Data table"}>
+            <div class="container" part="container" style=${containerStyles} role="region" aria-label=${this.caption || "Data table"}>
                 <div class="sentinel"></div>
                 ${this.#ariaLiveMessage ? html`<div class="sr-only" aria-live="polite" aria-atomic="true">${this.#ariaLiveMessage}</div>` : nothing}
-                <table class=${tableClasses} role="table">
+                <table class=${tableClasses} part="table" role="table">
                     ${this.caption
                         ? html`
-                              <caption>
+                              <caption part="caption">
                                   ${this.caption}
                               </caption>
                           `
                         : nothing}
-                    <thead class=${headClasses}>
-                        <tr>
+                    <thead class=${headClasses} part="thead">
+                        <tr part="row header-row">
                             ${this.#renderThead()}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody part="body">
                         ${this.#renderTBody()}
                     </tbody>
                 </table>
@@ -128,8 +151,8 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                 ${this.infiniteScroll && this.hasMore ? html`<div class="infinite-scroll-sentinel"></div>` : nothing}
                 ${this.infiniteScroll && this.loading
                     ? html`
-                          <div class="loading-indicator" aria-live="polite">
-                              <div class="loading-spinner">Loading more...</div>
+                          <div class="loading-indicator" part="loading-indicator" aria-live="polite">
+                              <div class="loading-spinner" part="loading-text">Loading more...</div>
                           </div>
                       `
                     : nothing}
@@ -138,6 +161,13 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             ${this.pageSize && !this.infiniteScroll
                 ? html`
                       <mjo-pagination
+                          exportparts="
+                            container: pagination-container,
+                            wrapper: pagination-wrapper,
+                            indicator: pagination-indicator,
+                            nav-button: pagination-nav-button,
+                            page-button: pagination-page-button,
+                            ellipsis: pagination-ellipsis"
                           currentPage=${this.currentPage}
                           pageSize=${ifDefined(this.pageSize)}
                           totalItems=${this.#totalItems}
@@ -157,8 +187,23 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
             const checked = this.selectedItems.length === this.rows.length;
 
             selectableTh = html`
-                <th class="selectable" scope="col">
+                <th class="selectable" scope="col" part="header-cell header-selectable">
                     <mjo-checkbox
+                        exportparts="
+                          container: checkbox-container,
+                          box: checkbox-box,
+                          checkbox: checkbox,
+                          checkbox-inner: checkbox-inner,
+                          checkbox-icon: checkbox-icon,
+                          label-container: checkbox-label-container,
+                          label-text: checkbox-label-text,
+                          helper-text-container: checkbox-helper-text-container,
+                          helper-text-typography: checkbox-helper-text-typography,
+                          helper-text-typography-tag: checkbox-helper-text-typography-tag,
+                          helper-text-msg-container: checkbox-helper-text-msg-container,
+                          helper-text-msg-error-message: checkbox-helper-text-msg-error-message,
+                          helper-text-msg-success-message: checkbox-helper-text-msg-success-message,
+                          helper-text-msg-icon: checkbox-helper-text-msg-icon"
                         ?indeterminate=${indeterminate}
                         ?checked=${checked}
                         class=${this.selectable !== "multiple" ? "hidden" : ""}
@@ -197,6 +242,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                     ${index === 0 ? selectableTh : nothing}
                     <th
                         class=${thClasses}
+                        part="header-cell"
                         style=${styles}
                         scope="col"
                         aria-sort=${ifDefined(
@@ -210,25 +256,36 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                         )}
                         id=${`header-${column.name}`}
                     >
-                        <div class=${containerClasses}>
-                            <span class="render">${column.label || "Column"}</span>
+                        <div class=${containerClasses} part="header-container">
+                            <span class="render" part="header-label">${column.label || "Column"}</span>
                             ${column.sortable
-                                ? html`<mjoint-sortable-button
-                                      color=${this.color}
-                                      columnname=${column.name}
-                                      direction=${ifDefined(this.sort.columnName === column.name ? this.sort.direction : undefined)}
-                                      aria-describedby=${`header-${column.name}`}
-                                      @mjo-table:sort=${this.#handleSort}
-                                  ></mjoint-sortable-button>`
+                                ? html`
+                                      <mjoint-sortable-button
+                                          color=${this.color}
+                                          exportparts="button: sort-button, icon: sort-icon"
+                                          columnname=${column.name}
+                                          direction=${ifDefined(this.sort.columnName === column.name ? this.sort.direction : undefined)}
+                                          aria-describedby=${`header-${column.name}`}
+                                          @mjo-table:sort=${this.#handleSort}
+                                      ></mjoint-sortable-button>
+                                  `
                                 : nothing}
                             ${column.filterable
-                                ? html`<mjoint-filtrable-button
-                                      color=${this.color}
-                                      columnName=${column.name}
-                                      filter=${ifDefined(this.filters.columnName === column.name ? this.filters.filter : undefined)}
-                                      aria-describedby=${`header-${column.name}`}
-                                      @mjo-table:filter=${this.#handleFilter}
-                                  ></mjoint-filtrable-button>`
+                                ? html`
+                                      <mjoint-filtrable-button
+                                          color=${this.color}
+                                          exportparts="
+                                            search-container: filter-search-container,
+                                            search-input: filter-search-input,
+                                            button: filter-button,
+                                            icon: filter-icon
+                                          "
+                                          columnName=${column.name}
+                                          filter=${ifDefined(this.filters.columnName === column.name ? this.filters.filter : undefined)}
+                                          aria-describedby=${`header-${column.name}`}
+                                          @mjo-table:filter=${this.#handleFilter}
+                                      ></mjoint-filtrable-button>
+                                  `
                                 : nothing}
                         </div>
                     </th>
@@ -242,8 +299,8 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
 
         if (itemsRow.length === 0) {
             return html`
-                <tr class="no-data">
-                    <td colspan=${this.#fullColspan()} style="text-align: center;" role="cell">No data available</td>
+                <tr class="no-data" part="row no-data">
+                    <td part="cell no-data" colspan=${this.#fullColspan()} style="text-align: center;" role="cell">No data available</td>
                 </tr>
             `;
         }
@@ -259,6 +316,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                     return html`
                         <tr
                             role=${isClickable ? "button" : "row"}
+                            part="row"
                             aria-selected=${ifDefined(this.selectable !== "none" ? (isSelected ? "true" : "false") : undefined)}
                             tabindex=${ifDefined(isClickable ? "0" : undefined)}
                             @click=${(ev: Event) => this.#handleRowClick(row, ev)}
@@ -280,9 +338,24 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                                     let selectableTh: TemplateResult<1> | typeof nothing = nothing;
                                     if (this.selectable !== "none") {
                                         selectableTh = html`
-                                            <td class="selectable" role="cell">
+                                            <td class="selectable" part="cell selectable" role="cell">
                                                 <mjo-checkbox
                                                     class="selectable-checkbox-sr3as"
+                                                    exportparts="
+                                                        container: checkbox-container,
+                                                        box: checkbox-box,
+                                                        checkbox: checkbox,
+                                                        checkbox-inner: checkbox-inner,
+                                                        checkbox-icon: checkbox-icon,
+                                                        label-container: checkbox-label-container,
+                                                        label-text: checkbox-label-text,
+                                                        helper-text-container: checkbox-helper-text-container,
+                                                        helper-text-typography: checkbox-helper-text-typography,
+                                                        helper-text-typography-tag: checkbox-helper-text-typography-tag,
+                                                        helper-text-msg-container: checkbox-helper-text-msg-container,
+                                                        helper-text-msg-error-message: checkbox-helper-text-msg-error-message,
+                                                        helper-text-msg-success-message: checkbox-helper-text-msg-success-message,
+                                                        helper-text-msg-icon: checkbox-helper-text-msg-icon"
                                                     ?checked=${this.#isRowSelected(row)}
                                                     color=${this.color || "primary"}
                                                     aria-label=${`Select row ${index + 1}`}
@@ -293,7 +366,7 @@ export class MjoTable extends ThemeMixin(LitElement) implements IThemeMixin {
                                     }
                                     return html`
                                         ${index === 0 ? selectableTh : nothing}
-                                        <td class=${tdClasses} role="cell" headers=${`header-${column.name}`}>${row[column.name]}</td>
+                                        <td class=${tdClasses} part="cell" role="cell" headers=${`header-${column.name}`}>${row[column.name]}</td>
                                     `;
                                 },
                             )}

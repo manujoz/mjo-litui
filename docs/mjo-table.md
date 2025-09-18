@@ -1,19 +1,12 @@
 # mjo-table
 
-A flexible and feature-rich table component that supports sorting, pagination, row selection, and custom rendering. Perfect for displaying structured data with advanced functionality like sortable columns, filterable headers, and customizable styling.
+A comprehensive and accessible table component with advanced features including sorting, filtering, pagination, row selection, infinite scrolling, and responsive design. Built with accessibility first and supports custom theming.
 
 ## Import
 
 ```ts
 import "mjo-litui/mjo-table";
 ```
-
-## Basic Usage
-
-````html
-# mjo-table A comprehensive and accessible table component with advanced features including sorting, filtering, pagination, row selection, infinite scrolling,
-and responsive design. Built with accessibility first and supports custom theming. ## Import ```ts import "mjo-litui/mjo-table";
-````
 
 ## Basic Usage
 
@@ -79,31 +72,37 @@ export class ExampleTableBasic extends LitElement {
     ];
 
     render() {
-        return html` <mjo-table .columns=${this.columns} .rows=${this.rows}></mjo-table> `;
+        return html`<mjo-table .columns=${this.columns} .rows=${this.rows}></mjo-table>`;
     }
 }
 ```
 
-## Sortable and Filterable Table
+## Advanced Features
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-table";
-import type { MjoTableColumns, MjoTableRows, MjoTableSortEvent, MjoTableFilterEvent } from "mjo-litui/types/mjo-table";
+import type {
+    MjoTableColumns,
+    MjoTableRows,
+    MjoTableSortEvent,
+    MjoTableFilterEvent,
+    MjoTableSelectEvent,
+    MjoTableRowClickEvent,
+} from "mjo-litui/types/mjo-table";
 
 @customElement("example-table-advanced")
 export class ExampleTableAdvanced extends LitElement {
     @state() columns: MjoTableColumns = [
-        { name: "name", label: "Name", sortable: true, filterable: true, minWidth: 150 },
+        { name: "name", label: "Name", sortable: true, filterable: true },
         { name: "email", label: "Email", sortable: true },
         { name: "age", label: "Age", sortable: true, responsive: "md" },
-        { name: "city", label: "City", responsive: "lg" },
     ];
 
     @state() rows: MjoTableRows = [
-        { _key: 1, name: "John Doe", email: "john@example.com", age: 30, city: "New York" },
-        { _key: 2, name: "Jane Smith", email: "jane@example.com", age: 25, city: "Los Angeles" },
+        { _key: 1, name: "John Doe", email: "john@example.com", age: 30 },
+        { _key: 2, name: "Jane Smith", email: "jane@example.com", age: 25 },
     ];
 
     render() {
@@ -111,9 +110,13 @@ export class ExampleTableAdvanced extends LitElement {
             <mjo-table
                 .columns=${this.columns}
                 .rows=${this.rows}
+                selectable="multiple"
+                rowClickable
                 rowHover="highlight"
                 @mjo-table:sort=${this.#handleSort}
                 @mjo-table:filter=${this.#handleFilter}
+                @mjo-table:select=${this.#handleSelect}
+                @mjo-table:row-click=${this.#handleRowClick}
             ></mjo-table>
         `;
     }
@@ -125,75 +128,24 @@ export class ExampleTableAdvanced extends LitElement {
     #handleFilter = (event: MjoTableFilterEvent) => {
         console.log("Filter:", event.detail);
     };
-}
-```
-
-## Selectable Table with Row Actions
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-table";
-import "mjo-litui/mjo-button";
-import type { MjoTableColumns, MjoTableRows, MjoTableSelectEvent, MjoTableRowClickEvent } from "mjo-litui/types/mjo-table";
-
-@customElement("example-table-selectable")
-export class ExampleTableSelectable extends LitElement {
-    @state() columns: MjoTableColumns = [
-        { name: "name", label: "Name" },
-        { name: "email", label: "Email" },
-        { name: "actions", label: "Actions", placeContent: "center" },
-    ];
-
-    @state() rows: MjoTableRows = [
-        {
-            _key: 1,
-            name: "John Doe",
-            email: "john@example.com",
-            actions: html`<mjo-button size="small" @click=${() => this.#editUser(1)}>Edit</mjo-button>`,
-        },
-        {
-            _key: 2,
-            name: "Jane Smith",
-            email: "jane@example.com",
-            actions: html`<mjo-button size="small" @click=${() => this.#editUser(2)}>Edit</mjo-button>`,
-        },
-    ];
-
-    render() {
-        return html`
-            <mjo-table
-                .columns=${this.columns}
-                .rows=${this.rows}
-                selectable="multiple"
-                rowClickable
-                @mjo-table:select=${this.#handleSelect}
-                @mjo-table:row-click=${this.#handleRowClick}
-            ></mjo-table>
-        `;
-    }
 
     #handleSelect = (event: MjoTableSelectEvent) => {
         console.log("Selected rows:", event.detail.selected);
     };
 
     #handleRowClick = (event: MjoTableRowClickEvent) => {
-        console.log("Row clicked:", event.detail.key, event.detail.row);
-    };
-
-    #editUser = (id: number) => {
-        console.log("Edit user:", id);
+        console.log("Row clicked:", event.detail);
     };
 }
 ```
 
-## Paginated Table
+## Pagination and Infinite Scroll
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-table";
-import type { MjoTableColumns, MjoTableRows } from "mjo-litui/types/mjo-table";
+import type { MjoTableColumns, MjoTableRows, MjoTableLoadMoreEvent } from "mjo-litui/types/mjo-table";
 import type { MjoPaginationChangeEvent } from "mjo-litui/types/mjo-pagination";
 
 @customElement("example-table-pagination")
@@ -203,7 +155,7 @@ export class ExampleTablePagination extends LitElement {
         { name: "email", label: "Email" },
     ];
 
-    @state() rows: MjoTableRows = Array.from({ length: 50 }, (_, i) => ({
+    @state() rows: MjoTableRows = Array.from({ length: 100 }, (_, i) => ({
         _key: i + 1,
         name: `User ${i + 1}`,
         email: `user${i + 1}@example.com`,
@@ -211,39 +163,10 @@ export class ExampleTablePagination extends LitElement {
 
     render() {
         return html`
+            <!-- Regular Pagination -->
             <mjo-table .columns=${this.columns} .rows=${this.rows} pageSize="10" currentPage="1" @mjo-pagination:change=${this.#handlePageChange}></mjo-table>
-        `;
-    }
 
-    #handlePageChange = (event: MjoPaginationChangeEvent) => {
-        console.log("Page changed to:", event.detail.page);
-    };
-}
-```
-
-## Infinite Scroll Table
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-table";
-import type { MjoTableColumns, MjoTableRows, MjoTableLoadMoreEvent } from "mjo-litui/types/mjo-table";
-
-@customElement("example-table-infinite")
-export class ExampleTableInfinite extends LitElement {
-    @state() columns: MjoTableColumns = [
-        { name: "name", label: "Name" },
-        { name: "description", label: "Description" },
-    ];
-
-    @state() rows: MjoTableRows = Array.from({ length: 100 }, (_, i) => ({
-        _key: i + 1,
-        name: `Item ${i + 1}`,
-        description: `Description for item ${i + 1}`,
-    }));
-
-    render() {
-        return html`
+            <!-- Infinite Scroll -->
             <mjo-table
                 .columns=${this.columns}
                 .rows=${this.rows}
@@ -255,36 +178,13 @@ export class ExampleTableInfinite extends LitElement {
         `;
     }
 
+    #handlePageChange = (event: MjoPaginationChangeEvent) => {
+        console.log("Page changed to:", event.detail.page);
+    };
+
     #handleLoadMore = (event: MjoTableLoadMoreEvent) => {
         console.log("Load more requested:", event.detail);
     };
-}
-```
-
-## Sticky Header Table
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-table";
-import type { MjoTableColumns, MjoTableRows } from "mjo-litui/types/mjo-table";
-
-@customElement("example-table-sticky")
-export class ExampleTableSticky extends LitElement {
-    @state() columns: MjoTableColumns = [
-        { name: "name", label: "Name" },
-        { name: "value", label: "Value" },
-    ];
-
-    @state() rows: MjoTableRows = Array.from({ length: 30 }, (_, i) => ({
-        _key: i + 1,
-        name: `Row ${i + 1}`,
-        value: Math.floor(Math.random() * 1000),
-    }));
-
-    render() {
-        return html` <mjo-table .columns=${this.columns} .rows=${this.rows} headerSticky maxHeight="300" caption="Data with sticky header"></mjo-table> `;
-    }
 }
 ```
 
@@ -293,15 +193,15 @@ export class ExampleTableSticky extends LitElement {
 | Name             | Type                               | Default       | Description                                              |
 | ---------------- | ---------------------------------- | ------------- | -------------------------------------------------------- |
 | `columns`        | `MjoTableColumns`                  | `[]`          | Array of column definitions                              |
-| `rows`           | `MjoTableRows`                     | `[]`          | Array of row data                                        |
-| `size`           | `"small" \| "medium" \| "large"`   | `"medium"`    | Size variant for the table                               |
+| `rows`           | `MjoTableRows`                     | `[]`          | Array of row data (never mutate in place)                |
+| `size`           | `"small" \| "medium" \| "large"`   | `"medium"`    | Size variant affecting fonts and spacing                 |
 | `color`          | `"primary" \| "secondary"`         | `"primary"`   | Color scheme for interactive elements                    |
 | `maxHeight`      | `number`                           | -             | Maximum height in pixels, enables scrolling              |
 | `compact`        | `boolean`                          | `false`       | Reduces padding for more compact display                 |
 | `selectable`     | `"single" \| "multiple" \| "none"` | `"none"`      | Row selection mode                                       |
 | `headerSticky`   | `boolean`                          | `false`       | Makes headers sticky when scrolling (requires maxHeight) |
-| `headerStyle`    | `"sticky-style"`                   | -             | Force sticky header styling                              |
-| `rowSeparator`   | `"border" \| "contrast" \| "none"` | `"none"`      | Row separator style                                      |
+| `headerStyle`    | `"sticky-style"`                   | -             | Forces sticky header visual styling                      |
+| `rowSeparator`   | `"border" \| "contrast" \| "none"` | `"none"`      | Row separator visual style                               |
 | `rowHover`       | `"highlight" \| "none"`            | `"highlight"` | Row hover effect                                         |
 | `rowClickable`   | `boolean`                          | `false`       | Makes rows clickable and keyboard navigable              |
 | `infiniteScroll` | `boolean`                          | `false`       | Enables infinite scroll loading                          |
@@ -383,6 +283,14 @@ The table component provides extensive theming through CSS custom properties:
 | `--mjo-table-header-background-color-stuck` | `var(--mjo-background-color-card-high, #000000)` | Sticky header background   |
 | `--mjo-table-header-foreground-color-stuck` | `var(--mjo-foreground-color, #ffffff)`           | Sticky header text color   |
 
+### Caption Styles
+
+| Name                                   | Default                                 | Description          |
+| -------------------------------------- | --------------------------------------- | -------------------- |
+| `--mjo-table-caption-font-size`        | `0.9em`                                 | Caption font size    |
+| `--mjo-table-caption-foreground-color` | `var(--mjo-foreground-color-low, #666)` | Caption text color   |
+| `--mjo-table-caption-padding-bottom`   | `var(--mjo-space-medium)`               | Caption bottom space |
+
 ### Body & Cell Styles
 
 | Name                                | Default                                | Description     |
@@ -400,38 +308,104 @@ The table component provides extensive theming through CSS custom properties:
 | `--mjo-table-row-background-color-highlight` | `var(--mjo-primary-color-alpha1, #007bff11)` | Row hover/focus background          |
 | `--mjo-table-row-foreground-color-highlight` | `var(--mjo-primary-color, #ffffff)`          | Row hover/focus text color          |
 
+### No Data State
+
+| Name                                   | Default                                 | Description             |
+| -------------------------------------- | --------------------------------------- | ----------------------- |
+| `--mjo-table-no-data-padding`          | `60px 10px`                             | No data message padding |
+| `--mjo-table-no-data-foreground-color` | `var(--mjo-foreground-color-low, #666)` | No data text color      |
+
+## CSS Parts
+
+The table exposes several CSS parts for granular styling:
+
+| Name                | Description                       |
+| ------------------- | --------------------------------- |
+| `container`         | The main table container element  |
+| `table`             | The HTML table element            |
+| `caption`           | The table caption element         |
+| `thead`             | The table header section          |
+| `body`              | The table body section            |
+| `row`               | Table rows (both header and body) |
+| `header-row`        | Header table row                  |
+| `no-data`           | No data state row and cell        |
+| `header-cell`       | Header cells                      |
+| `header-selectable` | Header checkbox cell              |
+| `header-container`  | Header cell content container     |
+| `header-label`      | Header cell text label            |
+| `cell`              | Body cells                        |
+| `selectable`        | Checkbox cells                    |
+| `loading-indicator` | Loading state container           |
+| `loading-text`      | Loading spinner text              |
+
+### Exportparts
+
+The table also re-exports parts from child components:
+
+#### From mjo-pagination
+
+| Name                     | Component Part | Description             |
+| ------------------------ | -------------- | ----------------------- |
+| `pagination-container`   | `container`    | Pagination container    |
+| `pagination-wrapper`     | `wrapper`      | Pagination wrapper      |
+| `pagination-indicator`   | `indicator`    | Page indicator          |
+| `pagination-nav-button`  | `nav-button`   | Navigation buttons      |
+| `pagination-page-button` | `page-button`  | Page buttons            |
+| `pagination-ellipsis`    | `ellipsis`     | Page ellipsis indicator |
+
+#### From mjo-checkbox
+
+| Name        | Component Part | Description            |
+| ----------- | -------------- | ---------------------- |
+| `checkbox`  | `checkbox`     | Checkbox input element |
+| `checkmark` | `checkmark`    | Checkbox checkmark     |
+
+#### From mjo-button (sort buttons)
+
+| Name          | Component Part | Description      |
+| ------------- | -------------- | ---------------- |
+| `sort-button` | `button`       | Sort button      |
+| `sort-icon`   | `icon`         | Sort button icon |
+
+#### From mjo-textfield (filter inputs)
+
+| Name           | Component Part | Description        |
+| -------------- | -------------- | ------------------ |
+| `filter-field` | `field`        | Filter input field |
+| `filter-input` | `input`        | Filter input       |
+
 ## Accessibility Features
 
 The table component includes comprehensive accessibility features:
 
--   **Screen Reader Support**: Proper ARIA labels, roles, and live regions
--   **Keyboard Navigation**: Full keyboard support for clickable tables
--   **Focus Management**: Maintains focus during sorting and filtering
--   **High Contrast Support**: Adapts to user's contrast preferences
--   **Reduced Motion**: Respects user's motion preferences
--   **Semantic Markup**: Uses proper table elements and structure
+- **Screen Reader Support**: Proper ARIA labels, roles, and live regions
+- **Keyboard Navigation**: Full keyboard support for clickable tables
+- **Focus Management**: Maintains focus during sorting and filtering
+- **High Contrast Support**: Adapts to user's contrast preferences
+- **Reduced Motion**: Respects user's motion preferences
+- **Semantic Markup**: Uses proper table elements and structure
 
 ### Keyboard Controls (when `rowClickable` is true)
 
--   **Arrow Keys**: Navigate between rows
--   **Enter/Space**: Activate row click
--   **Home/End**: Move to first/last row
--   **Ctrl+Home/End**: Move to first/last cell in current row
+- **Arrow Keys**: Navigate between rows
+- **Enter/Space**: Activate row click
+- **Home/End**: Move to first/last row
+- **Ctrl+Home/End**: Move to first/last cell in current row
 
 ## Responsive Design
 
 The table supports responsive column hiding using the `responsive` property:
 
--   `responsive: "sm"` - Hidden on screens < 640px
--   `responsive: "md"` - Hidden on screens < 768px
--   `responsive: "lg"` - Hidden on screens < 1024px
+- `responsive: "sm"` - Hidden on screens < 640px
+- `responsive: "md"` - Hidden on screens < 768px
+- `responsive: "lg"` - Hidden on screens < 1024px
 
 ## Performance Considerations
 
--   Use `infiniteScroll` for large datasets instead of loading all rows
--   Set `pageSize` to limit rendered rows for better performance
--   The `rows` array should never be mutated in place - always assign a new array
--   Consider using `maxHeight` with sticky headers for large tables
+- Use `infiniteScroll` for large datasets instead of loading all rows
+- Set `pageSize` to limit rendered rows for better performance
+- The `rows` array should never be mutated in place - always assign a new array
+- Consider using `maxHeight` with sticky headers for large tables
 
 ## Best Practices
 
@@ -445,15 +419,15 @@ The table supports responsive column hiding using the `responsive` property:
 
 ## Notes
 
--   The table automatically handles sorting logic for string and number values
--   Pagination is built-in but requires manual page state management
--   Row selection is visual only (styling applied to selected row)
--   Custom content in cells receives all event handling capabilities
--   The component automatically sorts by the first sortable column on initialization
--   Empty state shows "No data" message when no rows are provided
+- The table automatically handles sorting logic for string and number values
+- Pagination is built-in but requires manual page state management
+- Row selection is visual only (styling applied to selected row)
+- Custom content in cells receives all event handling capabilities
+- The component automatically sorts by the first sortable column on initialization
+- Empty state shows "No data" message when no rows are provided
 
 ## Related Components
 
--   [mjo-button](./mjo-button.md) - For action buttons within table cells
--   [mjo-icon](./mjo-icon.md) - For icons in headers and cells
--   [mjo-theme](./mjo-theme.md) - For theme configuration
+- [mjo-button](./mjo-button.md) - For action buttons within table cells
+- [mjo-icon](./mjo-icon.md) - For icons in headers and cells
+- [mjo-theme](./mjo-theme.md) - For theme configuration

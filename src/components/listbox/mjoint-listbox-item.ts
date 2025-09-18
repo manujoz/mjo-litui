@@ -27,6 +27,7 @@ export class MjointListboxItem extends LitElement {
             return html`
                 <a
                     id=${this.id}
+                    part="link"
                     href=${this.item.href}
                     role="option"
                     aria-selected=${this.selected ? "true" : "false"}
@@ -42,6 +43,7 @@ export class MjointListboxItem extends LitElement {
             <div
                 id=${this.id}
                 class="container"
+                part="container"
                 role="option"
                 aria-selected=${this.selected ? "true" : "false"}
                 aria-disabled=${this.item.disabled ? "true" : "false"}
@@ -60,18 +62,25 @@ export class MjointListboxItem extends LitElement {
         return html`
             <div
                 class="inner"
+                part="wrapper"
                 data-color=${ifDefined(this.item.color)}
                 data-variant=${this.variant}
                 ?data-focused=${this.focused}
                 ?data-disabled=${this.item.disabled || false}
             >
-                ${this.item.startIcon ? html`<mjo-icon src=${this.item.startIcon}></mjo-icon>` : nothing}
-                <div class="content">
-                    <mjo-typography>${this.item.label}</mjo-typography>
-                    ${this.item.description ? html`<mjo-typography class="description" size="body2">${this.item.description}</mjo-typography>` : nothing}
+                ${this.item.startIcon ? html`<mjo-icon exportparts="icon: start-icon" src=${this.item.startIcon}></mjo-icon>` : nothing}
+                <div class="content" part="content">
+                    <mjo-typography part="item-label">${this.item.label}</mjo-typography>
+                    ${this.item.description
+                        ? html`
+                              <mjo-typography class="description" size="body2" part="item-description" exportparts="typography: item-description-tag">
+                                  ${this.item.description}
+                              </mjo-typography>
+                          `
+                        : nothing}
                 </div>
-                ${this.item.endIcon ? html`<mjo-icon src=${this.item.endIcon}></mjo-icon>` : nothing}
-                ${this.selected ? html`<mjo-icon class="selected-icon" src=${MdOutlineCheck}></mjo-icon>` : nothing}
+                ${this.item.endIcon ? html`<mjo-icon exportparts="icon: end-icon" src=${this.item.endIcon}></mjo-icon>` : nothing}
+                ${this.selected ? html`<mjo-icon class="selected-icon" exportparts="icon: selected-icon" src=${MdOutlineCheck}></mjo-icon>` : nothing}
             </div>
         `;
     }

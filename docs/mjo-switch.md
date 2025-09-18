@@ -142,101 +142,16 @@ export class ExampleSwitchForm extends LitElement {
     render() {
         return html`
             <mjo-form @mjo-form-submit=${this.#handleSubmit}>
-                <h3>User Preferences</h3>
-
-                <mjo-switch name="notifications" label="Email notifications" helperText="Receive important updates via email" checked></mjo-switch>
-
-                <mjo-switch name="marketing" label="Marketing emails" helperText="Receive promotional content and offers"></mjo-switch>
-
-                <mjo-switch name="darkMode" label="Dark mode" helperText="Use dark theme interface"></mjo-switch>
-
-                <mjo-switch name="terms" label="I agree to the terms and conditions" required helperText="Required to save preferences"></mjo-switch>
-
-                <mjo-button type="submit" style="margin-top: 1rem;"> Save Preferences </mjo-button>
+                <mjo-switch name="notifications" label="Email notifications" checked></mjo-switch>
+                <mjo-switch name="terms" label="I agree to the terms" required></mjo-switch>
+                <mjo-button type="submit">Save</mjo-button>
             </mjo-form>
-
-            <div style="margin-top: 1rem;">
-                <h4>Form Data:</h4>
-                <pre>${JSON.stringify(this.formData, null, 2)}</pre>
-            </div>
         `;
     }
 
     #handleSubmit(e: CustomEvent) {
         this.formData = e.detail.data;
         console.log("Form submitted:", e.detail);
-    }
-}
-```
-
-## Advanced Example with State Management
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-switch";
-import "mjo-litui/mjo-card";
-
-@customElement("example-switch-advanced")
-export class ExampleSwitchAdvanced extends LitElement {
-    @state() settings = {
-        notifications: true,
-        darkMode: false,
-        autoSave: true,
-        showPreview: false,
-    };
-
-    render() {
-        return html`
-            <mjo-card>
-                <h3 slot="header">Application Settings</h3>
-
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    <mjo-switch
-                        label="Enable notifications"
-                        helperText="Show desktop notifications for important events"
-                        .checked=${this.settings.notifications}
-                        @mjo-switch:change=${(e: CustomEvent) => this.#updateSetting("notifications", e.detail.checked)}
-                    ></mjo-switch>
-
-                    <mjo-switch
-                        label="Dark mode"
-                        helperText="Use dark theme for better visibility in low light"
-                        .checked=${this.settings.darkMode}
-                        @mjo-switch:change=${(e: CustomEvent) => this.#updateSetting("darkMode", e.detail.checked)}
-                    ></mjo-switch>
-
-                    <mjo-switch
-                        label="Auto-save"
-                        helperText="Automatically save changes every 5 minutes"
-                        .checked=${this.settings.autoSave}
-                        @mjo-switch:change=${(e: CustomEvent) => this.#updateSetting("autoSave", e.detail.checked)}
-                    ></mjo-switch>
-
-                    <mjo-switch
-                        label="Show preview"
-                        helperText="Display preview panel while editing"
-                        .checked=${this.settings.showPreview}
-                        @mjo-switch:change=${(e: CustomEvent) => this.#updateSetting("showPreview", e.detail.checked)}
-                        .disabled=${!this.settings.autoSave}
-                    ></mjo-switch>
-                </div>
-
-                <div slot="footer" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--mjo-color-border);">
-                    <small>Settings are saved automatically</small>
-                </div>
-            </mjo-card>
-        `;
-    }
-
-    #updateSetting(key: string, value: boolean) {
-        this.settings = { ...this.settings, [key]: value };
-        this.#saveSettings();
-    }
-
-    #saveSettings() {
-        // Simulate saving to backend or localStorage
-        console.log("Saving settings:", this.settings);
     }
 }
 ```
@@ -278,6 +193,23 @@ export class ExampleSwitchAdvanced extends LitElement {
 | `setValue(value)`        | `(value: string) => void`   | Sets the value of the switch           |
 | `reportValidity()`       | `() => boolean`             | Checks if the switch passes validation |
 | `setCustomValidity(msg)` | `(message: string) => void` | Sets a custom validation message       |
+
+## CSS Parts
+
+| Name                          | Description                                             |
+| ----------------------------- | ------------------------------------------------------- |
+| `container`                   | The main switch container                               |
+| `check-item`                  | The switch ball/handle container                        |
+| `label-container`             | The label container (via exportparts)                   |
+| `label-truncate-container`    | The label truncate container (via exportparts)          |
+| `label-truncate-wrapper`      | The label truncate wrapper (via exportparts)            |
+| `check-icon`                  | The check icon inside the switch ball (via exportparts) |
+| `helper-text-container`       | The helper text container (via exportparts)             |
+| `helper-text-typography`      | The helper text typography element (via exportparts)    |
+| `helper-text-typography-tag`  | The helper text typography tag (via exportparts)        |
+| `helper-text-error-message`   | The error message container (via exportparts)           |
+| `helper-text-success-message` | The success message container (via exportparts)         |
+| `helper-text-icon`            | The helper text status icon (via exportparts)           |
 
 ## CSS Custom Properties
 
@@ -369,29 +301,29 @@ The switch component follows WAI-ARIA guidelines and provides comprehensive acce
 
 ### ARIA Support
 
--   Uses `role="switch"` for proper screen reader identification
--   Provides `aria-checked` state information (`true`/`false`)
--   Supports `aria-label` and `aria-describedby` for labeling and description
--   Implements `aria-disabled` and `aria-invalid` states
--   Associates helper text with the switch using `aria-describedby`
+- Uses `role="switch"` for proper screen reader identification
+- Provides `aria-checked` state information (`true`/`false`)
+- Supports `aria-label` and `aria-describedby` for labeling and description
+- Implements `aria-disabled` and `aria-invalid` states
+- Associates helper text with the switch using `aria-describedby`
 
 ### Keyboard Navigation
 
--   **Space** or **Enter**: Toggle the switch state
--   **Tab**: Navigate to/from the switch
--   Proper focus management with visual focus indicators
+- **Space** or **Enter**: Toggle the switch state
+- **Tab**: Navigate to/from the switch
+- Proper focus management with visual focus indicators
 
 ### Screen Reader Support
 
--   Announces switch state changes appropriately
--   Provides context about required fields
--   Helper text and error messages are properly announced
+- Announces switch state changes appropriately
+- Provides context about required fields
+- Helper text and error messages are properly announced
 
 ### Focus Management
 
--   Clear focus indicators with customizable colors
--   Respects user's focus preferences
--   Maintains focus during state changes
+- Clear focus indicators with customizable colors
+- Respects user's focus preferences
+- Maintains focus during state changes
 
 ### Accessibility Example
 
@@ -410,19 +342,19 @@ The switch component follows WAI-ARIA guidelines and provides comprehensive acce
 
 ## Notes
 
--   The switch automatically handles smooth animations with support for `prefers-reduced-motion`
--   High contrast mode is supported with enhanced visual indicators
--   When used in forms, the switch value is included in form data when checked
--   The component supports both controlled and uncontrolled usage patterns
--   Custom checkmark icon appears when the switch is in the checked state
--   Form validation integration works with the `required` attribute
--   All theme tokens can be overridden at the component level or globally
--   Full keyboard navigation support follows WCAG guidelines
--   Screen reader compatibility with proper ARIA attributes
+- The switch automatically handles smooth animations with support for `prefers-reduced-motion`
+- High contrast mode is supported with enhanced visual indicators
+- When used in forms, the switch value is included in form data when checked
+- The component supports both controlled and uncontrolled usage patterns
+- Custom checkmark icon appears when the switch is in the checked state
+- Form validation integration works with the `required` attribute
+- All theme tokens can be overridden at the component level or globally
+- Full keyboard navigation support follows WCAG guidelines
+- Screen reader compatibility with proper ARIA attributes
 
 ## Related Components
 
--   [mjo-checkbox](./mjo-checkbox.md) - For multi-select options
--   [mjo-radio](./mjo-radio.md) - For single-select from multiple options
--   [mjo-form](./mjo-form.md) - For form integration and validation
--   [mjo-theme](./mjo-theme.md) - For theme configuration
+- [mjo-checkbox](./mjo-checkbox.md) - For multi-select options
+- [mjo-radio](./mjo-radio.md) - For single-select from multiple options
+- [mjo-form](./mjo-form.md) - For form integration and validation
+- [mjo-theme](./mjo-theme.md) - For theme configuration

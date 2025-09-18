@@ -15,6 +15,48 @@ import "./components/input/mjoint-input-helper-text.js";
 import "./mjo-icon.js";
 import "./mjo-typography.js";
 
+/**
+ * @summary A customizable radio button component with form integration, validation support, and enhanced accessibility.
+ *
+ * @fires change - Standard HTML input change event for form compatibility
+ * @fires mjo-radio:change - Enhanced custom event with detailed state information
+ * @fires mjo-radio:focus - Fired when radio button receives focus
+ * @fires mjo-radio:blur - Fired when radio button loses focus
+ *
+ * @cssproperty --mjo-radio-border-color - Border color for unchecked state
+ * @cssproperty --mjo-radio-checked-color - Color when checked
+ * @cssproperty --mjo-radio-checked-border-color - Border color when checked
+ * @cssproperty --mjo-radio-checked-icon-color - Icon color when checked
+ * @cssproperty --mjo-radio-disabled-opacity - Opacity when disabled
+ * @cssproperty --mjo-radio-error-border-color - Border color in error state
+ * @cssproperty --mjo-radio-error-background-color - Background color in error state
+ * @cssproperty --mjo-radio-error-icon-color - Icon color in error state
+ * @cssproperty --mjo-radio-error-label-color - Label color in error state
+ * @cssproperty --mjo-radio-focus-color - Focus indicator shadow color
+ * @cssproperty --mjo-radio-focus-outline-color - Focus outline color
+ * @cssproperty --mjo-radio-label-color - Label text color
+ * @cssproperty --mjo-radio-label-font-size - Label font size
+ * @cssproperty --mjo-radio-label-font-weight - Label font weight
+ * @cssproperty --mjo-radio-helper-color - Helper text color
+ * @cssproperty --mjo-radio-helper-font-size - Helper text font size
+ * @cssproperty --mjo-radio-helper-font-weight - Helper text font weight
+ * @cssproperty --mjo-space-small - Spacing between radio and label
+ *
+ * @csspart container - The main radio button container
+ * @csspart box - The radio button visual container
+ * @csspart radio - The radio button itself
+ * @csspart radio-inner - The inner area containing the check icon
+ * @csspart radio-icon - The check icon (via exportparts)
+ * @csspart label-container - Container for the label text
+ * @csspart label-text - The label typography element (via exportparts)
+ * @csspart helper-text-container - Container for helper text (via exportparts)
+ * @csspart helper-text-typography - The helper text typography element (via exportparts)
+ * @csspart helper-text-typography-tag - The helper text typography tag element (via exportparts)
+ * @csspart helper-text-msg-container - Container for error/success messages (via exportparts)
+ * @csspart helper-text-msg-error-message - Error message element (via exportparts)
+ * @csspart helper-text-msg-success-message - Success message element (via exportparts)
+ * @csspart helper-text-msg-icon - Icon in error/success messages (via exportparts)
+ */
 @customElement("mjo-radio")
 export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IFormMixin, IInputErrorMixin {
     @property({ type: String }) color: MjoRadioColor = "primary";
@@ -60,6 +102,7 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
             <div class="container" ?data-disabled=${this.disabled} data-color=${this.color} data-size=${this.size} ?data-error=${this.error}>
                 <div
                     class="radio-container"
+                    part="container"
                     role="radio"
                     aria-checked=${this.computedAriaChecked}
                     aria-label=${ifDefined(this.computedAriaLabel)}
@@ -72,14 +115,20 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                     @focus=${this.#handleFocus}
                     @blur=${this.#handleBlur}
                 >
-                    <div class="box">
-                        <div class="checkbox" ?data-checked=${this.checked}>
-                            <div class="inner">
-                                <mjo-icon src=${FaCheck}></mjo-icon>
+                    <div class="box" part="box">
+                        <div class="checkbox" part="radio" ?data-checked=${this.checked}>
+                            <div class="inner" part="radio-inner">
+                                <mjo-icon src=${FaCheck} exportparts="icon: radio-icon"></mjo-icon>
                             </div>
                         </div>
                     </div>
-                    ${this.label ? html`<div class="label-container"><mjo-typography tag="none" class="label">${this.label}</mjo-typography></div>` : nothing}
+                    ${this.label
+                        ? html`
+                              <div class="label-container" part="label-container">
+                                  <mjo-typography tag="none" class="label" exportparts="typography: label-text">${this.label}</mjo-typography>
+                              </div>
+                          `
+                        : nothing}
                     <input
                         id=${ifDefined(this.id)}
                         type="radio"
@@ -92,9 +141,30 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                         tabindex="-1"
                     />
                 </div>
-                ${this.helperText ? html`<mjoint-input-helper-text>${this.helperText}</mjoint-input-helper-text> ` : nothing}
+                ${this.helperText
+                    ? html`
+                          <mjoint-input-helper-text
+                              exportparts="
+                            container: helper-text-container,
+                            typography: helper-text-typography,
+                            helper-text: helper-text-typography-tag"
+                          >
+                              ${this.helperText}
+                          </mjoint-input-helper-text>
+                      `
+                    : nothing}
                 ${this.errormsg || this.successmsg
-                    ? html`<mjoint-input-helper-text .errormsg=${this.errormsg} .successmsg=${this.successmsg}></mjoint-input-helper-text> `
+                    ? html`
+                          <mjoint-input-helper-text
+                              exportparts="
+                            container: helper-text-msg-container,
+                            error-message: helper-text-msg-error-message,
+                            success-message: helper-text-msg-success-message,
+                            icon: helper-text-msg-icon"
+                              .errormsg=${this.errormsg}
+                              .successmsg=${this.successmsg}
+                          ></mjoint-input-helper-text>
+                      `
                     : nothing}
             </div>
         `;
@@ -338,9 +408,6 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                 display: flex;
                 align-items: center;
             }
-            mjo-typography {
-                line-height: 1em;
-            }
             .label {
                 position: relative;
                 padding-left: var(--mjo-space-small, 5px);
@@ -348,6 +415,7 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                 color: var(--mjo-radio-label-color, inherit);
                 font-size: var(--mjo-radio-label-font-size, inherit);
                 font-weight: var(--mjo-radio-label-font-weight, inherit);
+                line-height: 1em;
             }
             input {
                 display: none;
@@ -357,6 +425,18 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                 color: var(--mjo-radio-helper-color, var(--mjo-foreground-color-low));
                 font-size: var(--mjo-radio-helper-font-size, 0.8em);
                 font-weight: var(--mjo-radio-helper-font-weight, normal);
+            }
+            mjoint-input-helper-text::part(typography) {
+                line-height: 1em;
+            }
+            .container[data-size="small"] mjoint-input-helper-text {
+                padding-left: calc(16px + var(--mjo-space-small, 5px));
+            }
+            .container[data-size="medium"] mjoint-input-helper-text {
+                padding-left: calc(18px + var(--mjo-space-small, 5px));
+            }
+            .container[data-size="large"] mjoint-input-helper-text {
+                padding-left: calc(20px + var(--mjo-space-small, 5px));
             }
             .container[data-error] .checkbox {
                 border-color: var(--mjo-checkbox-error-border-color, var(--mjo-color-error));

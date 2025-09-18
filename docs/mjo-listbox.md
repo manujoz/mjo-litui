@@ -63,22 +63,22 @@ export class ExampleListboxMultiple extends LitElement {
 }
 ```
 
-### With Sections and Icons
+### With Sections
 
 ```ts
 @customElement("example-listbox-sections")
 export class ExampleListboxSections extends LitElement {
     @state() private items = [
         { section: "Fruits" },
-        { label: "Apple", value: "apple", startIcon: "🍎" },
-        { label: "Banana", value: "banana", startIcon: "🍌" },
+        { label: "Apple", value: "apple", color: "success" },
+        { label: "Banana", value: "banana", color: "warning" },
         { section: "Vegetables" },
-        { label: "Carrot", value: "carrot", startIcon: "🥕" },
-        { label: "Broccoli", value: "broccoli", startIcon: "🥦" },
+        { label: "Carrot", value: "carrot", color: "warning" },
+        { label: "Broccoli", value: "broccoli", color: "success" },
     ];
 
     render() {
-        return html` <mjo-listbox .items=${this.items} selectable="single" size="large"></mjo-listbox> `;
+        return html` <mjo-listbox .items=${this.items} selectable="single"></mjo-listbox> `;
     }
 }
 ```
@@ -89,9 +89,9 @@ export class ExampleListboxSections extends LitElement {
 @customElement("example-listbox-links")
 export class ExampleListboxLinks extends LitElement {
     @state() private items = [
-        { label: "Home", href: "/", startIcon: "🏠" },
-        { label: "About", href: "/about", startIcon: "ℹ️" },
-        { label: "Contact", href: "/contact", startIcon: "📧" },
+        { label: "Home", href: "/" },
+        { label: "About", href: "/about" },
+        { label: "Contact", href: "/contact" },
     ];
 
     render() {
@@ -134,24 +134,40 @@ Each item in the `items` array can have the following properties:
 | `mjo-listbox:focus`  | `{ item: MjoListboxItem, value: string \| number }`                           | Fired when an item receives focus |
 | `mjo-listbox:blur`   | `{ item: MjoListboxItem, value: string \| number }`                           | Fired when an item loses focus    |
 
+## CSS Parts
+
+| Part                 | Description                                         |
+| -------------------- | --------------------------------------------------- |
+| `container`          | The main listbox container element                  |
+| `link`               | Link elements for items with href (via exportparts) |
+| `wrapper`            | Individual item wrapper (via exportparts)           |
+| `content`            | Item content container (via exportparts)            |
+| `item-label`         | Item label element (via exportparts)                |
+| `item-description`   | Item description element (via exportparts)          |
+| `start-icon`         | Start icon element (via exportparts)                |
+| `end-icon`           | End icon element (via exportparts)                  |
+| `selected-icon`      | Selected state icon (via exportparts)               |
+| `section`            | Section header element (via exportparts)            |
+| `section-typography` | Section typography element (via exportparts)        |
+
 ## Keyboard Navigation
 
--   **Arrow Up/Down**: Navigate between items
--   **Home**: Focus first item
--   **End**: Focus last item
--   **Enter/Space**: Select focused item
--   **Tab**: Move focus to next focusable element
+- **Arrow Up/Down**: Navigate between items
+- **Home**: Focus first item
+- **End**: Focus last item
+- **Enter/Space**: Select focused item
+- **Tab**: Move focus to next focusable element
 
 The component automatically skips disabled items and sections during keyboard navigation and wraps around at the boundaries.
 
 ## Accessibility Features
 
--   Full ARIA support with proper roles (`listbox`, `option`, `group`)
--   Keyboard navigation following WAI-ARIA guidelines
--   Screen reader announcements for selection changes
--   Focus management with `aria-activedescendant`
--   Support for disabled and grouped options
--   Proper labeling and descriptions
+- Full ARIA support with proper roles (`listbox`, `option`, `group`)
+- Keyboard navigation following WAI-ARIA guidelines
+- Screen reader announcements for selection changes
+- Focus management with `aria-activedescendant`
+- Support for disabled and grouped options
+- Proper labeling and descriptions
 
 ## CSS Variables
 
@@ -232,16 +248,16 @@ Items show very subtle background overlays on hover and focus.
 
 ## Size Options
 
--   **Small**: Reduced font size (0.9em)
--   **Medium**: Default font size
--   **Large**: Increased font size (1.1em)
+- **Small**: Reduced font size (0.9em)
+- **Medium**: Default font size
+- **Large**: Increased font size (1.1em)
 
 ## Implementation Notes
 
--   The component uses internal `listbox-item` and `listbox-section` components for rendering
--   Focus management is handled internally with proper ARIA attributes
--   Selection state is maintained in the `selectedItems` property
--   The component automatically generates unique IDs for accessibility
--   Items without labels will show an error in the console but won't crash the component
--   Disabled items are skipped during keyboard navigation
--   Links (items with `href`) render as anchor elements instead of divs
+- The component uses internal `listbox-item` and `listbox-section` components for rendering
+- Focus management is handled internally with proper ARIA attributes
+- Selection state is maintained in the `selectedItems` property
+- The component automatically generates unique IDs for accessibility
+- Items without labels will show an error in the console but won't crash the component
+- Disabled items are skipped during keyboard navigation
+- Links (items with `href`) render as anchor elements instead of divs

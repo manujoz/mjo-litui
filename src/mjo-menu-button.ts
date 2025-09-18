@@ -8,6 +8,21 @@ import { pause } from "./utils/utils.js";
 
 import "./mjo-ripple.js";
 
+/**
+ * @summary Animated hamburger menu button with multiple effects and semantic colors.
+ *
+ * @description The mjo-menu-button component provides an interactive hamburger-style menu button
+ * with smooth transitions between open and closed states. It features multiple animation effects,
+ * semantic color variants, keyboard navigation, and comprehensive accessibility support.
+ *
+ * @fires mjo-menu-button:open - Fired when the menu button is opened
+ * @fires mjo-menu-button:close - Fired when the menu button is closed
+ * @fires mjo-menu-button:toggle - Fired when the menu button state is toggled
+ *
+ * @csspart container - The main button element that contains the entire menu button
+ * @csspart menu-button - The inner container that holds the hamburger menu lines
+ * @csspart line - Individual lines that form the hamburger menu (4 span elements)
+ */
 @customElement("mjo-menu-button")
 export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) size: "sm" | "md" | "lg" = "md";
@@ -16,8 +31,6 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
     @property({ type: Boolean }) isOpen = false;
     @property({ type: Boolean }) noink = false;
     @property({ type: Boolean }) disabled = false;
-
-    // ARIA properties - ariaControls remains custom, ariaLabel uses Lit native
     @property({ type: String, attribute: "aria-controls" }) ariaControls?: string;
 
     @query(".container") container!: HTMLButtonElement;
@@ -31,6 +44,7 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
             ${this.applyThemeSsr()}
             <button
                 class="container"
+                part="container"
                 @click=${this.#handleClick}
                 data-color=${this.color}
                 aria-label=${this.ariaLabel || (this.isOpen ? "Close menu" : "Open menu")}
@@ -40,11 +54,11 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
                 ?disabled=${this.disabled}
                 type="button"
             >
-                <div class="menu-button">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div class="menu-button" part="menu-button">
+                    <span part="line"></span>
+                    <span part="line"></span>
+                    <span part="line"></span>
+                    <span part="line"></span>
                     ${!this.noink && !this.disabled ? html`<mjo-ripple></mjo-ripple>` : nothing}
                 </div>
             </button>

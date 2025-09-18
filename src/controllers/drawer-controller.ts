@@ -1,13 +1,14 @@
-import type { MjointDrawerContainer } from "../components/drawer/mjoint-drawer-container";
+import type { MjoDrawerContainer } from "../components/drawer/mjo-drawer-container";
 import type { MjoDrawer } from "../mjo-drawer";
 import { DrawerShowParams } from "../types/mjo-drawer";
 
 import { ReactiveController, ReactiveControllerHost } from "lit";
-import "../components/drawer/mjoint-drawer-container.js";
+
+import "../components/drawer/mjo-drawer-container.js";
 
 export class DrawerController implements ReactiveController {
     host: ReactiveControllerHost;
-    drawerContainer!: MjointDrawerContainer;
+    drawerContainer!: MjoDrawerContainer;
 
     constructor(host: ReactiveControllerHost) {
         (this.host = host).addController(this);
@@ -22,16 +23,19 @@ export class DrawerController implements ReactiveController {
     }
 
     hostConnected(): void {
-        this.#createMessageElement();
+        this.#createDrawerElement();
     }
 
     hostDisconnected(): void {
         this.drawerContainer.remove();
     }
 
-    #createMessageElement() {
-        this.drawerContainer = document.createElement("mjoint-drawer-container") as MjointDrawerContainer;
+    #createDrawerElement() {
+        this.drawerContainer = document.createElement("mjo-drawer-container") as MjoDrawerContainer;
         this.drawerContainer.style.zIndex = window.getComputedStyle(this.host as MjoDrawer).zIndex;
+
+        const id = (this.host as MjoDrawer).idDrawer;
+        if (id) this.drawerContainer.id = id;
 
         const theme = (this.host as MjoDrawer).theme as Record<string, string>;
         if (theme) this.drawerContainer.theme = theme;

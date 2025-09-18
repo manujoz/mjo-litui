@@ -1,22 +1,13 @@
 import { MjoOption } from "../components/select/mjo-option";
 import { MjoSelect } from "../mjo-select";
 
-// Select size types
 export type MjoSelectSize = "small" | "medium" | "large";
-
-// Select color types
 export type MjoSelectColor = "primary" | "secondary";
-
-// ARIA autocomplete types
+export type MjoSelectVariant = "default" | "ghost" | "flat";
 export type MjoSelectAriaAutocomplete = "none" | "inline" | "list" | "both";
-
-// ARIA expanded types
 export type MjoSelectAriaExpanded = "true" | "false";
-
-// ARIA invalid types
 export type MjoSelectAriaInvalid = "false" | "true" | "grammar" | "spelling";
 
-// Select change event interface
 export interface MjoSelectChangeEvent extends CustomEvent {
     detail: {
         element: MjoSelect;
@@ -27,7 +18,6 @@ export interface MjoSelectChangeEvent extends CustomEvent {
     };
 }
 
-// Select open event interface
 export interface MjoSelectOpenEvent extends CustomEvent {
     detail: {
         element: MjoSelect;
@@ -36,7 +26,6 @@ export interface MjoSelectOpenEvent extends CustomEvent {
     };
 }
 
-// Select close event interface
 export interface MjoSelectCloseEvent extends CustomEvent {
     detail: {
         element: MjoSelect;
@@ -45,7 +34,6 @@ export interface MjoSelectCloseEvent extends CustomEvent {
     };
 }
 
-// Select search event interface
 export interface MjoSelectSearchEvent extends CustomEvent {
     detail: {
         element: MjoSelect;
@@ -54,7 +42,6 @@ export interface MjoSelectSearchEvent extends CustomEvent {
     };
 }
 
-// Select clear event interface
 export interface MjoSelectClearEvent extends CustomEvent {
     detail: {
         element: MjoSelect;
@@ -63,7 +50,6 @@ export interface MjoSelectClearEvent extends CustomEvent {
     };
 }
 
-// Select focus events
 export interface MjoSelectFocusEvent extends CustomEvent {
     detail: {
         element: MjoSelect;

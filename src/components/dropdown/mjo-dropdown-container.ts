@@ -15,8 +15,8 @@ import {
     getTopInTopPosition,
 } from "../../utils/dropdown.js";
 
-@customElement("mjoint-dropdown-container")
-export class MjointDropdownContainer extends ThemeMixin(LitElement) implements IThemeMixin {
+@customElement("mjo-dropdown-container")
+export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Object }) css?: CSSResult;
     @property({ type: Object }) html?: TemplateResult<1>;
     @property({ type: String }) position: MjoDropdownPosition = "center-bottom";
@@ -199,7 +199,8 @@ export class MjointDropdownContainer extends ThemeMixin(LitElement) implements I
                 z-index: 1000;
             }
             .container {
-                background-color: var(--mjo-dropdown-container-background-color, var(--mjo-dropdown-background-color, var(--mjo-background-color, white)));
+                background-color: var(--mjo-dropdown-background-color, var(--mjo-background-color, transparent));
+                color: var(--mjo-dropdown-foreground-color, currentColor);
                 overflow: hidden;
             }
         `,
@@ -208,6 +209,6 @@ export class MjointDropdownContainer extends ThemeMixin(LitElement) implements I
 
 declare global {
     interface HTMLElementTagNameMap {
-        "mjoint-dropdown-container": MjointDropdownContainer;
+        "mjo-dropdown-container": MjoDropdownContainer;
     }
 }

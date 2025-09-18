@@ -20,6 +20,32 @@ import { uniqueId } from "./utils/strings.js";
 import "./components/listbox/mjoint-listbox-item.js";
 import "./components/listbox/mjoint-listbox-section.js";
 
+/**
+ * @summary Interactive listbox component for displaying selectable lists of items with full accessibility support.
+ *
+ * @description The mjo-listbox component provides a flexible way to display lists of selectable items
+ * with support for single and multiple selection modes, keyboard navigation, sections, icons, and links.
+ * It includes comprehensive ARIA support and accessibility features following WAI-ARIA guidelines.
+ *
+ * @fires mjo-listbox:click - Fired when an item is clicked
+ * @fires mjo-listbox:change - Fired when selection changes
+ * @fires mjo-listbox:focus - Fired when an item receives focus
+ * @fires mjo-listbox:blur - Fired when an item loses focus
+ *
+ * @csspart container - The main listbox container element
+ * @csspart link - Link elements for items with href (via exportparts)
+ * @csspart wrapper - Individual item wrapper element (via exportparts)
+ * @csspart content - Item content container (via exportparts)
+ * @csspart item-label - Item label element (via exportparts)
+ * @csspart item-description - Item description element (via exportparts)
+ * @csspart item-description-tag - Item description typography tag (via exportparts)
+ * @csspart start-icon - Start icon element (via exportparts)
+ * @csspart end-icon - End icon element (via exportparts)
+ * @csspart selected-icon - Selected state icon (via exportparts)
+ * @csspart section - Section header container (via exportparts)
+ * @csspart section-typography-tag - Section typography tag (via exportparts)
+ * @csspart section-typography - Section typography element (via exportparts)
+ */
 @customElement("mjo-listbox")
 export class MjoListbox extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Array }) items: MjoListboxItems = [];
@@ -37,6 +63,7 @@ export class MjoListbox extends ThemeMixin(LitElement) implements IThemeMixin {
             ${this.applyThemeSsr()}
             <div
                 id=${this.#uniqueId}
+                part="container"
                 class="container"
                 data-size=${this.size}
                 data-selectable=${ifDefined(this.selectable)}
@@ -50,9 +77,25 @@ export class MjoListbox extends ThemeMixin(LitElement) implements IThemeMixin {
                     this.items,
                     (item, index) => this.#getItemKey(item, index),
                     (item, index) => {
-                        if (item.section) return html`<mjoint-listbox-section section=${item.section}></mjoint-listbox-section>`;
+                        if (item.section) {
+                            return html`<mjoint-listbox-section
+                                section=${item.section}
+                                exportparts="section, section-typography-tag, typography: section-typography"
+                            ></mjoint-listbox-section>`;
+                        }
                         return html`<mjoint-listbox-item
                             id=${this.#getItemId(index)}
+                            exportparts="
+                                link, 
+                                container, 
+                                wrapper, 
+                                content, 
+                                item-label, 
+                                item-description, 
+                                item-description-tag,
+                                start-icon, 
+                                end-icon, 
+                                selected-icon"
                             .item=${item}
                             index=${index}
                             variant=${this.variant}

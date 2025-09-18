@@ -3,6 +3,27 @@ import { customElement, property } from "lit/decorators.js";
 
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
+/**
+ * @summary Individual option element for mjo-select component with support for icons, images, and custom styling.
+ *
+ * @description The mjo-option component represents a single selectable option within an mjo-select dropdown.
+ * It supports rich content including icons, images, custom text, and provides full accessibility features
+ * with proper ARIA attributes and keyboard navigation support.
+ *
+ * @fires click - Fired when the option is clicked
+ *
+ * @slot - The default slot contains the option text content (used as fallback if text property is not set)
+ *
+ * @csspart option-container - The main option container element
+ * @csspart option-start-icon-container - Container for the start icon
+ * @csspart option-start-icon - The start icon element (via exportparts from mjo-icon)
+ * @csspart option-start-image-container - Container for the start image
+ * @csspart option-start-image - The start image element
+ * @csspart option-end-icon-container - Container for the end icon
+ * @csspart option-end-icon - The end icon element (via exportparts from mjo-icon)
+ * @csspart option-end-image-container - Container for the end image
+ * @csspart option-end-image - The end image element
+ */
 @customElement("mjo-option")
 export class MjoOption extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) value = "";
@@ -14,15 +35,14 @@ export class MjoOption extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) endIcon = "";
     @property({ type: String }) startImage = "";
     @property({ type: String }) endImage = "";
-
     handleClick?: (value: string) => void;
 
-    // Unique ID for accessibility
     #uniqueId = `mjo-option-${Math.random().toString(36).substring(2, 9)}`;
 
     render() {
         return html`<div
             id=${this.#uniqueId}
+            part="option-container"
             role="option"
             tabindex="-1"
             aria-selected=${this.selected ? "true" : "false"}
@@ -32,11 +52,32 @@ export class MjoOption extends ThemeMixin(LitElement) implements IThemeMixin {
             ?data-selected=${this.selected}
             ?data-preselected=${this.preSelected}
         >
-            ${this.startIcon && html`<div class="icon startIcon" aria-hidden="true"><mjo-icon src=${this.startIcon}></mjo-icon></div>`}
-            ${this.startImage && !this.startIcon ? html`<div class="image startImage"><img src=${this.startImage} alt="Option image" /></div>` : nothing}
+            ${this.startIcon &&
+            html`
+                <div class="icon startIcon" part="option-start-icon-container" aria-hidden="true">
+                    <mjo-icon exportparts="icon: option-start-icon" src=${this.startIcon}></mjo-icon>
+                </div>
+            `}
+            ${this.startImage && !this.startIcon
+                ? html`
+                      <div class="image startImage" part="option-start-image-container">
+                          <img src=${this.startImage} part="option-start-image" alt="Option image" />
+                      </div>
+                  `
+                : nothing}
             <div class="option">${this.text || this.value}</div>
-            ${this.endIcon ? html`<div class="icon endIcon" aria-hidden="true"><mjo-icon src=${this.endIcon}></mjo-icon></div>` : nothing}
-            ${this.endImage && !this.endIcon ? html`<div class="image endImage"><img src=${this.endImage} alt="Option image" /></div>` : nothing}
+            ${this.endIcon
+                ? html`<div class="icon endIcon" part="option-end-icon-container" aria-hidden="true">
+                      <mjo-icon exportparts="icon: option-end-icon" src=${this.endIcon}></mjo-icon>
+                  </div>`
+                : nothing}
+            ${this.endImage && !this.endIcon
+                ? html`
+                      <div class="image endImage" part="option-end-image-container">
+                          <img src=${this.endImage} part="option-end-image" alt="Option image" />
+                      </div>
+                  `
+                : nothing}
         </div>`;
     }
 
@@ -48,7 +89,11 @@ export class MjoOption extends ThemeMixin(LitElement) implements IThemeMixin {
         }
     }
 
-    // Getter for accessing the unique ID
+    /**
+     * Gets the unique identifier for this option element.
+     * Used for accessibility and ARIA relationships.
+     * @returns The unique ID string for this option
+     */
     get id(): string {
         return this.#uniqueId;
     }

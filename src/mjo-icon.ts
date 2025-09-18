@@ -39,14 +39,6 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
 
     @state() private hasError = false;
 
-    private get roleAssignment() {
-        return this.role ? (this.role as "button" | undefined) : this.clickable && !this.disabled ? "button" : undefined;
-    }
-
-    private get tabIndexAssignment() {
-        return this.clickable && !this.disabled ? 0 : undefined;
-    }
-
     render() {
         if ((!this.src && !this.loading) || this.hasError) {
             return nothing;
@@ -63,8 +55,8 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
             <div
                 class="icon-container ${classes}"
                 part="icon"
-                tabindex=${ifDefined(this.tabIndexAssignment)}
-                role=${ifDefined(this.roleAssignment)}
+                tabindex=${ifDefined(this.#tabIndexAssignment)}
+                role=${ifDefined(this.#roleAssignment)}
                 @click=${this.#handleClick}
                 @keydown=${this.#handleKeydown}
             >
@@ -97,6 +89,14 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
     blur(): void {
         const container = this.shadowRoot?.querySelector(".icon-container") as HTMLElement;
         container?.blur();
+    }
+
+    get #roleAssignment() {
+        return this.role ? (this.role as "button" | undefined) : this.clickable && !this.disabled ? "button" : undefined;
+    }
+
+    get #tabIndexAssignment() {
+        return this.clickable && !this.disabled ? 0 : undefined;
     }
 
     // Private methods

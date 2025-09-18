@@ -4,16 +4,16 @@ A comprehensive pagination component with animated page indicator, accessibility
 
 ## Features
 
--   **Animated Page Indicator**: Visual indicator that smoothly moves to show current page
--   **Complete Navigation**: First, previous, next, last navigation buttons with icons
--   **Page Range Calculation**: Intelligent ellipsis system for large page counts
--   **Page Size Selection**: Built-in page size selector using mjo-select
--   **Accessibility**: Full ARIA support and keyboard navigation
--   **Internationalization**: Multi-language support through locales system
--   **Theming**: Comprehensive CSS custom properties for styling
--   **Size Variants**: Small, medium, large sizes
--   **Color Variants**: Primary and secondary color schemes
--   **Responsive**: Adapts to different screen sizes
+- **Animated Page Indicator**: Visual indicator that smoothly moves to show current page
+- **Complete Navigation**: First, previous, next, last navigation buttons with icons
+- **Page Range Calculation**: Intelligent ellipsis system for large page counts
+- **Page Size Selection**: Built-in page size selector using mjo-select
+- **Accessibility**: Full ARIA support and keyboard navigation
+- **Internationalization**: Multi-language support through locales system
+- **Theming**: Comprehensive CSS custom properties for styling
+- **Size Variants**: Small, medium, large sizes
+- **Color Variants**: Primary and secondary color schemes
+- **Responsive**: Adapts to different screen sizes
 
 ## Usage
 
@@ -65,29 +65,29 @@ import "mjo-litui/mjo-pagination";
 @customElement("example-basic-pagination")
 export class ExampleBasicPagination extends LitElement {
     render() {
-        return html` <mjo-pagination total-items="250" page-size="25" current-page="3"></mjo-pagination> `;
+        return html`<mjo-pagination total-items="250" page-size="25" current-page="3"></mjo-pagination>`;
     }
 }
 ```
 
-### With Navigation and Page Size Selector
+### With Page Size Selector
 
 ```ts
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-pagination";
 
-@customElement("example-full-pagination")
-export class ExampleFullPagination extends LitElement {
+@customElement("example-pagination-with-selector")
+export class ExamplePaginationWithSelector extends LitElement {
     render() {
         return html`
-            <mjo-pagination total-items="500" page-size="25" current-page="5" show-page-size-selector .pageSizeOptions=${[10, 25, 50, 100]}></mjo-pagination>
+            <mjo-pagination total-items="500" page-size="25" current-page="5" show-page-size-selector .pageSizeOptions=${[10, 25, 50, 100]}> </mjo-pagination>
         `;
     }
 }
 ```
 
-### Size and Color Variants
+### Different Sizes and Colors
 
 ```ts
 import { LitElement, html } from "lit";
@@ -195,15 +195,16 @@ interface MjoPaginationNavigationEvent extends CustomEvent {
 | `--mjo-pagination-font-size`          | `1em`     | Base font size              |
 | `--mjo-pagination-font-weight`        | `normal`  | Font weight                 |
 | `--mjo-pagination-active-font-weight` | `600`     | Font weight for active page |
+| `--mjo-pagination-small-font-size`    | `0.8em`   | Font size for small variant |
+| `--mjo-pagination-large-font-size`    | `1.2em`   | Font size for large variant |
 
 ### Page Items
 
-| Property                           | Default                         | Description                   |
-| ---------------------------------- | ------------------------------- | ----------------------------- |
-| `--mjo-pagination-item-width`      | `2em`                           | Width of page buttons         |
-| `--mjo-pagination-border-radius`   | `var(--mjo-radius-medium, 5px)` | Border radius of page buttons |
-| `--mjo-pagination-small-font-size` | `0.8em`                         | Font size for small variant   |
-| `--mjo-pagination-large-font-size` | `1.2em`                         | Font size for large variant   |
+| Property                           | Default                         | Description                       |
+| ---------------------------------- | ------------------------------- | --------------------------------- |
+| `--mjo-pagination-item-width`      | `2em`                           | Width of page buttons             |
+| `--mjo-pagination-border-radius`   | `var(--mjo-radius-medium, 5px)` | Border radius of page buttons     |
+| `--mjo-pagination-small-min-width` | `2em`                           | Min width for small variant items |
 
 ### Colors
 
@@ -227,26 +228,21 @@ interface MjoPaginationNavigationEvent extends CustomEvent {
 
 ### Navigation Buttons
 
-| Property                               | Default                                         | Description                     |
-| -------------------------------------- | ----------------------------------------------- | ------------------------------- |
-| `--mjo-pagination-nav-color`           | `var(--mjo-foreground-color, #222222)`          | Navigation button text color    |
-| `--mjo-pagination-nav-min-width`       | `2.5em`                                         | Minimum width of nav buttons    |
-| `--mjo-pagination-nav-padding`         | `0.5em`                                         | Padding of nav buttons          |
-| `--mjo-pagination-nav-disabled-color`  | `var(--mjo-disabled-foreground-color, #aaaaaa)` | Color for disabled nav buttons  |
-| `--mjo-pagination-nav-small-min-width` | `2em`                                           | Small size nav button min width |
-| `--mjo-pagination-nav-small-padding`   | `0.4em`                                         | Small size nav button padding   |
-| `--mjo-pagination-nav-large-min-width` | `3em`                                           | Large size nav button min width |
-| `--mjo-pagination-nav-large-padding`   | `0.6em`                                         | Large size nav button padding   |
+| Property                              | Default                                         | Description                    |
+| ------------------------------------- | ----------------------------------------------- | ------------------------------ |
+| `--mjo-pagination-nav-color`          | `var(--mjo-foreground-color, #222222)`          | Navigation button text color   |
+| `--mjo-pagination-nav-min-width`      | `1.5em`                                         | Minimum width of nav buttons   |
+| `--mjo-pagination-nav-padding`        | `0.5em`                                         | Padding of nav buttons         |
+| `--mjo-pagination-nav-disabled-color` | `var(--mjo-disabled-foreground-color, #aaaaaa)` | Color for disabled nav buttons |
 
 ### Animated Indicator
 
 | Property                                   | Default                                        | Description                                    |
 | ------------------------------------------ | ---------------------------------------------- | ---------------------------------------------- |
-| `--mjo-pagination-indicator-opacity`       | `0.8`                                          | Opacity of the sliding indicator               |
 | `--mjo-pagination-indicator-border-radius` | `var(--mjo-radius-medium, 5px)`                | Border radius of the indicator                 |
 | `--mjo-pagination-animation-duration`      | `0.3s`                                         | Duration of the sliding animation              |
 | `--mjo-pagination-animation-timing`        | `ease-out`                                     | Timing function for animations                 |
-| `--mjo-pagination-primary-color-alpha`     | `var(--mjo-primary-color-alpha1, #1d7fdb33)`   | Semi-transparent primary color for indicator   |
+| `--mjo-pagination-primary-color-alpha`     | `var(--mjo-primary-color, #1d7fdb33)`          | Semi-transparent primary color for indicator   |
 | `--mjo-pagination-secondary-color-alpha`   | `var(--mjo-secondary-color-alpha1, #cc3d7433)` | Semi-transparent secondary color for indicator |
 
 ### Ellipsis
@@ -269,6 +265,17 @@ interface MjoPaginationNavigationEvent extends CustomEvent {
 | `--mjo-pagination-select-color`            | `var(--mjo-foreground-color, #222222)`      | Text color of select dropdown       |
 | `--mjo-pagination-select-padding`          | `0.25em 0.5em`                              | Padding of select dropdown          |
 
+## CSS Parts
+
+| Part          | Description                                      |
+| ------------- | ------------------------------------------------ |
+| `container`   | The main navigation container                    |
+| `wrapper`     | The pagination container wrapper                 |
+| `indicator`   | The animated page indicator                      |
+| `nav-button`  | Navigation buttons (first, previous, next, last) |
+| `page-button` | Individual page number buttons                   |
+| `ellipsis`    | Ellipsis elements for truncated page ranges      |
+
 ## Theming
 
 The component supports theming through the `MjoPaginationTheme` interface:
@@ -285,6 +292,9 @@ interface MjoPaginationTheme {
     fontSize?: string;
     fontWeight?: string;
     activeFontWeight?: string;
+    smallFontSize?: string;
+    largeFontSize?: string;
+    itemWidth?: string;
     color?: string;
     primaryColor?: string;
     secondaryColor?: string;
@@ -294,10 +304,27 @@ interface MjoPaginationTheme {
     hoverBackgroundColor?: string;
     primaryColorHover?: string;
     secondaryColorHover?: string;
-    indicatorOpacity?: string;
+    secondaryColorAlpha1?: string;
+    indicatorBorderRadius?: string;
     animationDuration?: string;
     animationTiming?: string;
+    primaryColorAlpha?: string;
+    secondaryColorAlpha?: string;
     ellipsisColor?: string;
-    // ... and more properties for complete customization
+    ellipsisFontWeight?: string;
+    borderRadius?: string;
+    navColor?: string;
+    navMinWidth?: string;
+    navPadding?: string;
+    navDisabledColor?: string;
+    smallMinWidth?: string;
+    pageSizeGap?: string;
+    pageSizeFontSize?: string;
+    pageSizeColor?: string;
+    selectBackgroundColor?: string;
+    selectBorderColor?: string;
+    selectBorderRadius?: string;
+    selectColor?: string;
+    selectPadding?: string;
 }
 ```

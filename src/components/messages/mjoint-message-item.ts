@@ -21,8 +21,9 @@ export class MjointMessageItem extends LitElement {
         const ariaLive = isUrgent ? "assertive" : "polite";
 
         return html`
-            <div class="icon" data-type=${this.type} aria-hidden="true">
+            <div class="icon" part="icon-container" data-type=${this.type} aria-hidden="true">
                 <mjo-icon
+                    exportparts="icon"
                     src=${this.type === "info"
                         ? AiFillInfoCircle
                         : this.type === "warning"
@@ -33,7 +34,7 @@ export class MjointMessageItem extends LitElement {
                     aria-hidden="true"
                 ></mjo-icon>
             </div>
-            <div class="message" role=${messageRole} aria-live=${ariaLive} aria-atomic="true">${this.message}</div>
+            <div class="message" part="message" role=${messageRole} aria-live=${ariaLive} aria-atomic="true">${this.message}</div>
         `;
     }
 

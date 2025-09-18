@@ -9,8 +9,8 @@ export class MjointListboxSection extends LitElement {
 
     render() {
         return html`
-            <div role="group" aria-label=${this.section}>
-                <mjo-typography size="body2">${this.section}</mjo-typography>
+            <div role="group" part="section" aria-label=${this.section}>
+                <mjo-typography size="body2" part="typography" exportparts="typography: section-typography-tag">${this.section}</mjo-typography>
             </div>
         `;
     }

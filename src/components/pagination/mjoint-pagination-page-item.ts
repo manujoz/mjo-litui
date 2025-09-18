@@ -12,6 +12,7 @@ export class MjointPaginationPageItem extends LitElement {
     render() {
         return html`<button
             type="button"
+            part="button"
             data-size=${this.size}
             data-color=${this.color}
             ?data-active=${this.active}

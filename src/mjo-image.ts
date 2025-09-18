@@ -40,28 +40,10 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
 
     @query("img") private img!: HTMLImageElement;
 
-    private get roleAssignment() {
-        if (this.clickable && !this.disabled) return "button";
-        if (this.error) return "presentation";
-        return "img";
-    }
-
-    private get tabIndexAssignment() {
-        if (this.clickable && !this.disabled) return 0;
-        return -1;
-    }
-
-    private get computedAriaLabel() {
-        if (this.ariaLabel) return this.ariaLabel;
-        if (this.error) return "Image failed to load";
-        if (this.loading) return "Image loading";
-        return this.alt;
-    }
-
     render() {
         const loadingSpinner = html`
-            <div class="loading-spinner" role="status" aria-label="Loading image">
-                <svg viewBox="0 0 24 24" class="spinner">
+            <div class="loading-spinner" role="status" part="loading-spinner-wrapper" aria-label="Loading image">
+                <svg viewBox="0 0 24 24" class="spinner" part="loading-spinner-svg">
                     <circle
                         cx="12"
                         cy="12"
@@ -82,17 +64,19 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
 
         if (this.loading) {
             return html`${this.applyThemeSsr()}
-                <div class="container loading" role="img" aria-label=${this.computedAriaLabel || "Loading image"}>${loadingSpinner}</div>`;
+                <div class="container loading" role="img" part="container container-loading" aria-label=${this.#computedAriaLabel || "Loading image"}>
+                    ${loadingSpinner}
+                </div>`;
         }
 
         if (this.error) {
             return html`
-                ${this.applyThemeSsr()}
                 <div
                     class="container error ${this.clickable ? "clickable" : ""}"
-                    role=${this.roleAssignment}
-                    tabindex=${this.tabIndexAssignment}
-                    aria-label=${this.computedAriaLabel || "Image failed to load"}
+                    part="container container-error"
+                    role=${this.#roleAssignment}
+                    tabindex=${this.#tabIndexAssignment}
+                    aria-label=${this.#computedAriaLabel || "Image failed to load"}
                     aria-describedby=${ifDefined(this.ariaDescribedBy)}
                     ?data-clickable=${this.clickable}
                     ?data-disabled=${this.disabled}
@@ -108,9 +92,10 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
             ${this.applyThemeSsr()}
             <div
                 class="container ${this.clickable ? "clickable" : ""}"
-                role=${this.roleAssignment}
-                tabindex=${this.tabIndexAssignment}
-                aria-label=${ifDefined(this.computedAriaLabel)}
+                part="container ${this.clickable ? "container-clickable" : ""}"
+                role=${this.#roleAssignment}
+                tabindex=${this.#tabIndexAssignment}
+                aria-label=${ifDefined(this.#computedAriaLabel)}
                 aria-labelledby=${ifDefined(this.ariaLabelledBy)}
                 aria-describedby=${ifDefined(this.ariaDescribedBy)}
                 ?data-clickable=${this.clickable}
@@ -119,6 +104,7 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
                 @keydown=${this.#handleKeydown}
             >
                 <img
+                    part="image"
                     class=${`${this.fit}`}
                     src=${this.src}
                     alt=${ifDefined(this.alt)}
@@ -128,6 +114,24 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
                 />
             </div>
         `;
+    }
+
+    get #roleAssignment() {
+        if (this.clickable && !this.disabled) return "button";
+        if (this.error) return "presentation";
+        return "img";
+    }
+
+    get #tabIndexAssignment() {
+        if (this.clickable && !this.disabled) return 0;
+        return -1;
+    }
+
+    get #computedAriaLabel() {
+        if (this.ariaLabel) return this.ariaLabel;
+        if (this.error) return "Image failed to load";
+        if (this.loading) return "Image loading";
+        return this.alt;
     }
 
     #handleLoad(event: Event) {
