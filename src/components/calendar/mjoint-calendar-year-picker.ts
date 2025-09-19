@@ -61,7 +61,7 @@ export class MjointCalendarYearPicker extends LitElement {
                         (year) => html`
                             <button
                                 class="year-button"
-                                part="year-picker-button"
+                                part="year-picker-button${year === this.selectedYear ? " year-picker-button-selected" : ""}"
                                 role="gridcell"
                                 ?data-selected=${year === this.selectedYear}
                                 ?disabled=${this.disabled || this.#isYearDisabled(year)}
@@ -217,6 +217,10 @@ export class MjointCalendarYearPicker extends LitElement {
         }
         .year-picker {
             padding: var(--mjo-space-medium, 8px) var(--mjo-space-small, 4px);
+            background: var(--mjo-calendar-picker-background, var(--mjo-calendar-background, var(--mjo-background-color, white)));
+            border-radius: var(--mjo-calendar-picker-radius, var(--mjo-radius-medium, 8px));
+            height: 100%;
+            box-sizing: border-box;
         }
         .year-navigation {
             display: flex;

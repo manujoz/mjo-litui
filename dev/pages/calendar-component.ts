@@ -531,6 +531,10 @@ export class CalendarComponent extends LitElement {
                 display: flex;
                 flex-direction: column;
                 gap: 40px;
+
+                --custom-lighthight-color: rgba(255, 255, 255, 0.3);
+                --custom-accent-color: #6b46c1;
+                --custom-accent-foreground-color: white;
             }
 
             mjo-calendar {
@@ -648,6 +652,89 @@ export class CalendarComponent extends LitElement {
                 .form-actions {
                     flex-direction: column;
                 }
+            }
+            #event-calendar-1::part(calendar),
+            #event-calendar-1::part(year-picker-container) {
+                background: linear-gradient(135deg, #fab1db 0%, #cfd8fe 50%, #fecfef 100%);
+                border-radius: 20px;
+                box-shadow: 0 15px 35px rgba(255, 154, 158, 0.2);
+                padding: 24px;
+            }
+            #event-calendar-1::part(month-picker-container),
+            #event-calendar-1::part(year-picker-container) {
+                border-radius: 20px;
+                padding: 24px;
+                background: linear-gradient(135deg, #fab1db 0%, #cfd8fe 50%, #fecfef 100%);
+            }
+            #event-calendar-1::part(month-picker-button),
+            #event-calendar-1::part(year-picker-button),
+            #event-calendar-1::part(year-picker-nav-button) {
+                font-size: 0.75rem;
+                color: var(--custom-accent-color);
+                border: none;
+            }
+            #event-calendar-1::part(header) {
+                margin-bottom: 0px;
+            }
+            #event-calendar-1::part(nav-button),
+            #event-calendar-1::part(selector-button) {
+                color: var(--custom-accent-color);
+                border-radius: 12px;
+                font-weight: 600;
+                border: none;
+                transition: all 0.2s ease;
+            }
+            #event-calendar-1::part(nav-button):hover,
+            #event-calendar-1::part(selector-button):hover,
+            #event-calendar-1::part(month-picker-button):hover,
+            #event-calendar-1::part(year-picker-button):hover,
+            #event-calendar-1::part(year-picker-nav-button):hover {
+                background: var(--custom-lighthight-color);
+            }
+            #event-calendar-1::part(week-day) {
+                color: color-mix(in srgb, var(--custom-accent-color) 70%, transparent);
+                font-weight: 600;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            #event-calendar-1::part(day) {
+                color: var(--custom-accent-color);
+                font-weight: 500;
+                border-radius: 10px;
+                transition: all 0.2s ease;
+            }
+            #event-calendar-1::part(day):hover {
+                background: var(--custom-lighthight-color);
+                transform: scale(1.05);
+            }
+            #event-calendar-1::part(day-today) {
+                border: 1px solid #d090d8;
+                font-weight: 700;
+            }
+            #event-calendar-1::part(day-selected),
+            #event-calendar-1::part(month-picker-button-selected),
+            #event-calendar-1::part(year-picker-button-selected) {
+                background: var(--custom-accent-color);
+                color: var(--custom-accent-foreground-color);
+                font-weight: 700;
+                box-shadow: 0 4px 12px var(--custom-lighthight-color);
+            }
+            #event-calendar-1::part(day-today):hover,
+            #event-calendar-1::part(day-selected):hover,
+            #event-calendar-1::part(month-picker-button-selected):hover,
+            #event-calendar-1::part(year-picker-button-selected):hover {
+                background: var(--custom-accent-color);
+                color: var(--custom-accent-foreground-color);
+            }
+            #event-calendar-1::part(day-disabled) {
+                color: #d1d5db;
+                background: transparent;
+            }
+            #event-calendar-1::part(year-picker-decade-label) {
+                color: var(--custom-accent-color);
+                font-weight: 600;
+                font-size: 0.875rem;
             }
         `,
     ];

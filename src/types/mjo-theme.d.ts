@@ -770,7 +770,6 @@ export interface MjoCalendarTheme {
     rangeColorSecondary?: string;
     pickerBackground?: string;
     pickerRadius?: string;
-    pickerShadow?: string;
     pickerButtonBackground?: string;
     pickerButtonBorder?: string;
     pickerButtonRadius?: string;
@@ -799,6 +798,8 @@ export interface MjoCalendarTheme {
     eventMultipleSize?: string;
     eventFontSize?: string;
     eventFontWeight?: string;
+    foregroundColor?: string;
+    foregroundColorLow?: string;
 }
 
 export interface MjoMenuButtonTheme {

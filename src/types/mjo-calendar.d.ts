@@ -4,12 +4,13 @@ export type MjoCalendarColor = "primary" | "secondary";
 export type MjoCalendarRangeCalendars = "1" | "2" | "auto";
 export type MjoCalendarFirstDayOfWeek = "sunday" | "monday";
 
-export interface MjoCalendarMarker {
+export interface MjoCalendarMarker<T = unknown> {
     date: string;
     time?: string;
     backgroundColor?: string;
     foregroundColor?: string;
     tooltip?: string;
+    data?: T;
 }
 
 export type MjoCalendarHeaderSide = "single" | "left" | "right";
