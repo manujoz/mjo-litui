@@ -7,7 +7,7 @@ import "../../mjo-icon.js";
 @customElement("mjoint-pagination-nav-button")
 export class MjointPaginationNavButton extends LitElement {
     @property({ type: String }) direction: "previous" | "next" | "first" | "last" = "next";
-    @property({ type: Boolean, reflect: true }) disabled = false;
+    @property({ type: Boolean }) disabled = false;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
     @property({ type: String }) label?: string;

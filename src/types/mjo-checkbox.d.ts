@@ -1,9 +1,7 @@
 import { MjoCheckbox } from "../mjo-checkbox";
 
-// Checkbox color types
 export type MjoCheckboxColor = "primary" | "secondary";
 
-// Checkbox change event interface
 export interface MjoCheckboxChangeEvent extends CustomEvent {
     detail: {
         element: MjoCheckbox;
@@ -18,7 +16,6 @@ export interface MjoCheckboxChangeEvent extends CustomEvent {
     };
 }
 
-// Checkbox indeterminate change event interface
 export interface MjoCheckboxIndeterminateChangeEvent extends CustomEvent {
     detail: {
         element: MjoCheckbox;
@@ -27,7 +24,6 @@ export interface MjoCheckboxIndeterminateChangeEvent extends CustomEvent {
     };
 }
 
-// Checkbox focus events
 export interface MjoCheckboxFocusEvent extends CustomEvent {
     detail: {
         element: MjoCheckbox;

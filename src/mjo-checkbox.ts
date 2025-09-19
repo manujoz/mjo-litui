@@ -49,9 +49,9 @@ import "./mjo-typography.js";
 @customElement("mjo-checkbox")
 export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
     @property({ type: String }) color: MjoCheckboxColor = "primary";
-    @property({ type: Boolean, reflect: true }) checked = false;
-    @property({ type: Boolean, reflect: true }) disabled = false;
-    @property({ type: Boolean, reflect: true }) indeterminate = false;
+    @property({ type: Boolean }) checked = false;
+    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean }) indeterminate = false;
     @property({ type: String }) helperText?: string;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) label?: string;
@@ -67,12 +67,12 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
     type = "checkbox";
 
     // Computed properties for accessibility
-    private get computedAriaChecked(): "true" | "false" | "mixed" {
+    get #computedAriaChecked(): "true" | "false" | "mixed" {
         if (this.indeterminate) return "mixed";
         return this.checked ? "true" : "false";
     }
 
-    private get computedAriaLabel(): string | undefined {
+    get #computedAriaLabel(): string | undefined {
         if (this.ariaLabel) return this.ariaLabel;
         if (!this.label) return undefined;
 
@@ -85,7 +85,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         return baseLabel;
     }
 
-    private get computedTabIndex(): number {
+    get #computedTabIndex(): number {
         return this.disabled ? -1 : 0;
     }
 
@@ -97,12 +97,12 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                     class="checkbox-container"
                     part="container"
                     role="checkbox"
-                    aria-checked=${this.computedAriaChecked}
-                    aria-label=${ifDefined(this.computedAriaLabel)}
+                    aria-checked=${this.#computedAriaChecked}
+                    aria-label=${ifDefined(this.#computedAriaLabel)}
                     aria-describedby=${ifDefined(this.ariaDescribedby)}
                     aria-disabled=${this.disabled ? "true" : "false"}
                     aria-invalid=${this.error ? "true" : "false"}
-                    tabindex=${this.computedTabIndex}
+                    tabindex=${this.#computedTabIndex}
                     @click=${this.#handleClick}
                     @keydown=${this.#handleKeydown}
                     @focus=${this.#handleFocus}

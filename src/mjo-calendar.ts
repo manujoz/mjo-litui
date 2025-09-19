@@ -139,7 +139,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @property({ type: String }) locale: SupportedLocale = "en";
     @property({ type: String }) minDate?: string;
     @property({ type: String }) maxDate?: string;
-    @property({ type: Boolean, reflect: true }) disabled = false;
+    @property({ type: Boolean }) disabled = false;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
     @property({ type: Array }) disabledDates?: string[];

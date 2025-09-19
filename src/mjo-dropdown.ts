@@ -32,7 +32,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: Boolean }) disabled = false;
     @property({ type: Boolean }) preventScroll = false;
-    @property({ type: Boolean, reflect: true }) isOpen = false;
+    @property({ type: Boolean }) isOpen = false;
     @property({ type: Object }) css?: CSSResult;
     @property({ type: Object }) html?: TemplateResult<1>;
     @property({ type: String }) behaviour: MjoDropdownBehaviour = "hover";
