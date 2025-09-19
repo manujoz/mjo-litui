@@ -42,10 +42,10 @@ import "./mjo-typography.js";
  */
 @customElement("mjo-button")
 export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThemeMixin, IFormMixin {
-    @property({ type: Boolean, reflect: true }) fullwidth = false;
-    @property({ type: Boolean, reflect: true }) disabled = false;
-    @property({ type: Boolean, reflect: true }) loading = false;
-    @property({ type: Boolean, reflect: true }) rounded = false;
+    @property({ type: Boolean }) fullwidth = false;
+    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean }) loading = false;
+    @property({ type: Boolean }) rounded = false;
     @property({ type: Boolean }) toggleable = false;
     @property({ type: Boolean }) smallCaps = false;
     @property({ type: Boolean }) noink = false;

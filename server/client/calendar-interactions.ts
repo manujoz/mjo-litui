@@ -2,7 +2,7 @@
 // This functionality loads after client hydration
 
 import { MjoCalendar } from "../../src/mjo-calendar";
-import type { CalendarDateSelectedEvent, CalendarRangeSelectedEvent, MjoCalendarEventMarker } from "../../src/types/mjo-calendar";
+import type { MjoCalendarDateSelectedEvent, MjoCalendarMarker, MjoCalendarRangeSelectedEvent } from "../../src/types/mjo-calendar";
 
 // Playground interactions
 function changeCalendarProp(prop: string, value: string | boolean): void {
@@ -93,7 +93,7 @@ function addSampleEvents(): void {
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
 
-    const sampleEvents: MjoCalendarEventMarker[] = [
+    const sampleEvents: MjoCalendarMarker[] = [
         {
             date: `${year}-${month}-05`,
             tooltip: "Team Meeting",
@@ -132,7 +132,7 @@ function addWorkEvents(): void {
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
 
-    const workEvents: MjoCalendarEventMarker[] = [
+    const workEvents: MjoCalendarMarker[] = [
         {
             date: `${year}-${month}-03`,
             tooltip: "Sprint Planning",
@@ -171,7 +171,7 @@ function addHolidayEvents(): void {
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
 
-    const holidayEvents: MjoCalendarEventMarker[] = [
+    const holidayEvents: MjoCalendarMarker[] = [
         {
             date: `${year}-${month}-01`,
             tooltip: "Monthly Start",
@@ -229,7 +229,7 @@ function addCustomEvent(): void {
     const colors = ["#1976d2", "#388e3c", "#f57c00", "#7b1fa2", "#c62828", "#2e7d32", "#1565c0", "#ef6c00"];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-    const newEvent: MjoCalendarEventMarker = {
+    const newEvent: MjoCalendarMarker = {
         date: date,
         tooltip: tooltip || `Event on ${date}`,
         backgroundColor: randomColor,
@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners to all calendar components
     document.querySelectorAll("mjo-calendar").forEach((calendar) => {
         calendar.addEventListener("mjo-calendar:date-selected", (ev: Event) => {
-            const event = ev as CalendarDateSelectedEvent;
+            const event = ev as MjoCalendarDateSelectedEvent;
             const value = event.detail.value;
             const date = event.detail.date;
 
@@ -304,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         calendar.addEventListener("mjo-calendar:range-selected", (ev: Event) => {
-            const event = ev as CalendarRangeSelectedEvent;
+            const event = ev as MjoCalendarRangeSelectedEvent;
             const startDate = event.detail.startDate;
             const endDate = event.detail.endDate;
             const startValue = event.detail.startDateValue;

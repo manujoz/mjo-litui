@@ -4,8 +4,8 @@ import { customElement, property } from "lit/decorators.js";
 @customElement("mjoint-pagination-page-item")
 export class MjointPaginationPageItem extends LitElement {
     @property({ type: Number }) page = 1;
-    @property({ type: Boolean, reflect: true }) active = false;
-    @property({ type: Boolean, reflect: true }) disabled = false;
+    @property({ type: Boolean }) active = false;
+    @property({ type: Boolean }) disabled = false;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
 

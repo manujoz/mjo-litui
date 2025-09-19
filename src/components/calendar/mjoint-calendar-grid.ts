@@ -1,4 +1,4 @@
-import { MjoCalendarEventMarker } from "../../types/mjo-calendar.js";
+import { MjoCalendarMarker } from "../../types/mjo-calendar.js";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
@@ -19,9 +19,10 @@ export class MjointCalendarGrid extends LitElement {
     @property({ type: Array }) weekDays!: string[];
     @property({ type: String }) firstDayOfWeek: "sunday" | "monday" = "monday";
     @property({ type: String }) mode: "single" | "range" = "single";
-    @property({ type: Boolean }) showToday = true;
+    @property({ type: Boolean }) showToday = false;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean }) compact = false;
     @property({ type: String }) minDate: string = "";
     @property({ type: String }) maxDate: string = "";
     @property({ type: Array }) disabledDates?: string[];
@@ -34,7 +35,7 @@ export class MjointCalendarGrid extends LitElement {
     @property({ type: Object }) focusedDate?: Date;
 
     // Events map for event markers
-    @property({ type: Object }) eventsMap = new Map<string, MjoCalendarEventMarker[]>();
+    @property({ type: Object }) eventsMap = new Map<string, MjoCalendarMarker[]>();
 
     render() {
         const firstDay = new Date(this.year, this.month, 1);
@@ -101,7 +102,7 @@ export class MjointCalendarGrid extends LitElement {
                     ${weekDaysAdjusted.map(
                         (day) => html`
                             <div class="week-day" role="columnheader" part="week-day">
-                                <mjo-typography tag="none" size="body1">${day}</mjo-typography>
+                                <mjo-typography tag="none" size="body1">${!this.compact ? day : day.substring(0, 1)}</mjo-typography>
                             </div>
                         `,
                     )}
@@ -162,7 +163,7 @@ export class MjointCalendarGrid extends LitElement {
     /**
      * Get all events for a specific date
      */
-    #getEventsForDate(date: Date): MjoCalendarEventMarker[] {
+    #getEventsForDate(date: Date): MjoCalendarMarker[] {
         const dateStr = CalendarUtils.formatDate(date);
         return this.eventsMap.get(dateStr) || [];
     }
@@ -178,7 +179,6 @@ export class MjointCalendarGrid extends LitElement {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 2px;
-            min-width: max-content;
         }
         .week-header {
             margin-bottom: 8px;
@@ -191,7 +191,6 @@ export class MjointCalendarGrid extends LitElement {
             color: var(--mjo-calendar-week-day-color, var(--mjoint-calendar-color-foreground-low));
             font-weight: var(--mjo-calendar-week-day-font-weight, 600);
             box-sizing: border-box;
-            width: 3em;
         }
     `;
 }

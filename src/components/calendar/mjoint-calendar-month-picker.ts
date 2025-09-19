@@ -30,7 +30,7 @@ export class MjointCalendarMonthPicker extends LitElement {
                         (month, index) => html`
                             <button
                                 class="month-button"
-                                part="month-picker-button"
+                                part="month-picker-button${index === this.selectedMonth ? " month-picker-button-selected" : ""}"
                                 role="gridcell"
                                 ?data-selected=${index === this.selectedMonth}
                                 ?disabled=${this.disabled}
@@ -54,7 +54,7 @@ export class MjointCalendarMonthPicker extends LitElement {
 
         this.selectedMonth = month;
         this.dispatchEvent(
-            new CustomEvent("month-selected", {
+            new CustomEvent("mjo-calendar:month-selected", {
                 detail: { month },
                 bubbles: true,
                 composed: true,
@@ -133,6 +133,10 @@ export class MjointCalendarMonthPicker extends LitElement {
         }
         .month-picker {
             padding: var(--mjo-space-small);
+            background: var(--mjo-calendar-picker-background, var(--mjo-calendar-background, var(--mjo-background-color, white)));
+            border-radius: var(--mjo-calendar-picker-radius, var(--mjo-radius-medium, 8px));
+            height: 100%;
+            box-sizing: border-box;
         }
         .months-grid {
             display: grid;

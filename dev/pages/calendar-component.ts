@@ -7,7 +7,8 @@ import "../../src/mjo-form.ts";
 import "../../src/mjo-grid.ts";
 import "../../src/mjo-textfield.ts";
 
-import { MjoCalendarEventMarker } from "../../src/types/mjo-calendar";
+import { MjoCalendarMarker } from "../../src/types/mjo-calendar";
+import { MjoFormSubmitEvent } from "../../src/types/mjo-form";
 import "../components/control-group.js";
 import "../components/playground-grid.js";
 import "../components/section-container.js";
@@ -31,16 +32,16 @@ export class CalendarComponent extends LitElement {
     @state() private currentMinDate = "";
     @state() private currentMaxDate = "";
     @state() private currentDisabledDates: string[] = [];
-    @state() private eventMarkers: MjoCalendarEventMarker[] = this.generateCurrentMonthEvents();
+    @state() private eventMarkers: MjoCalendarMarker[] = this.generateCurrentMonthEvents();
     @state() private eventInfo = "Click on a day to see events";
 
-    private generateCurrentMonthEvents(): MjoCalendarEventMarker[] {
+    private generateCurrentMonthEvents(): MjoCalendarMarker[] {
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, "0");
 
         return [
-            { date: `${year}-${month}-05`, hour: "16:25", tooltip: "Important meeting" },
+            { date: `${year}-${month}-05`, time: "16:25", tooltip: "Important meeting" },
             { date: `${year}-${month}-08`, backgroundColor: "#4ecdc4", foregroundColor: "white", tooltip: "Team standup" },
             { date: `${year}-${month}-08`, backgroundColor: "#45b7d1", foregroundColor: "white", tooltip: "Project deadline" },
             { date: `${year}-${month}-22`, backgroundColor: "#96ceb4", foregroundColor: "black", tooltip: "Client presentation" },
@@ -51,7 +52,6 @@ export class CalendarComponent extends LitElement {
     render() {
         return html`
             <h1>Calendar Component Examples</h1>
-
             <section-container label="Interactive Calendar Playground">
                 <playground-grid>
                     <mjo-calendar
@@ -256,8 +256,12 @@ export class CalendarComponent extends LitElement {
 
             <section-container label="Basic Usage Examples" description="Common calendar implementations with different modes and configurations.">
                 <showcases-grid columns="2">
-                    <mjo-calendar mode="single" size="medium" color="primary"></mjo-calendar>
-                    <mjo-calendar mode="range" size="medium" color="secondary" rangeCalendars="2"></mjo-calendar>
+                    <div>
+                        <mjo-calendar mode="single" size="medium" color="primary"></mjo-calendar>
+                    </div>
+                    <div>
+                        <mjo-calendar mode="range" size="medium" color="secondary" rangeCalendars="auto"></mjo-calendar>
+                    </div>
                 </showcases-grid>
             </section-container>
 
@@ -315,16 +319,16 @@ export class CalendarComponent extends LitElement {
             </section-container>
 
             <section-container label="Form Integration Example">
-                <mjo-form>
+                <mjo-form @submit=${this.handleSubmit}>
                     <mjo-grid columns="2" gap="20px">
                         <div class="form-field">
                             <label>Event Date</label>
-                            <mjo-calendar mode="single" size="medium" color="primary" name="eventDate"></mjo-calendar>
+                            <mjo-calendar mode="single" name="primary" size="medium" color="primary" name="eventDate"></mjo-calendar>
                         </div>
 
                         <div class="form-field">
                             <label>Date Range</label>
-                            <mjo-calendar mode="range" size="medium" color="secondary" name="dateRange"></mjo-calendar>
+                            <mjo-calendar mode="range" name="secondary" size="medium" color="secondary" name="dateRange"></mjo-calendar>
                         </div>
                     </mjo-grid>
 
@@ -358,6 +362,12 @@ export class CalendarComponent extends LitElement {
                 </div>
             </section-container>
         `;
+    }
+
+    private handleSubmit(event: MjoFormSubmitEvent) {
+        console.log("Form submitted:", event.detail.response);
+        const loadingButton = event.detail.response.submitButton;
+        if (loadingButton) loadingButton.loading = true;
     }
 
     private setMode(mode: "single" | "range") {
@@ -521,6 +531,10 @@ export class CalendarComponent extends LitElement {
                 display: flex;
                 flex-direction: column;
                 gap: 40px;
+
+                --custom-lighthight-color: rgba(255, 255, 255, 0.3);
+                --custom-accent-color: #6b46c1;
+                --custom-accent-foreground-color: white;
             }
 
             mjo-calendar {
@@ -638,6 +652,89 @@ export class CalendarComponent extends LitElement {
                 .form-actions {
                     flex-direction: column;
                 }
+            }
+            #event-calendar-1::part(calendar),
+            #event-calendar-1::part(year-picker-container) {
+                background: linear-gradient(135deg, #fab1db 0%, #cfd8fe 50%, #fecfef 100%);
+                border-radius: 20px;
+                box-shadow: 0 15px 35px rgba(255, 154, 158, 0.2);
+                padding: 24px;
+            }
+            #event-calendar-1::part(month-picker-container),
+            #event-calendar-1::part(year-picker-container) {
+                border-radius: 20px;
+                padding: 24px;
+                background: linear-gradient(135deg, #fab1db 0%, #cfd8fe 50%, #fecfef 100%);
+            }
+            #event-calendar-1::part(month-picker-button),
+            #event-calendar-1::part(year-picker-button),
+            #event-calendar-1::part(year-picker-nav-button) {
+                font-size: 0.75rem;
+                color: var(--custom-accent-color);
+                border: none;
+            }
+            #event-calendar-1::part(header) {
+                margin-bottom: 0px;
+            }
+            #event-calendar-1::part(nav-button),
+            #event-calendar-1::part(selector-button) {
+                color: var(--custom-accent-color);
+                border-radius: 12px;
+                font-weight: 600;
+                border: none;
+                transition: all 0.2s ease;
+            }
+            #event-calendar-1::part(nav-button):hover,
+            #event-calendar-1::part(selector-button):hover,
+            #event-calendar-1::part(month-picker-button):hover,
+            #event-calendar-1::part(year-picker-button):hover,
+            #event-calendar-1::part(year-picker-nav-button):hover {
+                background: var(--custom-lighthight-color);
+            }
+            #event-calendar-1::part(week-day) {
+                color: color-mix(in srgb, var(--custom-accent-color) 70%, transparent);
+                font-weight: 600;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            #event-calendar-1::part(day) {
+                color: var(--custom-accent-color);
+                font-weight: 500;
+                border-radius: 10px;
+                transition: all 0.2s ease;
+            }
+            #event-calendar-1::part(day):hover {
+                background: var(--custom-lighthight-color);
+                transform: scale(1.05);
+            }
+            #event-calendar-1::part(day-today) {
+                border: 1px solid #d090d8;
+                font-weight: 700;
+            }
+            #event-calendar-1::part(day-selected),
+            #event-calendar-1::part(month-picker-button-selected),
+            #event-calendar-1::part(year-picker-button-selected) {
+                background: var(--custom-accent-color);
+                color: var(--custom-accent-foreground-color);
+                font-weight: 700;
+                box-shadow: 0 4px 12px var(--custom-lighthight-color);
+            }
+            #event-calendar-1::part(day-today):hover,
+            #event-calendar-1::part(day-selected):hover,
+            #event-calendar-1::part(month-picker-button-selected):hover,
+            #event-calendar-1::part(year-picker-button-selected):hover {
+                background: var(--custom-accent-color);
+                color: var(--custom-accent-foreground-color);
+            }
+            #event-calendar-1::part(day-disabled) {
+                color: #d1d5db;
+                background: transparent;
+            }
+            #event-calendar-1::part(year-picker-decade-label) {
+                color: var(--custom-accent-color);
+                font-weight: 600;
+                font-size: 0.875rem;
             }
         `,
     ];

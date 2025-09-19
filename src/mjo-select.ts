@@ -91,8 +91,8 @@ import "./mjo-dropdown.js";
 @customElement("mjo-select")
 export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: Boolean }) autoFocus = false;
-    @property({ type: Boolean, reflect: true }) disabled = false;
-    @property({ type: Boolean, reflect: true }) required = false;
+    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean }) required = false;
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: String }) name?: string;
     @property({ type: String }) placeholder?: string;

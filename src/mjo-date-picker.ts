@@ -2,7 +2,7 @@ import type { MjoCalendar } from "./mjo-calendar.js";
 import type { MjoDropdown } from "./mjo-dropdown.js";
 import type { MjoTextfield } from "./mjo-textfield.js";
 import { SupportedLocale } from "./types/locales.js";
-import { CalendarDateSelectedEvent, CalendarRangeSelectedEvent } from "./types/mjo-calendar";
+import { MjoCalendarDateSelectedEvent, MjoCalendarRangeSelectedEvent } from "./types/mjo-calendar";
 import { DatePickerChangeEvent } from "./types/mjo-date-picker.js";
 
 import { css, html, LitElement, PropertyValues, TemplateResult } from "lit";
@@ -85,7 +85,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
     @property({ type: Array }) disabledDates?: string[];
     @property({ type: String }) label?: string;
     @property({ type: String }) placeholder?: string;
-    @property({ type: Boolean, reflect: true }) disabled = false;
+    @property({ type: Boolean }) disabled = false;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
     @property({ type: Boolean }) clearabled = false;
@@ -352,7 +352,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         return `${format(start)} – ${format(end)}`;
     }
 
-    #onDateSelected = (ev: CalendarDateSelectedEvent) => {
+    #onDateSelected = (ev: MjoCalendarDateSelectedEvent) => {
         const detail = ev.detail;
 
         if (this.isRange) return; // ignore single events in range mode
@@ -372,7 +372,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         }
     };
 
-    #onRangeSelected = (ev: CalendarRangeSelectedEvent) => {
+    #onRangeSelected = (ev: MjoCalendarRangeSelectedEvent) => {
         if (!this.isRange) return;
 
         const detail = ev.detail;
