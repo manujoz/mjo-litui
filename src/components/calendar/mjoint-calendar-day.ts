@@ -1,4 +1,4 @@
-import { MjoCalendarEventMarker } from "../../types/mjo-calendar.js";
+import { MjoCalendarMarker } from "../../types/mjo-calendar.js";
 
 import { css, html, LitElement, PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
@@ -28,7 +28,7 @@ export class MjointCalendarDay extends LitElement {
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
 
     // Events for this specific day
-    @property({ type: Array }) dayEvents?: MjoCalendarEventMarker[];
+    @property({ type: Array }) dayEvents?: MjoCalendarMarker[];
 
     @query(".day") private $day!: HTMLElement;
 
@@ -99,7 +99,7 @@ export class MjointCalendarDay extends LitElement {
     }
 
     // Computed properties for events
-    get #dayEvents(): MjoCalendarEventMarker[] {
+    get #dayEvents(): MjoCalendarMarker[] {
         return this.dayEvents || [];
     }
 
@@ -108,7 +108,7 @@ export class MjointCalendarDay extends LitElement {
     }
 
     get #eventTooltip(): string {
-        return this.#dayEvents.map((evt: MjoCalendarEventMarker) => evt.tooltip || "Event").join("\n");
+        return this.#dayEvents.map((evt: MjoCalendarMarker) => evt.tooltip || "Event").join("\n");
     }
 
     get #eventCount(): string {

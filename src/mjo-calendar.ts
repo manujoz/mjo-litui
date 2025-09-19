@@ -1,14 +1,14 @@
 import { SupportedLocale } from "./types/locales.js";
 import {
-    CalendarDayClickEvent,
     GoToDateOptions,
     GoToMonthOptions,
     GoToYearOptions,
     MjoCalendarDateSelectedEvent,
+    MjoCalendarDayClickEvent,
     MjoCalendarDayHoverEvent,
     MjoCalendarDayLeaveEvent,
-    MjoCalendarEventMarker,
     MjoCalendarHeaderSide,
+    MjoCalendarMarker,
     MjoCalendarMonthPickerEvent,
     MjoCalendarMonthSelectedEvent,
     MjoCalendarNavigateEvent,
@@ -121,12 +121,12 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
     @property({ type: Array }) disabledDates?: string[];
-    @property({ type: Boolean }) showToday = true;
+    @property({ type: Boolean }) hideToday = true;
     @property({ type: String }) firstDayOfWeek: "sunday" | "monday" = "monday";
     @property({ type: String }) rangeCalendars: "1" | "2" | "auto" = "auto";
-    @property({ type: Array }) eventMarkers?: MjoCalendarEventMarker[];
-    @property({ type: Boolean }) enableKeyboardNavigation = true;
-    @property({ type: Boolean }) announceSelections = true;
+    @property({ type: Array }) eventMarkers?: MjoCalendarMarker[];
+    @property({ type: Boolean }) disableKeyboardNavigation = false;
+    @property({ type: Boolean }) disableAnnounceSelections = false;
     @property({ type: Boolean }) allowCompact = false;
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledby: string | null = null;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby: string | null = null;
@@ -142,7 +142,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @state() private announcementText = "";
     @state() private compact = false;
 
-    @state() private eventsMap = new Map<string, MjoCalendarEventMarker[]>();
+    @state() private eventsMap = new Map<string, MjoCalendarMarker[]>();
 
     #resizeObserver?: ResizeObserver;
     #autoDual = false;
@@ -163,7 +163,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 aria-describedby=${ifDefined(this.ariaDescribedby || undefined)}
                 aria-live=${this.announcementText ? this.ariaLive : "off"}
                 tabindex=${this.disabled ? -1 : 0}
-                @keydown=${this.enableKeyboardNavigation ? this.#handleKeydown : nothing}
+                @keydown=${!this.disableKeyboardNavigation ? this.#handleKeydown : nothing}
             >
                 ${this.mode === "range" ? this.#renderRangeMode() : this.#renderSingleMode()}
                 ${this.announcementText ? html`<div class="sr-only" aria-live=${this.ariaLive}>${this.announcementText}</div>` : nothing}
@@ -276,7 +276,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                     .weekDays=${this.#weekDays}
                     firstDayOfWeek=${this.firstDayOfWeek}
                     mode=${mode}
-                    ?showToday=${this.showToday}
+                    ?showToday=${!this.hideToday}
                     size=${this.size}
                     ?disabled=${this.disabled}
                     minDate=${this.minDate || ""}
@@ -692,7 +692,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }
 
         // Announce the focused date
-        if (this.announceSelections) {
+        if (!this.disableAnnounceSelections) {
             const dateString = CalendarUtils.formatDate(date);
             this.#announceText(`Focused on ${dateString}`);
         }
@@ -782,7 +782,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         this.#openPicker("year", side);
     }
 
-    #handleDayClick(event: CalendarDayClickEvent) {
+    #handleDayClick(event: MjoCalendarDayClickEvent) {
         const { date } = event.detail;
         this.#selectDate(date);
     }
@@ -1009,7 +1009,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         };
 
         // Announce selection for accessibility
-        if (this.announceSelections && this.value) {
+        if (!this.disableAnnounceSelections && this.value) {
             const dateString = CalendarUtils.formatDate(new Date(this.value));
             this.#announceText(`Selected ${dateString}`);
         }
@@ -1042,7 +1042,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         };
 
         // Announce selection for accessibility
-        if (this.announceSelections && this.startDate && this.endDate) {
+        if (!this.disableAnnounceSelections && this.startDate && this.endDate) {
             const startString = CalendarUtils.formatDate(new Date(this.startDate));
             const endString = CalendarUtils.formatDate(new Date(this.endDate));
             this.#announceText(`Selected date range from ${startString} to ${endString}`);
@@ -1123,7 +1123,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
      * Update the events map when eventMarkers property changes
      */
     #updateEventsMap() {
-        const eventsMap = new Map<string, MjoCalendarEventMarker[]>();
+        const eventsMap = new Map<string, MjoCalendarMarker[]>();
 
         this.eventMarkers?.forEach((marker) => {
             const existing = eventsMap.get(marker.date) || [];
@@ -1238,7 +1238,7 @@ declare global {
     interface HTMLElementEventMap {
         "mjo-calendar:date-selected": MjoCalendarDateSelectedEvent;
         "mjo-calendar:range-selected": MjoCalendarRangeSelectedEvent;
-        "mjo-calendar:day-click": CalendarDayClickEvent;
+        "mjo-calendar:day-click": MjoCalendarDayClickEvent;
         "mjo-calendar:day-hover": MjoCalendarDayHoverEvent;
         "mjo-calendar:day-leave": MjoCalendarDayLeaveEvent;
     }

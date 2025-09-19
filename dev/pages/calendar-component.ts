@@ -7,7 +7,7 @@ import "../../src/mjo-form.ts";
 import "../../src/mjo-grid.ts";
 import "../../src/mjo-textfield.ts";
 
-import { MjoCalendarEventMarker } from "../../src/types/mjo-calendar";
+import { MjoCalendarMarker } from "../../src/types/mjo-calendar";
 import { MjoFormSubmitEvent } from "../../src/types/mjo-form";
 import "../components/control-group.js";
 import "../components/playground-grid.js";
@@ -32,16 +32,16 @@ export class CalendarComponent extends LitElement {
     @state() private currentMinDate = "";
     @state() private currentMaxDate = "";
     @state() private currentDisabledDates: string[] = [];
-    @state() private eventMarkers: MjoCalendarEventMarker[] = this.generateCurrentMonthEvents();
+    @state() private eventMarkers: MjoCalendarMarker[] = this.generateCurrentMonthEvents();
     @state() private eventInfo = "Click on a day to see events";
 
-    private generateCurrentMonthEvents(): MjoCalendarEventMarker[] {
+    private generateCurrentMonthEvents(): MjoCalendarMarker[] {
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, "0");
 
         return [
-            { date: `${year}-${month}-05`, hour: "16:25", tooltip: "Important meeting" },
+            { date: `${year}-${month}-05`, time: "16:25", tooltip: "Important meeting" },
             { date: `${year}-${month}-08`, backgroundColor: "#4ecdc4", foregroundColor: "white", tooltip: "Team standup" },
             { date: `${year}-${month}-08`, backgroundColor: "#45b7d1", foregroundColor: "white", tooltip: "Project deadline" },
             { date: `${year}-${month}-22`, backgroundColor: "#96ceb4", foregroundColor: "black", tooltip: "Client presentation" },
