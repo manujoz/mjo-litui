@@ -110,7 +110,7 @@ export class MjointCalendarYearPicker extends LitElement {
         this.selectedYear = year;
 
         this.dispatchEvent(
-            new CustomEvent("year-selected", {
+            new CustomEvent("mjo-calendar:year-selected", {
                 detail: { year },
                 bubbles: true,
                 composed: true,

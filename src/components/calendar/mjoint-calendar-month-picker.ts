@@ -54,7 +54,7 @@ export class MjointCalendarMonthPicker extends LitElement {
 
         this.selectedMonth = month;
         this.dispatchEvent(
-            new CustomEvent("month-selected", {
+            new CustomEvent("mjo-calendar:month-selected", {
                 detail: { month },
                 bubbles: true,
                 composed: true,

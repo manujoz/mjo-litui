@@ -43,20 +43,20 @@ export interface MjoCalendarMonthSelectedEvent extends CustomEvent {
     };
 }
 
-export interface MjoCalendarNavigateEvent extends CustomEvent {
+export interface CalendarNavigateEvent extends CustomEvent {
     detail: {
         direction: 1 | -1;
         side: MjoCalendarHeaderSide;
     };
 }
 
-export interface MjoCalendarMonthPickerEvent extends CustomEvent {
+export interface CalendarMonthPickerEvent extends CustomEvent {
     detail: {
         side: MjoCalendarHeaderSide;
     };
 }
 
-export interface MjoCalendarYearPickerEvent extends CustomEvent {
+export interface CalendarYearPickerEvent extends CustomEvent {
     detail: {
         side: MjoCalendarHeaderSide;
     };

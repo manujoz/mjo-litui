@@ -1,5 +1,8 @@
 import { SupportedLocale } from "./types/locales.js";
 import {
+    CalendarMonthPickerEvent,
+    CalendarNavigateEvent,
+    CalendarYearPickerEvent,
     GoToDateOptions,
     GoToMonthOptions,
     GoToYearOptions,
@@ -9,11 +12,8 @@ import {
     MjoCalendarDayLeaveEvent,
     MjoCalendarHeaderSide,
     MjoCalendarMarker,
-    MjoCalendarMonthPickerEvent,
     MjoCalendarMonthSelectedEvent,
-    MjoCalendarNavigateEvent,
     MjoCalendarRangeSelectedEvent,
-    MjoCalendarYearPickerEvent,
     MjoCalendarYearSelectedEvent,
 } from "./types/mjo-calendar.js";
 
@@ -41,6 +41,8 @@ import "./components/calendar/mjoint-calendar-year-picker.js";
  * @fires mjo-calendar:day-click - Fired when a day is clicked
  * @fires mjo-calendar:day-hover - Fired when a day is hovered
  * @fires mjo-calendar:day-leave - Fired when mouse leaves a day
+ * @fires mjo-calendar:month-selected - Fired when a month is selected in month picker
+ * @fires mjo-calendar:year-selected - Fired when a year is selected in year picker
  * @fires change - Standard change event for form compatibility
  *
  * @cssprop --mjo-calendar-font-family - Calendar font family
@@ -321,7 +323,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                               selectedMonth=${month}
                               .monthNames=${this.#monthNames}
                               ?disabled=${this.disabled}
-                              @month-selected=${this.#handleMonthSelected}
+                              @mjo-calendar:month-selected=${this.#handleMonthSelected}
                               @click=${(e: Event) => e.stopPropagation()}
                           ></mjoint-calendar-month-picker>
                       `
@@ -338,7 +340,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                                     year-picker-button-selected"
                                 selectedYear=${year}
                                 ?disabled=${this.disabled}
-                                @year-selected=${this.#handleYearSelected}
+                                @mjo-calendar:year-selected=${this.#handleYearSelected}
                                 @click=${(e: Event) => e.stopPropagation()}
                             ></mjoint-calendar-year-picker>
                         `
@@ -788,17 +790,17 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }
     }
 
-    #handleNavigate(event: MjoCalendarNavigateEvent) {
+    #handleNavigate(event: CalendarNavigateEvent) {
         const { direction, side } = event.detail;
         this.#navigateMonth(direction, side);
     }
 
-    #handleMonthPicker(event: MjoCalendarMonthPickerEvent) {
+    #handleMonthPicker(event: CalendarMonthPickerEvent) {
         const { side } = event.detail;
         this.#openPicker("month", side);
     }
 
-    #handleYearPicker(event: MjoCalendarYearPickerEvent) {
+    #handleYearPicker(event: CalendarYearPickerEvent) {
         const { side } = event.detail;
         this.#openPicker("year", side);
     }
@@ -1262,5 +1264,7 @@ declare global {
         "mjo-calendar:day-click": MjoCalendarDayClickEvent;
         "mjo-calendar:day-hover": MjoCalendarDayHoverEvent;
         "mjo-calendar:day-leave": MjoCalendarDayLeaveEvent;
+        "mjo-calendar:month-selected": MjoCalendarMonthSelectedEvent;
+        "mjo-calendar:year-selected": MjoCalendarYearSelectedEvent;
     }
 }

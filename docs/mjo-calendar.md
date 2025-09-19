@@ -468,6 +468,8 @@ The auto mode uses a `ResizeObserver` for responsive adaptation. The threshold i
 | `mjo-calendar:day-click`      | `{ day: number, date: Date, events: MjoCalendarMarker[] }`                                                                                                                    | Day cell is clicked                   |
 | `mjo-calendar:day-hover`      | `{ day: number, date: Date, events: MjoCalendarMarker[] }`                                                                                                                    | Day cell is hovered                   |
 | `mjo-calendar:day-leave`      | `{ day: number, date: Date, events: MjoCalendarMarker[] }`                                                                                                                    | Mouse leaves day cell                 |
+| `mjo-calendar:month-selected` | `{ month: number }`                                                                                                                                                           | Month is selected in month picker     |
+| `mjo-calendar:year-selected`  | `{ year: number }`                                                                                                                                                            | Year is selected in year picker       |
 | `change`                      | Mirrors `mjo-calendar:date-selected` (single) or `mjo-calendar-` (range) with identical detail fields (adds compatibility for generic form handlers & change event listeners) | Date selection changes                |
 
 ### Event Details
@@ -516,6 +518,15 @@ calendar.addEventListener("mjo-calendar:day-hover", (e) => {
 
 calendar.addEventListener("mjo-calendar:day-leave", (e) => {
     console.log("Left day:", e.detail.day);
+});
+
+// Navigation events (useful for custom calendar controls)
+calendar.addEventListener("mjo-calendar:month-selected", (e) => {
+    console.log("Month selected:", e.detail.month); // 0-11 (0 = January, 11 = December)
+});
+
+calendar.addEventListener("mjo-calendar:year-selected", (e) => {
+    console.log("Year selected:", e.detail.year); // 4-digit year
 });
 ```
 

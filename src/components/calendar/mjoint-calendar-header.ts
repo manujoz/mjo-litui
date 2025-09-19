@@ -128,8 +128,8 @@ export class MjointCalendarHeader extends LitElement {
         this.dispatchEvent(
             new CustomEvent("navigate", {
                 detail: { direction: -1, side: this.side },
-                bubbles: true,
-                composed: true,
+                bubbles: false,
+                composed: false,
             }),
         );
     }
@@ -138,8 +138,8 @@ export class MjointCalendarHeader extends LitElement {
         this.dispatchEvent(
             new CustomEvent("navigate", {
                 detail: { direction: 1, side: this.side },
-                bubbles: true,
-                composed: true,
+                bubbles: false,
+                composed: false,
             }),
         );
     }
@@ -148,8 +148,8 @@ export class MjointCalendarHeader extends LitElement {
         this.dispatchEvent(
             new CustomEvent("month-picker", {
                 detail: { side: this.side },
-                bubbles: true,
-                composed: true,
+                bubbles: false,
+                composed: false,
             }),
         );
     }
@@ -158,8 +158,8 @@ export class MjointCalendarHeader extends LitElement {
         this.dispatchEvent(
             new CustomEvent("year-picker", {
                 detail: { side: this.side },
-                bubbles: true,
-                composed: true,
+                bubbles: false,
+                composed: false,
             }),
         );
     }
