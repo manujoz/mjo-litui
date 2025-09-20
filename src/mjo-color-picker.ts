@@ -42,7 +42,6 @@ import "./components/input/mjoint-input-label.js";
  * @csspart label-truncate-wrapper - The label truncate wrapper (via mjoint-input-label)
  * @csspart helper-text-container - The helper text container (via mjoint-input-helper-text)
  * @csspart helper-text-typography - The helper text typography (via mjoint-input-helper-text)
- * @csspart helper-text-typography-tag - The helper text typography tag (via mjoint-input-helper-text)
  * @csspart helper-text-error-message - The error message container (via mjoint-input-helper-text)
  * @csspart helper-text-success-message - The success message container (via mjoint-input-helper-text)
  * @csspart helper-text-icon - The helper text icon (via mjoint-input-helper-text)
@@ -50,7 +49,7 @@ import "./components/input/mjoint-input-label.js";
 @customElement("mjo-color-picker")
 export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IFormMixin, IInputErrorMixin, IThemeMixin {
     @property({ type: String }) color: "primary" | "secondary" = "primary";
-    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
     @property({ type: String }) label?: string;
     @property({ type: String }) name?: string;
@@ -104,8 +103,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
                 ? html`<mjoint-input-helper-text
                       exportparts="
                             container: helper-text-container,
-                            typography: helper-text-typography,
-                            helper-text: helper-text-typography-tag,
+                            helper-text: helper-text-typography,
                             error-message: helper-text-error-message,
                             success-message: helper-text-success-message,
                             icon: helper-text-icon

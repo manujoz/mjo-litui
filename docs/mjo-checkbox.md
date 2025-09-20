@@ -445,7 +445,8 @@ ${JSON.stringify(this.formData, null, 2)}</pre
                                             >
                                         </div>
                                     `
-                                  : ""} ${this.lastSubmission.errors && this.lastSubmission.errors.length > 0
+                                  : ""}
+                              ${this.lastSubmission.errors && this.lastSubmission.errors.length > 0
                                   ? html`
                                         <div style="margin-top: 1rem;">
                                             <strong style="color: #dc3545;">Validation Errors:</strong>
@@ -648,13 +649,13 @@ All validation properties from FormMixin are inherited:
 
 ### Behavior Notes
 
--   Form integration through FormMixin automatically handles form data submission
--   The checkbox uses custom icons (`AiFillCheckSquare` for checked, `AiOutlineMinus` for indeterminate)
--   Clicking anywhere on the label or checkbox toggles the state
--   Form validation supports required fields and group validation (mincheck/maxcheck)
--   Error and success states override helper text display
--   Indeterminate state is cleared when checkbox is clicked
--   Accessibility features include proper ARIA attributes and keyboard navigation
+- Form integration through FormMixin automatically handles form data submission
+- The checkbox uses custom icons (`AiFillCheckSquare` for checked, `AiOutlineMinus` for indeterminate)
+- Clicking anywhere on the label or checkbox toggles the state
+- Form validation supports required fields and group validation (mincheck/maxcheck)
+- Error and success states override helper text display
+- Indeterminate state is cleared when checkbox is clicked
+- Accessibility features include proper ARIA attributes and keyboard navigation
 
 ## Slots
 
@@ -781,10 +782,10 @@ checkbox.setIndeterminate(true); // Sets to indeterminate state
 checkbox.setIndeterminate(false); // Clears indeterminate state
 ```
 
--   Updates both the component property and the internal HTML input's indeterminate property
--   Dispatches the `mjo-checkbox:indeterminate-change` event
--   Automatically sets `checked` to `false` when indeterminate is set to `true`
--   Updates form data automatically
+- Updates both the component property and the internal HTML input's indeterminate property
+- Dispatches the `mjo-checkbox:indeterminate-change` event
+- Automatically sets `checked` to `false` when indeterminate is set to `true`
+- Updates form data automatically
 
 #### `reportValidity(): boolean`
 
@@ -823,39 +824,20 @@ The component provides extensive customization through CSS variables with fallba
 | `--mjo-checkbox-indeterminate-border-color`     | `--mjo-checkbox-indeterminate-color`           | Indeterminate border color                 |
 | `--mjo-checkbox-indeterminate-background-color` | `transparent`                                  | Background color when indeterminate        |
 | `--mjo-checkbox-indeterminate-icon-color`       | `--mjo-checkbox-indeterminate-color`           | Color of the minus icon when indeterminate |
-
-### Typography
-
-| Variable                            | Fallback                     | Used For                |
-| ----------------------------------- | ---------------------------- | ----------------------- |
-| `--mjo-checkbox-label-color`        | `inherit`                    | Label text color        |
-| `--mjo-checkbox-label-font-size`    | `inherit`                    | Label font size         |
-| `--mjo-checkbox-label-font-weight`  | `inherit`                    | Label font weight       |
-| `--mjo-checkbox-helper-color`       | `--mjo-foreground-color-low` | Helper text color       |
-| `--mjo-checkbox-helper-font-size`   | `0.8em`                      | Helper text font size   |
-| `--mjo-checkbox-helper-font-weight` | `normal`                     | Helper text font weight |
-
-### Focus and Accessibility
-
-| Variable                             | Fallback                  | Used For               |
-| ------------------------------------ | ------------------------- | ---------------------- |
-| `--mjo-checkbox-focus-color`         | `rgba(59, 130, 246, 0.1)` | Focus box shadow color |
-| `--mjo-checkbox-focus-outline-color` | `--mjo-primary-color`     | Focus outline color    |
-
-### Disabled State
-
-| Variable                          | Fallback | Used For              |
-| --------------------------------- | -------- | --------------------- |
-| `--mjo-checkbox-disabled-opacity` | `0.5`    | Opacity when disabled |
-
-### Error States
-
-| Variable                                | Fallback                       | Used For                        |
-| --------------------------------------- | ------------------------------ | ------------------------------- |
-| `--mjo-checkbox-error-border-color`     | `--mjo-color-error`            | Border color in error state     |
-| `--mjo-checkbox-error-background-color` | `--mjo-color-error`            | Background color in error state |
-| `--mjo-checkbox-error-icon-color`       | `--mjo-color-error-foreground` | Icon color in error state       |
-| `--mjo-checkbox-error-label-color`      | `--mjo-color-error`            | Label color in error state      |
+| `--mjo-checkbox-border-radius`                  | `--mjo-radius-small`                           | Radius of the checkbox                     |
+| `--mjo-checkbox-label-color`                    | `inherit`                                      | Label text color                           |
+| `--mjo-checkbox-label-font-size`                | `inherit`                                      | Label font size                            |
+| `--mjo-checkbox-label-font-weight`              | `inherit`                                      | Label font weight                          |
+| `--mjo-checkbox-helper-color`                   | `--mjo-foreground-color-low`                   | Helper text color                          |
+| `--mjo-checkbox-helper-font-size`               | `0.8em`                                        | Helper text font size                      |
+| `--mjo-checkbox-helper-font-weight`             | `normal`                                       | Helper text font weight                    |
+| `--mjo-checkbox-focus-color`                    | `rgba(59, 130, 246, 0.1)`                      | Focus box shadow color                     |
+| `--mjo-checkbox-focus-outline-color`            | `--mjo-primary-color`                          | Focus outline color                        |
+| `--mjo-checkbox-disabled-opacity`               | `0.5`                                          | Opacity when disabled                      |
+| `--mjo-checkbox-error-border-color`             | `--mjo-color-error`                            | Border color in error state                |
+| `--mjo-checkbox-error-background-color`         | `--mjo-color-error`                            | Background color in error state            |
+| `--mjo-checkbox-error-icon-color`               | `--mjo-color-error-foreground`                 | Icon color in error state                  |
+| `--mjo-checkbox-error-label-color`              | `--mjo-color-error`                            | Label color in error state                 |
 
 ### Spacing
 
@@ -1012,16 +994,16 @@ export class ExampleCheckboxAdvancedForm extends LitElement {
 
 ## Accessibility Notes
 
--   The component provides proper keyboard navigation (Space and Enter keys to toggle)
--   Uses semantic HTML input element for screen reader compatibility
--   Label is properly associated with the checkbox for accessibility
--   ARIA attributes are automatically managed (`aria-checked`, `aria-disabled`, `aria-invalid`)
--   Computed ARIA labels provide context about state (checked/unchecked/indeterminate)
--   Error states should be announced to screen readers through `aria-invalid`
--   For required checkboxes, the required state is announced through computed ARIA labels
--   Focus management with proper tab order and focus indicators
--   Support for high contrast mode with enhanced border widths
--   Reduced motion support for users with motion preferences
+- The component provides proper keyboard navigation (Space and Enter keys to toggle)
+- Uses semantic HTML input element for screen reader compatibility
+- Label is properly associated with the checkbox for accessibility
+- ARIA attributes are automatically managed (`aria-checked`, `aria-disabled`, `aria-invalid`)
+- Computed ARIA labels provide context about state (checked/unchecked/indeterminate)
+- Error states should be announced to screen readers through `aria-invalid`
+- For required checkboxes, the required state is announced through computed ARIA labels
+- Focus management with proper tab order and focus indicators
+- Support for high contrast mode with enhanced border widths
+- Reduced motion support for users with motion preferences
 
 ```html
 <!-- Example with enhanced accessibility -->
@@ -1037,37 +1019,37 @@ export class ExampleCheckboxAdvancedForm extends LitElement {
 
 ## Performance Considerations
 
--   The component uses efficient event delegation for click handling
--   Form integration updates are optimized to prevent unnecessary re-renders
--   Icon animations use CSS transforms for optimal performance with scale transitions
--   Large checkbox groups should use proper state management to avoid re-rendering all items
--   Indeterminate state changes are handled efficiently without full component re-renders
--   ARIA label computation is cached and only updates when relevant properties change
--   Support for `prefers-reduced-motion` to disable animations for accessibility
--   Memory-efficient event listeners with proper cleanup in `disconnectedCallback`
+- The component uses efficient event delegation for click handling
+- Form integration updates are optimized to prevent unnecessary re-renders
+- Icon animations use CSS transforms for optimal performance with scale transitions
+- Large checkbox groups should use proper state management to avoid re-rendering all items
+- Indeterminate state changes are handled efficiently without full component re-renders
+- ARIA label computation is cached and only updates when relevant properties change
+- Support for `prefers-reduced-motion` to disable animations for accessibility
+- Memory-efficient event listeners with proper cleanup in `disconnectedCallback`
 
 ## Best Practices
 
 ### Form Design
 
--   Group related checkboxes logically
--   Use clear, descriptive labels
--   Provide helpful helper text for complex options
--   Use validation appropriately (required, mincheck, maxcheck)
+- Group related checkboxes logically
+- Use clear, descriptive labels
+- Provide helpful helper text for complex options
+- Use validation appropriately (required, mincheck, maxcheck)
 
 ### Styling
 
--   Maintain consistent color schemes across checkbox groups
--   Use the same theme for related checkboxes
--   Ensure sufficient contrast for accessibility
--   Test with different text lengths to ensure proper layout
+- Maintain consistent color schemes across checkbox groups
+- Use the same theme for related checkboxes
+- Ensure sufficient contrast for accessibility
+- Test with different text lengths to ensure proper layout
 
 ### User Experience
 
--   Pre-check sensible defaults where appropriate
--   Use helper text to clarify the implications of checking boxes
--   Group validation feedback should be clear and actionable
--   Consider the cognitive load of too many options
+- Pre-check sensible defaults where appropriate
+- Use helper text to clarify the implications of checking boxes
+- Group validation feedback should be clear and actionable
+- Consider the cognitive load of too many options
 
 ## Summary
 
@@ -1075,14 +1057,14 @@ export class ExampleCheckboxAdvancedForm extends LitElement {
 
 ### Key Features:
 
--   **Three-state support**: Unchecked, checked, and indeterminate states
--   **Advanced accessibility**: Full ARIA support with computed labels and automatic state announcements
--   **Form integration**: Automatic data collection and validation with FormMixin
--   **Event system**: Rich event model with detailed state change information
--   **Theme customization**: Complete visual customization through CSS variables and theme objects
--   **Keyboard navigation**: Full keyboard support with Space and Enter key handling
--   **Motion preferences**: Respects user's reduced motion preferences
--   **High contrast support**: Enhanced visibility for accessibility compliance
+- **Three-state support**: Unchecked, checked, and indeterminate states
+- **Advanced accessibility**: Full ARIA support with computed labels and automatic state announcements
+- **Form integration**: Automatic data collection and validation with FormMixin
+- **Event system**: Rich event model with detailed state change information
+- **Theme customization**: Complete visual customization through CSS variables and theme objects
+- **Keyboard navigation**: Full keyboard support with Space and Enter key handling
+- **Motion preferences**: Respects user's reduced motion preferences
+- **High contrast support**: Enhanced visibility for accessibility compliance
 
 The component handles all standard checkbox behaviors while providing enhanced functionality for modern web applications, including parent-child relationships for hierarchical selections and comprehensive form validation capabilities.
 

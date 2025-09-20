@@ -206,7 +206,6 @@ export class ExampleSwitchForm extends LitElement {
 | `check-icon`                  | The check icon inside the switch ball (via exportparts) |
 | `helper-text-container`       | The helper text container (via exportparts)             |
 | `helper-text-typography`      | The helper text typography element (via exportparts)    |
-| `helper-text-typography-tag`  | The helper text typography tag (via exportparts)        |
 | `helper-text-error-message`   | The error message container (via exportparts)           |
 | `helper-text-success-message` | The success message container (via exportparts)         |
 | `helper-text-icon`            | The helper text status icon (via exportparts)           |

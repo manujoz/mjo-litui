@@ -15,14 +15,14 @@ export class MjointInputHelperText extends LitElement {
             ${this.errormsg
                 ? html`<div class="error" role="alert" aria-live="assertive" part="error-message">
                       <mjo-icon src=${AiFillCloseCircle} aria-hidden="true" exportparts="icon: icon"></mjo-icon>
-                      <mjo-typography tag="none" part="typography" exportparts="typography: helper-text">${this.errormsg}</mjo-typography>
+                      <mjo-typography tag="none" part="helper-text">${this.errormsg}</mjo-typography>
                   </div>`
                 : this.successmsg
                   ? html`<div class="success" role="status" aria-live="polite" part="success-message">
                         <mjo-icon src=${AiFillCheckCircle} aria-hidden="true" exportparts="icon: icon"></mjo-icon>
-                        <mjo-typography tag="none" part="typography" exportparts="typography: helper-text">${this.successmsg}</mjo-typography>
+                        <mjo-typography tag="none" part="helper-text">${this.successmsg}</mjo-typography>
                     </div>`
-                  : html`<mjo-typography tag="none" part="typography" exportparts="typography: helper-text"><slot></slot></mjo-typography>`}
+                  : html`<mjo-typography tag="none" part="helper-text"><slot></slot></mjo-typography>`}
         </div>`;
     }
 

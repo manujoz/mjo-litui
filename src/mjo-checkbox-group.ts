@@ -10,7 +10,6 @@ import { customElement } from "lit/decorators.js";
  */
 @customElement("mjo-checkbox-group")
 export class MjoCheckboxGroup extends LitElement {
-    /** @internal Array of child checkbox components managed by this group */
     checkboxs: MjoCheckbox[] = [];
 
     render() {

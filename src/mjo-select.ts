@@ -77,7 +77,6 @@ import "./mjo-dropdown.js";
  * @csspart helper-container - Helper container (via exportparts from mjoint-input-helper-text)
  * @csspart helper-text-container - Helper text container (via exportparts)
  * @csspart helper-text-typography - Helper text typography (via exportparts)
- * @csspart helper-text-typography-tag - Helper text typography tag (via exportparts)
  * @csspart helper-text-error-message - Error message element (via exportparts)
  * @csspart helper-text-success-message - Success message element (via exportparts)
  * @csspart helper-text-icon - Helper text icon element (via exportparts)
@@ -91,7 +90,7 @@ import "./mjo-dropdown.js";
 @customElement("mjo-select")
 export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
     @property({ type: Boolean }) autoFocus = false;
-    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean }) required = false;
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: String }) name?: string;
@@ -284,8 +283,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                               id=${ifDefined(helperTextId)}
                               exportparts="
                                     container: helper-text-container,
-                                    typography: helper-text-typography,
-                                    helper-text: helper-text-typography-tag,
+                                    helper-text: helper-text-typography,
                                     error-message: helper-text-error-message,
                                     success-message: helper-text-success-message,
                                     icon: helper-text-icon

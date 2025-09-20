@@ -31,7 +31,6 @@ import "./mjo-icon.js";
  * @csspart check-icon - The check icon inside the switch ball (via exportparts)
  * @csspart helper-text-container - The helper text container (via exportparts)
  * @csspart helper-text-typography - The helper text typography element (via exportparts)
- * @csspart helper-text-typography-tag - The helper text typography tag (via exportparts)
  * @csspart helper-text-error-message - The error message container (via exportparts)
  * @csspart helper-text-success-message - The success message container (via exportparts)
  * @csspart helper-text-icon - The helper text status icon (via exportparts)
@@ -40,8 +39,8 @@ import "./mjo-icon.js";
 export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
     @property({ type: String }) color: MjoSwitchColor = "primary";
     @property({ type: String }) size: MjoSwitchSize = "medium";
-    @property({ type: Boolean }) checked = false;
-    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean, reflect: true }) checked = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
     @property({ type: String }) label?: string;
     @property({ type: String }) name?: string;
@@ -107,8 +106,7 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                       <mjoint-input-helper-text
                           exportparts="
                             container: helper-text-container,
-                            typography: helper-text-typography,
-                            helper-text: helper-text-typography-tag,
+                            helper-text: helper-text-typography,
                             error-message: helper-text-error-message,
                             success-message: helper-text-success-message,
                             icon: helper-text-icon

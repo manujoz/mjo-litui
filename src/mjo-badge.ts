@@ -139,13 +139,15 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
         }
     };
 
-    protected willUpdate(_changedProperties: PropertyValues): void {
+    protected willUpdate(_changedProperties: PropertyValues<this>): void {
+        super.willUpdate(_changedProperties);
+
         if (_changedProperties.has("label") || _changedProperties.has("show")) {
             if (this.container) this.container.classList.remove("show");
         }
     }
 
-    protected updated(_changedProperties: PropertyValues): void {
+    protected updated(_changedProperties: PropertyValues<this>): void {
         if (_changedProperties.has("label") || _changedProperties.has("show")) {
             setTimeout(() => {
                 this.#setPosition();

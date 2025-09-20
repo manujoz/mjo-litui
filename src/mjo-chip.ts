@@ -1,4 +1,4 @@
-import { MjoChipClickEvent, MjoChipCloseEvent } from "./types/mjo-chip.js";
+import { MjoChipClickEvent, MjoChipCloseEvent, MjoChipColor, MjoChipRadius, MjoChipSize, MjoChipVariant } from "./types/mjo-chip.js";
 
 import { css, html, LitElement, nothing, PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
@@ -26,17 +26,17 @@ import "./mjo-typography.js";
  */
 @customElement("mjo-chip")
 export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
+    @property({ type: String }) label = "";
+    @property({ type: String }) size: MjoChipSize = "medium";
+    @property({ type: String }) color: MjoChipColor = "default";
+    @property({ type: String }) radius: MjoChipRadius = "full";
+    @property({ type: String }) variant: MjoChipVariant = "solid";
+    @property({ type: String }) value?: string;
     @property({ type: Boolean }) closable = false;
     @property({ type: Boolean }) clickable = false;
     @property({ type: Boolean }) disabled = false;
-    @property({ type: String }) color: "primary" | "secondary" | "default" | "success" | "warning" | "info" | "error" = "default";
     @property({ type: String }) endIcon?: string;
-    @property({ type: String }) label = "";
-    @property({ type: String }) radius: "small" | "medium" | "large" | "full" | "none" = "full";
-    @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) startIcon?: string;
-    @property({ type: String }) value?: string;
-    @property({ type: String }) variant: "solid" | "bordered" | "light" | "flat" | "faded" | "shadow" | "dot" = "solid";
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
     @property({ type: String, attribute: "aria-label", reflect: true }) override ariaLabel: string | null = null;
 
@@ -69,18 +69,28 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 <mjo-typography tag="none" class="label" exportparts="typography: label">${this.label}</mjo-typography>
                 ${this.endIcon ? html`<mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>` : nothing}
                 ${this.closable
-                    ? html`<mjo-icon
-                          class="close"
-                          exportparts="icon: close-icon"
-                          src=${AiFillCloseCircle}
-                          @click=${this.#handleCloseClick}
-                          @keydown=${this.#handleCloseKeydown}
-                          role="button"
-                          tabindex=${this.disabled ? "-1" : "0"}
-                          aria-label="Close ${this.label}"
-                      ></mjo-icon>`
+                    ? html`
+                          <mjo-icon
+                              class="close"
+                              exportparts="icon: close-icon"
+                              src=${AiFillCloseCircle}
+                              @click=${this.#handleCloseClick}
+                              @keydown=${this.#handleCloseKeydown}
+                              role="button"
+                              tabindex=${this.disabled ? "-1" : "0"}
+                              aria-label="Close ${this.label}"
+                          ></mjo-icon>
+                      `
                     : nothing}
             </div>`;
+    }
+
+    protected willUpdate(_changedProperties: PropertyValues<this>): void {
+        super.willUpdate(_changedProperties);
+
+        if (_changedProperties.has("color") || _changedProperties.has("variant") || _changedProperties.has("size") || _changedProperties.has("radius")) {
+            this.#setChipCssVars();
+        }
     }
 
     get #computedAriaLabel() {
@@ -165,12 +175,6 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         this.remove();
     }
 
-    protected willUpdate(_changedProperties: PropertyValues<this>): void {
-        if (_changedProperties.has("color") || _changedProperties.has("variant") || _changedProperties.has("size") || _changedProperties.has("radius")) {
-            this.#setChipCssVars();
-        }
-    }
-
     #setChipCssVars() {
         // Color property mapping
         const colorMap = {
@@ -194,12 +198,6 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
             error: "var(--mjo-color-white)",
         };
 
-        // Alpha colors for flat variant
-        const alphaColorMap = {
-            primary: "var(--mjo-primary-color-alpha2)",
-            secondary: "var(--mjo-secondary-color-alpha2)",
-        };
-
         // Shadow colors for shadow variant
         const shadowColorMap = {
             default: "rgba(0, 0, 0, 0.2)",
@@ -220,8 +218,6 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         let borderColor = "transparent";
         let borderWidth = "0px";
         let boxShadow = "none";
-        let pseudoBackground = "transparent";
-        let pseudoOpacity = "0";
         let closeIconColor = "rgba(0, 0, 0, 0.6)";
 
         // Variant-specific styling
@@ -255,18 +251,11 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
             case "flat": {
                 textColor = currentColor;
                 closeIconColor = currentColor;
-                const alphaColor = alphaColorMap[this.color as keyof typeof alphaColorMap];
-                if (alphaColor) {
-                    backgroundColor = alphaColor;
-                } else {
-                    backgroundColor = "transparent";
-                    pseudoBackground = currentColor;
-                    pseudoOpacity = "0.1";
-                }
+                backgroundColor = "color-mix(in srgb, " + currentColor + " 15%, var(--mjo-background-color))";
                 break;
             }
             case "faded": {
-                backgroundColor = "rgba(0, 0, 0, 0.1)";
+                backgroundColor = "color-mix(in srgb, var(--mjo-foreground-color) 12%, var(--mjo-background-color))";
                 textColor = this.color === "default" ? "var(--mjo-foreground-color)" : currentColor;
                 closeIconColor = currentColor;
                 break;
@@ -289,7 +278,6 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                           ? "var(--mjo-chip-border-width-size-large, 3px)"
                           : "var(--mjo-chip-border-width-size-medium, 2px)";
                 closeIconColor = currentColor;
-                // For dot variant, the dot color should match the chip's color
                 break;
             }
         }
@@ -334,7 +322,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
 
         // Apply CSS variables
         // eslint-disable-next-line max-len
-        this.#styles = `<style>:host{--mjoint-chip-background-color: ${backgroundColor};--mjoint-chip-text-color: ${textColor};--mjoint-chip-border-color: ${borderColor};--mjoint-chip-border-width: ${borderWidth};--mjoint-chip-box-shadow: ${boxShadow};--mjoint-chip-pseudo-background: ${pseudoBackground};--mjoint-chip-pseudo-opacity: ${pseudoOpacity};--mjoint-chip-close-icon-color: ${closeIconColor};--mjoint-chip-font-size: ${fontSize};--mjoint-chip-line-height: ${lineHeight};--mjoint-chip-height: ${height};--mjoint-chip-border-radius: ${borderRadius};--mjoint-chip-focus-outline-color: ${currentColor};--mjoint-chip-dot-color: ${currentColor};}</style>`;
+        this.#styles = `<style>:host{--mjoint-chip-background-color: ${backgroundColor};--mjoint-chip-text-color: ${textColor};--mjoint-chip-border-color: ${borderColor};--mjoint-chip-border-width: ${borderWidth};--mjoint-chip-box-shadow: ${boxShadow};--mjoint-chip-close-icon-color: ${closeIconColor};--mjoint-chip-font-size: ${fontSize};--mjoint-chip-line-height: ${lineHeight};--mjoint-chip-height: ${height};--mjoint-chip-border-radius: ${borderRadius};--mjoint-chip-focus-outline-color: ${currentColor};--mjoint-chip-dot-color: ${currentColor};}</style>`;
     }
 
     static styles = [
@@ -344,9 +332,9 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
             }
             .container {
                 position: relative;
-                background-color: var(--mjoint-chip-background-color);
+                background: var(--mjo-chip-background-color, var(--mjoint-chip-background-color));
                 color: var(--mjoint-chip-text-color);
-                border: var(--mjoint-chip-border-width) solid var(--mjoint-chip-border-color);
+                border: var(--mjoint-chip-border-width) solid var(--mjo-chip-border-color, var(--mjoint-chip-border-color));
                 border-radius: var(--mjoint-chip-border-radius);
                 font-size: var(--mjoint-chip-font-size);
                 line-height: var(--mjoint-chip-line-height);
@@ -360,15 +348,6 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
                 gap: var(--mjo-chip-gap, 0.4em);
                 overflow: hidden;
                 z-index: 1;
-            }
-            .container::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                opacity: var(--mjoint-chip-pseudo-opacity);
-                background-color: var(--mjoint-chip-pseudo-background);
-                border-radius: var(--mjoint-chip-border-radius);
-                z-index: -1;
             }
             .dot {
                 width: 0.9em;

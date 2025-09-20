@@ -9,6 +9,7 @@ import "../../src/mjo-switch.js";
 import "../../src/mjo-textfield.js";
 
 // Import dev components
+import { MjoChipTheme } from "../../src/types/mjo-theme.js";
 import "../components/control-group.js";
 import "../components/playground-grid.js";
 import "../components/section-container.js";
@@ -32,6 +33,10 @@ export class ChipComponent extends LitElement {
     // Event logs
     @state() private eventLogs: string[] = [];
 
+    theme: MjoChipTheme = {
+        gap: "8px",
+    };
+
     render() {
         return html`
             <h1>MJO Chip Component</h1>
@@ -49,9 +54,10 @@ export class ChipComponent extends LitElement {
                         ?closable=${this.isClosable}
                         ?clickable=${this.isClickable}
                         ?disabled=${this.isDisabled}
-                        start-icon=${this.startIcon}
-                        end-icon=${this.endIcon}
+                        startIcon=${this.startIcon}
+                        endIcon=${this.endIcon}
                         value=${this.customValue}
+                        .theme=${this.theme}
                         aria-describedby=${this.customAriaDescribedby}
                         @chip-click=${this.#logEvent}
                         @chip-close=${this.#logEvent}
@@ -178,9 +184,9 @@ export class ChipComponent extends LitElement {
                 <showcases-grid columns="2">
                     <mjo-chip label="Clickable" clickable @chip-click=${this.#logEvent}></mjo-chip>
                     <mjo-chip label="Closable" closable @chip-close=${this.#logEvent}></mjo-chip>
-                    <mjo-chip label="With Start Icon" start-icon="user"></mjo-chip>
-                    <mjo-chip label="With End Icon" end-icon="arrow-right"></mjo-chip>
-                    <mjo-chip label="Both Icons" start-icon="star" end-icon="check"></mjo-chip>
+                    <mjo-chip label="With Start Icon" startIcon="user"></mjo-chip>
+                    <mjo-chip label="With End Icon" endIcon="arrow-right"></mjo-chip>
+                    <mjo-chip label="Both Icons" startIcon="star" endIcon="check"></mjo-chip>
                     <mjo-chip label="Disabled" disabled></mjo-chip>
                     <mjo-chip label="Round Small" size="small" radius="full"></mjo-chip>
                     <mjo-chip label="Square Large" size="large" radius="none"></mjo-chip>

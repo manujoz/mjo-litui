@@ -40,7 +40,6 @@ import "./mjo-typography.js";
  * @csspart label-text - The label typography element (via exportparts)
  * @csspart helper-text-container - Container for helper text (via exportparts)
  * @csspart helper-text-typography - The helper text typography element (via exportparts)
- * @csspart helper-text-typography-tag - The helper text typography tag element (via exportparts)
  * @csspart helper-text-msg-container - Container for error/success messages (via exportparts)
  * @csspart helper-text-msg-error-message - Error message element (via exportparts)
  * @csspart helper-text-msg-success-message - Success message element (via exportparts)
@@ -49,9 +48,9 @@ import "./mjo-typography.js";
 @customElement("mjo-checkbox")
 export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
     @property({ type: String }) color: MjoCheckboxColor = "primary";
-    @property({ type: Boolean }) checked = false;
-    @property({ type: Boolean }) disabled = false;
-    @property({ type: Boolean }) indeterminate = false;
+    @property({ type: Boolean, reflect: true }) checked = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
+    @property({ type: Boolean, reflect: true }) indeterminate = false;
     @property({ type: String }) helperText?: string;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) label?: string;
@@ -65,29 +64,6 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
 
     group: MjoCheckboxGroup | null = null;
     type = "checkbox";
-
-    // Computed properties for accessibility
-    get #computedAriaChecked(): "true" | "false" | "mixed" {
-        if (this.indeterminate) return "mixed";
-        return this.checked ? "true" : "false";
-    }
-
-    get #computedAriaLabel(): string | undefined {
-        if (this.ariaLabel) return this.ariaLabel;
-        if (!this.label) return undefined;
-
-        let baseLabel = this.label;
-        if (this.required || this.ariaRequired) baseLabel += " (required)";
-        if (this.indeterminate) baseLabel += " (partially selected)";
-        else if (this.checked) baseLabel += " (checked)";
-        else baseLabel += " (unchecked)";
-
-        return baseLabel;
-    }
-
-    get #computedTabIndex(): number {
-        return this.disabled ? -1 : 0;
-    }
 
     render() {
         return html`
@@ -126,7 +102,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                     ${this.label
                         ? html`
                               <div class="label-container" part="label-container">
-                                  <mjo-typography tag="none" class="label" exportparts="typography: label-text">${this.label}</mjo-typography>
+                                  <mjo-typography tag="none" class="label" part="label-text">${this.label}</mjo-typography>
                               </div>
                           `
                         : nothing}
@@ -136,7 +112,6 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                         name=${ifDefined(this.name)}
                         value=${ifDefined(this.value)}
                         ?checked=${this.checked}
-                        .indeterminate=${this.indeterminate}
                         ?disabled=${this.disabled}
                         ?required=${this.required}
                         aria-hidden="true"
@@ -148,8 +123,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                           <mjoint-input-helper-text
                               exportparts="
                             container: helper-text-container,
-                            typography: helper-text-typography,
-                            helper-text: helper-text-typography-tag"
+                            helper-text: helper-text-typography"
                           >
                               ${this.helperText}
                           </mjoint-input-helper-text>
@@ -227,11 +201,34 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         this.inputElement.setCustomValidity(message);
     }
 
+    // Computed properties for accessibility
+    get #computedAriaChecked(): "true" | "false" | "mixed" {
+        if (this.indeterminate) return "mixed";
+        return this.checked ? "true" : "false";
+    }
+
+    get #computedAriaLabel(): string | undefined {
+        if (this.ariaLabel) return this.ariaLabel;
+        if (!this.label) return undefined;
+
+        let baseLabel = this.label;
+        if (this.required || this.ariaRequired) baseLabel += " (required)";
+        if (this.indeterminate) baseLabel += " (partially selected)";
+        else if (this.checked) baseLabel += " (checked)";
+        else baseLabel += " (unchecked)";
+
+        return baseLabel;
+    }
+
+    get #computedTabIndex(): number {
+        return this.disabled ? -1 : 0;
+    }
+
     #searchGroup() {
         this.group = searchParentElement(this, "mjo-checkbox-group") as MjoCheckboxGroup | null;
-        if (this.group) {
-            this.group.pushCheckbox(this);
-        }
+        this.group?.updateComplete.then(() => {
+            this.group?.pushCheckbox(this);
+        });
     }
 
     #handleClick(newValue?: boolean) {
@@ -365,11 +362,12 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             .checkbox {
                 position: relative;
                 border: solid 2px var(--mjo-checkbox-border-color, var(--mjo-foreground-color-low, rgb(51, 51, 51)));
-                border-radius: 0.2rem;
+                border-radius: var(--mjo-checkbox-border-radius, var(--mjo-radius-small, 4px));
                 line-height: 0;
                 transition: all 0.3s ease;
                 width: 1em;
                 height: 1em;
+                overflow: hidden;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -399,11 +397,10 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 position: absolute;
                 inset: 0;
                 flex: 1 1 0;
-                border-radius: 0.1rem;
                 align-self: stretch;
                 background: green;
                 display: flex;
-                background-color: var(--mjo-checkbox-checked-color, var(--mjo-primary-color));
+                background: var(--mjo-checkbox-checked-color, var(--mjo-primary-color));
                 color: var(--mjo-checkbox-checked-icon-color, var(--mjo-primary-foreground-color));
                 display: grid;
                 place-content: center;

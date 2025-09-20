@@ -239,22 +239,21 @@ interface MjoRadioChangeEvent extends CustomEvent {
 
 ## CSS Parts
 
-| Part                              | Description                                                            |
-| --------------------------------- | ---------------------------------------------------------------------- |
-| `container`                       | The main radio button container element                                |
-| `box`                             | The visual radio button container                                      |
-| `radio`                           | The radio button element itself                                        |
-| `radio-inner`                     | The inner area containing the check icon                               |
-| `radio-icon`                      | The check icon (via exportparts from mjo-icon)                         |
-| `label-container`                 | Container for the label text                                           |
-| `label-text`                      | The label typography element (via exportparts from mjo-typography)     |
-| `helper-text-container`           | Container for helper text (via exportparts from helper component)      |
-| `helper-text-typography`          | The helper text typography (via exportparts from helper component)     |
-| `helper-text-typography-tag`      | The helper text typography tag (via exportparts from helper component) |
-| `helper-text-msg-container`       | Container for error/success messages (via exportparts)                 |
-| `helper-text-msg-error-message`   | Error message element (via exportparts)                                |
-| `helper-text-msg-success-message` | Success message element (via exportparts)                              |
-| `helper-text-msg-icon`            | Icon in error/success messages (via exportparts)                       |
+| Part                              | Description                                                        |
+| --------------------------------- | ------------------------------------------------------------------ |
+| `container`                       | The main radio button container element                            |
+| `box`                             | The visual radio button container                                  |
+| `radio`                           | The radio button element itself                                    |
+| `radio-inner`                     | The inner area containing the check icon                           |
+| `radio-icon`                      | The check icon (via exportparts from mjo-icon)                     |
+| `label-container`                 | Container for the label text                                       |
+| `label-text`                      | The label typography element (via exportparts from mjo-typography) |
+| `helper-text-container`           | Container for helper text (via exportparts from helper component)  |
+| `helper-text-typography`          | The helper text typography (via exportparts from helper component) |
+| `helper-text-msg-container`       | Container for error/success messages (via exportparts)             |
+| `helper-text-msg-error-message`   | Error message element (via exportparts)                            |
+| `helper-text-msg-success-message` | Success message element (via exportparts)                          |
+| `helper-text-msg-icon`            | Icon in error/success messages (via exportparts)                   |
 
 ## CSS Variables
 

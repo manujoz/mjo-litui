@@ -62,7 +62,7 @@ export class AlertComponent extends LitElement {
                         ?focusOnShow=${this.focusOnShow}
                         ?autoClose=${this.autoClose}
                         ?persistent=${this.persistent}
-                        ?hidden=${!this.isVisible}
+                        hidden
                         @mjo-alert:will-show=${this.#handleAlertEvent}
                         @mjo-alert:opened=${this.#handleAlertEvent}
                         @mjo-alert:will-close=${this.#handleAlertEvent}

@@ -62,7 +62,6 @@ import "./mjo-icon.js";
  * @csspart helper-container - Helper container (via exportparts)
  * @csspart helper-text-container - Helper text container (via exportparts)
  * @csspart helper-text-typography - Helper text typography (via exportparts)
- * @csspart helper-text-typography-tag - Helper text typography tag (via exportparts)
  * @csspart helper-text-error-message - Error message element (via exportparts)
  * @csspart helper-text-success-message - Success message element (via exportparts)
  * @csspart helper-text-icon - Helper text icon element (via exportparts)
@@ -74,7 +73,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
     @property({ type: String }) autoCapitalize?: MjoTextfieldAutoCapitalize;
     @property({ type: String }) autoComplete?: AutoFillContactField;
     @property({ type: Boolean }) autoFocus = false;
-    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: String }) name?: string;
     @property({ type: String }) placeholder?: string;
@@ -239,8 +238,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                           id=${ifDefined(helperTextId)}
                           exportparts="
                             container: helper-text-container,
-                            typography: helper-text-typography,
-                            helper-text: helper-text-typography-tag,
+                            helper-text: helper-text-typography,
                             error-message: helper-text-error-message,
                             success-message: helper-text-success-message,
                             icon: helper-text-icon
