@@ -40,7 +40,6 @@ import "./mjo-typography.js";
  * @csspart label-text - The label typography element (via exportparts)
  * @csspart helper-text-container - Container for helper text (via exportparts)
  * @csspart helper-text-typography - The helper text typography element (via exportparts)
- * @csspart helper-text-typography-tag - The helper text typography tag element (via exportparts)
  * @csspart helper-text-msg-container - Container for error/success messages (via exportparts)
  * @csspart helper-text-msg-error-message - Error message element (via exportparts)
  * @csspart helper-text-msg-success-message - Success message element (via exportparts)
@@ -103,7 +102,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                     ${this.label
                         ? html`
                               <div class="label-container" part="label-container">
-                                  <mjo-typography tag="none" class="label" exportparts="typography: label-text">${this.label}</mjo-typography>
+                                  <mjo-typography tag="none" class="label" part="label-text">${this.label}</mjo-typography>
                               </div>
                           `
                         : nothing}
@@ -125,8 +124,7 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                           <mjoint-input-helper-text
                               exportparts="
                             container: helper-text-container,
-                            typography: helper-text-typography,
-                            helper-text: helper-text-typography-tag"
+                            helper-text: helper-text-typography"
                           >
                               ${this.helperText}
                           </mjoint-input-helper-text>
@@ -227,9 +225,10 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         return this.disabled ? -1 : 0;
     }
 
-    #searchGroup() {
+    async #searchGroup() {
         this.group = searchParentElement(this, "mjo-checkbox-group") as MjoCheckboxGroup | null;
         if (this.group) {
+            await this.group.updateComplete;
             this.group.pushCheckbox(this);
         }
     }
@@ -365,11 +364,12 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
             .checkbox {
                 position: relative;
                 border: solid 2px var(--mjo-checkbox-border-color, var(--mjo-foreground-color-low, rgb(51, 51, 51)));
-                border-radius: 0.2rem;
+                border-radius: var(--mjo-checkbox-border-radius, var(--mjo-radius-small, 4px));
                 line-height: 0;
                 transition: all 0.3s ease;
                 width: 1em;
                 height: 1em;
+                overflow: hidden;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -399,11 +399,10 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                 position: absolute;
                 inset: 0;
                 flex: 1 1 0;
-                border-radius: 0.1rem;
                 align-self: stretch;
                 background: green;
                 display: flex;
-                background-color: var(--mjo-checkbox-checked-color, var(--mjo-primary-color));
+                background: var(--mjo-checkbox-checked-color, var(--mjo-primary-color));
                 color: var(--mjo-checkbox-checked-icon-color, var(--mjo-primary-foreground-color));
                 display: grid;
                 place-content: center;

@@ -293,6 +293,7 @@ export interface MjoButtonTheme {
 
 export interface MjoCheckboxTheme {
     borderColor?: string;
+    borderRadius?: string;
     checkedColor?: string;
     checkedBorderColor?: string;
     checkedIconColor?: string;

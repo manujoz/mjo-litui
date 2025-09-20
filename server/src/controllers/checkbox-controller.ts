@@ -106,11 +106,13 @@ export class CheckboxController {
 
                 <h3>Basic States</h3>
                 <div class="component-showcase">
-                    <mjo-checkbox label="Unchecked" name="basic1" value="unchecked"></mjo-checkbox>
-                    <mjo-checkbox label="Checked" name="basic2" value="checked" checked></mjo-checkbox>
-                    <mjo-checkbox label="Indeterminate" name="basic3" value="indeterminate" indeterminate></mjo-checkbox>
-                    <mjo-checkbox label="Disabled" name="basic4" value="disabled" disabled></mjo-checkbox>
-                    <mjo-checkbox label="Disabled Checked" name="basic5" value="disabled-checked" disabled checked></mjo-checkbox>
+                    <mjo-checkbox-group>
+                        <mjo-checkbox label="Unchecked" name="basic1" value="unchecked"></mjo-checkbox>
+                        <mjo-checkbox label="Checked" name="basic2" value="checked" checked></mjo-checkbox>
+                        <mjo-checkbox label="Indeterminate" name="basic3" value="indeterminate" indeterminate></mjo-checkbox>
+                        <mjo-checkbox label="Disabled" name="basic4" value="disabled" disabled></mjo-checkbox>
+                        <mjo-checkbox label="Disabled Checked" name="basic5" value="disabled-checked" disabled checked></mjo-checkbox>
+                    </mjo-checkbox-group>
                 </div>
 
                 <h3>Colors</h3>

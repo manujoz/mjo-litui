@@ -11,7 +11,7 @@ export class MjointInputCounter extends LitElement {
 
     render() {
         return html`<span role="status" part="counter" aria-live="polite">
-            <mjo-typography tag="none" exportparts="typography: counter-text">${this.#setValue()}</mjo-typography>
+            <mjo-typography tag="none" part="counter-text">${this.#setValue()}</mjo-typography>
         </span>`;
     }
 

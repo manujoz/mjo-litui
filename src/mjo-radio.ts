@@ -51,7 +51,6 @@ import "./mjo-typography.js";
  * @csspart label-text - The label typography element (via exportparts)
  * @csspart helper-text-container - Container for helper text (via exportparts)
  * @csspart helper-text-typography - The helper text typography element (via exportparts)
- * @csspart helper-text-typography-tag - The helper text typography tag element (via exportparts)
  * @csspart helper-text-msg-container - Container for error/success messages (via exportparts)
  * @csspart helper-text-msg-error-message - Error message element (via exportparts)
  * @csspart helper-text-msg-success-message - Success message element (via exportparts)
@@ -125,7 +124,7 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                     ${this.label
                         ? html`
                               <div class="label-container" part="label-container">
-                                  <mjo-typography tag="none" class="label" exportparts="typography: label-text">${this.label}</mjo-typography>
+                                  <mjo-typography tag="none" class="label" part="label-text">${this.label}</mjo-typography>
                               </div>
                           `
                         : nothing}
@@ -146,8 +145,7 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
                           <mjoint-input-helper-text
                               exportparts="
                             container: helper-text-container,
-                            typography: helper-text-typography,
-                            helper-text: helper-text-typography-tag"
+                            helper-text: helper-text-typography"
                           >
                               ${this.helperText}
                           </mjoint-input-helper-text>

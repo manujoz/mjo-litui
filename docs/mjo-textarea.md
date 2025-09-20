@@ -581,7 +581,6 @@ The textarea component exposes these CSS parts for styling:
 | `label-truncate-wrapper`      | The label truncate wrapper (via exportparts)   |
 | `helper-text-container`       | Helper text container (via exportparts)        |
 | `helper-text-typography`      | Helper text typography (via exportparts)       |
-| `helper-text-typography-tag`  | Helper text typography tag (via exportparts)   |
 | `helper-text-error-message`   | Error message element (via exportparts)        |
 | `helper-text-success-message` | Success message element (via exportparts)      |
 | `helper-text-icon`            | Helper text icon element (via exportparts)     |
