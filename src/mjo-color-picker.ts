@@ -50,7 +50,7 @@ import "./components/input/mjoint-input-label.js";
 @customElement("mjo-color-picker")
 export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IFormMixin, IInputErrorMixin, IThemeMixin {
     @property({ type: String }) color: "primary" | "secondary" = "primary";
-    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
     @property({ type: String }) label?: string;
     @property({ type: String }) name?: string;

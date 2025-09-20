@@ -85,7 +85,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
     @property({ type: Array }) disabledDates?: string[];
     @property({ type: String }) label?: string;
     @property({ type: String }) placeholder?: string;
-    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) color: "primary" | "secondary" = "primary";
     @property({ type: Boolean }) clearabled = false;

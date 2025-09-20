@@ -60,8 +60,8 @@ import "./mjo-typography.js";
 @customElement("mjo-radio")
 export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IFormMixin, IInputErrorMixin {
     @property({ type: String }) color: MjoRadioColor = "primary";
-    @property({ type: Boolean }) checked = false;
-    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean, reflect: true }) checked = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) label?: string;

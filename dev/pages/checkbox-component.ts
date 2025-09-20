@@ -7,6 +7,7 @@ import "../../src/mjo-form.js";
 import "../../src/mjo-grid.js";
 import "../../src/mjo-textfield.js";
 
+import { ifDefined } from "lit/directives/if-defined.js";
 import { MjoCheckbox } from "../../src/mjo-checkbox.js";
 import { MjoCheckboxChangeEvent } from "../../src/types/mjo-checkbox.js";
 import "../components/control-group.js";
@@ -45,8 +46,7 @@ export class CheckboxComponent extends LitElement {
                         .size=${this.selectedSize}
                         .label=${this.hasLabel ? this.customLabel : undefined}
                         .helperText=${this.customHelperText || undefined}
-                        .aria-label=${this.customAriaLabel || undefined}
-                        .checkgroup=${this.checkboxGroup || undefined}
+                        aria-label=${ifDefined(this.customAriaLabel || undefined)}
                         ?checked=${this.isChecked}
                         ?indeterminate=${this.isIndeterminate}
                         ?disabled=${this.isDisabled}

@@ -102,6 +102,10 @@ export class MjoAlert extends ThemeMixin(LitElement) implements IThemeMixin {
                 this.focus();
             });
         }
+
+        if (this.hidden) {
+            this.hide();
+        }
     }
 
     disconnectedCallback(): void {
@@ -275,7 +279,7 @@ export class MjoAlert extends ThemeMixin(LitElement) implements IThemeMixin {
 
     #hide() {
         const $container = this as HTMLElement;
-        if (!$container || $container.offsetHeight === 0 || this.#isAnimating) return;
+        if (!$container || this.#isAnimating || ($container.offsetHeight === 0 && !this.hidden)) return;
 
         // Dispatch cancel event
         this.#dispatchEvent("mjo-alert:will-close");
@@ -348,6 +352,7 @@ export class MjoAlert extends ThemeMixin(LitElement) implements IThemeMixin {
             }
 
             this.#isAnimating = false;
+            this.removeAttribute("hidden");
             this.#dispatchEvent("mjo-alert:closed");
         });
     }

@@ -74,7 +74,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
     @property({ type: String }) autoCapitalize?: MjoTextfieldAutoCapitalize;
     @property({ type: String }) autoComplete?: AutoFillContactField;
     @property({ type: Boolean }) autoFocus = false;
-    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: String }) name?: string;
     @property({ type: String }) placeholder?: string;

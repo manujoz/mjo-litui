@@ -49,9 +49,9 @@ import "./mjo-typography.js";
 @customElement("mjo-checkbox")
 export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
     @property({ type: String }) color: MjoCheckboxColor = "primary";
-    @property({ type: Boolean }) checked = false;
-    @property({ type: Boolean }) disabled = false;
-    @property({ type: Boolean }) indeterminate = false;
+    @property({ type: Boolean, reflect: true }) checked = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
+    @property({ type: Boolean, reflect: true }) indeterminate = false;
     @property({ type: String }) helperText?: string;
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) label?: string;
@@ -65,29 +65,6 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
 
     group: MjoCheckboxGroup | null = null;
     type = "checkbox";
-
-    // Computed properties for accessibility
-    get #computedAriaChecked(): "true" | "false" | "mixed" {
-        if (this.indeterminate) return "mixed";
-        return this.checked ? "true" : "false";
-    }
-
-    get #computedAriaLabel(): string | undefined {
-        if (this.ariaLabel) return this.ariaLabel;
-        if (!this.label) return undefined;
-
-        let baseLabel = this.label;
-        if (this.required || this.ariaRequired) baseLabel += " (required)";
-        if (this.indeterminate) baseLabel += " (partially selected)";
-        else if (this.checked) baseLabel += " (checked)";
-        else baseLabel += " (unchecked)";
-
-        return baseLabel;
-    }
-
-    get #computedTabIndex(): number {
-        return this.disabled ? -1 : 0;
-    }
 
     render() {
         return html`
@@ -225,6 +202,29 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
 
     setCustomValidity(message: string): void {
         this.inputElement.setCustomValidity(message);
+    }
+
+    // Computed properties for accessibility
+    get #computedAriaChecked(): "true" | "false" | "mixed" {
+        if (this.indeterminate) return "mixed";
+        return this.checked ? "true" : "false";
+    }
+
+    get #computedAriaLabel(): string | undefined {
+        if (this.ariaLabel) return this.ariaLabel;
+        if (!this.label) return undefined;
+
+        let baseLabel = this.label;
+        if (this.required || this.ariaRequired) baseLabel += " (required)";
+        if (this.indeterminate) baseLabel += " (partially selected)";
+        else if (this.checked) baseLabel += " (checked)";
+        else baseLabel += " (unchecked)";
+
+        return baseLabel;
+    }
+
+    get #computedTabIndex(): number {
+        return this.disabled ? -1 : 0;
     }
 
     #searchGroup() {

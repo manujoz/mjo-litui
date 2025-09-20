@@ -40,8 +40,8 @@ import "./mjo-icon.js";
 export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
     @property({ type: String }) color: MjoSwitchColor = "primary";
     @property({ type: String }) size: MjoSwitchSize = "medium";
-    @property({ type: Boolean }) checked = false;
-    @property({ type: Boolean }) disabled = false;
+    @property({ type: Boolean, reflect: true }) checked = false;
+    @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: String }) helperText?: string;
     @property({ type: String }) label?: string;
     @property({ type: String }) name?: string;
