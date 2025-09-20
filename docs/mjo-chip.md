@@ -329,14 +329,14 @@ The component supports standard HTML accessibility attributes through Lit's nati
 
 ### Behavior Notes
 
--   The `dot` variant adds a colored dot indicator at the beginning of the chip
--   Closable chips automatically remove themselves from DOM when close button is clicked
--   Clickable chips provide visual feedback animation when activated
--   Icons scale with the chip size automatically
--   The `value` property is useful for identifying chips in event handlers
--   Color variants affect both background and text colors based on the selected variant
--   When both `clickable` and `closable` are true, the chip main area triggers click events, close button triggers close events
--   Keyboard navigation: Tab to focus, Enter/Space to activate, Escape to close (if closable)
+- The `dot` variant adds a colored dot indicator at the beginning of the chip
+- Closable chips automatically remove themselves from DOM when close button is clicked
+- Clickable chips provide visual feedback animation when activated
+- Icons scale with the chip size automatically
+- The `value` property is useful for identifying chips in event handlers
+- Color variants affect both background and text colors based on the selected variant
+- When both `clickable` and `closable` are true, the chip main area triggers click events, close button triggers close events
+- Keyboard navigation: Tab to focus, Enter/Space to activate, Escape to close (if closable)
 
 ## Slots
 
@@ -361,59 +361,45 @@ The component doesn't expose public methods. Interaction is handled through prop
 
 The component provides extensive customization through CSS variables with fallbacks to the global design system.
 
-### Typography and Sizing
-
-| Variable                             | Fallback | Used For                        |
-| ------------------------------------ | -------- | ------------------------------- |
-| `--mjo-chip-font-size-small-size`    | `0.75em` | Small chip font size            |
-| `--mjo-chip-font-size-medium-size`   | `0.9em`  | Medium chip font size (default) |
-| `--mjo-chip-font-size-large-size`    | `1.1em`  | Large chip font size            |
-| `--mjo-chip-line-height-small-size`  | `0.75em` | Small chip line height          |
-| `--mjo-chip-line-height-medium-size` | `1em`    | Medium chip line height         |
-| `--mjo-chip-line-height-large-size`  | `1.2em`  | Large chip line height          |
-
-### Structure and Spacing
-
-| Variable             | Fallback   | Used For                  |
-| -------------------- | ---------- | ------------------------- |
-| `--mjo-chip-padding` | `0 0.75em` | Internal padding          |
-| `--mjo-chip-gap`     | `0.4em`    | Gap between chip elements |
-
-### Border Widths
-
-| Variable                              | Fallback | Used For                 |
-| ------------------------------------- | -------- | ------------------------ |
-| `--mjo-chip-border-width-size-small`  | `1px`    | Small chip border width  |
-| `--mjo-chip-border-width-size-medium` | `2px`    | Medium chip border width |
-| `--mjo-chip-border-width-size-large`  | `3px`    | Large chip border width  |
-
-### Semantic Colors
-
-The component uses the global semantic color system:
+| Variable                              | Fallback   | Used For                        |
+| ------------------------------------- | ---------- | ------------------------------- |
+| `--mjo-chip-background-color`         | `-`        | Background color of the chip    |
+| `--mjo-chip-border-color`             | `-`        | Border color of the chip        |
+| `--mjo-chip-font-size-small-size`     | `0.75em`   | Small chip font size            |
+| `--mjo-chip-font-size-medium-size`    | `0.9em`    | Medium chip font size (default) |
+| `--mjo-chip-font-size-large-size`     | `1.1em`    | Large chip font size            |
+| `--mjo-chip-line-height-small-size`   | `0.75em`   | Small chip line height          |
+| `--mjo-chip-line-height-medium-size`  | `1em`      | Medium chip line height         |
+| `--mjo-chip-line-height-large-size`   | `1.2em`    | Large chip line height          |
+| `--mjo-chip-padding`                  | `0 0.75em` | Internal padding                |
+| `--mjo-chip-gap`                      | `0.4em`    | Gap between chip elements       |
+| `--mjo-chip-border-width-size-small`  | `1px`      | Small chip border width         |
+| `--mjo-chip-border-width-size-medium` | `2px`      | Medium chip border width        |
+| `--mjo-chip-border-width-size-large`  | `3px`      | Large chip border width         |
 
 #### Primary Colors
 
--   `--mjo-primary-color` / `--mjo-primary-foreground-color`
--   `--mjo-primary-color-alpha2` (flat variant)
--   `--mjo-primary-color-alpha5` (shadow variant)
+- `--mjo-primary-color` / `--mjo-primary-foreground-color`
+- `--mjo-primary-color-alpha2` (flat variant)
+- `--mjo-primary-color-alpha5` (shadow variant)
 
 #### Secondary Colors
 
--   `--mjo-secondary-color` / `--mjo-secondary-foreground-color`
--   `--mjo-secondary-color-alpha2` (flat variant)
--   `--mjo-secondary-color-alpha5` (shadow variant)
+- `--mjo-secondary-color` / `--mjo-secondary-foreground-color`
+- `--mjo-secondary-color-alpha2` (flat variant)
+- `--mjo-secondary-color-alpha5` (shadow variant)
 
 #### Status Colors
 
--   `--mjo-color-success` / `--mjo-color-info` / `--mjo-color-warning` / `--mjo-color-error`
--   Corresponding alpha variants for flat and shadow styles
+- `--mjo-color-success` / `--mjo-color-info` / `--mjo-color-warning` / `--mjo-color-error`
+- Corresponding alpha variants for flat and shadow styles
 
 #### Gray Scale
 
--   `--mjo-color-gray-400` (default background)
--   `--mjo-color-gray-600` (faded variant)
--   `--mjo-color-gray-200` (borders)
--   `--mjo-color-white` / `--mjo-color-black` (text)
+- `--mjo-color-gray-400` (default background)
+- `--mjo-color-gray-600` (faded variant)
+- `--mjo-color-gray-200` (borders)
+- `--mjo-color-white` / `--mjo-color-black` (text)
 
 ## ThemeMixin Customization
 
@@ -472,30 +458,30 @@ The `mjo-chip` component includes comprehensive accessibility support following 
 
 ### Automatic Accessibility Features
 
--   **Dynamic Roles**: Automatically sets appropriate `role` attributes:
-    -   `role="button"` for interactive chips (clickable or closable)
-    -   No role for purely decorative chips
--   **ARIA Labels**: Intelligent `aria-label` generation:
-    -   Generic: "Chip: {label}" for display-only chips
-    -   Interactive: "{label}. Click to interact" for clickable chips
-    -   Closable: "{label}. Press to close" for closable chips
-    -   Combined: "{label}. Clickable chip with close button" for both
--   **Keyboard Navigation**: Full keyboard support:
-    -   **Tab**: Navigate between focusable chips
-    -   **Enter/Space**: Activate clickable chips or close closable chips
-    -   **Escape**: Close closable chips (additional shortcut)
-    -   Visual focus indicators with `:focus-visible`
--   **State Communication**:
-    -   `aria-disabled="true"` when chip is disabled
-    -   `tabindex` automatically managed based on interaction state
-    -   Proper state changes communicated to screen readers
+- **Dynamic Roles**: Automatically sets appropriate `role` attributes:
+    - `role="button"` for interactive chips (clickable or closable)
+    - No role for purely decorative chips
+- **ARIA Labels**: Intelligent `aria-label` generation:
+    - Generic: "Chip: {label}" for display-only chips
+    - Interactive: "{label}. Click to interact" for clickable chips
+    - Closable: "{label}. Press to close" for closable chips
+    - Combined: "{label}. Clickable chip with close button" for both
+- **Keyboard Navigation**: Full keyboard support:
+    - **Tab**: Navigate between focusable chips
+    - **Enter/Space**: Activate clickable chips or close closable chips
+    - **Escape**: Close closable chips (additional shortcut)
+    - Visual focus indicators with `:focus-visible`
+- **State Communication**:
+    - `aria-disabled="true"` when chip is disabled
+    - `tabindex` automatically managed based on interaction state
+    - Proper state changes communicated to screen readers
 
 ### Close Button Accessibility
 
--   Dedicated `aria-label` for close buttons: "Close {label}"
--   Independent keyboard navigation and activation
--   Visual focus indicators separate from main chip focus
--   Event propagation properly managed to prevent conflicts
+- Dedicated `aria-label` for close buttons: "Close {label}"
+- Independent keyboard navigation and activation
+- Visual focus indicators separate from main chip focus
+- Event propagation properly managed to prevent conflicts
 
 ### Accessibility Best Practices
 
@@ -530,17 +516,17 @@ The `mjo-chip` component includes comprehensive accessibility support following 
 
 ### Motion and Preference Support
 
--   **Reduced Motion**: Respects `prefers-reduced-motion` user setting
--   **Visual Feedback**: Subtle scale animations for clickable chips
--   **Focus Management**: Clear visual focus indicators for keyboard users
--   **Color Contrast**: All color variants maintain sufficient contrast ratios
+- **Reduced Motion**: Respects `prefers-reduced-motion` user setting
+- **Visual Feedback**: Subtle scale animations for clickable chips
+- **Focus Management**: Clear visual focus indicators for keyboard users
+- **Color Contrast**: All color variants maintain sufficient contrast ratios
 
 ### Screen Reader Support
 
--   Interactive state changes are announced appropriately
--   Close actions provide meaningful feedback through events
--   Complex chips with multiple actions have clear role separation
--   Loading and error states can be announced through custom event handling
+- Interactive state changes are announced appropriately
+- Close actions provide meaningful feedback through events
+- Complex chips with multiple actions have clear role separation
+- Loading and error states can be announced through custom event handling
 
 ## CSS Parts
 
@@ -554,38 +540,38 @@ The `mjo-chip` component includes comprehensive accessibility support following 
 
 ## Performance Considerations
 
--   Large numbers of chips should be virtualized if performance becomes an issue
--   The component uses efficient CSS variables for theming without runtime style recalculation
--   Close functionality removes chips from DOM automatically
--   Icon rendering is optimized through the mjo-icon component
+- Large numbers of chips should be virtualized if performance becomes an issue
+- The component uses efficient CSS variables for theming without runtime style recalculation
+- Close functionality removes chips from DOM automatically
+- Icon rendering is optimized through the mjo-icon component
 
 ## Design Guidelines
 
--   **Consistency**: Use consistent color schemes for related chip groups
--   **Clarity**: Choose variants that provide appropriate visual hierarchy
--   **Spacing**: Allow adequate spacing between chips for touch targets
--   **Content**: Keep labels concise and descriptive
--   **Actions**: Use closable chips for removable items, regular chips for display-only content
+- **Consistency**: Use consistent color schemes for related chip groups
+- **Clarity**: Choose variants that provide appropriate visual hierarchy
+- **Spacing**: Allow adequate spacing between chips for touch targets
+- **Content**: Keep labels concise and descriptive
+- **Actions**: Use closable chips for removable items, regular chips for display-only content
 
 ## Best Practices
 
 ### Content Organization
 
--   Group related chips together logically
--   Use consistent sizing within groups
--   Implement clear visual hierarchy with colors and variants
+- Group related chips together logically
+- Use consistent sizing within groups
+- Implement clear visual hierarchy with colors and variants
 
 ### Interactive Design
 
--   Provide visual feedback for interactive chips
--   Use appropriate colors to indicate state (selected, active, etc.)
--   Consider loading states for dynamic chip updates
+- Provide visual feedback for interactive chips
+- Use appropriate colors to indicate state (selected, active, etc.)
+- Consider loading states for dynamic chip updates
 
 ### Accessibility
 
--   Ensure sufficient color contrast
--   Provide keyboard navigation for interactive chips
--   Use descriptive labels and ARIA attributes where needed
+- Ensure sufficient color contrast
+- Provide keyboard navigation for interactive chips
+- Use descriptive labels and ARIA attributes where needed
 
 ## Summary
 
@@ -593,22 +579,22 @@ The `mjo-chip` component includes comprehensive accessibility support following 
 
 Key features include:
 
--   **Interactive Capabilities**: Full support for clickable and closable functionality with separate event handling
--   **Visual Variants**: Seven distinct styling variants (solid, bordered, light, flat, faded, shadow, dot)
--   **Semantic Colors**: Complete integration with the global design system
--   **Keyboard Navigation**: Full keyboard support with Tab, Enter, Space, and Escape key handling
--   **Extensive Customization**: ThemeMixin support for instance-specific styling
--   **Icon Support**: Start and end icon positioning with automatic scaling
--   **Animation Feedback**: Subtle visual feedback for interactive elements
+- **Interactive Capabilities**: Full support for clickable and closable functionality with separate event handling
+- **Visual Variants**: Seven distinct styling variants (solid, bordered, light, flat, faded, shadow, dot)
+- **Semantic Colors**: Complete integration with the global design system
+- **Keyboard Navigation**: Full keyboard support with Tab, Enter, Space, and Escape key handling
+- **Extensive Customization**: ThemeMixin support for instance-specific styling
+- **Icon Support**: Start and end icon positioning with automatic scaling
+- **Animation Feedback**: Subtle visual feedback for interactive elements
 
 ### Accessibility Highlights
 
--   **WCAG 2.1 Compliant**: Meets accessibility standards with comprehensive keyboard and screen reader support
--   **Intelligent ARIA**: Dynamic role and label generation based on interaction state
--   **Focus Management**: Clear visual focus indicators with customizable colors
--   **Keyboard Navigation**: Complete keyboard support including Escape key for closing
--   **Screen Reader Support**: Proper state announcements and contextual labeling
--   **Motion Preferences**: Respects user's `prefers-reduced-motion` setting
--   **Event Separation**: Clean separation between click and close actions for complex interactions
+- **WCAG 2.1 Compliant**: Meets accessibility standards with comprehensive keyboard and screen reader support
+- **Intelligent ARIA**: Dynamic role and label generation based on interaction state
+- **Focus Management**: Clear visual focus indicators with customizable colors
+- **Keyboard Navigation**: Complete keyboard support including Escape key for closing
+- **Screen Reader Support**: Proper state announcements and contextual labeling
+- **Motion Preferences**: Respects user's `prefers-reduced-motion` setting
+- **Event Separation**: Clean separation between click and close actions for complex interactions
 
 The component's flexibility makes it suitable for both static display and dynamic, interactive use cases while maintaining consistent styling and full accessibility compliance. Perfect for building accessible filter systems, tag management interfaces, status indicators, and compact information displays.

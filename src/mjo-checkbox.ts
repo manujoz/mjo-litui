@@ -112,7 +112,6 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
                         name=${ifDefined(this.name)}
                         value=${ifDefined(this.value)}
                         ?checked=${this.checked}
-                        .indeterminate=${this.indeterminate}
                         ?disabled=${this.disabled}
                         ?required=${this.required}
                         aria-hidden="true"
@@ -225,12 +224,11 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         return this.disabled ? -1 : 0;
     }
 
-    async #searchGroup() {
+    #searchGroup() {
         this.group = searchParentElement(this, "mjo-checkbox-group") as MjoCheckboxGroup | null;
-        if (this.group) {
-            await this.group.updateComplete;
-            this.group.pushCheckbox(this);
-        }
+        this.group?.updateComplete.then(() => {
+            this.group?.pushCheckbox(this);
+        });
     }
 
     #handleClick(newValue?: boolean) {

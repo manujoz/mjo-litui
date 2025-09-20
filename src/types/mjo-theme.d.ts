@@ -317,6 +317,8 @@ export interface MjoCheckboxTheme {
 }
 
 export interface MjoChipTheme {
+    backgroundColor?: string;
+    borderColor?: string;
     borderWidthSizeSmall?: string;
     borderWidthSizeMedium?: string;
     borderWidthSizeLarge?: string;

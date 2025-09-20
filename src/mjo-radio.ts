@@ -178,9 +178,9 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
 
     #searchGroup() {
         this.group = searchParentElement(this, "mjo-radio-group") as MjoRadioGroup | null;
-        if (this.group) {
-            this.group.pushRadio(this);
-        }
+        this.group?.updateComplete.then(() => {
+            this.group?.pushRadio(this);
+        });
     }
 
     getValue() {
