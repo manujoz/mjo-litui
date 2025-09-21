@@ -11,12 +11,12 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { PiCalendarDotsLight } from "mjo-icons/pi";
 
 import { createRef, ref } from "lit/directives/ref.js";
+import { getAutoLocale } from "./lib/locales.js";
 import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
 import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import { ifDefined } from "lit/directives/if-defined.js";
-import { suportedLocales } from "./locales/locales.js";
 import "./mjo-button.js";
 import "./mjo-calendar.js";
 import "./mjo-dropdown.js";
@@ -191,19 +191,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         super.willUpdate(_changedProperties);
 
         if (_changedProperties.has("locale") && this.locale === "auto") {
-            this.#getAutoLocale();
-        }
-    }
-
-    #getAutoLocale() {
-        if (typeof navigator !== "undefined" && navigator.language) {
-            const navLocale = navigator.language.toLowerCase().split("-")[0];
-
-            if (suportedLocales.includes(navLocale)) {
-                this.locale = navLocale as SupportedLocale;
-            } else {
-                this.locale = "en";
-            }
+            this.locale = getAutoLocale();
         }
     }
 

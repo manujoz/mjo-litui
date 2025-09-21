@@ -20,7 +20,8 @@ import {
 import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { locales, suportedLocales } from "./locales/locales.js";
+import { getAutoLocale } from "./lib/locales.js";
+import { locales } from "./locales/locales.js";
 import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { CalendarUtils } from "./utils/calendar.js";
@@ -376,7 +377,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         }
 
         if (changedProperties.has("locale") && this.locale === "auto") {
-            this.#getAutoLocale();
+            this.locale = getAutoLocale();
         }
 
         if (changedProperties.has("eventMarkers")) {
@@ -542,18 +543,6 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         return this.selectedDate
             ? `Date picker. Selected date: ${CalendarUtils.formatDate(this.selectedDate)}`
             : "Date picker. Use arrow keys to navigate, Enter to select.";
-    }
-
-    #getAutoLocale() {
-        if (typeof navigator !== "undefined" && navigator.language) {
-            const navLocale = navigator.language.toLowerCase().split("-")[0];
-
-            if (suportedLocales.includes(navLocale)) {
-                this.locale = navLocale as SupportedLocale;
-            } else {
-                this.locale = "en";
-            }
-        }
     }
 
     #shouldRenderDualRange(): boolean {

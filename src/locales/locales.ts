@@ -300,5 +300,3 @@ export const locales = {
         },
     },
 };
-
-export const suportedLocales = locales ? Object.keys(locales) : [];
