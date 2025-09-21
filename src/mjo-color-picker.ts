@@ -7,7 +7,7 @@ import {
 } from "./types/mjo-color-picker.js";
 
 import { LitElement, PropertyValues, css, html, nothing } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
@@ -59,9 +59,9 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
     @property({ type: String }) size: "small" | "medium" | "large" = "medium";
     @property({ type: String }) format: ColorFormat = "hex";
     @property({ type: Boolean }) showValue = false;
-
-    // Non native Lit ARIA properties
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedBy: string | null = null;
+
+    @state() focused = false;
 
     @query("input") inputElement!: HTMLInputElement;
     @query(".color-picker") colorPicker!: HTMLDivElement;
@@ -76,6 +76,7 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
                       exportparts="container: label-container, truncate-container: label-truncate-container, truncate-wrapper: label-truncate-wrapper"
                       color=${this.color}
                       label=${this.label}
+                      ?focused=${this.focused}
                       ?error=${this.error}
                       ?data-disabled=${this.disabled}
                   ></mjoint-input-label>`
@@ -151,6 +152,18 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
             console.warn(`Failed to convert color ${this.value} to format ${this.format}:`, error);
             return this.value;
         }
+    }
+
+    click() {
+        this.inputElement.click();
+    }
+
+    focus() {
+        this.inputElement.focus();
+    }
+
+    blur() {
+        this.inputElement.blur();
     }
 
     getFormattedValue(format: ColorFormat): string {
@@ -247,6 +260,8 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
     }
 
     #handleFocus() {
+        this.focused = true;
+
         this.dispatchEvent(
             new CustomEvent("mjo-color-picker:focus", {
                 detail: { element: this },
@@ -256,6 +271,8 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
     }
 
     #handleBlur() {
+        this.focused = false;
+
         this.dispatchEvent(
             new CustomEvent("mjo-color-picker:blur", {
                 detail: { element: this },

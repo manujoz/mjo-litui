@@ -66,7 +66,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
             >
                 ${this.variant === "dot" ? html`<span class="dot"></span>` : nothing}
                 ${this.startIcon ? html`<mjo-icon src=${this.startIcon} exportparts="icon: start-icon"></mjo-icon>` : nothing}
-                <mjo-typography tag="none" class="label" exportparts="typography: label">${this.label}</mjo-typography>
+                <mjo-typography tag="none" class="label" part="label">${this.label}</mjo-typography>
                 ${this.endIcon ? html`<mjo-icon src=${this.endIcon} exportparts="icon: end-icon"></mjo-icon>` : nothing}
                 ${this.closable
                     ? html`

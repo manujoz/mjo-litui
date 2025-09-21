@@ -844,6 +844,28 @@ function parseColorString(colorString: string): RGBColor & { a?: number } {
 }
 
 /**
+ * Calculate the relative luminance of a color according to WCAG standards
+ * @param r - Red value (0-255)
+ * @param g - Green value (0-255)
+ * @param b - Blue value (0-255)
+ * @returns Relative luminance value (0-1)
+ */
+function calculateRelativeLuminance(r: number, g: number, b: number): number {
+    // Normalize RGB values to 0-1
+    const normalize = (value: number) => {
+        const normalized = value / 255;
+        return normalized <= 0.03928 ? normalized / 12.92 : Math.pow((normalized + 0.055) / 1.055, 2.4);
+    };
+
+    const rNorm = normalize(r);
+    const gNorm = normalize(g);
+    const bNorm = normalize(b);
+
+    // Calculate relative luminance using WCAG formula
+    return 0.2126 * rNorm + 0.7152 * gNorm + 0.0722 * bNorm;
+}
+
+/**
  * Convert any supported color format to HEX
  * @param color - Color string in any supported format
  * @param sourceFormat - Source color format (optional, will auto-detect if not provided)
@@ -2096,4 +2118,53 @@ export function isValidColor(color: string, format?: ColorFormat): boolean {
     } catch {
         return false;
     }
+}
+
+/**
+ * Determine if a color is light or dark based on its relative luminance
+ * @param color - Color string in any supported format
+ * @param sourceFormat - Source color format (optional, will auto-detect if not provided)
+ * @param threshold - Luminance threshold to determine light/dark (default: 0.43, range: 0-1)
+ * @returns True if the color is light, false if it's dark
+ */
+export function isLightColor({ color, sourceFormat, threshold = 0.43 }: { color: string; sourceFormat?: ColorFormat; threshold?: number }): boolean {
+    if (threshold < 0 || threshold > 1) {
+        throw new Error("Threshold must be between 0 and 1");
+    }
+
+    try {
+        // Convert the color to RGB to calculate luminance
+        const rgbColor = toRgbObject(color, sourceFormat);
+
+        // Calculate relative luminance
+        const luminance = calculateRelativeLuminance(rgbColor.r, rgbColor.g, rgbColor.b);
+
+        // Return true if luminance is above threshold (light), false if below (dark)
+        return luminance > threshold;
+    } catch (error) {
+        throw new Error(`Invalid color format: ${color}`);
+    }
+}
+
+/**
+ * Get the contrast color (black or white) that provides optimal readability
+ * @param color - Background color string in any supported format
+ * @param sourceFormat - Source color format (optional, will auto-detect if not provided)
+ * @param lightColor - Color to use for light backgrounds (default: "#000000")
+ * @param darkColor - Color to use for dark backgrounds (default: "#ffffff")
+ * @returns Contrast color string
+ */
+export function getContrastColor({
+    color,
+    sourceFormat,
+    lightColor = "#000000",
+    darkColor = "#ffffff",
+}: {
+    color: string;
+    sourceFormat?: ColorFormat;
+    lightColor?: string;
+    darkColor?: string;
+}): string {
+    const isLight = isLightColor({ color, sourceFormat });
+    return isLight ? lightColor : darkColor;
 }

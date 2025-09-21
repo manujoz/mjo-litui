@@ -2,7 +2,9 @@ import type { MjoCheckbox } from "../mjo-checkbox.js";
 import { MjoFormElements } from "../types/litui";
 import { InputsValidatorMessages, ValidatorMessages, ValidatorRulesNames } from "../types/validator";
 
+import { suportedLocales } from "../locales/locales.js";
 import { validatorMessages } from "../locales/messages.js";
+import { SupportedLocale } from "../types/locales.js";
 
 export class MjoValidator {
     messages?: Partial<ValidatorMessages>;
@@ -368,7 +370,7 @@ export class MjoValidator {
         }
 
         // Return default message
-        const lang = (document.querySelector("html")?.getAttribute("lang")?.split("-")[0] || "en") as string;
+        const lang = this.#getLocale();
         const defaultMessages = this.#defaultMessages(lang);
         let message = defaultMessages[rule];
 
@@ -379,6 +381,20 @@ export class MjoValidator {
         }
 
         return message;
+    }
+
+    #getLocale() {
+        if (typeof navigator !== "undefined" && navigator.language) {
+            const navLocale = navigator.language.toLowerCase().split("-")[0];
+
+            if (suportedLocales.includes(navLocale)) {
+                return navLocale as SupportedLocale;
+            } else {
+                return "en";
+            }
+        }
+
+        return "en";
     }
 
     #getInputValue(input: MjoFormElements) {

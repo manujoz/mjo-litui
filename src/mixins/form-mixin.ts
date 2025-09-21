@@ -71,7 +71,7 @@ export const FormMixin = <T extends MixinConstructor<LitElement>>(superClass: T)
         @property({ type: Number }) maxlength?: number;
         @property({ type: Number }) minlength?: number;
 
-        @property({ type: Boolean, attribute: "form-ignore" }) formIgnore: boolean = false;
+        @property({ type: Boolean }) formIgnore: boolean = false;
 
         form: HTMLFormElement | null = null;
         mjoForm: MjoForm | null = null;
