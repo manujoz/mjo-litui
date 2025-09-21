@@ -1,6 +1,6 @@
 import { SupportedLocale } from "../types/locales";
 
-import { locales } from "../locales/locales";
+import { locales } from "../locales/locales.js";
 
 export const suportedLocales = locales ? Object.keys(locales) : [];
 
