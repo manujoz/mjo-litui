@@ -81,6 +81,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
     @property({ type: String }) name?: string;
     @property({ type: String }) value: string = ""; // single: YYYY-MM-DD, range: YYYY-MM-DD/YYYY-MM-DD
     @property({ type: Boolean }) isRange = false;
+    @property({ type: Boolean }) fullwidth = false;
     @property({ type: String }) locale: SupportedLocale | "auto" = "auto";
     @property({ type: String }) minDate?: string;
     @property({ type: String }) maxDate?: string;
@@ -92,8 +93,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
     @property({ type: String }) color: MjoTextfieldColor = "primary";
     @property({ type: String }) variant: MjoTextfieldVariant = "default";
     @property({ type: Boolean }) clearabled = false;
-    @property({ type: Boolean }) closeOnSelect = true;
-    @property({ type: String }) displayMode: MjoDatePickerDisplayMode = "iso";
+    @property({ type: String }) displayMode: MjoDatePickerDisplayMode = "numeric";
     @property({ type: String }) helperText?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
     @property({ type: String, attribute: "aria-live" }) ariaLive: MjoDatePickerAriaLive = "polite";
@@ -164,6 +164,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                     value=${this.#displayValue}
                     size=${this.size}
                     color=${this.color}
+                    ?fullwidth=${this.fullwidth}
                     ?disabled=${this.disabled}
                     label=${this.label ?? ""}
                     placeholder=${this.placeholder ?? ""}
@@ -416,7 +417,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                 this.#announceToScreenReader(`Selected ${formattedDate}`);
             }
 
-            if (this.closeOnSelect) this.close();
+            this.close();
         }
     };
 
@@ -475,7 +476,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                 this.#announceToScreenReader(`Selected date range from ${startFormatted} to ${endFormatted}`);
             }
 
-            if (this.closeOnSelect) this.close();
+            this.close();
         }
     };
 
