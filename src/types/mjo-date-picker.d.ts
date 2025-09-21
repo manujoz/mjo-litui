@@ -1,6 +1,9 @@
+export type MjoDatePickerDisplayMode = "iso" | "localized" | "numeric";
+export type MjoDatePickerAriaLive = "polite" | "assertive" | "off";
+
 export interface DatePickerDateSelectedEvent extends CustomEvent {
     detail: {
-        value?: string; // ISO string single or range "YYYY-MM-DD" or "YYYY-MM-DD/YYYY-MM-DD"
+        value?: string;
         date?: Date;
         startDate?: Date;
         endDate?: Date;
@@ -11,7 +14,6 @@ export interface DatePickerDateSelectedEvent extends CustomEvent {
 
 export interface DatePickerChangeEvent extends DatePickerDateSelectedEvent {}
 
-// New accessibility-related types
 export interface DatePickerAccessibilityConfig {
     announceSelections?: boolean;
     ariaLive?: "polite" | "assertive" | "off";

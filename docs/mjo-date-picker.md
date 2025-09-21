@@ -4,14 +4,14 @@ Interactive date (or date range) selection input composed from `mjo-textfield`, 
 
 ## Key Features
 
--   **Single & Range Selection**: Choose between single date or date range modes
--   **Portal-based UI**: Dropdown implementation using `mjo-dropdown` for consistent behavior
--   **Form Integration**: Full compatibility with `mjo-form` including validation support
--   **Localization**: Support for multiple locales with customizable display formats
--   **Accessibility**: Keyboard navigation, screen reader support, and semantic markup
--   **Theming**: Complete theme customization via ThemeMixin and CSS variables
--   **Validation**: Built-in form validation with error handling and custom messages
--   **No Typing Required**: Read-only input eliminates format errors
+- **Single & Range Selection**: Choose between single date or date range modes
+- **Portal-based UI**: Dropdown implementation using `mjo-dropdown` for consistent behavior
+- **Form Integration**: Full compatibility with `mjo-form` including validation support
+- **Localization**: Support for multiple locales with customizable display formats
+- **Accessibility**: Keyboard navigation, screen reader support, and semantic markup
+- **Theming**: Complete theme customization via ThemeMixin and CSS variables
+- **Validation**: Built-in form validation with error handling and custom messages
+- **No Typing Required**: Read-only input eliminates format errors
 
 ## HTML Usage
 
@@ -145,33 +145,35 @@ export class ExampleDatePickerForm extends LitElement {
 
 Submitted values follow these formats:
 
--   **Single mode**: `YYYY-MM-DD` string (e.g., `"2025-03-15"`)
--   **Range mode**: `YYYY-MM-DD/YYYY-MM-DD` string (e.g., `"2025-03-15/2025-03-20"`)
+- **Single mode**: `YYYY-MM-DD` string (e.g., `"2025-03-15"`)
+- **Range mode**: `YYYY-MM-DD/YYYY-MM-DD` string (e.g., `"2025-03-15/2025-03-20"`)
 
 ## Attributes / Properties
 
-| Name                           | Type                             | Default     | Reflects | Description                                                        |
-| ------------------------------ | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------ |
-| `name`                         | `string \| undefined`            | `undefined` | no       | Form field name (enables inclusion in `mjo-form` data)             |
-| `value`                        | `string`                         | `""`        | no       | Current value (single: `YYYY-MM-DD`; range: `start/end`)           |
-| `range`                        | `boolean`                        | `false`     | yes      | Enables range mode (`isRange` property)                            |
-| `locale`                       | `string`                         | `"en"`      | no       | Locale passed to calendar & Intl formatting                        |
-| `min-date`                     | `string \| undefined`            | `undefined` | no       | Minimum selectable date (ISO format)                               |
-| `max-date`                     | `string \| undefined`            | `undefined` | no       | Maximum selectable date (ISO format)                               |
-| `disabled-dates`               | `string[] \| undefined`          | `undefined` | no       | Array of disabled dates in ISO format                              |
-| `label`                        | `string \| undefined`            | `undefined` | no       | Floating label of inner textfield                                  |
-| `placeholder`                  | `string \| undefined`            | `undefined` | no       | Placeholder text (shown when empty)                                |
-| `disabled`                     | `boolean`                        | `false`     | yes      | Disables user interaction                                          |
-| `size`                         | `"small" \| "medium" \| "large"` | `"medium"`  | no       | Size token forwarded to textfield                                  |
-| `color`                        | `"primary" \| "secondary"`       | `"primary"` | no       | Color token forwarded to textfield                                 |
-| `clearabled`                   | `boolean`                        | `false`     | no       | Shows a Clear button in dropdown when value present                |
-| `close-on-select`              | `boolean`                        | `true`      | no       | Closes dropdown after selection (single or after range completion) |
-| `required`                     | `boolean`                        | `false`     | yes      | Marks as required for form validation                              |
-| `display-mode`                 | `"iso" \| "localized"`           | `"iso"`     | no       | Display format: ISO raw value or locale-formatted text             |
-| `aria-describedby`             | `string`                         | `""`        | no       | Links to external elements describing the picker                   |
-| `aria-live`                    | `string`                         | `"polite"`  | no       | Live region politeness level for screen reader announcements       |
-| `aria-label`                   | `string \| null`                 | `null`      | no       | Accessible label for the date picker                               |
-| `disabled-announce-selections` | `boolean`                        | `false`     | no       | Disables automatic screen reader announcements for date selections |
+| Name                         | Type                                  | Default     | Description                                                        |
+| ---------------------------- | ------------------------------------- | ----------- | ------------------------------------------------------------------ |
+| `name`                       | `string \| undefined`                 | `undefined` | Form field name (enables inclusion in `mjo-form` data)             |
+| `value`                      | `string`                              | `""`        | Current value (single: `YYYY-MM-DD`; range: `start/end`)           |
+| `range`                      | `boolean`                             | `false`     | Enables range mode (`isRange` property)                            |
+| `locale`                     | `string`                              | `"en"`      | Locale passed to calendar & Intl formatting                        |
+| `minDate`                    | `string \| undefined`                 | `undefined` | Minimum selectable date (ISO format)                               |
+| `maxDate`                    | `string \| undefined`                 | `undefined` | Maximum selectable date (ISO format)                               |
+| `disabledDates`              | `string[] \| undefined`               | `undefined` | Array of disabled dates in ISO format                              |
+| `label`                      | `string \| undefined`                 | `undefined` | Floating label of inner textfield                                  |
+| `placeholder`                | `string \| undefined`                 | `undefined` | Placeholder text (shown when empty)                                |
+| `disabled`                   | `boolean`                             | `false`     | Disables user interaction                                          |
+| `size`                       | `"small" \| "medium" \| "large"`      | `"medium"`  | Size token forwarded to textfield                                  |
+| `color`                      | `"primary" \| "secondary"`            | `"primary"` | Color token forwarded to textfield                                 |
+| `clearabled`                 | `boolean`                             | `false`     | Shows a Clear button in dropdown when value present                |
+| `closeOnSelect`              | `boolean`                             | `true`      | Closes dropdown after selection (single or after range completion) |
+| `required`                   | `boolean`                             | `false`     | Marks as required for form validation                              |
+| `variant`                    | `"default" \| "filled" \| "outlined"` | `"default"` | Visual variant style of the input field                            |
+| `displayMode`                | `"iso" \| "localized" \| "numeric"`   | `"numeric"` | Display format: ISO raw value or locale-formatted text             |
+| `helperText`                 | `string \| undefined`                 | `undefined` | Helper text displayed below the input                              |
+| `aria-describedby`           | `string`                              | `""`        | Links to external elements describing the picker                   |
+| `aria-live`                  | `string`                              | `"polite"`  | Live region politeness level for screen reader announcements       |
+| `aria-label`                 | `string \| null`                      | `null`      | Accessible label for the date picker                               |
+| `disabledAnnounceSelections` | `boolean`                             | `false`     | Disables automatic screen reader announcements for date selections |
 
 ### Validation Properties
 
@@ -190,45 +192,43 @@ Inherits all validation properties from `FormMixin`:
 | Event                    | Detail (shape)                                                                                                     | Emitted When                                   |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
 | `mjo-date-picker:change` | `{ value: string, date?: Date, startDate?: Date, endDate?: Date, startDateValue?: string, endDateValue?: string }` | Value changes (single date or completed range) |
-| `change`                 | Native bubbling `Event` (no extra detail)                                                                          | Fired alongside `date-picker-change` for forms |
 
 ### Event Detail Properties
 
 **Single Mode Events:**
 
--   `value`: ISO string of selected date
--   `date`: JavaScript Date object
+- `value`: ISO string of selected date
+- `date`: JavaScript Date object
 
 **Range Mode Events:**
 
--   `value`: Combined string in format `start/end`
--   `startDate`: JavaScript Date object for start
--   `endDate`: JavaScript Date object for end
--   `startDateValue`: ISO string for start date
--   `endDateValue`: ISO string for end date
+- `value`: Combined string in format `start/end`
+- `startDate`: JavaScript Date object for start
+- `endDate`: JavaScript Date object for end
+- `startDateValue`: ISO string for start date
+- `endDateValue`: ISO string for end date
 
 **Notes:**
 
--   In range mode, partial selection (only start date) does not emit change events until end date is selected
--   Events are emitted after internal state is fully updated
--   Both `mjo-date-picker:change` and `change` are fired for form compatibility
+- In range mode, partial selection (only start date) does not emit change events until end date is selected
+- Events are emitted after internal state is fully updated
+- Both `mjo-date-picker:change` and `change` are fired for form compatibility
 
 ## Methods (Public)
 
-| Method          | Parameters | Returns  | Description                                 |
-| --------------- | ---------- | -------- | ------------------------------------------- |
-| `focus()`       | none       | `void`   | Focuses the internal textfield              |
-| `clear()`       | none       | `void`   | Clears value and emits change events        |
-| `openPicker()`  | none       | `void`   | Programmatically opens the dropdown         |
-| `closePicker()` | none       | `void`   | Programmatically closes the dropdown        |
-| `getValue()`    | none       | `string` | Returns current raw value                   |
-| `setValue(v)`   | `string`   | `void`   | Sets value (triggers internal state update) |
+| Method        | Parameters | Returns  | Description                                 |
+| ------------- | ---------- | -------- | ------------------------------------------- |
+| `focus()`     | none       | `void`   | Focuses the internal textfield              |
+| `clear()`     | none       | `void`   | Clears value and emits change events        |
+| `click()`     | none       | `void`   | Click the internal textfield                |
+| `open()`      | none       | `void`   | Programmatically opens the dropdown         |
+| `close()`     | none       | `void`   | Programmatically closes the dropdown        |
+| `getValue()`  | none       | `string` | Returns current raw value                   |
+| `setValue(v)` | `string`   | `void`   | Sets value (triggers internal state update) |
 
 ## CSS Parts
 
 The component exposes CSS parts through `exportparts` from its internal textfield and calendar components:
-
-### Textfield Parts (via exportparts)
 
 | Part                                    | Element                  | Description                                 |
 | --------------------------------------- | ------------------------ | ------------------------------------------- |
@@ -297,10 +297,10 @@ Shows raw ISO values: `2025-03-15` or `2025-03-15/2025-03-20`. Good for technica
 
 Uses `Intl.DateTimeFormat(locale, { dateStyle: "medium" })`:
 
--   `en`: `Mar 15, 2025`
--   `es`: `15 mar 2025`
--   `fr`: `15 mars 2025`
--   Range format uses en dash: `Mar 15, 2025 – Mar 20, 2025`
+- `en`: `Mar 15, 2025`
+- `es`: `15 mar 2025`
+- `fr`: `15 mars 2025`
+- Range format uses en dash: `Mar 15, 2025 – Mar 20, 2025`
 
 Falls back to ISO format if locale is unsupported.
 
@@ -334,21 +334,11 @@ export class ExampleThemedDatePicker extends LitElement {
 
 ### CSS Variables
 
-The component exposes these CSS custom properties for styling:
+The component doesn't define its own CSS variables. Instead, it inherits theming through:
 
-| Variable                                   | Default                                             | Purpose                       |
-| ------------------------------------------ | --------------------------------------------------- | ----------------------------- |
-| `--mjo-date-picker-panel-padding`          | `var(--mjo-space-small, 8px)`                       | Panel padding                 |
-| `--mjo-date-picker-panel-background-color` | `var(--mjo-background-color)`                       | Panel background color        |
-| `--mjo-date-picker-panel-radius`           | `var(--mjo-radius-medium, 8px)`                     | Panel border-radius           |
-| `--mjo-date-picker-panel-box-shadow`       | `var(--mjo-box-shadow, 0 2px 6px rgba(0,0,0,0.15))` | Panel shadow                  |
-| `--mjo-date-picker-high-contrast-border`   | `1px solid`                                         | Border for high contrast mode |
-
-**Note**: The date picker also inherits CSS variables from its child components:
-
--   **mjo-textfield**: All textfield theming variables for input styling
--   **mjo-calendar**: All calendar theming variables for calendar appearance
--   **mjo-dropdown**: Dropdown positioning and behavior variables
+- **mjo-textfield**: All textfield theming variables for input styling
+- **mjo-calendar**: All calendar theming variables for calendar appearance
+- **mjo-dropdown**: Dropdown positioning and behavior variables
 
 For a complete list of inherited variables, see the documentation for [mjo-textfield](./mjo-textfield.md), [mjo-calendar](./mjo-calendar.md), and [mjo-dropdown](./mjo-dropdown.md).
 
@@ -429,10 +419,10 @@ export class ExampleDatePickerValidation extends LitElement {
 
 The component supports error display through the `InputErrorMixin`:
 
--   `error`: Boolean indicating error state
--   `errormsg`: Error message to display
--   `success`: Boolean for success state
--   `successmsg`: Success message
+- `error`: Boolean indicating error state
+- `errormsg`: Error message to display
+- `success`: Boolean for success state
+- `successmsg`: Success message
 
 ## Accessibility
 
@@ -440,26 +430,26 @@ The component provides comprehensive accessibility features:
 
 ### ARIA Compliance
 
--   Implements the **combobox pattern** with `role="combobox"`
--   Proper `aria-expanded` state management for dropdown visibility
--   `aria-controls` linking to the calendar panel
--   `aria-describedby` support for external descriptions
--   Optional `aria-live` regions for screen reader announcements
+- Implements the **combobox pattern** with `role="combobox"`
+- Proper `aria-expanded` state management for dropdown visibility
+- `aria-controls` linking to the calendar panel
+- `aria-describedby` support for external descriptions
+- Optional `aria-live` regions for screen reader announcements
 
 ### Keyboard Navigation
 
--   **Tab**: Navigate to the date picker
--   **Enter/Space**: Open the dropdown calendar
--   **Escape**: Close the dropdown (when open)
--   **Arrow Keys**: Open dropdown when closed, navigate dates when open
+- **Tab**: Navigate to the date picker
+- **Enter/Space**: Open the dropdown calendar
+- **Escape**: Close the dropdown (when open)
+- **Arrow Keys**: Open dropdown when closed, navigate dates when open
 
 ### Screen Reader Support
 
--   Semantic markup with proper roles and ARIA attributes
--   Live announcements for date selections and changes
--   Clear announcement of selected dates and ranges
--   Range separator uses proper en dash character (–) for clarity
--   Optional screen reader feedback via `disabled-announce-selections` property
+- Semantic markup with proper roles and ARIA attributes
+- Live announcements for date selections and changes
+- Clear announcement of selected dates and ranges
+- Range separator uses proper en dash character (–) for clarity
+- Optional screen reader feedback via `disabled-announce-selections` property
 
 ### Enhanced Properties for Accessibility
 
@@ -481,45 +471,30 @@ import "mjo-litui/mjo-date-picker";
 export class ExampleDatePickerAdvanced extends LitElement {
     @state() private startDate = "";
     @state() private endDate = "";
-    @state() private duration = 0;
 
     render() {
         return html`
-            <div style="display: grid; gap: 16px;">
-                <mjo-date-picker label="Start Date" max-date="2025-12-31" @mjo-date-picker:change=${this.handleStartChange}> </mjo-date-picker>
+            <mjo-date-picker label="Start Date" .value=${this.startDate} @mjo-date-picker:change=${this.handleStartChange}></mjo-date-picker>
 
-                <mjo-date-picker
-                    label="End Date"
-                    .min-date=${this.startDate || "2025-01-01"}
-                    max-date="2025-12-31"
-                    ?disabled=${!this.startDate}
-                    @mjo-date-picker:change=${this.handleEndChange}
-                >
-                </mjo-date-picker>
-
-                ${this.duration > 0
-                    ? html` <div style="padding: 8px; background: #f0f9ff; border-radius: 4px;"><strong>Duration:</strong> ${this.duration} days</div> `
-                    : ""}
-            </div>
+            <mjo-date-picker
+                label="End Date"
+                .minDate=${this.startDate || "2025-01-01"}
+                ?disabled=${!this.startDate}
+                .value=${this.endDate}
+                @mjo-date-picker:change=${this.handleEndChange}
+            ></mjo-date-picker>
         `;
     }
 
     private handleStartChange(e: CustomEvent) {
         this.startDate = e.detail.value;
-        this.calculateDuration();
+        if (this.endDate && this.endDate < this.startDate) {
+            this.endDate = ""; // Clear end date if invalid
+        }
     }
 
     private handleEndChange(e: CustomEvent) {
         this.endDate = e.detail.value;
-        this.calculateDuration();
-    }
-
-    private calculateDuration() {
-        if (this.startDate && this.endDate) {
-            const start = new Date(this.startDate);
-            const end = new Date(this.endDate);
-            this.duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-        }
     }
 }
 ```
@@ -528,34 +503,34 @@ export class ExampleDatePickerAdvanced extends LitElement {
 
 The component relies on these modern web features:
 
--   **Custom Elements**: All modern browsers
--   **Shadow DOM**: All modern browsers
--   **Intl.DateTimeFormat**: All modern browsers (fallback to ISO format)
--   **CSS Custom Properties**: All modern browsers
+- **Custom Elements**: All modern browsers
+- **Shadow DOM**: All modern browsers
+- **Intl.DateTimeFormat**: All modern browsers (fallback to ISO format)
+- **CSS Custom Properties**: All modern browsers
 
 ## Integration Notes
 
--   **With mjo-form**: Automatically registers when `name` is provided, participates in validation lifecycle
--   **With mjo-calendar**: Delegates calendar functionality, inherits theming and localization
--   **With mjo-dropdown**: Uses portal-based positioning, inherits dropdown behavior
+- **With mjo-form**: Automatically registers when `name` is provided, participates in validation lifecycle
+- **With mjo-calendar**: Delegates calendar functionality, inherits theming and localization
+- **With mjo-dropdown**: Uses portal-based positioning, inherits dropdown behavior
 
 ## Troubleshooting
 
 **Date not displaying in localized format:**
 
--   Ensure `display-mode="localized"` is set and locale is supported
+- Ensure `display-mode="localized"` is set and locale is supported
 
 **Validation not working:**
 
--   Ensure date picker has `name` attribute and parent is `mjo-form`
+- Ensure date picker has `name` attribute and parent is `mjo-form`
 
 **Dropdown positioning issues:**
 
--   Component uses portal rendering to avoid most positioning issues
+- Component uses portal rendering to avoid most positioning issues
 
 **Range selection not completing:**
 
--   Component requires both start and end dates before emitting change events
+- Component requires both start and end dates before emitting change events
 
 ## Summary
 

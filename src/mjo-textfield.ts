@@ -6,6 +6,7 @@ import type {
     MjoTextfieldColor,
     MjoTextfieldFocusEvent,
     MjoTextfieldInputEvent,
+    MjoTextfieldKeydownEvent,
     MjoTextfieldKeyupEvent,
     MjoTextfieldPasswordToggleEvent,
     MjoTextfieldSize,
@@ -32,13 +33,14 @@ import "./mjo-icon.js";
  * @summary Versatile single-line text input component with comprehensive features including validation,
  * icons, prefix/suffix text, password visibility toggle, and full form integration.
  *
- * @fires mjo-textfield-input - Fired on every input change with detailed value and validation information
- * @fires mjo-textfield-change - Fired when value changes and field loses focus
- * @fires mjo-textfield-focus - Fired when the textfield gains focus
- * @fires mjo-textfield-blur - Fired when the textfield loses focus
- * @fires mjo-textfield-keyup - Fired on keyup events (Enter key submits parent form)
- * @fires mjo-textfield-clear - Fired when the clear button is clicked
- * @fires mjo-textfield-password-toggle - Fired when password visibility is toggled
+ * @fires mjo-textfield:input - Fired on every input change with detailed value and validation information
+ * @fires mjo-textfield:change - Fired when value changes and field loses focus
+ * @fires mjo-textfield:focus - Fired when the textfield gains focus
+ * @fires mjo-textfield:blur - Fired when the textfield loses focus
+ * @fires mjo-textfield:keyup - Fired on keyup events (Enter key submits parent form)
+ * @fires mjo-textfield:keydown - Fired on keydown events (Enter key submits parent form)
+ * @fires mjo-textfield:clear - Fired when the clear button is clicked
+ * @fires mjo-textfield:password-toggle - Fired when password visibility is toggled
  *
  * @csspart container - The main textfield container
  * @csspart input - The native input element
@@ -170,6 +172,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
                     @blur=${this.#handleBlur}
                     @input=${this.#handleInput}
                     @keyup=${this.#handleKeyup}
+                    @keydown=${this.#handleKeydown}
                     @change=${this.#handleInput}
                     aria-label=${this.ariaLabel || nothing}
                     aria-labelledby=${labelId || nothing}
@@ -325,7 +328,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         this.isFocused = false;
 
         this.dispatchEvent(
-            new CustomEvent("mjo-textfield-blur", {
+            new CustomEvent("mjo-textfield:blur", {
                 bubbles: true,
                 composed: true,
                 detail: {
@@ -342,7 +345,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         this.valueLength = 0;
 
         this.dispatchEvent(
-            new CustomEvent("mjo-textfield-clear", {
+            new CustomEvent("mjo-textfield:clear", {
                 bubbles: true,
                 composed: true,
                 detail: {
@@ -357,7 +360,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         this.isFocused = true;
 
         this.dispatchEvent(
-            new CustomEvent("mjo-textfield-focus", {
+            new CustomEvent("mjo-textfield:focus", {
                 bubbles: true,
                 composed: true,
                 detail: {
@@ -387,7 +390,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         this.valueLength = this.value.length;
 
         this.dispatchEvent(
-            new CustomEvent("mjo-textfield-input", {
+            new CustomEvent("mjo-textfield:input", {
                 bubbles: true,
                 composed: true,
                 detail: {
@@ -401,7 +404,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
 
         if (ev.type === "change") {
             this.dispatchEvent(
-                new CustomEvent("mjo-textfield-change", {
+                new CustomEvent("mjo-textfield:change", {
                     bubbles: true,
                     composed: true,
                     detail: {
@@ -418,7 +421,27 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
 
     #handleKeyup = (ev: KeyboardEvent) => {
         this.dispatchEvent(
-            new CustomEvent("mjo-textfield-keyup", {
+            new CustomEvent("mjo-textfield:keyup", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    element: this,
+                    key: ev.key,
+                    code: ev.code,
+                    value: this.value,
+                    originalEvent: ev,
+                },
+            }),
+        );
+
+        if (ev.key === "Enter" && this.form) {
+            this.submitForm();
+        }
+    };
+
+    #handleKeydown = (ev: KeyboardEvent) => {
+        this.dispatchEvent(
+            new CustomEvent("mjo-textfield:keydown", {
                 bubbles: true,
                 composed: true,
                 detail: {
@@ -441,7 +464,7 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         this.type = this.type === "password" ? "text" : "password";
 
         this.dispatchEvent(
-            new CustomEvent("mjo-textfield-password-toggle", {
+            new CustomEvent("mjo-textfield:password-toggle", {
                 bubbles: true,
                 composed: true,
                 detail: {
@@ -696,12 +719,13 @@ declare global {
     }
 
     interface HTMLElementEventMap {
-        "mjo-textfield-clear": MjoTextfieldClearEvent;
-        "mjo-textfield-password-toggle": MjoTextfieldPasswordToggleEvent;
-        "mjo-textfield-input": MjoTextfieldInputEvent;
-        "mjo-textfield-change": MjoTextfieldChangeEvent;
-        "mjo-textfield-focus": MjoTextfieldFocusEvent;
-        "mjo-textfield-blur": MjoTextfieldBlurEvent;
-        "mjo-textfield-keyup": MjoTextfieldKeyupEvent;
+        "mjo-textfield:clear": MjoTextfieldClearEvent;
+        "mjo-textfield:password-toggle": MjoTextfieldPasswordToggleEvent;
+        "mjo-textfield:input": MjoTextfieldInputEvent;
+        "mjo-textfield:change": MjoTextfieldChangeEvent;
+        "mjo-textfield:focus": MjoTextfieldFocusEvent;
+        "mjo-textfield:blur": MjoTextfieldBlurEvent;
+        "mjo-textfield:keyup": MjoTextfieldKeyupEvent;
+        "mjo-textfield:keydown": MjoTextfieldKeydownEvent;
     }
 }

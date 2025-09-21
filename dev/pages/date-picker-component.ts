@@ -18,13 +18,14 @@ import "../components/showcases-grid.js";
 
 // Import types
 import { SupportedLocale } from "../../src/types/locales.js";
+import { MjoFormSubmitEvent } from "../../src/types/mjo-form.js";
 
 @customElement("date-picker-component")
 export class DatePickerComponent extends LitElement {
     @state() private selectedColor: "primary" | "secondary" = "primary";
     @state() private selectedSize: "small" | "medium" | "large" = "medium";
     @state() private selectedLocale: SupportedLocale = "en";
-    @state() private selectedDisplayMode: "iso" | "localized" = "iso";
+    @state() private selectedDisplayMode: "iso" | "localized" | "numeric" = "numeric";
     @state() private isRange = false;
     @state() private isDisabled = false;
     @state() private isClearabled = false;
@@ -64,7 +65,7 @@ export class DatePickerComponent extends LitElement {
                         .maxDate=${this.currentMaxDate}
                         .disabledDates=${this.currentDisabledDates}
                         aria-describedby=${ifDefined(this.currentAriaDescribedby || undefined)}
-                        ?range=${this.isRange}
+                        ?isRange=${this.isRange}
                         ?disabled=${this.isDisabled}
                         ?clearabled=${this.isClearabled}
                         ?closeOnSelect=${this.isCloseOnSelect}
@@ -122,6 +123,13 @@ export class DatePickerComponent extends LitElement {
 
                     <control-group slot="controls" label="Display Mode" columns="2">
                         <mjo-button size="small" variant=${this.selectedDisplayMode === "iso" ? "default" : "ghost"} @click=${() => this.setDisplayMode("iso")}>
+                            ISO
+                        </mjo-button>
+                        <mjo-button
+                            size="small"
+                            variant=${this.selectedDisplayMode === "numeric" ? "default" : "ghost"}
+                            @click=${() => this.setDisplayMode("numeric")}
+                        >
                             ISO
                         </mjo-button>
                         <mjo-button
@@ -251,7 +259,7 @@ export class DatePickerComponent extends LitElement {
                 <showcases-grid columns="3">
                     <mjo-date-picker label="Basic Date Picker" placeholder="Select a date"></mjo-date-picker>
 
-                    <mjo-date-picker label="Date Range Picker" placeholder="Select date range" range></mjo-date-picker>
+                    <mjo-date-picker label="Date Range Picker" placeholder="Select date range" isRange></mjo-date-picker>
 
                     <mjo-date-picker label="With Value" value="2024-01-15" clearabled></mjo-date-picker>
                 </showcases-grid>
@@ -289,9 +297,15 @@ export class DatePickerComponent extends LitElement {
 
             <section-container label="Range Mode Examples">
                 <showcases-grid columns="2">
-                    <mjo-date-picker label="Basic Range" range placeholder="Select date range"></mjo-date-picker>
+                    <mjo-date-picker label="Basic Range" isRange placeholder="Select date range"></mjo-date-picker>
 
-                    <mjo-date-picker label="Range with Value" range value="2024-01-15/2024-01-20" placeholder="Pre-selected range" clearabled></mjo-date-picker>
+                    <mjo-date-picker
+                        label="Range with Value"
+                        isRange
+                        value="2024-01-15/2024-01-20"
+                        placeholder="Pre-selected range"
+                        clearabled
+                    ></mjo-date-picker>
                 </showcases-grid>
             </section-container>
 
@@ -309,12 +323,20 @@ export class DatePickerComponent extends LitElement {
 
             <section-container label="Display Modes">
                 <showcases-grid columns="2">
-                    <mjo-date-picker label="ISO Format" displayMode="iso" value="2024-01-15" placeholder="ISO format"></mjo-date-picker>
+                    <mjo-date-picker label="ISO Format" locale="es" displayMode="iso" value="2024-01-15" placeholder="ISO format"></mjo-date-picker>
 
                     <mjo-date-picker
                         label="Localized Format"
                         displayMode="localized"
-                        locale="en"
+                        locale="es"
+                        value="2024-01-15"
+                        placeholder="Localized format"
+                    ></mjo-date-picker>
+
+                    <mjo-date-picker
+                        label="Localized Format"
+                        displayMode="numeric"
+                        locale="es"
                         value="2024-01-15"
                         placeholder="Localized format"
                     ></mjo-date-picker>
@@ -334,13 +356,13 @@ export class DatePickerComponent extends LitElement {
             </section-container>
 
             <section-container label="Form Integration Example">
-                <mjo-form>
+                <mjo-form @submit=${this.#handleSubmit}>
                     <mjo-grid columns="2" gap="20px">
                         <mjo-date-picker name="start_date" label="Start Date" placeholder="Select start date" required clearabled></mjo-date-picker>
 
                         <mjo-date-picker name="end_date" label="End Date" placeholder="Select end date" required clearabled></mjo-date-picker>
 
-                        <mjo-date-picker name="date_range" label="Date Range" placeholder="Select date range" range clearabled></mjo-date-picker>
+                        <mjo-date-picker name="date_range" label="Date Range" placeholder="Select date range" isRange clearabled></mjo-date-picker>
 
                         <mjo-date-picker
                             name="birthday"
@@ -379,6 +401,10 @@ export class DatePickerComponent extends LitElement {
         `;
     }
 
+    #handleSubmit = (event: MjoFormSubmitEvent) => {
+        console.log(event.detail.response);
+    };
+
     private setColor(color: "primary" | "secondary") {
         this.selectedColor = color;
     }
@@ -391,7 +417,7 @@ export class DatePickerComponent extends LitElement {
         this.selectedLocale = locale;
     }
 
-    private setDisplayMode(mode: "iso" | "localized") {
+    private setDisplayMode(mode: "iso" | "localized" | "numeric") {
         this.selectedDisplayMode = mode;
     }
 

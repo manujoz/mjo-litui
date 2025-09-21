@@ -20,7 +20,7 @@ import {
 import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { locales } from "./locales/locales.js";
+import { locales, suportedLocales } from "./locales/locales.js";
 import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import { CalendarUtils } from "./utils/calendar.js";
@@ -136,7 +136,7 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     @property({ type: String }) value?: string;
     @property({ type: String }) startDate?: string;
     @property({ type: String }) endDate?: string;
-    @property({ type: String }) locale: SupportedLocale = "en";
+    @property({ type: String }) locale: SupportedLocale | "auto" = "auto";
     @property({ type: String }) minDate?: string;
     @property({ type: String }) maxDate?: string;
     @property({ type: Boolean }) disabled = false;
@@ -375,6 +375,10 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
             this.#syncDisplayedMonthsFromState();
         }
 
+        if (changedProperties.has("locale") && this.locale === "auto") {
+            this.#getAutoLocale();
+        }
+
         if (changedProperties.has("eventMarkers")) {
             this.#updateEventsMap();
         }
@@ -511,7 +515,9 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
     }
 
     get #currentLocale() {
-        return locales[this.locale] || locales.en;
+        const locale = this.locale === "auto" ? "en" : this.locale;
+
+        return locales[locale] || locales.en;
     }
 
     get #monthNames() {
@@ -536,6 +542,18 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
         return this.selectedDate
             ? `Date picker. Selected date: ${CalendarUtils.formatDate(this.selectedDate)}`
             : "Date picker. Use arrow keys to navigate, Enter to select.";
+    }
+
+    #getAutoLocale() {
+        if (typeof navigator !== "undefined" && navigator.language) {
+            const navLocale = navigator.language.toLowerCase().split("-")[0];
+
+            if (suportedLocales.includes(navLocale)) {
+                this.locale = navLocale as SupportedLocale;
+            } else {
+                this.locale = "en";
+            }
+        }
     }
 
     #shouldRenderDualRange(): boolean {

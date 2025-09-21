@@ -64,3 +64,13 @@ export interface MjoTextfieldKeyupEvent extends CustomEvent {
         originalEvent: KeyboardEvent;
     };
 }
+
+export interface MjoTextfieldKeydownEvent extends CustomEvent {
+    detail: {
+        element: MjoTextfield;
+        key: string;
+        code: string;
+        value: string;
+        originalEvent: KeyboardEvent;
+    };
+}
