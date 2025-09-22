@@ -9,6 +9,7 @@ import "../components/drawer/mjo-drawer-container.js";
 export class DrawerController implements ReactiveController {
     host: ReactiveControllerHost;
     drawerContainer!: MjoDrawerContainer;
+    parent?: Element;
 
     constructor(host: ReactiveControllerHost) {
         (this.host = host).addController(this);
@@ -20,6 +21,12 @@ export class DrawerController implements ReactiveController {
 
     close() {
         this.drawerContainer.close();
+    }
+
+    setParent(parent: Element) {
+        this.parent = parent;
+
+        this.parent.appendChild(this.drawerContainer);
     }
 
     hostConnected(): void {
@@ -40,6 +47,7 @@ export class DrawerController implements ReactiveController {
         const theme = (this.host as MjoDrawer).theme as Record<string, string>;
         if (theme) this.drawerContainer.theme = theme;
 
-        document.body.appendChild(this.drawerContainer);
+        if (!this.parent) this.parent = document.body;
+        this.parent.appendChild(this.drawerContainer);
     }
 }

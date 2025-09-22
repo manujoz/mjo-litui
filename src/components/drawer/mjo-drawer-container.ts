@@ -328,12 +328,13 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
                 color: var(--mjo-drawer-close-icon-color, var(--mjo-foreground-color, currentColor));
             }
             .title mjo-icon:hover {
-                background-color: var(--mjo-background-color-high, #ffffff);
+                background-color: color-mix(in srgb, var(--mjo-foreground-color, currentColor) 10%, transparent);
             }
             .content {
                 position: relative;
                 flex: 1 1 0;
                 display: flex;
+                flex-direction: column;
             }
         `,
     ];

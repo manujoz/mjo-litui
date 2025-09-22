@@ -50,7 +50,7 @@ export const validatorMessages: ValidatorMessagesLanguages = {
         phonenumber: "El número de teléfono ingresado no es correcto",
         range: "El valor debe estar entre {data0} y {data1}",
         rangelength: "La longitud debe estar entre {data0} y {data1} caracteres.",
-        required: "Este campo es requerido",
+        required: "Este campo es obligatorio",
         security: "{data0}",
     },
     fr: {

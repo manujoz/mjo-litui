@@ -5,6 +5,7 @@ import { SupportedLocale } from "./types/locales.js";
 import { MjoCalendarDateSelectedEvent, MjoCalendarRangeSelectedEvent } from "./types/mjo-calendar";
 import { DatePickerChangeEvent, MjoDatePickerAriaLive, MjoDatePickerDisplayMode } from "./types/mjo-date-picker.js";
 import { MjoTextfieldColor, MjoTextfieldSize, MjoTextfieldVariant } from "./types/mjo-textfield.js";
+import { MjoCalendarTheme, MjoInputTheme } from "./types/mjo-theme.js";
 
 import { css, html, LitElement, PropertyValues, TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
@@ -81,6 +82,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
     @property({ type: String }) name?: string;
     @property({ type: String }) value: string = ""; // single: YYYY-MM-DD, range: YYYY-MM-DD/YYYY-MM-DD
     @property({ type: Boolean }) isRange = false;
+    @property({ type: Boolean }) fullwidth = false;
     @property({ type: String }) locale: SupportedLocale | "auto" = "auto";
     @property({ type: String }) minDate?: string;
     @property({ type: String }) maxDate?: string;
@@ -92,12 +94,13 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
     @property({ type: String }) color: MjoTextfieldColor = "primary";
     @property({ type: String }) variant: MjoTextfieldVariant = "default";
     @property({ type: Boolean }) clearabled = false;
-    @property({ type: Boolean }) closeOnSelect = true;
-    @property({ type: String }) displayMode: MjoDatePickerDisplayMode = "iso";
+    @property({ type: String }) displayMode: MjoDatePickerDisplayMode = "numeric";
     @property({ type: String }) helperText?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
     @property({ type: String, attribute: "aria-live" }) ariaLive: MjoDatePickerAriaLive = "polite";
     @property({ type: Boolean }) disabledAnnounceSelections = false;
+    @property({ type: Object }) textfieldTheme?: MjoInputTheme;
+    @property({ type: Object }) calendarTheme?: MjoCalendarTheme;
 
     @state() private calendarId = `mjo-calendar-${Math.random().toString(36).substring(2, 9)}`;
     @state() private announcementText = "";
@@ -155,15 +158,10 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                         counter-text: textfield-counter-text
                     "
                     formIgnore
-                    role="combobox"
-                    aria-expanded=${isOpen ? "true" : "false"}
-                    aria-haspopup="dialog"
-                    aria-controls=${this.calendarId}
-                    aria-label=${computedAriaLabel}
-                    aria-describedby=${ifDefined(this.ariaDescribedby)}
                     value=${this.#displayValue}
                     size=${this.size}
                     color=${this.color}
+                    ?fullwidth=${this.fullwidth}
                     ?disabled=${this.disabled}
                     label=${this.label ?? ""}
                     placeholder=${this.placeholder ?? ""}
@@ -173,8 +171,15 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                     ?success=${this.success}
                     successmsg=${this.successmsg}
                     helperText=${ifDefined(this.helperText)}
+                    .theme=${this.textfieldTheme}
                     readonly
                     startIcon=${PiCalendarDotsLight}
+                    role="combobox"
+                    aria-expanded=${isOpen ? "true" : "false"}
+                    aria-haspopup="dialog"
+                    aria-controls=${this.calendarId}
+                    aria-label=${computedAriaLabel}
+                    aria-describedby=${ifDefined(this.ariaDescribedby)}
                     ?clearabled=${this.clearabled}
                     @mjo-textfield:keydown=${this.#onKeydown}
                     @mjo-textfield:clear=${this.#handleClear}
@@ -342,6 +347,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                 endDate=${ifDefined(endDate)}
                 minDate=${ifDefined(this.minDate)}
                 maxDate=${ifDefined(this.maxDate)}
+                .theme=${this.calendarTheme}
                 .disabledDates=${this.disabledDates}
                 @mjo-calendar:date-selected=${this.#onDateSelected}
                 @mjo-calendar:range-selected=${this.#onRangeSelected}
@@ -416,7 +422,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                 this.#announceToScreenReader(`Selected ${formattedDate}`);
             }
 
-            if (this.closeOnSelect) this.close();
+            this.close();
         }
     };
 
@@ -475,7 +481,7 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
                 this.#announceToScreenReader(`Selected date range from ${startFormatted} to ${endFormatted}`);
             }
 
-            if (this.closeOnSelect) this.close();
+            this.close();
         }
     };
 
