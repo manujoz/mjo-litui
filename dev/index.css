@@ -20,4 +20,5 @@ body {
     background-color: var(--mjo-background-color);
     color: var(--mjo-foreground-color);
     overflow-x: hidden;
+    scrollbar-gutter: stable;
 }

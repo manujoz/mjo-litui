@@ -38,14 +38,17 @@ export class DrawerController implements ReactiveController {
     }
 
     #createDrawerElement() {
+        const host = this.host as MjoDrawer;
         this.drawerContainer = document.createElement("mjo-drawer-container") as MjoDrawerContainer;
-        this.drawerContainer.style.zIndex = window.getComputedStyle(this.host as MjoDrawer).zIndex;
+        this.drawerContainer.style.zIndex = window.getComputedStyle(host).zIndex;
 
-        const id = (this.host as MjoDrawer).idDrawer;
+        const id = host.idDrawer;
         if (id) this.drawerContainer.id = id;
 
-        const theme = (this.host as MjoDrawer).theme as Record<string, string>;
+        const theme = host.theme as Record<string, string>;
         if (theme) this.drawerContainer.theme = theme;
+
+        this.drawerContainer.disableScrollLock = host.disableScrollLock;
 
         if (!this.parent) this.parent = document.body;
         this.parent.appendChild(this.drawerContainer);

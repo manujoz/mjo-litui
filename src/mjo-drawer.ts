@@ -37,6 +37,7 @@ export class MjoDrawer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) restoreFocus = true;
     @property({ type: Boolean }) closeOnEscape = true;
     @property({ type: String }) initialFocus?: string;
+    @property({ type: Boolean }) disableScrollLock = false;
 
     controller = new DrawerController(this);
 

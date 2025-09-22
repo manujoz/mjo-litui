@@ -24,10 +24,13 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
     @query(".container") container!: HTMLDivElement;
     @query(".close") closeButton?: HTMLElement;
 
+    disableScrollLock = false;
+
     #animationDuration = 200;
     #onOpen?: () => void;
     #onClose?: () => void;
     #focusTrap?: FocusTrap;
+    #overflowSaved = "";
 
     render() {
         // Generate unique IDs for accessibility
@@ -145,6 +148,11 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
     #open() {
         this.isOpen = true;
 
+        if (!this.disableScrollLock) {
+            this.#overflowSaved = document.body.style.overflow || "";
+            document.body.style.overflow = "clip";
+        }
+
         this.style.display = "block";
 
         const translateFrom =
@@ -163,7 +171,6 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
         });
 
         containerAnimation.onfinish = () => {
-            // Initialize focus trap (this will handle making other elements inert)
             this.#initializeFocusTrap();
 
             if (typeof this.#onOpen === "function") {
@@ -176,6 +183,8 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
 
     #close() {
         this.isOpen = false;
+
+        if (!this.disableScrollLock) document.body.style.overflow = this.#overflowSaved;
 
         // Deactivate focus trap (this will restore inert state automatically)
         this.#deactivateFocusTrap();
