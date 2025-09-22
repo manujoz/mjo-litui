@@ -1,7 +1,7 @@
 export type MjoDatePickerDisplayMode = "iso" | "localized" | "numeric";
 export type MjoDatePickerAriaLive = "polite" | "assertive" | "off";
 
-export interface DatePickerDateSelectedEvent extends CustomEvent {
+export interface DatePickerChangeEvent extends CustomEvent {
     detail: {
         value?: string;
         date?: Date;
@@ -10,14 +10,4 @@ export interface DatePickerDateSelectedEvent extends CustomEvent {
         startDateValue?: string;
         endDateValue?: string;
     };
-}
-
-export interface DatePickerChangeEvent extends DatePickerDateSelectedEvent {}
-
-export interface DatePickerAccessibilityConfig {
-    announceSelections?: boolean;
-    ariaLive?: "polite" | "assertive" | "off";
-    calendarLabel?: string;
-    openedAnnouncement?: string;
-    closedAnnouncement?: string;
 }

@@ -475,12 +475,6 @@ this.drawer.controller.show({
 - **`onOpen`**: Called after the opening animation completes and focus trap is activated
 - **`onClose`**: Called after the closing animation completes and the drawer is removed from the DOM
 
-## Methods
-
-| Method | Parameters | Return Type | Description                                        |
-| ------ | ---------- | ----------- | -------------------------------------------------- |
-| None   | -          | -           | All interaction is through the controller instance |
-
 ## CSS Parts
 
 The component exposes several CSS parts for advanced styling customization:
