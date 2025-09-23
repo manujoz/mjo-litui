@@ -31,7 +31,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) idDropdown?: string;
     @property({ type: Boolean }) fullwidth = false;
     @property({ type: Boolean }) disabled = false;
-    @property({ type: Boolean }) preventScroll = false;
+    @property({ type: Boolean }) scrollLocked = false;
     @property({ type: Boolean }) isOpen = false;
     @property({ type: Object }) css?: CSSResult;
     @property({ type: Object }) html?: TemplateResult<1>;
@@ -81,9 +81,9 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
             if (!this.$dropdownContainer) return;
             this.$dropdownContainer.css = this.css;
         }
-        if (changedProperties.has("preventScroll") && this.preventScroll) {
+        if (changedProperties.has("scrollLocked") && this.scrollLocked) {
             if (!this.$dropdownContainer) return;
-            this.$dropdownContainer.preventScroll = this.preventScroll;
+            this.$dropdownContainer.scrollLocked = this.scrollLocked;
         }
         if (changedProperties.has("width") && this.width !== undefined) {
             if (!this.$dropdownContainer) return;
@@ -193,7 +193,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         this.$dropdownContainer.host = this;
         this.$dropdownContainer.html = this.html;
         this.$dropdownContainer.css = this.css;
-        this.$dropdownContainer.preventScroll = this.preventScroll;
+        this.$dropdownContainer.scrollLocked = this.scrollLocked;
         this.$dropdownContainer.position = this.position;
 
         const id = this.idDropdown;

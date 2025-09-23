@@ -4,6 +4,7 @@ import type { MjoDropdownPosition } from "../../types/mjo-dropdown.d.ts";
 import { LitElement, TemplateResult, css, html, nothing, type CSSResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+import { ScrollLock } from "../../lib/scroll.js";
 import { ThemeMixin, type IThemeMixin } from "../../mixins/theme-mixin.js";
 
 import {
@@ -20,13 +21,12 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
     @property({ type: Object }) css?: CSSResult;
     @property({ type: Object }) html?: TemplateResult<1>;
     @property({ type: String }) position: MjoDropdownPosition = "center-bottom";
-    @property({ type: Boolean }) preventScroll = false;
+    @property({ type: Boolean }) scrollLocked = false;
     @property({ type: String }) width?: string;
     @property({ type: String }) height?: string;
 
     host?: MjoDropdown;
-
-    #scrollElements: { element: HTMLElement; scrollTop: number }[] = [];
+    #scrollLock!: ScrollLock;
 
     render() {
         return html`${this.css
@@ -38,6 +38,9 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
 
     connectedCallback(): void {
         super.connectedCallback();
+
+        this.#scrollLock = new ScrollLock(this);
+        this.#scrollLock.onScroll = this.#handleScroll;
 
         if (this.height) this.style.maxHeight = this.height;
 
@@ -57,8 +60,7 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
     }
 
     close() {
-        this.#scrollElements = [];
-        this.#removePreventScroll();
+        if (this.scrollLocked) this.#scrollLock.unlock();
 
         this.style.transform = "scale(0.7)";
         this.style.opacity = "0";
@@ -71,7 +73,7 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
     }
 
     open() {
-        this.#addPreventScroll();
+        if (this.scrollLocked) this.#scrollLock.lock();
 
         this.style.display = "block";
         this.style.transition = "opacity 0.1s ease-in, transform 0.1s ease-in";
@@ -122,65 +124,14 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
         this.style.left = `${left}px`;
     }
 
-    #addPreventScroll() {
-        this.#getScrollbarElements();
-
-        this.#scrollElements.forEach(({ element }) => {
-            element.addEventListener("scroll", this.#handleScroll);
-        });
-
-        if (this.preventScroll) document.addEventListener("wheel", this.#handleWheel, { passive: false });
-    }
-
-    #removePreventScroll() {
-        this.#scrollElements.forEach(({ element }) => {
-            element.removeEventListener("scroll", this.#handleScroll);
-        });
-
-        document.removeEventListener("wheel", this.#handleWheel);
-    }
-
-    #getScrollbarElements() {
-        this.#scrollElements = [];
-
-        let element = this.host as unknown as HTMLElement;
-        while (element) {
-            if (element.scrollHeight > element.clientHeight) {
-                if (element.tagName === "HTML") {
-                    element = window as unknown as HTMLElement;
-                    this.#scrollElements.push({ element, scrollTop: (element as unknown as Window).scrollY });
-                } else {
-                    this.#scrollElements.push({ element, scrollTop: element.scrollTop });
-                }
-            }
-            element = ((element.parentNode as ShadowRoot)?.host as HTMLElement) ?? element.parentNode;
-        }
-    }
-
     #handleResize = () => {
         this.updatePosition();
     };
 
-    #handleScroll = (ev: Event) => {
-        const target = ev.currentTarget as HTMLElement;
-
-        if (this.preventScroll) {
-            for (const { element, scrollTop } of this.#scrollElements) {
-                if (element !== target) continue;
-
-                if (element === (window as unknown as HTMLElement)) {
-                    window.scrollTo(0, scrollTop);
-                } else {
-                    element.scrollTop = scrollTop;
-                }
-            }
-        } else {
+    #handleScroll = () => {
+        if (!this.scrollLocked) {
             this.updatePosition();
         }
-    };
-
-    #handleWheel = (ev: WheelEvent) => {
-        if (ev.target !== this) ev.preventDefault();
     };
 
     static styles = [

@@ -37,7 +37,7 @@ export class DrawerComponent extends LitElement {
                         <mjo-drawer id="playground-drawer"></mjo-drawer>
                         <div class="demo-buttons">
                             <mjo-button @click=${this.#showDrawer}>Show Drawer</mjo-button>
-                            <mjo-button variant="bordered" @click=${this.#showDrawerWithoutTitle}>Show Without Title</mjo-button>
+                            <mjo-button variant="ghost" @click=${this.#showDrawerWithoutTitle}>Show Without Title</mjo-button>
                             <mjo-button variant="ghost" @click=${this.#showCustomContentDrawer}>Show Custom Content</mjo-button>
                         </div>
                     </div>
@@ -107,7 +107,7 @@ export class DrawerComponent extends LitElement {
                     </control-group>
 
                     <control-group slot="controls" label="Actions" columns="2">
-                        <mjo-button size="small" variant="bordered" @click=${this.resetDrawer}>Reset to Defaults</mjo-button>
+                        <mjo-button size="small" variant="ghost" @click=${this.resetDrawer}>Reset to Defaults</mjo-button>
                         <mjo-button size="small" variant="ghost" @click=${this.clearEventLog}>Clear Event Log</mjo-button>
                     </control-group>
                 </playground-grid>
@@ -262,7 +262,7 @@ export class DrawerComponent extends LitElement {
                         </mjo-typography>
                         <div style="margin-top: 20px; display: flex; gap: 10px;">
                             <mjo-button size="small" color="primary">Action 1</mjo-button>
-                            <mjo-button size="small" variant="bordered">Action 2</mjo-button>
+                            <mjo-button size="small" variant="ghost">Action 2</mjo-button>
                         </div>
                     </div>
                 `,
@@ -318,7 +318,7 @@ export class DrawerComponent extends LitElement {
                             <mjo-textfield label="Email" type="email" placeholder="Enter your email"></mjo-textfield>
                             <mjo-textarea label="Message" placeholder="Enter your message" rows="4"></mjo-textarea>
                             <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
-                                <mjo-button variant="bordered">Cancel</mjo-button>
+                                <mjo-button variant="ghost">Cancel</mjo-button>
                                 <mjo-button color="primary">Submit</mjo-button>
                             </div>
                         </mjo-form>

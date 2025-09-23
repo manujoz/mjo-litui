@@ -47,11 +47,11 @@ export class ModalController implements ReactiveController {
         this.modalContainer.ariaLabelledby = hostModal.ariaLabelledby;
         this.modalContainer.ariaDescribedby = hostModal.ariaDescribedby;
         this.modalContainer.label = hostModal.label;
-        this.modalContainer.trapFocus = hostModal.trapFocus;
-        this.modalContainer.restoreFocus = hostModal.restoreFocus;
-        this.modalContainer.closeOnEscape = hostModal.closeOnEscape;
+        this.modalContainer.disabledTrapFocus = hostModal.disabledTrapFocus;
+        this.modalContainer.disabledRestoreFocus = hostModal.disabledRestoreFocus;
+        this.modalContainer.disabledCloseOnEscape = hostModal.disabledCloseOnEscape;
         this.modalContainer.initialFocus = hostModal.initialFocus;
-        this.modalContainer.preventBodyScroll = hostModal.preventBodyScroll;
+        this.modalContainer.disableScrollLock = hostModal.disableScrollLock;
 
         document.body.appendChild(this.modalContainer);
     }

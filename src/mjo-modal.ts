@@ -36,12 +36,12 @@ import "./components/modal/mjo-modal-container.js";
 @customElement("mjo-modal")
 export class MjoModal extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) idModal?: string;
-    @property({ type: String }) label?: string; // Alternative label for modal content
-    @property({ type: Boolean }) trapFocus = true; // Enable/disable focus trapping
-    @property({ type: Boolean }) restoreFocus = true; // Enable/disable focus restoration
-    @property({ type: Boolean }) closeOnEscape = true; // Enable/disable ESC key closing
-    @property({ type: String }) initialFocus?: string; // CSS selector for initial focus element
-    @property({ type: Boolean }) preventBodyScroll = true; // Prevent body scroll when open
+    @property({ type: String }) label?: string;
+    @property({ type: String }) initialFocus?: string;
+    @property({ type: Boolean }) disabledTrapFocus = false;
+    @property({ type: Boolean }) disabledRestoreFocus = false;
+    @property({ type: Boolean }) disabledCloseOnEscape = false;
+    @property({ type: Boolean }) disableScrollLock = false;
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledby?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
 

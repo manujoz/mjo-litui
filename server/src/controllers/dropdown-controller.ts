@@ -72,7 +72,7 @@ export class DropdownController {
                                     <span>Full Width</span>
                                 </label>
                                 <label class="toggle">
-                                    <input type="checkbox" onchange="changeDropdownProp('preventScroll', this.checked || false)" />
+                                    <input type="checkbox" onchange="changeDropdownProp('scrollLocked', this.checked || false)" />
                                     <span>Prevent Scroll</span>
                                 </label>
                                 <label class="toggle">

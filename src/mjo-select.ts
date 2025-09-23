@@ -182,7 +182,7 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
                     @options-list.selection-change=${(e: CustomEvent) => this.#handleOptionListSelectionChange(e)}
                 ></mjoint-options-list>`}
                 ?disabled=${this.disabled}
-                preventScroll
+                scrollLocked
                 behaviour="click"
                 fullwidth
                 .theme=${this.dropDownTheme}

@@ -8,6 +8,8 @@ export interface FocusTrapOptions {
     onActivate?: () => void;
     /** Callback when trap is deactivated */
     onDeactivate?: () => void;
+    /** Disable focus restoration when trap is deactivated */
+    disabledRestoreFocus?: boolean;
 }
 
 export class FocusTrap {
@@ -52,8 +54,8 @@ export class FocusTrap {
         // Restore inert state
         this.restoreInertElements();
 
-        // Restore focus
-        if (this.lastFocusedElement) {
+        // Restore focus only if not disabled
+        if (this.lastFocusedElement && !this.options.disabledRestoreFocus) {
             this.lastFocusedElement.focus();
         }
 

@@ -128,7 +128,7 @@ export class ExampleDropdownForm extends LitElement {
 | -------------------------- | ----------------------------- | ----------------- | -------- | -------------------------------------------------------------------------- |
 | `fullwidth`                | `boolean`                     | `false`           | no       | Makes dropdown width match trigger element width                           |
 | `disabled`                 | `boolean`                     | `false`           | no       | Disables dropdown interaction                                              |
-| `preventScroll`            | `boolean`                     | `false`           | no       | Prevents page scrolling when dropdown is open                              |
+| `scrollLocked`             | `boolean`                     | `false`           | no       | Prevents page scrolling when dropdown is open                              |
 | `isOpen`                   | `boolean`                     | `false`           | yes      | Controls dropdown open state (can be used for programmatic control)        |
 | `css`                      | `CSSResult \| undefined`      | `undefined`       | no       | Custom CSS styles to apply to dropdown content                             |
 | `html`                     | `TemplateResult \| undefined` | `undefined`       | no       | HTML template to render inside dropdown                                    |
@@ -152,7 +152,7 @@ export class ExampleDropdownForm extends LitElement {
 - The dropdown container is created dynamically and appended to `document.body`
 - Position is automatically calculated and updated on scroll/resize
 - Click behavior includes a 100ms debounce to prevent immediate close on trigger click
-- When `preventScroll` is true, the dropdown locks scroll position during display
+- When `scrollLocked` is true, the dropdown locks scroll position during display
 - When `preventCloseOnInnerClick` is true, clicking inside the dropdown content will not close the dropdown
 - `suppressOpenSelectors` array allows preventing dropdown opening when click events originate from matching elements (only applies to `behaviour="click"`)
 - Theme inheritance: dropdown inherits theme from closest `<mjo-theme>` ancestor

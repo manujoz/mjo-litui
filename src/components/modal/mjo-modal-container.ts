@@ -4,6 +4,7 @@ import { LitElement, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 
 import { AiOutlineClose } from "mjo-icons/ai";
+import { ScrollLock } from "../../lib/scroll.js";
 import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 import { FocusTrap } from "../../utils/focus-trap.js";
 
@@ -21,11 +22,11 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
     @property({ type: String }) ariaLabelledby?: string;
     @property({ type: String }) ariaDescribedby?: string;
     @property({ type: String }) label?: string;
-    @property({ type: Boolean }) trapFocus = true;
-    @property({ type: Boolean }) restoreFocus = true;
-    @property({ type: Boolean }) closeOnEscape = true;
+    @property({ type: Boolean }) disabledTrapFocus = false;
+    @property({ type: Boolean }) disabledRestoreFocus = false;
+    @property({ type: Boolean }) disabledCloseOnEscape = false;
+    @property({ type: Boolean }) disableScrollLock = false;
     @property({ type: String }) initialFocus?: string;
-    @property({ type: Boolean }) preventBodyScroll = true;
 
     @state() blocked = false;
 
@@ -36,7 +37,7 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
     onClose?: () => void;
     #animationDuration = 200;
     #focusTrap?: FocusTrap;
-    #originalBodyOverflow?: string;
+    #scrollLock!: ScrollLock;
 
     render() {
         return html`
@@ -88,6 +89,12 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
         `;
     }
 
+    connectedCallback(): void {
+        super.connectedCallback();
+
+        this.#scrollLock = new ScrollLock(this);
+    }
+
     show({ content, time, title, width, animationDuration, blocked = false, closePosition = "in", onClose }: ModalShowParams) {
         if (this.isOpen) return;
 
@@ -136,7 +143,7 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
     }
 
     #handleGlobalKeyDown = (event: KeyboardEvent) => {
-        if (event.key === "Escape" && this.closeOnEscape && !this.blocked) {
+        if (event.key === "Escape" && !this.disabledCloseOnEscape && !this.blocked) {
             event.preventDefault();
             this.close();
         }
@@ -146,10 +153,7 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
         this.isOpen = true;
 
         // Manage body scroll
-        if (this.preventBodyScroll) {
-            this.#originalBodyOverflow = document.body.style.overflow;
-            document.body.style.overflow = "hidden";
-        }
+        if (!this.disableScrollLock) this.#scrollLock.lock(true);
 
         // Add global keyboard listener
         document.addEventListener("keydown", this.#handleGlobalKeyDown);
@@ -168,15 +172,10 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
 
         // Setup focus trap after animation
         setTimeout(() => {
-            if (this.trapFocus) {
+            if (!this.disabledTrapFocus) {
                 this.#focusTrap = new FocusTrap(this, {
                     initialFocus: this.initialFocus,
-                    onActivate: () => {
-                        // Focus trap activated
-                    },
-                    onDeactivate: () => {
-                        // Focus trap deactivated
-                    },
+                    disabledRestoreFocus: this.disabledRestoreFocus,
                 });
                 this.#focusTrap.activate();
             }
@@ -196,10 +195,7 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
         document.removeEventListener("keydown", this.#handleGlobalKeyDown);
 
         // Restore body scroll
-        if (this.preventBodyScroll && this.#originalBodyOverflow !== undefined) {
-            document.body.style.overflow = this.#originalBodyOverflow;
-            this.#originalBodyOverflow = undefined;
-        }
+        if (!this.disableScrollLock) this.#scrollLock.unlock();
 
         this.background.animate([{ opacity: 1 }, { opacity: 0 }], { duration: this.#animationDuration, fill: "forwards" });
         this.closeIcon?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: this.#animationDuration, fill: "forwards" });

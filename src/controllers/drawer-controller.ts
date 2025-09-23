@@ -48,6 +48,14 @@ export class DrawerController implements ReactiveController {
         const theme = host.theme as Record<string, string>;
         if (theme) this.drawerContainer.theme = theme;
 
+        // Transfer accessibility properties
+        this.drawerContainer.ariaLabelledby = host.ariaLabelledby;
+        this.drawerContainer.ariaDescribedby = host.ariaDescribedby;
+        this.drawerContainer.label = host.label;
+        this.drawerContainer.disabledTrapFocus = host.disabledTrapFocus;
+        this.drawerContainer.disabledRestoreFocus = host.disabledRestoreFocus;
+        this.drawerContainer.disabledCloseOnEscape = host.disabledCloseOnEscape;
+        this.drawerContainer.initialFocus = host.initialFocus;
         this.drawerContainer.disableScrollLock = host.disableScrollLock;
 
         if (!this.parent) this.parent = document.body;

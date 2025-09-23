@@ -5,12 +5,20 @@ import { LitElement, TemplateResult, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { AiOutlineClose } from "mjo-icons/ai";
 
+import { ScrollLock } from "../../lib/scroll.js";
 import { type IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
 
 @customElement("mjo-drawer-container")
 export class MjoDrawerContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) titleMsg = "";
     @property({ type: String }) content: string | TemplateResult<1> = "";
+    @property({ type: String }) label?: string;
+    @property({ type: String }) initialFocus?: string;
+    @property({ type: Boolean }) disabledTrapFocus = false;
+    @property({ type: Boolean }) disabledRestoreFocus = false;
+    @property({ type: Boolean }) disabledCloseOnEscape = false;
+    @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledby?: string;
+    @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
 
     @state() isOpen = false;
     @state() position: "left" | "right" | "top" | "bottom" = "right";
@@ -30,7 +38,7 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
     #onOpen?: () => void;
     #onClose?: () => void;
     #focusTrap?: FocusTrap;
-    #overflowSaved = "";
+    #scrollLock!: ScrollLock;
 
     render() {
         // Generate unique IDs for accessibility
@@ -45,8 +53,9 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
                 data-position=${this.position}
                 role="dialog"
                 aria-modal="true"
-                aria-labelledby=${this.titleMsg ? this.titleId : nothing}
-                aria-describedby=${this.contentId}
+                aria-labelledby=${this.ariaLabelledby || (this.titleMsg ? this.titleId : nothing)}
+                aria-describedby=${this.ariaDescribedby || this.contentId}
+                aria-label=${!this.ariaLabelledby && !this.titleMsg && this.label ? this.label : nothing}
             >
                 ${this.titleMsg
                     ? html`
@@ -81,6 +90,12 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
                 <div class="content" id=${this.contentId} part="content" role="document">${this.content}</div>
             </div>
         `;
+    }
+
+    connectedCallback(): void {
+        super.connectedCallback();
+
+        this.#scrollLock = new ScrollLock(this);
     }
 
     open({ title, content, position = "right", width, height, blocked = false, animationDuration, onOpen, onClose }: DrawerShowParams) {
@@ -139,7 +154,7 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
     }
 
     #handleKeyDown = (event: KeyboardEvent): void => {
-        if (event.key === "Escape" && !this.blocked) {
+        if (event.key === "Escape" && !this.blocked && !this.disabledCloseOnEscape) {
             event.preventDefault();
             this.#close();
         }
@@ -148,10 +163,7 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
     #open() {
         this.isOpen = true;
 
-        if (!this.disableScrollLock) {
-            this.#overflowSaved = document.body.style.overflow || "";
-            document.body.style.overflow = "clip";
-        }
+        if (!this.disableScrollLock) this.#scrollLock.lock(true);
 
         this.style.display = "block";
 
@@ -171,7 +183,9 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
         });
 
         containerAnimation.onfinish = () => {
-            this.#initializeFocusTrap();
+            if (!this.disabledTrapFocus) {
+                this.#initializeFocusTrap();
+            }
 
             if (typeof this.#onOpen === "function") {
                 this.#onOpen();
@@ -184,7 +198,7 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
     #close() {
         this.isOpen = false;
 
-        if (!this.disableScrollLock) document.body.style.overflow = this.#overflowSaved;
+        if (!this.disableScrollLock) this.#scrollLock.unlock();
 
         // Deactivate focus trap (this will restore inert state automatically)
         this.#deactivateFocusTrap();
@@ -217,7 +231,10 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
     #initializeFocusTrap(): void {
         if (!this.container) return;
 
-        this.#focusTrap = new FocusTrap(this);
+        this.#focusTrap = new FocusTrap(this, {
+            initialFocus: this.initialFocus,
+            disabledRestoreFocus: this.disabledRestoreFocus,
+        });
 
         this.#focusTrap.activate();
     }

@@ -30,14 +30,14 @@ import "./components/drawer/mjo-drawer-container.js";
 @customElement("mjo-drawer")
 export class MjoDrawer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) idDrawer?: string;
+    @property({ type: String }) label?: string;
+    @property({ type: String }) initialFocus?: string;
+    @property({ type: Boolean }) disabledTrapFocus = false;
+    @property({ type: Boolean }) disabledRestoreFocus = false;
+    @property({ type: Boolean }) disabledCloseOnEscape = false;
+    @property({ type: Boolean }) disableScrollLock = false;
     @property({ type: String, attribute: "aria-labelledby" }) ariaLabelledby?: string;
     @property({ type: String, attribute: "aria-describedby" }) ariaDescribedby?: string;
-    @property({ type: String }) label?: string;
-    @property({ type: Boolean }) trapFocus = true;
-    @property({ type: Boolean }) restoreFocus = true;
-    @property({ type: Boolean }) closeOnEscape = true;
-    @property({ type: String }) initialFocus?: string;
-    @property({ type: Boolean }) disableScrollLock = false;
 
     controller = new DrawerController(this);
 
