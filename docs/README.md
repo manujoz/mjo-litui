@@ -45,7 +45,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 ### Interactive Components
 
 - **[mjo-button](mjo-button.md)** - Fully accessible button component with multiple variants, interactive states, and comprehensive ARIA support
-- **[mjo-dropdown](mjo-dropdown.md)** - Contextual dropdown menus
+- **[mjo-dropdown](mjo-dropdown.md)** - Accessible dropdown component that displays floating content relative to its trigger element
 - **[mjo-link](mjo-link.md)** - Accessible links with button variants and comprehensive ARIA support
 
 ### Media & Display
