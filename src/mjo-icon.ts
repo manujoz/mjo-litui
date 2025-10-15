@@ -22,6 +22,16 @@ import "./mjo-ripple.js";
  *
  * @slot - No slots available (content provided via src property)
  * @csspart icon - The SVG icon element
+ * @cssprop --mjo-icon-disabled-opacity - Opacity when the icon is disabled
+ * @cssprop --mjo-icon-transition - Transition effect for the icon
+ * @cssprop --mjo-icon-border-radius - Border radius for clickable icons
+ * @cssprop --mjo-icon-padding - Padding for clickable icons
+ * @cssprop --mjo-icon-clickable-focus-outline - Outline style for focused clickable icons
+ * @cssprop --mjo-icon-size-small - Font size for small icons
+ * @cssprop --mjo-icon-size-medium - Font size for medium icons
+ * @cssprop --mjo-icon-size-large - Font size for large icons
+ * @cssprop --mjo-icon-size-xl - Font size for extra large icons
+ * @cssprop --mjo-icon-loading-spin-duration - Duration of the loading spinner animation
  */
 @customElement("mjo-icon")
 export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -79,6 +89,9 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
     }
 
     // Public methods
+    /**
+     * Sets focus to the icon if it is clickable and not disabled.
+     */
     focus(): void {
         if (this.clickable && !this.disabled) {
             const container = this.shadowRoot?.querySelector(".icon-container") as HTMLElement;
@@ -86,6 +99,9 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
         }
     }
 
+    /**
+     * Removes focus from the icon.
+     */
     blur(): void {
         const container = this.shadowRoot?.querySelector(".icon-container") as HTMLElement;
         container?.blur();
