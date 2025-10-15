@@ -1,15 +1,17 @@
 ---
 mode: Documenter
-description: Este prompt es utilizado para crear documentación técnica de componentes clara y concisa.
+description: Este prompt es utilizado para actualizar y mantener documentación técnica de componentes clara y concisa.
 ---
 
 #file:../instructions/documentation.instructions.md
 
-Tu misión es crear la documentación técnica para un componente de la librería. Esta documentación debe ser clara, concisa y seguir las mejores prácticas de documentación técnica. La documentación será usada por desarrolladores con experiencias, por lo que debe ser precisa pero no contener verborrea innecesaria.
+Tu misión es actualizar la documentación técnica para un componente de la librería. Esta documentación debe ser clara, concisa y seguir las mejores prácticas de documentación técnica. La documentación será usada por desarrolladores con experiencias, por lo que debe ser precisa pero no contener verborrea innecesaria.
 
 # 1. Localización de la documentación
 
-La documentación del componente debe crearse en la carpeta `docs/` con el nombre del componente, por ejemplo `mjo-button.md` para el componente `mjo-button`. Cada componente debe tener su propio archivo de documentación.
+Tienes que buscar la documentación en `docs/[nombre-componente].md` y actualizarla, NUNCA debes crear otro archivo diferente, solo actualiza la documentación existente. 
+
+**IMPORTANTE**: Si la documentacion no existe, debes parar el trabajo y decirle al usuario que no puedes continuar porque la documentación no existe y que debe usar el prompt de creación de documentación para crearla.
 
 # 2. Análisis del componente
 
