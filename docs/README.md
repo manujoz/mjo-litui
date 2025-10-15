@@ -33,7 +33,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 - **[mjo-form](mjo-form.md)** - Form container with validation
 - **[mjo-textfield](mjo-textfield.md)** - Single-line text inputs
-- **[mjo-textarea](mjo-textarea.md)** - Multi-line text inputs
+- **[mjo-textarea](mjo-textarea.md)** - Multi-line text input with auto-resize functionality, character counting, and comprehensive validation support
 - **[mjo-select](mjo-select.md)** - Comprehensive dropdown select component with search functionality, rich options support, and full form integration
 - **[mjo-option](mjo-option.md)** - Select option items
 - **[mjo-checkbox](mjo-checkbox.md)** - Customizable checkbox with form integration, validation, and indeterminate state (includes mjo-checkbox-group)

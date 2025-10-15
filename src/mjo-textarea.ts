@@ -236,20 +236,32 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         this.textAreaAutoSize?.destroy();
     }
 
+    /**
+     * Sets the textarea value programmatically and updates the character count.
+     */
     setValue(value: string) {
         this.#previousValue = this.value;
         this.value = value;
         this.valueLength = value.length;
     }
 
+    /**
+     * Gets the current textarea value.
+     */
     getValue() {
         return this.value;
     }
 
+    /**
+     * Removes focus from the textarea.
+     */
     blur() {
         this.inputElement.blur();
     }
 
+    /**
+     * Clears the textarea value and optionally focuses it.
+     */
     clear(focus = false) {
         const previousValue = this.value;
         this.setValue("");
@@ -272,23 +284,38 @@ export class MjoTextarea extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         this.updateFormData({ name: this.name || "", value: this.value });
     }
 
+    /**
+     * Sets focus to the textarea.
+     */
     focus() {
         this.inputElement.focus();
     }
 
+    /**
+     * Returns the current error message.
+     */
     getError() {
         return this.errormsg;
     }
 
+    /**
+     * Returns the closest parent form element.
+     */
     getForm() {
         return this.closest("form");
     }
 
+    /**
+     * Removes error state and message.
+     */
     removeError() {
         this.error = false;
         this.errormsg = "";
     }
 
+    /**
+     * Sets error state and message.
+     */
     setError(errormsg: string) {
         this.error = true;
         this.errormsg = errormsg;
