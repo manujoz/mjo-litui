@@ -42,6 +42,35 @@ import "./mjo-icon.js";
  * @fires mjo-textfield:clear - Fired when the clear button is clicked
  * @fires mjo-textfield:password-toggle - Fired when password visibility is toggled
  *
+ * @cssprop --mjo-input-border-radius - Border radius of the input container
+ * @cssprop --mjo-input-border-style - Border style of the container
+ * @cssprop --mjo-input-border-width - Border width of the container
+ * @cssprop --mjo-input-border-color - Border color of the container
+ * @cssprop --mjo-input-background-color - Background color of the container
+ * @cssprop --mjo-input-box-shadow - Box shadow of the container
+ * @cssprop --mjo-input-border-style-hover - Border style on hover
+ * @cssprop --mjo-input-border-width-hover - Border width on hover
+ * @cssprop --mjo-input-border-color-hover - Border color on hover
+ * @cssprop --mjo-input-border-style-focus - Border style when focused
+ * @cssprop --mjo-input-border-width-focus - Border width when focused
+ * @cssprop --mjo-input-primary-color - Primary theme color for focus state
+ * @cssprop --mjo-input-secondary-color - Secondary theme color for focus state
+ * @cssprop --mjo-input-padding - Inner padding of the input
+ * @cssprop --mjo-input-padding-small - Inner padding for small size
+ * @cssprop --mjo-input-padding-large - Inner padding for large size
+ * @cssprop --mjo-input-font-size - Font size of the input text
+ * @cssprop --mjo-input-font-weight - Font weight of the input text
+ * @cssprop --mjo-input-font-family - Font family of the input text
+ * @cssprop --mjo-input-color - Text color of the input
+ * @cssprop --mjo-input-prefix-text-background-color - Background color of prefix text
+ * @cssprop --mjo-input-prefix-text-color - Text color of prefix text
+ * @cssprop --mjo-input-label-font-size - Font size of the label
+ * @cssprop --mjo-input-label-font-weight - Font weight of the label
+ * @cssprop --mjo-input-label-color - Color of the label
+ * @cssprop --mjo-input-helper-font-size - Font size of helper text and counter
+ * @cssprop --mjo-input-helper-font-weight - Font weight of helper text and counter
+ * @cssprop --mjo-input-helper-color - Color of helper text and counter
+ *
  * @csspart container - The main textfield container
  * @csspart input - The native input element
  * @csspart label-container - The label container (via exportparts)
@@ -284,42 +313,69 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
         }
     }
 
+    /**
+     * Removes focus from the textfield.
+     */
     blur() {
         this.inputElement.blur();
     }
 
+    /**
+     * Clears the textfield value and optionally sets focus to it.
+     */
     clear(focus = false) {
         this.setValue("");
 
         if (focus) this.focus();
     }
 
+    /**
+     * Sets focus to the textfield.
+     */
     focus() {
         this.inputElement.focus();
     }
 
+    /**
+     * Returns the current error message.
+     */
     getError() {
         return this.errormsg;
     }
 
+    /**
+     * Returns the closest parent form element.
+     */
     getForm() {
         return this.form;
     }
 
+    /**
+     * Gets the current textfield value.
+     */
     getValue() {
         return this.value;
     }
 
+    /**
+     * Removes error state and message.
+     */
     removeError() {
         this.error = false;
         this.errormsg = "";
     }
 
+    /**
+     * Sets error state and message.
+     */
     setError(errormsg: string) {
         this.error = true;
         this.errormsg = errormsg;
     }
 
+    /**
+     * Sets the textfield value programmatically.
+     */
     setValue(value: string) {
         this.value = value;
     }
