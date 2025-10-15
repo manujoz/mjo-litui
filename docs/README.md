@@ -37,7 +37,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 - **[mjo-option](mjo-option.md)** - Select option items
 - **[mjo-checkbox](mjo-checkbox.md)** - Customizable checkbox with form integration, validation, and indeterminate state (includes mjo-checkbox-group)
 - **[mjo-radio](mjo-radio.md)** - Customizable radio button with form integration, validation support, and enhanced accessibility (includes mjo-radio-group)
-- **[mjo-switch](mjo-switch.md)** - Toggle switch controls
+- **[mjo-switch](mjo-switch.md)** - Toggle switch component with customizable themes, sizes, and comprehensive form integration
 - **[mjo-slider](mjo-slider.md)** - Customizable range slider component with accessibility support, keyboard navigation, and range selection
 - **[mjo-color-picker](mjo-color-picker.md)** - Advanced color picker with multiple formats, accessibility features, and form integration
 - **[mjo-date-picker](mjo-date-picker.md)** - Interactive date picker with comprehensive features for single date and date range selection

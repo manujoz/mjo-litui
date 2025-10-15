@@ -127,34 +127,55 @@ export class MjoSwitch extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         this.updateFormData({ name: this.name || "", value: this.checked ? this.value || "1" : "" });
     }
 
+    /**
+     * Gets the current value of the switch. Returns the value property if checked, empty string otherwise.
+     */
     getValue() {
         return this.checked ? this.value || "1" : "";
     }
 
+    /**
+     * Sets the value property of the switch.
+     */
     setValue(value: string) {
         this.value = value;
     }
 
+    /**
+     * Toggles the checked state of the switch. Does nothing if the switch is disabled.
+     */
     toggle() {
         if (this.disabled) return;
         this.checked = !this.checked;
         this.updateFormData({ name: this.name || "", value: this.getValue() });
     }
 
+    /**
+     * Programmatically focuses the switch element.
+     */
     focus() {
         if (!this.disabled) {
             this.$switchContainer?.focus();
         }
     }
 
+    /**
+     * Programmatically removes focus from the switch element.
+     */
     blur() {
         this.$switchContainer?.blur();
     }
 
+    /**
+     * Checks the validity of the switch and reports it to the user.
+     */
     reportValidity(): boolean {
         return this.inputElement.reportValidity();
     }
 
+    /**
+     * Sets a custom validation message for the switch.
+     */
     setCustomValidity(message: string): void {
         this.inputElement.setCustomValidity(message);
     }
