@@ -11,10 +11,6 @@ import "./mjo-ripple.js";
 /**
  * @summary Animated hamburger menu button with multiple effects and semantic colors.
  *
- * @description The mjo-menu-button component provides an interactive hamburger-style menu button
- * with smooth transitions between open and closed states. It features multiple animation effects,
- * semantic color variants, keyboard navigation, and comprehensive accessibility support.
- *
  * @fires mjo-menu-button:open - Fired when the menu button is opened
  * @fires mjo-menu-button:close - Fired when the menu button is closed
  * @fires mjo-menu-button:toggle - Fired when the menu button state is toggled
@@ -22,6 +18,8 @@ import "./mjo-ripple.js";
  * @csspart container - The main button element that contains the entire menu button
  * @csspart menu-button - The inner container that holds the hamburger menu lines
  * @csspart line - Individual lines that form the hamburger menu (4 span elements)
+ *
+ * @cssprop --mjo-menu-button-color-hover - Color applied on hover state
  */
 @customElement("mjo-menu-button")
 export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -97,6 +95,9 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         this.container?.blur();
     }
 
+    /**
+     * Closes the menu button by setting isOpen to false
+     */
     close() {
         if (this.isAnimated || this.disabled) return;
 
@@ -111,6 +112,9 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         );
     }
 
+    /**
+     * Opens the menu button by setting isOpen to true
+     */
     open() {
         if (this.isAnimated || this.disabled) return;
 
@@ -125,6 +129,9 @@ export class MjoMenuButton extends ThemeMixin(LitElement) implements IThemeMixin
         );
     }
 
+    /**
+     * Toggles the menu button state between open and closed
+     */
     toggle() {
         if (this.isAnimated || this.disabled) return;
 
