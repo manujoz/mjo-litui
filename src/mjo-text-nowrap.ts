@@ -6,6 +6,14 @@ import { ifDefined } from "lit/directives/if-defined.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
+/**
+ * Simple component that truncates text with ellipsis when it overflows its container.
+ *
+ * @summary Truncates text with ellipsis preventing text wrapping.
+ *
+ * @csspart container - Main container that holds the truncated content
+ * @csspart wrapper - Inner wrapper that applies the truncation styles
+ */
 @customElement("mjo-text-nowrap")
 export class MjoTextNowrap extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) tag: MjoTextNowrapTag = "span";
