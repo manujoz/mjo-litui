@@ -25,20 +25,30 @@ import "./mjo-typography.js";
 /**
  * @summary Fully accessible button component with multiple variants, interactive states, and comprehensive ARIA support.
  *
- * @description The mjo-button component provides a complete button solution with multiple visual variants,
- * semantic colors, loading states, toggle functionality, and comprehensive accessibility features.
- * It integrates seamlessly with forms and supports both global and per-instance theming.
+ * @slot - Button text content
  *
  * @fires mjo-button:click - Fired when the button is clicked
  * @fires mjo-button:toggle - Fired when toggle state changes (only when toggleable=true)
  * @fires mjo-button:loading-change - Fired when loading state changes
  *
- * @slot - Button text content
  * @csspart button - The native button element
- * @csspart start-icon - The start icon element
- * @csspart end-icon - The end icon element
+ * @csspart start-icon - The start icon element (via exportparts from mjo-icon)
+ * @csspart end-icon - The end icon element (via exportparts from mjo-icon)
  * @csspart text - The typography wrapper around the button text
  * @csspart loading - The loading indicator element (visible when `loading` is true)
+ *
+ * @cssprop --mjo-button-background-color - Background color of the button
+ * @cssprop --mjo-button-background-color-hover - Background color on hover
+ * @cssprop --mjo-button-border-radius - Border radius of the button
+ * @cssprop --mjo-button-border - Border style
+ * @cssprop --mjo-button-color - Text color
+ * @cssprop --mjo-button-font-size - Font size
+ * @cssprop --mjo-button-font-weight - Font weight
+ * @cssprop --mjo-button-font-family - Font family
+ * @cssprop --mjo-button-gap - Gap between button content elements
+ * @cssprop --mjo-button-padding - Internal padding
+ * @cssprop --mjo-button-opacity-hover - Opacity on hover
+ * @cssprop --mjo-button-loading-color - Color of the loading indicator
  */
 @customElement("mjo-button")
 export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThemeMixin, IFormMixin {
@@ -126,7 +136,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     }
 
     /**
-     * Sets focus to the button
+     * Sets focus to the button.
      */
     focus(options?: FocusOptions) {
         const button = this.shadowRoot?.querySelector("button");
@@ -134,7 +144,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     }
 
     /**
-     * Removes focus from the button
+     * Removes focus from the button.
      */
     blur() {
         const button = this.shadowRoot?.querySelector("button");
@@ -142,7 +152,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     }
 
     /**
-     * Simulates a click on the button
+     * Simulates a click on the button.
      */
     click() {
         const button = this.shadowRoot?.querySelector("button");
@@ -150,14 +160,15 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
     }
 
     /**
-     * Sets the button as busy/loading
+     * Sets the button loading state. When loading, the button is disabled and shows a loading indicator.
      */
     setLoading(loading: boolean) {
         this.loading = loading;
     }
 
     /**
-     * Toggles the button pressed state (only works if toggleable is true)
+     * Toggles the button pressed state. Only works when the button has `toggleable` set to `true`
+     * and is not disabled or loading.
      */
     togglePressed() {
         if (this.toggleable && !this.disabled && !this.loading) {
