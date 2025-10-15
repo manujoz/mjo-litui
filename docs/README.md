@@ -34,7 +34,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 - **[mjo-textarea](mjo-textarea.md)** - Multi-line text inputs
 - **[mjo-select](mjo-select.md)** - Dropdown select inputs
 - **[mjo-option](mjo-option.md)** - Select option items
-- **[mjo-checkbox](mjo-checkbox.md)** - Form checkboxes with validation
+- **[mjo-checkbox](mjo-checkbox.md)** - Customizable checkbox with form integration, validation, and indeterminate state (includes mjo-checkbox-group)
 - **[mjo-radio](mjo-radio.md)** - Radio button inputs
 - **[mjo-switch](mjo-switch.md)** - Toggle switch controls
 - **[mjo-slider](mjo-slider.md)** - Range slider inputs
