@@ -20,6 +20,10 @@ node_modules
 *.sln
 *.sw?
 
+olddocs
+
+.settings/mcp-atlassian.env
+
 .env
 .npmrc
 
