@@ -1,3 +1,5 @@
+import { MjoScrollshadowOverflow } from "./types/mjo-scrollshadow";
+
 import { LitElement, PropertyValues, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
@@ -7,16 +9,17 @@ import { getInheritBackgroundColor } from "./utils/shadow-dom.js";
 /**
  * @summary Container component that adds visual scroll shadows to indicate scrollable content.
  *
- * @description The mjo-scrollshadow component creates elegant gradient masks that appear when content overflows,
- * providing visual cues about scrollable areas. The component automatically detects the parent's background color
- * to create seamless shadow gradients and supports both vertical and horizontal scrolling directions.
- *
  * @slot - Content to be placed inside the scrollable container
  * @csspart container - The internal scrollable container element
+ * @cssprop --mjo-scrollshadow-color - Color used for gradient shadows (auto-detected from parent background)
+ * @cssprop --mjo-scrollshadow-size - Size of the gradient shadow effect (default: 10%)
+ * @cssprop --mjo-scrollshadow-scrollbar-width - Width of the scrollbar (default: thin)
+ * @cssprop --mjo-scrollshadow-scrollbar-thumb-color - Color of the scrollbar thumb (default: #cccccc)
+ * @cssprop --mjo-scrollshadow-scrollbar-track - Background color of the scrollbar track (default: transparent)
  */
 @customElement("mjo-scrollshadow")
 export class MjoScrollshadow extends ThemeMixin(LitElement) implements IThemeMixin {
-    @property({ type: String }) overflow: "horizontal" | "vertical" = "vertical";
+    @property({ type: String }) overflow: MjoScrollshadowOverflow = "vertical";
     @property({ type: Boolean }) hideScrollbar = false;
 
     @query(".container") private $container!: HTMLDivElement;
@@ -44,7 +47,6 @@ export class MjoScrollshadow extends ThemeMixin(LitElement) implements IThemeMix
 
     /**
      * Gets the current scroll position (scrollTop for vertical, scrollLeft for horizontal)
-     * @returns Current scroll position in pixels
      */
     get scrollPosition() {
         if (this.overflow === "vertical") {
@@ -56,7 +58,6 @@ export class MjoScrollshadow extends ThemeMixin(LitElement) implements IThemeMix
 
     /**
      * Manually recalculates and updates shadow visibility
-     * Useful when content changes dynamically
      */
     updateShadows() {
         this.#setShadows();
@@ -64,7 +65,6 @@ export class MjoScrollshadow extends ThemeMixin(LitElement) implements IThemeMix
 
     /**
      * Scrolls to a specific position with smooth behavior
-     * @param position - Position in pixels to scroll to
      */
     scrollToPosition(position: number) {
         if (this.overflow === "vertical") {

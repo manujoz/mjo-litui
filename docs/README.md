@@ -74,6 +74,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 - **[mjo-chip](mjo-chip.md)** - Flexible chip component for displaying compact information with multiple variants, colors, and interactive capabilities
 - **[mjo-progress](mjo-progress.md)** - Accessible progress indicators supporting bar and circular variants with determinate and indeterminate states
+- **[mjo-scrollshadow](mjo-scrollshadow.md)** - Container component that adds visual scroll shadows to indicate scrollable content with automatic background color detection
 
 4. **Coming Soon** (suggested): accessibility, form patterns, contribution guides.
 
