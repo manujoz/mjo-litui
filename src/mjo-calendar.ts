@@ -33,9 +33,8 @@ import "./components/calendar/mjoint-calendar-month-picker.js";
 import "./components/calendar/mjoint-calendar-year-picker.js";
 
 /**
- * A configurable calendar component for date selection.
- * Supports single date and date range selection with navigation controls, internationalization,
- * accessibility features, form integration, and extensive theming capabilities.
+ * @summary A configurable calendar component for date selection with support for single date and date range selection modes,
+ * navigation controls, internationalization, accessibility features, form integration, and extensive theming capabilities.
  *
  * @fires mjo-calendar:date-selected - Fired when a date is selected in single mode
  * @fires mjo-calendar:range-selected - Fired when a date range is selected in range mode
@@ -45,62 +44,6 @@ import "./components/calendar/mjoint-calendar-year-picker.js";
  * @fires mjo-calendar:month-selected - Fired when a month is selected in month picker
  * @fires mjo-calendar:year-selected - Fired when a year is selected in year picker
  * @fires change - Standard change event for form compatibility
- *
- * @cssprop --mjo-calendar-font-family - Calendar font family
- * @cssprop --mjo-calendar-background - Calendar background color
- * @cssprop --mjo-calendar-foreground-color - Calendar foreground color
- * @cssprop --mjo-calendar-foreground-color-low - Calendar foreground color for low emphasis
- * @cssprop --mjo-calendar-border - Calendar border style
- * @cssprop --mjo-calendar-border-radius - Calendar border radius
- * @cssprop --mjo-calendar-shadow - Calendar box shadow
- * @cssprop --mjo-calendar-padding - Calendar internal padding
- * @cssprop --mjo-calendar-week-day-color - Week day headers text color
- * @cssprop --mjo-calendar-week-day-font-weight - Week day headers font weight
- * @cssprop --mjo-calendar-day-border-radius - Individual day cell border radius
- * @cssprop --mjo-calendar-day-hover-background - Day cell hover background
- * @cssprop --mjo-calendar-focus-outline - Focused element outline color
- * @cssprop --mjo-calendar-today-background - Today's date background
- * @cssprop --mjo-calendar-today-color - Today's date text color
- * @cssprop --mjo-calendar-event-offset - Event indicator offset from bottom-right corner
- * @cssprop --mjo-calendar-event-font-size - Event indicator font size
- * @cssprop --mjo-calendar-event-font-weight - Event indicator font weight
- * @cssprop --mjo-calendar-event-background-color - Event indicator background color
- * @cssprop --mjo-calendar-event-foreground-color - Event indicator foreground color
- * @cssprop --mjo-calendar-event-single-size - Single event indicator size
- * @cssprop --mjo-calendar-event-multiple-size - Multiple events indicator size
- * @cssprop --mjo-calendar-selected-background - Selected date background
- * @cssprop --mjo-calendar-selected-color - Selected date text color
- * @cssprop --mjo-calendar-range-endpoint-background - Range start/end background
- * @cssprop --mjo-calendar-range-endpoint-color - Range start/end text color
- * @cssprop --mjo-calendar-range-background - Range middle dates background
- * @cssprop --mjo-calendar-range-color - Range middle dates text color
- * @cssprop --mjo-calendar-disabled-color - Disabled dates text color
- * @cssprop --mjo-calendar-disabled-background - Disabled dates background
- * @cssprop --mjo-calendar-picker-background - Month/year picker background
- * @cssprop --mjo-calendar-picker-radius - Month/year picker border radius
- * @cssprop --mjo-calendar-picker-button-background - Picker button background
- * @cssprop --mjo-calendar-picker-button-hover-background - Picker button hover background
- * @cssprop --mjo-calendar-picker-button-selected-background - Picker button selected background
- * @cssprop --mjo-calendar-nav-button-border - Navigation button border
- * @cssprop --mjo-calendar-nav-button-color - Navigation button text color
- * @cssprop --mjo-calendar-selector-button-color - Month/year selector text color
- * @cssprop --mjo-calendar-selector-button-highlight-color - Selector button hover background color
- * @cssprop --mjo-calendar-padding-compact - Calendar internal padding when compact
- * @cssprop --mjo-calendar-picker-button-border - Picker button border
- * @cssprop --mjo-calendar-picker-button-radius - Picker button border radius
- * @cssprop --mjo-calendar-picker-button-color - Picker button text color
- * @cssprop --mjo-calendar-picker-button-hover-border - Picker button hover border
- * @cssprop --mjo-calendar-picker-button-focus-outline - Picker button focus outline
- * @cssprop --mjo-calendar-picker-button-selected-border - Picker button selected border
- * @cssprop --mjo-calendar-picker-button-selected-color - Picker button selected text color
- * @cssprop --mjo-calendar-nav-background - Year picker navigation button background
- * @cssprop --mjo-calendar-nav-border - Year picker navigation button border
- * @cssprop --mjo-calendar-nav-radius - Year picker navigation button border radius
- * @cssprop --mjo-calendar-nav-color - Year picker navigation button text color
- * @cssprop --mjo-calendar-nav-hover-background - Year picker navigation button hover background
- * @cssprop --mjo-calendar-nav-hover-border - Year picker navigation button hover border
- * @cssprop --mjo-calendar-nav-focus-outline - Year picker navigation button focus outline
- * @cssprop --mjo-calendar-decade-label-color - Year picker decade label text color
  *
  * @csspart calendar - The main calendar container
  * @csspart header - The calendar header container
@@ -129,6 +72,62 @@ import "./components/calendar/mjoint-calendar-year-picker.js";
  * @csspart year-picker-grid - Year picker grid layout
  * @csspart year-picker-button - Individual year selection button
  * @csspart year-picker-button-selected - Individual year selection button (selected state)
+ *
+ * @cssprop --mjo-calendar-font-family - Calendar font family
+ * @cssprop --mjo-calendar-background - Calendar background color
+ * @cssprop --mjo-calendar-foreground-color - Calendar foreground color
+ * @cssprop --mjo-calendar-foreground-color-low - Calendar foreground color for low emphasis
+ * @cssprop --mjo-calendar-border - Calendar border style
+ * @cssprop --mjo-calendar-border-radius - Calendar border radius
+ * @cssprop --mjo-calendar-shadow - Calendar box shadow
+ * @cssprop --mjo-calendar-padding - Calendar internal padding
+ * @cssprop --mjo-calendar-padding-compact - Calendar internal padding when compact
+ * @cssprop --mjo-calendar-week-day-color - Week day headers text color
+ * @cssprop --mjo-calendar-week-day-font-weight - Week day headers font weight
+ * @cssprop --mjo-calendar-day-border-radius - Individual day cell border radius
+ * @cssprop --mjo-calendar-day-hover-background - Day cell hover background
+ * @cssprop --mjo-calendar-focus-outline - Focused element outline color
+ * @cssprop --mjo-calendar-today-background - Today's date background
+ * @cssprop --mjo-calendar-today-color - Today's date text color
+ * @cssprop --mjo-calendar-event-offset - Event indicator offset from bottom-right corner
+ * @cssprop --mjo-calendar-event-font-size - Event indicator font size
+ * @cssprop --mjo-calendar-event-font-weight - Event indicator font weight
+ * @cssprop --mjo-calendar-event-background-color - Event indicator background color
+ * @cssprop --mjo-calendar-event-foreground-color - Event indicator foreground color
+ * @cssprop --mjo-calendar-event-single-size - Single event indicator size
+ * @cssprop --mjo-calendar-event-multiple-size - Multiple events indicator size
+ * @cssprop --mjo-calendar-selected-background - Selected date background
+ * @cssprop --mjo-calendar-selected-color - Selected date text color
+ * @cssprop --mjo-calendar-range-endpoint-background - Range start/end background
+ * @cssprop --mjo-calendar-range-endpoint-color - Range start/end text color
+ * @cssprop --mjo-calendar-range-background - Range middle dates background
+ * @cssprop --mjo-calendar-range-color - Range middle dates text color
+ * @cssprop --mjo-calendar-disabled-color - Disabled dates text color
+ * @cssprop --mjo-calendar-disabled-background - Disabled dates background
+ * @cssprop --mjo-calendar-picker-background - Month/year picker background
+ * @cssprop --mjo-calendar-picker-radius - Month/year picker border radius
+ * @cssprop --mjo-calendar-picker-button-background - Picker button background
+ * @cssprop --mjo-calendar-picker-button-border - Picker button border
+ * @cssprop --mjo-calendar-picker-button-radius - Picker button border radius
+ * @cssprop --mjo-calendar-picker-button-color - Picker button text color
+ * @cssprop --mjo-calendar-picker-button-hover-background - Picker button hover background
+ * @cssprop --mjo-calendar-picker-button-hover-border - Picker button hover border
+ * @cssprop --mjo-calendar-picker-button-focus-outline - Picker button focus outline
+ * @cssprop --mjo-calendar-picker-button-selected-background - Picker button selected background
+ * @cssprop --mjo-calendar-picker-button-selected-border - Picker button selected border
+ * @cssprop --mjo-calendar-picker-button-selected-color - Picker button selected text color
+ * @cssprop --mjo-calendar-nav-background - Year picker navigation button background
+ * @cssprop --mjo-calendar-nav-border - Year picker navigation button border
+ * @cssprop --mjo-calendar-nav-radius - Year picker navigation button border radius
+ * @cssprop --mjo-calendar-nav-color - Year picker navigation button text color
+ * @cssprop --mjo-calendar-nav-hover-background - Year picker navigation button hover background
+ * @cssprop --mjo-calendar-nav-hover-border - Year picker navigation button hover border
+ * @cssprop --mjo-calendar-nav-focus-outline - Year picker navigation button focus outline
+ * @cssprop --mjo-calendar-nav-button-border - Navigation button border
+ * @cssprop --mjo-calendar-nav-button-color - Navigation button text color
+ * @cssprop --mjo-calendar-selector-button-color - Month/year selector text color
+ * @cssprop --mjo-calendar-selector-button-highlight-color - Selector button hover background color
+ * @cssprop --mjo-calendar-decade-label-color - Year picker decade label text color
  */
 @customElement("mjo-calendar")
 export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IFormMixin, IThemeMixin {
