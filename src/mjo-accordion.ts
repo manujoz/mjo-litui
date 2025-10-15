@@ -19,9 +19,7 @@ import "./components/accordion/mjo-accordion-item.js";
 /**
  * @summary Flexible accordion component with multiple variants, selection modes, and accessibility support.
  *
- * @description The mjo-accordion component provides an organized way to display collapsible content sections.
- * It supports multiple visual variants, single or multiple selection modes, and includes comprehensive
- * keyboard navigation and ARIA support for accessibility.
+ * @slot - Contains mjo-accordion-item elements
  *
  * @fires mjo-accordion:toggle - Fired when any accordion item is toggled
  * @fires mjo-accordion:will-expand - Fired before an item expands (cancelable)
@@ -29,8 +27,15 @@ import "./components/accordion/mjo-accordion-item.js";
  * @fires mjo-accordion:will-collapse - Fired before an item collapses (cancelable)
  * @fires mjo-accordion:collapsed - Fired after an item has collapsed
  *
- * @slot - Contains mjo-accordion-item elements
  * @csspart accordion - The main accordion container
+ *
+ * @cssprop --mjo-accordion-border-radius - Border radius for solid, shadow, bordered, and splitted variants
+ * @cssprop --mjo-accordion-background-color - Background color for solid, shadow, and splitted item variants
+ * @cssprop --mjo-accordion-box-shadow - Box shadow for shadow variant
+ * @cssprop --mjo-accordion-border-color - Border color for bordered variant and item separators
+ * @cssprop --mjo-accordion-gap - Gap between items in splitted variant
+ * @cssprop --mjo-accordion-padding - Horizontal padding for solid, shadow, bordered, and splitted variants
+ * @cssprop --mjo-accordion-padding-compact - Horizontal padding in compact mode
  */
 @customElement("mjo-accordion")
 export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -69,6 +74,9 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
         }
     }
 
+    /**
+     * Expands an accordion item by index or ID. Only works if the item is not disabled.
+     */
     expandItem(index: number | string) {
         const item = typeof index === "number" ? this.itemsChildren[index] : this.itemsChildren.find((i) => i.id === index);
 
@@ -77,6 +85,9 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
         }
     }
 
+    /**
+     * Collapses an accordion item by index or ID.
+     */
     collapseItem(index: number | string) {
         const item = typeof index === "number" ? this.itemsChildren[index] : this.itemsChildren.find((i) => i.id === index);
 
@@ -85,6 +96,9 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
         }
     }
 
+    /**
+     * Expands all non-disabled items. Only works in multiple selection mode.
+     */
     expandAll() {
         if (this.selectionMode === "multiple") {
             this.itemsChildren.forEach((item) => {
@@ -93,10 +107,16 @@ export class MjoAccordion extends ThemeMixin(LitElement) implements IThemeMixin 
         }
     }
 
+    /**
+     * Collapses all accordion items.
+     */
     collapseAll() {
         this.itemsChildren.forEach((item) => item.close());
     }
 
+    /**
+     * Sets focus to an accordion item by index if it is not disabled.
+     */
     focusItem(index: number) {
         if (this.itemsChildren[index] && !this.itemsChildren[index].disabled) {
             this.itemsChildren[index].focus();

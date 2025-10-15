@@ -12,67 +12,67 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 ### Core Components
 
--   **[mjo-theme](mjo-theme.md)** - Theme configuration and CSS variables
--   **[mjo-typography](mjo-typography.md)** - Semantic text styling
--   **[mjo-icon](mjo-icon.md)** - Icon display from mjo-icons
--   **[mjo-ripple](mjo-ripple.md)** - Material Design ripple effects
+- **[mjo-theme](mjo-theme.md)** - Theme configuration and CSS variables
+- **[mjo-typography](mjo-typography.md)** - Semantic text styling
+- **[mjo-icon](mjo-icon.md)** - Icon display from mjo-icons
+- **[mjo-ripple](mjo-ripple.md)** - Material Design ripple effects
 
 ### Layout & Structure
 
--   **[mjo-card](mjo-card.md)** - Content containers with elevation
--   **[mjo-grid](mjo-grid.md)** - Responsive grid layout system
--   **[mjo-accordion](mjo-accordion.md)** - Collapsible content panels
+- **[mjo-card](mjo-card.md)** - Content containers with elevation
+- **[mjo-grid](mjo-grid.md)** - Responsive grid layout system
+- **[mjo-accordion](mjo-accordion.md)** - Flexible accordion with multiple variants and selection modes
 
 ### Form Components
 
--   **[mjo-form](mjo-form.md)** - Form container with validation
--   **[mjo-textfield](mjo-textfield.md)** - Single-line text inputs
--   **[mjo-textarea](mjo-textarea.md)** - Multi-line text inputs
--   **[mjo-select](mjo-select.md)** - Dropdown select inputs
--   **[mjo-option](mjo-option.md)** - Select option items
--   **[mjo-checkbox](mjo-checkbox.md)** - Form checkboxes with validation
--   **[mjo-radio](mjo-radio.md)** - Radio button inputs
--   **[mjo-switch](mjo-switch.md)** - Toggle switch controls
--   **[mjo-slider](mjo-slider.md)** - Range slider inputs
--   **[mjo-color-picker](mjo-color-picker.md)** - Color selection interface
--   **[mjo-date-picker](mjo-date-picker.md)** - Composite calendar input (single or range)
--   **[mjo-calendar](mjo-calendar.md)** - Standalone calendar (used by date picker)
+- **[mjo-form](mjo-form.md)** - Form container with validation
+- **[mjo-textfield](mjo-textfield.md)** - Single-line text inputs
+- **[mjo-textarea](mjo-textarea.md)** - Multi-line text inputs
+- **[mjo-select](mjo-select.md)** - Dropdown select inputs
+- **[mjo-option](mjo-option.md)** - Select option items
+- **[mjo-checkbox](mjo-checkbox.md)** - Form checkboxes with validation
+- **[mjo-radio](mjo-radio.md)** - Radio button inputs
+- **[mjo-switch](mjo-switch.md)** - Toggle switch controls
+- **[mjo-slider](mjo-slider.md)** - Range slider inputs
+- **[mjo-color-picker](mjo-color-picker.md)** - Color selection interface
+- **[mjo-date-picker](mjo-date-picker.md)** - Composite calendar input (single or range)
+- **[mjo-calendar](mjo-calendar.md)** - Standalone calendar (used by date picker)
 
 ### Interactive Components
 
--   **[mjo-button](mjo-button.md)** - Interactive buttons with variants and states
--   **[mjo-dropdown](mjo-dropdown.md)** - Contextual dropdown menus
--   **[mjo-link](mjo-link.md)** - Accessible links with button variants and comprehensive ARIA support
+- **[mjo-button](mjo-button.md)** - Interactive buttons with variants and states
+- **[mjo-dropdown](mjo-dropdown.md)** - Contextual dropdown menus
+- **[mjo-link](mjo-link.md)** - Accessible links with button variants and comprehensive ARIA support
 
 ### Media & Display
 
--   **[mjo-image](mjo-image.md)** - Enhanced image component with loading states
--   **[mjo-avatar](mjo-avatar.md)** - User profile images and placeholders
--   **[mjo-table](mjo-table.md)** - Data tables with sorting and filtering
--   **[mjo-text-nowrap](mjo-text-nowrap.md)** - Text overflow handling
+- **[mjo-image](mjo-image.md)** - Enhanced image component with loading states
+- **[mjo-avatar](mjo-avatar.md)** - User profile images and placeholders
+- **[mjo-table](mjo-table.md)** - Data tables with sorting and filtering
+- **[mjo-text-nowrap](mjo-text-nowrap.md)** - Text overflow handling
 
 ### Feedback & Messaging
 
--   **[mjo-alert](mjo-alert.md)** - Contextual feedback messages
--   **[mjo-message](mjo-message.md)** - Toast-style messages
--   **[mjo-notification](mjo-notification.md)** - System notifications
+- **[mjo-alert](mjo-alert.md)** - Contextual feedback messages
+- **[mjo-message](mjo-message.md)** - Toast-style messages
+- **[mjo-notification](mjo-notification.md)** - System notifications
 
 ### Overlays
 
--   **[mjo-modal](mjo-modal.md)** - Modal dialogs and overlays
--   **[mjo-drawer](mjo-drawer.md)** - Slide-out navigation panels
+- **[mjo-modal](mjo-modal.md)** - Modal dialogs and overlays
+- **[mjo-drawer](mjo-drawer.md)** - Slide-out navigation panels
 
 ### Utility Components
 
--   **[mjo-chip](mjo-chip.md)** - Compact elements for tags and filters
+- **[mjo-chip](mjo-chip.md)** - Compact elements for tags and filters
 
 4. **Coming Soon** (suggested): accessibility, form patterns, contribution guides.
 
 ## 🧱 File Structure
 
--   `getting-started.md`: quick onboarding.
--   `theming.md`: complete list of global `--mjo-*` variables and patterns.
--   `mjo-*.md`: individual component documentation.
+- `getting-started.md`: quick onboarding.
+- `theming.md`: complete list of global `--mjo-*` variables and patterns.
+- `mjo-*.md`: individual component documentation.
 
 ## 🧩 Documenting a Component
 
@@ -114,11 +114,11 @@ Use cases (basic, advanced, form integration if applicable).
 
 ## ✨ Conventions
 
--   File name: `mjo-<name>.md` (e.g., `mjo-select.md`).
--   Use functional and minimal examples.
--   Do not include CSS variables from unrelated components (stay focused).
--   If a component depends on another (e.g., `mjo-select` and `mjo-option`), cross-reference them.
--   Avoid repeating the global variables list (already in `theming.md`).
+- File name: `mjo-<name>.md` (e.g., `mjo-select.md`).
+- Use functional and minimal examples.
+- Do not include CSS variables from unrelated components (stay focused).
+- If a component depends on another (e.g., `mjo-select` and `mjo-option`), cross-reference them.
+- Avoid repeating the global variables list (already in `theming.md`).
 
 ## 🧪 Example Verification
 
@@ -141,14 +141,14 @@ When adding a new component:
 
 All components have comprehensive documentation with:
 
--   Usage examples and TypeScript integration
--   Complete property and event documentation
--   Theme customization guides
--   Accessibility best practices
--   Integration examples with other components
+- Usage examples and TypeScript integration
+- Complete property and event documentation
+- Theme customization guides
+- Accessibility best practices
+- Integration examples with other components
 
 ## 🔍 Useful Internal References
 
--   Default theme: `src/theme/default-theme.ts`
--   Theme mixin: `src/mixins/theme-mixin.ts`
--   Theme types: `src/types/mjo-theme.d.ts`
+- Default theme: `src/theme/default-theme.ts`
+- Theme mixin: `src/mixins/theme-mixin.ts`
+- Theme types: `src/types/mjo-theme.d.ts`

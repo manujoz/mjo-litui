@@ -73,51 +73,6 @@
 			"command": "npm run dev",
 			"isBackground": true,
 			"group": "build"
-		},
-		{
-			"label": "Validate Build",
-			"type": "shell",
-			"command": "npm run build"
-		},
-		{
-			"label": "Validate TypeScript",
-			"type": "shell",
-			"command": "npm run build"
-		},
-		{
-			"label": "Clear NPM Cache",
-			"type": "shell",
-			"command": "npm cache clear --force"
-		},
-		{
-			"label": "Check NPM Config",
-			"type": "shell",
-			"command": "npm config list"
-		},
-		{
-			"label": "Set CA Certificates",
-			"type": "shell",
-			"command": "npm config set ca \"\""
-		},
-		{
-			"label": "Test TLS Connection",
-			"type": "shell",
-			"command": "npm install -g https://tls-test.npmjs.com/tls-test-1.0.0.tgz"
-		},
-		{
-			"label": "Dry Run Publish",
-			"type": "shell",
-			"command": "cd dist && npm publish --dry-run"
-		},
-		{
-			"label": "Real Publish",
-			"type": "shell",
-			"command": "cd dist && npm publish"
-		},
-		{
-			"label": "Check NPM Auth Status",
-			"type": "shell",
-			"command": "npm whoami"
 		}
 	]
 }

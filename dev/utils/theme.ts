@@ -13,20 +13,4 @@ export const theme: MjoThemeConfig = {
     spaceSmall: "8px",
     spaceXlarge: "32px",
     spaceXxlarge: "48px",
-    dark: {
-        primaryColor: {
-            default: "#16c97c",
-            "50": "#e8faf2",
-            "100": "#d0f4e5",
-            "200": "#a2e9cb",
-            "300": "#73dfb0",
-            "400": "#45d496",
-            "500": "#16c97c",
-            "600": "#14b570",
-            "700": "#0f8d57",
-            "800": "#0b653e",
-            "900": "#073c25",
-        },
-        secondaryColor: "#f0a34b",
-    },
 };

@@ -1,14 +1,5 @@
 {
 	"servers": {
-		"atlassian": {
-			"command": "npx",
-			"args": [
-				"-y",
-				"mcp-remote",
-				"https://mcp.atlassian.com/v1/sse"
-			],
-			"type": "stdio"
-		},
 		"context7": {
 			"type": "stdio",
 			"command": "npx",
@@ -17,5 +8,17 @@
 				"@upstash/context7-mcp"
 			]
 		},
+		"jira": {
+			"type": "stdio",
+			"command": "docker",
+			"args": [
+				"run",
+				"--rm",
+				"-i",
+        		"--env-file",
+				"${workspaceFolder}/.settings/mcp-atlassian.env",
+				"ghcr.io/sooperset/mcp-atlassian:latest"
+			]
+		}
 	}
 }

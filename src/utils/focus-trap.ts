@@ -30,10 +30,10 @@ export class FocusTrap {
         if (this.isActive) return;
 
         // Store the currently focused element
-        this.lastFocusedElement = document.activeElement as HTMLElement;
+        this.lastFocusedElement = this.#getActiveElememt();
 
         // Make all other elements inert
-        this.makeOtherElementsInert();
+        this.#makeOtherElementsInert();
 
         this.isActive = true;
 
@@ -52,7 +52,7 @@ export class FocusTrap {
         if (!this.isActive) return;
 
         // Restore inert state
-        this.restoreInertElements();
+        this.#restoreInertElements();
 
         // Restore focus only if not disabled
         if (this.lastFocusedElement && !this.options.disabledRestoreFocus) {
@@ -65,7 +65,7 @@ export class FocusTrap {
         this.options.onDeactivate?.();
     }
 
-    private makeOtherElementsInert(): void {
+    #makeOtherElementsInert(): void {
         const bodyChildren = Array.from(document.body.children) as HTMLElement[];
 
         for (const child of bodyChildren) {
@@ -78,10 +78,20 @@ export class FocusTrap {
         }
     }
 
-    private restoreInertElements(): void {
+    #restoreInertElements(): void {
         for (const element of this.inertElements) {
             element.inert = false;
         }
         this.inertElements = [];
+    }
+
+    #getActiveElememt() {
+        let activeElement = document.activeElement as HTMLElement | null;
+
+        while (activeElement && activeElement.shadowRoot && activeElement.shadowRoot.activeElement) {
+            activeElement = activeElement.shadowRoot.activeElement as HTMLElement;
+        }
+
+        return activeElement;
     }
 }

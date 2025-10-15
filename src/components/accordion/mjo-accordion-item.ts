@@ -16,9 +16,7 @@ const ANIMATION_DURATION = 300;
 /**
  * @summary Individual accordion item component with title, subtitle, content, and interaction support.
  *
- * @description The mjo-accordion-item component represents a single collapsible section within an accordion.
- * It provides title and subtitle display, smooth expand/collapse animations, keyboard navigation,
- * and comprehensive accessibility features. The component can be used standalone or within mjo-accordion.
+ * @slot - Content to be displayed when the accordion item is expanded
  *
  * @fires mjo-accordion:toggle - Fired when the item is toggled (expanded or collapsed)
  * @fires mjo-accordion:will-expand - Fired before the item expands (cancelable)
@@ -26,13 +24,23 @@ const ANIMATION_DURATION = 300;
  * @fires mjo-accordion:will-collapse - Fired before the item collapses (cancelable)
  * @fires mjo-accordion:collapsed - Fired after the item has collapsed
  *
- * @slot - Content to be displayed when the accordion item is expanded
  * @csspart item - The main accordion item container
  * @csspart header - The clickable header area containing title and icon
  * @csspart content - The collapsible content area
  * @csspart title - The title typography element (via exportparts)
  * @csspart subtitle - The subtitle typography element (via exportparts)
  * @csspart icon - The toggle icon element (via exportparts)
+ *
+ * @cssprop --mjo-accordion-item-title-padding - Vertical padding for item title area
+ * @cssprop --mjo-accordion-item-title-padding-compact - Vertical padding for item title in compact mode
+ * @cssprop --mjo-accordion-item-title-font-size - Font size for item title
+ * @cssprop --mjo-accordion-item-title-color - Color for item title
+ * @cssprop --mjo-accordion-item-title-color-hover - Color for item title on hover
+ * @cssprop --mjo-accordion-item-subtitle-color - Color for item subtitle
+ * @cssprop --mjo-accordion-item-content-padding - Bottom padding when item is expanded
+ * @cssprop --mjo-accordion-item-focus-color - Focus outline color for keyboard navigation
+ * @cssprop --mjo-accordion-padding - Horizontal padding (inherited from parent variants)
+ * @cssprop --mjo-accordion-padding-compact - Horizontal padding in compact mode (inherited from parent variants)
  */
 @customElement("mjo-accordion-item")
 export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -116,26 +124,44 @@ export class MjoAccordionItem extends ThemeMixin(LitElement) implements IThemeMi
         }
     }
 
+    /**
+     * Sets the compact mode for the accordion item (internal use).
+     */
     setCompact(compact: boolean) {
         this.compact = compact;
     }
 
+    /**
+     * Expands the accordion item.
+     */
     open() {
         this.expanded = true;
     }
 
+    /**
+     * Collapses the accordion item.
+     */
     close() {
         this.expanded = false;
     }
 
+    /**
+     * Toggles between expanded and collapsed states.
+     */
     toggle() {
         this.expanded = !this.expanded;
     }
 
+    /**
+     * Sets focus on the item's header.
+     */
     focus() {
         this.$titleContainer?.focus();
     }
 
+    /**
+     * Sets the visual variant for the accordion item (internal use).
+     */
     setVariant(variant: MjoAccordionVariants) {
         this.variant = variant;
     }
