@@ -26,6 +26,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 ### Navigation
 
 - **[mjo-breadcrumbs](mjo-breadcrumbs.md)** - Navigation breadcrumbs component with horizontal scroll shadow support
+- **[mjo-pagination](mjo-pagination.md)** - Comprehensive pagination component with animated page indicator and full accessibility support
 
 ### Form Components
 
