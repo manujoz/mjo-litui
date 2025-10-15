@@ -73,6 +73,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 ### Utility Components
 
 - **[mjo-chip](mjo-chip.md)** - Flexible chip component for displaying compact information with multiple variants, colors, and interactive capabilities
+- **[mjo-progress](mjo-progress.md)** - Accessible progress indicators supporting bar and circular variants with determinate and indeterminate states
 
 4. **Coming Soon** (suggested): accessibility, form patterns, contribution guides.
 

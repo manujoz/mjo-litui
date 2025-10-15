@@ -18,7 +18,6 @@ import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
  * @fires mjo-progress:change - Fired when progress value, min, or max changes
  * @fires mjo-progress:complete - Fired when progress value reaches or exceeds maximum
  *
- * @slot - No slots available
  * @csspart container - The main progress wrapper element
  * @csspart bar-container - Container for the bar variant
  * @csspart bar-labels - Container for label and value text (bar variant)
@@ -31,6 +30,22 @@ import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
  * @csspart circle-wrapper - Wrapper around the SVG circle
  * @csspart circle-svg - The SVG element containing the progress circle
  * @csspart circle-value - Value text inside the circle
+ *
+ * @cssprop --mjo-progress-label-gap - Gap between label and progress indicator (default: 8px)
+ * @cssprop --mjo-progress-font-size - Font size for labels and values (default: 14px)
+ * @cssprop --mjo-progress-font-size-small - Font size for small variant (default: 12px)
+ * @cssprop --mjo-progress-font-size-medium - Font size for circle value in medium variant (default: 10px)
+ * @cssprop --mjo-progress-font-size-large - Font size for large variant (default: 16px)
+ * @cssprop --mjo-progress-font-weight - Font weight for labels (default: 500)
+ * @cssprop --mjo-progress-background - Background color for track/circle background (default: var(--mjo-background-color-high, #f5f5f5))
+ * @cssprop --mjo-progress-color - Color of the progress fill/stroke (overrides color property)
+ * @cssprop --mjo-progress-bar-border-radius - Border radius for bar variant (default: 4px)
+ * @cssprop --mjo-progress-bar-border-radius-small - Border radius for small bar variant (default: 3px)
+ * @cssprop --mjo-progress-bar-border-radius-large - Border radius for large bar variant (default: 6px)
+ * @cssprop --mjo-progress-animation-duration - Duration of indeterminate animation (default: 2s)
+ * @cssprop --mjo-progress-circle-dash - Stroke dash array for medium circle indeterminate animation (default: 40.84 122.52)
+ * @cssprop --mjo-progress-circle-dash-small - Stroke dash array for small circle indeterminate animation (default: 23.56 70.69)
+ * @cssprop --mjo-progress-circle-dash-large - Stroke dash array for large circle indeterminate animation (default: 62.83 188.5)
  */
 @customElement("mjo-progress")
 export class MjoProgress extends ThemeMixin(LitElement) implements IThemeMixin {
