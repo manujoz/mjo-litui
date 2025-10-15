@@ -12,7 +12,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 ### Core Components
 
-- **[mjo-theme](mjo-theme.md)** - Theme configuration and CSS variables
+- **[mjo-theme](mjo-theme.md)** - Theme management component that applies consistent design tokens across the application and manages light/dark mode switching
 - **[mjo-typography](mjo-typography.md)** - Semantic typography component with configurable sizes, weights, and semantic HTML tags
 - **[mjo-icon](mjo-icon.md)** - Icon display from mjo-icons
 - **[mjo-ripple](mjo-ripple.md)** - Material Design ripple effects
