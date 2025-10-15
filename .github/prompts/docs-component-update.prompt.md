@@ -59,7 +59,7 @@ La documentación debe seguir **estrictamente** la siguiente estructura:
    - Mejores prácticas para el uso del componente.
    - ARIA roles y atributos (si aplica).
    - Keyboard interactions (si aplica).
-13. **Ejemplos de uso**: Proporciona ejemplos de uso del componente en diferentes escenarios. Incluye fragmentos de código que muestren cómo usar el componente con diferentes propiedades y en diferentes estados. **IMPORTANTE**: No incluyas ejemplos obvios o que no aporten valor adicional. Incluye:
+13. **Ejemplos de uso**: Proporciona ejemplos de uso del componente en diferentes escenarios. Incluye fragmentos de código que muestren cómo usar el componente con diferentes propiedades y en diferentes estados. **IMPORTANTE**: No incluyas ejemplos obvios o que no aporten valor adicional. Los ejemplos tienen que ser de como se usa el componente dentro de otro componente Lit. Incluye:
    - Ejemplos de uso que no sean obvios.
    - Ejemplos de manejo programático que no sean obvios (si aplica).
    - Ejemplos de integración en formularios si aplica.

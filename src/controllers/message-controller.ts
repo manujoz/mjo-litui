@@ -13,6 +13,9 @@ export class MessageController implements ReactiveController {
         (this.host = host).addController(this);
     }
 
+    /**
+     * Displays a new message notification and returns the message item instance for programmatic control.
+     */
     async show({ message, type = "info", time, onClose }: MessageShowParams) {
         return await this.messageContainer.show({ message, type, time, onClose }, (this.host as MjoMessage).maxMessages);
     }

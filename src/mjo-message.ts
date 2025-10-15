@@ -16,7 +16,17 @@ import "./components/messages/mjo-message-container.js";
  * support, and semantic message types.
  *
  * @slot - Default slot for any content (hidden by default as the component uses a controller pattern)
- * @csspart container - The message container element (applied to mjo-message-container in document body)
+ *
+ * @csspart container - The main container element holding all message items
+ * @csspart icon-container - Container for the message type icon
+ * @csspart icon - The icon element (exported from internal mjo-icon)
+ * @csspart message - Container for the message text content
+ *
+ * @cssprop --mjo-message-top - Top position of the message container (default: 0)
+ * @cssprop --mjo-message-background-color - Background color of individual messages
+ * @cssprop --mjo-message-box-shadow - Box shadow applied to messages
+ * @cssprop --mjo-message-border-radius - Border radius of message items
+ * @cssprop --mjo-message-margin-top - Top margin for each message item (default: 15px)
  */
 @customElement("mjo-message")
 export class MjoMessage extends ThemeMixin(LitElement) implements IThemeMixin {
