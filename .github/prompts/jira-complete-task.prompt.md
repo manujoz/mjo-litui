@@ -83,48 +83,25 @@ Espera la confirmación del usuario antes de proceder.
 **CRÍTICO**: Analiza la implementación del código para entender qué se desarrolló.
 **CRÍTICO**: Antes de añadir el comentario de finalización, DEBES analizar la implementación para crear un resumen profesional en la sección "Detail Solution".
 
-**Paso 1**: Comprobar la rama Git
+**Paso 1**: Buscar en todas las ramas del repositorio commits relacionados con la tarea.
 
-La convención de ramas del proyecto es: `feature/[jira-key]` (por ejemplo, `feature/MJOLIT-1234`).
-
-**Paso 2**: Comprobar si existe la rama de la tarea
-
-Usa el terminal para comprobar si la rama existe:
+Según la convención de commits del proyecto los mensajes de commit siempre deben incluir la clave de la tarea (por ejemplo, `feat(MJOLIT-1234)` o `fix(MJOLIT-1234)`). Usa la terminal para buscar commits:
 
 ```bash
-git branch -a | grep "feature/[jira-key]"
-``` 
+git log --all --grep="MJOLIT-1234" --oneline
+```
 
-Si la rama existe:
-
-1. Obtener todos los commits de la rama:
-    ```bash
-    git log origin/master..feature/[jira-key] --oneline --no-merges
-    ```
-2. Obtener cambios detallados:
-    ```bash
-    git diff origin/master...feature/[jira-key] --stat
-    ```
-3. Revisar mensajes de commit y archivos cambiados
-4. Leer los archivos modificados para entender la implementación
-
-Si la rama NO existe Y la tarea es una Subtask:
+Si no encuentras commits:
 
 **IMPORTANTE**: Las subtareas frecuentemente comparten la rama del padre. Comprueba si la tarea es una subtarea y busca la rama del padre.
 
 1. Comprueba si la tarea tiene un padre (buscar el campo `parent` en los datos de la tarea obtenidos en el Paso 1)
 2. Si existe el padre (por ejemplo, MJOLIT-1000), busca la rama del padre:
     ```bash
-    git branch -a | grep "feature/MJOLIT-1000"
+    git log --all --grep="MJOLIT-1000" --oneline
     ```
-3. Si la rama del padre existe, úsala para el análisis:
-    ```bash
-    git log origin/master..feature/MJOLIT-1000 --oneline --no-merges
-    git diff origin/master...feature/MJOLIT-1000 --stat
-    ```
-4. Revisar commits y archivos, filtrando cambios relevantes para esta subtarea
 
-Si ni la rama de la tarea ni la del padre existen:
+Si sigues sin encontrar commits con la clave de la tarea o su padre:
 
 1. Comprobar si hay cambios sin commitear:
     ```bash

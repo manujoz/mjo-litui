@@ -24,7 +24,7 @@ Una vez que hayas entendido claramente lo solicitado en la tarea, analiza el pro
 
 ## 4. Crear una rama Git
 
-Crea la rama Git para el desarrollo del plan, siguiendo la convención: `feature/{jira-task-id}`. **IMPORTANTE**, la rama siempre debe partir de `master/main`.`
+Crea la rama Git para el desarrollo del plan, siguiendo la convención: `[feature|fix|release]/{jira-task-id}`. **IMPORTANTE**, la rama siempre debe partir de `master/main`. Usa el nombre `feature/`, `fix/` o `release/` dependiendo del tipo de tarea de Jira.`
 
 - Si la rama ya existe, antes de implementar, indica al usuario que debe hacer checkout a esa rama.
 - Si hay archivos sin commitear pendientes, no puedes proceder con la creación de la rama. Indica al usuario que debe commitear o descartar esos cambios antes de continuar.
