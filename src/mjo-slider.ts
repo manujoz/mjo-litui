@@ -38,7 +38,6 @@ import "./components/slider/mjoint-slider-handle.js";
  * @fires mjo-slider:valuechange - Fired when value changes programmatically
  * @fires change - Standard change event for form compatibility
  *
- * @slot - No slots available (uses properties for configuration)
  * @csspart container - The main slider container
  * @csspart value - Value display element next to the label
  * @csspart rangebar - Slider track container
@@ -51,6 +50,30 @@ import "./components/slider/mjoint-slider-handle.js";
  * @csspart tooltip - Tooltip content for handle values
  * @csspart handle-wrapper - Wrapper for slider handles
  * @csspart handle-item - Individual slider handle element
+ *
+ * @cssprop --mjo-slider-background-color - Background color of the slider container
+ * @cssprop --mjo-slider-border-radius - Border radius of the slider track
+ * @cssprop --mjo-slider-primary-color - Color for primary theme (track progress and handles)
+ * @cssprop --mjo-slider-secondary-color - Color for secondary theme (track progress and handles)
+ * @cssprop --mjo-slider-primary-foreground-color - Text color for primary tooltip
+ * @cssprop --mjo-slider-secondary-foreground-color - Text color for secondary tooltip
+ * @cssprop --mjo-slider-disabled-opacity - Opacity when slider is disabled
+ * @cssprop --mjo-slider-focus-outline-radius - Border radius for focus outline
+ * @cssprop --mjo-slider-label-font-size - Font size for label text
+ * @cssprop --mjo-slider-label-font-weight - Font weight for label text
+ * @cssprop --mjo-slider-label-color - Color for label text
+ * @cssprop --mjo-slider-value-font-size - Font size for value display
+ * @cssprop --mjo-slider-value-color - Color for value display
+ * @cssprop --mjo-slider-value-font-weight - Font weight for value display
+ * @cssprop --mjo-slider-tooltip-radius - Border radius for tooltip
+ * @cssprop --mjo-slider-tooltip-box-shadow - Box shadow for tooltip
+ * @cssprop --mjo-slider-handle-focus-ring-color - Color of focus ring around handles
+ * @cssprop --mjo-slider-handle-disabled-color - Color for handles when disabled
+ * @cssprop --mjo-slider-background-color-high-contrast - Background color in high contrast mode
+ * @cssprop --mjo-slider-border-color-high-contrast - Border color in high contrast mode
+ * @cssprop --mjo-slider-primary-color-high-contrast - Primary color in high contrast mode
+ * @cssprop --mjo-slider-secondary-color-high-contrast - Secondary color in high contrast mode
+ * @cssprop --mjo-slider-focus-outline-width-high-contrast - Focus outline width in high contrast mode
  */
 @customElement("mjo-slider")
 export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IInputErrorMixin, IFormMixin, IThemeMixin {
@@ -249,10 +272,16 @@ export class MjoSlider extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         }
     }
 
+    /**
+     * Returns the current slider value
+     */
     getValue() {
         return this.value;
     }
 
+    /**
+     * Sets the slider value programmatically and triggers validation
+     */
     setValue(value: string) {
         const previousValue = this.value;
         this.value = this.#checkValue(value);

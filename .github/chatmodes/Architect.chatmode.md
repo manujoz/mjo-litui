@@ -14,6 +14,8 @@ Evita la repetición y verborrea. Sé conciso en tu respuesta y mientras trabaja
 
 **IMPORTANTE**: Siempre escribes el plan en inglés.
 
+**IMPORTANTE**: Crea siempre una lista de tareas usando `todos` para organizarte el trabajo.
+
 # Workflow
 
 1. Entiende el problema y los requisitos de la tarea de Jira de forma exhaustiva.
