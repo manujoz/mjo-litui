@@ -38,7 +38,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 - **[mjo-radio](mjo-radio.md)** - Customizable radio button with form integration, validation support, and enhanced accessibility (includes mjo-radio-group)
 - **[mjo-switch](mjo-switch.md)** - Toggle switch controls
 - **[mjo-slider](mjo-slider.md)** - Range slider inputs
-- **[mjo-color-picker](mjo-color-picker.md)** - Color selection interface
+- **[mjo-color-picker](mjo-color-picker.md)** - Advanced color picker with multiple formats, accessibility features, and form integration
 - **[mjo-date-picker](mjo-date-picker.md)** - Composite calendar input (single or range)
 - **[mjo-calendar](mjo-calendar.md)** - Standalone calendar (used by date picker)
 
