@@ -11,6 +11,12 @@ import { FocusTrap } from "../../utils/focus-trap.js";
 import "../../mjo-icon.js";
 import "../../mjo-typography.js";
 
+/**
+ * Internal container component for the modal system.
+ * This component is created and managed by the ModalController and should not be used directly.
+ *
+ * @internal
+ */
 @customElement("mjo-modal-container")
 export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Boolean }) isOpen = false;
@@ -95,6 +101,9 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
         this.#scrollLock = new ScrollLock(this);
     }
 
+    /**
+     * Opens the modal with the specified configuration and content
+     */
     show({ content, time, title, width, animationDuration, blocked = false, closePosition = "in", onClose }: ModalShowParams) {
         if (this.isOpen) return;
 
@@ -124,6 +133,9 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
         }
     }
 
+    /**
+     * Closes the modal with animation and cleanup
+     */
     close() {
         if (!this.isOpen) return;
 
