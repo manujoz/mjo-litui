@@ -9,15 +9,20 @@ import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 /**
  * @summary Flexible card component with background, padding, shadow, radius, and variant customization.
  *
- * @description The mjo-card component provides a versatile container with theme-aware styling.
- * It supports multiple contrast levels for background adaptation, configurable border radius,
- * different spacing options, and visual variants including modern geometric shapes.
- * The component integrates with the global design system through CSS variables.
- *
  * @slot - Content to be displayed inside the card container
  * @csspart container - The main card container element
  * @csspart content - The internal content wrapper element
  * @csspart border - The decorative border element for skew and modern variants
+ * @cssprop --mjo-card-background-color - Default background color (fallback: --mjo-background-color-card)
+ * @cssprop --mjo-card-background-color-low - Low contrast background color (fallback: --mjo-background-color-card-low)
+ * @cssprop --mjo-card-background-color-high - High contrast background color (fallback: --mjo-background-color-card-high)
+ * @cssprop --mjo-card-padding - Internal padding (fallback: --mjo-space-medium)
+ * @cssprop --mjo-card-box-shadow - Card elevation shadow (fallback: --mjo-box-shadow-1)
+ * @cssprop --mjo-card-border - Card border styling (default: none)
+ * @cssprop --mjo-card-border-color - Border color for variants (default: transparent)
+ * @cssprop --mjo-card-radius-small - Small border radius (fallback: --mjo-radius-small)
+ * @cssprop --mjo-card-radius-medium - Medium border radius (fallback: --mjo-radius-medium)
+ * @cssprop --mjo-card-radius-large - Large border radius (fallback: --mjo-radius-large)
  */
 @customElement("mjo-card")
 export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
