@@ -18,6 +18,20 @@ import "./mjo-typography.js";
  * @fires mjo-chip:click - Fired when the chip is clicked (when clickable is true)
  * @fires mjo-chip:close - Fired when the close button is clicked (when closable is true)
  *
+ * @cssprop --mjo-chip-background-color - Background color of the chip
+ * @cssprop --mjo-chip-border-color - Border color of the chip
+ * @cssprop --mjo-chip-padding - Internal padding of the chip
+ * @cssprop --mjo-chip-gap - Gap between chip elements (icon, label, close)
+ * @cssprop --mjo-chip-border-width-size-small - Border width for small size
+ * @cssprop --mjo-chip-border-width-size-medium - Border width for medium size
+ * @cssprop --mjo-chip-border-width-size-large - Border width for large size
+ * @cssprop --mjo-chip-font-size-small-size - Font size for small chips
+ * @cssprop --mjo-chip-line-height-small-size - Line height for small chips
+ * @cssprop --mjo-chip-font-size-medium-size - Font size for medium chips
+ * @cssprop --mjo-chip-line-height-medium-size - Line height for medium chips
+ * @cssprop --mjo-chip-font-size-large-size - Font size for large chips
+ * @cssprop --mjo-chip-line-height-large-size - Line height for large chips
+ *
  * @csspart container - The main chip container element
  * @csspart label - The text label element (via exportparts from mjo-typography)
  * @csspart start-icon - The start icon element (via exportparts from mjo-icon)

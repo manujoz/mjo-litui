@@ -69,7 +69,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 ### Utility Components
 
-- **[mjo-chip](mjo-chip.md)** - Compact elements for tags and filters
+- **[mjo-chip](mjo-chip.md)** - Flexible chip component for displaying compact information with multiple variants, colors, and interactive capabilities
 
 4. **Coming Soon** (suggested): accessibility, form patterns, contribution guides.
 
