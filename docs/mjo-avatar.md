@@ -56,10 +56,10 @@ import "mjo-litui/mjo-avatar";
 
 ## Events
 
-| Event              | Description                                                                         | Type                               | Detail                                                    |
-| ------------------ | ----------------------------------------------------------------------------------- | ---------------------------------- | --------------------------------------------------------- |
-| `mjo-avatar:click` | Fired when the avatar is clicked (only when `clickable` is `true` and not disabled) | `CustomEvent<MjoAvatarClickEvent>` | `{ value: string }` - The `value` or `name` of the avatar |
-| `mjo-avatar:error` | Fired when the image fails to load                                                  | `CustomEvent<MjoAvatarErrorEvent>` | `{ message: string }` - Error message                     |
+| Event              | Description                                                                         | Type                  | Detail                                                    |
+| ------------------ | ----------------------------------------------------------------------------------- | --------------------- | --------------------------------------------------------- |
+| `mjo-avatar:click` | Fired when the avatar is clicked (only when `clickable` is `true` and not disabled) | `MjoAvatarClickEvent` | `{ value: string }` - The `value` or `name` of the avatar |
+| `mjo-avatar:error` | Fired when the image fails to load                                                  | `MjoAvatarErrorEvent` | `{ message: string }` - Error message                     |
 
 ## CSS Variables
 

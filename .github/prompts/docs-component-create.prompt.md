@@ -43,7 +43,7 @@ La documentación debe seguir **estrictamente** la siguiente estructura:
 9. **Eventos**: Tabla con los eventos emitidos por el componente, incluyendo:
    - Nombre del evento
    - Descripción
-   - Tipo del evento (Normalmente puedes encontrarlo en el archivo de tipos `.d.ts` del componente).
+   - Tipo del evento (Normalmente puedes encontrarlo en el archivo de tipos `.d.ts` del componente). **¡NOTA!**: Si el tipo del evento extiende `CustomEvent` no debes poner `CustomEvent<...>` sino el tipo original.
    - Parámetros (si los hay)
 10. **Variables CSS**: Si el componente tiene variables CSS específicas deben ser documentadas. Estas variables deben seguir el siguiente patrón `--mjo-[componente]-[propiedad]`, por ejemplo `--mjo-button-background-color`. También deben documentarse las variables CSS en los componentes dependientes si hubiera componentes dependientes exclusivos para el componente principal y sigan el mismo patrón del componente principal o el patrón `--mjo-[componente]-[dependiente]-[propiedad]`. **NUNCA** documentes variables que no siguen este patrón para el componente específico. La tabla debe incluir:
    - Nombre de la variable
