@@ -24,11 +24,6 @@ import "./mjo-typography.js";
 /**
  * @summary Navigation breadcrumbs component for displaying hierarchical paths with horizontal scroll shadow support.
  *
- * @description The mjo-breadcrumbs component provides an accessible way to display navigation breadcrumbs
- * that help users understand their current location within an application. It automatically enables
- * horizontal scroll shadows when content overflows the container width, ensuring all breadcrumbs remain
- * accessible while maintaining a clean visual appearance.
- *
  * @fires mjo-breadcrumbs:navigate - Fired when a breadcrumb item is clicked (when not using autoNavigate)
  *
  * @csspart container - The main navigation container element
@@ -40,6 +35,18 @@ import "./mjo-typography.js";
  * @csspart active-icon - Icons within active/current breadcrumb items (via exportparts)
  * @csspart active-text - The typography element for active/current breadcrumb items (via exportparts)
  * @csspart icon-separator - The separator icon between breadcrumb items (via exportparts)
+ *
+ * @cssprop --mjo-breadcrumbs-font-family - Font family for breadcrumb text (default: inherit)
+ * @cssprop --mjo-breadcrumbs-font-size - Font size for breadcrumb items (default: inherit)
+ * @cssprop --mjo-breadcrumbs-font-weight - Font weight for breadcrumb items (default: inherit)
+ * @cssprop --mjo-breadcrumbs-background-color - Background color for solid variant (default: var(--mjo-background-color-card))
+ * @cssprop --mjo-breadcrumbs-border-color - Border color for bordered variant (default: var(--mjo-border-color))
+ * @cssprop --mjo-breadcrumbs-border-radius - Border radius for solid and bordered variants (default: var(--mjo-radius-medium))
+ * @cssprop --mjo-breadcrumbs-padding - Padding for solid and bordered variants (default: var(--mjo-space-small) var(--mjo-space-small))
+ * @cssprop --mjo-breadcrumbs-text-color - Color for active/current breadcrumb item (default: var(--mjo-foreground-color-low))
+ * @cssprop --mjo-breadcrumbs-link-hover-color - Color for links on hover (default: var(--mjo-primary-color) or var(--mjo-secondary-color))
+ * @cssprop --mjo-breadcrumbs-separator-color - Color for separator icons (default: var(--mjo-foreground-color-low))
+ * @cssprop --mjo-breadcrumbs-current-font-weight - Font weight for current breadcrumb in high contrast mode (default: 600)
  */
 @customElement("mjo-breadcrumbs")
 export class MjoBreadcrumbs extends ThemeMixin(LitElement) implements IThemeMixin {

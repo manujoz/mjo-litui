@@ -23,6 +23,10 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 - **[mjo-grid](mjo-grid.md)** - Responsive grid layout system
 - **[mjo-accordion](mjo-accordion.md)** - Flexible accordion with multiple variants and selection modes
 
+### Navigation
+
+- **[mjo-breadcrumbs](mjo-breadcrumbs.md)** - Navigation breadcrumbs component with horizontal scroll shadow support
+
 ### Form Components
 
 - **[mjo-form](mjo-form.md)** - Form container with validation
