@@ -35,7 +35,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 - **[mjo-select](mjo-select.md)** - Dropdown select inputs
 - **[mjo-option](mjo-option.md)** - Select option items
 - **[mjo-checkbox](mjo-checkbox.md)** - Customizable checkbox with form integration, validation, and indeterminate state (includes mjo-checkbox-group)
-- **[mjo-radio](mjo-radio.md)** - Radio button inputs
+- **[mjo-radio](mjo-radio.md)** - Customizable radio button with form integration, validation support, and enhanced accessibility (includes mjo-radio-group)
 - **[mjo-switch](mjo-switch.md)** - Toggle switch controls
 - **[mjo-slider](mjo-slider.md)** - Range slider inputs
 - **[mjo-color-picker](mjo-color-picker.md)** - Color selection interface

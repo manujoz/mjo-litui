@@ -183,30 +183,51 @@ export class MjoRadio extends ThemeMixin(InputErrorMixin(FormMixin(LitElement)))
         });
     }
 
+    /**
+     * Returns the current value of the radio button if checked, empty string otherwise
+     */
     getValue() {
         return this.checked ? this.value : "";
     }
 
+    /**
+     * Sets the value of the radio button
+     */
     setValue(value: string) {
         this.value = value;
     }
 
+    /**
+     * Programmatically sets the checked state of the radio button
+     */
     setChecked(checked: boolean) {
         this.#handleClick(checked);
     }
 
+    /**
+     * Programmatically clicks the radio button
+     */
     click(): void {
         this.#handleClick();
     }
 
+    /**
+     * Toggles the checked state of the radio button
+     */
     toggle() {
         this.#handleClick();
     }
 
+    /**
+     * Validates the radio button and displays a validation message if invalid
+     */
     reportValidity(): boolean {
         return this.inputElement.reportValidity();
     }
 
+    /**
+     * Sets a custom validation message for the radio button
+     */
     setCustomValidity(message: string): void {
         this.inputElement.setCustomValidity(message);
     }
