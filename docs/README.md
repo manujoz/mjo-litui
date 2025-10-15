@@ -62,7 +62,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 - **[mjo-alert](mjo-alert.md)** - Alert component for displaying contextual feedback messages with multiple types, sizes, and dismissal functionality
 - **[mjo-message](mjo-message.md)** - Global message controller component that displays temporary toast-like notifications with comprehensive accessibility support
-- **[mjo-notification](mjo-notification.md)** - System notifications
+- **[mjo-notification](mjo-notification.md)** - Notification system for displaying positioned toast notifications with controller architecture and comprehensive accessibility support
 
 ### Overlays
 
