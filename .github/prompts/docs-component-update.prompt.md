@@ -27,7 +27,7 @@ La documentación debe seguir **estrictamente** la siguiente estructura:
 
 1. **Título del componente**: El nombre del componente como título principal, por ejemplo `mjo-button`.
 2. **Descripción breve**: Una breve descripción del propósito y funcionalidad del componente.
-3. **Indice**: Un índice con enlaces a las secciones principales del propio archivo de documentación.
+3. **Indice**: Un índice con enlaces a las secciones principales del propio archivo de documentación, SOLO UN NIVEL NO AÑADAS SUBSECCIONES.
 4. **Casos de uso**: Descripción de los casos de uso más comunes del componente.
 5. **Importación**: Instrucciones sobre cómo importar el componente en un proyecto. (ej. `import 'mjo-litui/mjo-button';`);
 6. **Propiedades**: Tabla con las propiedades del componente, incluyendo:

@@ -47,7 +47,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 ### Media & Display
 
 - **[mjo-image](mjo-image.md)** - Enhanced image component with loading states
-- **[mjo-avatar](mjo-avatar.md)** - User profile images and placeholders
+- **[mjo-avatar](mjo-avatar.md)** - Configurable avatar component for user images, initials, or fallback icons
 - **[mjo-table](mjo-table.md)** - Data tables with sorting and filtering
 - **[mjo-text-nowrap](mjo-text-nowrap.md)** - Text overflow handling
 
