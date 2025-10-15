@@ -23,10 +23,6 @@ import "./components/listbox/mjoint-listbox-section.js";
 /**
  * @summary Interactive listbox component for displaying selectable lists of items with full accessibility support.
  *
- * @description The mjo-listbox component provides a flexible way to display lists of selectable items
- * with support for single and multiple selection modes, keyboard navigation, sections, icons, and links.
- * It includes comprehensive ARIA support and accessibility features following WAI-ARIA guidelines.
- *
  * @fires mjo-listbox:click - Fired when an item is clicked
  * @fires mjo-listbox:change - Fired when selection changes
  * @fires mjo-listbox:focus - Fired when an item receives focus
@@ -45,6 +41,19 @@ import "./components/listbox/mjoint-listbox-section.js";
  * @csspart section - Section header container (via exportparts)
  * @csspart section-typography-tag - Section typography tag (via exportparts)
  * @csspart section-typography - Section typography element (via exportparts)
+ *
+ * @cssprop --mjo-listbox-background-color - Background color of the listbox container
+ * @cssprop --mjo-listbox-border-radius - Border radius of the listbox container and items
+ * @cssprop --mjo-listbox-item-gap - Gap between item content elements
+ * @cssprop --mjo-listbox-item-margin - Margin around individual items
+ * @cssprop --mjo-listbox-item-padding - Padding inside individual items
+ * @cssprop --mjo-listbox-item-cursor - Cursor style for items
+ * @cssprop --mjo-listbox-item-border-radius - Border radius for individual items
+ * @cssprop --mjo-listbox-item-hover-background-color - Background color for hovered/focused items
+ * @cssprop --mjo-listbox-item-hover-foreground-color - Text color for hovered/focused items
+ * @cssprop --mjo-listbox-icon-top - Top offset for icons within items
+ * @cssprop --mjo-listbox-section-border-color - Border color for section headers
+ * @cssprop --mjo-listbox-section-color - Text color for section headers
  */
 @customElement("mjo-listbox")
 export class MjoListbox extends ThemeMixin(LitElement) implements IThemeMixin {
