@@ -39,7 +39,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 - **[mjo-switch](mjo-switch.md)** - Toggle switch controls
 - **[mjo-slider](mjo-slider.md)** - Range slider inputs
 - **[mjo-color-picker](mjo-color-picker.md)** - Advanced color picker with multiple formats, accessibility features, and form integration
-- **[mjo-date-picker](mjo-date-picker.md)** - Composite calendar input (single or range)
+- **[mjo-date-picker](mjo-date-picker.md)** - Interactive date picker with comprehensive features for single date and date range selection
 - **[mjo-calendar](mjo-calendar.md)** - Standalone calendar (used by date picker)
 
 ### Interactive Components
