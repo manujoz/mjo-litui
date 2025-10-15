@@ -1,385 +1,376 @@
 # mjo-alert
 
-Configurable, type-aware alert component for displaying contextual feedback messages with multiple types, sizes, and interactive dismissal functionality.
+Alert component for displaying contextual feedback messages with multiple types, sizes, and dismissal functionality.
 
-## HTML Usage
+## Table of Contents
 
-```html
-<mjo-alert type="success" message="Operation completed successfully!"></mjo-alert>
-<mjo-alert type="error" message="An error occurred" detail="Please check your input and try again."></mjo-alert>
-<mjo-alert type="warning" message="Warning" closable></mjo-alert>
-```
+- [Use Cases](#use-cases)
+- [Installation](#installation)
+- [Properties](#properties)
+- [Public Methods](#public-methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-## Basic Example
+## Use Cases
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
+The `mjo-alert` component is ideal for:
+
+- Displaying success, error, warning, or informational messages to users
+- Providing contextual feedback after user actions (form submissions, operations)
+- Creating dismissible notifications with auto-close functionality
+- Building accessible alert systems with screen reader support
+- Implementing animated message displays with customizable timing
+
+## Installation
+
+```typescript
 import "mjo-litui/mjo-alert";
-import "mjo-litui/mjo-icon";
-
-@customElement("example-alert-basic")
-export class ExampleAlertBasic extends LitElement {
-    render() {
-        return html`
-            <mjo-alert type="info" message="This is an informational alert"></mjo-alert>
-            <mjo-alert type="success" message="Success! Your action was completed."></mjo-alert>
-            <mjo-alert type="warning" message="Warning: Please review your settings."></mjo-alert>
-            <mjo-alert type="error" message="Error: Something went wrong."></mjo-alert>
-        `;
-    }
-}
 ```
 
-## Types and Detailed Messages Example
+Or import it from the main package:
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-alert";
-import "mjo-litui/mjo-icon";
-
-@customElement("example-alert-types")
-export class ExampleAlertTypes extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-alert
-                    type="info"
-                    message="Information"
-                    detail="This is additional information that provides more context about the alert message."
-                ></mjo-alert>
-
-                <mjo-alert
-                    type="success"
-                    message="Success!"
-                    detail="Your changes have been saved successfully. You can continue working on your project."
-                ></mjo-alert>
-
-                <mjo-alert
-                    type="warning"
-                    message="Warning"
-                    detail="<strong>Important:</strong> This action cannot be undone. Please make sure you want to proceed."
-                ></mjo-alert>
-
-                <mjo-alert type="error" message="Error" detail="Failed to save changes. Please check your network connection and try again."></mjo-alert>
-            </div>
-        `;
-    }
-}
+```typescript
+import "mjo-litui";
 ```
 
-## Auto-Close Example
+## Properties
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-alert";
-
-@customElement("example-alert-autoclose")
-export class ExampleAlertAutoclose extends LitElement {
-    render() {
-        return html`
-            <mjo-alert
-                type="success"
-                message="Auto-closing alert"
-                detail="This alert will disappear after 3 seconds"
-                autoClose
-                autoCloseDelay="3000"
-            ></mjo-alert>
-        `;
-    }
-}
-```
-
-## Animation Types Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-alert";
-
-@customElement("example-alert-animations")
-export class ExampleAlertAnimations extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-alert type="info" message="Fade animation" animation="fade" closable></mjo-alert>
-                <mjo-alert type="success" message="Slide animation" animation="slide" closable></mjo-alert>
-                <mjo-alert type="warning" message="Scale animation" animation="scale" closable></mjo-alert>
-                <mjo-alert type="error" message="No animation" animation="none" closable></mjo-alert>
-            </div>
-        `;
-    }
-}
-```
-
-## Programmatic Control Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import "mjo-litui/mjo-alert";
-import "mjo-litui/mjo-button";
-
-@customElement("example-alert-control")
-export class ExampleAlertControl extends LitElement {
-    @query("mjo-alert") alert!: MjoAlert;
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div style="display: flex; gap: 0.5rem;">
-                    <mjo-button @click=${() => this.alert.show()} size="small">Show</mjo-button>
-                    <mjo-button @click=${() => this.alert.hide()} size="small">Hide</mjo-button>
-                    <mjo-button @click=${() => this.alert.announce()} size="small">Announce</mjo-button>
-                </div>
-                <mjo-alert
-                    type="info"
-                    message="Programmatically controlled alert"
-                    focusOnShow
-                    @mjo-alert:opened=${() => console.log("Alert shown")}
-                    @mjo-alert:closed=${() => console.log("Alert closed")}
-                ></mjo-alert>
-            </div>
-        `;
-    }
-}
-```
-
-## Attributes / Properties
-
-| Name                | Type                                                                                   | Default    | Reflects | Description                                                              |
-| ------------------- | -------------------------------------------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------ |
-| `type`              | `"default" \| "primary" \| "secondary" \| "success" \| "info" \| "warning" \| "error"` | `"info"`   | no       | Semantic type that determines color scheme and default icon              |
-| `size`              | `"small" \| "medium" \| "large"`                                                       | `"medium"` | no       | Controls font size and padding                                           |
-| `rounded`           | `"none" \| "small" \| "medium" \| "large"`                                             | `"medium"` | no       | Border radius applied to the alert container                             |
-| `icon`              | `string`                                                                               | `""`       | no       | The icon to display in the alert (must be SVG)                           |
-| `message`           | `string`                                                                               | `""`       | no       | Main alert message displayed prominently                                 |
-| `detail`            | `string \| TemplateResult`                                                             | `""`       | no       | Additional detail text (supports HTML content, use trusted content only) |
-| `closable`          | `boolean`                                                                              | `false`    | no       | Shows close button and enables dismissal functionality                   |
-| `hideIcon`          | `boolean`                                                                              | `false`    | no       | Hides the default type-based icon                                        |
-| `ariaLive`          | `"polite" \| "assertive" \| "off"`                                                     | `"polite"` | no       | Controls aria-live announcement behavior for screen readers              |
-| `focusOnShow`       | `boolean`                                                                              | `false`    | no       | Automatically focus the alert when shown                                 |
-| `autoClose`         | `boolean`                                                                              | `false`    | no       | Automatically close the alert after a delay                              |
-| `autoCloseDelay`    | `number`                                                                               | `5000`     | no       | Delay in milliseconds before auto-closing (when enabled)                 |
-| `animation`         | `"fade" \| "slide" \| "scale" \| "none"`                                               | `"fade"`   | no       | Animation type for show/hide transitions                                 |
-| `animationDuration` | `number`                                                                               | `300`      | no       | Animation duration in milliseconds                                       |
-| `persistent`        | `boolean`                                                                              | `false`    | no       | Prevents the alert from being closed manually                            |
-
-### Internal State
-
-| Name   | Type     | Description                                                    |
-| ------ | -------- | -------------------------------------------------------------- |
-| `icon` | `string` | Private `@state` that stores the icon path based on alert type |
-
-### Behavior Notes
-
--   Icons are automatically selected based on the `type` property:
-    -   `success`: Check circle icon
-    -   `info`: Info circle icon
-    -   `warning`: Warning triangle icon
-    -   `error`: Close circle icon
--   The `detail` property supports HTML content via `unsafeHTML` directive
--   Closing animation smoothly transitions height, opacity, and padding before removing the element
--   The close functionality calls the native `remove()` method to delete the element from DOM
+| Property            | Type                                                                                   | Description                                                                                              | Default    | Required |
+| ------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `type`              | `"default" \| "primary" \| "secondary" \| "success" \| "info" \| "warning" \| "error"` | Semantic type of the alert that determines its visual appearance and default icon                        | `"info"`   | No       |
+| `size`              | `"small" \| "medium" \| "large"`                                                       | Size variant affecting font size and spacing                                                             | `"medium"` | No       |
+| `rounded`           | `"none" \| "small" \| "medium" \| "large" \| "full"`                                   | Border radius style                                                                                      | `"medium"` | No       |
+| `variant`           | `"solid" \| "flat"`                                                                    | Visual variant. `solid` displays with border, `flat` without border                                      | `"solid"`  | No       |
+| `icon`              | `string`                                                                               | Custom icon SVG string. If empty, uses default type-based icon                                           | `""`       | No       |
+| `message`           | `string`                                                                               | Main alert message text                                                                                  | `""`       | No       |
+| `details`           | `string \| TemplateResult<1>`                                                          | Additional details text or template. Displayed below the message                                         | `""`       | No       |
+| `closable`          | `boolean`                                                                              | Whether the alert displays a close button                                                                | `false`    | No       |
+| `hideIcon`          | `boolean`                                                                              | Hides the type icon when true                                                                            | `false`    | No       |
+| `focusOnShow`       | `boolean`                                                                              | Automatically focuses the alert when shown                                                               | `false`    | No       |
+| `autoClose`         | `boolean`                                                                              | Enables automatic closing after specified delay                                                          | `false`    | No       |
+| `autoCloseDelay`    | `number`                                                                               | Milliseconds before auto-close triggers (requires `autoClose: true`)                                     | `5000`     | No       |
+| `animation`         | `"fade" \| "slide" \| "scale" \| "none"`                                               | Animation type for show/hide transitions                                                                 | `"fade"`   | No       |
+| `animationDuration` | `number`                                                                               | Duration of show/hide animation in milliseconds                                                          | `250`      | No       |
+| `persistent`        | `boolean`                                                                              | When true, prevents alert from closing even with close button                                            | `false`    | No       |
+| `ariaLive`          | `"polite" \| "assertive" \| "off"`                                                     | ARIA live region politeness for screen readers. `assertive` auto-applied for `error` and `warning` types | `"polite"` | No       |
 
 ## Public Methods
 
-| Method       | Parameters | Description                                           |
-| ------------ | ---------- | ----------------------------------------------------- |
-| `show()`     | none       | Programmatically show the alert with animations       |
-| `hide()`     | none       | Programmatically hide the alert with animations       |
-| `focus()`    | none       | Focus the alert (close button if available)           |
-| `announce()` | none       | Force screen readers to re-announce the alert content |
-
-## Slots
-
-| Slot      | Description                                                                     |
-| --------- | ------------------------------------------------------------------------------- |
-| (default) | Currently not implemented; content is provided via `message` and `detail` props |
+| Method       | Parameters | Description                                                                                            | Return Value |
+| ------------ | ---------- | ------------------------------------------------------------------------------------------------------ | ------------ |
+| `show()`     | None       | Displays the alert with configured animation. Resets auto-close timer if enabled                       | `void`       |
+| `hide()`     | None       | Hides the alert with configured animation. Restores focus to next focusable element if alert had focus | `void`       |
+| `focus()`    | None       | Sets focus to the close button if available, otherwise to the alert container                          | `void`       |
+| `announce()` | None       | Forces screen readers to re-announce the alert by temporarily toggling `aria-live`                     | `void`       |
 
 ## Events
 
-| Event                  | Detail                  | Emitted When               | Notes                                    |
-| ---------------------- | ----------------------- | -------------------------- | ---------------------------------------- |
-| `mjo-alert:will-show`  | `{ element: MjoAlert }` | Before the alert is shown  | Can be used to prepare for alert display |
-| `mjo-alert:opened`     | `{ element: MjoAlert }` | After the alert is shown   | Fired when show animation completes      |
-| `mjo-alert:will-close` | `{ element: MjoAlert }` | Before the alert is closed | Can be used to save state or cleanup     |
-| `mjo-alert:closed`     | `{ element: MjoAlert }` | After the alert is closed  | Fired when close animation completes     |
+| Event                  | Type                     | Description                                             | Detail Properties       |
+| ---------------------- | ------------------------ | ------------------------------------------------------- | ----------------------- |
+| `mjo-alert:will-show`  | `MjoAlertWillShowEvent`  | Fired before the alert is shown                         | `{ element: MjoAlert }` |
+| `mjo-alert:opened`     | `MjoAlertOpenedEvent`    | Fired after the alert is shown and animation completes  | `{ element: MjoAlert }` |
+| `mjo-alert:will-close` | `MjoAlertWillCloseEvent` | Fired before the alert is closed                        | `{ element: MjoAlert }` |
+| `mjo-alert:closed`     | `MjoAlertClosedEvent`    | Fired after the alert is closed and animation completes | `{ element: MjoAlert }` |
 
-**Note**: All events are custom events that bubble and are composed, making them available across shadow DOM boundaries.
+All events bubble and are composed, allowing them to cross shadow DOM boundaries.
 
 ## CSS Variables
 
-The component uses semantic color tokens and spacing variables with fallbacks to the global design system.
+| Variable                          | Description                                                          | Default |
+| --------------------------------- | -------------------------------------------------------------------- | ------- |
+| `--mjo-alert-border-width`        | Width of the border in solid variant                                 | `3px`   |
+| `--mjo-alert-message-font-weight` | Font weight of the main message text                                 | `600`   |
+| `--mjo-alert-animation-duration`  | Animation duration (auto-set to `0ms` with `prefers-reduced-motion`) | -       |
 
-### Component-specific Variables
-
-| Variable                          | Default | Used For                     |
-| --------------------------------- | ------- | ---------------------------- |
-| `--mjo-alert-border-width`        | `3px`   | Internal padding and spacing |
-| `--mjo-alert-message-font-weight` | `600`   | Internal padding and spacing |
-
-### Type-based Colors
-
-Each alert type uses specific color tokens from the design system:
-
-| Type      | Background Variable     | Border Variable       | Text Color Variable   |
-| --------- | ----------------------- | --------------------- | --------------------- |
-| `success` | `--mjo-color-green-50`  | `--mjo-color-success` | `--mjo-color-success` |
-| `info`    | `--mjo-color-blue-50`   | `--mjo-color-info`    | `--mjo-color-info`    |
-| `warning` | `--mjo-color-yellow-50` | `--mjo-color-warning` | `--mjo-color-warning` |
-| `error`   | `--mjo-color-red-50`    | `--mjo-color-error`   | `--mjo-color-error`   |
-
-### Global Design System Variables
-
-| Variable              | Used For                                      |
-| --------------------- | --------------------------------------------- |
-| `--mjo-radius-small`  | Small border radius option                    |
-| `--mjo-radius-medium` | Medium border radius (default)                |
-| `--mjo-radius-large`  | Large border radius option                    |
-| `--mjo-space-xsmall`  | Gap between icon and text, small size spacing |
-
-### Size-specific Adjustments
-
--   `small` size: Uses `--mjo-space-xsmall` for padding and 0.8em font-size
--   `medium` size: Uses default `--mjo-alert-space` and 1em font-size
--   `large` size: Uses default `--mjo-alert-space` and 1.2em font-size
-
-## Theme Customization
-
-While this component doesn't use ThemeMixin, it can be customized through CSS variables. The component references an `MjoAlertTheme` interface:
-
-### MjoAlertTheme Interface
-
-```ts
-interface MjoAlertTheme {
-    /** --mjo-alert-space */
-    space?: string;
-    /** --mjo-alert-animation-duration */
-    animationDuration?: string;
-}
-```
-
-### CSS Custom Properties Example
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-alert";
-
-@customElement("example-alert-custom")
-export class ExampleAlertCustom extends LitElement {
-    static styles = css`
-        .custom-alert {
-            --mjo-alert-space: 1.5rem;
-            --mjo-alert-animation-duration: 600ms;
-            --mjo-color-success: #2d8f47;
-            --mjo-color-green-50: #f0f9f3;
-        }
-    `;
-
-    render() {
-        return html`
-            <mjo-alert
-                class="custom-alert"
-                type="success"
-                message="Custom Styled Alert"
-                detail="Uses custom spacing and slower animations."
-                size="large"
-                animation="scale"
-                closable
-            ></mjo-alert>
-        `;
-    }
-}
-```
-
-## Form Integration Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-alert";
-import "mjo-litui/mjo-textfield";
-import "mjo-litui/mjo-button";
-
-@customElement("example-alert-form")
-export class ExampleAlertForm extends LitElement {
-    @state() private alertType: "success" | "error" | null = null;
-    @state() private alertMessage = "";
-
-    private handleSubmit(e: Event) {
-        e.preventDefault();
-        const form = e.target as HTMLFormElement;
-        const formData = new FormData(form);
-        const email = formData.get("email") as string;
-
-        if (email && email.includes("@")) {
-            this.alertType = "success";
-            this.alertMessage = "Email submitted successfully!";
-        } else {
-            this.alertType = "error";
-            this.alertMessage = "Please enter a valid email address.";
-        }
-
-        setTimeout(() => (this.alertType = null), 3000);
-    }
-
-    render() {
-        return html`
-            <form @submit=${this.handleSubmit} style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
-                ${this.alertType ? html`<mjo-alert type=${this.alertType} message=${this.alertMessage} closable></mjo-alert>` : ""}
-                <mjo-textfield name="email" placeholder="Enter your email" type="email" required></mjo-textfield>
-                <mjo-button type="submit" color="primary">Submit</mjo-button>
-            </form>
-        `;
-    }
-}
-```
-
-## Accessibility Notes
-
--   Alert content is announced to screen readers automatically with appropriate `aria-live` behavior
--   Important alerts (error/warning) use `aria-live="assertive"` for immediate attention
--   The component includes proper ARIA attributes: `role="alert"`, `aria-atomic="true"`, and `aria-labelledby`/`aria-describedby`
--   Close button is fully keyboard accessible (Enter/Space keys) with proper `aria-label`
--   Focus management: the `focusOnShow` property enables automatic focus for important alerts
--   Color contrast is maintained across all alert types for accessibility compliance
--   Animation respects `prefers-reduced-motion` user preferences
--   Use `announce()` method to force re-announcement for dynamic content changes
-
-```html
-<!-- Example with enhanced accessibility -->
-<mjo-alert
-    type="error"
-    message="Form validation failed"
-    detail="Please correct the errors below and try again."
-    closable
-    focusOnShow
-    ariaLive="assertive"
-></mjo-alert>
-```
-
-## Performance Considerations
-
--   The `detail` property uses `unsafeHTML` directive, so sanitize content if accepting user input
--   Close animations are optimized with CSS transitions and minimal DOM manipulation
--   Large numbers of alerts should be managed with proper state cleanup to prevent memory leaks
--   Consider implementing a global alert service for application-wide alert management
+The component also uses global theme variables such as `--mjo-primary-color`, `--mjo-color-success`, `--mjo-color-error`, etc., for type-based styling.
 
 ## CSS Parts
 
-| Part                | Description                                      |
-| ------------------- | ------------------------------------------------ |
-| `container`         | The main alert container                         |
-| `message-container` | The container for the message and close button   |
-| `icon-container`    | The container for the type icon                  |
-| `message`           | The message content area                         |
-| `detail`            | The detail content area                          |
-| `icon`              | The icon element (via exportparts from mjo-icon) |
+| Part                | Description                                     | Element      |
+| ------------------- | ----------------------------------------------- | ------------ |
+| `container`         | Main alert container with type-based styling    | `<div>`      |
+| `message-container` | Container for icon, message, and close button   | `<div>`      |
+| `icon-container`    | Container for the type icon                     | `<div>`      |
+| `message`           | Message content area                            | `<div>`      |
+| `detail`            | Detail content area (when details are provided) | `<div>`      |
+| `icon`              | Icon element (exported from `mjo-icon`)         | `<mjo-icon>` |
 
-## Summary
+## Accessibility
 
-`<mjo-alert>` provides a flexible and accessible way to display contextual feedback messages with automatic type-based styling and icons. The component supports multiple sizes, border radius options, and dismissal functionality. Use semantic types (`success`, `info`, `warning`, `error`) for consistent styling, and leverage the `closable` property for interactive alerts. The component automatically handles animations and cleanup when dismissed, making it suitable for both static and dynamic alert scenarios.
+### ARIA Attributes
+
+- `role="alert"`: Applied to main container for screen reader announcements
+- `aria-live`: Set to `"assertive"` for `error` and `warning` types, otherwise uses the `ariaLive` property value
+- `aria-atomic="true"`: Ensures entire alert is announced when changed
+- `aria-labelledby`: Links to the message element ID
+- `aria-describedby`: Links to the detail element ID when details exist
+- `aria-label="Close alert"`: Applied to close button for screen reader users
+
+### Keyboard Navigation
+
+- **Tab**: Moves focus to the close button when `closable` is true
+- **Enter/Space**: Closes the alert when close button is focused
+- **Focus management**: Automatically restores focus to next available element when closed
+
+### Best Practices
+
+- Use appropriate `type` values to convey semantic meaning (`error` for errors, `success` for confirmations)
+- Provide meaningful `message` text that describes the alert's purpose
+- Use `ariaLive="assertive"` sparingly, only for critical messages requiring immediate attention
+- Enable `focusOnShow` for alerts requiring user interaction
+- Set `persistent` for critical alerts that should not be dismissed accidentally
+- Test with screen readers to ensure announcements work as expected
+
+### Reduced Motion Support
+
+The component respects `prefers-reduced-motion: reduce` by setting animation duration to `0ms`, providing instant transitions for users who prefer reduced motion.
+
+## Usage Examples
+
+### Basic Alert Types
+
+```html
+<!-- Success message -->
+<mjo-alert type="success" message="Operation completed successfully" closable> </mjo-alert>
+
+<!-- Error with details -->
+<mjo-alert type="error" message="Something went wrong" details="Please check your input and try again." closable> </mjo-alert>
+
+<!-- Info notification -->
+<mjo-alert type="info" message="New updates available"> </mjo-alert>
+```
+
+### Different Sizes and Variants
+
+```html
+<!-- Small flat alert -->
+<mjo-alert type="warning" size="small" variant="flat" message="Minor warning" closable> </mjo-alert>
+
+<!-- Large solid alert -->
+<mjo-alert type="primary" size="large" variant="solid" message="Important announcement" details="This is a larger alert for prominent messages." closable>
+</mjo-alert>
+```
+
+### Auto-Close Functionality
+
+```html
+<!-- Auto-close after 3 seconds -->
+<mjo-alert type="success" message="Saved successfully" autoClose autoCloseDelay="3000" closable> </mjo-alert>
+
+<!-- Custom animation with auto-close -->
+<mjo-alert type="info" message="Loading complete" animation="slide" animationDuration="300" autoClose autoCloseDelay="5000" closable> </mjo-alert>
+```
+
+### Custom Icons
+
+```typescript
+import { AiOutlineWarning } from "mjo-icons/ai";
+
+// In your template:
+```
+
+```html
+<mjo-alert type="warning" icon="${AiOutlineWarning}" message="Custom icon alert"> </mjo-alert>
+
+<!-- Hide icon completely -->
+<mjo-alert type="info" message="Alert without icon" hideIcon closable> </mjo-alert>
+```
+
+### Programmatic Control
+
+```typescript
+// Get alert reference
+const alert = document.querySelector("mjo-alert");
+
+// Show the alert
+alert.show();
+
+// Hide the alert
+setTimeout(() => {
+    alert.hide();
+}, 3000);
+
+// Force announcement
+alert.announce();
+
+// Focus the alert
+alert.focus();
+```
+
+### Event Handling
+
+```typescript
+const alert = document.querySelector("mjo-alert");
+
+alert.addEventListener("mjo-alert:will-show", (e) => {
+    console.log("Alert about to show", e.detail.element);
+});
+
+alert.addEventListener("mjo-alert:opened", (e) => {
+    console.log("Alert shown", e.detail.element);
+});
+
+alert.addEventListener("mjo-alert:will-close", (e) => {
+    console.log("Alert about to close", e.detail.element);
+    // Can perform cleanup or validation here
+});
+
+alert.addEventListener("mjo-alert:closed", (e) => {
+    console.log("Alert closed", e.detail.element);
+    // Can trigger next action or remove from DOM
+});
+```
+
+### Integration with Forms
+
+```html
+<mjo-form id="user-form">
+    <mjo-textfield name="email" label="Email" required></mjo-textfield>
+    <mjo-button type="submit">Submit</mjo-button>
+</mjo-form>
+
+<mjo-alert id="form-alert" type="error" message="Validation failed" details="Please check the required fields." closable hidden> </mjo-alert>
+
+<script>
+    const form = document.querySelector("#user-form");
+    const alert = document.querySelector("#form-alert");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        try {
+            // Form processing...
+            alert.type = "success";
+            alert.message = "Form submitted successfully";
+            alert.details = "";
+            alert.show();
+        } catch (error) {
+            alert.type = "error";
+            alert.message = "Submission failed";
+            alert.details = error.message;
+            alert.show();
+        }
+    });
+</script>
+```
+
+### Advanced Animation Examples
+
+```html
+<!-- Fade animation -->
+<mjo-alert type="info" animation="fade" animationDuration="200" message="Fade in/out" closable> </mjo-alert>
+
+<!-- Slide animation -->
+<mjo-alert type="success" animation="slide" animationDuration="300" message="Slide in/out" closable> </mjo-alert>
+
+<!-- Scale animation -->
+<mjo-alert type="warning" animation="scale" animationDuration="250" message="Scale in/out" closable> </mjo-alert>
+
+<!-- No animation -->
+<mjo-alert type="error" animation="none" message="Instant show/hide" closable> </mjo-alert>
+```
+
+### Styling with CSS Parts
+
+```css
+/* Style the container */
+mjo-alert::part(container) {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the message */
+mjo-alert::part(message) {
+    font-family: "Custom Font", sans-serif;
+    letter-spacing: 0.5px;
+}
+
+/* Style the icon container */
+mjo-alert::part(icon-container) {
+    transform: scale(1.2);
+}
+
+/* Style the icon itself */
+mjo-alert::part(icon) {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Style details */
+mjo-alert::part(detail) {
+    font-style: italic;
+    opacity: 0.9;
+}
+```
+
+### Using CSS Variables
+
+```css
+/* Customize border width */
+mjo-alert {
+    --mjo-alert-border-width: 2px;
+}
+
+/* Customize message font weight */
+mjo-alert[type="error"] {
+    --mjo-alert-message-font-weight: 700;
+}
+
+/* Custom spacing for small alerts */
+mjo-alert[size="small"] {
+    --mjo-space-small: 8px;
+    --mjo-space-medium: 12px;
+}
+```
+
+## Additional Notes
+
+### Type-Specific Behavior
+
+- `error` and `warning` types automatically use `aria-live="assertive"` regardless of the `ariaLive` property value
+- Each type has a default icon that can be overridden with the `icon` property
+- Type determines the color scheme using theme variables
+
+### Animation Considerations
+
+- Animations respect the `prefers-reduced-motion` media query
+- Animation durations should be kept between 150-500ms for optimal UX
+- The `slide` animation requires the component to store its height for smooth transitions
+- Setting `animation="none"` provides instant show/hide without transitions
+
+### Focus Management
+
+- When `focusOnShow` is enabled, the close button receives focus automatically
+- Focus is restored to the next available focusable element when the alert closes with keyboard
+- Focus restoration helps maintain keyboard navigation flow
+
+### Persistent Alerts
+
+- Setting `persistent="true"` with `closable="true"` shows the close button but prevents actual closing
+- Useful for alerts requiring acknowledgment through other means (e.g., form submission)
+- Can be programmatically closed using the `hide()` method even when persistent
+
+### Auto-Close Timer
+
+- The timer resets whenever `show()` is called
+- Timer is cleared when `hide()` is called or component disconnects
+- Setting `autoClose="false"` disables the timer even if `autoCloseDelay` is set
+
+### Template Details
+
+The `details` property accepts either a string or a Lit `TemplateResult`, allowing rich content:
+
+```typescript
+import { html } from "lit";
+
+const alert = document.querySelector("mjo-alert");
+alert.details = html` <strong>Important:</strong> Your session will expire in <a href="/extend">5 minutes</a>. `;
+```
+
+### Hidden State
+
+- Alerts can be created with the `hidden` attribute for later programmatic display
+- Use `show()` method to reveal hidden alerts with animation
+- The component manages the `hidden` attribute internally during animations

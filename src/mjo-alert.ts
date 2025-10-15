@@ -21,6 +21,10 @@ import "./mjo-icon.js";
  * @fires mjo-alert:will-close - Fired before the alert is closed
  * @fires mjo-alert:closed - Fired after the alert is closed and animation completes
  *
+ * @cssprop --mjo-alert-border-width - Width of the border in solid variant (default: 3px)
+ * @cssprop --mjo-alert-message-font-weight - Font weight of the main message text (default: 600)
+ * @cssprop --mjo-alert-animation-duration - Animation duration (auto-set to 0ms with prefers-reduced-motion)
+ *
  * @csspart container - The main alert container
  * @csspart message-container - The container for the message and close button
  * @csspart icon-container - The container for the type icon
@@ -113,6 +117,9 @@ export class MjoAlert extends ThemeMixin(LitElement) implements IThemeMixin {
         this.#clearAutoCloseTimer();
     }
 
+    /**
+     * Displays the alert with the configured animation. Resets the auto-close timer if enabled.
+     */
     show(): void {
         if (this.autoClose) {
             this.#setupAutoClose();
@@ -121,10 +128,16 @@ export class MjoAlert extends ThemeMixin(LitElement) implements IThemeMixin {
         this.#show();
     }
 
+    /**
+     * Hides the alert with the configured animation. Restores focus to the next focusable element if the alert had focus.
+     */
     hide(): void {
         this.#hide();
     }
 
+    /**
+     * Sets focus to the close button if available, otherwise focuses the alert container.
+     */
     focus(): void {
         const closeButton = this.shadowRoot?.querySelector(".close-button") as HTMLButtonElement;
         if (closeButton) {
@@ -134,6 +147,9 @@ export class MjoAlert extends ThemeMixin(LitElement) implements IThemeMixin {
         }
     }
 
+    /**
+     * Forces screen readers to re-announce the alert by temporarily toggling the aria-live attribute.
+     */
     announce(): void {
         // Force re-announcement by temporarily changing aria-live
         const container = this.shadowRoot?.querySelector(".container") as HTMLElement;

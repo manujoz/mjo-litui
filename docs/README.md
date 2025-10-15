@@ -53,7 +53,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 ### Feedback & Messaging
 
-- **[mjo-alert](mjo-alert.md)** - Contextual feedback messages
+- **[mjo-alert](mjo-alert.md)** - Alert component for displaying contextual feedback messages with multiple types, sizes, and dismissal functionality
 - **[mjo-message](mjo-message.md)** - Toast-style messages
 - **[mjo-notification](mjo-notification.md)** - System notifications
 
