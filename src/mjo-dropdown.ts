@@ -14,17 +14,17 @@ import "./components/dropdown/mjo-dropdown-container.js";
 /**
  * @summary Accessible dropdown component that displays floating content relative to its trigger element.
  *
- * @description The mjo-dropdown component provides a flexible dropdown system with hover/click behaviors,
- * intelligent positioning, keyboard navigation, and comprehensive accessibility features. It creates a
- * dynamic container in the document body, allowing dropdowns to appear above any content regardless of
- * parent element constraints. The component supports multiple positioning strategies and automatic
- * collision detection for optimal user experience.
+ * @slot - Trigger element that activates the dropdown (button, input, etc.)
  *
  * @fires mjo-dropdown:open - Fired when the dropdown opens
  * @fires mjo-dropdown:close - Fired when the dropdown closes
  *
- * @slot - Trigger element that activates the dropdown (button, input, etc.)
  * @csspart dropdown-container - The floating container element (applied to mjo-dropdown-container in document body)
+ *
+ * @cssprop --mjo-dropdown-background-color - Background color of the dropdown container
+ * @cssprop --mjo-dropdown-foreground-color - Text color of the dropdown content
+ * @cssprop --mjo-dropdown-border-radius - Border radius of the dropdown container
+ * @cssprop --mjo-dropdown-box-shadow - Box shadow of the dropdown container
  */
 @customElement("mjo-dropdown")
 export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -97,26 +97,44 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         }
     }
 
+    /**
+     * Opens the dropdown programmatically.
+     */
     open() {
         this.#open();
     }
 
+    /**
+     * Closes the dropdown programmatically.
+     */
     close(ev?: Event) {
         this.#close(ev);
     }
 
+    /**
+     * Recalculates and updates the dropdown position.
+     */
     updatePosition() {
         this.$dropdownContainer?.updatePosition();
     }
 
+    /**
+     * Scrolls dropdown content to specified top position.
+     */
     scrollToTop(top: number) {
         this.$dropdownContainer?.scrollToTop(top);
     }
 
+    /**
+     * Gets the current scroll position of the dropdown.
+     */
     getScroll() {
         return this.$dropdownContainer?.getScroll() ?? { top: 0, left: 0 };
     }
 
+    /**
+     * Gets the current height of the dropdown container.
+     */
     getHeigth() {
         return this.$dropdownContainer?.offsetHeight ?? 0;
     }

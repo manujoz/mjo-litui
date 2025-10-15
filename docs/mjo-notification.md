@@ -2,562 +2,424 @@
 
 A notification system for displaying positioned toast notifications with controller architecture and comprehensive accessibility support.
 
-## Overview
+The notification system renders in a container that is mounted directly in the document body, providing proper overlay management and positioning control. It manages the lifecycle of notifications, handles animations, supports screen reader announcements, and respects user motion preferences.
 
-The `mjo-notification` component provides a powerful notification system for displaying positioned toast notifications. It uses a controller architecture that creates a global notification container in the document body, allowing notifications to appear in any corner of the screen regardless of parent element constraints like `overflow: hidden`.
+## Index
 
-The component includes comprehensive accessibility features, support for reduced motion preferences, and extensive theming capabilities.
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Methods](#methods)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-## Basic Usage
+## Use Cases
 
-```html
-<mjo-notification position="top-right"></mjo-notification>
-```
+- Display success, error, warning, or informational toast notifications
+- Show temporary status updates or feedback to users
+- Present non-blocking alerts that auto-dismiss after a configured time
+- Stack multiple notifications with automatic threshold management
+- Provide accessible notifications that work with screen readers
+- Support different positioning strategies (top-left, top-right, bottom-left, bottom-right)
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoNotification } from "mjo-litui/types";
+## Import
+
+```typescript
 import "mjo-litui/mjo-notification";
-import "mjo-litui/mjo-button";
-
-@customElement("notification-example")
-export class NotificationExample extends LitElement {
-    @query("mjo-notification")
-    private notification!: MjoNotification;
-
-    private showNotification() {
-        this.notification.controller.show({
-            title: "Success",
-            message: "Operation completed successfully!",
-            type: "success",
-            time: 4000,
-        });
-    }
-
-    render() {
-        return html`
-            <mjo-button @click=${this.showNotification}>Show Notification</mjo-button>
-            <mjo-notification position="top-right"></mjo-notification>
-        `;
-    }
-}
-```
-
-## Notification Types
-
-The component supports four notification types with distinct styling:
-
-```ts
-// Success notification
-this.notification.controller.show({
-    title: "Success",
-    message: "Operation completed successfully!",
-    type: "success",
-    time: 4000,
-});
-
-// Error notification
-this.notification.controller.show({
-    title: "Error",
-    message: "An error occurred during processing",
-    type: "error",
-    time: 5000,
-});
-
-// Warning notification
-this.notification.controller.show({
-    title: "Warning",
-    message: "Please review this important warning",
-    type: "warning",
-    time: 6000,
-});
-
-// Info notification
-this.notification.controller.show({
-    title: "Information",
-    message: "This is important information",
-    type: "info",
-    time: 4000,
-});
-
-// No icon notification
-this.notification.controller.show({
-    title: "Simple Notification",
-    message: "This notification has no type, so no icon is displayed",
-    time: 4000,
-});
-```
-
-## Positioning
-
-Configure notification positioning in any corner of the screen:
-
-```ts
-// Top positions
-<mjo-notification position="top-right"></mjo-notification>
-<mjo-notification position="top-left"></mjo-notification>
-
-// Bottom positions
-<mjo-notification position="bottom-right"></mjo-notification>
-<mjo-notification position="bottom-left"></mjo-notification>
-```
-
-## Auto-Close and Callbacks
-
-```ts
-// Auto-close after 3 seconds
-this.notification.controller.show({
-    message: "Auto-close notification",
-    time: 3000,
-});
-
-// Persistent notification (manual close only)
-this.notification.controller.show({
-    message: "Persistent notification",
-    // No time property = stays until manually closed
-});
-
-// With close callback
-this.notification.controller.show({
-    message: "Notification with callback",
-    time: 4000,
-    onClose: () => {
-        console.log("Notification was closed");
-    },
-});
-
-// Programmatic control
-const notification = await this.notification.controller.show({
-    message: "Controlled notification",
-});
-// Close programmatically after 2 seconds
-setTimeout(() => notification.close(), 2000);
-```
-
-## Rich Content
-
-Notifications support HTML strings and Lit templates:
-
-```ts
-import { html } from "lit";
-
-// HTML template content
-this.notification.controller.show({
-    title: "Rich Content",
-    message: html`
-        <div>
-            <p>This notification contains <strong>rich HTML content</strong>.</p>
-            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                <mjo-button size="small" @click=${this.handleAction}>Action</mjo-button>
-                <mjo-button size="small" variant="ghost">Cancel</mjo-button>
-            </div>
-        </div>
-    `,
-    type: "info",
-});
-```
-
-## Threshold Management
-
-Control the maximum number of notifications displayed simultaneously:
-
-```ts
-// Set threshold (default is 4)
-<mjo-notification position="top-right" threshold="3"></mjo-notification>
-
-// Clear all notifications
-this.notification.clearAll();
-```
-
-## Accessibility Features
-
-The component includes comprehensive accessibility support:
-
-```html
-<!-- Accessibility configuration -->
-<mjo-notification position="top-right" aria-live="polite" aria-label="System notifications" disable-animations="false"> </mjo-notification>
-```
-
-### Screen Reader Support
-
-```ts
-// Announce message to screen readers without visual notification
-this.notification.announce("Important status update available");
-```
-
-### Motion Preferences
-
-The component automatically respects `prefers-reduced-motion` settings, disabling animations for users who prefer reduced motion.
-
-## Context Sharing
-
-Share the notification controller across component hierarchies:
-
-```ts
-import { createContext } from "@lit/context";
-import { NotificationController } from "mjo-litui/types";
-
-// Create notification context
-const notificationContext = createContext<NotificationController>("notification-controller");
-
-@customElement("app-root")
-export class AppRoot extends LitElement {
-    @provide({ context: notificationContext })
-    notificationController!: NotificationController;
-
-    @query("mjo-notification")
-    private notification!: MjoNotification;
-
-    protected firstUpdated() {
-        this.notificationController = this.notification.controller;
-    }
-
-    render() {
-        return html`
-            <app-content></app-content>
-            <mjo-notification position="top-right"></mjo-notification>
-        `;
-    }
-}
-
-@customElement("app-content")
-export class AppContent extends LitElement {
-    @consume({ context: notificationContext })
-    notificationController!: NotificationController;
-
-    private showNotification() {
-        this.notificationController.show({
-            message: "Notification from child component",
-            type: "success",
-        });
-    }
-
-    render() {
-        return html` <mjo-button @click=${this.showNotification}>Notify</mjo-button> `;
-    }
-}
-```
-
-## Theme Customization
-
-### Using mjo-theme
-
-```ts
-import "mjo-litui/mjo-theme";
-
-const notificationTheme = {
-    backgroundColor: "#f8f9fa",
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
-    radius: "12px",
-    margin: "20px",
-    titleFontSize: "1.1em",
-    titleFontWeight: "600",
-    titleColor: "#2c3e50",
-    messageFontSize: "0.95em",
-    messageColor: "#34495e",
-    closeHoverBackgroundColor: "#e9ecef",
-    animationDuration: "0.4s",
-    focusOutline: "2px solid #007acc",
-};
-
-html`
-    <mjo-theme .theme=${{ components: { mjoNotification: notificationTheme } }}>
-        <mjo-notification position="top-right"></mjo-notification>
-    </mjo-theme>
-`;
-```
-
-### Using ThemeMixin
-
-```ts
-import { ThemeMixin } from "mjo-litui/mixins";
-
-@customElement("themed-notification")
-export class ThemedNotification extends ThemeMixin(LitElement) {
-    render() {
-        return html`
-            <mjo-notification
-                position="top-right"
-                .theme=${{
-                    backgroundColor: "#fff3cd",
-                    boxShadow: "0 4px 20px rgba(255, 193, 7, 0.3)",
-                    titleColor: "#856404",
-                    messageColor: "#664d03",
-                }}
-            ></mjo-notification>
-        `;
-    }
-}
 ```
 
 ## Properties
 
-| Property            | Type                               | Default           | Description                                                                           |
-| ------------------- | ---------------------------------- | ----------------- | ------------------------------------------------------------------------------------- |
-| `position`          | `NotificationPositions`            | `"top-right"`     | Notification position: `"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"` |
-| `threshold`         | `number`                           | `4`               | Maximum number of notifications displayed simultaneously                              |
-| `ariaLive`          | `"polite" \| "assertive" \| "off"` | `"polite"`        | ARIA live region politeness setting                                                   |
-| `ariaLabel`         | `string`                           | `"Notifications"` | ARIA label for the notification region                                                |
-| `disableAnimations` | `boolean`                          | `false`           | Disable all notification animations                                                   |
+| Property            | Type                               | Description                                                                                             | Default           | Required |
+| ------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------- | -------- |
+| `idNotification`    | `string`                           | Unique identifier for the notification container                                                        | `undefined`       | No       |
+| `position`          | `NotificationPositions`            | Position of the notification container (`"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"`) | `"top-right"`     | No       |
+| `threshold`         | `number`                           | Maximum number of notifications to display simultaneously                                               | `4`               | No       |
+| `ariaLive`          | `"polite" \| "assertive" \| "off"` | ARIA live region politeness setting                                                                     | `"polite"`        | No       |
+| `ariaLabel`         | `string`                           | ARIA label for the notification region                                                                  | `"Notifications"` | No       |
+| `disableAnimations` | `boolean`                          | Disable notification animations                                                                         | `false`           | No       |
 
-## Controller Methods
+## Methods
 
-### `show(params: NotificationShowParams): Promise<NotificationItem>`
+| Method       | Parameters                       | Description                                                              | Return Value                      |
+| ------------ | -------------------------------- | ------------------------------------------------------------------------ | --------------------------------- |
+| `show()`     | `params: NotificationShowParams` | Display a new notification with specified configuration                  | `Promise<MjointNotificationItem>` |
+| `clearAll()` | -                                | Clear all visible notifications from the container                       | `void`                            |
+| `announce()` | `message: string`                | Announce a message to screen readers without showing visual notification | `void`                            |
 
-Shows a new notification and returns the notification item instance.
+### NotificationShowParams Interface
 
-#### Parameters
-
-| Parameter | Type                          | Default | Description                                                      |
-| --------- | ----------------------------- | ------- | ---------------------------------------------------------------- |
-| `message` | `string \| TemplateResult<1>` | -       | The notification message content                                 |
-| `title`   | `string`                      | -       | Optional notification title                                      |
-| `type`    | `NotificationTypes`           | -       | Notification type: `"info"`, `"success"`, `"warning"`, `"error"` |
-| `time`    | `number`                      | `0`     | Auto-close time in milliseconds (0 = manual close only)          |
-| `onClose` | `() => void`                  | -       | Callback function executed when notification closes              |
-
-### `clearAll(): void`
-
-Clears all notifications from the notification container.
-
-### `setPosition(position: NotificationPositions): void`
-
-Changes the position of the notification container.
-
-## Component Methods
-
-### `clearAll(): void`
-
-Clears all notifications from the notification container.
-
-### `announce(message: string): void`
-
-Announces a message to screen readers without showing a visual notification.
-
-## Types
-
-```ts
-type NotificationPositions = "top-left" | "top-right" | "bottom-left" | "bottom-right";
-type NotificationTypes = "info" | "warning" | "error" | "success";
-
+```typescript
 interface NotificationShowParams {
     title?: string;
     message: string | TemplateResult<1>;
-    type?: NotificationTypes;
+    type?: "info" | "warning" | "error" | "success";
     time?: number;
     onClose?: () => void;
 }
-
-interface NotificationAccessibilityOptions {
-    ariaLive?: "polite" | "assertive" | "off";
-    ariaLabel?: string;
-    disableAnimations?: boolean;
-    announceToScreenReader?: boolean;
-}
 ```
 
-## CSS Custom Properties
+## CSS Variables
 
-| Property                                          | Default                                                | Description                             |
-| ------------------------------------------------- | ------------------------------------------------------ | --------------------------------------- |
-| `--mjo-notification-background-color`             | `var(--mjo-background-color-low, #ffffff)`             | Background color for notification items |
-| `--mjo-notification-box-shadow`                   | `var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1))` | Box shadow for notification items       |
-| `--mjo-notification-border-radius`                | `var(--mjo-radius-large, 4px)`                         | Border radius for notification items    |
-| `--mjo-notification-margin`                       | `15px`                                                 | Margin between notification items       |
-| `--mjo-notification-space-vertical`               | `0`                                                    | Vertical spacing from screen edge       |
-| `--mjo-notification-space-horizontal`             | `15px`                                                 | Horizontal spacing from screen edge     |
-| `--mjo-notification-title-font-size`              | `1em`                                                  | Font size for notification titles       |
-| `--mjo-notification-title-font-weight`            | `500`                                                  | Font weight for notification titles     |
-| `--mjo-notification-title-color`                  | -                                                      | Color for notification titles           |
-| `--mjo-notification-message-font-size`            | `0.9em`                                                | Font size for notification messages     |
-| `--mjo-notification-message-color`                | -                                                      | Color for notification messages         |
-| `--mjo-notification-close-hover-background-color` | `var(--mjo-background-color-high, #f5f5f5)`            | Close button hover background color     |
-| `--mjo-notification-animation-duration`           | `0.3s`                                                 | Duration of notification animations     |
-| `--mjo-notification-focus-outline`                | `2px solid var(--mjo-primary-color, #007acc)`          | Focus outline for interactive elements  |
+| Variable                                          | Description                             | Default                                                |
+| ------------------------------------------------- | --------------------------------------- | ------------------------------------------------------ |
+| `--mjo-notification-background-color`             | Background color for notification items | `var(--mjo-background-color-low, #ffffff)`             |
+| `--mjo-notification-box-shadow`                   | Box shadow for notification items       | `var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1))` |
+| `--mjo-notification-border-radius`                | Border radius for notification items    | `var(--mjo-radius-large, 4px)`                         |
+| `--mjo-notification-margin`                       | Margin between notification items       | `15px`                                                 |
+| `--mjo-notification-space-vertical`               | Vertical spacing from screen edge       | `0`                                                    |
+| `--mjo-notification-space-horizontal`             | Horizontal spacing from screen edge     | `15px`                                                 |
+| `--mjo-notification-title-font-size`              | Font size for notification titles       | `1em`                                                  |
+| `--mjo-notification-title-font-weight`            | Font weight for notification titles     | `500`                                                  |
+| `--mjo-notification-title-color`                  | Color for notification titles           | -                                                      |
+| `--mjo-notification-message-font-size`            | Font size for notification messages     | `0.9em`                                                |
+| `--mjo-notification-message-color`                | Color for notification messages         | -                                                      |
+| `--mjo-notification-close-hover-background-color` | Close button hover background color     | `var(--mjo-background-color-high, #f5f5f5)`            |
+| `--mjo-notification-animation-duration`           | Duration of notification animations     | `0.3s`                                                 |
+| `--mjo-notification-focus-outline`                | Focus outline for interactive elements  | `2px solid var(--mjo-primary-color, #007acc)`          |
 
 ## CSS Parts
 
-The notification component uses CSS parts to allow styling of internal elements. Since the notification container and items are mounted directly in the document body, CSS parts must be applied globally:
-
-```css
-/* Global styling for all notification containers */
-mjo-notification-container::part(container) {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-}
-
-/* Global styling for notification items */
-mjoint-notification-item::part(notification-wrapper) {
-    padding: 20px;
-    border-radius: 8px;
-}
-
-mjoint-notification-item::part(notification-icon-container) {
-    width: 40px;
-    border-radius: 8px 0 0 8px;
-}
-
-mjoint-notification-item::part(notification-title) {
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 8px;
-}
-
-mjoint-notification-item::part(notification-message) {
-    line-height: 1.5;
-    color: #34495e;
-}
-
-mjoint-notification-item::part(close-button) {
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 50%;
-    transition: all 0.2s ease;
-}
-
-mjoint-notification-item::part(close-button):hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    transform: scale(1.1);
-}
-```
-
-### Available CSS Parts
-
-| Part                          | Component                    | Description                              |
-| ----------------------------- | ---------------------------- | ---------------------------------------- |
-| `container`                   | `mjo-notification-container` | The main notification container          |
-| `notification-icon-container` | `mjoint-notification-item`   | Container for the notification type icon |
-| `notification-icon`           | `mjoint-notification-item`   | The notification type icon element       |
-| `notification-wrapper`        | `mjoint-notification-item`   | Wrapper for the notification content     |
-| `notification-title`          | `mjoint-notification-item`   | The notification title element           |
-| `notification-message`        | `mjoint-notification-item`   | The notification message element         |
-| `close-button`                | `mjoint-notification-item`   | The close button element                 |
-| `icon-close`                  | `mjoint-notification-item`   | The close icon element                   |
-
-### Important: Global Notification Architecture
-
-The `mjo-notification` component works by dynamically creating notification containers and items that are mounted directly in the document `<body>`. This architecture provides several benefits:
-
-- **Overlay Management**: Ensures notifications appear above all other content
-- **Position Control**: Allows notifications in any corner regardless of parent constraints
-- **Z-index Management**: Prevents z-index conflicts with parent containers
-- **Overflow Prevention**: Bypasses any parent `overflow: hidden` styles
-
-Because the actual notification content is rendered in containers mounted in the body, CSS variables and CSS parts cannot be applied directly to the `mjo-notification` component. Instead, you need to target the containers and items globally.
-
-### Global Styling Best Practices
-
-#### All Notifications
-
-```css
-/* Apply to all notification containers */
-:root {
-    --mjo-notification-space-horizontal: 20px;
-    --mjo-notification-animation-duration: 0.4s;
-}
-
-/* Target all notification containers */
-mjo-notification-container {
-    --mjo-notification-background-color: #ffffff;
-}
-
-/* Target all notification items */
-mjoint-notification-item {
-    --mjo-notification-border-radius: 12px;
-}
-```
-
-#### Type-Specific Styling
-
-You can style notifications based on their type using attribute selectors:
-
-```css
-/* Success notifications */
-mjoint-notification-item[type="success"]::part(notification-wrapper) {
-    border-left: 4px solid var(--mjo-color-success);
-}
-
-/* Error notifications */
-mjoint-notification-item[type="error"]::part(notification-wrapper) {
-    border-left: 4px solid var(--mjo-color-error);
-}
-
-/* Warning notifications */
-mjoint-notification-item[type="warning"]::part(notification-wrapper) {
-    border-left: 4px solid var(--mjo-color-warning);
-}
-
-/* Info notifications */
-mjoint-notification-item[type="info"]::part(notification-wrapper) {
-    border-left: 4px solid var(--mjo-color-info);
-}
-```
-
-#### Position-Specific Styling
-
-Style notifications based on their position:
-
-```css
-/* Top notifications */
-mjoint-notification-item[position*="top"]::part(notification-wrapper) {
-    border-radius: 0 0 8px 8px;
-}
-
-/* Bottom notifications */
-mjoint-notification-item[position*="bottom"]::part(notification-wrapper) {
-    border-radius: 8px 8px 0 0;
-}
-```
-
-### Theme Interface
-
-```ts
-interface MjoNotificationTheme {
-    backgroundColor?: string;
-    boxShadow?: string;
-    radius?: string;
-    margin?: string;
-    titleFontSize?: string;
-    titleFontWeight?: string;
-    titleColor?: string;
-    closeHoverBackgroundColor?: string;
-    messageFontSize?: string;
-    messageColor?: string;
-    animationDuration?: string;
-    focusOutline?: string;
-    spaceVertical?: string;
-    spaceHorizontal?: string;
-}
-```
+| Part                          | Description                                              | Element      |
+| ----------------------------- | -------------------------------------------------------- | ------------ |
+| `container`                   | The main notification container mounted in document body | `<div>`      |
+| `notification-icon-container` | Container for the notification type icon                 | `<div>`      |
+| `notification-icon`           | The notification type icon element                       | `<mjo-icon>` |
+| `notification-wrapper`        | Wrapper for the notification content                     | `<div>`      |
+| `notification-title`          | The notification title element                           | `<div>`      |
+| `notification-message`        | The notification message element                         | `<div>`      |
+| `close-button`                | The close button element                                 | `<div>`      |
+| `icon-close`                  | The close icon element                                   | `<mjo-icon>` |
 
 ## Accessibility
 
-- **ARIA Support**: Proper ARIA attributes including `aria-live`, `aria-label`, and `role`
-- **Screen Reader Friendly**: Notifications are announced to screen readers
-- **Keyboard Navigation**: Close buttons are keyboard accessible
-- **Focus Management**: Proper focus handling for interactive notifications
-- **Motion Preferences**: Respects `prefers-reduced-motion` settings
-- **High Contrast**: Support for high contrast themes
-- **Color Independence**: Icons and text provide information beyond color
+The notification system is built with comprehensive accessibility support:
 
-## Technical Notes
+### ARIA Attributes
 
-- **Global Container**: Notifications render in containers appended to `document.body`
-- **Z-Index Management**: Container inherits z-index from host component
-- **Queue Management**: Automatically manages notification threshold
-- **Animation System**: Smooth animations with position-aware directions
-- **Content Flexibility**: Supports HTML strings and Lit templates
-- **Theme Inheritance**: Container inherits theme from host component
+- The notification container has `role="region"` to indicate a significant section of content
+- Uses `aria-live` attribute to control screen reader announcement behavior:
+    - `"polite"` (default): Announces notifications when screen reader is idle
+    - `"assertive"`: Interrupts screen reader immediately
+    - `"off"`: Disables live region announcements
+- Uses `aria-label` to provide descriptive label for the notification region
+- Individual notification items have `role="alert"` for their message content
+- Uses `aria-describedby` to associate titles with message content when present
 
-## Best Practices
+### Keyboard Support
 
-- Use appropriate notification types to convey correct urgency levels
-- Keep notification content concise and actionable
-- Provide longer duration for important notifications
-- Use callbacks for notifications requiring user acknowledgment
-- Consider threshold limits to avoid overwhelming users
-- Place notification components at appropriate application levels
-- Use context sharing for large applications
-- Test with screen readers and keyboard navigation
+- Close button is keyboard accessible with `tabindex="0"`
+- Close button can be activated with Enter/Space keys through native button behavior
+- Close button has `aria-label` and `title` attributes for clear purpose indication
+- Focus indicator respects `--mjo-notification-focus-outline` CSS variable
 
-For additional theming options, see the [Theming Guide](./theming.md).
+### Motion and Animation
+
+- Respects `prefers-reduced-motion` media query
+- When reduced motion is preferred, notifications appear instantly without animations
+- All animations can be disabled programmatically via `disableAnimations` property
+
+### Screen Reader Support
+
+- The `announce()` method allows programmatic announcements without visual notifications
+- Each notification generates a unique ID for proper ARIA relationships
+- Type indicators (success, error, warning, info) are marked with `aria-hidden="true"` as they're decorative
+
+### Best Practices
+
+- Use `ariaLive="polite"` for non-critical notifications to avoid interrupting users
+- Use `ariaLive="assertive"` for critical errors that require immediate attention
+- Provide meaningful titles and messages that work well when read aloud
+- Consider using the `announce()` method for status updates that don't need visual persistence
+- Set appropriate `time` values to allow users enough time to perceive and read notifications
+
+## Usage Examples
+
+### Basic Usage with Controller
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import "mjo-litui/mjo-notification";
+import type { MjoNotification } from "mjo-litui/mjo-notification";
+
+@customElement("my-component")
+class MyComponent extends LitElement {
+    @query("mjo-notification") notificationSystem!: MjoNotification;
+
+    render() {
+        return html`
+            <mjo-notification position="top-right"></mjo-notification>
+            <button @click=${this.showNotification}>Show Notification</button>
+        `;
+    }
+
+    async showNotification() {
+        await this.notificationSystem.controller.show({
+            message: "Operation completed successfully",
+            type: "success",
+            time: 3000,
+        });
+    }
+}
+```
+
+### Notifications with Title and Custom Duration
+
+```typescript
+async showDetailedNotification() {
+    await this.notificationSystem.controller.show({
+        title: 'Upload Complete',
+        message: 'Your file has been uploaded and processed successfully.',
+        type: 'success',
+        time: 5000
+    });
+}
+```
+
+### Different Notification Types
+
+```typescript
+async showDifferentTypes() {
+    // Success notification
+    await this.notificationSystem.controller.show({
+        message: 'Changes saved successfully',
+        type: 'success',
+        time: 3000
+    });
+
+    // Error notification
+    await this.notificationSystem.controller.show({
+        title: 'Error',
+        message: 'Failed to connect to server',
+        type: 'error',
+        time: 5000
+    });
+
+    // Warning notification
+    await this.notificationSystem.controller.show({
+        message: 'Your session will expire in 5 minutes',
+        type: 'warning',
+        time: 4000
+    });
+
+    // Info notification
+    await this.notificationSystem.controller.show({
+        message: 'New features are available',
+        type: 'info',
+        time: 4000
+    });
+}
+```
+
+### Handling Close Events
+
+```typescript
+async showWithCloseCallback() {
+    await this.notificationSystem.controller.show({
+        message: 'Processing your request...',
+        type: 'info',
+        time: 3000,
+        onClose: () => {
+            console.log('Notification was closed');
+            // Perform cleanup or trigger next action
+        }
+    });
+}
+```
+
+### Using Template Result for Rich Content
+
+```typescript
+import { html } from 'lit';
+
+async showRichNotification() {
+    await this.notificationSystem.controller.show({
+        title: 'Update Available',
+        message: html`
+            <div>
+                <p>Version 2.0 is now available.</p>
+                <a href="/updates">View release notes</a>
+            </div>
+        `,
+        type: 'info',
+        time: 6000
+    });
+}
+```
+
+### Different Positioning Strategies
+
+```typescript
+render() {
+    return html`
+        <!-- Top right (default) -->
+        <mjo-notification position="top-right"></mjo-notification>
+
+        <!-- Top left -->
+        <mjo-notification position="top-left"></mjo-notification>
+
+        <!-- Bottom right -->
+        <mjo-notification position="bottom-right"></mjo-notification>
+
+        <!-- Bottom left -->
+        <mjo-notification position="bottom-left"></mjo-notification>
+    `;
+}
+```
+
+### Managing Multiple Notifications
+
+```typescript
+async showMultipleNotifications() {
+    // Show several notifications in sequence
+    for (let i = 1; i <= 5; i++) {
+        await this.notificationSystem.controller.show({
+            message: `Notification ${i}`,
+            type: 'info',
+            time: 3000
+        });
+    }
+
+    // The threshold property (default: 4) will automatically
+    // remove the oldest notification when exceeded
+}
+```
+
+### Clearing All Notifications
+
+```typescript
+async handleClearAll() {
+    this.notificationSystem.clearAll();
+}
+```
+
+### Screen Reader Announcements
+
+```typescript
+async announceStatusChange() {
+    // Visual notification
+    await this.notificationSystem.controller.show({
+        message: 'Processing complete',
+        type: 'success',
+        time: 3000
+    });
+
+    // Additional screen reader announcement without visual
+    this.notificationSystem.announce('All items have been processed successfully');
+}
+```
+
+### Accessibility Configuration
+
+```typescript
+render() {
+    return html`
+        <!-- Assertive for critical errors -->
+        <mjo-notification
+            position="top-right"
+            aria-live="assertive"
+            aria-label="Critical notifications"
+        ></mjo-notification>
+
+        <!-- Disable animations for reduced motion preference -->
+        <mjo-notification
+            position="bottom-right"
+            disable-animations
+        ></mjo-notification>
+    `;
+}
+```
+
+### Custom Styling with CSS Variables
+
+```typescript
+render() {
+    return html`
+        <style>
+            mjo-notification {
+                --mjo-notification-background-color: #1a1a1a;
+                --mjo-notification-title-color: #ffffff;
+                --mjo-notification-message-color: #cccccc;
+                --mjo-notification-space-vertical: 20px;
+                --mjo-notification-space-horizontal: 20px;
+                --mjo-notification-animation-duration: 0.5s;
+            }
+        </style>
+        <mjo-notification position="top-right"></mjo-notification>
+    `;
+}
+```
+
+### Custom Styling with CSS Parts
+
+```typescript
+render() {
+    return html`
+        <style>
+            mjo-notification::part(notification-wrapper) {
+                padding: 15px;
+                border-left: 4px solid var(--mjo-primary-color);
+            }
+
+            mjo-notification::part(notification-title) {
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            mjo-notification::part(close-button) {
+                color: var(--mjo-error-color);
+            }
+
+            mjo-notification::part(notification-icon-container) {
+                border-radius: 50%;
+            }
+        </style>
+        <mjo-notification position="top-right"></mjo-notification>
+    `;
+}
+```
+
+## Additional Notes
+
+### Architecture
+
+The notification system uses a controller-based architecture where:
+
+- `mjo-notification` component manages the configuration and serves as the public API
+- `NotificationController` handles the lifecycle and communication with the container
+- `mjo-notification-container` manages the rendering and positioning of notifications
+- `mjoint-notification-item` represents individual notification instances
+
+### Container Management
+
+The notification container is automatically created and mounted to the document body when the component connects. It's removed when the component disconnects, ensuring proper cleanup.
+
+### Threshold Behavior
+
+When the number of notifications exceeds the `threshold` property:
+
+- The oldest notification is automatically removed
+- For top-positioned notifications, the first notification is removed
+- For bottom-positioned notifications, the last notification is removed
+
+### Animation Timing
+
+Notifications animate in three stages:
+
+1. Initial appearance (slide in from side)
+2. Position adjustment
+3. Final translation to position
+
+Each stage is timed to create smooth, sequential animations. The total animation duration can be controlled via the `--mjo-notification-animation-duration` CSS variable.
+
+### z-index Management
+
+The notification container inherits the z-index from the `mjo-notification` component, allowing you to control the stacking context relative to other elements in your application.
+
+### Theme Support
+
+The component extends `ThemeMixin`, allowing it to participate in the theming system. Theme properties set on the component are automatically propagated to the notification container.

@@ -10,17 +10,30 @@ import { pause } from "./utils/utils.js";
 /**
  * @summary Configurable avatar component for displaying user images, initials, or fallback icons with multiple sizes, shapes, and colors.
  *
- * @description The mjo-avatar component provides a comprehensive solution for displaying user avatars
- * with intelligent fallback handling, automatic color generation, and extensive customization options.
- * It supports multiple display modes, interactive behavior, and full accessibility compliance.
- *
  * @fires mjo-avatar:click - Fired when the avatar is clicked (only when clickable is true)
  * @fires mjo-avatar:error - Fired when the image fails to load
  *
  * @csspart container - The main avatar container element
  * @csspart image-container - The image/content container
+ * @csspart fallback - The fallback icon container (when using fallbackIcon)
+ * @csspart name - The name initials container (when using name)
  * @csspart image - The actual image element (when using src)
- * @csspart icon - The fallback icon element (via exportparts)
+ * @csspart icon - The fallback icon element (via exportparts from mjo-icon)
+ *
+ * @cssprop --mjo-avatar-background-color - Background color for the avatar container (default: var(--mjo-color-gray-400))
+ * @cssprop --mjo-avatar-fallback-color - Text/icon color for fallback content (default: var(--mjo-color-gray-100))
+ * @cssprop --mjo-avatar-name-color - Text color for name initials (default: var(--mjo-color-gray-100))
+ * @cssprop --mjo-avatar-border-color - Border color for the avatar (default: var(--mjo-color-gray-300))
+ * @cssprop --mjo-avatar-border-width - Border width when bordered is true (default: 3px)
+ * @cssprop --mjo-avatar-size-small - Size for small avatars (default: 32px)
+ * @cssprop --mjo-avatar-size-medium - Size for medium avatars (default: 44px)
+ * @cssprop --mjo-avatar-size-large - Size for large avatars (default: 54px)
+ * @cssprop --mjo-avatar-fallback-size-small - Font size for small fallback content (default: 18px)
+ * @cssprop --mjo-avatar-fallback-size-medium - Font size for medium fallback content (default: 28px)
+ * @cssprop --mjo-avatar-fallback-size-large - Font size for large fallback content (default: 40px)
+ * @cssprop --mjo-avatar-radius-small - Border radius for small rounded avatars (default: 4px)
+ * @cssprop --mjo-avatar-radius-medium - Border radius for medium rounded avatars (default: 8px)
+ * @cssprop --mjo-avatar-radius-large - Border radius for large rounded avatars (default: 12px)
  */
 @customElement("mjo-avatar")
 export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -128,6 +141,10 @@ export class MjoAvatar extends ThemeMixin(LitElement) implements IThemeMixin {
         return this.name ? this.name[0].toLocaleUpperCase() : "";
     }
 
+    /**
+     * Programmatically trigger a click event on the avatar.
+     * Only works when the avatar is clickable and not disabled.
+     */
     click(): void {
         this.#handleClick();
     }

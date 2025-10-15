@@ -5,6 +5,14 @@ import { customElement, property } from "lit/decorators.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
+/**
+ * Flexible CSS Grid layout component providing responsive grid systems with auto-fill, auto-fit, and fixed column modes.
+ *
+ * @summary Simplifies responsive layouts without complex media queries. Supports three layout modes: fixed columns for
+ * consistent layouts, auto-fill for responsive card grids, and auto-fit for content that stretches to fill space.
+ *
+ * @slot - Grid items - any HTML elements that will be arranged in the grid
+ */
 @customElement("mjo-grid")
 export class MjoGrid extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Number }) columns: number = 4;

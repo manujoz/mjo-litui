@@ -16,6 +16,16 @@ import {
     getTopInTopPosition,
 } from "../../utils/dropdown.js";
 
+/**
+ * @summary Container element for mjo-dropdown that holds the floating content.
+ *
+ * @csspart dropdown-container - The main container holding the dropdown content
+ *
+ * @cssprop --mjo-dropdown-background-color - Background color of the container
+ * @cssprop --mjo-dropdown-foreground-color - Text color of the content
+ * @cssprop --mjo-dropdown-border-radius - Border radius of the container
+ * @cssprop --mjo-dropdown-box-shadow - Box shadow of the container
+ */
 @customElement("mjo-dropdown-container")
 export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Object }) css?: CSSResult;
@@ -59,6 +69,9 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
         if (this.offsetHeight > 0) this.updatePosition();
     }
 
+    /**
+     * Closes the dropdown with animation.
+     */
     close() {
         if (this.scrollLocked) this.#scrollLock.unlock();
 
@@ -72,6 +85,9 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
         }, 210);
     }
 
+    /**
+     * Opens the dropdown with animation.
+     */
     open() {
         if (this.scrollLocked) this.#scrollLock.lock();
 
@@ -87,12 +103,18 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
         }, 5);
     }
 
+    /**
+     * Scrolls the dropdown content to specified top position.
+     */
     scrollToTop(top: number) {
         this.scrollTo({
             top,
         });
     }
 
+    /**
+     * Gets the current scroll position of the dropdown.
+     */
     getScroll() {
         return {
             top: this.scrollTop,
@@ -100,6 +122,9 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
         };
     }
 
+    /**
+     * Recalculates and updates the dropdown position based on trigger element and viewport constraints.
+     */
     updatePosition() {
         if (this.offsetHeight === 0 || !this.host) return;
 

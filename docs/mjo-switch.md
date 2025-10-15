@@ -1,359 +1,334 @@
 # mjo-switch
 
-A toggle switch component that provides an elegant way to toggle between two states. The switch features smooth animations, customizable themes, and full form integration capabilities.
+Toggle switch component with customizable themes, sizes, and comprehensive form integration.
+
+## Index
+
+- [Use cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Public methods](#public-methods)
+- [Events](#events)
+- [CSS variables](#css-variables)
+- [CSS parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage examples](#usage-examples)
+- [Additional notes](#additional-notes)
+
+## Use cases
+
+The `mjo-switch` component is ideal for:
+
+- Binary on/off settings and preferences
+- Feature toggles in configuration panels
+- Form controls requiring visual feedback of state
+- Accessible toggle controls with keyboard support
+- Settings that require immediate visual state confirmation
 
 ## Import
 
-```ts
+```javascript
 import "mjo-litui/mjo-switch";
 ```
 
-## Basic Usage
+## Properties
 
-```html
-<mjo-switch label="Enable notifications"></mjo-switch>
-```
+| Property          | Type             | Description                                                              | Default     | Required |
+| ----------------- | ---------------- | ------------------------------------------------------------------------ | ----------- | -------- |
+| `color`           | `MjoSwitchColor` | Theme color variant. Possible values: `primary`, `secondary`             | `primary`   | No       |
+| `size`            | `MjoSwitchSize`  | Size variant. Possible values: `small`, `medium`, `large`                | `medium`    | No       |
+| `checked`         | `boolean`        | Determines if the switch is in the on state                              | `false`     | No       |
+| `disabled`        | `boolean`        | Disables the switch, preventing interaction                              | `false`     | No       |
+| `helperText`      | `string`         | Helper text displayed below the switch                                   | `undefined` | No       |
+| `label`           | `string`         | Label text displayed above the switch                                    | `undefined` | No       |
+| `name`            | `string`         | Name attribute for form submission                                       | `undefined` | No       |
+| `value`           | `string`         | Value submitted when the switch is checked                               | `""`        | No       |
+| `checkgroup`      | `string`         | Group identifier for related switches                                    | `undefined` | No       |
+| `hideErrors`      | `boolean`        | Hides error messages from validation                                     | `false`     | No       |
+| `ariaDescribedby` | `string`         | ID(s) of elements that describe the switch                               | `undefined` | No       |
+| `required`        | `boolean`        | Makes the switch required for form validation (inherited from FormMixin) | `false`     | No       |
+| `error`           | `boolean`        | Displays the switch in error state (inherited from InputErrorMixin)      | `false`     | No       |
+| `errormsg`        | `string`         | Error message to display (inherited from InputErrorMixin)                | `undefined` | No       |
+| `successmsg`      | `string`         | Success message to display (inherited from InputErrorMixin)              | `undefined` | No       |
 
-## Lit Example
+## Public methods
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-switch";
-
-@customElement("example-switch-basic")
-export class ExampleSwitchBasic extends LitElement {
-    @state() isEnabled = false;
-
-    render() {
-        return html`
-            <mjo-switch label="Enable feature" .checked=${this.isEnabled} @mjo-switch:change=${this.#handleToggle}></mjo-switch>
-
-            <p>Feature is ${this.isEnabled ? "enabled" : "disabled"}</p>
-        `;
-    }
-
-    #handleToggle(e: CustomEvent) {
-        this.isEnabled = e.detail.checked;
-    }
-}
-```
-
-## Switch Sizes
-
-The switch component supports three sizes: `small`, `medium` (default), and `large`.
-
-```html
-<mjo-switch size="small" label="Small switch"></mjo-switch>
-<mjo-switch size="medium" label="Medium switch"></mjo-switch>
-<mjo-switch size="large" label="Large switch"></mjo-switch>
-```
-
-### Lit Example - Sizes
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-switch";
-
-@customElement("example-switch-sizes")
-export class ExampleSwitchSizes extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-switch size="small" label="Small switch" checked></mjo-switch>
-                <mjo-switch size="medium" label="Medium switch" checked></mjo-switch>
-                <mjo-switch size="large" label="Large switch" checked></mjo-switch>
-            </div>
-        `;
-    }
-}
-```
-
-## Color Variants
-
-The switch supports different color variants: `primary` (default) and `secondary`.
-
-```html
-<mjo-switch color="primary" label="Primary switch" checked></mjo-switch> <mjo-switch color="secondary" label="Secondary switch" checked></mjo-switch>
-```
-
-### Lit Example - Colors
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-switch";
-
-@customElement("example-switch-colors")
-export class ExampleSwitchColors extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-switch color="primary" label="Primary switch" checked></mjo-switch>
-                <mjo-switch color="secondary" label="Secondary switch" checked></mjo-switch>
-            </div>
-        `;
-    }
-}
-```
-
-## Disabled State
-
-Switches can be disabled to prevent user interaction.
-
-```html
-<mjo-switch label="Disabled switch" disabled></mjo-switch> <mjo-switch label="Disabled checked" checked disabled></mjo-switch>
-```
-
-## Helper Text
-
-Provide additional context with helper text.
-
-```html
-<mjo-switch label="Dark mode" helperText="Switch to dark theme" checked></mjo-switch>
-```
-
-## Form Integration
-
-The switch integrates seamlessly with `mjo-form` and supports validation.
-
-```html
-<mjo-form>
-    <mjo-switch name="terms" label="I agree to the terms and conditions" required helperText="You must accept the terms to continue"></mjo-switch>
-
-    <mjo-switch name="newsletter" label="Subscribe to newsletter" helperText="Receive updates about our products"></mjo-switch>
-</mjo-form>
-```
-
-### Lit Example - Form Integration
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-form";
-import "mjo-litui/mjo-switch";
-import "mjo-litui/mjo-button";
-
-@customElement("example-switch-form")
-export class ExampleSwitchForm extends LitElement {
-    @state() formData = {};
-
-    render() {
-        return html`
-            <mjo-form @mjo-form-submit=${this.#handleSubmit}>
-                <mjo-switch name="notifications" label="Email notifications" checked></mjo-switch>
-                <mjo-switch name="terms" label="I agree to the terms" required></mjo-switch>
-                <mjo-button type="submit">Save</mjo-button>
-            </mjo-form>
-        `;
-    }
-
-    #handleSubmit(e: CustomEvent) {
-        this.formData = e.detail.data;
-        console.log("Form submitted:", e.detail);
-    }
-}
-```
-
-## Attributes/Properties
-
-| Name               | Type                             | Default     | Description                               |
-| ------------------ | -------------------------------- | ----------- | ----------------------------------------- |
-| `checked`          | `boolean`                        | `false`     | Whether the switch is checked             |
-| `color`            | `'primary' \| 'secondary'`       | `'primary'` | Color variant of the switch               |
-| `disabled`         | `boolean`                        | `false`     | Whether the switch is disabled            |
-| `helper-text`      | `string`                         | `''`        | Helper text displayed below the switch    |
-| `label`            | `string`                         | `''`        | Label text for the switch                 |
-| `name`             | `string`                         | `''`        | Name attribute for form submission        |
-| `required`         | `boolean`                        | `false`     | Whether the switch is required in forms   |
-| `size`             | `'small' \| 'medium' \| 'large'` | `'medium'`  | Size of the switch                        |
-| `value`            | `string`                         | `'on'`      | Value when the switch is checked          |
-| `aria-describedby` | `string`                         | `undefined` | IDs of elements that describe the switch  |
-| `checkgroup`       | `string`                         | `undefined` | Groups related switches for form handling |
-| `hideErrors`       | `boolean`                        | `false`     | Whether to hide error messages            |
+| Method                       | Parameters                                    | Description                                                                                         | Return    |
+| ---------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------- |
+| `getValue()`                 | -                                             | Gets the current value of the switch. Returns the value property if checked, empty string otherwise | `string`  |
+| `setValue(value)`            | `value: string` - The value to set            | Sets the value property of the switch                                                               | `void`    |
+| `toggle()`                   | -                                             | Toggles the checked state of the switch. Does nothing if the switch is disabled                     | `void`    |
+| `focus()`                    | -                                             | Programmatically focuses the switch element                                                         | `void`    |
+| `blur()`                     | -                                             | Programmatically removes focus from the switch element                                              | `void`    |
+| `reportValidity()`           | -                                             | Checks the validity of the switch and reports it to the user                                        | `boolean` |
+| `setCustomValidity(message)` | `message: string` - Custom validation message | Sets a custom validation message for the switch                                                     | `void`    |
 
 ## Events
 
-| Name                | Type                                                            | Description                         |
-| ------------------- | --------------------------------------------------------------- | ----------------------------------- |
-| `change`            | `Event`                                                         | Standard form change event          |
-| `mjo-switch:change` | `CustomEvent<{ element, checked, value, name, previousState }>` | Fired when the switch state changes |
-| `mjo-switch:focus`  | `CustomEvent<{ element }>`                                      | Fired when the switch gains focus   |
-| `mjo-switch:blur`   | `CustomEvent<{ element }>`                                      | Fired when the switch loses focus   |
+| Event               | Description                                                          | Type                   | Detail                                                                                                       |
+| ------------------- | -------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `change`            | Standard form change event when the switch state changes             | `Event`                | -                                                                                                            |
+| `mjo-switch:change` | Custom event with detailed information about the switch state change | `MjoSwitchChangeEvent` | `{ element: MjoSwitch, checked: boolean, value: string, name: string, previousState: { checked: boolean } }` |
+| `mjo-switch:focus`  | Fired when the switch gains focus                                    | `MjoSwitchFocusEvent`  | `{ element: MjoSwitch }`                                                                                     |
+| `mjo-switch:blur`   | Fired when the switch loses focus                                    | `MjoSwitchBlurEvent`   | `{ element: MjoSwitch }`                                                                                     |
 
-## Methods
+## CSS variables
 
-| Name                     | Type                        | Description                            |
-| ------------------------ | --------------------------- | -------------------------------------- |
-| `toggle()`               | `() => void`                | Toggles the switch state               |
-| `focus()`                | `() => void`                | Focuses the switch                     |
-| `blur()`                 | `() => void`                | Removes focus from the switch          |
-| `getValue()`             | `() => string`              | Gets the current value of the switch   |
-| `setValue(value)`        | `(value: string) => void`   | Sets the value of the switch           |
-| `reportValidity()`       | `() => boolean`             | Checks if the switch passes validation |
-| `setCustomValidity(msg)` | `(message: string) => void` | Sets a custom validation message       |
+| Variable                                     | Description                                        | Default                                                                                                                    |
+| -------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `--mjo-switch-size-small`                    | Height for small size variant                      | `20px`                                                                                                                     |
+| `--mjo-switch-size-medium`                   | Height for medium size variant                     | `28px`                                                                                                                     |
+| `--mjo-switch-size-large`                    | Height for large size variant                      | `36px`                                                                                                                     |
+| `--mjo-switch-background-color`              | Background color when unchecked                    | `var(--mjo-background-color-high, #dddddd)`                                                                                |
+| `--mjo-switch-background-color-checked`      | Background color when checked                      | `var(--mjo-primary-color, #007bff)` for primary, `var(--mjo-secondary-color, #7dc717)` for secondary                       |
+| `--mjo-switch-border-radius`                 | Border radius of the switch track                  | `50px`                                                                                                                     |
+| `--mjo-switch-border-style`                  | Border style of the switch track                   | `var(--mjo-input-border-style, solid)`                                                                                     |
+| `--mjo-switch-border-width`                  | Border width of the switch track                   | `var(--mjo-input-border-width, 1px)`                                                                                       |
+| `--mjo-switch-border-color`                  | Border color of the switch track                   | `var(--mjo-input-border-color, var(--mjo-border-color, #dddddd))`                                                          |
+| `--mjo-switch-ball-background-color`         | Background color of the switch ball when unchecked | `var(--mjo-foreground-color, #333333)`                                                                                     |
+| `--mjo-switch-ball-background-color-checked` | Background color of the switch ball when checked   | `var(--mjo-primary-foreground-color, #ffffff)` for primary, `var(--mjo-secondary-foreground-color, #ffffff)` for secondary |
+| `--mjo-switch-disabled-opacity`              | Opacity when the switch is disabled                | `0.5`                                                                                                                      |
+| `--mjo-switch-focus-color`                   | Box shadow color on focus                          | `rgba(59, 130, 246, 0.1)`                                                                                                  |
+| `--mjo-switch-focus-outline-color`           | Outline color on focus                             | `var(--mjo-primary-color)` for primary, `var(--mjo-secondary-color)` for secondary                                         |
+| `--mjo-switch-label-font-size`               | Font size for the label                            | `calc(1em * 0.8)`                                                                                                          |
+| `--mjo-switch-label-font-weight`             | Font weight for the label                          | `normal`                                                                                                                   |
+| `--mjo-switch-label-color`                   | Color for the label                                | `currentColor`                                                                                                             |
+| `--mjo-switch-helper-font-size`              | Font size for helper text                          | `inherit`                                                                                                                  |
+| `--mjo-switch-helper-font-weight`            | Font weight for helper text                        | `inherit`                                                                                                                  |
+| `--mjo-switch-helper-color`                  | Color for helper text                              | `var(--mjo-foreground-color-low)`                                                                                          |
 
-## CSS Parts
+## CSS parts
 
-| Name                          | Description                                             |
-| ----------------------------- | ------------------------------------------------------- |
-| `container`                   | The main switch container                               |
-| `check-item`                  | The switch ball/handle container                        |
-| `label-container`             | The label container (via exportparts)                   |
-| `label-truncate-container`    | The label truncate container (via exportparts)          |
-| `label-truncate-wrapper`      | The label truncate wrapper (via exportparts)            |
-| `check-icon`                  | The check icon inside the switch ball (via exportparts) |
-| `helper-text-container`       | The helper text container (via exportparts)             |
-| `helper-text-typography`      | The helper text typography element (via exportparts)    |
-| `helper-text-error-message`   | The error message container (via exportparts)           |
-| `helper-text-success-message` | The success message container (via exportparts)         |
-| `helper-text-icon`            | The helper text status icon (via exportparts)           |
+| Part                          | Description                           | Element                    |
+| ----------------------------- | ------------------------------------- | -------------------------- |
+| `container`                   | The main switch container             | `div`                      |
+| `check-item`                  | The switch ball/handle container      | `div`                      |
+| `check-icon`                  | The check icon inside the switch ball | `mjo-icon`                 |
+| `label-container`             | The label container                   | `mjoint-input-label`       |
+| `label-truncate-container`    | The label truncate container          | `mjo-text-nowrap`          |
+| `label-truncate-wrapper`      | The label truncate wrapper            | `mjo-text-nowrap`          |
+| `helper-text-container`       | The helper text container             | `mjoint-input-helper-text` |
+| `helper-text-typography`      | The helper text typography element    | `mjo-typography`           |
+| `helper-text-error-message`   | The error message container           | `div`                      |
+| `helper-text-success-message` | The success message container         | `div`                      |
+| `helper-text-icon`            | The helper text status icon           | `mjo-icon`                 |
 
-## CSS Custom Properties
+## Accessibility
 
-The switch component inherits global theme tokens and provides these specific customization options:
+The `mjo-switch` component is designed with accessibility in mind:
 
-| Name                                         | Default                               | Description                                      |
-| -------------------------------------------- | ------------------------------------- | ------------------------------------------------ |
-| `--mjo-switch-size-medium`                   | `28px`                                | Height of medium switch                          |
-| `--mjo-switch-size-small`                    | `20px`                                | Height of small switch                           |
-| `--mjo-switch-size-large`                    | `36px`                                | Height of large switch                           |
-| `--mjo-switch-background-color`              | `var(--mjo-background-color-high)`    | Background color when unchecked                  |
-| `--mjo-switch-background-color-checked`      | `var(--mjo-primary-color)`            | Background color when checked                    |
-| `--mjo-switch-ball-background-color`         | `var(--mjo-foreground-color)`         | Background color of the switch ball              |
-| `--mjo-switch-ball-background-color-checked` | `var(--mjo-primary-foreground-color)` | Background color of the switch ball when checked |
-| `--mjo-switch-border-radius`                 | `50px`                                | Border radius of the switch                      |
-| `--mjo-switch-border-style`                  | `solid`                               | Border style of the switch                       |
-| `--mjo-switch-border-width`                  | `1px`                                 | Border width of the switch                       |
-| `--mjo-switch-border-color`                  | `var(--mjo-border-color)`             | Border color of the switch                       |
-| `--mjo-switch-focus-color`                   | `rgba(59, 130, 246, 0.1)`             | Focus shadow color                               |
-| `--mjo-switch-focus-outline-color`           | `var(--mjo-primary-color)`            | Focus outline color                              |
-| `--mjo-switch-disabled-opacity`              | `0.5`                                 | Opacity when switch is disabled                  |
-| `--mjo-switch-helper-color`                  | `var(--mjo-foreground-color-low)`     | Color of helper text                             |
-| `--mjo-switch-helper-font-size`              | `inherit`                             | Font size of helper text                         |
-| `--mjo-switch-helper-font-weight`            | `inherit`                             | Font weight of helper text                       |
+### Best practices
 
-## Theme Configuration
+- Always provide a `label` property for screen reader users to understand the switch's purpose
+- Use `helperText` to provide additional context about what the switch controls
+- When using in forms, ensure proper `name` attributes for form submission
+- Set `required` property when the switch must be toggled for form validation
 
-For global theme customization, use the theme configuration:
+### ARIA roles and attributes
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
+- The component uses `role="switch"` to properly identify itself to assistive technologies
+- `aria-checked` reflects the current state ("true" or "false")
+- `aria-label` is automatically computed from the label property, including "(required)" when applicable and "(on)"/"(off)" state indicators
+- `aria-disabled` is set to "true" when the switch is disabled
+- `aria-invalid` is set to "true" when the component is in error state
+- `aria-describedby` can be customized to reference additional descriptive elements
 
-@customElement("example-switch-theme")
-export class ExampleSwitchTheme extends LitElement {
-    render() {
-        return html`
-            <mjo-theme
-                .config=${{
-                    components: {
-                        mjoSwitch: {
-                            sizeMedium: "24px",
-                            backgroundColorChecked: "#10B981",
-                            ballBackgroundColor: "#FFFFFF",
-                            radius: "12px",
-                            helperTextColor: "#6B7280",
-                            labelFontWeight: "600",
-                        },
-                    },
-                }}
-            >
-                <mjo-switch label="Custom themed switch" helperText="This switch uses custom theme colors" checked></mjo-switch>
-            </mjo-theme>
-        `;
-    }
-}
-```
+### Keyboard interactions
 
-For component-specific theming using the `theme` property:
+| Key     | Action                                 |
+| ------- | -------------------------------------- |
+| `Space` | Toggles the switch state               |
+| `Enter` | Toggles the switch state               |
+| `Tab`   | Moves focus to or away from the switch |
 
-```ts
+## Usage examples
+
+### Basic usage with label
+
+```typescript
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-switch";
 
-@customElement("example-switch-custom-theme")
-export class ExampleSwitchCustomTheme extends LitElement {
+@customElement("my-settings")
+export class MySettings extends LitElement {
+    render() {
+        return html` <mjo-switch label="Enable notifications" helperText="Receive updates about your account"></mjo-switch> `;
+    }
+}
+```
+
+### Form integration with event handling
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-switch";
+import "mjo-litui/mjo-form";
+import type { MjoSwitchChangeEvent } from "mjo-litui/types/mjo-switch";
+
+@customElement("my-preferences")
+export class MyPreferences extends LitElement {
+    @state() private preferences = {
+        notifications: false,
+        darkMode: false,
+    };
+
+    private handleSwitchChange(event: MjoSwitchChangeEvent) {
+        const { name, checked } = event.detail;
+        this.preferences = {
+            ...this.preferences,
+            [name]: checked,
+        };
+        console.log(`${name} changed to:`, checked);
+    }
+
     render() {
         return html`
-            <mjo-switch
-                label="Custom switch"
-                helperText="Custom themed switch"
-                .theme=${{
-                    backgroundColorChecked: "#8B5CF6",
-                    sizeMedium: "20px",
-                    radius: "10px",
-                }}
-                checked
-            ></mjo-switch>
+            <mjo-form>
+                <mjo-switch
+                    name="notifications"
+                    label="Enable notifications"
+                    ?checked=${this.preferences.notifications}
+                    @mjo-switch:change=${this.handleSwitchChange}
+                ></mjo-switch>
+
+                <mjo-switch
+                    name="darkMode"
+                    label="Dark mode"
+                    color="secondary"
+                    ?checked=${this.preferences.darkMode}
+                    @mjo-switch:change=${this.handleSwitchChange}
+                ></mjo-switch>
+            </mjo-form>
         `;
     }
 }
 ```
 
-## Accessibility
+### Programmatic control
 
-The switch component follows WAI-ARIA guidelines and provides comprehensive accessibility support:
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import "mjo-litui/mjo-switch";
+import "mjo-litui/mjo-button";
+import type { MjoSwitch } from "mjo-litui/mjo-switch";
 
-### ARIA Support
+@customElement("my-toggle-control")
+export class MyToggleControl extends LitElement {
+    @query("mjo-switch") switchElement!: MjoSwitch;
 
-- Uses `role="switch"` for proper screen reader identification
-- Provides `aria-checked` state information (`true`/`false`)
-- Supports `aria-label` and `aria-describedby` for labeling and description
-- Implements `aria-disabled` and `aria-invalid` states
-- Associates helper text with the switch using `aria-describedby`
+    private toggleSwitch() {
+        this.switchElement.toggle();
+    }
 
-### Keyboard Navigation
+    private resetSwitch() {
+        this.switchElement.checked = false;
+    }
 
-- **Space** or **Enter**: Toggle the switch state
-- **Tab**: Navigate to/from the switch
-- Proper focus management with visual focus indicators
+    render() {
+        return html`
+            <mjo-switch label="Feature toggle" name="feature" value="enabled"></mjo-switch>
 
-### Screen Reader Support
-
-- Announces switch state changes appropriately
-- Provides context about required fields
-- Helper text and error messages are properly announced
-
-### Focus Management
-
-- Clear focus indicators with customizable colors
-- Respects user's focus preferences
-- Maintains focus during state changes
-
-### Accessibility Example
-
-```html
-<mjo-switch label="Enable dark mode" helperText="Switch to dark theme for better visibility" aria-describedby="dark-mode-help" required></mjo-switch>
-<div id="dark-mode-help">This setting will affect all pages in the application</div>
+            <mjo-button @click=${this.toggleSwitch}> Toggle </mjo-button>
+            <mjo-button @click=${this.resetSwitch}> Reset </mjo-button>
+        `;
+    }
+}
 ```
 
-### Best Practices
+### Custom styling with CSS variables and parts
 
-1. Always provide meaningful labels
-2. Use helper text for additional context
-3. Group related switches with fieldsets when appropriate
-4. Test with keyboard-only navigation
-5. Verify screen reader announcements
+```typescript
+import { LitElement, html, css } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-switch";
 
-## Notes
+@customElement("my-custom-switch")
+export class MyCustomSwitch extends LitElement {
+    render() {
+        return html` <mjo-switch label="Custom styled switch" size="large" color="secondary"></mjo-switch> `;
+    }
 
-- The switch automatically handles smooth animations with support for `prefers-reduced-motion`
-- High contrast mode is supported with enhanced visual indicators
-- When used in forms, the switch value is included in form data when checked
-- The component supports both controlled and uncontrolled usage patterns
-- Custom checkmark icon appears when the switch is in the checked state
-- Form validation integration works with the `required` attribute
-- All theme tokens can be overridden at the component level or globally
-- Full keyboard navigation support follows WCAG guidelines
-- Screen reader compatibility with proper ARIA attributes
+    static styles = css`
+        mjo-switch {
+            --mjo-switch-background-color: #e0e0e0;
+            --mjo-switch-background-color-checked: #00c853;
+            --mjo-switch-ball-background-color: #ffffff;
+            --mjo-switch-border-radius: 8px;
+            --mjo-switch-label-font-weight: 600;
+        }
 
-## Related Components
+        mjo-switch::part(container) {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-- [mjo-checkbox](./mjo-checkbox.md) - For multi-select options
-- [mjo-radio](./mjo-radio.md) - For single-select from multiple options
-- [mjo-form](./mjo-form.md) - For form integration and validation
-- [mjo-theme](./mjo-theme.md) - For theme configuration
+        mjo-switch::part(check-icon) {
+            color: #00c853;
+        }
+    `;
+}
+```
+
+### Validation and error handling
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-switch";
+import "mjo-litui/mjo-button";
+
+@customElement("my-terms-agreement")
+export class MyTermsAgreement extends LitElement {
+    @state() private agreed = false;
+    @state() private error = false;
+    @state() private errorMsg = "";
+
+    private handleSubmit() {
+        if (!this.agreed) {
+            this.error = true;
+            this.errorMsg = "You must agree to the terms to continue";
+        } else {
+            this.error = false;
+            this.errorMsg = "";
+            console.log("Form submitted");
+        }
+    }
+
+    private handleChange(e: Event) {
+        const target = e.target as HTMLInputElement;
+        this.agreed = target.checked;
+        if (this.agreed) {
+            this.error = false;
+            this.errorMsg = "";
+        }
+    }
+
+    render() {
+        return html`
+            <mjo-switch
+                name="terms"
+                label="I agree to the terms and conditions"
+                ?checked=${this.agreed}
+                ?required=${true}
+                ?error=${this.error}
+                .errormsg=${this.errorMsg}
+                @change=${this.handleChange}
+            ></mjo-switch>
+
+            <mjo-button @click=${this.handleSubmit}> Submit </mjo-button>
+        `;
+    }
+}
+```
+
+## Additional notes
+
+- The switch includes a checkmark icon that appears when toggled on, providing clear visual feedback
+- The component supports reduced motion preferences through CSS media queries
+- High contrast mode support is built-in with enhanced borders and outlines
+- The switch automatically manages form data when used within a form context via the FormMixin
+- The internal checkbox input is hidden from accessibility tools (`aria-hidden="true"`) as the switch role on the container provides proper semantics
+- When disabled, all interaction methods (click, keyboard, focus) are blocked
+- The component properly handles focus management, allowing programmatic focus control while respecting the disabled state

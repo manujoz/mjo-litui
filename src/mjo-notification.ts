@@ -9,11 +9,7 @@ import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import "./components/notifications/mjo-notification-container.js";
 
 /**
- * A notification system for displaying positioned toast notifications with controller
- * architecture and comprehensive accessibility support.
- *
- * The notification system renders in a `mjo-notification-container` that is mounted directly
- * in the document body, providing proper overlay management and positioning control.
+ * @summary A notification system for displaying positioned toast notifications with controller architecture and comprehensive accessibility support.
  *
  * @cssprop --mjo-notification-background-color - Background color for notification items
  * @cssprop --mjo-notification-box-shadow - Box shadow for notification items
@@ -73,7 +69,6 @@ export class MjoNotification extends ThemeMixin(LitElement) implements IThemeMix
 
     /**
      * Announce a message to screen readers without showing a visual notification
-     * @param message - Message to announce
      */
     announce(message: string): void {
         const announcer = document.createElement("div");

@@ -1,481 +1,386 @@
 # mjo-progress
 
-Accessible progress indicators supporting bar and circular variants with determinate and indeterminate states, multiple sizes, semantic colors, and real-time event tracking.
+Accessible progress indicators supporting bar and circular variants with determinate and indeterminate states.
 
-## HTML Usage
+The `mjo-progress` component provides flexible progress visualization with support for both bar and circular variants. It offers determinate progress tracking with value changes, indeterminate animations for ongoing processes, multiple semantic colors, three size variants, and real-time event tracking with comprehensive accessibility support.
 
-```html
-<mjo-progress value="50" label="Loading data..."></mjo-progress>
-<mjo-progress variant="circle" value="75" showValue color="success"></mjo-progress>
-<mjo-progress indeterminate label="Processing..."></mjo-progress>
-<mjo-progress min="0" max="200" value="150" showValue></mjo-progress>
-```
+## Index
 
-## Basic Example
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
+## Use Cases
+
+- **File upload progress**: Show the progress of file uploads or downloads
+- **Form completion tracking**: Display how much of a multi-step form has been completed
+- **Loading states**: Indicate ongoing processes with indeterminate animations
+- **Task progress**: Track completion of tasks or processes in real-time
+- **Goal tracking**: Visualize achievement or progress toward goals
+- **Data processing**: Show the status of batch operations or data transformations
+
+## Import
+
+```typescript
 import "mjo-litui/mjo-progress";
-
-@customElement("example-progress-basic")
-export class ExampleProgressBasic extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-progress value="25" label="Basic Progress" showValue></mjo-progress>
-                <mjo-progress variant="circle" value="75" showValue color="primary"></mjo-progress>
-                <mjo-progress indeterminate label="Loading..."></mjo-progress>
-            </div>
-        `;
-    }
-}
 ```
 
-## Variants Example
+## Properties
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-progress";
-
-@customElement("example-progress-variants")
-export class ExampleProgressVariants extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Bar Progress</h4>
-                    <mjo-progress value="40" label="Upload Progress" showValue></mjo-progress>
-                </div>
-
-                <div>
-                    <h4>Circle Progress</h4>
-                    <div style="display: flex; gap: 1rem; align-items: center;">
-                        <mjo-progress variant="circle" value="60" showValue size="small"></mjo-progress>
-                        <mjo-progress variant="circle" value="60" showValue size="medium"></mjo-progress>
-                        <mjo-progress variant="circle" value="60" showValue size="large"></mjo-progress>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Colors and Sizes Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-progress";
-
-@customElement("example-progress-colors")
-export class ExampleProgressColors extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-progress value="60" color="success" label="Success" showValue></mjo-progress>
-                <mjo-progress value="60" color="warning" label="Warning" showValue></mjo-progress>
-                <mjo-progress value="70" size="small" label="Small size" showValue></mjo-progress>
-                <mjo-progress value="70" size="large" label="Large size" showValue></mjo-progress>
-            </div>
-        `;
-    }
-}
-```
-
-## Interactive Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-progress";
-import "mjo-litui/mjo-button";
-
-@customElement("example-progress-interactive")
-export class ExampleProgressInteractive extends LitElement {
-    @state() private progress = 0;
-    @state() private isAnimating = false;
-
-    private animate() {
-        if (this.isAnimating) return;
-
-        this.isAnimating = true;
-        this.progress = 0;
-
-        const interval = setInterval(() => {
-            this.progress += 2;
-            if (this.progress >= 100) {
-                clearInterval(interval);
-                this.isAnimating = false;
-            }
-        }, 50);
-    }
-
-    private handleProgressChange(e: CustomEvent) {
-        console.log("Progress changed:", e.detail);
-    }
-
-    private handleProgressComplete(e: CustomEvent) {
-        console.log("Progress completed!", e.detail);
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-progress
-                    .value=${this.progress}
-                    label="Animated Progress"
-                    showValue
-                    color="success"
-                    @mjo-progress:change=${this.handleProgressChange}
-                    @mjo-progress:complete=${this.handleProgressComplete}
-                ></mjo-progress>
-
-                <mjo-button @click=${this.animate} ?disabled=${this.isAnimating} variant="flat">
-                    ${this.isAnimating ? "Animating..." : "Start Animation"}
-                </mjo-button>
-            </div>
-        `;
-    }
-}
-```
-
-## Indeterminate States Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-progress";
-
-@customElement("example-progress-indeterminate")
-export class ExampleProgressIndeterminate extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Bar Indeterminate</h4>
-                    <mjo-progress indeterminate label="Processing data..."></mjo-progress>
-                </div>
-
-                <div>
-                    <h4>Circle Indeterminate</h4>
-                    <div style="display: flex; gap: 1rem; align-items: center;">
-                        <mjo-progress variant="circle" indeterminate label="Loading..." size="small"></mjo-progress>
-                        <mjo-progress variant="circle" indeterminate label="Processing..." size="medium"></mjo-progress>
-                        <mjo-progress variant="circle" indeterminate label="Syncing..." size="large"></mjo-progress>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Custom Range Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-progress";
-
-@customElement("example-progress-range")
-export class ExampleProgressRange extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-progress min="10" max="50" value="30" label="Custom Range (10-50)" showValue></mjo-progress>
-                <mjo-progress min="0" max="200" value="150" label="Large Numbers (0-200)" showValue></mjo-progress>
-            </div>
-        `;
-    }
-}
-```
-
-## Attributes / Properties
-
-| Name            | Type                                                                      | Default     | Reflects | Description                                       |
-| --------------- | ------------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------- |
-| `min`           | `number`                                                                  | `0`         | no       | Minimum value of the progress range               |
-| `max`           | `number`                                                                  | `100`       | no       | Maximum value of the progress range               |
-| `value`         | `number \| undefined`                                                     | `undefined` | no       | Current progress value (uses `min` if undefined)  |
-| `showValue`     | `boolean`                                                                 | `false`     | no       | Display formatted percentage value                |
-| `indeterminate` | `boolean`                                                                 | `false`     | yes      | Shows animated indeterminate state                |
-| `label`         | `string \| undefined`                                                     | `undefined` | no       | Text label displayed above the progress indicator |
-| `formatOptions` | `Intl.NumberFormatOptions \| undefined`                                   | `undefined` | no       | Custom formatting options for percentage display  |
-| `color`         | `"primary" \| "secondary" \| "success" \| "warning" \| "error" \| "info"` | `"primary"` | no       | Semantic color theme                              |
-| `size`          | `"small" \| "medium" \| "large"`                                          | `"medium"`  | no       | Overall size of the progress indicator            |
-| `variant`       | `"bar" \| "circle"`                                                       | `"bar"`     | no       | Visual style variant                              |
-
-### Internal State
-
-| Name            | Type                  | Description                                         |
-| --------------- | --------------------- | --------------------------------------------------- |
-| `previousValue` | `number \| undefined` | Tracks previous value for change/complete detection |
-
-### Behavior Notes
-
-- Progress percentage is calculated as: `((value - min) / (max - min)) * 100`
-- When `indeterminate` is true, animations show continuous activity regardless of `value`
-- `mjo-progress:complete` event fires when value reaches or exceeds `max`
-- Circle variant automatically adjusts SVG dimensions based on size
-- Bar heights are fixed per size: small (6px), medium (8px), large (12px)
+| Property        | Type                                    | Description                                                                                                          | Default     | Required |
+| --------------- | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
+| `min`           | `number`                                | Minimum value for the progress range                                                                                 | `0`         | No       |
+| `max`           | `number`                                | Maximum value for the progress range                                                                                 | `100`       | No       |
+| `value`         | `number \| undefined`                   | Current progress value. When undefined, uses `min` value                                                             | `undefined` | No       |
+| `showValue`     | `boolean`                               | Whether to display the formatted percentage value                                                                    | `false`     | No       |
+| `indeterminate` | `boolean`                               | Whether to show an indeterminate loading animation                                                                   | `false`     | No       |
+| `label`         | `string \| undefined`                   | Optional label text displayed above the progress indicator                                                           | `undefined` | No       |
+| `formatOptions` | `Intl.NumberFormatOptions \| undefined` | Custom number format options for the displayed value                                                                 | `undefined` | No       |
+| `color`         | `MjoProgressColor`                      | Semantic color of the progress indicator (`'primary'`, `'secondary'`, `'success'`, `'warning'`, `'error'`, `'info'`) | `'primary'` | No       |
+| `size`          | `MjoProgressSize`                       | Size variant of the progress indicator (`'small'`, `'medium'`, `'large'`)                                            | `'medium'`  | No       |
+| `variant`       | `MjoProgressVariant`                    | Visual variant of the progress indicator (`'bar'`, `'circle'`)                                                       | `'bar'`     | No       |
 
 ## Events
 
-| Event                   | Detail                            | Emitted When                 | Notes                                         |
-| ----------------------- | --------------------------------- | ---------------------------- | --------------------------------------------- |
-| `mjo-progress:change`   | `{ value, percentage, min, max }` | Value, min, or max changes   | Fires on any progress value change            |
-| `mjo-progress:complete` | `{ value, min, max }`             | Value reaches or exceeds max | Only fires when crossing completion threshold |
-
-### Event Details
-
-#### MjoProgressChangeEvent
-
-- `value`: Current progress value
-- `percentage`: Calculated percentage (0-100)
-- `min`: Minimum value
-- `max`: Maximum value
-
-#### MjoProgressCompleteEvent
-
-- `value`: Final value that triggered completion
-- `min`: Minimum value
-- `max`: Maximum value
-
-## CSS Parts
-
-The component exposes several CSS parts for granular styling control:
-
-| Part Name          | Description                                    | Variant     |
-| ------------------ | ---------------------------------------------- | ----------- |
-| `container`        | Main progress wrapper element                  | Both        |
-| `bar-container`    | Container for the bar variant                  | Bar only    |
-| `bar-labels`       | Container for label and value text             | Bar only    |
-| `bar-label`        | Label text element                             | Bar only    |
-| `bar-value`        | Value text element                             | Bar only    |
-| `bar-track`        | Background track of the progress bar           | Bar only    |
-| `bar-fill`         | Filled portion of the progress bar             | Bar only    |
-| `circle-container` | Container for the circle variant               | Circle only |
-| `circle-label`     | Label text for circle variant                  | Circle only |
-| `circle-wrapper`   | Wrapper around the SVG circle                  | Circle only |
-| `circle-svg`       | The SVG element containing the progress circle | Circle only |
-| `circle-value`     | Value text inside the circle                   | Circle only |
-
-### CSS Parts Example
-
-```css
-/* Style the progress bar track */
-mjo-progress::part(bar-track) {
-    background: linear-gradient(90deg, #f0f0f0, #e0e0e0);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Style the progress bar fill */
-mjo-progress::part(bar-fill) {
-    background: linear-gradient(90deg, #4e9be4, #357abd);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* Style circle labels */
-mjo-progress::part(circle-label) {
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-```
+| Event                   | Type                       | Description                                          | Detail                                                            |
+| ----------------------- | -------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------- |
+| `mjo-progress:change`   | `MjoProgressChangeEvent`   | Fired when progress value, min, or max changes       | `{ value: number, percentage: number, min: number, max: number }` |
+| `mjo-progress:complete` | `MjoProgressCompleteEvent` | Fired when progress value reaches or exceeds maximum | `{ value: number, min: number, max: number }`                     |
 
 ## CSS Variables
 
-The component provides extensive customization through CSS variables with intelligent fallbacks.
+| Variable                                 | Description                                                  | Default                                     |
+| ---------------------------------------- | ------------------------------------------------------------ | ------------------------------------------- |
+| `--mjo-progress-label-gap`               | Gap between label and progress indicator                     | `8px`                                       |
+| `--mjo-progress-font-size`               | Font size for labels and values                              | `14px`                                      |
+| `--mjo-progress-font-size-small`         | Font size for small variant                                  | `12px`                                      |
+| `--mjo-progress-font-size-medium`        | Font size for circle value in medium variant                 | `10px`                                      |
+| `--mjo-progress-font-size-large`         | Font size for large variant                                  | `16px`                                      |
+| `--mjo-progress-font-weight`             | Font weight for labels                                       | `500`                                       |
+| `--mjo-progress-background`              | Background color for track/circle background                 | `var(--mjo-background-color-high, #f5f5f5)` |
+| `--mjo-progress-color`                   | Color of the progress fill/stroke (overrides color property) | Depends on `color` property                 |
+| `--mjo-progress-bar-border-radius`       | Border radius for bar variant                                | `4px`                                       |
+| `--mjo-progress-bar-border-radius-small` | Border radius for small bar variant                          | `3px`                                       |
+| `--mjo-progress-bar-border-radius-large` | Border radius for large bar variant                          | `6px`                                       |
+| `--mjo-progress-animation-duration`      | Duration of indeterminate animation                          | `2s`                                        |
+| `--mjo-progress-circle-dash`             | Stroke dash array for medium circle indeterminate animation  | `40.84 122.52`                              |
+| `--mjo-progress-circle-dash-small`       | Stroke dash array for small circle indeterminate animation   | `23.56 70.69`                               |
+| `--mjo-progress-circle-dash-large`       | Stroke dash array for large circle indeterminate animation   | `62.83 188.5`                               |
 
-### Layout and Typography
+## CSS Parts
 
-| Variable                     | Default | Used For                           |
-| ---------------------------- | ------- | ---------------------------------- |
-| `--mjo-progress-label-gap`   | `8px`   | Gap between label and progress bar |
-| `--mjo-progress-font-size`   | `14px`  | Base font size for labels/values   |
-| `--mjo-progress-font-weight` | `500`   | Font weight for text content       |
+| Part               | Description                                       | Element |
+| ------------------ | ------------------------------------------------- | ------- |
+| `container`        | The main progress wrapper element                 | `div`   |
+| `bar-container`    | Container for the bar variant                     | `div`   |
+| `bar-labels`       | Container for label and value text in bar variant | `div`   |
+| `bar-label`        | Label text element in bar variant                 | `span`  |
+| `bar-value`        | Value text element in bar variant                 | `span`  |
+| `bar-track`        | Background track of the progress bar              | `div`   |
+| `bar-fill`         | Filled portion of the progress bar                | `div`   |
+| `circle-container` | Container for the circle variant                  | `div`   |
+| `circle-label`     | Label text for circle variant                     | `div`   |
+| `circle-wrapper`   | Wrapper around the SVG circle                     | `div`   |
+| `circle-svg`       | The SVG element containing the progress circle    | `svg`   |
+| `circle-value`     | Value text inside the circle                      | `div`   |
 
-### Size-Specific Typography
+## Accessibility
 
-| Variable                          | Fallback                            | Used For                 |
-| --------------------------------- | ----------------------------------- | ------------------------ |
-| `--mjo-progress-font-size-small`  | `--mjo-progress-font-size` (`12px`) | Small variant text size  |
-| `--mjo-progress-font-size-medium` | `10px`                              | Medium circle value size |
-| `--mjo-progress-font-size-large`  | `--mjo-progress-font-size` (`16px`) | Large variant text size  |
+### ARIA Roles and Attributes
 
-### Colors
+The component implements proper ARIA attributes for screen reader support:
 
-| Variable                    | Fallback                                  | Used For                   |
-| --------------------------- | ----------------------------------------- | -------------------------- |
-| `--mjo-progress-color`      | Semantic color (see below)                | Progress fill/stroke color |
-| `--mjo-progress-background` | `--mjo-background-color-high` (`#f5f5f5`) | Track background color     |
+- `role="progressbar"`: Identifies the element as a progress indicator
+- `aria-valuenow`: Current value (only in determinate state)
+- `aria-valuemin`: Minimum value
+- `aria-valuemax`: Maximum value
+- `aria-label`: Accessible label from `ariaLabel` or `label` properties
 
-### Border Radius
+### Best Practices
 
-| Variable                                 | Default | Used For                |
-| ---------------------------------------- | ------- | ----------------------- |
-| `--mjo-progress-bar-border-radius`       | `4px`   | Base bar corner radius  |
-| `--mjo-progress-bar-border-radius-small` | `3px`   | Small bar corner radius |
-| `--mjo-progress-bar-border-radius-large` | `6px`   | Large bar corner radius |
+1. **Provide labels**: Use the `label` property to describe what is being tracked
+2. **Use appropriate colors**: Choose semantic colors that match the context (e.g., `'success'` for completed tasks, `'error'` for failed operations)
+3. **Show values when relevant**: Enable `showValue` for determinate progress where users benefit from seeing the percentage
+4. **Use indeterminate for unknown duration**: Set `indeterminate` when the process duration is unknown
+5. **Choose appropriate variants**: Use `'bar'` for horizontal spaces, `'circle'` for compact areas or dashboards
 
-### Animation
+### Keyboard Interactions
 
-| Variable                            | Default | Used For                           |
-| ----------------------------------- | ------- | ---------------------------------- |
-| `--mjo-progress-animation-duration` | `2s`    | Indeterminate animation cycle time |
+The component is informational and does not require keyboard interactions. Screen readers will announce progress updates automatically when values change.
 
-### Indeterminate Circle Animation
+## Usage Examples
 
-| Variable                           | Calculated     | Used For                   |
-| ---------------------------------- | -------------- | -------------------------- |
-| `--mjo-progress-circle-dash`       | `40.84 122.52` | Medium circle dash pattern |
-| `--mjo-progress-circle-dash-small` | `23.56 70.69`  | Small circle dash pattern  |
-| `--mjo-progress-circle-dash-large` | `62.83 188.5`  | Large circle dash pattern  |
+### Basic Progress Bar
 
-### Semantic Colors
-
-The component automatically uses semantic colors based on the `color` prop:
-
-| Color       | CSS Variable            | Fallback  |
-| ----------- | ----------------------- | --------- |
-| `primary`   | `--mjo-primary-color`   | `#4e9be4` |
-| `secondary` | `--mjo-secondary-color` | `#7dc717` |
-| `success`   | `--mjo-color-success`   | `#4caf50` |
-| `warning`   | `--mjo-color-warning`   | `#ff9800` |
-| `error`     | `--mjo-color-error`     | `#f44336` |
-| `info`      | `--mjo-color-info`      | `#2196f3` |
-
-## ThemeMixin Customization
-
-This component supports `ThemeMixin` for instance-specific customization. Properties are converted to CSS variables with the pattern: `--mjo-progress-{property-name}`.
-
-### MjoProgressTheme Interface
-
-```ts
-interface MjoProgressTheme {
-    labelGap?: string;
-    fontSize?: string;
-    fontWeight?: string;
-    fontSizeSmall?: string;
-    fontSizeMedium?: string;
-    fontSizeLarge?: string;
-    color?: string;
-    background?: string;
-    barBorderRadius?: string;
-    barBorderRadiusSmall?: string;
-    barBorderRadiusLarge?: string;
-    animationDuration?: string;
-    circleDash?: string;
-    circleDashSmall?: string;
-    circleDashLarge?: string;
-}
-```
-
-### ThemeMixin Example
-
-```ts
+```typescript
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-progress";
 
-@customElement("example-progress-themed")
-export class ExampleProgressThemed extends LitElement {
-    private customTheme = {
-        color: "#7c3aed",
-        background: "#f3f4f6",
-        fontSize: "16px",
-        fontWeight: "600",
-        barBorderRadius: "8px",
-        animationDuration: "1.5s",
-    };
-
+@customElement("my-component")
+export class MyComponent extends LitElement {
     render() {
-        return html` <mjo-progress value="65" label="Custom Themed Progress" showValue .theme=${this.customTheme}></mjo-progress> `;
+        return html` <mjo-progress label="Upload Progress" .value=${45} showValue></mjo-progress> `;
     }
 }
 ```
 
-## Accessibility Features
+### Circular Progress with Different Colors
 
-The component provides comprehensive accessibility support following WCAG 2.1 guidelines:
+```typescript
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-progress";
 
-### ARIA Support
+@customElement("my-dashboard")
+export class MyDashboard extends LitElement {
+    render() {
+        return html`
+            <div style="display: flex; gap: 20px;">
+                <mjo-progress variant="circle" color="success" .value=${80} showValue label="CPU Usage"></mjo-progress>
 
-- **`role="progressbar"`**: Identifies the element as a progress indicator
-- **`aria-valuenow`**: Current progress value (omitted for indeterminate)
-- **`aria-valuemin`**: Minimum value from `min` property
-- **`aria-valuemax`**: Maximum value from `max` property
-- **`aria-label`**: Uses `ariaLabel` prop or falls back to `label` property
+                <mjo-progress variant="circle" color="warning" .value=${65} showValue label="Memory"></mjo-progress>
 
-### Screen Reader Support
-
-- Progress changes are announced through value updates
-- Completion events provide auditory feedback
-- Indeterminate state is properly communicated
-- Labels provide context about what's progressing
-
-### Motion Preferences
-
-- Respects `prefers-reduced-motion` user setting
-- Indeterminate animations are reduced or replaced with static patterns
-- Smooth transitions honor motion preferences
-
-### Keyboard Navigation
-
-While progress indicators are typically not interactive, the component properly handles:
-
-- Focus management when part of larger interfaces
-- Programmatic focus if needed for custom interactions
-
-## Performance Considerations
-
-- Circle SVG dimensions are calculated efficiently using getters
-- Indeterminate animations use CSS transforms for optimal performance
-- Event dispatching is optimized to prevent unnecessary updates
-- Value changes only trigger events when actual values differ
-
-## Best Practices
-
-### Value Display
-
-```html
-<!-- Good: Show values for user feedback -->
-<mjo-progress value="45" label="Upload progress" showValue></mjo-progress>
-
-<!-- Good: Hide values when not meaningful -->
-<mjo-progress indeterminate label="Analyzing data..."></mjo-progress>
+                <mjo-progress variant="circle" color="error" .value=${95} showValue label="Disk Space"></mjo-progress>
+            </div>
+        `;
+    }
+}
 ```
 
-### Semantic Colors
+### Indeterminate Loading State
 
-```html
-<!-- Good: Use semantic colors appropriately -->
-<mjo-progress value="90" color="success" label="Download complete"></mjo-progress>
-<mjo-progress value="25" color="warning" label="Low battery"></mjo-progress>
-<mjo-progress value="95" color="error" label="Storage almost full"></mjo-progress>
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-progress";
+
+@customElement("my-loader")
+export class MyLoader extends LitElement {
+    @state() private loading = true;
+
+    render() {
+        return html` <mjo-progress label="Processing data..." ?indeterminate=${this.loading} variant="bar" color="primary"></mjo-progress> `;
+    }
+}
 ```
 
-### Custom Ranges
+### Progress Event Handling
 
-```html
-<!-- Good: Custom ranges with clear labeling -->
-<mjo-progress min="1000" max="5000" value="3500" label="API calls remaining: 1,500 of 4,000" showValue></mjo-progress>
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-progress";
+import type { MjoProgressChangeEvent, MjoProgressCompleteEvent } from "mjo-litui/types/mjo-progress";
+
+@customElement("my-upload")
+export class MyUpload extends LitElement {
+    @state() private progress = 0;
+
+    private handleChange(e: MjoProgressChangeEvent) {
+        console.log(`Progress: ${e.detail.percentage.toFixed(1)}%`);
+    }
+
+    private handleComplete(e: MjoProgressCompleteEvent) {
+        console.log("Upload complete!");
+        alert("File uploaded successfully");
+    }
+
+    private simulateUpload() {
+        this.progress = 0;
+        const interval = setInterval(() => {
+            this.progress += 10;
+            if (this.progress >= 100) {
+                clearInterval(interval);
+            }
+        }, 500);
+    }
+
+    render() {
+        return html`
+            <div>
+                <mjo-progress
+                    label="File Upload"
+                    .value=${this.progress}
+                    showValue
+                    color="info"
+                    @mjo-progress:change=${this.handleChange}
+                    @mjo-progress:complete=${this.handleComplete}
+                ></mjo-progress>
+
+                <button @click=${this.simulateUpload}>Start Upload</button>
+            </div>
+        `;
+    }
+}
 ```
 
-## Summary
+### Custom Formatting Options
 
-`<mjo-progress>` provides a fully accessible, flexible progress indicator supporting both determinate and indeterminate states. The component offers:
+```typescript
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-progress";
 
-- **Dual Variants**: Bar and circular progress indicators
-- **Semantic Colors**: Six semantic color options integrated with the design system
-- **Flexible Sizing**: Three size variants with proportional scaling
-- **Smart Events**: Real-time change tracking and completion detection
-- **Custom Ranges**: Support for any numeric range beyond 0-100
-- **Accessibility**: WCAG 2.1 compliant with comprehensive ARIA support
-- **Motion Respect**: Honors user motion preferences
-- **Theme Integration**: Full ThemeMixin support for custom styling
+@customElement("my-progress-custom")
+export class MyProgressCustom extends LitElement {
+    render() {
+        return html`
+            <mjo-progress
+                label="Download Progress"
+                .value=${75.5}
+                showValue
+                .formatOptions=${{
+                    style: "percent",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                }}
+            ></mjo-progress>
+        `;
+    }
+}
+```
 
-The component automatically handles percentage calculations, provides intelligent fallbacks for all CSS variables, and includes built-in animations that respect user preferences. Use it for file uploads, data processing, loading states, or any scenario requiring progress visualization with proper accessibility support.
+### Different Sizes
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-progress";
+
+@customElement("my-progress-sizes")
+export class MyProgressSizes extends LitElement {
+    render() {
+        return html`
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <mjo-progress size="small" .value=${60} label="Small Progress" showValue></mjo-progress>
+
+                <mjo-progress size="medium" .value=${60} label="Medium Progress" showValue></mjo-progress>
+
+                <mjo-progress size="large" .value=${60} label="Large Progress" showValue></mjo-progress>
+            </div>
+        `;
+    }
+}
+```
+
+### Styling with CSS Parts and Variables
+
+```typescript
+import { LitElement, html, css } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-progress";
+
+@customElement("my-styled-progress")
+export class MyStyledProgress extends LitElement {
+    static styles = css`
+        mjo-progress {
+            --mjo-progress-color: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            --mjo-progress-background: #e0e0e0;
+            --mjo-progress-bar-border-radius: 10px;
+            --mjo-progress-font-size: 16px;
+            --mjo-progress-font-weight: 700;
+        }
+
+        mjo-progress::part(bar-fill) {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        mjo-progress::part(bar-label) {
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    `;
+
+    render() {
+        return html` <mjo-progress label="Custom Styled Progress" .value=${70} showValue></mjo-progress> `;
+    }
+}
+```
+
+### Real-World Multi-Step Form Progress
+
+```typescript
+import { LitElement, html, css } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-progress";
+
+@customElement("my-multi-step-form")
+export class MyMultiStepForm extends LitElement {
+    @state() private currentStep = 1;
+    private totalSteps = 5;
+
+    static styles = css`
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .step-content {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    `;
+
+    private get progress() {
+        return (this.currentStep / this.totalSteps) * 100;
+    }
+
+    private nextStep() {
+        if (this.currentStep < this.totalSteps) {
+            this.currentStep++;
+        }
+    }
+
+    private prevStep() {
+        if (this.currentStep > 1) {
+            this.currentStep--;
+        }
+    }
+
+    render() {
+        return html`
+            <div class="form-container">
+                <mjo-progress label="Form Completion" .value=${this.progress} showValue color="primary" size="large"></mjo-progress>
+
+                <div class="step-content">
+                    <h3>Step ${this.currentStep} of ${this.totalSteps}</h3>
+                    <p>Form content for step ${this.currentStep}...</p>
+                </div>
+
+                <div class="navigation">
+                    <button @click=${this.prevStep} ?disabled=${this.currentStep === 1}>Previous</button>
+                    <button @click=${this.nextStep} ?disabled=${this.currentStep === this.totalSteps}>Next</button>
+                </div>
+            </div>
+        `;
+    }
+}
+```
+
+## Additional Notes
+
+- The component automatically calculates percentages based on `min`, `max`, and `value` properties
+- When `indeterminate` is true, the `value` property is ignored and animations are shown
+- The `complete` event fires only when transitioning from below max to at or above max value
+- Circle variant automatically hides the value text in `small` size due to space constraints
+- The component uses native `Intl.NumberFormat` for value formatting, allowing extensive customization
+- All transitions and animations respect the user's motion preferences when properly configured in the theme
+- The component is fully responsive and works well in flex and grid layouts

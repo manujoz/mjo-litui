@@ -1,767 +1,515 @@
 # mjo-drawer
 
-Dynamic side panel component providing slide-out content areas with configurable positioning, animations, overlay management, and comprehensive accessibility support including ARIA patterns, focus management, and keyboard navigation.
+Dynamic side panel component providing slide-out content areas with configurable positioning and comprehensive accessibility support.
 
-## HTML Usage
+## Index
 
-```html
-<mjo-drawer id="myDrawer"></mjo-drawer>
-```
+1. [Use Cases](#use-cases)
+2. [Import](#import)
+3. [Properties](#properties)
+4. [States](#states)
+5. [Public Methods](#public-methods)
+6. [Events](#events)
+7. [CSS Variables](#css-variables)
+8. [CSS Parts](#css-parts)
+9. [Accessibility](#accessibility)
+10. [Usage Examples](#usage-examples)
+11. [Additional Notes](#additional-notes)
 
-## Basic Example
+## Use Cases
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoDrawer } from "mjo-litui/types";
+The `mjo-drawer` component is designed for:
+
+- Side navigation panels that slide in from any screen edge
+- Form panels and detail views in responsive layouts
+- Contextual content overlays with configurable dimensions
+- Modal-like panels with backdrop and focus trapping
+- Temporary panels for displaying additional information or controls
+- Navigation menus on mobile devices
+
+## Import
+
+```typescript
 import "mjo-litui/mjo-drawer";
-import "mjo-litui/mjo-button";
-
-@customElement("example-drawer-basic")
-export class ExampleDrawerBasic extends LitElement {
-    @query("mjo-drawer") drawer!: MjoDrawer;
-
-    private openDrawer() {
-        this.drawer.controller.show({
-            title: "Basic Drawer",
-            content: html`
-                <div style="padding: 1rem;">
-                    <p>This is a basic drawer with some content.</p>
-                    <p>You can put any HTML content here.</p>
-                </div>
-            `,
-        });
-    }
-
-    render() {
-        return html`
-            <div>
-                <mjo-button @click=${this.openDrawer} color="primary"> Open Basic Drawer </mjo-button>
-                <mjo-drawer></mjo-drawer>
-            </div>
-        `;
-    }
-}
 ```
 
-## Positioning Example
+## Properties
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoDrawer } from "mjo-litui/types";
-import "mjo-litui/mjo-drawer";
-import "mjo-litui/mjo-button";
+| Property                | Type      | Default     | Description                                                                        | Required |
+| ----------------------- | --------- | ----------- | ---------------------------------------------------------------------------------- | -------- |
+| `idDrawer`              | `string`  | `undefined` | ID for the drawer container element                                                | No       |
+| `label`                 | `string`  | `undefined` | Accessible label for the drawer (used when no title is provided)                   | No       |
+| `initialFocus`          | `string`  | `undefined` | CSS selector for the element to focus when drawer opens                            | No       |
+| `disabledTrapFocus`     | `boolean` | `false`     | Disables focus trapping within the drawer                                          | No       |
+| `disabledRestoreFocus`  | `boolean` | `false`     | Prevents restoring focus to the previously focused element when drawer closes      | No       |
+| `disabledCloseOnEscape` | `boolean` | `false`     | Prevents closing the drawer when the Escape key is pressed                         | No       |
+| `disableScrollLock`     | `boolean` | `false`     | Disables body scroll locking when the drawer is open                               | No       |
+| `aria-labelledby`       | `string`  | `undefined` | ID of the element that labels the drawer (automatically set to title if provided)  | No       |
+| `aria-describedby`      | `string`  | `undefined` | ID of the element that describes the drawer (automatically set to content element) | No       |
 
-@customElement("example-drawer-positions")
-export class ExampleDrawerPositions extends LitElement {
-    @query("mjo-drawer") drawer!: MjoDrawer;
+## States
 
-    private openDrawer(position: "left" | "right" | "top" | "bottom", title: string) {
-        this.drawer.controller.show({
-            title: `${title} Drawer`,
-            position,
-            width: position === "left" || position === "right" ? 400 : undefined,
-            height: position === "top" || position === "bottom" ? 300 : undefined,
-            content: html`
-                <div style="padding: 1rem;">
-                    <h4>Content from the ${position}</h4>
-                    <p>This drawer slides in from the ${position} side of the screen.</p>
-                </div>
-            `,
-        });
-    }
+No public states are exposed.
 
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <h4>Drawer Positions</h4>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; max-width: 400px;">
-                    <mjo-button @click=${() => this.openDrawer("left", "Left")} color="primary"> Left Drawer </mjo-button>
-                    <mjo-button @click=${() => this.openDrawer("right", "Right")} color="secondary"> Right Drawer </mjo-button>
-                    <mjo-button @click=${() => this.openDrawer("top", "Top")} color="success"> Top Drawer </mjo-button>
-                    <mjo-button @click=${() => this.openDrawer("bottom", "Bottom")} color="warning"> Bottom Drawer </mjo-button>
-                </div>
-                <mjo-drawer></mjo-drawer>
-            </div>
-        `;
-    }
-}
-```
+## Public Methods
 
-## Advanced Configuration Example
+The `mjo-drawer` component uses a controller-based API. All interactions are performed through the `controller` property:
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
-import type { MjoDrawer } from "mjo-litui/types";
-import "mjo-litui/mjo-drawer";
-import "mjo-litui/mjo-button";
-
-@customElement("example-drawer-advanced")
-export class ExampleDrawerAdvanced extends LitElement {
-    @query("mjo-drawer") drawer!: MjoDrawer;
-    @state() private logs: string[] = [];
-
-    private addLog(message: string) {
-        this.logs = [...this.logs, `${new Date().toLocaleTimeString()}: ${message}`];
-    }
-
-    private openBlockedDrawer() {
-        this.addLog("Opening blocked drawer...");
-        this.drawer.controller.show({
-            title: "Blocked Drawer",
-            blocked: true,
-            width: 450,
-            content: html`
-                <div style="padding: 1rem;">
-                    <p style="color: #f59e0b; font-weight: 500;">⚠️ This drawer is blocked!</p>
-                    <p>Blocked drawers can only be closed programmatically:</p>
-                    <mjo-button @click=${() => this.drawer.controller.close()} color="error"> Force Close </mjo-button>
-                </div>
-            `,
-            onOpen: () => this.addLog("Blocked drawer opened"),
-            onClose: () => this.addLog("Blocked drawer closed"),
-        });
-    }
-
-    private openCustomAnimationDrawer() {
-        this.addLog("Opening slow animation drawer...");
-        this.drawer.controller.show({
-            title: "Custom Animation",
-            animationDuration: 800,
-            content: html`
-                <div style="padding: 1rem;">
-                    <p>This drawer uses a slower animation (800ms).</p>
-                    <mjo-button @click=${() => this.drawer.controller.close()} color="primary"> Close </mjo-button>
-                </div>
-            `,
-            onOpen: () => this.addLog("Animation completed"),
-            onClose: () => this.addLog("Drawer closed"),
-        });
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Advanced Configuration</h4>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <mjo-button @click=${this.openBlockedDrawer} color="warning"> Blocked Drawer </mjo-button>
-                        <mjo-button @click=${this.openCustomAnimationDrawer} color="secondary"> Custom Animation </mjo-button>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Event Log</h4>
-                    <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 1rem; max-height: 150px; overflow-y: auto;">
-                        ${this.logs.length > 0
-                            ? this.logs.map((log) => html`<div style="font-family: monospace; font-size: 0.9rem;">${log}</div>`)
-                            : html`<div style="color: #6c757d;">No events yet. Open a drawer to see callbacks.</div>`}
-                    </div>
-                    <mjo-button @click=${() => (this.logs = [])} variant="ghost" size="small" style="margin-top: 0.5rem;"> Clear Log </mjo-button>
-                </div>
-
-                <mjo-drawer></mjo-drawer>
-            </div>
-        `;
-    }
-}
-```
-
-## Theming Example
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoDrawer } from "mjo-litui/types";
-import "mjo-litui/mjo-drawer";
-import "mjo-litui/mjo-button";
-
-@customElement("example-drawer-themed")
-export class ExampleDrawerThemed extends LitElement {
-    @query("mjo-drawer") drawer!: MjoDrawer;
-
-    static styles = css`
-        .dark-drawer {
-            --mjo-drawer-background-color: #1f2937;
-            --mjo-drawer-title-border-color: #374151;
-            --mjo-drawer-box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-            color: #f3f4f6;
-        }
-    `;
-
-    private openDarkDrawer() {
-        this.drawer.controller.show({
-            title: "Dark Theme Drawer",
-            position: "right",
-            content: html`
-                <div style="padding: 1rem;">
-                    <h4 style="color: #f3f4f6;">Dark Theme</h4>
-                    <p style="color: #d1d5db;">This drawer uses custom CSS variables for theming.</p>
-                    <mjo-button color="primary">Action Button</mjo-button>
-                </div>
-            `,
-        });
-    }
-
-    render() {
-        return html`
-            <div>
-                <mjo-button @click=${this.openDarkDrawer} color="primary"> Dark Theme Drawer </mjo-button>
-                <mjo-drawer class="dark-drawer" idDrawer="themed-drawer"></mjo-drawer>
-            </div>
-        `;
-    }
-}
-```
-
-## Styling Architecture
-
-### Important: Drawer Container Mounting
-
-The `mjo-drawer` component works by dynamically creating a `mjoint-drawer-container` element that is mounted directly in the document `<body>`. This architecture provides several benefits:
-
-- **Overlay Management**: Ensures the drawer appears above all other content
-- **Z-index Control**: Prevents z-index conflicts with parent containers
-- **Overflow Prevention**: Bypasses any parent `overflow: hidden` styles
-- **Focus Management**: Enables proper focus trapping and restoration
-
-### CSS Variables and Parts Application
-
-Because the actual drawer content is rendered in the `mjoint-drawer-container` (mounted in the body), CSS variables and CSS parts cannot be applied directly to the `mjo-drawer` component. Instead, you need to target the container using the `idDrawer` property.
-
-### Usage with `idDrawer` Property
-
-The `idDrawer` property allows you to assign a specific ID to the dynamically created drawer container, enabling targeted styling:
-
-```html
-<mjo-drawer idDrawer="my-settings-drawer"></mjo-drawer>
-```
-
-This creates a container with `id="my-settings-drawer"` in the document body, which you can then style:
-
-```css
-/* Target the specific drawer container */
-#my-settings-drawer {
-    --mjo-drawer-width: 600px;
-    --mjo-drawer-background-color: #f8f9fa;
-}
-
-/* Apply CSS parts to the specific drawer */
-#my-settings-drawer::part(backdrop) {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-```
-
-### Global vs Specific Styling
-
-#### Global Styling (All Drawers)
-
-```css
-/* Apply to all drawer containers */
-:root {
-    --mjo-drawer-width: 500px;
-    --mjo-drawer-backdrop-background-color: rgba(0, 0, 0, 0.5);
-}
-
-/* Target all drawer containers */
-mjo-drawer-container {
-    --mjo-drawer-background-color: #ffffff;
-}
-```
-
-#### Specific Styling (Individual Drawers)
-
-```css
-/* Apply only to drawers with specific idDrawer */
-#navigation-drawer {
-    --mjo-drawer-width: 280px;
-    --mjo-drawer-background-color: #1f2937;
-}
-
-#settings-drawer {
-    --mjo-drawer-width: 450px;
-    --mjo-drawer-background-color: #f3f4f6;
-}
-```
-
-### Complete Styling Example
-
-```ts
-@customElement("app-with-styled-drawers")
-export class AppWithStyledDrawers extends LitElement {
-    @query("#nav-drawer") navDrawer!: MjoDrawer;
-    @query("#settings-drawer") settingsDrawer!: MjoDrawer;
-
-    static styles = css`
-        /* Global drawer defaults */
-        :root {
-            --mjo-drawer-backdrop-background-color: rgba(0, 0, 0, 0.6);
-            --mjo-drawer-focus-outline-color: #3b82f6;
-        }
-
-        /* Navigation drawer specific styles */
-        #app-navigation {
-            --mjo-drawer-width: 280px;
-            --mjo-drawer-background-color: #1e293b;
-            --mjo-drawer-title-border-color: #334155;
-        }
-
-        /* Settings drawer specific styles */
-        #app-settings {
-            --mjo-drawer-width: 500px;
-            --mjo-drawer-background-color: #f8fafc;
-            --mjo-drawer-box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Custom parts styling */
-        #app-navigation::part(content) {
-            padding: 0;
-        }
-
-        #app-settings::part(close-button) {
-            background-color: #ef4444;
-            border-radius: 50%;
-        }
-    `;
-
-    private openNavigation() {
-        this.navDrawer.controller.show({
-            title: "Navigation",
-            position: "left",
-            content: html`<nav-menu></nav-menu>`,
-        });
-    }
-
-    private openSettings() {
-        this.settingsDrawer.controller.show({
-            title: "Settings",
-            position: "right",
-            content: html`<settings-form></settings-form>`,
-        });
-    }
-
-    render() {
-        return html`
-            <main>
-                <mjo-button @click=${this.openNavigation}>Menu</mjo-button>
-                <mjo-button @click=${this.openSettings}>Settings</mjo-button>
-
-                <mjo-drawer id="nav-drawer" idDrawer="app-navigation"></mjo-drawer>
-                <mjo-drawer id="settings-drawer" idDrawer="app-settings"></mjo-drawer>
-            </main>
-        `;
-    }
-}
-```
-
-### Best Practices for Styling
-
-1. **Use `idDrawer` for specific styling**: Always provide a unique `idDrawer` when you need custom styling
-2. **Global defaults in `:root`**: Set common variables in `:root` for consistency across all drawers
-3. **Semantic naming**: Use descriptive IDs like `"navigation-drawer"` or `"user-settings"`
-4. **CSS parts for advanced styling**: Use `::part()` selectors for styling internal elements
-5. **Test with multiple drawers**: Ensure your styling doesn't conflict when multiple drawers exist
-
-## Attributes / Properties
-
-| Property          | Type                  | Default     | Description                                           |
-| ----------------- | --------------------- | ----------- | ----------------------------------------------------- |
-| `idDrawer`        | `string \| undefined` | `undefined` | ID assigned to the drawer container for CSS targeting |
-| `ariaLabelledby`  | `string \| undefined` | `undefined` | ID of element that labels the drawer                  |
-| `ariaDescribedby` | `string \| undefined` | `undefined` | ID of element that describes the drawer               |
-| `label`           | `string \| undefined` | `undefined` | Accessible name for the drawer                        |
-| `trapFocus`       | `boolean`             | `true`      | Whether to trap focus within the drawer               |
-| `restoreFocus`    | `boolean`             | `true`      | Whether to restore focus when closing                 |
-| `closeOnEscape`   | `boolean`             | `true`      | Whether escape key closes the drawer                  |
-| `initialFocus`    | `string \| undefined` | `undefined` | Selector for element to focus when opened             |
-
-### Property Details
-
-#### `idDrawer`
-
-This property is essential for styling the drawer since the actual container is mounted in the document body. When specified, the dynamically created `mjoint-drawer-container` receives this ID, allowing you to apply CSS variables and parts:
-
-```html
-<mjo-drawer idDrawer="my-drawer"></mjo-drawer>
-```
-
-```css
-#my-drawer {
-    --mjo-drawer-width: 600px;
-}
-
-#my-drawer::part(backdrop) {
-    background-color: rgba(255, 0, 0, 0.5);
-}
-```
-
-The remaining properties control drawer behavior and are configured through the controller's `show()` method.
-
-## Controller Methods
-
-| Method  | Parameters         | Return Type | Description                            |
-| ------- | ------------------ | ----------- | -------------------------------------- |
-| `show`  | `DrawerShowParams` | `void`      | Opens the drawer with specified config |
-| `close` | None               | `void`      | Closes the currently open drawer       |
+| Method                   | Parameters         | Description                                    | Returns |
+| ------------------------ | ------------------ | ---------------------------------------------- | ------- |
+| `controller.show()`      | `DrawerShowParams` | Opens the drawer with the specified parameters | `void`  |
+| `controller.close()`     | -                  | Closes the drawer                              | `void`  |
+| `controller.setParent()` | `parent: Element`  | Sets a custom parent element for the drawer    | `void`  |
 
 ### DrawerShowParams Interface
 
-| Property            | Type                                     | Default     | Description                                      |
-| ------------------- | ---------------------------------------- | ----------- | ------------------------------------------------ |
-| `content`           | `string \| TemplateResult<1>`            | Required    | Content to display inside the drawer             |
-| `title`             | `string \| undefined`                    | `undefined` | Optional title displayed in the drawer header    |
-| `position`          | `"top" \| "right" \| "bottom" \| "left"` | `"right"`   | Side of the screen from which drawer slides      |
-| `width`             | `string \| number \| undefined`          | `undefined` | Custom width for left/right drawers              |
-| `height`            | `string \| number \| undefined`          | `undefined` | Custom height for top/bottom drawers             |
-| `blocked`           | `boolean \| undefined`                   | `false`     | Prevents closing by clicking outside or X button |
-| `animationDuration` | `number \| undefined`                    | `200`       | Animation duration in milliseconds               |
-| `onOpen`            | `(() => void) \| undefined`              | `undefined` | Callback executed when drawer finishes opening   |
-| `onClose`           | `(() => void) \| undefined`              | `undefined` | Callback executed when drawer finishes closing   |
+```typescript
+interface DrawerShowParams {
+    content: string | TemplateResult<1>;
+    title?: string;
+    position?: "top" | "right" | "bottom" | "left";
+    width?: string | number;
+    height?: string | number;
+    blocked?: boolean;
+    animationDuration?: number;
+    onOpen?: () => void;
+    onClose?: () => void;
+}
+```
 
-### Accessibility Properties
-
-| Property          | Type                   | Default     | Description                               |
-| ----------------- | ---------------------- | ----------- | ----------------------------------------- |
-| `ariaLabelledby`  | `string \| undefined`  | `undefined` | ID of element that labels the drawer      |
-| `ariaDescribedby` | `string \| undefined`  | `undefined` | ID of element that describes the drawer   |
-| `label`           | `string \| undefined`  | `undefined` | Accessible name for the drawer            |
-| `trapFocus`       | `boolean \| undefined` | `true`      | Whether to trap focus within the drawer   |
-| `restoreFocus`    | `boolean \| undefined` | `true`      | Whether to restore focus when closing     |
-| `closeOnEscape`   | `boolean \| undefined` | `true`      | Whether escape key closes the drawer      |
-| `initialFocus`    | `string \| undefined`  | `undefined` | Selector for element to focus when opened |
-
-### Behavior Notes
-
-- **Position**: Affects both animation direction and default dimensions
-- **Dimensions**: Left/right drawers use `width`, top/bottom use `height`
-- **Blocked**: When true, prevents all user-initiated closing actions
-- **Content**: Supports both string HTML and Lit TemplateResult for dynamic content
-- **Callbacks**: Execute after animations complete, not when they start
-
-## Slots
-
-| Slot      | Description                                                            |
-| --------- | ---------------------------------------------------------------------- |
-| (default) | Currently not implemented; content is provided via the `show()` method |
+| Parameter           | Type                                     | Default   | Description                                                   |
+| ------------------- | ---------------------------------------- | --------- | ------------------------------------------------------------- |
+| `content`           | `string \| TemplateResult`               | -         | Content to display in the drawer (required)                   |
+| `title`             | `string`                                 | `""`      | Title displayed at the top of the drawer                      |
+| `position`          | `"top" \| "right" \| "bottom" \| "left"` | `"right"` | Position of the drawer on the screen                          |
+| `width`             | `string \| number`                       | -         | Width of the drawer (applies to left/right positions)         |
+| `height`            | `string \| number`                       | -         | Height of the drawer (applies to top/bottom positions)        |
+| `blocked`           | `boolean`                                | `false`   | Prevents closing via backdrop click, ESC key, or close button |
+| `animationDuration` | `number`                                 | `200`     | Duration of open/close animations in milliseconds             |
+| `onOpen`            | `() => void`                             | -         | Callback function executed when the drawer finishes opening   |
+| `onClose`           | `() => void`                             | -         | Callback function executed when the drawer finishes closing   |
 
 ## Events
 
-The drawer component uses callback functions for lifecycle management rather than custom events, as the drawer container is created dynamically in the document body outside the component tree.
+The `mjo-drawer` component does not emit custom events. Use the `onOpen` and `onClose` callbacks in the `show()` method parameters for event handling.
 
-### Lifecycle Callbacks
+## CSS Variables
 
-Use the `onOpen` and `onClose` callback functions in the `show()` method parameters:
+| Variable                                 | Description                              | Default                                               |
+| ---------------------------------------- | ---------------------------------------- | ----------------------------------------------------- |
+| `--mjo-drawer-backdrop-background-color` | Background color of the backdrop overlay | `rgba(0, 0, 0, 0.5)`                                  |
+| `--mjo-drawer-backdrop-filter`           | Backdrop filter effect                   | `blur(5px)`                                           |
+| `--mjo-drawer-background-color`          | Background color of the drawer container | `var(--mjo-background-color, #fff)`                   |
+| `--mjo-drawer-box-shadow`                | Box shadow of the drawer container       | `var(--mjo-box-shadow3, 0 0 10px rgba(0, 0, 0, 0.5))` |
+| `--mjo-drawer-border-width`              | Border width of the drawer container     | `1px`                                                 |
+| `--mjo-drawer-border-color`              | Border color of the drawer container     | `transparent`                                         |
+| `--mjo-drawer-focus-outline-width`       | Width of the focus outline               | `2px`                                                 |
+| `--mjo-drawer-focus-outline-color`       | Color of the focus outline               | `var(--mjo-theme-primary-color, #2563eb)`             |
+| `--mjo-drawer-focus-outline-offset`      | Offset of the focus outline              | `-2px`                                                |
+| `--mjo-drawer-width`                     | Default width for left/right drawers     | `500px`                                               |
+| `--mjo-drawer-height`                    | Default height for top/bottom drawers    | `500px`                                               |
+| `--mjo-drawer-title-border-color`        | Border color of the title section        | `var(--mjo-border-color, #ccc)`                       |
+| `--mjo-drawer-close-icon-border-radius`  | Border radius of the close icon button   | `var(--mjo-radius-small, 3px)`                        |
+| `--mjo-drawer-close-icon-color`          | Color of the close icon                  | `var(--mjo-foreground-color, currentColor)`           |
 
-```ts
-this.drawer.controller.show({
-    title: "My Drawer",
-    content: html`<div>Content here</div>`,
+## CSS Parts
+
+| Part             | Description                               | Element                        |
+| ---------------- | ----------------------------------------- | ------------------------------ |
+| `backdrop`       | The background overlay behind the drawer  | `div.background`               |
+| `container`      | The main drawer container                 | `div.container`                |
+| `title`          | The title section of the drawer           | `div.title`                    |
+| `typography`     | The typography component within the title | `mjo-typography`               |
+| `typography-tag` | The typography tag (exported part)        | `mjo-typography` inner element |
+| `close-button`   | The close button in the title section     | `button.close`                 |
+| `content`        | The main content area of the drawer       | `div.content`                  |
+
+## Accessibility
+
+The `mjo-drawer` component implements comprehensive accessibility features:
+
+### ARIA Roles and Attributes
+
+- **role="dialog"**: The drawer container has the `dialog` role to indicate it's a modal-like element
+- **aria-modal="true"**: Indicates that the drawer is modal and requires user interaction
+- **aria-labelledby**: Automatically set to the title element ID when a title is provided, or uses the `aria-labelledby` property
+- **aria-describedby**: Automatically set to the content element ID, or uses the `aria-describedby` property
+- **aria-label**: Used when no title is provided and no `aria-labelledby` is set (uses the `label` property)
+- **aria-hidden="true"**: Applied to the backdrop to hide it from screen readers
+
+### Focus Management
+
+- **Focus Trapping**: When the drawer opens, focus is trapped within the drawer (can be disabled with `disabledTrapFocus`)
+- **Initial Focus**: Focus can be directed to a specific element using the `initialFocus` property (CSS selector)
+- **Focus Restoration**: When the drawer closes, focus is restored to the previously focused element (can be disabled with `disabledRestoreFocus`)
+- **Inert Elements**: Elements outside the drawer are made inert to prevent interaction while the drawer is open
+
+### Keyboard Interactions
+
+| Key           | Action                                                                  |
+| ------------- | ----------------------------------------------------------------------- |
+| `Escape`      | Closes the drawer (unless `blocked` or `disabledCloseOnEscape` is true) |
+| `Tab`         | Moves focus to the next focusable element within the drawer             |
+| `Shift + Tab` | Moves focus to the previous focusable element within the drawer         |
+
+### Best Practices
+
+- **Always provide a title or label**: Use the `title` parameter or the `label` property to ensure screen reader users understand the drawer's purpose
+- **Use descriptive content**: Ensure the drawer content is clearly structured and accessible
+- **Avoid nested drawers**: Don't open a drawer from within another drawer, as this can confuse users
+- **Provide clear close mechanisms**: Unless the drawer is `blocked`, ensure users can close it via the close button, backdrop, or Escape key
+- **Test with screen readers**: Verify that the drawer announcement and navigation work correctly with screen readers
+
+### High Contrast Mode Support
+
+The component includes specific styles for high contrast mode:
+
+- Border becomes visible in high contrast mode to ensure the drawer is distinguishable
+
+### Reduced Motion Support
+
+The component respects the `prefers-reduced-motion` media query:
+
+- Animations are disabled when the user prefers reduced motion
+
+## Usage Examples
+
+### Basic Usage
+
+```typescript
+import { LitElement, html } from "lit";
+import "mjo-litui/mjo-drawer";
+import "mjo-litui/mjo-button";
+
+class MyComponent extends LitElement {
+    render() {
+        return html`
+            <mjo-drawer id="my-drawer"></mjo-drawer>
+            <mjo-button @click=${this.openDrawer}>Open Drawer</mjo-button>
+        `;
+    }
+
+    openDrawer() {
+        const drawer = this.shadowRoot.getElementById("my-drawer");
+        drawer.controller.show({
+            title: "My Drawer",
+            content: "This is the drawer content.",
+        });
+    }
+}
+```
+
+### Drawer Positions
+
+```typescript
+// Right drawer (default)
+drawer.controller.show({
+    title: "Right Drawer",
+    content: "Slides in from the right",
+    position: "right",
+    width: 400,
+});
+
+// Left drawer
+drawer.controller.show({
+    title: "Left Drawer",
+    content: "Slides in from the left",
+    position: "left",
+    width: 350,
+});
+
+// Top drawer
+drawer.controller.show({
+    title: "Top Drawer",
+    content: "Slides in from the top",
+    position: "top",
+    height: 300,
+});
+
+// Bottom drawer
+drawer.controller.show({
+    title: "Bottom Drawer",
+    content: "Slides in from the bottom",
+    position: "bottom",
+    height: 250,
+});
+```
+
+### Custom Content with HTML Templates
+
+```typescript
+import { html } from "lit";
+
+const drawer = this.shadowRoot.getElementById("my-drawer");
+drawer.controller.show({
+    title: "Form Drawer",
+    content: html`
+        <div style="padding: 20px;">
+            <mjo-form>
+                <mjo-textfield label="Name" required></mjo-textfield>
+                <mjo-textfield label="Email" type="email" required></mjo-textfield>
+                <mjo-textarea label="Message" rows="4"></mjo-textarea>
+                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                    <mjo-button variant="ghost" @click=${() => drawer.controller.close()}> Cancel </mjo-button>
+                    <mjo-button color="primary">Submit</mjo-button>
+                </div>
+            </mjo-form>
+        </div>
+    `,
+    position: "right",
+    width: 450,
+});
+```
+
+### Blocked Drawer
+
+```typescript
+// Drawer that cannot be closed by clicking outside or pressing ESC
+drawer.controller.show({
+    title: "Important Message",
+    content: html`
+        <div style="padding: 20px;">
+            <p>This drawer requires your attention.</p>
+            <mjo-button @click=${() => drawer.controller.close()}> I Understand </mjo-button>
+        </div>
+    `,
+    blocked: true,
+    position: "right",
+    width: 400,
+});
+```
+
+### Drawer with Callbacks
+
+```typescript
+drawer.controller.show({
+    title: "Drawer with Events",
+    content: "Content with event handling",
     onOpen: () => {
         console.log("Drawer opened");
-        // Drawer is fully opened and ready for interaction
+        // Perform actions when drawer opens
     },
     onClose: () => {
         console.log("Drawer closed");
-        // Drawer is fully closed and removed from DOM
-        // Focus has been restored to the previous element
+        // Clean up or save data when drawer closes
     },
 });
 ```
 
-### Callback Timing
+### Custom Animation Duration
 
-- **`onOpen`**: Called after the opening animation completes and focus trap is activated
-- **`onClose`**: Called after the closing animation completes and the drawer is removed from the DOM
+```typescript
+// Slower animation
+drawer.controller.show({
+    title: "Slow Animation",
+    content: "This drawer opens slowly",
+    animationDuration: 500,
+});
 
-## CSS Parts
-
-The component exposes several CSS parts for advanced styling customization:
-
-| Part           | Description                               | Element                  |
-| -------------- | ----------------------------------------- | ------------------------ |
-| `backdrop`     | The background overlay behind the drawer  | `.background` div        |
-| `container`    | The main drawer container                 | `.container` div         |
-| `title`        | The title section of the drawer           | `.title` div             |
-| `typography`   | The typography component within the title | `mjo-typography` element |
-| `close-button` | The close button in the title section     | `button` element         |
-| `content`      | The main content area of the drawer       | `.content` div           |
-
-### CSS Parts Usage Example
-
-**⚠️ Important**: CSS Parts must be applied using the `idDrawer` property since the drawer container is mounted in the document body.
-
-```html
-<!-- Component with idDrawer -->
-<mjo-drawer idDrawer="styled-drawer"></mjo-drawer>
+// Faster animation
+drawer.controller.show({
+    title: "Fast Animation",
+    content: "This drawer opens quickly",
+    animationDuration: 100,
+});
 ```
 
-```css
-/* ❌ This WILL NOT work - parts cannot be applied to mjo-drawer */
-mjo-drawer::part(backdrop) {
-    background-color: rgba(255, 0, 0, 0.3);
-}
+### Accessibility Properties
 
-/* ✅ This WILL work - parts applied to the container using idDrawer */
-#styled-drawer::part(backdrop) {
-    background-color: rgba(255, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-}
+```typescript
+// Drawer with accessibility labels
+const drawer = html`
+    <mjo-drawer id="accessible-drawer" label="User Settings" initial-focus="#first-input" aria-describedby="drawer-description"></mjo-drawer>
+`;
 
-/* Style the main container */
-#styled-drawer::part(container) {
-    border-radius: 8px;
-    border: 2px solid var(--mjo-theme-primary-color);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-/* Customize the title section */
-#styled-drawer::part(title) {
-    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
-    color: white;
-    padding: 1rem;
-    margin: 0;
-}
-
-/* Style the close button */
-#styled-drawer::part(close-button) {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    color: white;
-    transition: background-color 0.2s;
-}
-
-#styled-drawer::part(close-button):hover {
-    background-color: rgba(255, 255, 255, 0.3);
-}
-
-/* Style the content area */
-#styled-drawer::part(content) {
-    padding: 2rem;
-    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-}
+// When opened
+drawer.controller.show({
+    title: "Settings",
+    content: html`
+        <div>
+            <p id="drawer-description">Configure your application settings.</p>
+            <mjo-textfield id="first-input" label="Username"></mjo-textfield>
+        </div>
+    `,
+});
 ```
 
-### Global Parts Styling
+### Programmatic Control
 
-For consistent styling across all drawers, target the container element directly:
+```typescript
+class MyComponent extends LitElement {
+    render() {
+        return html`
+            <mjo-drawer id="controlled-drawer"></mjo-drawer>
+            <mjo-button @click=${this.openDrawer}>Open</mjo-button>
+            <mjo-button @click=${this.closeDrawer}>Close</mjo-button>
+        `;
+    }
 
-```css
-/* Apply to all drawer containers */
-mjoint-drawer-container::part(backdrop) {
-    backdrop-filter: blur(8px);
-}
-
-mjoint-drawer-container::part(container) {
-    border-radius: 0.5rem;
-}
-```
-
-## CSS Variables
-
-The component provides extensive customization through CSS variables with fallbacks to the global design system.
-
-**⚠️ Important**: CSS Variables must be applied using the `idDrawer` property or globally, since the drawer container is mounted in the document body.
-
-### Variable Application Methods
-
-#### Method 1: Using `idDrawer` (Recommended for specific drawers)
-
-```html
-<mjo-drawer idDrawer="custom-drawer"></mjo-drawer>
-```
-
-```css
-/* Target specific drawer using its ID */
-#custom-drawer {
-    --mjo-drawer-width: 600px;
-    --mjo-drawer-background-color: #f8f9fa;
-    --mjo-drawer-backdrop-background-color: rgba(0, 0, 0, 0.8);
-}
-```
-
-#### Method 2: Global Variables (Affects all drawers)
-
-```css
-/* Apply to all drawers globally */
-:root {
-    --mjo-drawer-width: 500px;
-    --mjo-drawer-backdrop-background-color: rgba(0, 0, 0, 0.6);
-}
-
-/* Or target all drawer containers directly */
-mjoint-drawer-container {
-    --mjo-drawer-background-color: #ffffff;
-}
-```
-
-#### Method 3: Conditional/Dynamic Styling
-
-```css
-/* Apply different styles based on theme or context */
-[data-theme="dark"] #user-settings-drawer {
-    --mjo-drawer-background-color: #1f2937;
-    --mjo-drawer-title-border-color: #374151;
-}
-
-[data-theme="light"] #user-settings-drawer {
-    --mjo-drawer-background-color: #f9fafb;
-    --mjo-drawer-title-border-color: #e5e7eb;
-}
-```
-
-### Layout and Dimensions
-
-| Variable                                 | Fallback                                              | Used For                              |
-| ---------------------------------------- | ----------------------------------------------------- | ------------------------------------- |
-| `--mjo-drawer-width`                     | `500px`                                               | Default width for left/right drawers  |
-| `--mjo-drawer-height`                    | `500px`                                               | Default height for top/bottom drawers |
-| `--mjo-drawer-background-color`          | `var(--mjo-background-color, #fff)`                   | Drawer background color               |
-| `--mjo-drawer-box-shadow`                | `var(--mjo-box-shadow3, 0 0 10px rgba(0, 0, 0, 0.5))` | Shadow around drawer                  |
-| `--mjo-drawer-title-border-color`        | `var(--mjo-border-color, #ccc)`                       | Border below title section            |
-| `--mjo-drawer-backdrop-background-color` | `rgba(0, 0, 0, 0.5)`                                  | Background color of backdrop          |
-| `--mjo-drawer-backdrop-filter`           | `blur(5px)`                                           | Backdrop filter effect                |
-| `--mjo-drawer-close-icon-color`          | `var(--mjo-foreground-color, currentColor)`           | Color of the close icon               |
-| `--mjo-drawer-close-icon-border-radius`  | `var(--mjo-radius-small, 3px)`                        | Border radius of close button         |
-| `--mjo-drawer-focus-outline-color`       | `var(--mjo-theme-primary-color, #2563eb)`             | Focus outline color                   |
-| `--mjo-drawer-focus-outline-width`       | `2px`                                                 | Focus outline width                   |
-| `--mjo-drawer-focus-outline-offset`      | `-2px`                                                | Focus outline offset                  |
-| `--mjo-drawer-border-width`              | `1px`                                                 | Border width for high contrast mode   |
-| `--mjo-drawer-border-color`              | `transparent`                                         | Border color (default transparent)    |
-
-### High Contrast and Accessibility Support
-
-The component includes built-in support for:
-
-- **High Contrast Mode**: Automatic border styling when `prefers-contrast: high`
-- **Reduced Motion**: Animation disabling when `prefers-reduced-motion: reduce`
-- **Focus Indicators**: Clear focus outlines with customizable colors and sizing
-
-### Global Integration
-
-The component inherits from the global design system:
-
-- `--mjo-background-color` for consistent backgrounds
-- `--mjo-border-color` for consistent borders
-- `--mjo-space-small` and `--mjo-space-xsmall` for spacing
-- `--mjo-box-shadow3` for consistent shadows
-
-## ThemeMixin Customization
-
-This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to customize specific instances. However, the drawer doesn't define a specific theme interface since it uses generic CSS variables.
-
-### ThemeMixin Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoDrawer } from "mjo-litui/types";
-import "mjo-litui/mjo-drawer";
-
-@customElement("example-drawer-themed")
-export class ExampleDrawerThemed extends LitElement {
-    @query("mjo-drawer") drawer!: MjoDrawer;
-
-    private customTheme = {
-        "drawer-background-color": "#1f2937",
-        "drawer-title-border-color": "#374151",
-        "drawer-box-shadow": "0 25px 50px -12px rgba(0, 0, 0, 0.8)",
-    };
-
-    private openThemedDrawer() {
-        this.drawer.controller.show({
-            title: "Themed Drawer",
-            content: html`<div style="padding: 1rem; color: #f3f4f6;">Dark themed content</div>`,
+    openDrawer() {
+        const drawer = this.shadowRoot.getElementById("controlled-drawer");
+        drawer.controller.show({
+            title: "Controlled Drawer",
+            content: "This drawer can be controlled programmatically",
         });
     }
 
-    render() {
-        return html`
-            <div>
-                <mjo-button @click=${this.openThemedDrawer}>Open Themed Drawer</mjo-button>
-                <mjo-drawer .theme=${this.customTheme}></mjo-drawer>
-            </div>
-        `;
+    closeDrawer() {
+        const drawer = this.shadowRoot.getElementById("controlled-drawer");
+        drawer.controller.close();
     }
 }
 ```
 
-## Usage Patterns
+### Custom Parent Element
 
-### Basic Implementation
+```typescript
+// By default, drawer is appended to document.body
+// You can set a custom parent:
+const drawer = this.shadowRoot.getElementById("my-drawer");
+const customParent = document.getElementById("drawer-container");
+drawer.controller.setParent(customParent);
 
-```ts
-// 1. Import the component
-import "mjo-litui/mjo-drawer";
+drawer.controller.show({
+    title: "Drawer in Custom Container",
+    content: "This drawer is appended to a custom parent element",
+});
+```
 
-// 2. Add to template with query reference
-@query("mjo-drawer") drawer!: MjoDrawer;
+### Styling with CSS Parts
 
-render() {
-    return html`
-        <mjo-button @click=${this.openDrawer}>Open</mjo-button>
-        <mjo-drawer></mjo-drawer>
-    `;
+```css
+/* Style the backdrop */
+mjo-drawer::part(backdrop) {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
 }
 
-// 3. Use controller to show/hide
-private openDrawer() {
-    this.drawer.controller.show({
-        title: "My Drawer",
-        content: html`<div>Content here</div>`
-    });
+/* Style the container */
+mjo-drawer::part(container) {
+    background-color: #f5f5f5;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    border: 2px solid #333;
+}
+
+/* Style the title */
+mjo-drawer::part(title) {
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+}
+
+/* Style the close button */
+mjo-drawer::part(close-button) {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Style the content area */
+mjo-drawer::part(content) {
+    padding: 20px;
 }
 ```
 
-### Advanced Configuration
+### Styling with CSS Variables
 
-```ts
-private openAdvancedDrawer() {
-    this.drawer.controller.show({
-        title: "Advanced Settings",
-        position: "left",
-        width: 450,
-        blocked: false,
-        animationDuration: 300,
-        content: html`<complex-form></complex-form>`,
-        onOpen: () => console.log("Drawer opened"),
-        onClose: () => this.handleDrawerClose()
-    });
+```css
+/* Global drawer customization */
+:root {
+    --mjo-drawer-width: 600px;
+    --mjo-drawer-height: 400px;
+    --mjo-drawer-background-color: #fafafa;
+    --mjo-drawer-backdrop-background-color: rgba(0, 0, 0, 0.7);
+    --mjo-drawer-backdrop-filter: blur(8px);
+    --mjo-drawer-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --mjo-drawer-border-color: #ddd;
+    --mjo-drawer-border-width: 2px;
+    --mjo-drawer-title-border-color: #e0e0e0;
+    --mjo-drawer-close-icon-color: #666;
+    --mjo-drawer-close-icon-border-radius: 50%;
+}
+
+/* Drawer-specific customization */
+#special-drawer {
+    --mjo-drawer-width: 800px;
+    --mjo-drawer-background-color: #fff;
+    --mjo-drawer-focus-outline-color: #ff5722;
 }
 ```
 
-## Best Practices
+## Additional Notes
 
-### Content Design
+### Architecture
 
-- Keep titles concise and descriptive
-- Organize content in logical sections with proper hierarchy
-- Consider scrollable content for longer drawers
-- Use consistent positioning conventions for different use cases
+The `mjo-drawer` component uses a unique controller-based architecture:
 
-### User Experience & Performance
+1. **Invisible Host**: The `<mjo-drawer>` element itself is invisible (`display: none`) and serves only as a controller provider
+2. **Dynamic Container**: When `show()` is called, a `<mjo-drawer-container>` element is dynamically created and appended to the specified parent (default: `document.body`)
+3. **Controller API**: All interactions are performed through the `controller` property, which manages the lifecycle of the dynamically created container
 
-- Provide visual feedback during animations (200-300ms recommended)
-- Implement proper loading states for async content
-- Lazy load heavy content when drawer opens
-- Consider escape key handling and focus management for accessibility
-- Optimize animations for mobile devices and test with reduced motion preferences
+This architecture enables proper z-index management and overlay behavior without affecting the document flow.
 
-## Summary
+### Performance Considerations
 
-`<mjo-drawer>` provides a flexible, powerful slide-out panel system with comprehensive customization options and full accessibility support. The component supports multiple positioning modes, configurable dimensions, modal behaviors, extensive theming capabilities, ARIA patterns, focus management, and keyboard navigation.
+- **Scroll Locking**: By default, the drawer locks body scrolling when open. Disable with `disableScrollLock` if needed
+- **Animation Duration**: The default 200ms animation provides good performance. Longer durations may feel sluggish on slower devices
+- **Content Complexity**: Complex HTML templates in `content` may affect rendering performance. Consider lazy loading heavy content
 
-### Key Features
+### Browser Support
 
-- **Full Accessibility**: ARIA roles, focus trapping, keyboard navigation, screen reader support
-- **Custom Events**: New event naming convention `mjo-component-name:event-name`
-- **Focus Management**: Automatic focus trapping and restoration with customizable initial focus
-- **Keyboard Support**: Escape key handling, Tab navigation, and reduced motion support
-- **High Contrast**: Automatic styling adjustments for accessibility preferences
+- **Focus Trap**: Uses the Inert API for focus management, which is widely supported in modern browsers
+- **Backdrop Filter**: The blur effect requires `backdrop-filter` support. Fallback styling is applied automatically
+- **CSS Container Queries**: Not used, ensuring compatibility with older browsers
 
-Use drawers for navigation menus, settings panels, help documentation, notification centers, and any scenario requiring temporary overlay content. The controller-based API provides programmatic control while maintaining clean separation between the trigger elements and the drawer implementation.
+### Integration with Forms
 
-### Accessibility Compliance
+When using forms inside drawers:
 
-The component follows WCAG 2.1 guidelines and implements the Modal Dialog design pattern from the W3C ARIA Authoring Practices Guide, ensuring compatibility with assistive technologies and keyboard-only navigation.
+```typescript
+drawer.controller.show({
+    title: "Form Submission",
+    content: html`
+        <mjo-form @submit=${this.handleSubmit}>
+            <mjo-textfield label="Name" required></mjo-textfield>
+            <mjo-button type="submit">Submit</mjo-button>
+        </mjo-form>
+    `,
+    onClose: () => {
+        // Handle form cleanup if needed
+    },
+});
+```
+
+### Multiple Drawers
+
+You can have multiple drawer instances, but only open one at a time:
+
+```typescript
+// Multiple drawer elements
+html`
+    <mjo-drawer id="drawer-1"></mjo-drawer>
+    <mjo-drawer id="drawer-2"></mjo-drawer>
+    <mjo-drawer id="drawer-3"></mjo-drawer>
+`;
+
+// Opening different drawers
+drawer1.controller.show({ title: "Drawer 1", content: "..." });
+drawer2.controller.show({ title: "Drawer 2", content: "..." });
+```
+
+**Note**: Opening multiple drawers simultaneously is not recommended as it can confuse users and cause accessibility issues.
+
+### Theme Integration
+
+The drawer respects the global theme through the `ThemeMixin`:
+
+```typescript
+// Drawer automatically inherits theme from parent
+html`<mjo-drawer id="themed-drawer"></mjo-drawer>`;
+
+// Theme properties are transferred to the dynamically created container
+drawer.controller.show({
+    title: "Themed Drawer",
+    content: "This drawer uses the current theme",
+});
+```

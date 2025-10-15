@@ -486,6 +486,9 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         return this.open;
     }
 
+    /**
+     * Sets the selected value programmatically.
+     */
     setValue(value: string, noDispatch: boolean = false) {
         this.#previousValue = this.value;
         this.#previousOption = this.options.find((option) => option.selected) || null;
@@ -525,6 +528,9 @@ export class MjoSelect extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))
         this.updateFormData({ name: this.name || "", value: this.value });
     }
 
+    /**
+     * Returns the current selected value.
+     */
     getValue() {
         return this.value;
     }

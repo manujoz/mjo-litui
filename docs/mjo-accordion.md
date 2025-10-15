@@ -2,6 +2,19 @@
 
 Flexible accordion component with multiple variants, selection modes, and accessibility support. It provides an organized way to display collapsible content sections with keyboard navigation and comprehensive ARIA features.
 
+## Table of Contents
+
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Methods](#methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
+
 ## Use Cases
 
 - FAQ sections with question/answer pairs
@@ -130,9 +143,30 @@ import "mjo-litui/mjo-accordion";
 
 ## Accessibility
 
+The accordion component implements comprehensive accessibility features following WAI-ARIA best practices:
+
+### ARIA Roles and Attributes
+
+- **Container**: Uses `role="tablist"` on the main accordion container
+- **Items**: Each item header uses `role="button"` to indicate interactivity
+- **Content regions**: Uses `role="region"` with `aria-labelledby` to link content with headers
+- **State management**:
+    - `aria-expanded` indicates whether an item is open or collapsed
+    - `aria-disabled` marks disabled items
+    - `aria-controls` links the header button to its content region
+    - `aria-describedby` can be used to provide additional descriptions
+
+### Best Practices
+
+- Always provide meaningful titles for accordion items to ensure screen readers can properly announce them
+- Use the `aria-describedby` attribute when additional context is needed beyond the title
+- Ensure content within accordion items is properly structured with semantic HTML
+- Disabled items are clearly marked and excluded from keyboard navigation
+- Focus management ensures users always know their current position
+
 ### Keyboard Navigation
 
-The accordion supports full keyboard navigation:
+Full keyboard support is provided for efficient navigation:
 
 - **Tab**: Navigate between accordion items
 - **Enter/Space**: Toggle the focused item
@@ -140,6 +174,10 @@ The accordion supports full keyboard navigation:
 - **Home**: Focus first item
 - **End**: Focus last item
 - **Escape**: Collapse the focused item (if expanded)
+
+### Motion Preferences
+
+The component respects the `prefers-reduced-motion` media query, disabling animations for users who prefer reduced motion.
 
 ## Usage Examples
 

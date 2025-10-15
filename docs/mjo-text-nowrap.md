@@ -1,234 +1,178 @@
 # mjo-text-nowrap
 
-A utility component that prevents text wrapping and applies ellipsis when content overflows. Perfect for displaying long text in constrained layouts while maintaining visual consistency and acc## Notes
+Simple component that truncates text with ellipsis when it overflows its container, preventing text wrapping.
 
--   The component provides a lightweight wrapper for text truncation
--   It maintains consistent height regardless of content length
--   Styling is inherited from parent elements
--   Works with any text content including HTML elements
--   The ellipsis appears automatically when content overflows
--   Component is purely presentational and requires no JavaScript overhead
--   For enhanced accessibility, manually add `title` or `aria-label` attributes as neededty.
+## Index
 
-## Import
+- [Use cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage examples](#usage-examples)
+- [Additional notes](#additional-notes)
 
-```ts
-import "mjo-litui/mjo-text-nowrap";
-```
+## Use cases
 
-## Basic Usage
-
-```html
-<mjo-text-nowrap>This is a very long text that will be truncated with ellipsis when it overflows the container width</mjo-text-nowrap>
-```
-
-## Accessibility Features
-
-The component automatically provides tooltips when text is truncated and supports ARIA labels:
-
-````ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-text-nowrap";
-
-@customElement("example-text-nowrap-accessibility")
-export class ExampleTextNowrapAccessibility extends LitElement {
-    @state() private _truncationInfo = "";
-
-    render() {
-        const longText = "This is a very long text that demonstrates accessibility features of the text-nowrap component";
-
-        return html`
-            <div style="width: 250px; padding: 1rem; border: 1px solid var(--mjo-color-border); border-radius: 8px;">
-                <h4>Automatic Tooltip (hover to see full text):</h4>
-                # mjo-text-nowrap
-
-A lightweight utility component that prevents text wrapping and applies ellipsis when content overflows. Perfect for displaying long text in constrained layouts while maintaining visual consistency and accessibility.
+- Truncate long text in table cells
+- Display single-line text in cards or lists
+- Show file names or paths in compact spaces
+- Prevent text wrapping in fixed-width containers
 
 ## Import
 
-```ts
+```typescript
 import "mjo-litui/mjo-text-nowrap";
-````
-
-## Basic Usage
-
-```html
-<mjo-text-nowrap>This is a very long text that will be truncated with ellipsis when it overflows the container width</mjo-text-nowrap>
 ```
 
-## Accessibility Features
+## Properties
 
-The component supports ARIA labels for enhanced accessibility:
+| Property     | Type               | Description                                                                                     | Default | Required |
+| ------------ | ------------------ | ----------------------------------------------------------------------------------------------- | ------- | -------- |
+| `tag`        | `MjoTextNowrapTag` | HTML tag to use for semantic structure (`span`, `p`, `div`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`) | `span`  | No       |
+| `aria-label` | `string \| null`   | Accessible label for the truncated text                                                         | `null`  | No       |
 
-```html
-<!-- With custom ARIA label -->
-<mjo-text-nowrap aria-label="Product name: Gaming Laptop"> Ultra High-Performance Gaming Laptop with Advanced Graphics </mjo-text-nowrap>
+### MjoTextNowrapTag Type
 
-<!-- Basic usage with automatic tooltip via title attribute -->
-<mjo-text-nowrap title="This is the complete text that might be truncated"> This is the complete text that might be truncated </mjo-text-nowrap>
+```typescript
+type MjoTextNowrapTag = "span" | "p" | "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 ```
 
-                <p style="margin-top: 1rem; font-size: 0.9em; color: var(--mjo-color-text-secondary);">${this._truncationInfo}</p>
-            </div>
+## CSS Parts
 
-            <div style="width: 200px; padding: 1rem; border: 1px solid var(--mjo-color-border); border-radius: 8px; margin-top: 1rem;">
-                <h4>With Custom ARIA Label:</h4>
-                <mjo-text-nowrap aria-label="Product name: Ultra High-Performance Gaming Laptop">
-                    Ultra High-Performance Gaming Laptop with Advanced Graphics
-                </mjo-text-nowrap>
-            </div>
-
-            <div style="width: 180px; padding: 1rem; border: 1px solid var(--mjo-color-border); border-radius: 8px; margin-top: 1rem;">
-                <h4>Tooltip Disabled:</h4>
-                <mjo-text-nowrap .showTooltip=${false}> This text won't show tooltip even if truncated </mjo-text-nowrap>
-            </div>
-        `;
-    }
-
-    private _handleTruncation(event: CustomEvent) {
-        const { isTruncated, fullText } = event.detail;
-        this._truncationInfo = isTruncated ? `Text is truncated. Full text: "${fullText}"` : "Text fits completely";
-    }
-
-}
-
-````
-
-## Common Use Cases
-
-### Form Labels
-
-```html
-<div style="width: 300px;">
-    <label style="display: block; width: 150px; margin-bottom: 0.5rem;">
-        <mjo-text-nowrap>Very long field label that would normally wrap:</mjo-text-nowrap>
-    </label>
-    <input type="text" placeholder="Enter value" style="width: 100%;" />
-</div>
-````
-
-### Table Cells
-
-```html
-<table style="width: 100%; border-collapse: collapse;">
-    <tr>
-        <td style="width: 200px; padding: 0.5rem; border: 1px solid var(--mjo-color-border);">
-            <mjo-text-nowrap>john.doe@verylongdomainname.com</mjo-text-nowrap>
-        </td>
-        <td style="padding: 0.5rem; border: 1px solid var(--mjo-color-border);">
-            <mjo-text-nowrap>Senior Software Engineer with expertise in full-stack development</mjo-text-nowrap>
-        </td>
-    </tr>
-</table>
-```
-
-### Navigation Items
-
-```html
-<nav style="width: 200px;">
-    <div style="display: flex; align-items: center; padding: 0.75rem; gap: 0.75rem;">
-        <span style="flex-shrink: 0;">🏠</span>
-        <mjo-text-nowrap>Dashboard Overview and Analytics</mjo-text-nowrap>
-    </div>
-</nav>
-```
-
-## Attributes/Properties
-
-| Name       | Type               | Default  | Description                                          |
-| ---------- | ------------------ | -------- | ---------------------------------------------------- |
-| tag        | `MjoTextNowrapTag` | `"span"` | Semantic tag for future use (currently not rendered) |
-| aria-label | `string`           | -        | ARIA label for accessibility                         |
-| (slot)     | `Node[]`           | -        | Content to be displayed with text truncation         |
-
-## Events
-
-This component does not emit any custom events.
-
-## Methods
-
-This component has no public methods beyond the standard LitElement lifecycle methods.
-
-## CSS Custom Properties
-
-The component uses fixed internal styling and does not expose CSS custom properties for customization. It inherits text styling from parent elements.
+| Part        | Description                                      | Element |
+| ----------- | ------------------------------------------------ | ------- |
+| `container` | Main container that holds the truncated content  | `div`   |
+| `wrapper`   | Inner wrapper that applies the truncation styles | `div`   |
 
 ## Accessibility
 
-The `mjo-text-nowrap` component provides enhanced accessibility features:
+### Best practices
 
-### Automatic Tooltips
+- Use the `aria-label` attribute when the truncated text might lose important context
+- Choose the appropriate `tag` property value for semantic HTML structure
+- When using heading tags (`h1`-`h6`), ensure proper heading hierarchy in your document
 
-When text is truncated, the component automatically shows the full text as a tooltip on hover (unless `showTooltip` is set to `false`).
+### ARIA attributes
 
-### ARIA Support
+- The component automatically sets `role="none"` when using non-span tags to avoid duplicate semantics
+- The `aria-label` attribute can be used to provide the full text content when truncated
 
--   **aria-label**: Provides custom accessibility labels for screen readers
--   **Semantic structure**: Uses proper DOM structure for accessibility
+## Usage examples
 
-### Usage Examples
+### Basic truncation
 
-```html
-<!-- Basic usage -->
-<mjo-text-nowrap>Long text that may be truncated</mjo-text-nowrap>
+```typescript
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-text-nowrap";
 
-<!-- With custom ARIA label -->
-<mjo-text-nowrap aria-label="Product name: Gaming Laptop"> Ultra High-Performance Gaming Laptop with Advanced Graphics </mjo-text-nowrap>
-
-<!-- With manual tooltip via title attribute -->
-<mjo-text-nowrap title="Full text for accessibility">Truncated text content</mjo-text-nowrap>
-```
-
-## Styling
-
-The component automatically inherits text styling from its parent:
-
-```css
-/* The component will inherit these styles */
-.parent {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    font-family: Arial, sans-serif;
+@customElement("my-component")
+export class MyComponent extends LitElement {
+    render() {
+        return html`
+            <mjo-text-nowrap style="width: 200px;">
+                This is a very long text that will be truncated with ellipsis when it exceeds the container width
+            </mjo-text-nowrap>
+        `;
+    }
 }
 ```
 
-## Use Cases
+### Using semantic tags
 
-1. **Form Labels**: Prevent label text from wrapping in form layouts
-2. **Table Cells**: Maintain consistent row heights in data tables
-3. **Card Titles**: Keep card layouts uniform with varying title lengths
-4. **Navigation**: Truncate long menu item names
-5. **Lists**: Display long item names without breaking layout
-6. **Breadcrumbs**: Show navigation paths without wrapping
+```typescript
+@customElement("user-profile")
+export class UserProfile extends LitElement {
+    render() {
+        return html`
+            <div class="profile">
+                <mjo-text-nowrap tag="h2" style="width: 300px;"> ${this.userName} </mjo-text-nowrap>
+                <mjo-text-nowrap tag="p" style="width: 300px;"> ${this.userBio} </mjo-text-nowrap>
+            </div>
+        `;
+    }
+}
+```
 
-## Best Practices
+### Providing accessible labels
 
-1. **Container Width**: Ensure the parent container has a defined width
-2. **Accessibility**: Use `aria-label` and `title` attributes when appropriate
-3. **Responsive**: Component adapts to container size changes via CSS
-4. **Content Priority**: Use for secondary text; critical content should remain fully visible
-5. **Manual Tooltips**: Add `title` attribute when text truncation is expected
+```typescript
+@customElement("file-list")
+export class FileList extends LitElement {
+    private fileName = "very-long-document-name-with-many-details.pdf";
 
-## Browser Support
+    render() {
+        return html` <mjo-text-nowrap style="width: 150px;" aria-label="File name: ${this.fileName}"> ${this.fileName} </mjo-text-nowrap> `;
+    }
+}
+```
 
--   **Text Overflow**: Supported in all modern browsers
--   **Ellipsis**: Universal support for text-overflow: ellipsis
--   **ResizeObserver**: Supported in all modern browsers
--   **CSS Custom Properties**: Compatible with all layout systems
+### Styling with CSS parts
 
-## Notes
+```typescript
+@customElement("styled-truncate")
+export class StyledTruncate extends LitElement {
+    static styles = css`
+        mjo-text-nowrap::part(container) {
+            background: var(--surface-color);
+            padding: 8px;
+            border-radius: 4px;
+        }
 
--   The component provides automatic truncation detection and tooltip support
--   It maintains consistent height regardless of content length
--   Styling is inherited from parent elements
--   Works with any text content including HTML elements
--   ResizeObserver ensures accurate truncation detection on container changes
--   Events enable custom accessibility and UX enhancements
+        mjo-text-nowrap::part(wrapper) {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+    `;
 
-## Related Components
+    render() {
+        return html` <mjo-text-nowrap style="width: 200px;"> Styled truncated text </mjo-text-nowrap> `;
+    }
+}
+```
 
--   [mjo-typography](./mjo-typography.md) - For semantic text styling
--   [mjo-card](./mjo-card.md) - Often used together for card layouts
--   [mjo-table](./mjo-table.md) - Commonly used in table cells
+### Table cell truncation
+
+```typescript
+@customElement("data-table")
+export class DataTable extends LitElement {
+    private data = [
+        { id: 1, name: "Long Product Name That Needs Truncation", price: 99.99 },
+        { id: 2, name: "Another Very Long Product Description", price: 149.99 },
+    ];
+
+    render() {
+        return html`
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 200px;">Product</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${this.data.map(
+                        (item) => html`
+                            <tr>
+                                <td>
+                                    <mjo-text-nowrap aria-label="${item.name}"> ${item.name} </mjo-text-nowrap>
+                                </td>
+                                <td>$${item.price}</td>
+                            </tr>
+                        `,
+                    )}
+                </tbody>
+            </table>
+        `;
+    }
+}
+```
+
+## Additional notes
+
+- The component has a fixed height of `calc(1em * 1.25)` to maintain consistent line height
+- The truncation is achieved using CSS `text-overflow: ellipsis`, `white-space: nowrap`, and `overflow: hidden`
+- The component uses absolute positioning internally, so the parent container should have enough space to accommodate it
+- Always set a width constraint on the component or its parent for the truncation to work properly
+- The component extends `ThemeMixin` for theme support

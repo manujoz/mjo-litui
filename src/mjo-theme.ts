@@ -7,6 +7,11 @@ import { Cookies } from "./lib/cookies.js";
 import { applyThemeToCssVars, mergeConfig } from "./lib/theme.js";
 import { defaultTheme } from "./theme/default-theme.js";
 
+/**
+ * @summary Theme management component that applies consistent design tokens across the application and manages light/dark mode switching.
+ *
+ * @fires {MjoThemeChangeEvent} mjo-theme:change - Dispatched when theme mode changes
+ */
 @customElement("mjo-theme")
 export class MjoTheme extends LitElement {
     @property({ type: String }) theme: MjoThemeModes = "light";
@@ -51,15 +56,24 @@ export class MjoTheme extends LitElement {
         this.#isFirstUpdated = false;
     }
 
+    /**
+     * Sets the current theme mode
+     */
     setTheme(theme: MjoThemeModes) {
         this.theme = theme;
     }
 
+    /**
+     * Toggles between light and dark theme modes
+     */
     toggleTheme() {
         this.theme = this.theme === "light" ? "dark" : "light";
         return this.theme;
     }
 
+    /**
+     * Applies the current theme configuration to CSS variables
+     */
     applyTheme() {
         let style =
             this.scope === "global"

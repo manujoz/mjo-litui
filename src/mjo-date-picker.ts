@@ -24,7 +24,7 @@ import "./mjo-dropdown.js";
 import "./mjo-textfield.js";
 
 /**
- * @summary Interactive date picker component with comprehensive features for single date and date range selection.
+ * @summary Interactive date picker component that combines a text field with a calendar dropdown for single date and date range selection.
  *
  * @fires mjo-date-picker:change - Fired when date selection changes (single date or completed range)
  * @fires change - Standard change event for form compatibility
@@ -208,6 +208,9 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         this.#setInputElement();
     }
 
+    /**
+     * Clears the current date selection and resets the calendar
+     */
     clear() {
         if (this.disabled) return;
 
@@ -225,10 +228,16 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         }
     }
 
+    /**
+     * Programmatically clicks the textfield
+     */
     click() {
         this.textfield?.click();
     }
 
+    /**
+     * Closes the calendar dropdown
+     */
     close() {
         this.dropdown.close();
 
@@ -240,10 +249,16 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         this.textfield?.focus();
     }
 
+    /**
+     * Focuses the textfield input
+     */
     focus() {
         this.textfield?.focus();
     }
 
+    /**
+     * Opens the calendar dropdown
+     */
     open() {
         if (this.disabled) return;
 
@@ -261,10 +276,16 @@ export class MjoDatePicker extends ThemeMixin(InputErrorMixin(FormMixin(LitEleme
         });
     }
 
+    /**
+     * Returns the current value
+     */
     getValue() {
         return this.value;
     }
 
+    /**
+     * Sets the date value programmatically
+     */
     setValue(value: string) {
         this.value = value;
     }

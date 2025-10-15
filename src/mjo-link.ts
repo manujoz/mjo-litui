@@ -10,6 +10,33 @@ import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./mjo-button.js";
 
+/**
+ * @summary Accessible link component with multiple variants, color options, and comprehensive keyboard navigation support.
+ *
+ * @slot - Link text content
+ *
+ * @fires mjo-link:click - Fired when the link is clicked and preventDefault is true
+ *
+ * @csspart link - The native anchor element
+ * @csspart link-text - The text wrapper around the link content (only for variant="link")
+ * @csspart button - The button element (via exportparts from mjo-button when variant is not "link")
+ * @csspart button-content - The button content element (via exportparts from mjo-button when variant is not "link")
+ *
+ * @cssprop --mjo-link-font-family - Font family of the link
+ * @cssprop --mjo-link-color-default - Default text color
+ * @cssprop --mjo-link-color-primary - Primary color variant
+ * @cssprop --mjo-link-color-secondary - Secondary color variant
+ * @cssprop --mjo-link-color-disabled - Disabled state color
+ * @cssprop --mjo-link-text-decoration - Text decoration style
+ * @cssprop --mjo-link-text-decoration-hover - Text decoration on hover
+ * @cssprop --mjo-link-font-weight - Font weight
+ * @cssprop --mjo-link-transition - Transition effect
+ * @cssprop --mjo-link-focus-outline - Focus outline style
+ * @cssprop --mjo-link-focus-outline-color - Focus outline color
+ * @cssprop --mjo-link-focus-outline-offset - Focus outline offset
+ * @cssprop --mjo-link-focus-outline-width - Focus outline width (high contrast mode)
+ * @cssprop --mjo-link-focus-border-radius - Focus outline border radius
+ */
 @customElement("mjo-link")
 export class MjoLink extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: String }) href?: string;

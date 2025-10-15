@@ -7,11 +7,9 @@ import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 import "./components/modal/mjo-modal-container.js";
 
 /**
- * A modal dialog component with controller architecture for displaying overlay content
- * with full accessibility support.
+ * A controller-based modal dialog component for displaying overlay content with comprehensive accessibility support.
  *
- * The modal renders in a `mjo-modal-container` that is mounted directly in the document body,
- * providing proper overlay management and z-index control.
+ * @summary Modal dialog component with programmatic control and accessibility features
  *
  * @cssprop --mjo-modal-background-color - Modal background color
  * @cssprop --mjo-modal-backdrop-background-color - Backdrop background color

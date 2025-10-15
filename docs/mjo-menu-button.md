@@ -1,448 +1,278 @@
 # mjo-menu-button
 
-An animated hamburger menu button that transforms between different visual states with customizable effects and semantic colors.
+Animated hamburger menu button with multiple effects and semantic colors. Provides smooth transitions between open and closed states with comprehensive accessibility support.
 
-## Overview
+## Index
 
-The `mjo-menu-button` component provides an interactive hamburger-style menu button with smooth transitions between open and closed states. It features multiple animation effects, semantic color variants, and built-in ripple feedback for enhanced user interaction.
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Public Methods](#public-methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-## Basic Usage
+## Use Cases
 
-### HTML
+- Navigation menu toggle for mobile/responsive designs
+- Sidebar/drawer activation control
+- Collapsible panel trigger
+- Interactive UI state indicator with visual feedback
 
-```html
-<mjo-menu-button color="primary" effect="cross"></mjo-menu-button>
-<mjo-menu-button color="secondary" effect="wink" size="lg"></mjo-menu-button>
-<mjo-menu-button color="success" effect="bounce" isOpen></mjo-menu-button>
-```
+## Import
 
-### Basic Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
+```typescript
 import "mjo-litui/mjo-menu-button";
-
-@customElement("example-menu-button-basic")
-export class ExampleMenuButtonBasic extends LitElement {
-    render() {
-        return html` <mjo-menu-button color="primary" effect="cross" aria-label="Toggle navigation menu"> </mjo-menu-button> `;
-    }
-}
 ```
 
-### ARIA Usage Examples
+## Properties
 
-```html
-<!-- Basic hamburger menu with external navigation -->
-<mjo-menu-button aria-label="Toggle main navigation" aria-controls="navigation-menu" color="primary"> </mjo-menu-button>
+| Property        | Type                                                                      | Description                                                                 | Default     | Required |
+| --------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----------- | -------- |
+| `size`          | `"sm" \| "md" \| "lg"`                                                    | Button size (sm: 35px, md: 50px, lg: 65px)                                  | `"md"`      | No       |
+| `effect`        | `MjoButtonEffect`                                                         | Animation effect type (see [MjoButtonEffect types](#mjobuttoneffect-types)) | `"cross"`   | No       |
+| `color`         | `"primary" \| "secondary" \| "success" \| "info" \| "warning" \| "error"` | Semantic color variant for hover state                                      | `"primary"` | No       |
+| `isOpen`        | `boolean`                                                                 | Controls the open/closed state                                              | `false`     | No       |
+| `noink`         | `boolean`                                                                 | Disables ripple effect                                                      | `false`     | No       |
+| `disabled`      | `boolean`                                                                 | Disables the button                                                         | `false`     | No       |
+| `aria-controls` | `string`                                                                  | ID of the element controlled by this button (for ARIA)                      | `undefined` | No       |
 
-<!-- Menu button for sidebar control -->
-<mjo-menu-button aria-label="Toggle sidebar" aria-controls="sidebar-panel" color="secondary"> </mjo-menu-button>
+### MjoButtonEffect Types
 
-<!-- Menu button without external control -->
-<mjo-menu-button aria-label="Menu options" color="primary"> </mjo-menu-button>
-```
+Available animation effects:
 
-## Attributes / Properties
+- `"cross"` - Lines cross to form an X
+- `"wink"` - Lines collapse from center
+- `"wink-reverse"` - Lines collapse with reverse rotation
+- `"bounce"` - Lines bounce while rotating
+- `"rotate"` - Full 360° rotation with cross formation
+- `"rotate-reverse"` - Counter-clockwise rotation with cross formation
+- `"push"` - Lines push from right to left
+- `"push-reverse"` - Lines push from left to right
+- `"async"` - Lines animate sequentially from top
+- `"async-reverse"` - Lines animate sequentially from bottom
+- `"spin"` - Container spins 90° with diagonal lines
+- `"spin-reverse"` - Container spins with reverse diagonal
 
-| Name           | Type                                                                      | Default     | Reflects | Description                                                            |
-| -------------- | ------------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------- |
-| `size`         | `"sm" \| "md" \| "lg"`                                                    | `"md"`      | no       | Controls the button size (35px, 50px, or 65px)                         |
-| `effect`       | `MjoButtonEffect` (see types below)                                       | `"cross"`   | no       | Animation effect when transitioning between states                     |
-| `color`        | `"primary" \| "secondary" \| "success" \| "info" \| "warning" \| "error"` | `"primary"` | no       | Semantic color theme for hover states                                  |
-| `isOpen`       | `boolean`                                                                 | `false`     | no       | Controls the open/closed state of the menu button                      |
-| `noink`        | `boolean`                                                                 | `false`     | no       | Disables the ripple effect when true                                   |
-| `disabled`     | `boolean`                                                                 | `false`     | yes      | Disables the button interaction and applies disabled styling           |
-| `ariaControls` | `string`                                                                  | `undefined` | no       | ID of the element this button controls (sets aria-controls attribute)  |
-| `theme`        | `MjoMenuButtonTheme`                                                      | `{}`        | no       | Theme configuration object for customizing appearance (via ThemeMixin) |
+## Public Methods
 
-### ARIA Support
-
-The component leverages both Lit's native ARIA support and custom properties for comprehensive accessibility:
-
-| Attribute       | Type                          | Description                                   | Usage                             |
-| --------------- | ----------------------------- | --------------------------------------------- | --------------------------------- |
-| `aria-label`    | `string \| null` (Lit native) | Custom accessibility label for the button     | `aria-label="Toggle navigation"`  |
-| `aria-controls` | `string` (custom property)    | ID of the element controlled by this button   | `aria-controls="main-navigation"` |
-| `aria-expanded` | Read-only (automatic)         | Automatically managed based on `isOpen` state | Managed internally based on state |
-| `aria-haspopup` | Read-only (automatic)         | Set to "menu" when `ariaControls` is provided | Managed internally                |
-
-### Effect Types
-
-The `effect` property supports the following animation effects:
-
-| Effect             | Description                                |
-| ------------------ | ------------------------------------------ |
-| `"cross"`          | Default cross animation (hamburger to X)   |
-| `"wink"`           | Wink effect with diagonal animations       |
-| `"wink-reverse"`   | Reverse wink effect                        |
-| `"bounce"`         | Bounce effect with extended rotation       |
-| `"rotate"`         | Rotation of container with cross animation |
-| `"rotate-reverse"` | Reverse rotation effect                    |
-| `"push"`           | Push effect from center outwards           |
-| `"push-reverse"`   | Push effect towards center                 |
-| `"async"`          | Asynchronous animation of individual bars  |
-| `"async-reverse"`  | Reverse asynchronous animation             |
-| `"spin"`           | Spin container with diagonal bars          |
-| `"spin-reverse"`   | Reverse spin effect                        |
-
-### Internal State
-
-| Name         | Type      | Description                                             |
-| ------------ | --------- | ------------------------------------------------------- |
-| `isAnimated` | `boolean` | Internal flag to prevent state changes during animation |
-
-## Methods
-
-| Method            | Description                                                    |
-| ----------------- | -------------------------------------------------------------- |
-| `close()`         | Programmatically closes the menu button (sets isOpen to false) |
-| `open()`          | Programmatically opens the menu button (sets isOpen to true)   |
-| `toggle()`        | Toggles the current state of the menu button                   |
-| `focus(options?)` | Sets focus to the menu button element                          |
-| `blur()`          | Removes focus from the menu button element                     |
-
-### Method Usage Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import { MjoMenuButton } from "mjo-litui/mjo-menu-button";
-
-@customElement("example-menu-button-methods")
-export class ExampleMenuButtonMethods extends LitElement {
-    @query("mjo-menu-button") menuButton!: MjoMenuButton;
-
-    private openMenu() {
-        this.menuButton.open();
-    }
-
-    private closeMenu() {
-        this.menuButton.close();
-    }
-
-    private toggleMenu() {
-        this.menuButton.toggle();
-    }
-
-    private focusMenuButton() {
-        this.menuButton.focus();
-    }
-
-    render() {
-        return html`
-            <div>
-                <mjo-menu-button color="primary" effect="cross" aria-label="Toggle navigation" aria-controls="main-nav"> </mjo-menu-button>
-
-                <div class="controls">
-                    <button @click=${this.openMenu}>Open</button>
-                    <button @click=${this.closeMenu}>Close</button>
-                    <button @click=${this.toggleMenu}>Toggle</button>
-                    <button @click=${this.focusMenuButton}>Focus Menu Button</button>
-                </div>
-            </div>
-        `;
-    }
-}
-```
+| Method   | Parameters               | Description                                       | Returns |
+| -------- | ------------------------ | ------------------------------------------------- | ------- |
+| `focus`  | `options?: FocusOptions` | Sets focus to the menu button                     | `void`  |
+| `blur`   | -                        | Removes focus from the menu button                | `void`  |
+| `open`   | -                        | Opens the menu button (sets `isOpen` to `true`)   | `void`  |
+| `close`  | -                        | Closes the menu button (sets `isOpen` to `false`) | `void`  |
+| `toggle` | -                        | Toggles the menu button state                     | `void`  |
 
 ## Events
 
-| Event                    | Detail                | Emitted When                           | Notes                               |
-| ------------------------ | --------------------- | -------------------------------------- | ----------------------------------- |
-| `click`                  | Native `MouseEvent`   | User clicks the menu button            | Native button click event           |
-| `mjo-menu-button:open`   | `{ isOpen: true }`    | Menu button is opened programmatically | Custom event with state information |
-| `mjo-menu-button:close`  | `{ isOpen: false }`   | Menu button is closed programmatically | Custom event with state information |
-| `mjo-menu-button:toggle` | `{ isOpen: boolean }` | Menu button state is toggled           | Custom event with current state     |
+| Event                    | Description                                 | Type                       | Detail                |
+| ------------------------ | ------------------------------------------- | -------------------------- | --------------------- |
+| `mjo-menu-button:open`   | Fired when the menu button is opened        | `MjoMenuButtonOpenEvent`   | `{ isOpen: true }`    |
+| `mjo-menu-button:close`  | Fired when the menu button is closed        | `MjoMenuButtonCloseEvent`  | `{ isOpen: false }`   |
+| `mjo-menu-button:toggle` | Fired when the menu button state is toggled | `MjoMenuButtonToggleEvent` | `{ isOpen: boolean }` |
+
+## CSS Variables
+
+| Variable                        | Description                  | Default                                                                                        |
+| ------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| `--mjo-menu-button-color-hover` | Color applied on hover state | Depends on `color` property (primary, secondary, success, info, warning, or error theme color) |
 
 ## CSS Parts
 
-| Part          | Description                                                     |
-| ------------- | --------------------------------------------------------------- |
-| `container`   | The main button element that contains the entire menu button    |
-| `menu-button` | The inner container that holds the hamburger menu lines         |
-| `line`        | Individual lines that form the hamburger menu (4 span elements) |
-
-## CSS Custom Properties
-
-| Property                        | Default                    | Description                                     |
-| ------------------------------- | -------------------------- | ----------------------------------------------- |
-| `--mjo-menu-button-color-hover` | `var(--mjo-{color}-color)` | Hover color based on the selected color variant |
-
-### Color-Specific Hover Variables
-
-The component automatically uses different hover colors based on the `color` attribute:
-
-- **Primary**: `var(--mjo-menu-button-color-hover, var(--mjo-primary-color, #1aa8ed))`
-- **Secondary**: `var(--mjo-menu-button-color-hover, var(--mjo-secondary-color, #7dc717))`
-- **Success**: `var(--mjo-menu-button-color-hover, var(--mjo-color-success, #20d338))`
-- **Info**: `var(--mjo-menu-button-color-hover, var(--mjo-color-info, #2065cc))`
-- **Warning**: `var(--mjo-menu-button-color-hover, var(--mjo-color-warning, #df950c))`
-- **Error**: `var(--mjo-menu-button-color-hover, var(--mjo-color-error, #cf2a2a))`
-
-## Theme Interface
-
-```ts
-interface MjoMenuButtonTheme {
-    colorHover?: string;
-}
-```
-
-## ThemeMixin Customization
-
-This component uses `ThemeMixin`, allowing you to pass a `theme` object for instance-specific customization:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-menu-button";
-
-@customElement("example-menu-button-themed")
-export class ExampleMenuButtonThemed extends LitElement {
-    private customTheme = {
-        colorHover: "#7c3aed",
-    };
-
-    render() {
-        return html` <mjo-menu-button color="primary" effect="bounce" .theme=${this.customTheme}></mjo-menu-button> `;
-    }
-}
-```
-
-## Global Theming
-
-Configure menu button styling globally using `mjo-theme`:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-menu-button";
-
-@customElement("example-menu-button-global-theme")
-export class ExampleMenuButtonGlobalTheme extends LitElement {
-    render() {
-        return html`
-            <mjo-theme
-                .theme=${{
-                    components: {
-                        mjoMenuButton: {
-                            colorHover: "#f59e0b",
-                        },
-                    },
-                }}
-            >
-                <mjo-menu-button color="primary" effect="cross"></mjo-menu-button>
-                <mjo-menu-button color="secondary" effect="wink"></mjo-menu-button>
-            </mjo-theme>
-        `;
-    }
-}
-```
+| Part          | Description                                                     | Element    |
+| ------------- | --------------------------------------------------------------- | ---------- |
+| `container`   | The main button element that contains the entire menu button    | `<button>` |
+| `menu-button` | The inner container that holds the hamburger menu lines         | `<div>`    |
+| `line`        | Individual lines that form the hamburger menu (4 span elements) | `<span>`   |
 
 ## Accessibility
 
-The `mjo-menu-button` component is built with comprehensive accessibility features:
+### ARIA Support
 
-### Built-in Accessibility Features
+- Automatically sets `aria-label` to "Open menu" or "Close menu" based on state
+- Supports `aria-controls` attribute to link to controlled element
+- Sets `aria-expanded` to reflect current state
+- Sets `aria-haspopup="menu"` when `aria-controls` is provided
+- Disabled state properly reflected with `disabled` attribute
 
-- **Semantic HTML**: Uses a native `<button>` element for proper keyboard navigation and screen reader support
-- **ARIA Attributes**: Automatically includes `aria-expanded`, `aria-haspopup` (when controlling external elements), and optionally `aria-controls`
-- **Smart ARIA Management**: `aria-haspopup="menu"` is automatically set when `ariaControls` is provided, indicating this button controls an external menu
-- **Keyboard Support**: Full keyboard interaction (Enter, Space, Tab navigation)
-- **Focus Management**: Clear focus indicators with `:focus-visible` support and programmatic focus methods
-- **State Announcements**: Screen readers are informed of state changes through ARIA attributes
-- **Reduced Motion**: Respects `prefers-reduced-motion` user preference with simplified animations
-- **Disabled State**: Proper disabled state handling with visual and functional changes
+### Keyboard Navigation
 
-### ARIA Labels and Controls
+- Fully keyboard accessible as native `<button>` element
+- Activates with `Enter` and `Space` keys
+- Visible focus indicator with outline color matching semantic variant
 
-The component supports ARIA labeling and control relationships for hamburger menu buttons:
+### Motion Preferences
 
-- Use native `aria-label` attribute to provide accessible names for the button
-- Use `ariaControls` property to establish relationships with controlled elements (navigation menus, panels, etc.)
-- `aria-haspopup="menu"` is automatically added when `ariaControls` is set
-- Labels should clearly indicate the button's purpose (e.g., "Toggle navigation menu")
+- Respects `prefers-reduced-motion` media query
+- Switches to simple, instant transitions when reduced motion is preferred
+- Maintains functionality while removing complex animations
 
-### Enhanced Accessibility Example
+### Best Practices
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-menu-button";
+- Always use with descriptive labels or text nearby for context
+- Connect to controlled element using `aria-controls` for screen readers
+- Consider providing custom `aria-label` for specific contexts
+- Use semantic `color` variants that match your UI's information architecture
 
-@customElement("example-menu-button-accessible")
-export class ExampleMenuButtonAccessible extends LitElement {
-    @state() private menuOpen = false;
+## Usage Examples
 
-    private handleMenuToggle(event: CustomEvent) {
-        this.menuOpen = event.detail.isOpen;
-    }
+### Basic Usage
 
-    render() {
-        return html`
-            <mjo-menu-button
-                color="primary"
-                effect="cross"
-                .isOpen=${this.menuOpen}
-                aria-label="Toggle navigation menu"
-                aria-controls="main-navigation"
-                @mjo-menu-button:toggle=${this.handleMenuToggle}
-            ></mjo-menu-button>
-
-            <nav id="main-navigation" ?hidden=${!this.menuOpen}>
-                <ul>
-                    <li><a href="/home">Home</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/services">Services</a></li>
-                </ul>
-            </nav>
-        `;
-    }
-}
+```html
+<mjo-menu-button></mjo-menu-button>
 ```
 
-### Reduced Motion Support
+### Different Sizes and Effects
 
-The component automatically detects when users prefer reduced motion and uses simplified animations.
+```html
+<!-- Small size with wink effect -->
+<mjo-menu-button size="sm" effect="wink"></mjo-menu-button>
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-menu-button";
+<!-- Large size with bounce effect -->
+<mjo-menu-button size="lg" effect="bounce" color="secondary"></mjo-menu-button>
 
-@customElement("example-menu-button-reduced-motion")
-export class ExampleMenuButtonReducedMotion extends LitElement {
-    render() {
-        return html`
-            <!-- These buttons respect the user's motion preferences -->
-            <mjo-menu-button color="primary" effect="bounce" aria-label="Navigation"></mjo-menu-button>
-            <mjo-menu-button color="secondary" effect="spin" aria-label="Options"></mjo-menu-button>
-        `;
-    }
-}
+<!-- Spin effect with warning color -->
+<mjo-menu-button effect="spin" color="warning"></mjo-menu-button>
 ```
 
-### Disabled State Example
+### Programmatic Control
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-menu-button";
+```html
+<mjo-menu-button id="menuBtn"></mjo-menu-button>
+<button id="openBtn">Open Menu</button>
+<button id="closeBtn">Close Menu</button>
 
-@customElement("example-menu-button-disabled")
-export class ExampleMenuButtonDisabled extends LitElement {
-    @state() private isLoading = false;
+<script>
+    const menuBtn = document.getElementById("menuBtn");
+    const openBtn = document.getElementById("openBtn");
+    const closeBtn = document.getElementById("closeBtn");
 
-    private toggleLoading() {
-        this.isLoading = !this.isLoading;
-    }
+    openBtn.addEventListener("click", () => {
+        menuBtn.open();
+    });
 
-    render() {
-        return html`
-            <mjo-menu-button color="primary" .disabled=${this.isLoading} aria-label=${this.isLoading ? "Menu unavailable" : "Toggle menu"}></mjo-menu-button>
-            <button @click=${this.toggleLoading}>${this.isLoading ? "Enable" : "Disable"} Menu</button>
-        `;
-    }
-}
+    closeBtn.addEventListener("click", () => {
+        menuBtn.close();
+    });
+
+    // Listen to state changes
+    menuBtn.addEventListener("mjo-menu-button:toggle", (e) => {
+        console.log("Menu is now:", e.detail.isOpen ? "open" : "closed");
+    });
+</script>
 ```
 
-## Animation Effects Example
+### Controlling a Drawer
 
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-menu-button";
+```html
+<mjo-menu-button id="drawerToggle" aria-controls="mainDrawer" effect="push" color="primary"> </mjo-menu-button>
 
-@customElement("example-menu-button-effects")
-export class ExampleMenuButtonEffects extends LitElement {
-    render() {
-        return html`
-            <div class="effects-grid">
-                <mjo-menu-button effect="cross" color="primary" aria-label="Cross effect"></mjo-menu-button>
-                <mjo-menu-button effect="wink" color="secondary" aria-label="Wink effect"></mjo-menu-button>
-                <mjo-menu-button effect="bounce" color="success" aria-label="Bounce effect"></mjo-menu-button>
-                <mjo-menu-button effect="rotate" color="info" aria-label="Rotate effect"></mjo-menu-button>
-                <mjo-menu-button effect="spin" color="warning" aria-label="Spin effect"></mjo-menu-button>
-                <mjo-menu-button effect="async" color="error" aria-label="Async effect"></mjo-menu-button>
-            </div>
-        `;
-    }
+<mjo-drawer id="mainDrawer" position="left">
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</mjo-drawer>
 
-    static styles = css`
-        .effects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
+<script>
+    const toggle = document.getElementById("drawerToggle");
+    const drawer = document.getElementById("mainDrawer");
+
+    toggle.addEventListener("mjo-menu-button:toggle", (e) => {
+        if (e.detail.isOpen) {
+            drawer.open();
+        } else {
+            drawer.close();
         }
-    `;
-}
+    });
+
+    // Sync button state when drawer closes
+    drawer.addEventListener("mjo-drawer:close", () => {
+        toggle.close();
+    });
+</script>
 ```
 
-## Size and Color Variants
+### Customization with CSS Parts
 
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-menu-button";
-
-@customElement("example-menu-button-variants")
-export class ExampleMenuButtonVariants extends LitElement {
-    render() {
-        return html`
-            <div class="variants-grid">
-                <!-- Size Variants -->
-                <mjo-menu-button size="sm" color="primary" effect="cross" aria-label="Small menu"></mjo-menu-button>
-                <mjo-menu-button size="md" color="secondary" effect="wink" aria-label="Medium menu"></mjo-menu-button>
-                <mjo-menu-button size="lg" color="success" effect="bounce" aria-label="Large menu"></mjo-menu-button>
-
-                <!-- Color Variants -->
-                <mjo-menu-button color="info" effect="rotate" aria-label="Info menu"></mjo-menu-button>
-                <mjo-menu-button color="warning" effect="spin" aria-label="Warning menu"></mjo-menu-button>
-                <mjo-menu-button color="error" effect="async" aria-label="Error menu"></mjo-menu-button>
-            </div>
-        `;
+```html
+<style>
+    mjo-menu-button::part(container) {
+        background-color: rgba(0, 0, 0, 0.05);
     }
 
-    static styles = css`
-        .variants-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
-        }
-    `;
-}
+    mjo-menu-button::part(line) {
+        height: 3px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+
+    mjo-menu-button:hover::part(container) {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<mjo-menu-button effect="cross"></mjo-menu-button>
 ```
 
-## Performance Considerations
+### Custom Hover Color
 
-- **Animation Blocking**: During animations, the `isAnimated` flag prevents rapid state changes that could cause visual glitches
-- **CSS Transitions**: Uses CSS transitions for smooth, hardware-accelerated animations
-- **Event Handling**: Efficient click handling with proper event delegation
-- **Memory Management**: Automatic cleanup of animation timeouts to prevent memory leaks
+```html
+<style>
+    .custom-menu {
+        --mjo-menu-button-color-hover: #ff6b6b;
+    }
+</style>
 
-## Best Practices
+<mjo-menu-button class="custom-menu" effect="rotate"></mjo-menu-button>
+```
 
-- **Consistent Effects**: Use the same effect across your application for consistency
-- **Appropriate Sizing**: Choose size based on your UI layout (sm for compact layouts, lg for touch interfaces)
-- **Color Coordination**: Match the color prop with your overall design system
-- **State Management**: Use controlled state when you need to sync with other components
-- **Accessibility**: Always provide appropriate ARIA labels and roles
-- **Testing**: Test animations on different devices to ensure smooth performance
+### Disabled State
 
-## Common Use Cases
+```html
+<mjo-menu-button disabled></mjo-menu-button>
+```
 
-1. **Mobile Navigation**: Primary use case for responsive navigation menus
-2. **Sidebar Toggle**: Opening and closing sidebar panels
-3. **Menu Overlay**: Triggering full-screen menu overlays
-4. **Settings Panel**: Opening configuration or settings panels
-5. **Filter Toggle**: Showing/hiding filter options in data views
+### Without Ripple Effect
 
-## Summary
+```html
+<mjo-menu-button noink></mjo-menu-button>
+```
 
-`<mjo-menu-button>` provides a flexible, animated hamburger menu button with multiple visual effects and customization options. It integrates seamlessly with the mjo-litui design system while offering extensive theming capabilities through both global and instance-level customization. The component handles state management efficiently and provides smooth animations that enhance user experience without compromising performance.
+## Additional Notes
 
-For additional theming options and design system integration, see the [Theming Guide](./theming.md).
+### Animation Performance
+
+- All effects are optimized with CSS transforms and transitions
+- Animations are blocked during transitions to prevent state inconsistencies
+- Uses `isAnimated` internal flag to prevent rapid state changes
+
+### Effect Duration
+
+- Most effects complete in 500-800ms
+- Complex effects (bounce, rotate) may take up to 1 second
+- Reduced motion users get instant transitions without delays
+
+### Browser Compatibility
+
+- Works in all modern browsers supporting Web Components
+- CSS transforms and transitions are widely supported
+- Ripple effect requires support for custom elements
+
+### Styling Recommendations
+
+- Use CSS parts for deep customization of individual lines
+- Override `--mjo-menu-button-color-hover` for consistent theming
+- Container size is fixed based on `size` property but can be overridden with host styles
+
+### Integration with Navigation
+
+This component is designed to work seamlessly with:
+
+- **[mjo-drawer](mjo-drawer.md)** - For slide-out navigation panels
+- **[mjo-modal](mjo-modal.md)** - For modal-based menus
+- Custom navigation overlays and dropdown menus

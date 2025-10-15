@@ -1,349 +1,426 @@
 # mjo-button
 
-Fully accessible button component providing multiple variants, semantic colors, interactive states, and comprehensive accessibility features including ARIA support, loading states, and toggle functionality.
+Fully accessible button component with multiple variants, interactive states, and comprehensive ARIA support.
 
-## HTML Usage
+## Index
 
-```html
-<mjo-button color="primary" variant="default">Accept</mjo-button>
-<mjo-button color="secondary" variant="ghost">Cancel</mjo-button>
-<mjo-button color="success" variant="flat" startIcon="check">Done</mjo-button>
-<mjo-button toggleable button-label="Notification settings">Toggle</mjo-button>
-<mjo-button loading>Processing...</mjo-button>
-```
+1. [Use Cases](#use-cases)
+2. [Import](#import)
+3. [Properties](#properties)
+4. [States](#states)
+5. [Public Methods](#public-methods)
+6. [Events](#events)
+7. [CSS Variables](#css-variables)
+8. [CSS Parts](#css-parts)
+9. [Accessibility](#accessibility)
+10. [Usage Examples](#usage-examples)
+11. [Additional Notes](#additional-notes)
 
-## Basic Example
+## Use Cases
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
+The `mjo-button` component is designed for:
+
+- Standard clickable actions in user interfaces
+- Form submissions with type variants (submit, reset, button, menu)
+- Toggle buttons for on/off states
+- Loading states for async operations
+- Interactive elements with Material Design ripple effects
+- Semantic color-coded actions (primary, secondary, success, info, warning, error)
+- Icon-enhanced buttons with start/end icon positioning
+- Fully accessible form integration
+
+## Import
+
+```typescript
 import "mjo-litui/mjo-button";
-
-@customElement("example-button-basic")
-export class ExampleButtonBasic extends LitElement {
-    render() {
-        return html`
-            <mjo-button color="primary">Primary Button</mjo-button>
-            <mjo-button color="secondary" variant="ghost">Ghost Button</mjo-button>
-            <mjo-button color="success" variant="flat" startIcon="check">Flat Button</mjo-button>
-            <mjo-button toggleable>Toggle Button</mjo-button>
-            <mjo-button loading>Loading Button</mjo-button>
-        `;
-    }
-}
 ```
 
-## Interactive Features Example
+## Properties
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-button";
+| Property      | Type                                                                      | Default     | Description                                                      | Required |
+| ------------- | ------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | -------- |
+| `fullwidth`   | `boolean`                                                                 | `false`     | Makes the button take full width of its container                | No       |
+| `disabled`    | `boolean`                                                                 | `false`     | Disables the button                                              | No       |
+| `loading`     | `boolean`                                                                 | `false`     | Shows loading indicator and disables interaction                 | No       |
+| `rounded`     | `boolean`                                                                 | `false`     | Makes the button fully rounded (circular)                        | No       |
+| `toggleable`  | `boolean`                                                                 | `false`     | Enables toggle functionality                                     | No       |
+| `smallCaps`   | `boolean`                                                                 | `false`     | Applies small-caps font variant                                  | No       |
+| `noink`       | `boolean`                                                                 | `false`     | Disables ripple effect                                           | No       |
+| `startIcon`   | `string`                                                                  | `undefined` | SVG string for icon at the start of the button                   | No       |
+| `endIcon`     | `string`                                                                  | `undefined` | SVG string for icon at the end of the button                     | No       |
+| `size`        | `"small" \| "medium" \| "large"`                                          | `"medium"`  | Size variant of the button                                       | No       |
+| `color`       | `"primary" \| "secondary" \| "success" \| "info" \| "warning" \| "error"` | `"primary"` | Semantic color scheme                                            | No       |
+| `variant`     | `"default" \| "ghost" \| "dashed" \| "link" \| "text" \| "flat"`          | `"default"` | Visual style variant                                             | No       |
+| `type`        | `"button" \| "submit" \| "reset" \| "menu"`                               | `"button"`  | Button type for form handling                                    | No       |
+| `buttonLabel` | `string`                                                                  | `undefined` | ARIA label for the button                                        | No       |
+| `describedBy` | `string`                                                                  | `undefined` | ID of element that describes the button (for `aria-describedby`) | No       |
 
-@customElement("example-button-interactive")
-export class ExampleButtonInteractive extends LitElement {
-    @state() private loading = false;
+## States
 
-    private handleClick() {
-        this.loading = true;
-        setTimeout(() => (this.loading = false), 2000);
-    }
-
-    private handleToggle(e: CustomEvent) {
-        console.log("Toggle state:", e.detail.pressed);
-    }
-
-    render() {
-        return html`
-            <mjo-button color="primary" .loading=${this.loading} @click=${this.handleClick}> ${this.loading ? "Processing..." : "Start Task"} </mjo-button>
-
-            <mjo-button toggleable button-label="Toggle notifications" @mjo-button:toggle=${this.handleToggle}> Notifications </mjo-button>
-        `;
-    }
-}
-```
-
-## Attributes / Properties
-
-| Name         | Type                                                                      | Default     | Reflects | Description                                                                       |
-| ------------ | ------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------- |
-| `type`       | `"button" \| "submit" \| "reset" \| "menu"`                               | `"button"`  | no       | Native button type; `submit` triggers form submission (via FormMixin)             |
-| `color`      | `"primary" \| "secondary" \| "success" \| "info" \| "warning" \| "error"` | `"primary"` | no       | Semantic color; maps to theme variables / token palette                           |
-| `variant`    | `"default" \| "ghost" \| "dashed" \| "link" \| "text" \| "flat"`          | `"default"` | no       | Visual styling strategy                                                           |
-| `size`       | `"small" \| "medium" \| "large"`                                          | `"medium"`  | no       | Adjusts padding & font-size                                                       |
-| `fullwidth`  | `boolean`                                                                 | `false`     | yes      | Forces the host to span 100% width                                                |
-| `disabled`   | `boolean`                                                                 | `false`     | yes      | Disables interaction & ripple                                                     |
-| `loading`    | `boolean`                                                                 | `false`     | yes      | Shows loading bar & blocks toggle/ripple, sets aria-busy="true"                   |
-| `rounded`    | `boolean`                                                                 | `false`     | yes      | Circular shape (ignores width, uses equal padding)                                |
-| `toggleable` | `boolean`                                                                 | `false`     | no       | Enables internal pressed state with aria-pressed when clicked and `type="button"` |
-| `small-caps` | `boolean`                                                                 | `false`     | no       | Applies `font-variant: all-small-caps`                                            |
-| `noink`      | `boolean`                                                                 | `false`     | no       | Hides the ripple effect                                                           |
-| `startIcon`  | `string \| undefined`                                                     | `undefined` | no       | Icon name / path prepended to button text                                         |
-| `endIcon`    | `string \| undefined`                                                     | `undefined` | no       | Icon name / path appended to button text                                          |
-
-### Accessibility Properties
-
-| Name           | Type                  | Default     | Description                                                |
-| -------------- | --------------------- | ----------- | ---------------------------------------------------------- |
-| `button-label` | `string \| undefined` | `undefined` | Custom aria-label for the button                           |
-| `described-by` | `string \| undefined` | `undefined` | ID of element that describes the button (aria-describedby) |
-
-### Internal State
-
-| Name     | Type      | Description                                                                                   |
-| -------- | --------- | --------------------------------------------------------------------------------------------- |
-| `toggle` | `boolean` | Private `@state` used when `toggleable` is true to add `data-toggle` styling and aria-pressed |
-
-### Behavior Notes
-
-- When `disabled` or `loading`, toggle state is reset to `false`.
-- Form submission only occurs if a parent form is wired via FormMixin and `type="submit"`.
-- Ripple (`<mjo-ripple>`) is omitted when `loading`, `disabled`, or `noink`.
-
-## Slots
-
-| Slot      | Description                                                          |
-| --------- | -------------------------------------------------------------------- |
-| (default) | Button textual / inline content (rendered inside `<mjo-typography>`) |
-
-## Events
-
-| Event                       | Detail                                | Emitted When          | Notes                                               |
-| --------------------------- | ------------------------------------- | --------------------- | --------------------------------------------------- |
-| `click`                     | Native `MouseEvent`                   | User activation       | Standard DOM event, prevented when disabled/loading |
-| `mjo-button:click`          | `{ element, toggle?, originalEvent }` | Button is clicked     | Custom event with additional context                |
-| `mjo-button:toggle`         | `{ element, pressed, previousState }` | Toggle state changes  | Only emitted when `toggleable` is true              |
-| `mjo-button:loading-change` | `{ element, loading }`                | Loading state changes | Emitted whenever loading property changes           |
-
-### Event Details
-
-#### MjoButtonClickEvent
-
-- `element`: Reference to the button instance
-- `toggle`: Current toggle state (only present if toggleable)
-- `originalEvent`: The original MouseEvent or KeyboardEvent
-
-#### MjoButtonToggleEvent
-
-- `element`: Reference to the button instance
-- `pressed`: New toggle/pressed state
-- `previousState`: Previous toggle state
-
-#### MjoButtonLoadingChangeEvent
-
-- `element`: Reference to the button instance
-- `loading`: New loading state
+| State    | Type      | Description                                                     |
+| -------- | --------- | --------------------------------------------------------------- |
+| `toggle` | `boolean` | Internal toggle state (only active when `toggleable` is `true`) |
 
 ## Public Methods
 
-| Method            | Parameters               | Returns | Description                                |
-| ----------------- | ------------------------ | ------- | ------------------------------------------ |
-| `focus()`         | `options?: FocusOptions` | `void`  | Sets focus to the button                   |
-| `blur()`          | -                        | `void`  | Removes focus from the button              |
-| `click()`         | -                        | `void`  | Programmatically triggers a click          |
-| `setLoading()`    | `loading: boolean`       | `void`  | Sets the loading/busy state                |
-| `togglePressed()` | -                        | `void`  | Toggles pressed state (only if toggleable) |
+| Method          | Parameters               | Description                                           | Returns |
+| --------------- | ------------------------ | ----------------------------------------------------- | ------- |
+| `focus`         | `options?: FocusOptions` | Sets focus to the button                              | `void`  |
+| `blur`          | -                        | Removes focus from the button                         | `void`  |
+| `click`         | -                        | Simulates a click on the button                       | `void`  |
+| `setLoading`    | `loading: boolean`       | Sets the button as busy/loading                       | `void`  |
+| `togglePressed` | -                        | Toggles the button pressed state (only if toggleable) | `void`  |
 
-### Method Examples
+## Events
 
-```ts
-// Get reference to button and use methods
-const button = document.querySelector("mjo-button") as MjoButton;
+| Event                       | Type                          | Description                                                   | Detail                                                                |
+| --------------------------- | ----------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `mjo-button:click`          | `MjoButtonClickEvent`         | Fired when the button is clicked                              | `{ element: MjoButton, toggle?: boolean, originalEvent: MouseEvent }` |
+| `mjo-button:toggle`         | `MjoButtonToggleEvent`        | Fired when toggle state changes (only when `toggleable=true`) | `{ element: MjoButton, pressed: boolean, previousState: boolean }`    |
+| `mjo-button:loading-change` | `MjoButtonLoadingChangeEvent` | Fired when loading state changes                              | `{ element: MjoButton, loading: boolean }`                            |
+
+## CSS Variables
+
+| Variable                              | Description                         | Default                                   |
+| ------------------------------------- | ----------------------------------- | ----------------------------------------- |
+| `--mjo-button-background-color`       | Background color of the button      | Based on `color` and `variant` properties |
+| `--mjo-button-background-color-hover` | Background color on hover           | Based on `color` and `variant` properties |
+| `--mjo-button-border-radius`          | Border radius of the button         | `var(--mjo-radius-medium, 5px)`           |
+| `--mjo-button-border`                 | Border style                        | Based on `variant` property               |
+| `--mjo-button-color`                  | Text color                          | Based on `color` and `variant` properties |
+| `--mjo-button-font-size`              | Font size                           | `1rem`                                    |
+| `--mjo-button-font-weight`            | Font weight                         | `normal`                                  |
+| `--mjo-button-font-family`            | Font family                         | `inherit`                                 |
+| `--mjo-button-gap`                    | Gap between button content elements | `5px`                                     |
+| `--mjo-button-padding`                | Internal padding                    | `calc(1em / 2 - 1px) calc(1em / 2 + 2px)` |
+| `--mjo-button-opacity-hover`          | Opacity on hover                    | `1`                                       |
+| `--mjo-button-loading-color`          | Color of the loading indicator      | Based on `color` property                 |
+
+## CSS Parts
+
+| Part         | Description                                          | Element          |
+| ------------ | ---------------------------------------------------- | ---------------- |
+| `button`     | The native button element                            | `button`         |
+| `start-icon` | The start icon element (via exportparts)             | `mjo-icon`       |
+| `end-icon`   | The end icon element (via exportparts)               | `mjo-icon`       |
+| `text`       | The typography wrapper around the button text        | `mjo-typography` |
+| `loading`    | The loading indicator element (visible when loading) | `div`            |
+
+## Accessibility
+
+### ARIA Attributes
+
+The component implements comprehensive ARIA semantics:
+
+- Uses `aria-busy` to indicate loading state
+- Uses `aria-pressed` for toggle buttons (when `toggleable` is `true`)
+- Supports custom `aria-label` via `buttonLabel` property
+- Supports `aria-describedby` via `describedBy` property
+- Properly manages `tabindex` based on disabled state
+- Disables interaction when `disabled` or `loading` is `true`
+
+### Keyboard Interaction
+
+Standard button keyboard interaction:
+
+- **Enter/Space**: Activates the button (when focused)
+- **Tab**: Moves focus to/from the button
+
+### Best Practices
+
+- Use semantic `color` values to indicate action types (e.g., `error` for destructive actions)
+- Provide clear text content or `buttonLabel` for screen readers
+- Use `loading` state for async operations to prevent duplicate submissions
+- Use `toggleable` for on/off state buttons with proper `aria-pressed` support
+- Consider using `disabled` to prevent actions that aren't currently available
+- Use appropriate `type` values for form integration (`submit`, `reset`, `button`)
+
+### High Contrast Mode Support
+
+The component adapts to high contrast preferences by:
+
+- Increasing border width (2px) in high contrast mode
+- Applying increased outline width (3px) for focused buttons
+
+### Reduced Motion Support
+
+For users who prefer reduced motion:
+
+- All transitions are disabled
+- Loading indicator uses a static striped pattern instead of animation
+
+## Usage Examples
+
+### Basic Button
+
+```html
+<mjo-button>Click me</mjo-button>
+```
+
+### Button Variants
+
+```html
+<!-- Default/Solid variant -->
+<mjo-button variant="default">Default</mjo-button>
+
+<!-- Ghost variant (transparent background) -->
+<mjo-button variant="ghost">Ghost</mjo-button>
+
+<!-- Flat variant (subtle background) -->
+<mjo-button variant="flat">Flat</mjo-button>
+
+<!-- Dashed border variant -->
+<mjo-button variant="dashed">Dashed</mjo-button>
+
+<!-- Link style variant -->
+<mjo-button variant="link">Link</mjo-button>
+
+<!-- Text only variant -->
+<mjo-button variant="text">Text</mjo-button>
+```
+
+### Semantic Colors
+
+```html
+<mjo-button color="primary">Primary</mjo-button>
+<mjo-button color="secondary">Secondary</mjo-button>
+<mjo-button color="success">Success</mjo-button>
+<mjo-button color="info">Info</mjo-button>
+<mjo-button color="warning">Warning</mjo-button>
+<mjo-button color="error">Error</mjo-button>
+```
+
+### Button Sizes
+
+```html
+<mjo-button size="small">Small</mjo-button>
+<mjo-button size="medium">Medium</mjo-button>
+<mjo-button size="large">Large</mjo-button>
+```
+
+### Buttons with Icons
+
+```html
+<script type="module">
+    import { BsHeart, BsTrash } from "mjo-icons/bs";
+</script>
+
+<!-- Icon at start -->
+<mjo-button .startIcon="${BsHeart}">Like</mjo-button>
+
+<!-- Icon at end -->
+<mjo-button .endIcon="${BsTrash}">Delete</mjo-button>
+
+<!-- Icon only (rounded) -->
+<mjo-button .startIcon="${BsHeart}" rounded></mjo-button>
+```
+
+### Loading State
+
+```html
+<mjo-button loading>Loading...</mjo-button>
+
+<script>
+    const button = document.querySelector("mjo-button");
+
+    button.addEventListener("mjo-button:click", async (e) => {
+        button.setLoading(true);
+
+        try {
+            await performAsyncOperation();
+        } finally {
+            button.setLoading(false);
+        }
+    });
+</script>
+```
+
+### Toggle Button
+
+```html
+<mjo-button toggleable>Toggle me</mjo-button>
+
+<script>
+    const button = document.querySelector("mjo-button");
+
+    button.addEventListener("mjo-button:toggle", (e) => {
+        console.log("Pressed:", e.detail.pressed);
+        console.log("Previous state:", e.detail.previousState);
+    });
+</script>
+```
+
+### Form Integration
+
+```html
+<form id="myForm">
+    <input type="text" name="username" required />
+
+    <!-- Submit button -->
+    <mjo-button type="submit" color="primary">Submit</mjo-button>
+
+    <!-- Reset button -->
+    <mjo-button type="reset" variant="ghost">Reset</mjo-button>
+
+    <!-- Regular button (doesn't submit) -->
+    <mjo-button type="button">Cancel</mjo-button>
+</form>
+```
+
+### Disabled and Full Width
+
+```html
+<mjo-button disabled>Disabled</mjo-button> <mjo-button fullwidth>Full Width Button</mjo-button>
+```
+
+### Handling Click Events
+
+```html
+<mjo-button id="myButton">Click me</mjo-button>
+
+<script>
+    const button = document.getElementById("myButton");
+
+    button.addEventListener("mjo-button:click", (e) => {
+        console.log("Button clicked!");
+        console.log("Original event:", e.detail.originalEvent);
+        console.log("Toggle state:", e.detail.toggle);
+    });
+</script>
+```
+
+### Programmatic Control
+
+```javascript
+const button = document.querySelector("mjo-button");
 
 // Focus the button
 button.focus();
 
+// Trigger click programmatically
+button.click();
+
+// Toggle pressed state
+button.togglePressed();
+
 // Set loading state
 button.setLoading(true);
 
-// Toggle pressed state (if toggleable)
-button.togglePressed();
-
-// Programmatically click
-button.click();
+// Remove focus
+button.blur();
 ```
 
-## CSS Variables
+### Styling with CSS Parts
 
-The component uses CSS variables that inherit from the global theme system. Variables can be customized globally via `<mjo-theme>` or per-instance via ThemeMixin.
+```css
+/* Style the button element */
+mjo-button::part(button) {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
-### Component-Specific Variables
+/* Style the text content */
+mjo-button::part(text) {
+    font-weight: bold;
+}
 
-| Variable                              | Default                                   | Purpose                               |
-| ------------------------------------- | ----------------------------------------- | ------------------------------------- |
-| `--mjo-button-background-color`       | Dynamic based on variant/color            | Background color                      |
-| `--mjo-button-border-radius`          | `var(--mjo-radius-medium, 5px)`           | Corner radius (non-rounded)           |
-| `--mjo-button-border`                 | Dynamic based on variant/color            | Border property (style, width, color) |
-| `--mjo-button-color`                  | Dynamic based on variant/color            | Text color                            |
-| `--mjo-button-font-size`              | `1rem`                                    | Font size                             |
-| `--mjo-button-font-weight`            | `normal`                                  | Font weight                           |
-| `--mjo-button-font-family`            | `inherit`                                 | Font family                           |
-| `--mjo-button-gap`                    | `5px`                                     | Gap between icon and text             |
-| `--mjo-button-padding`                | `calc(1em / 2 - 1px) calc(1em / 2 + 2px)` | Button padding                        |
-| `--mjo-button-background-color-hover` | Dynamic based on variant/color            | Background color on hover             |
-| `--mjo-button-opacity-hover`          | `1`                                       | Opacity on hover                      |
-| `--mjo-button-loading-color`          | Dynamic based on color                    | Loading indicator color               |
+/* Style icons */
+mjo-button::part(start-icon) {
+    color: red;
+}
 
-### Global Theme Variables Used
-
-The component leverages these global theme variables:
-
-#### Primary & Secondary Colors
-
-- `--mjo-primary-color`
-- `--mjo-primary-color-hover`
-- `--mjo-primary-foreground-color`
-- `--mjo-primary-color-alpha1`
-- `--mjo-primary-color-alpha2`
-- `--mjo-secondary-color`
-- `--mjo-secondary-color-hover`
-- `--mjo-secondary-foreground-color`
-- `--mjo-secondary-color-alpha1`
-- `--mjo-secondary-color-alpha2`
-
-#### Status Colors
-
-- `--mjo-color-success` / `--mjo-color-success-foreground`
-- `--mjo-color-info` / `--mjo-color-info-foreground`
-- `--mjo-color-warning` / `--mjo-color-warning-foreground`
-- `--mjo-color-error` / `--mjo-color-error-foreground`
-
-#### Background & Disabled States
-
-- `--mjo-background-color-high` (for ghost/dashed/text variant hovers)
-- `--mjo-disabled-color`
-- `--mjo-disabled-foreground-color`
-
-## ThemeMixin Customization
-
-This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to customize specific instances. Properties are automatically converted from camelCase to CSS variables with the pattern: `--mjo-button-{property-name}`.
-
-### MjoButtonTheme Interface
-
-```ts
-interface MjoButtonTheme {
-    backgroundColor?: string;
-    backgroundColorHover?: string;
-    border?: string;
-    borderRadius?: string;
-    color?: string;
-    fontFamily?: string;
-    fontSize?: string;
-    fontWeight?: string;
-    gap?: string;
-    loadingColor?: string;
-    opacityHover?: string;
-    padding?: string;
+/* Style loading indicator */
+mjo-button::part(loading) {
+    height: 3px;
 }
 ```
 
-### ThemeMixin Example
+### Styling with CSS Variables
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-button";
+```css
+mjo-button {
+    --mjo-button-font-family: "Inter", sans-serif;
+    --mjo-button-font-size: 1.1rem;
+    --mjo-button-font-weight: 600;
+    --mjo-button-border-radius: 8px;
+    --mjo-button-padding: 0.75rem 1.5rem;
+    --mjo-button-gap: 8px;
+}
 
-@customElement("example-button-themed")
-export class ExampleButtonThemed extends LitElement {
-    private customTheme = {
-        fontSize: "1.1em",
-        fontWeight: "600",
-        padding: "0.75rem 1.25rem",
-        borderRadius: "8px",
-        gap: "8px",
-        backgroundColor: "#2563eb",
-        backgroundColorHover: "#1d4ed8",
-        color: "white",
-        loadingColor: "#60a5fa",
-        opacityHover: "0.9",
-    };
-
-    render() {
-        return html` <mjo-button color="primary" .theme=${this.customTheme}> Custom Themed Button </mjo-button> `;
-    }
+/* Custom color scheme */
+mjo-button[color="primary"] {
+    --mjo-button-background-color: #0066cc;
+    --mjo-button-background-color-hover: #0052a3;
+    --mjo-button-color: white;
 }
 ```
 
-## Form Integration
-
-When used with `type="submit"`, the button integrates with forms through the FormMixin:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-form";
-
-@customElement("example-button-form")
-export class ExampleButtonForm extends LitElement {
-    private handleSubmit(event: CustomEvent) {
-        console.log("Form submitted:", event.detail);
-    }
-
-    render() {
-        return html`
-            <mjo-form @submit=${this.handleSubmit}>
-                <!-- form inputs here -->
-                <mjo-button type="submit" color="primary">Submit Form</mjo-button>
-                <mjo-button type="reset" variant="ghost">Reset</mjo-button>
-            </mjo-form>
-        `;
-    }
-}
-```
-
-## CSS Parts
-
-| Part      | Description                                                    |
-| --------- | -------------------------------------------------------------- |
-| `button`  | The native button element                                      |
-| `loading` | The loading indicator element (visible when `loading` is true) |
-
-### Parts from child components
-
-When using `startIcon` or `endIcon`, the following parts are exposed via `exportparts`:
-
-- `start-icon` - The start icon element
-- `end-icon` - The end icon element
-- `text` - The text typography wrapper element
-
-## Accessibility Notes
-
-This component follows WCAG 2.1 guidelines and provides comprehensive accessibility support:
-
-### ARIA Support
-
-- **aria-busy**: Automatically set to "true" when `loading` is active
-- **aria-pressed**: Automatically managed for toggle buttons when `toggleable` is true
-- **aria-label**: Custom accessible name via `button-label` property
-- **aria-describedby**: Reference to descriptive text via `described-by` property
-
-### Best Practices
+### Combined Features
 
 ```html
-<!-- Good: Descriptive text -->
-<mjo-button color="primary">Save Document</mjo-button>
+<script type="module">
+    import { BsSave } from "mjo-icons/bs";
+</script>
 
-<!-- Good: Icon with accessible label -->
-<mjo-button rounded startIcon="close" button-label="Close dialog"></mjo-button>
-
-<!-- Good: Toggle with clear context -->
-<mjo-button toggleable button-label="Enable notifications">Notifications</mjo-button>
-
-<!-- Good: Loading state -->
-<mjo-button loading>Processing payment...</mjo-button>
+<mjo-button color="success" size="large" .startIcon="${BsSave}" loading buttonLabel="Save your changes"> Saving... </mjo-button>
 ```
 
-## Summary
+## Additional Notes
 
-`<mjo-button>` is a comprehensive button component that provides:
+### Ripple Effect
 
-- **Multiple Variants**: default, ghost, flat, dashed, link, text
-- **Semantic Colors**: primary, secondary, success, info, warning, error
-- **Interactive States**: loading, toggle, disabled
-- **Accessibility**: WCAG 2.1 compliant with comprehensive ARIA support
-- **Form Integration**: Seamless form submission via FormMixin
-- **Flexible Theming**: Global and per-instance customization
+The component includes an integrated `mjo-ripple` effect that provides Material Design-style visual feedback on click. This effect:
 
-Perfect for building interactive interfaces with consistent styling and excellent accessibility support.
+- Is automatically enabled by default
+- Can be disabled using the `noink` property
+- Is automatically disabled when the button is `disabled` or `loading`
+- Respects `prefers-reduced-motion` user preferences
+
+### Toggle Behavior
+
+When `toggleable` is `true`:
+
+- The button maintains an internal toggle state
+- Clicking the button toggles between pressed and unpressed states
+- The `aria-pressed` attribute reflects the current state
+- Toggle state is automatically reset when the button becomes `disabled` or `loading`
+- Visual feedback is provided through a shadow inset effect
+
+### Loading State
+
+The loading state provides visual feedback for async operations:
+
+- Shows an animated progress indicator at the bottom of the button
+- Automatically disables the button to prevent duplicate actions
+- Sets `aria-busy="true"` for screen readers
+- The loading indicator animation respects `prefers-reduced-motion`
+- Loading color is automatically calculated based on the button's `color` property
+
+### Variant-Specific Behavior
+
+Each variant has distinct visual characteristics:
+
+- **default**: Solid background with border
+- **ghost**: Transparent background, visible border, colored text
+- **flat**: Subtle colored background (alpha channel), no border
+- **dashed**: Transparent background with dashed border
+- **link**: Minimal styling, resembles a hyperlink
+- **text**: Plain text appearance with subtle hover effect
+
+### Form Integration
+
+The component integrates seamlessly with forms through the `FormMixin`:
+
+- `type="submit"` triggers form submission
+- `type="reset"` resets form fields
+- Properly associates with parent forms
+- Respects form validation before submission
+
+### Performance Considerations
+
+The component uses:
+
+- CSS custom properties for dynamic theming without JavaScript recalculation
+- Efficient event delegation for ripple effects
+- `willUpdate` and `updated` lifecycle methods to minimize unnecessary updates
+- Conditional rendering for loading states and ripple effects

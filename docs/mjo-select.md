@@ -1,905 +1,522 @@
 # mjo-select
 
-A customizable dropdown select component with search functionality and rich option support.
+Comprehensive dropdown select component with search functionality, rich options support, and full form integration.
 
-## Overview
+## Index
 
-The `mjo-select` component provides a sophisticated dropdown selection interface with support for icons, images, searching, and form integration. It works in conjunction with `mjo-option` elements to create flexible and user-friendly selection experiences.
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Public Methods](#public-methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-## Basic Usage
+## Use Cases
 
-### HTML
+The `mjo-select` component is designed for scenarios where users need to select a single value from a list of options:
 
-```html
-<mjo-select label="Select an option" name="selection">
-    <mjo-option value="option1">Option 1</mjo-option>
-    <mjo-option value="option2">Option 2</mjo-option>
-    <mjo-option value="option3">Option 3</mjo-option>
-</mjo-select>
-```
+- Form fields requiring single-value selection from a predefined list
+- Configuration dropdowns with search capability for large datasets
+- Navigation menus with enhanced visual presentation (icons/images)
+- Advanced selection interfaces requiring form validation and error handling
+- Components needing programmatic value management and custom validation
 
-### Lit Element Example
+## Import
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+```typescript
 import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
-
-@customElement("example-select-basic")
-export class ExampleSelectBasic extends LitElement {
-    @state()
-    private selectedValue = "";
-
-    private handleChange(event: Event) {
-        const select = event.target as any;
-        this.selectedValue = select.value;
-        console.log("Selected:", this.selectedValue);
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-select label="Choose a country" name="country" .value=${this.selectedValue} @change=${this.handleChange}>
-                    <mjo-option value="us">United States</mjo-option>
-                    <mjo-option value="ca">Canada</mjo-option>
-                    <mjo-option value="mx">Mexico</mjo-option>
-                    <mjo-option value="br">Brazil</mjo-option>
-                    <mjo-option value="ar">Argentina</mjo-option>
-                </mjo-select>
-
-                ${this.selectedValue ? html` <p>Selected: <strong>${this.selectedValue}</strong></p> ` : ""}
-            </div>
-        `;
-    }
-}
+import "mjo-litui/components/select/mjo-option"; // Required for options
 ```
 
-## Select Variants and Styling
+## Properties
 
-Configure select appearance with different sizes, colors, and styling options:
+| Property               | Type                                           | Description                                                              | Default     | Required |
+| ---------------------- | ---------------------------------------------- | ------------------------------------------------------------------------ | ----------- | -------- |
+| `autoFocus`            | `boolean`                                      | Automatically focuses the select on mount                                | `false`     | No       |
+| `disabled`             | `boolean`                                      | Disables user interaction with the select                                | `false`     | No       |
+| `required`             | `boolean`                                      | Marks the select as required for form validation                         | `false`     | No       |
+| `fullwidth`            | `boolean`                                      | Makes the select expand to fill its container width                      | `false`     | No       |
+| `name`                 | `string`                                       | Name attribute for form submission                                       | `undefined` | No       |
+| `placeholder`          | `string`                                       | Placeholder text displayed when no value is selected                     | `undefined` | No       |
+| `value`                | `string`                                       | Currently selected option value                                          | `""`        | No       |
+| `label`                | `string`                                       | Label text displayed above the select                                    | `undefined` | No       |
+| `size`                 | `MjoSelectSize`                                | Visual size of the select (`"small"`, `"medium"`, `"large"`)             | `"medium"`  | No       |
+| `color`                | `MjoSelectColor`                               | Color scheme for focus and selection states (`"primary"`, `"secondary"`) | `"primary"` | No       |
+| `variant`              | `MjoSelectVariant`                             | Visual variant style (`"default"`, `"ghost"`, `"flat"`)                  | `"default"` | No       |
+| `startIcon`            | `string`                                       | Icon displayed at the start of the select input                          | `undefined` | No       |
+| `endIcon`              | `string`                                       | Icon displayed at the end of the select input                            | `undefined` | No       |
+| `startImage`           | `string`                                       | Image URL displayed at the start (ignored if startIcon is set)           | `undefined` | No       |
+| `endImage`             | `string`                                       | Image URL displayed at the end (ignored if endIcon is set)               | `undefined` | No       |
+| `prefixText`           | `string`                                       | Text displayed before the input value                                    | `undefined` | No       |
+| `suffixText`           | `string`                                       | Text displayed after the input value                                     | `undefined` | No       |
+| `helperText`           | `string`                                       | Helper text displayed below the select                                   | `undefined` | No       |
+| `selectOnFocus`        | `boolean`                                      | Whether to select text when the input receives focus                     | `false`     | No       |
+| `searchable`           | `boolean`                                      | Enables search functionality in the dropdown                             | `false`     | No       |
+| `dropDownTheme`        | `MjoDropdownTheme`                             | Custom theme configuration for the dropdown                              | `undefined` | No       |
+| `ariaDescribedby`      | `string`                                       | ID(s) of elements that describe the select                               | `undefined` | No       |
+| `ariaLabelledby`       | `string`                                       | ID(s) of elements that label the select                                  | `undefined` | No       |
+| `ariaErrormessage`     | `string`                                       | ID of element containing error message                                   | `undefined` | No       |
+| `ariaAutocomplete`     | `"none"` \| `"inline"` \| `"list"` \| `"both"` | Indicates type of autocomplete functionality                             | `undefined` | No       |
+| `ariaActivedescendant` | `string`                                       | ID of currently active descendant element                                | `undefined` | No       |
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
+## Public Methods
 
-@customElement("example-select-variants")
-export class ExampleSelectVariants extends LitElement {
-    render() {
-        return html`
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <!-- Size Variants -->
-                <div>
-                    <h4>Sizes</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <mjo-select label="Small Select" size="small">
-                            <mjo-option value="small1">Small Option 1</mjo-option>
-                            <mjo-option value="small2">Small Option 2</mjo-option>
-                        </mjo-select>
+| Method                         | Parameters                              | Description                                                        | Return              |
+| ------------------------------ | --------------------------------------- | ------------------------------------------------------------------ | ------------------- |
+| `focus()`                      | -                                       | Focuses the select input element                                   | `void`              |
+| `blur()`                       | -                                       | Removes focus from the select input element                        | `void`              |
+| `checkValidity()`              | -                                       | Checks if the select meets all validation constraints              | `boolean`           |
+| `reportValidity()`             | -                                       | Reports validity state and displays validation messages if invalid | `boolean`           |
+| `setCustomValidity(message)`   | `message: string`                       | Sets a custom validation message                                   | `void`              |
+| `openDropdown()`               | -                                       | Opens the select dropdown programmatically                         | `void`              |
+| `closeDropdown()`              | -                                       | Closes the select dropdown programmatically                        | `void`              |
+| `toggleDropdown()`             | -                                       | Toggles the dropdown open/closed state                             | `void`              |
+| `getSelectedOption()`          | -                                       | Returns the currently selected option element                      | `MjoOption \| null` |
+| `getOptions()`                 | -                                       | Returns an array of all available option elements                  | `MjoOption[]`       |
+| `filterOptions(query)`         | `query: string`                         | Filters visible options based on search query                      | `void`              |
+| `resetFilter()`                | -                                       | Resets the filter to show all options                              | `void`              |
+| `isOpen()`                     | -                                       | Returns whether the dropdown is currently open                     | `boolean`           |
+| `setValue(value, noDispatch?)` | `value: string`, `noDispatch?: boolean` | Sets the selected value programmatically                           | `void`              |
+| `getValue()`                   | -                                       | Returns the current selected value                                 | `string`            |
 
-                        <mjo-select label="Medium Select" size="medium">
-                            <mjo-option value="medium1">Medium Option 1</mjo-option>
-                            <mjo-option value="medium2">Medium Option 2</mjo-option>
-                        </mjo-select>
+Additional validation methods:
 
-                        <mjo-select label="Large Select" size="large">
-                            <mjo-option value="large1">Large Option 1</mjo-option>
-                            <mjo-option value="large2">Large Option 2</mjo-option>
-                        </mjo-select>
-                    </div>
-                </div>
+- **`validationMessage`** (getter): Returns the current validation message string
 
-                <!-- Color Variants -->
-                <div>
-                    <h4>Colors</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <mjo-select label="Primary Color" color="primary">
-                            <mjo-option value="primary1">Primary Option 1</mjo-option>
-                            <mjo-option value="primary2">Primary Option 2</mjo-option>
-                        </mjo-select>
+## Events
 
-                        <mjo-select label="Secondary Color" color="secondary">
-                            <mjo-option value="secondary1">Secondary Option 1</mjo-option>
-                            <mjo-option value="secondary2">Secondary Option 2</mjo-option>
-                        </mjo-select>
-                    </div>
-                </div>
+| Event                         | Type                            | Description                                      | Detail                                                                                                                       |
+| ----------------------------- | ------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `mjo-select:change`           | `MjoSelectChangeEvent`          | Fired when the selected value changes            | `{ element: MjoSelect, value: string, previousValue: string, option: MjoOption \| null, previousOption: MjoOption \| null }` |
+| `mjo-select:open`             | `MjoSelectOpenEvent`            | Fired when the dropdown opens                    | `{ element: MjoSelect, value: string, optionsCount: number }`                                                                |
+| `mjo-select:close`            | `MjoSelectCloseEvent`           | Fired when the dropdown closes                   | `{ element: MjoSelect, value: string, reason: "selection" \| "escape" \| "blur" \| "clickOutside" }`                         |
+| `mjo-select:search`           | `MjoSelectSearchEvent`          | Fired when searching through options             | `{ element: MjoSelect, query: string, filteredOptionsCount: number }`                                                        |
+| `mjo-select:focus`            | `MjoSelectFocusEvent`           | Fired when the select gains focus                | `{ element: MjoSelect, value: string }`                                                                                      |
+| `mjo-select:blur`             | `MjoSelectBlurEvent`            | Fired when the select loses focus                | `{ element: MjoSelect, value: string, reason: "tab" \| "clickOutside" \| "programmatic" }`                                   |
+| `mjo-select:option-preselect` | `MjoSelectOptionPreselectEvent` | Fired when an option is preselected via keyboard | `{ element: MjoSelect, option: MjoOption, previousOption: MjoOption \| null, value: string }`                                |
+| `change`                      | `Event`                         | Standard HTML change event                       | -                                                                                                                            |
+| `focus`                       | `FocusEvent`                    | Standard HTML focus event                        | -                                                                                                                            |
+| `invalid`                     | `Event`                         | Fired when form validation fails                 | -                                                                                                                            |
 
-                <!-- States -->
-                <div>
-                    <h4>States</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <mjo-select label="Normal Select">
-                            <mjo-option value="normal1">Normal Option 1</mjo-option>
-                            <mjo-option value="normal2">Normal Option 2</mjo-option>
-                        </mjo-select>
+## CSS Variables
 
-                        <mjo-select label="Disabled Select" disabled>
-                            <mjo-option value="disabled1">Disabled Option 1</mjo-option>
-                            <mjo-option value="disabled2">Disabled Option 2</mjo-option>
-                        </mjo-select>
+### Select Component Variables
 
-                        <mjo-select label="Full Width Select" fullwidth>
-                            <mjo-option value="full1">Full Width Option 1</mjo-option>
-                            <mjo-option value="full2">Full Width Option 2</mjo-option>
-                        </mjo-select>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
+| Variable                         | Description                      | Default   |
+| -------------------------------- | -------------------------------- | --------- |
+| `--mjo-select-label-font-size`   | Font size for the select label   | `inherit` |
+| `--mjo-select-label-font-weight` | Font weight for the select label | `inherit` |
+| `--mjo-select-label-color`       | Color for the select label       | `inherit` |
 
-## Options with Icons and Images
+### Option Component Variables
 
-Create rich options with icons and images:
+| Variable                                           | Description                                      | Default                                        |
+| -------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------- |
+| `--mjo-select-option-padding`                      | Padding for each option in the dropdown          | `5px`                                          |
+| `--mjo-select-option-font-size`                    | Font size for option text                        | `0.8em`                                        |
+| `--mjo-select-option-preselected-background-color` | Background color for preselected/hovered options | `var(--mjo-background-color-hover, #eeeeee)`   |
+| `--mjo-select-option-preselected-color`            | Text color for preselected/hovered options       | `var(--mjo-foreground-color, currentColor)`    |
+| `--mjo-select-option-selected-primary-color`       | Text color for selected option (primary color)   | `var(--mjo-primary-foreground-color, white)`   |
+| `--mjo-select-option-selected-secondary-color`     | Text color for selected option (secondary color) | `var(--mjo-secondary-foreground-color, white)` |
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import { AiOutlineUser, AiFillStar, AiOutlineMail, AiOutlinePhone } from "mjo-icons/ai";
-import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
+**Note**: The select component also supports all standard input CSS variables documented in the theming guide (e.g., `--mjo-input-background-color`, `--mjo-input-border-color`, etc.).
 
-@customElement("example-select-rich-options")
-export class ExampleSelectRichOptions extends LitElement {
-    render() {
-        return html`
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <!-- Icon Options -->
-                <div>
-                    <h4>Options with Icons</h4>
-                    <mjo-select label="Contact Method" placeholder="Choose contact method">
-                        <mjo-option value="email" .startIcon=${AiOutlineMail}>Email</mjo-option>
-                        <mjo-option value="phone" .startIcon=${AiOutlinePhone}>Phone</mjo-option>
-                        <mjo-option value="user" .startIcon=${AiOutlineUser}>In Person</mjo-option>
-                        <mjo-option value="star" .startIcon=${AiFillStar} .endIcon=${AiFillStar}>Premium Contact</mjo-option>
-                    </mjo-select>
-                </div>
+## CSS Parts
 
-                <!-- Image Options -->
-                <div>
-                    <h4>Options with Images</h4>
-                    <mjo-select label="Country" placeholder="Select country">
-                        <mjo-option value="us" startImage="https://flagcdn.com/w20/us.png"> United States </mjo-option>
-                        <mjo-option value="ca" startImage="https://flagcdn.com/w20/ca.png"> Canada </mjo-option>
-                        <mjo-option value="gb" startImage="https://flagcdn.com/w20/gb.png"> United Kingdom </mjo-option>
-                        <mjo-option value="fr" startImage="https://flagcdn.com/w20/fr.png"> France </mjo-option>
-                    </mjo-select>
-                </div>
+### Select Container Parts
 
-                <!-- Mixed Content -->
-                <div>
-                    <h4>Mixed Content Options</h4>
-                    <mjo-select label="Status" placeholder="Select status">
-                        <mjo-option value="active" .startIcon=${AiFillStar} text="Active - Premium"></mjo-option>
-                        <mjo-option value="pending" .startIcon=${AiOutlineUser} text="Pending Approval"></mjo-option>
-                        <mjo-option value="inactive" text="Inactive"></mjo-option>
-                    </mjo-select>
-                </div>
-            </div>
-        `;
-    }
-}
-```
+| Part                         | Description                                   | Element    |
+| ---------------------------- | --------------------------------------------- | ---------- |
+| `container`                  | Main select input container                   | `div`      |
+| `input`                      | Native input element (hidden for display)     | `input`    |
+| `prefix-text`                | Container for prefix text                     | `div`      |
+| `suffix-text`                | Container for suffix text                     | `div`      |
+| `start-icon-container`       | Container for start icon                      | `div`      |
+| `start-icon`                 | Start icon element (from mjo-icon)            | `mjo-icon` |
+| `end-icon-container`         | Container for end icon                        | `div`      |
+| `end-icon`                   | End icon element (from mjo-icon)              | `mjo-icon` |
+| `start-image-container`      | Container for start image                     | `div`      |
+| `start-image`                | Start image element                           | `img`      |
+| `end-image-container`        | Container for end image                       | `div`      |
+| `end-image`                  | End image element                             | `img`      |
+| `end-icon-option-container`  | Container for end icon from selected option   | `div`      |
+| `end-option-icon`            | End icon from selected option (from mjo-icon) | `mjo-icon` |
+| `end-image-option-container` | Container for end image from selected option  | `div`      |
+| `end-option-image`           | End image from selected option                | `img`      |
+| `select-dropdown-icon`       | Dropdown arrow icon                           | `div`      |
+| `helper-container`           | Helper text container                         | `div`      |
 
-## Searchable Select
+### Label Parts (via exportparts)
 
-Enable search functionality for large option lists:
+| Part                       | Description              | Element              |
+| -------------------------- | ------------------------ | -------------------- |
+| `label-container`          | Label container          | `mjoint-input-label` |
+| `label-truncate-container` | Label truncate container | `mjoint-input-label` |
+| `label-truncate-wrapper`   | Label truncate wrapper   | `mjoint-input-label` |
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
+### Helper Text Parts (via exportparts)
 
-@customElement("example-select-searchable")
-export class ExampleSelectSearchable extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <mjo-select label="Country" placeholder="Search and select country" searchable helperText="Type to search through options">
-                    <mjo-option value="us">United States</mjo-option>
-                    <mjo-option value="ca">Canada</mjo-option>
-                    <mjo-option value="mx">Mexico</mjo-option>
-                    <mjo-option value="br">Brazil</mjo-option>
-                    <mjo-option value="fr">France</mjo-option>
-                    <mjo-option value="de">Germany</mjo-option>
-                    <mjo-option value="jp">Japan</mjo-option>
-                    <mjo-option value="au">Australia</mjo-option>
-                </mjo-select>
+| Part                          | Description              | Element                    |
+| ----------------------------- | ------------------------ | -------------------------- |
+| `helper-text-container`       | Helper text container    | `mjoint-input-helper-text` |
+| `helper-text-typography`      | Helper text typography   | `mjoint-input-helper-text` |
+| `helper-text-error-message`   | Error message element    | `mjoint-input-helper-text` |
+| `helper-text-success-message` | Success message element  | `mjoint-input-helper-text` |
+| `helper-text-icon`            | Helper text icon element | `mjoint-input-helper-text` |
 
-                <mjo-select label="Programming Language" placeholder="Search programming languages" searchable size="large">
-                    <mjo-option value="javascript">JavaScript</mjo-option>
-                    <mjo-option value="typescript">TypeScript</mjo-option>
-                    <mjo-option value="python">Python</mjo-option>
-                    <mjo-option value="java">Java</mjo-option>
-                    <mjo-option value="csharp">C#</mjo-option>
-                    <mjo-option value="rust">Rust</mjo-option>
-                    <mjo-option value="go">Go</mjo-option>
-                </mjo-select>
-            </div>
-        `;
-    }
-}
-```
+### Options List Parts (via exportparts)
 
-## Form Integration
+| Part                           | Description                              | Element               |
+| ------------------------------ | ---------------------------------------- | --------------------- |
+| `options-list-container`       | Options list container                   | `mjoint-options-list` |
+| `select-search-container`      | Search input container (when searchable) | `mjoint-options-list` |
+| `select-search-input-wrapper`  | Search input wrapper                     | `mjoint-options-list` |
+| `select-search-input`          | Search input element                     | `mjoint-options-list` |
+| `select-search-icon-container` | Search icon container                    | `mjoint-options-list` |
+| `select-search-icon`           | Search icon element                      | `mjoint-options-list` |
 
-Use select components within forms with validation:
+## Accessibility
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-form";
-import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
-import "mjo-litui/mjo-textfield";
-import "mjo-litui/mjo-button";
+The `mjo-select` component implements comprehensive accessibility features following WAI-ARIA best practices:
 
-@customElement("example-select-form")
-export class ExampleSelectForm extends LitElement {
-    @state()
-    private formData = {
-        name: "",
-        email: "",
-        country: "",
-        department: "",
-        priority: "",
-    };
+### ARIA Attributes
 
-    private handleSubmit(event: Event) {
-        event.preventDefault();
-        console.log("Form submitted:", this.formData);
-    }
+- **`role="combobox"`**: Applied to the input element for proper screen reader identification
+- **`aria-haspopup="listbox"`**: Indicates the presence of a listbox popup
+- **`aria-expanded`**: Dynamically reflects the dropdown's open/closed state
+- **`aria-controls`**: Links the input to the listbox by ID
+- **`aria-activedescendant`**: Points to the currently highlighted option during keyboard navigation
+- **`aria-autocomplete`**: Set to "list" when searchable, "none" otherwise
+- **`aria-invalid`**: Indicates validation state
+- **`aria-required`**: Reflects the required property
+- **`aria-describedby`**: Associates helper text and error messages
+- **`aria-labelledby`**: Associates label elements
+- **`aria-errormessage`**: Points to error message element
 
-    private handleFormChange(event: Event) {
-        const target = event.target as any;
-        if (target.name) {
-            this.formData = {
-                ...this.formData,
-                [target.name]: target.value,
-            };
-        }
-    }
+### Keyboard Navigation
 
-    render() {
-        return html`
-            <mjo-form @submit=${this.handleSubmit} @change=${this.handleFormChange}>
-                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                    <mjo-textfield label="Full Name" name="name" required></mjo-textfield>
+- **Arrow Down**: Opens dropdown (if closed) or moves to next option
+- **Arrow Up**: Opens dropdown (if closed) or moves to previous option
+- **Enter**: Selects the currently highlighted option and closes dropdown
+- **Tab**: Closes dropdown and moves focus to next focusable element
+- **Escape**: Closes dropdown without changing selection
 
-                    <mjo-textfield label="Email" name="email" type="email" required></mjo-textfield>
+### Best Practices
 
-                    <mjo-select label="Country" name="country" required placeholder="Select your country" searchable>
-                        <mjo-option value="us">United States</mjo-option>
-                        <mjo-option value="ca">Canada</mjo-option>
-                        <mjo-option value="gb">United Kingdom</mjo-option>
-                        <mjo-option value="de">Germany</mjo-option>
-                        <mjo-option value="fr">France</mjo-option>
-                    </mjo-select>
+- Always provide a `label` or use `aria-label` for screen reader users
+- Use `helperText` to provide additional context or instructions
+- Set `required` attribute for mandatory fields to enable proper form validation
+- Ensure sufficient color contrast when customizing colors
+- Provide meaningful `aria-describedby` for complex validation requirements
+- Use the `ariaErrormessage` property to associate custom error messages
 
-                    <mjo-select label="Department" name="department" required placeholder="Choose department">
-                        <mjo-option value="engineering">Engineering</mjo-option>
-                        <mjo-option value="design">Design</mjo-option>
-                        <mjo-option value="marketing">Marketing</mjo-option>
-                        <mjo-option value="sales">Sales</mjo-option>
-                    </mjo-select>
+## Usage Examples
 
-                    <mjo-select label="Priority" name="priority" size="small">
-                        <mjo-option value="low">Low</mjo-option>
-                        <mjo-option value="medium">Medium</mjo-option>
-                        <mjo-option value="high">High</mjo-option>
-                    </mjo-select>
+### Basic Select
 
-                    <mjo-button type="submit">Submit Form</mjo-button>
-                </div>
-            </mjo-form>
-        `;
-    }
-}
-```
-
-## Prefix/Suffix Text and Icons
-
-Add contextual elements to enhance the select appearance:
-
-```ts
+```typescript
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { AiOutlineGlobal, AiOutlineDollar, AiOutlinePhone } from "mjo-icons/ai";
 import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
+import "mjo-litui/components/select/mjo-option";
 
-@customElement("example-select-decorative")
-export class ExampleSelectDecorative extends LitElement {
+@customElement("my-component")
+class MyComponent extends LitElement {
     render() {
         return html`
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <!-- Currency Select with Prefix -->
-                <div>
-                    <h4>Currency Selection</h4>
-                    <mjo-select label="Currency" .startIcon=${AiOutlineDollar} prefixText="$" helperText="Select your preferred currency">
-                        <mjo-option value="usd">USD - US Dollar</mjo-option>
-                        <mjo-option value="eur">EUR - Euro</mjo-option>
-                        <mjo-option value="gbp">GBP - British Pound</mjo-option>
-                        <mjo-option value="jpy">JPY - Japanese Yen</mjo-option>
-                    </mjo-select>
-                </div>
-
-                <!-- Region Select with Icons -->
-                <div>
-                    <h4>Region Selection</h4>
-                    <mjo-select label="Region" .startIcon=${AiOutlineGlobal} suffixText="region" helperText="Choose your operating region">
-                        <mjo-option value="na">North America</mjo-option>
-                        <mjo-option value="eu">Europe</mjo-option>
-                        <mjo-option value="asia">Asia Pacific</mjo-option>
-                        <mjo-option value="latam">Latin America</mjo-option>
-                    </mjo-select>
-                </div>
-
-                <!-- Phone Type with Custom Styling -->
-                <div>
-                    <h4>Contact Method</h4>
-                    <mjo-select label="Phone Type" .startIcon=${AiOutlinePhone} .endIcon=${AiOutlinePhone} color="secondary" helperText="How can we reach you?">
-                        <mjo-option value="mobile">Mobile Phone</mjo-option>
-                        <mjo-option value="home">Home Phone</mjo-option>
-                        <mjo-option value="work">Work Phone</mjo-option>
-                        <mjo-option value="other">Other</mjo-option>
-                    </mjo-select>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Dynamic Options
-
-Dynamically populate options based on user interactions:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
-import "mjo-litui/mjo-button";
-
-@customElement("example-select-dynamic")
-export class ExampleSelectDynamic extends LitElement {
-    @state()
-    private selectedCategory = "";
-
-    @state()
-    private selectedSubcategory = "";
-
-    @state()
-    private categories = [
-        { value: "electronics", name: "Electronics" },
-        { value: "clothing", name: "Clothing" },
-        { value: "books", name: "Books" },
-        { value: "sports", name: "Sports" },
-    ];
-
-    @state()
-    private subcategories: Record<string, { value: string; name: string }[]> = {
-        electronics: [
-            { value: "phones", name: "Smartphones" },
-            { value: "laptops", name: "Laptops" },
-            { value: "tablets", name: "Tablets" },
-            { value: "accessories", name: "Accessories" },
-        ],
-        clothing: [
-            { value: "shirts", name: "Shirts" },
-            { value: "pants", name: "Pants" },
-            { value: "shoes", name: "Shoes" },
-            { value: "accessories", name: "Accessories" },
-        ],
-        books: [
-            { value: "fiction", name: "Fiction" },
-            { value: "nonfiction", name: "Non-Fiction" },
-            { value: "technical", name: "Technical" },
-            { value: "children", name: "Children's Books" },
-        ],
-        sports: [
-            { value: "equipment", name: "Equipment" },
-            { value: "apparel", name: "Apparel" },
-            { value: "footwear", name: "Footwear" },
-            { value: "nutrition", name: "Nutrition" },
-        ],
-    };
-
-    private handleCategoryChange(event: Event) {
-        const target = event.target as any;
-        this.selectedCategory = target.value;
-        this.selectedSubcategory = ""; // Reset subcategory when category changes
-    }
-
-    private handleSubcategoryChange(event: Event) {
-        const target = event.target as any;
-        this.selectedSubcategory = target.value;
-    }
-
-    private addNewCategory() {
-        const name = prompt("Enter new category name:");
-        if (name) {
-            const value = name.toLowerCase().replace(/\s+/g, "_");
-            this.categories = [...this.categories, { value, name }];
-            this.subcategories = { ...this.subcategories, [value]: [] };
-        }
-    }
-
-    private addSubcategory() {
-        if (!this.selectedCategory) {
-            alert("Please select a category first");
-            return;
-        }
-
-        const name = prompt("Enter new subcategory name:");
-        if (name) {
-            const value = name.toLowerCase().replace(/\s+/g, "_");
-            const newSubcategory = { value, name };
-
-            this.subcategories = {
-                ...this.subcategories,
-                [this.selectedCategory]: [...this.subcategories[this.selectedCategory], newSubcategory],
-            };
-        }
-    }
-
-    private get availableSubcategories() {
-        return this.selectedCategory ? this.subcategories[this.selectedCategory] || [] : [];
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <!-- Category Selection -->
-                <mjo-select label="Category" .value=${this.selectedCategory} @change=${this.handleCategoryChange} placeholder="Choose a category" searchable>
-                    ${this.categories.map((category) => html` <mjo-option value=${category.value}>${category.name}</mjo-option> `)}
-                </mjo-select>
-
-                <!-- Subcategory Selection (Dynamic) -->
-                <mjo-select
-                    label="Subcategory"
-                    .value=${this.selectedSubcategory}
-                    @change=${this.handleSubcategoryChange}
-                    placeholder=${this.selectedCategory ? "Choose a subcategory" : "Select a category first"}
-                    .disabled=${!this.selectedCategory}
-                    searchable
-                >
-                    ${this.availableSubcategories.map((subcategory) => html` <mjo-option value=${subcategory.value}>${subcategory.name}</mjo-option> `)}
-                </mjo-select>
-
-                <!-- Dynamic Actions -->
-                <div style="display: flex; gap: 1rem;">
-                    <mjo-button @click=${this.addNewCategory} variant="ghost"> Add Category </mjo-button>
-                    <mjo-button @click=${this.addSubcategory} variant="ghost" .disabled=${!this.selectedCategory}> Add Subcategory </mjo-button>
-                </div>
-
-                <!-- Selection Display -->
-                <div style="padding: 1rem; background: #f5f5f5; border-radius: 4px;">
-                    <h4>Current Selection:</h4>
-                    <p><strong>Category:</strong> ${this.selectedCategory || "None selected"}</p>
-                    <p><strong>Subcategory:</strong> ${this.selectedSubcategory || "None selected"}</p>
-
-                    ${this.selectedCategory ? html` <p><strong>Available Subcategories:</strong> ${this.availableSubcategories.length}</p> ` : ""}
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Theme Customization
-
-### Using mjo-theme
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
-
-@customElement("example-select-theming")
-export class ExampleSelectTheming extends LitElement {
-    render() {
-        return html`
-            <mjo-theme
-                .theme=${{
-                    select: {
-                        backgroundColor: "#f8f9fa",
-                        borderColor: "#dee2e6",
-                        borderColorHover: "#adb5bd",
-                        radius: "8px",
-                        fontSize: "1rem",
-                        optionPadding: "12px",
-                        optionPreselectedBackgroundColor: "#e3f2fd",
-                        optionSelectedPrimaryColor: "#1976d2",
-                        optionFontSize: "0.9rem",
-                    },
-                }}
-            >
-                <div style="display: flex; flex-direction: column; gap: 1.5rem; padding: 2rem;">
-                    <h3>Custom Themed Select</h3>
-
-                    <mjo-select label="Themed Select" placeholder="Custom styling">
-                        <mjo-option value="option1">Styled Option 1</mjo-option>
-                        <mjo-option value="option2">Styled Option 2</mjo-option>
-                        <mjo-option value="option3">Styled Option 3</mjo-option>
-                        <mjo-option value="option4">Styled Option 4</mjo-option>
-                    </mjo-select>
-
-                    <mjo-select label="Secondary Themed" color="secondary" searchable placeholder="Secondary color scheme">
-                        <mjo-option value="secondary1">Secondary Option 1</mjo-option>
-                        <mjo-option value="secondary2">Secondary Option 2</mjo-option>
-                        <mjo-option value="secondary3">Secondary Option 3</mjo-option>
-                    </mjo-select>
-                </div>
-            </mjo-theme>
-        `;
-    }
-}
-```
-
-### Using ThemeMixin
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import { ThemeMixin } from "mjo-litui/mixins";
-import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
-
-@customElement("example-select-theme-mixin")
-export class ExampleSelectThemeMixin extends ThemeMixin(LitElement) {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1.5rem; padding: 2rem;">
-                <h3>Component-Level Select Theming</h3>
-
-                <mjo-select
-                    label="Custom Component Theme"
-                    .theme=${{
-                        backgroundColor: "#fff3cd",
-                        borderColor: "#ffc107",
-                        borderColorHover: "#e0a800",
-                        radius: "12px",
-                        optionPreselectedBackgroundColor: "#fff8db",
-                        optionSelectedPrimaryColor: "#856404",
-                    }}
-                    placeholder="Component-specific styling"
-                >
-                    <mjo-option value="custom1">Custom Option 1</mjo-option>
-                    <mjo-option value="custom2">Custom Option 2</mjo-option>
-                    <mjo-option value="custom3">Custom Option 3</mjo-option>
-                </mjo-select>
-            </div>
-        `;
-    }
-}
-```
-
-## mjo-option Component
-
-The `mjo-option` component represents individual options within a select dropdown.
-
-### Option Properties
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import { AiFillStar, AiOutlineUser } from "mjo-icons/ai";
-import "mjo-litui/mjo-select";
-import "mjo-litui/mjo-option";
-
-@customElement("example-option-properties")
-export class ExampleOptionProperties extends LitElement {
-    render() {
-        return html`
-            <mjo-select label="Option Examples" placeholder="See different option configurations">
-                <!-- Basic option with value and text -->
-                <mjo-option value="basic" text="Basic Option"> This text is ignored when text attribute is set </mjo-option>
-
-                <!-- Option using slot content -->
-                <mjo-option value="slot"> Option content from slot </mjo-option>
-
-                <!-- Option with start icon -->
-                <mjo-option value="start-icon" .startIcon=${AiFillStar}> Option with Start Icon </mjo-option>
-
-                <!-- Option with end icon -->
-                <mjo-option value="end-icon" .endIcon=${AiOutlineUser}> Option with End Icon </mjo-option>
-
-                <!-- Option with both icons -->
-                <mjo-option value="both-icons" .startIcon=${AiFillStar} .endIcon=${AiOutlineUser}> Option with Both Icons </mjo-option>
-
-                <!-- Option with start image -->
-                <mjo-option value="start-image" startImage="https://via.placeholder.com/20x20/007bff/ffffff?text=S"> Option with Start Image </mjo-option>
-
-                <!-- Option with end image -->
-                <mjo-option value="end-image" endImage="https://via.placeholder.com/20x20/28a745/ffffff?text=E"> Option with End Image </mjo-option>
-
-                <!-- Pre-selected option -->
-                <mjo-option value="preselected" selected> Pre-selected Option </mjo-option>
+            <mjo-select label="Choose a color" placeholder="Select a color">
+                <mjo-option value="red">Red</mjo-option>
+                <mjo-option value="green">Green</mjo-option>
+                <mjo-option value="blue">Blue</mjo-option>
             </mjo-select>
         `;
     }
 }
 ```
 
-## Properties
-
-### mjo-select Properties
-
-| Name            | Type                             | Default     | Description                                     |
-| --------------- | -------------------------------- | ----------- | ----------------------------------------------- |
-| `autoFocus`     | `boolean`                        | `false`     | Automatically focus the select when mounted     |
-| `disabled`      | `boolean`                        | `false`     | Disable the select component                    |
-| `required`      | `boolean`                        | `false`     | Mark the select as required for form validation |
-| `fullwidth`     | `boolean`                        | `false`     | Make the select take full width of container    |
-| `name`          | `string`                         | -           | Form field name for form submission             |
-| `placeholder`   | `string`                         | -           | Placeholder text when no option is selected     |
-| `value`         | `string`                         | `""`        | Currently selected value                        |
-| `label`         | `string`                         | -           | Label text displayed above the select           |
-| `size`          | `"small" \| "medium" \| "large"` | `"medium"`  | Size variant of the select                      |
-| `color`         | `"primary" \| "secondary"`       | `"primary"` | Color scheme for focus states                   |
-| `startIcon`     | `string`                         | -           | Icon displayed at the start of the select       |
-| `endIcon`       | `string`                         | -           | Icon displayed at the end of the select         |
-| `startImage`    | `string`                         | -           | Image displayed at the start of the select      |
-| `endImage`      | `string`                         | -           | Image displayed at the end of the select        |
-| `prefixText`    | `string`                         | -           | Text displayed before the input area            |
-| `suffixText`    | `string`                         | -           | Text displayed after the input area             |
-| `helperText`    | `string`                         | -           | Helper text displayed below the select          |
-| `selectOnFocus` | `boolean`                        | `false`     | Select all text when focused                    |
-| `searchable`    | `boolean`                        | `false`     | Enable search functionality in dropdown         |
-| `dropDownTheme` | `MjoDropdownTheme`               | -           | Theme configuration for the dropdown            |
-| `theme`         | `MjoSelectTheme`                 | `{}`        | Theme configuration for the select              |
-
-### ARIA Properties
-
-The select component includes comprehensive ARIA support for accessibility:
-
-| Name                   | Type                                     | Default | Description                           |
-| ---------------------- | ---------------------------------------- | ------- | ------------------------------------- |
-| `ariaDescribedby`      | `string`                                 | -       | ID(s) of elements that describe input |
-| `ariaLabelledby`       | `string`                                 | -       | ID(s) of elements that label input    |
-| `ariaErrormessage`     | `string`                                 | -       | ID of error message element           |
-| `ariaAutocomplete`     | `"none" \| "inline" \| "list" \| "both"` | -       | Indicates autocomplete behavior       |
-| `ariaActivedescendant` | `string`                                 | -       | ID of active option during navigation |
-
-### mjo-option Properties
-
-| Name          | Type                       | Default     | Description                                          |
-| ------------- | -------------------------- | ----------- | ---------------------------------------------------- |
-| `value`       | `string`                   | `""`        | The value associated with this option                |
-| `text`        | `string`                   | `""`        | Display text (falls back to slot content if not set) |
-| `color`       | `"primary" \| "secondary"` | `"primary"` | Color scheme for selection states                    |
-| `selected`    | `boolean`                  | `false`     | Whether this option is currently selected            |
-| `preSelected` | `boolean`                  | `false`     | Whether this option is pre-highlighted               |
-| `startIcon`   | `string`                   | `""`        | Icon displayed at the start of the option            |
-| `endIcon`     | `string`                   | `""`        | Icon displayed at the end of the option              |
-| `startImage`  | `string`                   | `""`        | Image displayed at the start of the option           |
-| `endImage`    | `string`                   | `""`        | Image displayed at the end of the option             |
-| `theme`       | `MjoSelectTheme`           | `{}`        | Theme configuration for the option                   |
-
-## Methods
-
-### mjo-select Methods
-
-| Method                                          | Description                                        |
-| ----------------------------------------------- | -------------------------------------------------- |
-| `focus()`                                       | Focus the select input                             |
-| `blur()`                                        | Blur the select input                              |
-| `checkValidity(): boolean`                      | Check validity according to validation constraints |
-| `reportValidity(): boolean`                     | Report validity and display validation messages    |
-| `setCustomValidity(message: string): void`      | Set a custom validation message                    |
-| `get validationMessage(): string`               | Get the current validation message                 |
-| `openDropdown(): void`                          | Open the select dropdown                           |
-| `closeDropdown(): void`                         | Close the select dropdown                          |
-| `toggleDropdown(): void`                        | Toggle the select dropdown open/closed state       |
-| `getSelectedOption(): MjoOption \| null`        | Get the currently selected option element          |
-| `getOptions(): MjoOption[]`                     | Get all available option elements                  |
-| `filterOptions(query: string): void`            | Filter options based on a search query             |
-| `resetFilter(): void`                           | Reset the filter to show all options               |
-| `isOpen(): boolean`                             | Check if the dropdown is currently open            |
-| `setValue(value: string, noDispatch?: boolean)` | Set the selected value programmatically            |
-| `getValue(): string`                            | Get the currently selected value                   |
-
-## Events
-
-### mjo-select Events
-
-| Event                         | Description                                            |
-| ----------------------------- | ------------------------------------------------------ |
-| `mjo-select:change`           | Fired when the selected value changes with detail data |
-| `mjo-select:open`             | Fired when the dropdown opens                          |
-| `mjo-select:close`            | Fired when the dropdown closes                         |
-| `mjo-select:search`           | Fired when searching through options (searchable mode) |
-| `mjo-select:focus`            | Fired when the select gains focus                      |
-| `mjo-select:blur`             | Fired when the select loses focus                      |
-| `mjo-select:option-preselect` | Fired when an option is preselected via keyboard       |
-| `change`                      | Standard HTML change event                             |
-| `focus`                       | Standard HTML focus event                              |
-| `blur`                        | Standard HTML blur event                               |
-| `invalid`                     | Fired when validation fails                            |
-
-### Event Details
-
-#### mjo-select:change
+### Searchable Select with Icons
 
 ```typescript
-detail: {
-    element: MjoSelect;
-    value: string;
-    previousValue: string;
-    option: MjoOption | null;
-    previousOption: MjoOption | null;
+import { LitElement, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import "mjo-litui/mjo-select";
+import "mjo-litui/components/select/mjo-option";
+import { AiOutlineUser } from "mjo-icons/ai";
+
+@customElement("user-selector")
+class UserSelector extends LitElement {
+    @state() selectedUser = "";
+
+    render() {
+        return html`
+            <mjo-select
+                label="Select User"
+                .value=${this.selectedUser}
+                searchable
+                helperText="Search by name or email"
+                startIcon=${AiOutlineUser}
+                @mjo-select:change=${this.handleChange}
+            >
+                <mjo-option value="1" startIcon=${AiOutlineUser}>John Doe</mjo-option>
+                <mjo-option value="2" startIcon=${AiOutlineUser}>Jane Smith</mjo-option>
+                <mjo-option value="3" startIcon=${AiOutlineUser}>Bob Johnson</mjo-option>
+            </mjo-select>
+        `;
+    }
+
+    handleChange(e: CustomEvent) {
+        this.selectedUser = e.detail.value;
+        console.log("Selected user:", e.detail.option?.text);
+    }
 }
 ```
 
-#### mjo-select:open
+### Form Integration with Validation
 
 ```typescript
-detail: {
-    element: MjoSelect;
-    value: string;
-    optionsCount: number;
+import { LitElement, html } from "lit";
+import { customElement, query, state } from "lit/decorators.js";
+import { MjoSelect } from "mjo-litui/mjo-select";
+import "mjo-litui/components/select/mjo-option";
+
+@customElement("registration-form")
+class RegistrationForm extends LitElement {
+    @query('mjo-select[name="country"]') countrySelect!: MjoSelect;
+    @state() formError = "";
+
+    render() {
+        return html`
+            <form @submit=${this.handleSubmit}>
+                <mjo-select name="country" label="Country" placeholder="Select your country" required helperText="Required field" searchable>
+                    <mjo-option value="us">United States</mjo-option>
+                    <mjo-option value="uk">United Kingdom</mjo-option>
+                    <mjo-option value="ca">Canada</mjo-option>
+                    <mjo-option value="au">Australia</mjo-option>
+                </mjo-select>
+
+                ${this.formError ? html`<p class="error">${this.formError}</p>` : ""}
+
+                <button type="submit">Submit</button>
+            </form>
+        `;
+    }
+
+    handleSubmit(e: Event) {
+        e.preventDefault();
+
+        if (!this.countrySelect.checkValidity()) {
+            this.formError = this.countrySelect.validationMessage;
+            this.countrySelect.reportValidity();
+            return;
+        }
+
+        // Form is valid, proceed with submission
+        console.log("Country:", this.countrySelect.getValue());
+    }
 }
 ```
 
-#### mjo-select:close
+### Programmatic Control
 
 ```typescript
-detail: {
-    element: MjoSelect;
-    value: string;
-    reason: "selection" | "escape" | "blur" | "clickOutside";
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import { MjoSelect } from "mjo-litui/mjo-select";
+import "mjo-litui/components/select/mjo-option";
+
+@customElement("controlled-select")
+class ControlledSelect extends LitElement {
+    @query("mjo-select") select!: MjoSelect;
+
+    render() {
+        return html`
+            <mjo-select label="Status">
+                <mjo-option value="active">Active</mjo-option>
+                <mjo-option value="inactive">Inactive</mjo-option>
+                <mjo-option value="pending">Pending</mjo-option>
+            </mjo-select>
+
+            <button @click=${() => this.select.setValue("active")}>Set Active</button>
+            <button @click=${() => this.select.openDropdown()}>Open Dropdown</button>
+            <button @click=${() => console.log(this.select.getSelectedOption())}>Log Selection</button>
+        `;
+    }
 }
 ```
 
-## CSS Custom Properties
+### Custom Styling with CSS Parts
 
-### Select Input Styling
+```typescript
+import { LitElement, html, css } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-select";
+import "mjo-litui/components/select/mjo-option";
 
-| Property                         | Default                                                       | Description                  |
-| -------------------------------- | ------------------------------------------------------------- | ---------------------------- |
-| `--mjo-input-border-radius`      | `var(--mjo-radius-medium, 5px)`                               | Border radius                |
-| `--mjo-input-border-style`       | `solid`                                                       | Border style                 |
-| `--mjo-input-border-width`       | `1px`                                                         | Border width                 |
-| `--mjo-input-border-color`       | `var(--mjo-border-color, #dddddd)`                            | Default border color         |
-| `--mjo-input-border-style-hover` | `solid`                                                       | Border style on hover        |
-| `--mjo-input-border-width-hover` | `1px`                                                         | Border width on hover        |
-| `--mjo-input-border-color-hover` | `#cccccc`                                                     | Border color on hover        |
-| `--mjo-input-border-style-focus` | `solid`                                                       | Border style on focus        |
-| `--mjo-input-border-width-focus` | `1px`                                                         | Border width on focus        |
-| `--mjo-input-background-color`   | `var(--mjo-background-color-card-low, #ffffff)`               | Background color             |
-| `--mjo-input-box-shadow`         | `none`                                                        | Box shadow                   |
-| `--mjo-input-color`              | `var(--mjo-foreground-color, #222222)`                        | Text color                   |
-| `--mjo-input-font-size`          | `1em`                                                         | Font size                    |
-| `--mjo-input-font-weight`        | `normal`                                                      | Font weight                  |
-| `--mjo-input-font-family`        | `inherit`                                                     | Font family                  |
-| `--mjo-input-padding`            | `calc(1em / 2 - 3px) calc(1em / 2 - 2px) calc(1em / 2 - 4px)` | Input padding                |
-| `--mjo-input-padding-small`      | `calc(1em / 2 - 4px) calc(1em / 2)`                           | Input padding for small size |
-| `--mjo-input-padding-large`      | `calc(1em / 2 - 2px) calc(1em / 2 + 3px) calc(1em / 2 - 3px)` | Input padding for large size |
-| `--mjo-input-primary-color`      | `var(--mjo-primary-color, #1aa8ed)`                           | Primary focus color          |
-| `--mjo-input-secondary-color`    | `var(--mjo-secondary-color, #7dc717)`                         | Secondary focus color        |
+@customElement("styled-select")
+class StyledSelect extends LitElement {
+    render() {
+        return html`
+            <mjo-select label="Styled Select" placeholder="Choose an option">
+                <mjo-option value="1">Option 1</mjo-option>
+                <mjo-option value="2">Option 2</mjo-option>
+            </mjo-select>
+        `;
+    }
 
-### Prefix/Suffix Text Styling
+    static styles = css`
+        mjo-select::part(container) {
+            border-radius: 12px;
+            border: 2px solid #1aa8ed;
+        }
 
-| Property                                   | Default                    | Description                  |
-| ------------------------------------------ | -------------------------- | ---------------------------- |
-| `--mjo-input-prefix-text-background-color` | `rgba(220, 220, 220, 0.5)` | Prefix text background color |
-| `--mjo-input-prefix-text-color`            | `currentColor`             | Prefix text color            |
+        mjo-select::part(label-container) {
+            font-weight: bold;
+            color: #1aa8ed;
+        }
 
-### Label Styling
+        mjo-select::part(select-dropdown-icon) {
+            color: #1aa8ed;
+        }
 
-| Property                         | Default           | Description       |
-| -------------------------------- | ----------------- | ----------------- |
-| `--mjo-select-label-font-size`   | `calc(1em * 0.8)` | Label font size   |
-| `--mjo-select-label-font-weight` | `normal`          | Label font weight |
-| `--mjo-select-label-color`       | `currentColor`    | Label color       |
+        mjo-select {
+            --mjo-select-option-padding: 12px;
+            --mjo-select-option-font-size: 1em;
+        }
+    `;
+}
+```
 
-### Helper Text Styling
+### Options with Images
 
-| Property                         | Default                                         | Description             |
-| -------------------------------- | ----------------------------------------------- | ----------------------- |
-| `--mjo-input-helper-font-size`   | `calc(1em * 0.8)`                               | Helper text font size   |
-| `--mjo-input-helper-font-weight` | `normal`                                        | Helper text font weight |
-| `--mjo-input-helper-color`       | `var(--mjo-foreground-color-low, currentColor)` | Helper text color       |
+```typescript
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-select";
+import "mjo-litui/components/select/mjo-option";
 
-### Option Styling
+@customElement("country-selector")
+class CountrySelector extends LitElement {
+    render() {
+        return html`
+            <mjo-select label="Select Country" placeholder="Choose a country" searchable>
+                <mjo-option value="us" startImage="https://flagcdn.com/w20/us.png"> United States </mjo-option>
+                <mjo-option value="uk" startImage="https://flagcdn.com/w20/gb.png"> United Kingdom </mjo-option>
+                <mjo-option value="fr" startImage="https://flagcdn.com/w20/fr.png"> France </mjo-option>
+            </mjo-select>
+        `;
+    }
+}
+```
 
-| Property                                           | Default                                        | Description                      |
-| -------------------------------------------------- | ---------------------------------------------- | -------------------------------- |
-| `--mjo-select-option-padding`                      | `5px`                                          | Option padding                   |
-| `--mjo-select-option-font-size`                    | `0.8em`                                        | Option font size                 |
-| `--mjo-select-option-preselected-background-color` | `var(--mjo-background-color-hover, #eeeeee)`   | Pre-selected option background   |
-| `--mjo-select-option-preselected-color`            | `var(--mjo-foreground-color, currentColor)`    | Pre-selected option text color   |
-| `--mjo-select-option-selected-primary-color`       | `var(--mjo-primary-foreground-color, white)`   | Selected option text (primary)   |
-| `--mjo-select-option-selected-secondary-color`     | `var(--mjo-secondary-foreground-color, white)` | Selected option text (secondary) |
+### Event Handling
 
-### Search Styling (when searchable is enabled)
+```typescript
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-select";
+import "mjo-litui/components/select/mjo-option";
 
-| Property                          | Default                                                      | Description                 |
-| --------------------------------- | ------------------------------------------------------------ | --------------------------- |
-| `--mjo-dropdown-background-color` | `var(--mjo-background-color-low, white)`                     | Search container background |
-| `--mjo-dropdown-box-shadow`       | `var(--mjo-box-shadow-1, 0px 2px 3px rgba(50, 50, 50, 0.5))` | Search container shadow     |
+@customElement("select-with-events")
+class SelectWithEvents extends LitElement {
+    render() {
+        return html`
+            <mjo-select
+                label="Interactive Select"
+                searchable
+                @mjo-select:open=${this.handleOpen}
+                @mjo-select:close=${this.handleClose}
+                @mjo-select:change=${this.handleChange}
+                @mjo-select:search=${this.handleSearch}
+                @mjo-select:option-preselect=${this.handlePreselect}
+            >
+                <mjo-option value="1">Option 1</mjo-option>
+                <mjo-option value="2">Option 2</mjo-option>
+                <mjo-option value="3">Option 3</mjo-option>
+            </mjo-select>
+        `;
+    }
 
-### Global Color Variables
+    handleOpen(e: CustomEvent) {
+        console.log("Dropdown opened with", e.detail.optionsCount, "options");
+    }
 
-These are used as fallbacks throughout the component:
+    handleClose(e: CustomEvent) {
+        console.log("Dropdown closed. Reason:", e.detail.reason);
+    }
 
-| Property                          | Default   | Description           |
-| --------------------------------- | --------- | --------------------- |
-| `--mjo-color-error`               | `#d31616` | Error state color     |
-| `--mjo-primary-color`             | `#1aa8ed` | Primary theme color   |
-| `--mjo-secondary-color`           | `#7dc717` | Secondary theme color |
-| `--mjo-foreground-color`          | `#222222` | Default text color    |
-| `--mjo-background-color-card-low` | `#ffffff` | Default background    |
-| `--mjo-border-color`              | `#dddddd` | Default border color  |
+    handleChange(e: CustomEvent) {
+        console.log("Value changed from", e.detail.previousValue, "to", e.detail.value);
+        console.log("Selected option:", e.detail.option);
+    }
 
-### CSS Parts
+    handleSearch(e: CustomEvent) {
+        console.log("Searching for:", e.detail.query);
+        console.log("Filtered options:", e.detail.filteredOptionsCount);
+    }
 
-| Part                          | Description                                         |
-| ----------------------------- | --------------------------------------------------- |
-| `container`                   | The main select input container                     |
-| `input`                       | The native input element (hidden for display)       |
-| `label-container`             | The label container (via exportparts)               |
-| `label-truncate-container`    | The label truncate container (via exportparts)      |
-| `label-truncate-wrapper`      | The label truncate wrapper (via exportparts)        |
-| `prefix-text`                 | Container for prefix text                           |
-| `suffix-text`                 | Container for suffix text                           |
-| `start-icon-container`        | Container for start icon                            |
-| `start-icon`                  | The start icon element (via exportparts)            |
-| `end-icon-container`          | Container for end icon                              |
-| `end-icon`                    | The end icon element (via exportparts)              |
-| `end-icon-option-container`   | Container for end icon from selected option         |
-| `end-option-icon`             | The end icon from selected option (via exportparts) |
-| `start-image-container`       | Container for start image                           |
-| `start-image`                 | The start image element                             |
-| `end-image-container`         | Container for end image                             |
-| `end-image`                   | The end image element                               |
-| `end-image-option-container`  | Container for end image from selected option        |
-| `end-option-image`            | The end image from selected option                  |
-| `select-dropdown-icon`        | The dropdown arrow icon                             |
-| `helper-container`            | Helper container (via exportparts)                  |
-| `helper-text-container`       | Helper text container (via exportparts)             |
-| `helper-text-typography`      | Helper text typography (via exportparts)            |
-| `helper-text-error-message`   | Error message element (via exportparts)             |
-| `helper-text-success-message` | Success message element (via exportparts)           |
-| `helper-text-icon`            | Helper text icon element (via exportparts)          |
+    handlePreselect(e: CustomEvent) {
+        console.log("Preselected option:", e.detail.option?.text);
+    }
+}
+```
 
-## Technical Notes
+## Additional Notes
 
-- **Form Integration**: Automatically integrates with `mjo-form` for validation and data collection
-- **Keyboard Navigation**: Full keyboard support with arrow keys, Enter, and Tab
-- **Search Functionality**: Built-in filtering when `searchable` is enabled
-- **Dynamic Options**: Options can be added/removed dynamically with automatic re-rendering
-- **Accessibility**: Full ARIA support with proper labeling and keyboard navigation
-- **Performance**: Uses efficient option rendering with change detection
-- **Theme Inheritance**: Options automatically inherit theme from parent select
+### Option Component Relationship
 
-## Accessibility
+The `mjo-select` component works exclusively with `mjo-option` elements. Each option supports:
 
-- Full keyboard navigation support (Arrow keys, Enter, Escape, Tab)
-- Proper ARIA attributes for screen readers
-- Focus management and visual indicators
-- Support for assistive technologies
-- Semantic HTML structure with proper labeling
+- Text content via slot or `text` property
+- Icons via `startIcon` and `endIcon` properties
+- Images via `startImage` and `endImage` properties
+- Value via `value` property (required)
+- Color matching via `color` property (inherits from parent select)
 
-## Best Practices
+### Form Integration
 
-- Always provide meaningful labels for accessibility
-- Use helper text to guide users when needed
-- Enable search for lists with more than 10-15 options
-- Use icons and images to enhance option recognition
-- Implement proper validation when used in forms
-- Consider using clearable functionality for optional selections
-- Group related options logically
-- Provide default selections when appropriate
+The select component fully integrates with HTML forms:
 
-For additional theming options, see the [Theming Guide](./theming.md).
+- Submits the selected value under the specified `name` attribute
+- Supports native form validation with `required` attribute
+- Implements `checkValidity()` and `reportValidity()` methods
+- Triggers native `invalid` event when validation fails
+- Compatible with `FormData` API
+
+### Search Functionality
+
+When `searchable` is enabled:
+
+- A search input appears at the top of the dropdown
+- Options are filtered in real-time as the user types
+- Filtering matches both `value` and `text` properties
+- The search is case-insensitive
+- Fires `mjo-select:search` event with filtered results count
+
+### Keyboard Navigation
+
+The component maintains focus management during keyboard navigation:
+
+- Preselected options are visually highlighted before selection
+- The `aria-activedescendant` attribute tracks the highlighted option
+- Enter key confirms the preselected option
+- Tab key closes dropdown and moves to next form element
+
+### Performance Considerations
+
+- Options are rendered using Lit's `repeat` directive for efficient updates
+- Search filtering uses client-side filtering; for large datasets, consider server-side filtering
+- The dropdown implements virtual scrolling for optimal performance with many options
+- MutationObserver tracks dynamic option changes automatically
+
+### Validation
+
+The component supports both native HTML5 validation and custom validation:
+
+- Use `required` for mandatory field validation
+- Call `setCustomValidity()` for custom validation rules
+- The `validationMessage` getter returns the current error message
+- Validation errors display in the helper text area when `reportValidity()` is called

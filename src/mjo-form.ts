@@ -9,6 +9,11 @@ import { createRef, ref } from "lit/directives/ref.js";
 import { MjoButton } from "./mjo-button.js";
 import { MjoValidator } from "./utils/validator.js";
 
+/**
+ * @summary Form container component that provides comprehensive validation and data collection with extensive validation rules and error handling.
+ *
+ * @fires submit - Emitted when the form is submitted with validation results and form data
+ */
 @customElement("mjo-form")
 export class MjoForm extends LitElement {
     @property({ type: Boolean }) noValidate: boolean = false;

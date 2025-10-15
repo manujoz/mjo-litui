@@ -12,6 +12,8 @@ Evita la repetición y verborrea. Sé conciso en tu respuesta y mientras trabaja
 
 **CRITICAL**: El plan de implementación es sagrado, debes seguiro al PIE DE LA LETRA. Si durante el implementación encuentras algún problema o inconsistencia comunicaselo al usuaario y preguntale como proceder.
 
+**IMPORTANTE**: Crea siempre una lista de tareas usando `todos` para organizarte el trabajo.
+
 # Workflow
 
 1. Analiza la tarea de Jira asociada al plan de implementación para entender el problema y los requisitos de la tarea.

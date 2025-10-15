@@ -1,263 +1,316 @@
 # mjo-listbox
 
-Interactive listbox component for displaying selectable lists of items with support for single and multiple selection, keyboard navigation, and full accessibility features.
+Interactive listbox component for displaying selectable lists of items with full accessibility support.
 
-## Usage
+## Index
 
-### Basic HTML
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Methods](#methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-```html
-<mjo-listbox>
-    <!-- Items are configured via JavaScript -->
-</mjo-listbox>
-```
+## Use Cases
 
-### Lit Element Example
+The `mjo-listbox` component is designed for scenarios where you need to display a list of selectable items with rich formatting and interactions:
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+- Building menus with sections and icons
+- Creating action lists with visual feedback
+- Implementing single or multiple selection lists
+- Displaying navigation options with descriptions
+- Building command palettes or quick action menus
+- Creating accessible list interfaces with keyboard navigation
+
+## Import
+
+```typescript
 import "mjo-litui/mjo-listbox";
-
-@customElement("example-listbox-basic")
-export class ExampleListboxBasic extends LitElement {
-    @state() private items = [
-        { label: "Option 1", value: "1" },
-        { label: "Option 2", value: "2" },
-        { label: "Option 3", value: "3", disabled: true },
-        { label: "Option 4", value: "4" },
-    ];
-
-    render() {
-        return html` <mjo-listbox .items=${this.items} selectable="single" @mjo-listbox:change=${this.handleChange}></mjo-listbox> `;
-    }
-
-    private handleChange(event: CustomEvent) {
-        console.log("Selected items:", event.detail.selectedItems);
-        console.log("Selected values:", event.detail.selectedValues);
-    }
-}
 ```
 
-### Multiple Selection
+## Properties
 
-```ts
-@customElement("example-listbox-multiple")
-export class ExampleListboxMultiple extends LitElement {
-    @state() private items = [
-        { label: "Apple", value: "apple", color: "success" },
-        { label: "Banana", value: "banana", color: "warning" },
-        { label: "Orange", value: "orange", color: "warning" },
-        { label: "Grape", value: "grape", color: "info" },
-    ];
+| Property     | Type                                         | Description                                                                            | Default     | Required |
+| ------------ | -------------------------------------------- | -------------------------------------------------------------------------------------- | ----------- | -------- |
+| `items`      | `MjoListboxItems`                            | Array of listbox items to display. Each item can be a regular item or a section header | `[]`        | No       |
+| `variant`    | `'solid' \| 'bordered' \| 'light' \| 'flat'` | Visual variant of the listbox items                                                    | `'solid'`   | No       |
+| `size`       | `'small' \| 'medium' \| 'large'`             | Size of the listbox and its items                                                      | `'medium'`  | No       |
+| `selectable` | `'single' \| 'multiple' \| undefined`        | Selection mode. If undefined, items are not selectable                                 | `undefined` | No       |
 
-    render() {
-        return html` <mjo-listbox .items=${this.items} selectable="multiple" variant="bordered" @mjo-listbox:change=${this.handleChange}></mjo-listbox> `;
-    }
-
-    private handleChange(event: CustomEvent) {
-        const { selectedItems, selectedValues } = event.detail;
-        console.log("Selection changed to:", selectedItems);
-        console.log("Selected values:", selectedValues);
-    }
-}
-```
-
-### With Sections
-
-```ts
-@customElement("example-listbox-sections")
-export class ExampleListboxSections extends LitElement {
-    @state() private items = [
-        { section: "Fruits" },
-        { label: "Apple", value: "apple", color: "success" },
-        { label: "Banana", value: "banana", color: "warning" },
-        { section: "Vegetables" },
-        { label: "Carrot", value: "carrot", color: "warning" },
-        { label: "Broccoli", value: "broccoli", color: "success" },
-    ];
-
-    render() {
-        return html` <mjo-listbox .items=${this.items} selectable="single"></mjo-listbox> `;
-    }
-}
-```
-
-### Links Support
-
-```ts
-@customElement("example-listbox-links")
-export class ExampleListboxLinks extends LitElement {
-    @state() private items = [
-        { label: "Home", href: "/" },
-        { label: "About", href: "/about" },
-        { label: "Contact", href: "/contact" },
-    ];
-
-    render() {
-        return html` <mjo-listbox .items=${this.items}></mjo-listbox> `;
-    }
-}
-```
-
-## Attributes/Properties
-
-| Name         | Type                | Default     | Description                                                             |
-| ------------ | ------------------- | ----------- | ----------------------------------------------------------------------- |
-| `items`      | `MjoListboxItems`   | `[]`        | Array of items to display in the listbox                                |
-| `variant`    | `MjoListboxVariant` | `"solid"`   | Visual style variant: `"solid"`, `"bordered"`, `"light"`, or `"flat"`   |
-| `size`       | `MjoListboxSize`    | `"medium"`  | Size of the listbox: `"small"`, `"medium"`, or `"large"`                |
-| `selectable` | `string`            | `undefined` | Selection mode: `"single"`, `"multiple"`, or `undefined` (no selection) |
-
-## Item Properties
+### MjoListboxItem Interface
 
 Each item in the `items` array can have the following properties:
 
-| Name          | Type                                 | Default     | Description                                                                            |
-| ------------- | ------------------------------------ | ----------- | -------------------------------------------------------------------------------------- |
-| `label`       | `string \| number \| TemplateResult` | -           | Display text or template for the item                                                  |
-| `value`       | `string \| number`                   | `undefined` | Value associated with the item                                                         |
-| `description` | `string`                             | `undefined` | Optional description text                                                              |
-| `color`       | `string`                             | `undefined` | Color theme: `"primary"`, `"secondary"`, `"success"`, `"warning"`, `"error"`, `"info"` |
-| `startIcon`   | `string`                             | `undefined` | Icon to display at the start of the item                                               |
-| `endIcon`     | `string`                             | `undefined` | Icon to display at the end of the item                                                 |
-| `disabled`    | `boolean`                            | `false`     | Whether the item is disabled                                                           |
-| `section`     | `string`                             | `undefined` | If present, renders as a section header                                                |
-| `href`        | `string`                             | `undefined` | If present, renders as a link                                                          |
+| Property      | Type                                                                      | Description                                                       |
+| ------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `label`       | `string \| number \| TemplateResult<1>`                                   | Label text or template for the item                               |
+| `description` | `string`                                                                  | Optional secondary description text                               |
+| `color`       | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'error' \| 'info'` | Color theme for the item                                          |
+| `startIcon`   | `string`                                                                  | Icon to display at the start of the item                          |
+| `endIcon`     | `string`                                                                  | Icon to display at the end of the item                            |
+| `disabled`    | `boolean`                                                                 | Whether the item is disabled                                      |
+| `section`     | `string`                                                                  | If defined, renders as a section header instead of a regular item |
+| `href`        | `string`                                                                  | If defined, renders the item as a link                            |
+| `value`       | `string \| number`                                                        | Value associated with the item for form integration               |
+
+## Methods
+
+This component does not expose public methods.
 
 ## Events
 
-| Name                 | Detail                                                                        | Description                       |
-| -------------------- | ----------------------------------------------------------------------------- | --------------------------------- |
-| `mjo-listbox:click`  | `{ item: MjoListboxItem, value: string \| number }`                           | Fired when an item is clicked     |
-| `mjo-listbox:change` | `{ selectedItems: MjoListboxItems, selectedValues: Array<string \| number> }` | Fired when selection changes      |
-| `mjo-listbox:focus`  | `{ item: MjoListboxItem, value: string \| number }`                           | Fired when an item receives focus |
-| `mjo-listbox:blur`   | `{ item: MjoListboxItem, value: string \| number }`                           | Fired when an item loses focus    |
-
-## CSS Parts
-
-| Part                 | Description                                         |
-| -------------------- | --------------------------------------------------- |
-| `container`          | The main listbox container element                  |
-| `link`               | Link elements for items with href (via exportparts) |
-| `wrapper`            | Individual item wrapper (via exportparts)           |
-| `content`            | Item content container (via exportparts)            |
-| `item-label`         | Item label element (via exportparts)                |
-| `item-description`   | Item description element (via exportparts)          |
-| `start-icon`         | Start icon element (via exportparts)                |
-| `end-icon`           | End icon element (via exportparts)                  |
-| `selected-icon`      | Selected state icon (via exportparts)               |
-| `section`            | Section header element (via exportparts)            |
-| `section-typography` | Section typography element (via exportparts)        |
-
-## Keyboard Navigation
-
-- **Arrow Up/Down**: Navigate between items
-- **Home**: Focus first item
-- **End**: Focus last item
-- **Enter/Space**: Select focused item
-- **Tab**: Move focus to next focusable element
-
-The component automatically skips disabled items and sections during keyboard navigation and wraps around at the boundaries.
-
-## Accessibility Features
-
-- Full ARIA support with proper roles (`listbox`, `option`, `group`)
-- Keyboard navigation following WAI-ARIA guidelines
-- Screen reader announcements for selection changes
-- Focus management with `aria-activedescendant`
-- Support for disabled and grouped options
-- Proper labeling and descriptions
+| Event                | Type                       | Description                                            | Detail                                                                        |
+| -------------------- | -------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| `mjo-listbox:click`  | `MjoListboxClickEvent`     | Fired when an item is clicked                          | `{ item: MjoListboxItem, value: string \| number }`                           |
+| `mjo-listbox:change` | `MjoListboxChangeEvent`    | Fired when selection changes (only in selectable mode) | `{ selectedItems: MjoListboxItems, selectedValues: Array<string \| number> }` |
+| `mjo-listbox:focus`  | `MjoListboxItemFocusEvent` | Fired when an item receives focus                      | `{ item: MjoListboxItem, value: string \| number }`                           |
+| `mjo-listbox:blur`   | `MjoListboxItemBlurEvent`  | Fired when an item loses focus                         | `{ item: MjoListboxItem, value: string \| number }`                           |
 
 ## CSS Variables
 
-### Container Variables
+| Variable                                    | Description                                      | Default                                                           |
+| ------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
+| `--mjo-listbox-background-color`            | Background color of the listbox container        | -                                                                 |
+| `--mjo-listbox-border-radius`               | Border radius of the listbox container and items | `var(--mjo-radius-medium, 3px)`                                   |
+| `--mjo-listbox-item-gap`                    | Gap between item content elements                | `var(--mjo-space-small)`                                          |
+| `--mjo-listbox-item-margin`                 | Margin around individual items                   | `var(--mjo-space-xsmall, 3px) 0`                                  |
+| `--mjo-listbox-item-padding`                | Padding inside individual items                  | `var(--mjo-space-xxsmall, 3px) var(--mjo-space-xsmall, 3px)`      |
+| `--mjo-listbox-item-cursor`                 | Cursor style for items                           | `pointer`                                                         |
+| `--mjo-listbox-item-border-radius`          | Border radius for individual items               | `var(--mjo-listbox-border-radius, var(--mjo-radius-medium, 3px))` |
+| `--mjo-listbox-item-hover-background-color` | Background color for hovered/focused items       | `var(--mjo-color-default)`                                        |
+| `--mjo-listbox-item-hover-foreground-color` | Text color for hovered/focused items             | `var(--mjo-color-default-foreground)`                             |
+| `--mjo-listbox-icon-top`                    | Top offset for icons within items                | -                                                                 |
+| `--mjo-listbox-section-border-color`        | Border color for section headers                 | `var(--mjo-border-color, #dddddd)`                                |
+| `--mjo-listbox-section-color`               | Text color for section headers                   | `var(--mjo-foreground-color-low, #666666)`                        |
 
-| Variable                         | Default                         | Description                               |
-| -------------------------------- | ------------------------------- | ----------------------------------------- |
-| `--mjo-listbox-background-color` | -                               | Background color of the listbox container |
-| `--mjo-listbox-border-radius`    | `var(--mjo-radius-medium, 3px)` | Border radius of the container            |
+## CSS Parts
 
-### Item Variables
+| Part                     | Description                         | Element                      |
+| ------------------------ | ----------------------------------- | ---------------------------- |
+| `container`              | Main listbox container              | `div[role="listbox"]`        |
+| `link`                   | Link element for items with href    | `a`                          |
+| `wrapper`                | Individual item wrapper             | `div.inner`                  |
+| `content`                | Item content container              | `div.content`                |
+| `item-label`             | Item label typography               | `mjo-typography`             |
+| `item-description`       | Item description typography         | `mjo-typography.description` |
+| `item-description-tag`   | Typography tag for item description | `typography` element         |
+| `start-icon`             | Start icon element                  | `mjo-icon`                   |
+| `end-icon`               | End icon element                    | `mjo-icon`                   |
+| `selected-icon`          | Selected state icon                 | `mjo-icon.selected-icon`     |
+| `section`                | Section header container            | `div[role="group"]`          |
+| `section-typography-tag` | Section typography tag              | `typography` element         |
+| `section-typography`     | Section typography element          | `mjo-typography`             |
 
-| Variable                                    | Default                                                      | Description                |
-| ------------------------------------------- | ------------------------------------------------------------ | -------------------------- |
-| `--mjo-listbox-item-gap`                    | `var(--mjo-space-small)`                                     | Gap between item elements  |
-| `--mjo-listbox-item-margin`                 | `var(--mjo-space-xsmall, 3px) 0`                             | Margin around items        |
-| `--mjo-listbox-item-padding`                | `var(--mjo-space-xxsmall, 3px) var(--mjo-space-xsmall, 3px)` | Internal padding of items  |
-| `--mjo-listbox-item-cursor`                 | `pointer`                                                    | Cursor when hovering items |
-| `--mjo-listbox-item-border-radius`          | `var(--mjo-listbox-border-radius)`                           | Border radius of items     |
-| `--mjo-listbox-item-hover-background-color` | `var(--mjo-color-default)`                                   | Background color on hover  |
-| `--mjo-listbox-item-hover-foreground-color` | `var(--mjo-color-default-foreground)`                        | Text color on hover        |
+## Accessibility
 
-### Section Variables
+The `mjo-listbox` component follows WAI-ARIA guidelines for accessible listbox patterns:
 
-| Variable                             | Default                                    | Description                         |
-| ------------------------------------ | ------------------------------------------ | ----------------------------------- |
-| `--mjo-listbox-section-border-color` | `var(--mjo-border-color, #dddddd)`         | Border color for section separators |
-| `--mjo-listbox-section-color`        | `var(--mjo-foreground-color-low, #666666)` | Text color for section headers      |
+### ARIA Roles and Attributes
 
-### Icon Variables
+- **Container**: `role="listbox"` with `aria-multiselectable` indicating selection mode
+- **Items**: `role="option"` with `aria-selected` and `aria-disabled` attributes
+- **Sections**: `role="group"` with `aria-label` for section headers
+- **Focus Management**: `aria-activedescendant` points to the currently focused item
 
-| Variable                 | Default | Description                       |
-| ------------------------ | ------- | --------------------------------- |
-| `--mjo-listbox-icon-top` | -       | Top position adjustment for icons |
+### Keyboard Interactions
 
-## Theming
+| Key                | Action                                                   |
+| ------------------ | -------------------------------------------------------- |
+| `ArrowDown`        | Moves focus to the next enabled item (wraps to first)    |
+| `ArrowUp`          | Moves focus to the previous enabled item (wraps to last) |
+| `Home`             | Moves focus to the first enabled item                    |
+| `End`              | Moves focus to the last enabled item                     |
+| `Enter` or `Space` | Selects/deselects the focused item in selectable mode    |
+| `Tab`              | Moves focus into and out of the listbox                  |
 
-The component inherits from global theme tokens. Color variants (`primary`, `secondary`, etc.) automatically use the corresponding theme colors for hover and focus states.
+### Best Practices
+
+- Always provide meaningful `label` values for items
+- Use `description` to provide additional context when needed
+- Set `disabled` on items that are not currently actionable
+- Use `section` to group related items logically
+- Provide `value` for items when using in forms or selections
+- Use appropriate `color` values to convey meaning (e.g., `error` for destructive actions)
+
+## Usage Examples
+
+### Basic Listbox
+
+```typescript
+import "mjo-litui/mjo-listbox";
+import { MjoListboxItems } from "mjo-litui/types/mjo-listbox";
+
+const items: MjoListboxItems = [
+    { label: "Item 1", value: "1" },
+    { label: "Item 2", value: "2" },
+    { label: "Item 3", value: "3" },
+];
+```
+
+```html
+<mjo-listbox .items="${items}"></mjo-listbox>
+```
+
+### Listbox with Sections and Icons
+
+```typescript
+import { AiFillAccountBook, AiFillAlert, AiFillApple } from "mjo-icons/ai";
+
+const items: MjoListboxItems = [
+    { section: "Actions" },
+    { label: "Edit", startIcon: AiFillAccountBook, color: "primary", value: "edit" },
+    { label: "Delete", startIcon: AiFillAlert, color: "error", value: "delete" },
+    { section: "User" },
+    { label: "Profile", startIcon: AiFillApple, color: "secondary", value: "profile" },
+];
+```
+
+```html
+<mjo-listbox .items="${items}" variant="light"></mjo-listbox>
+```
+
+### Single Selection Listbox
+
+```typescript
+const items: MjoListboxItems = [
+    { label: "Option 1", value: "1" },
+    { label: "Option 2", value: "2" },
+    { label: "Option 3", value: "3", disabled: true },
+];
+```
+
+```html
+<mjo-listbox .items="${items}" selectable="single" @mjo-listbox:change="${(e)" =""> console.log('Selected:', e.detail.selectedValues)} ></mjo-listbox>
+```
+
+### Multiple Selection Listbox
+
+```html
+<mjo-listbox .items="${items}" selectable="multiple" variant="flat" @mjo-listbox:change="${(e)" ="">
+    console.log('Selected items:', e.detail.selectedItems)} ></mjo-listbox
+>
+```
+
+### Listbox with Descriptions
+
+```typescript
+const items: MjoListboxItems = [
+    {
+        label: "Advanced Settings",
+        description: "Configure advanced options",
+        color: "info",
+        value: "advanced",
+    },
+    {
+        label: "Danger Zone",
+        description: "Irreversible actions",
+        color: "error",
+        value: "danger",
+    },
+];
+```
+
+```html
+<mjo-listbox .items="${items}" size="large"></mjo-listbox>
+```
+
+### Listbox with Custom HTML Labels
+
+```typescript
+import { html } from "lit";
+
+const items: MjoListboxItems = [
+    {
+        label: html`<span style="color: var(--mjo-color-success)">Success</span>`,
+        value: "success",
+    },
+    {
+        label: html`<strong>Bold Item</strong>`,
+        value: "bold",
+    },
+];
+```
+
+```html
+<mjo-listbox .items="${items}"></mjo-listbox>
+```
+
+### Listbox with Links
+
+```typescript
+const items: MjoListboxItems = [
+    { label: "Home", href: "/", value: "home" },
+    { label: "About", href: "/about", value: "about" },
+    { label: "Contact", href: "/contact", value: "contact" },
+];
+```
+
+```html
+<mjo-listbox .items="${items}" variant="bordered"></mjo-listbox>
+```
+
+### Handling Events
+
+```typescript
+const handleClick = (e: CustomEvent) => {
+    console.log("Clicked item:", e.detail.item);
+    console.log("Item value:", e.detail.value);
+};
+
+const handleChange = (e: CustomEvent) => {
+    console.log("Selected items:", e.detail.selectedItems);
+    console.log("Selected values:", e.detail.selectedValues);
+};
+```
+
+```html
+<mjo-listbox .items="${items}" selectable="single" @mjo-listbox:click="${handleClick}" @mjo-listbox:change="${handleChange}"></mjo-listbox>
+```
+
+### Customizing with CSS Variables
 
 ```css
 mjo-listbox {
-    --mjo-listbox-background-color: var(--mjo-background-surface);
-    --mjo-listbox-item-hover-background-color: var(--mjo-primary-color-alpha2);
+    --mjo-listbox-background-color: #f5f5f5;
+    --mjo-listbox-border-radius: 8px;
+    --mjo-listbox-item-padding: 12px 16px;
+    --mjo-listbox-item-gap: 12px;
+    --mjo-listbox-item-hover-background-color: #e0e0e0;
+    --mjo-listbox-icon-top: -2px;
 }
 ```
 
-## Selection Behavior
+### Styling with CSS Parts
 
-### Single Selection Mode
+```css
+mjo-listbox::part(container) {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 
-When `selectable="single"`, only one item can be selected at a time. Selecting a new item automatically deselects the previous one.
+mjo-listbox::part(item-label) {
+    font-weight: 500;
+}
 
-### Multiple Selection Mode
+mjo-listbox::part(item-description) {
+    font-style: italic;
+}
 
-When `selectable="multiple"`, multiple items can be selected. Clicking or pressing Enter/Space on an already selected item will deselect it.
+mjo-listbox::part(start-icon) {
+    color: var(--mjo-primary-color);
+}
+```
 
-### No Selection Mode
+## Additional Notes
 
-When `selectable` is not set or is `undefined`, items are not selectable but still respond to focus and click events for navigation purposes.
-
-## Visual Variants
-
-### Solid (default)
-
-Items show solid background colors on hover and focus.
-
-### Bordered
-
-Items show colored borders on hover and focus instead of background colors.
-
-### Light
-
-Items show subtle text color changes on hover and focus.
-
-### Flat
-
-Items show very subtle background overlays on hover and focus.
-
-## Size Options
-
-- **Small**: Reduced font size (0.9em)
-- **Medium**: Default font size
-- **Large**: Increased font size (1.1em)
-
-## Implementation Notes
-
-- The component uses internal `listbox-item` and `listbox-section` components for rendering
-- Focus management is handled internally with proper ARIA attributes
-- Selection state is maintained in the `selectedItems` property
-- The component automatically generates unique IDs for accessibility
-- Items without labels will show an error in the console but won't crash the component
-- Disabled items are skipped during keyboard navigation
-- Links (items with `href`) render as anchor elements instead of divs
+- **Selection State**: The component manages selection state internally via the `selectedItems` state. Access current selection through the `mjo-listbox:change` event.
+- **Keyboard Navigation**: Focus management automatically skips disabled items and sections.
+- **Icon Support**: Use icons from `mjo-icons` package for `startIcon` and `endIcon` properties.
+- **Performance**: The component uses Lit's `repeat` directive with efficient keying for optimal rendering performance.
+- **Section Headers**: Items with a `section` property are rendered as non-interactive section headers that group related items.
+- **Link Items**: Items with an `href` property are rendered as `<a>` elements, allowing standard link behavior while maintaining listbox semantics.
+- **Disabled Items**: Disabled items are not focusable and cannot be selected, but remain visible in the list.

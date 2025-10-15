@@ -118,3 +118,7 @@ npm run test:file:nobuild   # Run the test for a specific file without building 
 npm run test:coverage       # Generate test coverage report
 npm run test:watch          # Run the test suite in watch mode
 ```
+
+## Commit Message Pattern -> ⚠️ CRITICAL - NEVER BREAK THIS
+
+All commit messages must match this regular expression to comply with the enforced linting rules: `^(build|docs|feat|fix|perf|refactor|revert|style|test)\((MJOLIT-[0-9]*)\)!?:\s(add|fix|update|test|change|remove|panic|close)\s(.*)$`.

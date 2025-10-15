@@ -210,12 +210,15 @@ export class MjoPagination extends ThemeMixin(LitElement) implements IThemeMixin
         this.goToPage(this.totalPages);
     }
 
+    /**
+     * Get the current page range array with numbers and ellipsis
+     */
     getPageRange(): (number | "ellipsis")[] {
         return this.pageRange;
     }
 
     /**
-     * Change the page size
+     * Change the page size and recalculate the current page to maintain the position in the dataset
      */
     setPageSize(size: number) {
         if (size === this.pageSize) return;

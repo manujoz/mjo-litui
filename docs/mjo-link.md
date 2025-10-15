@@ -1,395 +1,230 @@
 # mjo-link
 
-Accessible and versatile link component with button-like variants, comprehensive ARIA support, and extensive theming capabilities. Supports both traditional anchor functionality and button-like interactions with preventDefault handling.
+Accessible link component with multiple variants, color options, and comprehensive keyboard navigation support.
 
-## HTML Usage
+## Table of Contents
 
-```html
-<mjo-link href="/about">About Us</mjo-link>
-```
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Methods](#methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-## Basic Example
+## Use Cases
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
+- Standard navigation links with color variants
+- Button-styled links for call-to-action navigation
+- Cover links that expand clickable areas to parent containers
+- Links with custom typography sizes and weights
+- Links with preventDefault for SPAs and custom navigation handling
+
+## Import
+
+```typescript
 import "mjo-litui/mjo-link";
-
-@customElement("example-link-basic")
-export class ExampleLinkBasic extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-link href="/home">Home Page</mjo-link>
-                <mjo-link href="/about" color="primary">About Us</mjo-link>
-                <mjo-link href="/contact" color="secondary">Contact</mjo-link>
-                <mjo-link href="https://example.com" target="_blank">External Link</mjo-link>
-            </div>
-        `;
-    }
-}
 ```
 
-## Accessibility Features Example
+## Properties
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-link";
+| Property          | Type                                                                                | Description                                               | Default     | Required |
+| ----------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------- | -------- |
+| `href`            | `string`                                                                            | Target URL for the link                                   | `undefined` | No       |
+| `target`          | `"_self" \| "_blank" \| "_parent" \| "_top"`                                        | Specifies where to open the linked document               | `"_self"`   | No       |
+| `rel`             | `string`                                                                            | Relationship between current document and linked document | `undefined` | No       |
+| `color`           | `"default" \| "primary" \| "secondary"`                                             | Color variant of the link                                 | `"default"` | No       |
+| `variant`         | `"link" \| "button" \| "ghost" \| "dashed" \| "flat" \| "text"`                     | Visual style variant                                      | `"link"`    | No       |
+| `size`            | `"heading1" \| "heading2" \| "heading3" \| "base" \| "body1" \| "body2" \| "body3"` | Typography size (only for variant="link")                 | `"base"`    | No       |
+| `weight`          | `"light" \| "regular" \| "medium" \| "bold"`                                        | Font weight (only for variant="link")                     | `"regular"` | No       |
+| `disabled`        | `boolean`                                                                           | Disables the link interaction                             | `false`     | No       |
+| `cover`           | `boolean`                                                                           | Expands the clickable area to cover the parent container  | `false`     | No       |
+| `nodecor`         | `boolean`                                                                           | Removes text decoration on hover                          | `false`     | No       |
+| `preventDefault`  | `boolean`                                                                           | Prevents default navigation and fires custom event        | `false`     | No       |
+| `ariaLabelledBy`  | `string`                                                                            | ID of element that labels the link                        | `undefined` | No       |
+| `ariaDescribedBy` | `string`                                                                            | ID of element that describes the link                     | `undefined` | No       |
 
-@customElement("example-link-accessibility")
-export class ExampleLinkAccessibility extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <!-- Link with ARIA label for screen readers -->
-                <mjo-link href="/profile" aria-label="View your user profile settings"> Profile </mjo-link>
+## Methods
 
-                <!-- Current page indicator -->
-                <mjo-link href="/dashboard" aria-current="page" color="primary"> Dashboard </mjo-link>
-
-                <!-- Link with description -->
-                <mjo-link href="/help" aria-describedby="help-description"> Help Center </mjo-link>
-                <div id="help-description">Access comprehensive documentation and support</div>
-
-                <!-- Disabled link -->
-                <mjo-link disabled>Coming Soon</mjo-link>
-            </div>
-        `;
-    }
-}
-```
-
-## Variants and Typography Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-link";
-
-@customElement("example-link-variants")
-export class ExampleLinkVariants extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <!-- Typography sizes -->
-                <div>
-                    <h4>Typography Sizes</h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <mjo-link href="#" size="heading1" weight="bold">Heading 1 Link</mjo-link>
-                        <mjo-link href="#" size="heading2" weight="medium">Heading 2 Link</mjo-link>
-                        <mjo-link href="#" size="base" weight="regular">Base Size Link</mjo-link>
-                        <mjo-link href="#" size="body1" weight="light">Body 1 Link</mjo-link>
-                        <mjo-link href="#" size="body2">Body 2 Link</mjo-link>
-                    </div>
-                </div>
-
-                <!-- Button variants -->
-                <div>
-                    <h4>Button Variants</h4>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                        <mjo-link href="/action" variant="button" color="primary">Primary Button</mjo-link>
-                        <mjo-link href="/action" variant="ghost" color="secondary">Ghost Button</mjo-link>
-                        <mjo-link href="/action" variant="flat" color="primary">Flat Button</mjo-link>
-                        <mjo-link href="/action" variant="dashed">Dashed Button</mjo-link>
-                    </div>
-                </div>
-
-                <!-- Special behaviors -->
-                <div>
-                    <h4>Special Behaviors</h4>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <mjo-link href="#" nodecor>No decoration on hover</mjo-link>
-                        <mjo-link href="#" cover>Cover link (fills container)</mjo-link>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## PreventDefault and Custom Events Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import type { MjoLinkClickEvent } from "mjo-litui/types";
-import "mjo-litui/mjo-link";
-
-@customElement("example-link-events")
-export class ExampleLinkEvents extends LitElement {
-    private handleLinkClick(event: MjoLinkClickEvent) {
-        console.log("Link clicked:", event.detail.href);
-        // Handle custom navigation logic here
-        // For example: router navigation, analytics tracking, etc.
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <mjo-link href="/custom-nav" preventDefault @mjo-link:click=${this.handleLinkClick}> Custom Navigation Handler </mjo-link>
-
-                <mjo-link href="/analytics-tracked" preventDefault @mjo-link:click=${this.handleLinkClick}> Analytics Tracked Link </mjo-link>
-            </div>
-        `;
-    }
-}
-```
-
-## Theme Customization Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import { ThemeMixin } from "mjo-litui/mixins";
-import "mjo-litui/mjo-link";
-
-@customElement("example-link-themed")
-export class ExampleLinkThemed extends ThemeMixin(LitElement) {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem; padding: 2rem;">
-                <h3>Component-Level Link Theming</h3>
-
-                <!-- Custom brand theme -->
-                <mjo-link
-                    href="/brand"
-                    .theme=${{
-                        colorPrimary: "#ff6b35",
-                        fontWeight: "600",
-                        textDecorationHover: "none",
-                        focusOutlineColor: "#ff6b35",
-                        transition: "all 0.3s ease",
-                    }}
-                    color="primary"
-                >
-                    Custom Brand Link
-                </mjo-link>
-
-                <!-- Elegant theme -->
-                <mjo-link
-                    href="/elegant"
-                    .theme=${{
-                        colorDefault: "#2c3e50",
-                        fontFamily: "'Playfair Display', serif",
-                        textDecoration: "underline",
-                        textDecorationHover: "none",
-                        focusOutline: "2px dotted #2c3e50",
-                        focusOutlineOffset: "4px",
-                    }}
-                >
-                    Elegant Typography Link
-                </mjo-link>
-
-                <!-- Minimal theme -->
-                <mjo-link
-                    href="/minimal"
-                    .theme=${{
-                        colorSecondary: "#6c757d",
-                        textDecoration: "none",
-                        textDecorationHover: "underline",
-                        transition: "color 0.15s ease-in-out",
-                    }}
-                    color="secondary"
-                >
-                    Minimal Design Link
-                </mjo-link>
-            </div>
-        `;
-    }
-}
-```
-
-## Attributes / Properties
-
-| Name              | Type                                                                                | Default     | Description                                                  |
-| ----------------- | ----------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------ |
-| `href`            | `string`                                                                            | -           | The URL the link should navigate to                          |
-| `target`          | `"_self" \| "_blank" \| "_parent" \| "_top"`                                        | `"_self"`   | Where to open the linked document                            |
-| `rel`             | `string`                                                                            | -           | Relationship between current and linked document             |
-| `color`           | `"primary" \| "secondary" \| "default"`                                             | `"default"` | Color variant of the link                                    |
-| `variant`         | `"ghost" \| "dashed" \| "link" \| "text" \| "flat" \| "button"`                     | `"link"`    | Visual style variant                                         |
-| `size`            | `"heading1" \| "heading2" \| "heading3" \| "base" \| "body1" \| "body2" \| "body3"` | `"base"`    | Typography size                                              |
-| `weight`          | `"light" \| "regular" \| "medium" \| "bold"`                                        | `"regular"` | Font weight                                                  |
-| `disabled`        | `boolean`                                                                           | `false`     | Disable the link interaction                                 |
-| `cover`           | `boolean`                                                                           | `false`     | Make link cover the entire container                         |
-| `nodecor`         | `boolean`                                                                           | `false`     | Prevent text decoration on hover                             |
-| `preventDefault`  | `boolean`                                                                           | `false`     | Prevent default navigation and emit custom event             |
-| `ariaLabel`       | `string \| null`                                                                    | `null`      | Accessible label for screen readers                          |
-| `ariaLabelledBy`  | `string`                                                                            | -           | ID of element that labels this link                          |
-| `ariaDescribedBy` | `string`                                                                            | -           | ID of element that describes this link                       |
-| `ariaCurrent`     | `string \| null`                                                                    | `null`      | Indicates current item in a set (page, step, location, etc.) |
-
-## Slots
-
-| Slot      | Description                                   |
-| --------- | --------------------------------------------- |
-| (default) | Link content (text, icons, or other elements) |
+This component does not expose public methods.
 
 ## Events
 
-| Event            | Type                | Description                                            |
-| ---------------- | ------------------- | ------------------------------------------------------ |
-| `mjo-link:click` | `MjoLinkClickEvent` | Fired when link is clicked with `preventDefault: true` |
+| Event            | Type                | Description                                               | Detail                             |
+| ---------------- | ------------------- | --------------------------------------------------------- | ---------------------------------- |
+| `mjo-link:click` | `MjoLinkClickEvent` | Fired when the link is clicked and preventDefault is true | `{ link: MjoLink, href?: string }` |
 
-### Event Details
+## CSS Variables
 
-```ts
-interface MjoLinkClickEvent extends CustomEvent {
-    detail: {
-        link: MjoLink; // Reference to the link component
-        href?: string; // The href value that was prevented
-    };
-}
-```
+| Variable                           | Description                               | Default                                                                      |
+| ---------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------- |
+| `--mjo-link-font-family`           | Font family of the link                   | `inherit`                                                                    |
+| `--mjo-link-color-default`         | Default text color                        | `currentColor`                                                               |
+| `--mjo-link-color-primary`         | Primary color variant                     | `var(--mjo-primary-color, #1aa8ed)`                                          |
+| `--mjo-link-color-secondary`       | Secondary color variant                   | `var(--mjo-secondary-color, #7dc717)`                                        |
+| `--mjo-link-color-disabled`        | Disabled state color                      | `var(--mjo-disabled-foreground-color, #aaa)`                                 |
+| `--mjo-link-text-decoration`       | Text decoration style                     | `none`                                                                       |
+| `--mjo-link-text-decoration-hover` | Text decoration on hover                  | `underline`                                                                  |
+| `--mjo-link-font-weight`           | Font weight                               | `inherit`                                                                    |
+| `--mjo-link-transition`            | Transition effect                         | `color 0.2s ease, text-decoration 0.2s ease`                                 |
+| `--mjo-link-focus-outline`         | Focus outline style                       | `2px solid`                                                                  |
+| `--mjo-link-focus-outline-color`   | Focus outline color                       | `var(--mjo-primary-color, #1aa8ed)` or `var(--mjo-secondary-color, #7dc717)` |
+| `--mjo-link-focus-outline-offset`  | Focus outline offset                      | `2px`                                                                        |
+| `--mjo-link-focus-outline-width`   | Focus outline width in high contrast mode | `3px`                                                                        |
+| `--mjo-link-focus-border-radius`   | Focus outline border radius               | `2px`                                                                        |
 
-## CSS Custom Properties
+## CSS Parts
 
-### Core Colors
+| Part             | Description                                                                             | Element  |
+| ---------------- | --------------------------------------------------------------------------------------- | -------- |
+| `link`           | The native anchor element                                                               | `<a>`    |
+| `link-text`      | The text wrapper around the link content (only for variant="link")                      | `<span>` |
+| `button`         | The button element (via exportparts from mjo-button when variant is not "link")         | -        |
+| `button-content` | The button content element (via exportparts from mjo-button when variant is not "link") | -        |
 
-| Variable                     | Default                           | Description             |
-| ---------------------------- | --------------------------------- | ----------------------- |
-| `--mjo-link-color-primary`   | `--mjo-primary-color`             | Primary color variant   |
-| `--mjo-link-color-secondary` | `--mjo-secondary-color`           | Secondary color variant |
-| `--mjo-link-color-default`   | `currentColor`                    | Default text color      |
-| `--mjo-link-color-disabled`  | `--mjo-disabled-foreground-color` | Disabled state color    |
+## Accessibility
 
-### Typography & Decoration
+### ARIA Attributes
 
-| Variable                           | Default     | Description              |
-| ---------------------------------- | ----------- | ------------------------ |
-| `--mjo-link-font-family`           | `inherit`   | Font family              |
-| `--mjo-link-font-weight`           | `inherit`   | Font weight              |
-| `--mjo-link-text-decoration`       | `none`      | Text decoration          |
-| `--mjo-link-text-decoration-hover` | `underline` | Text decoration on hover |
+- **`aria-disabled`**: Automatically set to `"true"` when `disabled` is true
+- **`aria-current`**: Can be set via the `ariaCurrent` property to indicate current page or location
+- **`aria-label`**: Can be set via the `ariaLabel` property for custom accessible labels
+- **`aria-labelledby`**: Links the element to another element that labels it
+- **`aria-describedby`**: Links the element to another element that describes it
 
-### Focus & Interaction
+### Role Assignment
 
-| Variable                          | Default                    | Description                 |
-| --------------------------------- | -------------------------- | --------------------------- |
-| `--mjo-link-focus-outline`        | `2px solid`                | Focus outline style         |
-| `--mjo-link-focus-outline-color`  | `--mjo-primary-color`      | Focus outline color         |
-| `--mjo-link-focus-outline-width`  | `3px` (high contrast mode) | Focus outline width         |
-| `--mjo-link-focus-outline-offset` | `2px`                      | Focus outline offset        |
-| `--mjo-link-focus-border-radius`  | `2px`                      | Focus outline border radius |
+- Automatically assigns `role="button"` when:
+    - `variant` is not "link"
+    - `href` is not provided
 
-### Animation
+### Keyboard Navigation
 
-| Variable                | Default                                      | Description          |
-| ----------------------- | -------------------------------------------- | -------------------- |
-| `--mjo-link-transition` | `color 0.2s ease, text-decoration 0.2s ease` | Transition animation |
-
-## ThemeMixin Customization
-
-This component implements `ThemeMixin`, enabling component-specific theming through the `MjoLinkTheme` interface.
-
-### MjoLinkTheme Interface
-
-```ts
-interface MjoLinkTheme {
-    colorPrimary?: string;
-    colorSecondary?: string;
-    colorDefault?: string;
-    colorDisabled?: string;
-    fontFamily?: string;
-    fontWeight?: string;
-    textDecoration?: string;
-    textDecorationHover?: string;
-    focusOutline?: string;
-    focusOutlineColor?: string;
-    focusOutlineWidth?: string;
-    focusOutlineOffset?: string;
-    transition?: string;
-}
-```
-
-### Global Theme Configuration
-
-```ts
-import "mjo-litui/mjo-theme";
-
-const customTheme = {
-    components: {
-        mjoLink: {
-            colorPrimary: "#007bff",
-            colorSecondary: "#6c757d",
-            fontWeight: "500",
-            textDecorationHover: "none",
-            focusOutlineColor: "#007bff",
-            transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-        },
-    },
-};
-```
-
-## Accessibility Features
-
-### WCAG 2.1 Compliance
-
--   **Focus Management**: Proper focus indicators with customizable outline
--   **Screen Reader Support**: Full ARIA label and description support
--   **High Contrast**: Enhanced visibility in high contrast mode
--   **Keyboard Navigation**: Full keyboard accessibility
--   **Motion Respect**: Honors `prefers-reduced-motion` settings
+- **Tab**: Focus the link
+- **Enter/Space**: Activate the link (when role="button")
+- **Enter**: Follow the link (standard behavior)
 
 ### Best Practices
 
-```ts
-// ✅ Good: Descriptive link text
-html`<mjo-link href="/contact">Contact Us</mjo-link>`;
+- Use descriptive link text that makes sense out of context
+- Avoid generic text like "click here" or "read more"
+- For links that open in new windows (`target="_blank"`), inform users either through text or `aria-label`
+- Use `cover` property carefully to ensure the clickable area doesn't interfere with other interactive elements
+- When using `preventDefault`, ensure you provide alternative navigation through the `mjo-link:click` event
 
-// ✅ Good: ARIA label for context
-html`<mjo-link href="/profile" aria-label="View your user profile">Profile</mjo-link>`;
+### Focus Management
 
-// ✅ Good: Current page indication
-html`<mjo-link href="/dashboard" aria-current="page">Dashboard</mjo-link>`;
+- Visible focus indicator with customizable outline
+- Increased outline width in high contrast mode for better visibility
+- Disabled links are removed from tab order (`tabindex="-1"`)
 
-// ❌ Avoid: Generic link text without context
-html`<mjo-link href="/more">Click here</mjo-link>`;
+## Usage Examples
 
-// ❌ Avoid: External links without indication
-html`<mjo-link href="https://example.com">External</mjo-link>`;
-// Better:
-html`<mjo-link href="https://example.com" target="_blank" aria-label="External link (opens in new tab)">External</mjo-link>`;
+### Link with Cover Area
+
+```html
+<div style="position: relative; padding: 20px; background: #f0f0f0;">
+    <h3>Card Title</h3>
+    <p>Card description text</p>
+    <mjo-link href="/details" cover nodecor>Read more</mjo-link>
+</div>
 ```
 
-### Screen Reader Considerations
+### Button-Styled Link
 
--   Links without `href` are treated as buttons with appropriate ARIA roles
--   External links (`target="_blank"`) automatically get `rel="noopener noreferrer"`
--   Disabled links use both `aria-disabled` and visual indication
--   Current page/section indication through `aria-current`
+```html
+<mjo-link href="/signup" variant="button" color="primary"> Sign Up Now </mjo-link>
+```
 
-## Performance Considerations
+### SPA Navigation with preventDefault
 
--   **CSS Variables**: Efficient theming without style recalculation
--   **Event Delegation**: Minimal event listener overhead
--   **Lazy Evaluation**: Computed properties only run when needed
--   **Small Bundle**: Minimal dependencies and optimized imports
+```html
+<mjo-link href="/about" preventDefault @mjo-link:click="${(e) => navigateTo(e.detail.href)}"> About Us </mjo-link>
+```
 
-## Browser Support
+```typescript
+function navigateTo(href?: string) {
+    if (href) {
+        // Custom navigation logic for SPA
+        router.push(href);
+    }
+}
+```
 
--   Modern browsers with Web Components support
--   Graceful degradation in older browsers
--   Full accessibility features in all supported browsers
+### Typography Variants
 
-## Related Components
+```html
+<mjo-link href="/article" size="heading2" weight="bold"> Article Title Link </mjo-link>
 
--   [mjo-button](./mjo-button.md) - For action buttons
--   [mjo-typography](./mjo-typography.md) - For text styling
--   [mjo-theme](./mjo-theme.md) - For global theming
+<mjo-link href="/footnote" size="body2" color="secondary"> Footnote reference </mjo-link>
+```
 
-## Summary
+### Accessibility Enhancement
 
-`<mjo-link>` provides a comprehensive solution for link functionality with:
+```html
+<p id="article-desc">This article discusses advanced CSS techniques</p>
+<mjo-link href="/article/123" aria-describedby="article-desc" aria-label="Read full article about advanced CSS techniques"> Read more </mjo-link>
+```
 
--   **Complete Accessibility**: WCAG 2.1 compliant with comprehensive ARIA support
--   **Flexible Variants**: Traditional links and button-like appearances
--   **Typography Integration**: Consistent sizing with the typography system
--   **Custom Events**: preventDefault handling for SPA navigation
--   **Comprehensive Theming**: Global and component-level customization
--   **Performance Optimized**: Efficient rendering and minimal overhead
--   **Modern Features**: Focus management, reduced motion support, high contrast mode
+### External Link
 
-The component seamlessly integrates with modern web applications while maintaining excellent accessibility and user experience standards.
+```html
+<mjo-link href="https://example.com" target="_blank" color="primary"> Visit External Site (opens in new tab) </mjo-link>
+```
+
+### Custom Styling with CSS Variables
+
+```html
+<style>
+    .custom-link {
+        --mjo-link-color-primary: #ff6b6b;
+        --mjo-link-text-decoration: underline;
+        --mjo-link-text-decoration-hover: none;
+        --mjo-link-focus-outline-color: #ff6b6b;
+    }
+</style>
+
+<mjo-link class="custom-link" href="/custom" color="primary"> Custom Styled Link </mjo-link>
+```
+
+### Styling with CSS Parts
+
+```html
+<style>
+    mjo-link::part(link) {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        background-color: rgba(26, 168, 237, 0.1);
+    }
+
+    mjo-link::part(link):hover {
+        background-color: rgba(26, 168, 237, 0.2);
+    }
+</style>
+
+<mjo-link href="/styled" color="primary"> Link with Custom Background </mjo-link>
+```
+
+## Additional Notes
+
+### Automatic rel Attribute
+
+When `target="_blank"` is set without a custom `rel` attribute, the component automatically adds `rel="noopener noreferrer"` for security reasons.
+
+### Button Variants
+
+When using button variants (`button`, `ghost`, `dashed`, `flat`, `text`), the link internally uses the `mjo-button` component. Color mapping for these variants:
+
+- `color="default"` → maps to `mjo-button` with `color="primary"`
+- `color="primary"` and `color="secondary"` → maintain their respective colors
+
+### Typography Customization
+
+Typography size and weight properties only apply when `variant="link"`. For button variants, styling is controlled by the underlying `mjo-button` component.
+
+### Motion Preferences
+
+The component respects the user's `prefers-reduced-motion` setting by disabling transitions when motion reduction is preferred.

@@ -15,14 +15,26 @@ export class DrawerController implements ReactiveController {
         (this.host = host).addController(this);
     }
 
+    /**
+     * Opens the drawer with the specified parameters.
+     * Creates and displays the drawer container with the provided content, title, and configuration.
+     */
     show({ title, content, position, width, height, blocked, animationDuration, onOpen, onClose }: DrawerShowParams) {
         this.drawerContainer.open({ title, content, position, width, height, blocked, animationDuration, onOpen, onClose });
     }
 
+    /**
+     * Closes the drawer.
+     * Hides the drawer container and triggers the close animation.
+     */
     close() {
         this.drawerContainer.close();
     }
 
+    /**
+     * Sets a custom parent element for the drawer container.
+     * By default, the drawer is appended to document.body.
+     */
     setParent(parent: Element) {
         this.parent = parent;
 

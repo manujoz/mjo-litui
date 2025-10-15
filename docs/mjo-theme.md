@@ -1,698 +1,519 @@
 # mjo-theme
 
-The `mjo-theme` component is the central theming system for mjo-litui that generates CSS custom properties from theme configurations. It supports both global and local scoping, light/dark mode switching, and extensive customization through the `MjoThemeConfig` interface.
+Theme management component that applies consistent design tokens across the application and manages light/dark mode switching.
 
-## Usage
+## Table of Contents
 
-```html
-<mjo-theme scope="global" theme="light"></mjo-theme>
-```
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Methods](#methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
+
+## Use Cases
+
+- Apply global or local theme configuration with design tokens
+- Switch between light and dark modes
+- Persist user theme preference across sessions
+- Customize color palettes, typography, spacing, and component-specific styles
+- Server-side rendering (SSR) theme support
+- Override default theme with custom configuration
 
 ## Import
 
-```ts
+```typescript
 import "mjo-litui/mjo-theme";
 ```
 
-## Features
+## Properties
 
--   **Global/Local Scoping**: Apply themes globally (`:root`) or locally (component's Shadow DOM)
--   **Light/Dark Mode**: Built-in support for light and dark theme modes
--   **CSS Custom Properties**: Automatic generation of CSS variables with `--mjo-` prefix
--   **Theme Merging**: Combines default theme with user configurations
--   **Live Updates**: Reactive theme switching without page reload
--   **Component-Specific Themes**: Individual theming for each component type
--   **Automatic Theme Persistence**: Theme preferences are automatically saved in cookies and restored on page load
-
-## Examples
-
-### Basic Global Theme
-
-Apply a global theme that affects the entire application:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-button";
-
-@customElement("example-global-theme")
-export class ExampleGlobalTheme extends LitElement {
-    render() {
-        return html`
-            <mjo-theme scope="global" theme="light"></mjo-theme>
-            <mjo-button variant="flat" color="primary">Themed Button</mjo-button>
-        `;
-    }
-}
-```
-
-### Dynamic Theme Switching
-
-Toggle between light and dark modes with custom configuration:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-button";
-import type { MjoThemeConfig } from "mjo-litui/types/mjo-theme";
-
-const customColors: Partial<MjoThemeConfig> = {
-    light: {
-        primaryColor: "#1976D2",
-    },
-    dark: {
-        primaryColor: "#0F62FE",
-    },
-};
-
-@customElement("example-theme-toggle")
-export class ExampleThemeToggle extends LitElement {
-    @state() private isDark = false;
-
-    private toggleTheme = () => {
-        this.isDark = !this.isDark;
-    };
-
-    render() {
-        return html`
-            <mjo-theme scope="global" .theme=${this.isDark ? "dark" : "light"} .config=${customColors}> </mjo-theme>
-
-            <div>
-                <mjo-button @click=${this.toggleTheme}> Switch to ${this.isDark ? "Light" : "Dark"} Mode </mjo-button>
-                <mjo-button variant="outline" color="primary"> Primary Button </mjo-button>
-            </div>
-        `;
-    }
-}
-```
-
-### Local Theme Scope
-
-Create isolated theme areas that don't affect the global scope:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-card";
-
-@customElement("example-local-theme")
-export class ExampleLocalTheme extends LitElement {
-    render() {
-        return html`
-            <section>
-                <h3>Global Theme Area</h3>
-                <mjo-button color="primary">Global Button</mjo-button>
-            </section>
-
-            <section>
-                <h3>Local Dark Theme</h3>
-                <mjo-theme theme="dark" scope="local">
-                    <mjo-card>
-                        <mjo-button color="primary">Dark Themed Button</mjo-button>
-                        <mjo-button variant="outline">Another Button</mjo-button>
-                    </mjo-card>
-                </mjo-theme>
-            </section>
-        `;
-    }
-}
-```
-
-### Custom Component Theme
-
-Customize specific component themes:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-textfield";
-import type { MjoThemeConfig } from "mjo-litui/types/mjo-theme";
-
-const componentTheme: Partial<MjoThemeConfig> = {
-    components: {
-        mjoButton: {
-            borderRadius: "12px",
-            fontSize: "16px",
-            padding: "12px 24px",
-        },
-        mjoTextfield: {
-            radius: "8px",
-            fontSize: "14px",
-            padding: "16px",
-        },
-    },
-};
-
-@customElement("example-component-theme")
-export class ExampleComponentTheme extends LitElement {
-    render() {
-        return html`
-            <mjo-theme scope="global" theme="light" .config=${componentTheme}></mjo-theme>
-
-            <div>
-                <mjo-textfield label="Custom Styled Input" placeholder="Themed textfield"> </mjo-textfield>
-                <mjo-button color="primary">Custom Styled Button</mjo-button>
-            </div>
-        `;
-    }
-}
-```
-
-### Complete Theme Configuration
-
-utils/my-theme.ts
-
-```ts
-export const fullTheme: MjoThemeConfig = {
-    light: {
-        colors: {
-            primary: "#2563eb",
-            secondary: "#64748b",
-            success: "#059669",
-            warning: "#d97706",
-            error: "#dc2626",
-            surface: "#ffffff",
-            background: "#f8fafc",
-            onPrimary: "#ffffff",
-            onSecondary: "#ffffff",
-            onSurface: "#1e293b",
-            onBackground: "#1e293b",
-        },
-        typography: {
-            fontFamily: "Inter, system-ui, sans-serif",
-            fontSize: {
-                xs: "0.75rem",
-                sm: "0.875rem",
-                base: "1rem",
-                lg: "1.125rem",
-                xl: "1.25rem",
-            },
-        },
-        spacing: {
-            xs: "0.25rem",
-            sm: "0.5rem",
-            md: "1rem",
-            lg: "1.5rem",
-            xl: "2rem",
-        },
-    },
-    dark: {
-        colors: {
-            primary: "#3b82f6",
-            secondary: "#94a3b8",
-            success: "#10b981",
-            warning: "#f59e0b",
-            error: "#ef4444",
-            surface: "#1e293b",
-            background: "#0f172a",
-            onPrimary: "#ffffff",
-            onSecondary: "#ffffff",
-            onSurface: "#f1f5f9",
-            onBackground: "#f1f5f9",
-        },
-        typography: {
-            fontFamily: "Inter, system-ui, sans-serif",
-            fontSize: {
-                xs: "0.75rem",
-                sm: "0.875rem",
-                base: "1rem",
-                lg: "1.125rem",
-                xl: "1.25rem",
-            },
-        },
-        spacing: {
-            xs: "0.25rem",
-            sm: "0.5rem",
-            md: "1rem",
-            lg: "1.5rem",
-            xl: "2rem",
-        },
-    },
-    components: {
-        button: {
-            borderRadius: "0.5rem",
-            fontWeight: "600",
-        },
-        textfield: {
-            borderRadius: "0.375rem",
-        },
-        card: {
-            borderRadius: "0.75rem",
-            boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
-        },
-    },
-};
-```
-
-```ts
-import type { MjoThemeConfig } from "mjo-litui/types/mjo-theme";
-
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-
-// Your custom theme config
-import { fullTheme } from "utils/my-theme";
-
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-textfield";
-import "mjo-litui/mjo-card";
-
-@customElement("example-complete-theme")
-export class ExampleCompleteTheme extends LitElement {
-    render() {
-        return html`
-            <mjo-theme .config=${fullTheme} scope="global" theme="light"></mjo-theme>
-            <div style="padding: 2rem;">
-                <mjo-card>
-                    <h2>Complete Theme Example</h2>
-                    <p>This example shows a complete theme configuration with custom colors, typography, and component styles.</p>
-
-                    <mjo-button variant="primary">Primary Button</mjo-button>
-                    <mjo-button variant="secondary">Secondary Button</mjo-button>
-
-                    <mjo-textfield label="Custom styled input" placeholder="Type something..."></mjo-textfield>
-                </mjo-card>
-            </div>
-        `;
-    }
-}
-```
-
-### Server-Side Rendering (SSR)
-
-The `mjo-theme` component works seamlessly with server-side rendering. You can use the `createMjoStyleThemeElement` function to generate theme styles on the server and inject them into your HTML before sending it to the client.
-
-```ts
-import type { MjoThemeModes } from "mjo-litui/types/mjo-theme";
-
-import express from "express";
-import { createMjoStyleThemeElement } from "mjo-litui/lib/theme";
-
-// Your custom theme config
-import { fullTheme } from "utils/my-theme";
-
-const app = express();
-
-app.get("*", (req, res) => {
-    // Extract theme from cookies
-    const cookies = req.headers.cookie || "";
-    const theme =
-        (cookies
-            .split("; ")
-            .find((row) => row.startsWith("mjo-theme="))
-            ?.split("=")[1] as MjoThemeModes) || "light";
-
-    // Generate theme styles for server-side rendering
-    const styleTag = createMjoStyleThemeElement({ userConfig: fullTheme, themeMode: theme });
-
-    // Your HTML template
-    let html = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>My App</title>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-        </head>
-        <body>
-            <mjo-theme scope="global" theme="${theme}"></mjo-theme>
-            <main>
-                <mjo-button>Server-rendered themed button</mjo-button>
-            </main>
-            
-        </body>
-        </html>
-    `;
-
-    // Inject theme styles into the head
-    html = html.replace("</head>", `${styleTag}\n</head>`);
-
-    res.send(html);
-});
-```
-
-**Benefits of SSR with mjo-theme:**
-
--   **No Flash of Unstyled Content (FOUC)**: Styles are applied immediately on page load
--   **Cookie Integration**: Automatically respects user's theme preference stored in cookies
--   **Performance**: Critical theme CSS is inlined, reducing render-blocking requests
--   **SEO**: Proper styling is available for server-side rendered content
-
-## Attributes / Properties
-
-| Name     | Type                      | Default   | Description                                                       |
-| -------- | ------------------------- | --------- | ----------------------------------------------------------------- |
-| `scope`  | `'global' \| 'local'`     | `'local'` | Where to apply CSS variables: global (`:root`) or local (`:host`) |
-| `theme`  | `'light' \| 'dark'`       | `'light'` | Theme mode to apply                                               |
-| `config` | `Partial<MjoThemeConfig>` | `{}`      | Custom theme configuration to merge with defaults                 |
+| Property | Type                  | Description                                                                     | Default   | Required |
+| -------- | --------------------- | ------------------------------------------------------------------------------- | --------- | -------- |
+| `theme`  | `MjoThemeModes`       | Current theme mode. Options: `"light"`, `"dark"`                                | `"light"` | No       |
+| `scope`  | `"global" \| "local"` | Theme application scope. `"global"` applies to document, `"local"` to component | `"local"` | No       |
+| `config` | `MjoThemeConfig`      | Custom theme configuration object to override default theme values              | `{}`      | No       |
 
 ## Methods
 
-| Name         | Parameters | Returns | Description                                             |
-| ------------ | ---------- | ------- | ------------------------------------------------------- |
-| `applyTheme` | `()`       | `void`  | Regenerates and applies the current theme configuration |
+| Method        | Parameters             | Description                                    | Return Value    |
+| ------------- | ---------------------- | ---------------------------------------------- | --------------- |
+| `setTheme`    | `theme: MjoThemeModes` | Sets the current theme mode                    | `void`          |
+| `toggleTheme` | None                   | Toggles between light and dark modes           | `MjoThemeModes` |
+| `applyTheme`  | None                   | Applies the current theme configuration to CSS | `void`          |
 
 ## Events
 
-| Name               | Type                                  | Target                                | Description                  |
-| ------------------ | ------------------------------------- | ------------------------------------- | ---------------------------- |
-| `mjo-theme:change` | `CustomEvent<{theme: MjoThemeModes}>` | If global `document`, if local `this` | Fired when the theme changes |
+| Event              | Description                        | Type                  | Detail                     |
+| ------------------ | ---------------------------------- | --------------------- | -------------------------- |
+| `mjo-theme:change` | Dispatched when theme mode changes | `MjoThemeChangeEvent` | `{ theme: MjoThemeModes }` |
 
-## Cookie Management
+## CSS Variables
 
-The `mjo-theme` component automatically handles theme persistence using cookies:
+The `mjo-theme` component generates CSS variables dynamically based on the theme configuration. All variables follow the `--mjo-*` naming pattern. Below are the main categories:
 
--   **Cookie Name**: `mjo-theme`
--   **Storage Duration**: 365 days
--   **Behavior**:
-    -   On first load, saves the current theme to the cookie
-    -   On subsequent loads, restores the theme from the cookie
-    -   Automatically updates the cookie when the theme changes
-    -   The cookie value will be either `"light"` or `"dark"`
+### Border Radius
 
-This means theme preferences persist across browser sessions without any additional configuration.
+| Variable              | Description          | Default |
+| --------------------- | -------------------- | ------- |
+| `--mjo-radius-small`  | Small border radius  | `3px`   |
+| `--mjo-radius-medium` | Medium border radius | `5px`   |
+| `--mjo-radius-large`  | Large border radius  | `10px`  |
 
-This component does not emit any custom events.
+### Typography
 
-## Slots
+| Variable                    | Description           | Default    |
+| --------------------------- | --------------------- | ---------- |
+| `--mjo-font-family`         | Base font family      | `inherit`  |
+| `--mjo-font-size-xxsmall`   | XX-Small font size    | `0.625rem` |
+| `--mjo-font-size-xsmall`    | X-Small font size     | `0.75rem`  |
+| `--mjo-font-size-small`     | Small font size       | `0.875rem` |
+| `--mjo-font-size`           | Medium/base font size | `1rem`     |
+| `--mjo-font-size-large`     | Large font size       | `1.125rem` |
+| `--mjo-font-size-xlarge`    | X-Large font size     | `1.25rem`  |
+| `--mjo-font-size-xxlarge`   | XX-Large font size    | `1.375rem` |
+| `--mjo-font-size-title1`    | Title 1 font size     | `3rem`     |
+| `--mjo-font-size-title2`    | Title 2 font size     | `2rem`     |
+| `--mjo-font-size-title3`    | Title 3 font size     | `1.5rem`   |
+| `--mjo-font-weight-light`   | Light font weight     | `300`      |
+| `--mjo-font-weight-regular` | Regular font weight   | `400`      |
+| `--mjo-font-weight-medium`  | Medium font weight    | `500`      |
+| `--mjo-font-weight-bold`    | Bold font weight      | `700`      |
 
-| Name      | Description                                                    |
-| --------- | -------------------------------------------------------------- |
-| `default` | Content that will inherit the local theme (when scope="local") |
+### Spacing
 
-## CSS Custom Properties
+| Variable              | Description         | Default |
+| --------------------- | ------------------- | ------- |
+| `--mjo-space-xxsmall` | XX-Small spacing    | `3px`   |
+| `--mjo-space-xsmall`  | X-Small spacing     | `6px`   |
+| `--mjo-space-small`   | Small spacing       | `8px`   |
+| `--mjo-space`         | Medium/base spacing | `16px`  |
+| `--mjo-space-large`   | Large spacing       | `24px`  |
+| `--mjo-space-xlarge`  | X-Large spacing     | `32px`  |
+| `--mjo-space-xxlarge` | XX-Large spacing    | `40px`  |
 
-The `mjo-theme` component generates CSS custom properties with the `--mjo-` prefix based on the theme configuration. The following are the main categories:
+### Brand Colors
 
-## CSS Custom Properties
+#### Primary Color
 
-The `mjo-theme` component generates CSS custom properties with the `--mjo-` prefix based on the theme configuration. The following are the main categories:
+| Variable                         | Description              | Default   |
+| -------------------------------- | ------------------------ | --------- |
+| `--mjo-primary-color`            | Primary brand color      | `#1aa8ed` |
+| `--mjo-primary-color-hover`      | Primary color on hover   | `#008ccd` |
+| `--mjo-primary-foreground-color` | Primary foreground color | `#f2f2f2` |
 
-### Basic Properties
+**Primary Color Palette (Shades 50-950):**
 
-| Variable                    | Source Property     | Description                 |
-| --------------------------- | ------------------- | --------------------------- |
-| `--mjo-radius-small`        | `radiusSmall`       | Small border radius         |
-| `--mjo-radius-medium`       | `radiusMedium`      | Medium border radius        |
-| `--mjo-radius-large`        | `radiusLarge`       | Large border radius         |
-| `--mjo-font-size-small`     | `fontSizeSmall`     | Small font size             |
-| `--mjo-font-size-xsmall`    | `fontSizeXsmall`    | Extra small font size       |
-| `--mjo-font-size-xxsmall`   | `fontSizeXxsmall`   | Extra extra small font size |
-| `--mjo-font-size`           | `fontSizeMedium`    | Default font size           |
-| `--mjo-font-size-large`     | `fontSizeLarge`     | Large font size             |
-| `--mjo-font-size-xlarge`    | `fontSizeXlarge`    | Extra large font size       |
-| `--mjo-font-size-xxlarge`   | `fontSizeXxlarge`   | Extra extra large font size |
-| `--mjo-font-weight-light`   | `fontWeightLight`   | Light font weight           |
-| `--mjo-font-weight-regular` | `fontWeightRegular` | Regular font weight         |
-| `--mjo-font-weight-medium`  | `fontWeightMedium`  | Medium font weight          |
-| `--mjo-font-weight-bold`    | `fontWeightBold`    | Bold font weight            |
+- `--mjo-primary-color-50` to `--mjo-primary-color-950`: Complete shade palette from lightest to darkest
+- `--mjo-primary-color-alpha0` to `--mjo-primary-color-alpha9`: Alpha transparency variants (0% to 90% opacity)
 
-### Spacing Variables
+#### Secondary Color
 
-| Variable              | Source Property | Description             |
-| --------------------- | --------------- | ----------------------- |
-| `--mjo-space-xxsmall` | `spaceXxsmall`  | Extra extra small space |
-| `--mjo-space-xsmall`  | `spaceXsmall`   | Extra small space       |
-| `--mjo-space-small`   | `spaceSmall`    | Small space             |
-| `--mjo-space`         | `spaceMedium`   | Default space           |
-| `--mjo-space-large`   | `spaceLarge`    | Large space             |
-| `--mjo-space-xlarge`  | `spaceXlarge`   | Extra large space       |
-| `--mjo-space-xxlarge` | `spaceXxlarge`  | Extra extra large space |
+| Variable                           | Description                | Default   |
+| ---------------------------------- | -------------------------- | --------- |
+| `--mjo-secondary-color`            | Secondary brand color      | `#7dc717` |
+| `--mjo-secondary-color-hover`      | Secondary color on hover   | `#63a900` |
+| `--mjo-secondary-foreground-color` | Secondary foreground color | `#f2f2f2` |
 
-### Color Variables
+**Secondary Color Palette (Shades 50-950):**
 
-| Variable                         | Source Property            | Description                 |
-| -------------------------------- | -------------------------- | --------------------------- |
-| `--mjo-color-white`              | `colors.white`             | White color                 |
-| `--mjo-color-black`              | `colors.black`             | Black color                 |
-| `--mjo-color-error`              | `colors.error`             | Error color                 |
-| `--mjo-color-error-foreground`   | `colors.errorForeground`   | Error color foreground      |
-| `--mjo-color-success`            | `colors.success`           | Success color               |
-| `--mjo-color-success-foreground` | `colors.successForeground` | Success color foreground    |
-| `--mjo-color-warning`            | `colors.warning`           | Warning color               |
-| `--mjo-color-warning-foreground` | `colors.warningForeground` | Warning color foreground    |
-| `--mjo-color-info`               | `colors.info`              | Info color                  |
-| `--mjo-color-info-foreground`    | `colors.infoForeground`    | Info color foreground       |
-| `--mjo-color-default`            | `colors.default`           | Default color               |
-| `--mjo-color-default-foreground` | `colors.defaultForeground` | Default color foreground    |
-| `--mjo-color-gradient`           | `colors.gradient`          | Gradient color              |
-| `--mjo-color-gradient1`          | `colors.gradient1`         | Gradient 1 color            |
-| `--mjo-color-gradient2`          | `colors.gradient2`         | Gradient 2 color            |
-| `--mjo-color-gradient3`          | `colors.gradient3`         | Gradient 3 color            |
-| `--mjo-color-blue`               | `colors.blue.default`      | Blue color                  |
-| `--mjo-color-blue-50`            | `colors.blue.50`           | Blue color shade 50         |
-| `--mjo-color-blue-100`           | `colors.blue.100`          | Blue color shade 100        |
-| `--mjo-color-blue-200`           | `colors.blue.200`          | Blue color shade 200        |
-| `--mjo-color-blue-300`           | `colors.blue.300`          | Blue color shade 300        |
-| `--mjo-color-blue-400`           | `colors.blue.400`          | Blue color shade 400        |
-| `--mjo-color-blue-500`           | `colors.blue.500`          | Blue color shade 500        |
-| `--mjo-color-blue-600`           | `colors.blue.600`          | Blue color shade 600        |
-| `--mjo-color-blue-700`           | `colors.blue.700`          | Blue color shade 700        |
-| `--mjo-color-blue-800`           | `colors.blue.800`          | Blue color shade 800        |
-| `--mjo-color-blue-900`           | `colors.blue.900`          | Blue color shade 900        |
-| `--mjo-color-blue-alpha0`        | `colors.blue.alpha0`       | Blue color alpha 0          |
-| `--mjo-color-blue-alpha1`        | `colors.blue.alpha1`       | Blue color alpha 1          |
-| `--mjo-color-blue-alpha2`        | `colors.blue.alpha2`       | Blue color alpha 2          |
-| `--mjo-color-blue-alpha3`        | `colors.blue.alpha3`       | Blue color alpha 3          |
-| `--mjo-color-blue-alpha4`        | `colors.blue.alpha4`       | Blue color alpha 4          |
-| `--mjo-color-blue-alpha5`        | `colors.blue.alpha5`       | Blue color alpha 5          |
-| `--mjo-color-blue-alpha6`        | `colors.blue.alpha6`       | Blue color alpha 6          |
-| `--mjo-color-blue-alpha7`        | `colors.blue.alpha7`       | Blue color alpha 7          |
-| `--mjo-color-blue-alpha8`        | `colors.blue.alpha8`       | Blue color alpha 8          |
-| `--mjo-color-blue-alpha9`        | `colors.blue.alpha9`       | Blue color alpha 9          |
-| `--mjo-color-cyan`               | `colors.cyan.default`      | Cyan color                  |
-| `--mjo-color-cyan-[50-900]`      | `colors.cyan.*`            | Cyan color shades           |
-| `--mjo-color-cyan-alpha[0-9]`    | `colors.cyan.*`            | Cyan color alpha variants   |
-| `--mjo-color-green`              | `colors.green.default`     | Green color                 |
-| `--mjo-color-green-[50-900]`     | `colors.green.*`           | Green color shades          |
-| `--mjo-color-green-alpha[0-9]`   | `colors.green.*`           | Green color alpha variants  |
-| `--mjo-color-purple`             | `colors.purple.default`    | Purple color                |
-| `--mjo-color-purple-[50-900]`    | `colors.purple.*`          | Purple color shades         |
-| `--mjo-color-purple-alpha[0-9]`  | `colors.purple.*`          | Purple color alpha variants |
-| `--mjo-color-red`                | `colors.red.default`       | Red color                   |
-| `--mjo-color-red-[50-900]`       | `colors.red.*`             | Red color shades            |
-| `--mjo-color-red-alpha[0-9]`     | `colors.red.*`             | Red color alpha variants    |
-| `--mjo-color-yellow`             | `colors.yellow.default`    | Yellow color                |
-| `--mjo-color-yellow-[50-900]`    | `colors.yellow.*`          | Yellow color shades         |
-| `--mjo-color-yellow-alpha[0-9]`  | `colors.yellow.*`          | Yellow color alpha variants |
-| `--mjo-color-pink`               | `colors.pink.default`      | Pink color                  |
-| `--mjo-color-pink-[50-900]`      | `colors.pink.*`            | Pink color shades           |
-| `--mjo-color-pink-alpha[0-9]`    | `colors.pink.*`            | Pink color alpha variants   |
-| `--mjo-color-gray`               | `colors.gray.default`      | Gray color                  |
-| `--mjo-color-gray-[50-900]`      | `colors.gray.*`            | Gray color shades           |
-| `--mjo-color-gray-alpha[0-9]`    | `colors.gray.*`            | Gray color alpha variants   |
+- `--mjo-secondary-color-50` to `--mjo-secondary-color-950`: Complete shade palette from lightest to darkest
+- `--mjo-secondary-color-alpha0` to `--mjo-secondary-color-alpha9`: Alpha transparency variants (0% to 90% opacity)
 
-### Theme Mode Variables
+### Semantic Colors
 
-| Variable                                 | Source Property (light/dark)       | Description                      |
-| ---------------------------------------- | ---------------------------------- | -------------------------------- |
-| `--mjo-primary-color`                    | `primaryColor.default`             | Primary color                    |
-| `--mjo-primary-color-hover`              | `primaryColor.hover`               | Primary color hover state        |
-| `--mjo-primary-color-50`                 | `primaryColor.50`                  | Primary color shade 50           |
-| `--mjo-primary-color-100`                | `primaryColor.100`                 | Primary color shade 100          |
-| `--mjo-primary-color-200`                | `primaryColor.200`                 | Primary color shade 200          |
-| `--mjo-primary-color-300`                | `primaryColor.300`                 | Primary color shade 300          |
-| `--mjo-primary-color-400`                | `primaryColor.400`                 | Primary color shade 400          |
-| `--mjo-primary-color-500`                | `primaryColor.500`                 | Primary color shade 500          |
-| `--mjo-primary-color-600`                | `primaryColor.600`                 | Primary color shade 600          |
-| `--mjo-primary-color-700`                | `primaryColor.700`                 | Primary color shade 700          |
-| `--mjo-primary-color-800`                | `primaryColor.800`                 | Primary color shade 800          |
-| `--mjo-primary-color-900`                | `primaryColor.900`                 | Primary color shade 900          |
-| `--mjo-primary-color-alpha0`             | `primaryColor.alpha0`              | Primary color alpha 0            |
-| `--mjo-primary-color-alpha1`             | `primaryColor.alpha1`              | Primary color alpha 1            |
-| `--mjo-primary-color-alpha2`             | `primaryColor.alpha2`              | Primary color alpha 2            |
-| `--mjo-primary-color-alpha3`             | `primaryColor.alpha3`              | Primary color alpha 3            |
-| `--mjo-primary-color-alpha4`             | `primaryColor.alpha4`              | Primary color alpha 4            |
-| `--mjo-primary-color-alpha5`             | `primaryColor.alpha5`              | Primary color alpha 5            |
-| `--mjo-primary-color-alpha6`             | `primaryColor.alpha6`              | Primary color alpha 6            |
-| `--mjo-primary-color-alpha7`             | `primaryColor.alpha7`              | Primary color alpha 7            |
-| `--mjo-primary-color-alpha8`             | `primaryColor.alpha8`              | Primary color alpha 8            |
-| `--mjo-primary-color-alpha9`             | `primaryColor.alpha9`              | Primary color alpha 9            |
-| `--mjo-primary-foreground-color`         | `primaryForegroundColor.default`   | Primary foreground color         |
-| `--mjo-primary-foreground-color-light`   | `primaryForegroundColor.light`     | Light primary foreground color   |
-| `--mjo-primary-foreground-color-dark`    | `primaryForegroundColor.dark`      | Dark primary foreground color    |
-| `--mjo-secondary-color`                  | `secondaryColor.default`           | Secondary color                  |
-| `--mjo-secondary-color-hover`            | `secondaryColor.hover`             | Secondary color hover state      |
-| `--mjo-secondary-color-50`               | `secondaryColor.50`                | Secondary color shade 50         |
-| `--mjo-secondary-color-100`              | `secondaryColor.100`               | Secondary color shade 100        |
-| `--mjo-secondary-color-200`              | `secondaryColor.200`               | Secondary color shade 200        |
-| `--mjo-secondary-color-300`              | `secondaryColor.300`               | Secondary color shade 300        |
-| `--mjo-secondary-color-400`              | `secondaryColor.400`               | Secondary color shade 400        |
-| `--mjo-secondary-color-500`              | `secondaryColor.500`               | Secondary color shade 500        |
-| `--mjo-secondary-color-600`              | `secondaryColor.600`               | Secondary color shade 600        |
-| `--mjo-secondary-color-700`              | `secondaryColor.700`               | Secondary color shade 700        |
-| `--mjo-secondary-color-800`              | `secondaryColor.800`               | Secondary color shade 800        |
-| `--mjo-secondary-color-900`              | `secondaryColor.900`               | Secondary color shade 900        |
-| `--mjo-secondary-color-alpha0`           | `secondaryColor.alpha0`            | Secondary color alpha 0          |
-| `--mjo-secondary-color-alpha1`           | `secondaryColor.alpha1`            | Secondary color alpha 1          |
-| `--mjo-secondary-color-alpha2`           | `secondaryColor.alpha2`            | Secondary color alpha 2          |
-| `--mjo-secondary-color-alpha3`           | `secondaryColor.alpha3`            | Secondary color alpha 3          |
-| `--mjo-secondary-color-alpha4`           | `secondaryColor.alpha4`            | Secondary color alpha 4          |
-| `--mjo-secondary-color-alpha5`           | `secondaryColor.alpha5`            | Secondary color alpha 5          |
-| `--mjo-secondary-color-alpha6`           | `secondaryColor.alpha6`            | Secondary color alpha 6          |
-| `--mjo-secondary-color-alpha7`           | `secondaryColor.alpha7`            | Secondary color alpha 7          |
-| `--mjo-secondary-color-alpha8`           | `secondaryColor.alpha8`            | Secondary color alpha 8          |
-| `--mjo-secondary-color-alpha9`           | `secondaryColor.alpha9`            | Secondary color alpha 9          |
-| `--mjo-secondary-foreground-color`       | `secondaryForegroundColor.default` | Secondary foreground color       |
-| `--mjo-secondary-foreground-color-light` | `secondaryForegroundColor.light`   | Light secondary foreground color |
-| `--mjo-secondary-foreground-color-dark`  | `secondaryForegroundColor.dark`    | Dark secondary foreground color  |
-| `--mjo-border-color`                     | `borderColor.default`              | Border color                     |
-| `--mjo-border-color-low`                 | `borderColor.low`                  | Low border color                 |
-| `--mjo-border-color-high`                | `borderColor.high`                 | High border color                |
-| `--mjo-background-color`                 | `backgroundColor.default`          | Background color                 |
-| `--mjo-background-color-hover`           | `backgroundColor.hover`            | Background color hover state     |
-| `--mjo-background-color-low`             | `backgroundColor.low`              | Background color low contrast    |
-| `--mjo-background-color-high`            | `backgroundColor.high`             | Background color high contrast   |
-| `--mjo-background-color-card`            | `backgroundColorCard.default`      | Card background color            |
-| `--mjo-background-color-card-low`        | `backgroundColorCard.low`          | Card background color low        |
-| `--mjo-background-color-card-high`       | `backgroundColorCard.high`         | Card background color high       |
-| `--mjo-foreground-color`                 | `foregroundColor.default`          | Foreground/text color            |
-| `--mjo-foreground-color-low`             | `foregroundColor.low`              | Text color low contrast          |
-| `--mjo-foreground-color-high`            | `foregroundColor.high`             | Text color high contrast         |
-| `--mjo-box-shadow`                       | `boxShadow.default`                | Default box shadow               |
-| `--mjo-box-shadow-1`                     | `boxShadow.1`                      | Box shadow level 1               |
-| `--mjo-box-shadow-2`                     | `boxShadow.2`                      | Box shadow level 2               |
-| `--mjo-box-shadow-3`                     | `boxShadow.3`                      | Box shadow level 3               |
-| `--mjo-box-shadow-4`                     | `boxShadow.4`                      | Box shadow level 4               |
-| `--mjo-box-shadow-5`                     | `boxShadow.5`                      | Box shadow level 5               |
-| `--mjo-disabled-color`                   | `disabledColor`                    | Disabled color                   |
-| `--mjo-disabled-foreground-color`        | `disabledForegroundColor`          | Disabled foreground color        |
+| Variable                         | Description              | Default   |
+| -------------------------------- | ------------------------ | --------- |
+| `--mjo-color-white`              | White color              | `#ffffff` |
+| `--mjo-color-black`              | Black color              | `#000000` |
+| `--mjo-color-error`              | Error state color        | `#f44336` |
+| `--mjo-color-error-foreground`   | Error foreground color   | `#ffffff` |
+| `--mjo-color-success`            | Success state color      | `#4caf50` |
+| `--mjo-color-success-foreground` | Success foreground color | `#ffffff` |
+| `--mjo-color-warning`            | Warning state color      | `#ff9800` |
+| `--mjo-color-warning-foreground` | Warning foreground color | `#ffffff` |
+| `--mjo-color-info`               | Info state color         | `#128ada` |
+| `--mjo-color-info-foreground`    | Info foreground color    | `#ffffff` |
+| `--mjo-color-default`            | Default state color      | `#777777` |
+| `--mjo-color-default-foreground` | Default foreground color | `#ffffff` |
 
-### Variable Naming Convention
+### Gradient Colors
 
-All CSS variables follow the kebab-case naming convention:
+| Variable                | Description        | Default                          |
+| ----------------------- | ------------------ | -------------------------------- |
+| `--mjo-color-gradient`  | Default gradient   | Linear gradient with blue tones  |
+| `--mjo-color-gradient1` | Gradient variant 1 | Linear gradient with green tones |
+| `--mjo-color-gradient2` | Gradient variant 2 | Blue to green gradient           |
+| `--mjo-color-gradient3` | Gradient variant 3 | Green to blue gradient           |
 
--   **Basic properties**: `camelCase` → `--mjo-kebab-case` (e.g., `fontSizeSmall` → `--mjo-font-size-small`)
--   **Colors**: `colors.property` → `--mjo-color-kebab-case` (e.g., `colors.blue` → `--mjo-color-blue`)
--   **Color shades**: `colors.color.shade` → `--mjo-color-kebab-shade` (e.g., `colors.blue.500` → `--mjo-color-blue-500`)
--   **Theme modes**: `light/dark.property` → `--mjo-kebab-case` (e.g., `light.primaryColor` → `--mjo-primary-color`)
--   **Components**: `components.mjoComponent.property` → `--mjo-component-kebab-case` (e.g., `components.mjoButton.fontSize` → `--mjo-button-font-size`)
+### Theme Mode Colors
 
-> **Note**: Component-specific CSS variables are documented in each individual component's documentation.
+These colors automatically adapt based on the selected theme mode (light/dark):
 
-## Theme Configuration Interface
+| Variable                           | Description                    | Light Mode     | Dark Mode      |
+| ---------------------------------- | ------------------------------ | -------------- | -------------- |
+| `--mjo-background-color`           | Base background color          | `#efefef`      | `#151515`      |
+| `--mjo-background-color-low`       | Low contrast background        | `#f8f8f8`      | `#101010`      |
+| `--mjo-background-color-high`      | High contrast background       | `#dadada`      | `#252525`      |
+| `--mjo-background-color-hover`     | Background color on hover      | `#eeeeee`      | `#666666`      |
+| `--mjo-background-color-card`      | Card background color          | `#fafafa`      | `#333333`      |
+| `--mjo-background-color-card-low`  | Card low contrast background   | `#ffffff`      | `#222222`      |
+| `--mjo-background-color-card-high` | Card high contrast background  | `#e6e6e6`      | `#555555`      |
+| `--mjo-foreground-color`           | Base foreground/text color     | `#333333`      | `#f0f0f0`      |
+| `--mjo-foreground-color-low`       | Low contrast foreground        | `#666666`      | `#cccccc`      |
+| `--mjo-foreground-color-high`      | High contrast foreground       | `#151515`      | `#ffffff`      |
+| `--mjo-border-color`               | Base border color              | `#dddddd`      | `#555555`      |
+| `--mjo-border-color-low`           | Low contrast border            | `#fcfcfc`      | `#333333`      |
+| `--mjo-border-color-high`          | High contrast border           | `#cccccc`      | `#666666`      |
+| `--mjo-muted-color`                | Muted/disabled color           | Varies by mode | Varies by mode |
+| `--mjo-muted-color-low`            | Low contrast muted color       | Varies by mode | Varies by mode |
+| `--mjo-muted-color-high`           | High contrast muted color      | Varies by mode | Varies by mode |
+| `--mjo-muted-foreground`           | Muted foreground color         | Varies by mode | Varies by mode |
+| `--mjo-muted-foreground-low`       | Low contrast muted foreground  | Varies by mode | Varies by mode |
+| `--mjo-muted-foreground-high`      | High contrast muted foreground | Varies by mode | Varies by mode |
+| `--mjo-disabled-color`             | Disabled state color           | Varies by mode | Varies by mode |
+| `--mjo-disabled-foreground-color`  | Disabled foreground color      | Varies by mode | Varies by mode |
 
-The `MjoThemeConfig` interface provides comprehensive theme customization:
+### Shadows
 
-```ts
-interface MjoThemeConfig {
-    // Basic properties (--mjo-*)
-    radiusSmall?: string; // --mjo-radius-small
-    radiusMedium?: string; // --mjo-radius-medium
-    radiusLarge?: string; // --mjo-radius-large
-    fontSizeSmall?: string; // --mjo-font-size-small
-    fontSizeXsmall?: string; // --mjo-font-size-xsmall
-    fontSizeXxsmall?: string; // --mjo-font-size-xxsmall
-    fontSizeMedium?: string; // --mjo-font-size
-    fontSizeLarge?: string; // --mjo-font-size-large
-    fontSizeXlarge?: string; // --mjo-font-size-xlarge
-    fontSizeXxlarge?: string; // --mjo-font-size-xxlarge
-    fontWeightLight?: string; // --mjo-font-weight-light
-    fontWeightRegular?: string; // --mjo-font-weight-regular
-    fontWeightMedium?: string; // --mjo-font-weight-medium
-    fontWeightBold?: string; // --mjo-font-weight-bold
-    spaceXxsmall?: string; // --mjo-space-xxsmall
-    spaceXsmall?: string; // --mjo-space-xsmall
-    spaceSmall?: string; // --mjo-space-small
-    spaceMedium?: string; // --mjo-space
-    spaceLarge?: string; // --mjo-space-large
-    spaceXlarge?: string; // --mjo-space-xlarge
-    spaceXxlarge?: string; // --mjo-space-xxlarge
+| Variable             | Description     | Default (Light Mode)               |
+| -------------------- | --------------- | ---------------------------------- |
+| `--mjo-box-shadow`   | Base box shadow | `0 0 5px rgba(0, 0, 0, 0.2)`       |
+| `--mjo-box-shadow-1` | Shadow level 1  | `0 0 2px rgba(0, 0, 0, 0.3)`       |
+| `--mjo-box-shadow-2` | Shadow level 2  | `0 0 8px rgba(0, 0, 0, 0.25)`      |
+| `--mjo-box-shadow-3` | Shadow level 3  | `0 0 14px rgba(0, 0, 0, 0.25)`     |
+| `--mjo-box-shadow-4` | Shadow level 4  | `4px 4px 8px rgba(0, 0, 0, 0.3)`   |
+| `--mjo-box-shadow-5` | Shadow level 5  | `4px 4px 14px rgba(0, 0, 0, 0.25)` |
 
-    // Color system (--mjo-color-*)
-    colors?: {
-        white?: string; // --mjo-color-white
-        black?: string; // --mjo-color-black
-        error: string; // --mjo-color-error
-        success: string; // --mjo-color-success
-        warning: string; // --mjo-color-warning
-        info: string; // --mjo-color-info
-        blue?: MjoThemeShadeStructure; // --mjo-color-blue, --mjo-color-blue-[50-900]
-        red?: MjoThemeShadeStructure; // --mjo-color-red, --mjo-color-red-[50-900]
-        green?: MjoThemeShadeStructure; // --mjo-color-green, --mjo-color-green-[50-900]
-        yellow?: MjoThemeShadeStructure; // --mjo-color-yellow, --mjo-color-yellow-[50-900]
-        purple?: MjoThemeShadeStructure; // --mjo-color-purple, --mjo-color-purple-[50-900]
-        cyan?: MjoThemeShadeStructure; // --mjo-color-cyan, --mjo-color-cyan-[50-900]
-        pink?: MjoThemeShadeStructure; // --mjo-color-pink, --mjo-color-pink-[50-900]
-        gray?: MjoThemeShadeStructure; // --mjo-color-gray, --mjo-color-gray-[50-900]
-    };
+### Color Palettes
 
-    // Theme modes
-    light?: MjoThemeMode;
-    dark?: MjoThemeMode;
+The theme provides comprehensive color palettes with shades from 50-950 and alpha variants (alpha0-alpha9) for the following colors:
 
-    // Component themes (--mjo-{component}-*)
-    components?: {
-        mjoButton?: MjoButtonTheme;
-        mjoCalendar?: MjoCalendarTheme;
-        mjoCard?: MjoCardTheme;
-        mjoTextfield?: MjoInputTheme;
-        // ... other component themes
-    };
-}
+- **Blue**: `--mjo-color-blue`, `--mjo-color-blue-50` to `--mjo-color-blue-950`, `--mjo-color-blue-alpha0` to `--mjo-color-blue-alpha9`
+- **Red**: `--mjo-color-red`, `--mjo-color-red-50` to `--mjo-color-red-950`, `--mjo-color-red-alpha0` to `--mjo-color-red-alpha9`
+- **Green**: `--mjo-color-green`, `--mjo-color-green-50` to `--mjo-color-green-950`, `--mjo-color-green-alpha0` to `--mjo-color-green-alpha9`
+- **Yellow**: `--mjo-color-yellow`, `--mjo-color-yellow-50` to `--mjo-color-yellow-950`, `--mjo-color-yellow-alpha0` to `--mjo-color-yellow-alpha9`
+- **Purple**: `--mjo-color-purple`, `--mjo-color-purple-50` to `--mjo-color-purple-950`, `--mjo-color-purple-alpha0` to `--mjo-color-purple-alpha9`
+- **Cyan**: `--mjo-color-cyan`, `--mjo-color-cyan-50` to `--mjo-color-cyan-950`, `--mjo-color-cyan-alpha0` to `--mjo-color-cyan-alpha9`
+- **Pink**: `--mjo-color-pink`, `--mjo-color-pink-50` to `--mjo-color-pink-950`, `--mjo-color-pink-alpha0` to `--mjo-color-pink-alpha9`
+- **Gray**: `--mjo-color-gray`, `--mjo-color-gray-50` to `--mjo-color-gray-950`, `--mjo-color-gray-alpha0` to `--mjo-color-gray-alpha9`
 
-interface MjoThemeMode {
-    primaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string; // --mjo-primary-color
-    primaryForegroundColor?: MjoThemeColorSmall | string; // --mjo-primary-foreground-color
-    secondaryColor?: (MjoThemeShadeStructure & { hover?: string }) | string; // --mjo-secondary-color
-    secondaryForegroundColor?: MjoThemeColorSmall | string; // --mjo-secondary-foreground-color
-    borderColor?: MjoThemeColorContrasts | string; // --mjo-border-color
-    backgroundColor?: ({ hover: string } & MjoThemeColorContrasts) | string; // --mjo-background-color
-    backgroundColorCard?: MjoThemeColorContrasts | string; // --mjo-background-color-card
-    foregroundColor?: MjoThemeColorContrasts | string; // --mjo-foreground-color
-    boxShadow?: MjoThemeBoxShadow; // --mjo-box-shadow
-    disabledColor?: string; // --mjo-disabled-color
-    disabledForegroundColor?: string; // --mjo-disabled-foreground-color
-}
-```
+Each color palette includes:
 
-## Best Practices
+- **Base color**: The default shade (e.g., `--mjo-color-blue`)
+- **Shades 50-950**: 11 progressive shades from lightest (50) to darkest (950)
+- **Alpha variants**: 10 transparency levels from alpha0 (0% opacity) to alpha9 (90% opacity)
 
-1. **Global vs Local Scope**: Use `scope="global"` for application-wide themes and `scope="local"` for isolated sections.
+### Component-Specific Variables
 
-2. **Theme Switching**: Store theme preference in localStorage and restore on page load for better user experience.
+The theme also generates component-specific CSS variables following the pattern `--mjo-[component]-[property]`. See individual component documentation for their specific variables.
 
-3. **Performance**: Avoid frequent theme changes as they trigger CSS recalculation.
+## Accessibility
 
-4. **Custom Properties**: Leverage the generated CSS variables for consistent styling across custom components.
+### Best Practices
 
-5. **Component Themes**: Use component-specific configurations for fine-grained control over individual components.
-
-## Related Components
-
--   [All mjo-litui components](./README.md) - Can be themed using mjo-theme
--   [theming.md](./theming.md) - Complete theming guide and CSS variables reference
-
-## Technical Notes
-
-### Theme Generation Process
-
-1. The component merges the default theme with user-provided configuration
-2. CSS custom properties are generated from the merged configuration
-3. Properties are injected as a `<style>` element in the appropriate scope
-4. The kebab-case naming convention is applied to all CSS variables
-
-### Scope Behavior
-
--   **Global scope (`scope="global"`)**: CSS variables are applied to `:root`, affecting the entire document
--   **Local scope (`scope="local"`)**: CSS variables are applied to `:host`, affecting only the component's shadow DOM and its slotted content
+- Ensure sufficient color contrast between text and backgrounds in both light and dark modes
+- Test theme switching with screen readers to ensure consistent experience
+- Provide visual indication of current theme mode
+- Maintain accessible focus indicators across theme modes
+- Avoid using color alone to convey information
 
 ### Theme Persistence
 
-The component does not automatically persist theme preferences. Implement your own storage mechanism:
+The component automatically stores the user's theme preference in a cookie (`mjo-theme`) for 365 days, ensuring consistent experience across sessions.
 
-```ts
-// Save theme preference
-localStorage.setItem("theme-mode", this.isDark ? "dark" : "light");
+### Global Theme Application
 
-// Restore theme preference
-const savedTheme = localStorage.getItem("theme-mode") as "light" | "dark";
-this.isDark = savedTheme === "dark";
+When `scope="global"`, the theme applies a class (`light` or `dark`) to the `<html>` element, allowing global CSS rules to respond to the theme mode.
+
+## Usage Examples
+
+### Global Theme Configuration
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-theme";
+
+@customElement("app-root")
+export class AppRoot extends LitElement {
+    render() {
+        return html`
+            <mjo-theme
+                scope="global"
+                theme="dark"
+                .config=${{
+                    primaryColor: "#ff6b6b",
+                    primaryForegroundColor: "#ffffff",
+                    radiusMedium: "8px",
+                    fontFamily: "'Inter', sans-serif",
+                }}
+            >
+                <div class="app-content">
+                    <!-- Your application content -->
+                </div>
+            </mjo-theme>
+        `;
+    }
+}
 ```
+
+### Theme Toggle with Event Handling
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import type { MjoTheme } from "mjo-litui/mjo-theme";
+import "mjo-litui/mjo-theme";
+import "mjo-litui/mjo-button";
+
+@customElement("theme-switcher")
+export class ThemeSwitcher extends LitElement {
+    @query("mjo-theme") themeComponent!: MjoTheme;
+
+    render() {
+        return html`
+            <mjo-theme scope="global" @mjo-theme:change=${this.handleThemeChange}>
+                <mjo-button @click=${this.toggleTheme}> Toggle Theme </mjo-button>
+            </mjo-theme>
+        `;
+    }
+
+    private toggleTheme() {
+        const newTheme = this.themeComponent.toggleTheme();
+        console.log("Theme changed to:", newTheme);
+    }
+
+    private handleThemeChange(event: CustomEvent) {
+        console.log("Theme change event:", event.detail.theme);
+    }
+}
+```
+
+### Local Scoped Theme
+
+```typescript
+import { LitElement, html, css } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-theme";
+
+@customElement("card-container")
+export class CardContainer extends LitElement {
+    static styles = css`
+        .card {
+            background: var(--mjo-background-color);
+            color: var(--mjo-foreground-color);
+            border: 1px solid var(--mjo-border-color);
+            border-radius: var(--mjo-radius-medium);
+            padding: var(--mjo-space);
+        }
+    `;
+
+    render() {
+        return html`
+            <mjo-theme
+                scope="local"
+                theme="dark"
+                .config=${{
+                    dark: {
+                        backgroundColor: { default: "#1a1a1a" },
+                        foregroundColor: { default: "#e0e0e0" },
+                    },
+                }}
+            >
+                <div class="card">
+                    <h2>Dark Themed Card</h2>
+                    <p>This card has its own theme scope</p>
+                </div>
+            </mjo-theme>
+        `;
+    }
+}
+```
+
+### Custom Color Palette
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-theme";
+
+@customElement("custom-palette-app")
+export class CustomPaletteApp extends LitElement {
+    render() {
+        return html`
+            <mjo-theme
+                scope="global"
+                .config=${{
+                    colors: {
+                        blue: {
+                            default: "#007bff",
+                            "500": "#007bff",
+                            "600": "#0056b3",
+                            "700": "#003d82",
+                        },
+                    },
+                    primaryColor: {
+                        default: "#007bff",
+                        hover: "#0056b3",
+                        "500": "#007bff",
+                        "600": "#0056b3",
+                    },
+                }}
+            >
+                <!-- Your content -->
+            </mjo-theme>
+        `;
+    }
+}
+```
+
+### Component-Specific Theme Overrides
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import "mjo-litui/mjo-theme";
+import "mjo-litui/mjo-button";
+
+@customElement("themed-buttons")
+export class ThemedButtons extends LitElement {
+    render() {
+        return html`
+            <mjo-theme
+                scope="global"
+                .config=${{
+                    components: {
+                        mjoButton: {
+                            backgroundColor: "#4caf50",
+                            color: "#ffffff",
+                            borderRadius: "20px",
+                            padding: "12px 24px",
+                        },
+                    },
+                }}
+            >
+                <mjo-button>Custom Styled Button</mjo-button>
+            </mjo-theme>
+        `;
+    }
+}
+```
+
+### Programmatic Theme Management
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, query, state } from "lit/decorators.js";
+import type { MjoTheme } from "mjo-litui/mjo-theme";
+import "mjo-litui/mjo-theme";
+
+@customElement("theme-manager")
+export class ThemeManager extends LitElement {
+    @query("mjo-theme") themeComponent!: MjoTheme;
+    @state() currentTheme: "light" | "dark" = "light";
+
+    render() {
+        return html`
+            <mjo-theme scope="global" .theme=${this.currentTheme} @mjo-theme:change=${this.handleThemeChange}>
+                <button @click=${this.setLightTheme}>Light</button>
+                <button @click=${this.setDarkTheme}>Dark</button>
+                <button @click=${this.toggleTheme}>Toggle</button>
+                <p>Current theme: ${this.currentTheme}</p>
+            </mjo-theme>
+        `;
+    }
+
+    private setLightTheme() {
+        this.themeComponent.setTheme("light");
+    }
+
+    private setDarkTheme() {
+        this.themeComponent.setTheme("dark");
+    }
+
+    private toggleTheme() {
+        this.themeComponent.toggleTheme();
+    }
+
+    private handleThemeChange(event: CustomEvent) {
+        this.currentTheme = event.detail.theme;
+    }
+}
+```
+
+### SSR Theme Application
+
+```typescript
+import { MjoThemeSSRGenerator } from "mjo-litui/lib/theme";
+
+// Server-side usage
+const themeStyles = MjoThemeSSRGenerator({
+    userConfig: {
+        primaryColor: "#ff6b6b",
+        fontFamily: "'Inter', sans-serif",
+    },
+    themeMode: "dark",
+});
+
+// Inject into HTML head
+const html = `
+<!DOCTYPE html>
+<html class="dark">
+<head>
+    ${themeStyles}
+</head>
+<body>
+    <!-- Your content -->
+</body>
+</html>
+`;
+```
+
+## Additional Notes
+
+### Theme Configuration Structure
+
+The `MjoThemeConfig` interface supports deep customization:
+
+- **Global tokens**: radius, font sizes, spacing, colors
+- **Mode-specific values**: different values for light/dark modes
+- **Component overrides**: customize individual component styles
+- **Color palettes**: full shade structures with alpha variants
+
+### Theme Merging
+
+Custom configurations are deeply merged with the default theme. Only specified values are overridden, preserving all defaults for unspecified properties.
+
+### Cookie Persistence
+
+The component uses a simple cookie implementation to store theme preferences:
+
+- Cookie name: `mjo-theme`
+- Expiration: 365 days
+- Path: `/`
+- Values: `"light"` or `"dark"`
+
+### Global vs Local Scope
+
+- **Global**: Creates a `<style id="mjo-theme">` element in `document.head`, applies class to `<html>`, and dispatches events on `document`
+- **Local**: Creates a `<style id="mjo-theme">` element in the component's shadow root, applies variables to `:host`, and dispatches events on the component
+
+### CSS Variable Generation
+
+The component automatically converts camelCase configuration keys to kebab-case CSS variables:
+
+- `primaryColor` → `--mjo-primary-color`
+- `fontSizeXlarge` → `--mjo-font-size-xlarge`
+- `components.mjoButton.backgroundColor` → `--mjo-button-background-color`
+
+### Performance Considerations
+
+Theme application is optimized to only update when the `theme` property or `config` changes. The component uses `structuredClone` for deep configuration merging to avoid mutation of the default theme.
+
+### Integration with Other Components
+
+All components in the mjo-litui library automatically consume theme CSS variables. Custom components can also use these variables by referencing them in their styles.

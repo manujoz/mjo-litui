@@ -21,11 +21,6 @@ import "./components/input/mjoint-input-label.js";
 /**
  * @summary Advanced color picker component with multiple formats, accessibility features, and form integration.
  *
- * @description The mjo-color-picker component provides a comprehensive color selection interface that supports
- * multiple color formats (hex, rgb, rgba, hsl, hsla, hwb), includes real-time value display, and offers
- * extensive accessibility features. It integrates seamlessly with the mjo-form system and provides
- * detailed event feedback for color changes and format switching.
- *
  * @fires change - Standard HTML change event when color selection is finalized
  * @fires input - Standard HTML input event during color value changes
  * @fires mjo-color-picker:change - Custom event with detailed color change information
@@ -45,6 +40,24 @@ import "./components/input/mjoint-input-label.js";
  * @csspart helper-text-error-message - The error message container (via mjoint-input-helper-text)
  * @csspart helper-text-success-message - The success message container (via mjoint-input-helper-text)
  * @csspart helper-text-icon - The helper text icon (via mjoint-input-helper-text)
+ *
+ * @cssprop --mjo-color-picker-size-small - Size when size="small" (default: 20px)
+ * @cssprop --mjo-color-picker-size-medium - Size when size="medium" (default: 28px)
+ * @cssprop --mjo-color-picker-size-large - Size when size="large" (default: 36px)
+ * @cssprop --mjo-color-picker-border-style - Border style
+ * @cssprop --mjo-color-picker-border-width - Border width
+ * @cssprop --mjo-color-picker-border-color - Border color in default state
+ * @cssprop --mjo-color-picker-border-color-focus - Border color on focus
+ * @cssprop --mjo-color-picker-box-shadow - Box shadow in default state
+ * @cssprop --mjo-color-picker-box-shadow-focus - Box shadow on focus
+ * @cssprop --mjo-color-picker-border-radius - Border radius
+ * @cssprop --mjo-color-picker-transition - Transition for border and shadow
+ * @cssprop --mjo-color-picker-value-color - Color of the value display text
+ * @cssprop --mjo-color-picker-value-font-size - Font size of the value display (default: 0.75rem)
+ * @cssprop --mjo-color-picker-value-font-weight - Font weight of the value display (default: 500)
+ * @cssprop --mjo-color-picker-label-font-size - Label font size
+ * @cssprop --mjo-color-picker-label-font-weight - Label font weight
+ * @cssprop --mjo-color-picker-label-color - Label text color
  */
 @customElement("mjo-color-picker")
 export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IFormMixin, IInputErrorMixin, IThemeMixin {
@@ -140,10 +153,16 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
         }
     }
 
+    /**
+     * Returns the current color value in the specified format.
+     */
     getValue() {
         return this.value;
     }
 
+    /**
+     * Sets the color value and converts it to the current format.
+     */
     setValue(value: string) {
         try {
             this.value = convertColor(value, this.format);
@@ -154,18 +173,30 @@ export class MjoColorPicker extends ThemeMixin(InputErrorMixin(FormMixin(LitElem
         }
     }
 
+    /**
+     * Opens the native color picker dialog.
+     */
     click() {
         this.inputElement.click();
     }
 
+    /**
+     * Gives focus to the color picker input.
+     */
     focus() {
         this.inputElement.focus();
     }
 
+    /**
+     * Removes focus from the color picker input.
+     */
     blur() {
         this.inputElement.blur();
     }
 
+    /**
+     * Returns the current color value converted to the specified format.
+     */
     getFormattedValue(format: ColorFormat): string {
         if (!this.value) return "";
 

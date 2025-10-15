@@ -1,351 +1,304 @@
 # mjo-avatar
 
-Configurable, theme-aware avatar component for displaying user images, initials, or fallback icons with multiple sizes, shapes, colors, and customization options.
+Configurable avatar component for displaying user images, initials, or fallback icons with multiple sizes, shapes, and colors.
 
-## HTML Usage
+## Index
 
-```html
-<mjo-avatar src="https://example.com/avatar.jpg" alt="User Avatar"></mjo-avatar>
-<mjo-avatar name="John Doe" nameColoured></mjo-avatar>
-<mjo-avatar fallbackIcon="<svg>...</svg>" bordered color="primary"></mjo-avatar>
-<mjo-avatar name="Jane" clickable value="jane-user" bordered color="success"></mjo-avatar>
-```
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Public Methods](#public-methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-## Basic Example
+## Use Cases
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
+- Display user profile pictures with automatic fallback handling
+- Show user initials when no image is available
+- Create interactive avatar selectors in forms
+- Build team member lists and user directories
+- Implement status indicators with colored borders
+- Handle image loading errors gracefully with fallback content
+
+## Import
+
+```javascript
 import "mjo-litui/mjo-avatar";
-
-@customElement("example-avatar-basic")
-export class ExampleAvatarBasic extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <mjo-avatar src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"></mjo-avatar>
-                <mjo-avatar name="John Doe"></mjo-avatar>
-                <mjo-avatar fallbackIcon="person" name="Fallback User"></mjo-avatar>
-                <mjo-avatar name="Jane Smith" nameColoured></mjo-avatar>
-            </div>
-        `;
-    }
-}
 ```
 
-## Sizes and Shapes Example
+## Properties
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-avatar";
+| Property           | Type                                                                                   | Description                                                                      | Default     | Required |
+| ------------------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------- | -------- |
+| `src`              | `string`                                                                               | URL of the avatar image                                                          | `undefined` | No       |
+| `name`             | `string`                                                                               | User name for displaying initials (first letter)                                 | `undefined` | No       |
+| `value`            | `string`                                                                               | Custom value associated with the avatar (useful for clickable avatars)           | `undefined` | No       |
+| `alt`              | `string`                                                                               | Alternative text for the image (uses `name` if not provided)                     | `undefined` | No       |
+| `fallbackIcon`     | `string`                                                                               | Icon to display when image fails to load or no image is provided                 | `undefined` | No       |
+| `size`             | `"small" \| "medium" \| "large"`                                                       | Size of the avatar                                                               | `"medium"`  | No       |
+| `color`            | `"default" \| "primary" \| "secondary" \| "success" \| "warning" \| "info" \| "error"` | Color variant for border (when `bordered` is true)                               | `"default"` | No       |
+| `radius`           | `"none" \| "small" \| "medium" \| "large" \| "full"`                                   | Border radius style                                                              | `"full"`    | No       |
+| `bordered`         | `boolean`                                                                              | Whether to display a colored border around the avatar                            | `false`     | No       |
+| `disabled`         | `boolean`                                                                              | Whether the avatar is disabled (reduced opacity, no interaction)                 | `false`     | No       |
+| `clickable`        | `boolean`                                                                              | Whether the avatar is interactive and can be clicked                             | `false`     | No       |
+| `nameColoured`     | `boolean`                                                                              | Whether to use auto-generated colors for name initials based on the first letter | `false`     | No       |
+| `aria-describedby` | `string`                                                                               | ID of element that describes the avatar                                          | `undefined` | No       |
 
-@customElement("example-avatar-sizes")
-export class ExampleAvatarSizes extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Sizes</h4>
-                    <div style="display: flex; gap: 1rem; align-items: center;">
-                        <mjo-avatar name="S" size="small"></mjo-avatar>
-                        <mjo-avatar name="M" size="medium"></mjo-avatar>
-                        <mjo-avatar name="L" size="large"></mjo-avatar>
-                    </div>
-                </div>
+## Public Methods
 
-                <div>
-                    <h4>Border Radius</h4>
-                    <div style="display: flex; gap: 1rem; align-items: center;">
-                        <mjo-avatar name="□" radius="none"></mjo-avatar>
-                        <mjo-avatar name="▢" radius="small"></mjo-avatar>
-                        <mjo-avatar name="▣" radius="medium"></mjo-avatar>
-                        <mjo-avatar name="●" radius="full"></mjo-avatar>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Colors and Interactive Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-avatar";
-
-@customElement("example-avatar-interactive")
-export class ExampleAvatarInteractive extends LitElement {
-    @state() private lastClicked = "";
-
-    private handleAvatarClick(event: CustomEvent) {
-        this.lastClicked = event.detail.value;
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div>
-                    <h4>Bordered Colors</h4>
-                    <div style="display: flex; gap: 1rem; align-items: center;">
-                        <mjo-avatar name="P" bordered color="primary"></mjo-avatar>
-                        <mjo-avatar name="S" bordered color="secondary"></mjo-avatar>
-                        <mjo-avatar name="✓" bordered color="success"></mjo-avatar>
-                        <mjo-avatar name="⚠" bordered color="warning"></mjo-avatar>
-                        <mjo-avatar name="!" bordered color="error"></mjo-avatar>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Clickable Avatars</h4>
-                    <div style="display: flex; gap: 1rem; align-items: center;">
-                        <mjo-avatar name="Alice" nameColoured clickable value="alice" @mjo-avatar:click=${this.handleAvatarClick}></mjo-avatar>
-                        <mjo-avatar name="Bob" nameColoured clickable value="bob" @mjo-avatar:click=${this.handleAvatarClick}></mjo-avatar>
-                        <mjo-avatar name="Disabled" clickable disabled value="disabled"></mjo-avatar>
-                    </div>
-                    ${this.lastClicked ? html`<p>Last clicked: <strong>${this.lastClicked}</strong></p>` : ""}
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## ThemeMixin Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import type { MjoAvatarTheme } from "mjo-litui/types";
-import "mjo-litui/mjo-avatar";
-
-@customElement("example-avatar-themed")
-export class ExampleAvatarThemed extends LitElement {
-    private customTheme: MjoAvatarTheme = {
-        backgroundColor: "#6366f1",
-        borderWidth: "3px",
-        fallbackColor: "#ffffff",
-        nameColor: "#ffffff",
-        sizeSmall: "36px",
-        sizeMedium: "48px",
-        sizeLarge: "64px",
-    };
-
-    render() {
-        return html`
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <mjo-avatar name="T" size="small" bordered color="primary" .theme=${this.customTheme}></mjo-avatar>
-                <mjo-avatar name="H" size="medium" bordered color="primary" .theme=${this.customTheme}></mjo-avatar>
-                <mjo-avatar name="E" size="large" bordered color="primary" .theme=${this.customTheme}></mjo-avatar>
-            </div>
-        `;
-    }
-}
-```
-
-## Attributes / Properties
-
-| Name              | Type                                                                                   | Default     | Reflects | Description                                                              |
-| ----------------- | -------------------------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------ |
-| `src`             | `string \| undefined`                                                                  | `undefined` | no       | Image URL to display in the avatar                                       |
-| `alt`             | `string \| undefined`                                                                  | `undefined` | no       | Alternative text for the image (falls back to `name` if not provided)    |
-| `name`            | `string \| undefined`                                                                  | `undefined` | no       | Name used to generate initials when image is not available               |
-| `size`            | `"small" \| "medium" \| "large"`                                                       | `"medium"`  | no       | Controls the overall size of the avatar                                  |
-| `radius`          | `"small" \| "medium" \| "large" \| "full" \| "none"`                                   | `"full"`    | no       | Border radius applied to the avatar (full = circle)                      |
-| `color`           | `"default" \| "primary" \| "secondary" \| "success" \| "warning" \| "info" \| "error"` | `"default"` | no       | Color scheme for borders when `bordered` is true                         |
-| `bordered`        | `boolean`                                                                              | `false`     | yes      | Adds a colored border around the avatar                                  |
-| `disabled`        | `boolean`                                                                              | `false`     | yes      | Applies disabled styling (reduced opacity)                               |
-| `clickable`       | `boolean`                                                                              | `false`     | no       | Makes the avatar clickable and dispatches `mjo-avatar:click` events      |
-| `nameColoured`    | `boolean`                                                                              | `false`     | no       | Applies automatic color generation based on the first letter of the name |
-| `fallbackIcon`    | `string \| undefined`                                                                  | `undefined` | no       | Custom icon to use as fallback when image and name are not available     |
-| `value`           | `string \| undefined`                                                                  | `undefined` | no       | Custom value passed in the `mjo-avatar:click` event detail               |
-| `ariaDescribedby` | `string \| undefined`                                                                  | `undefined` | no       | References additional descriptive content for screen readers             |
-
-### Accessibility Properties (Native Lit Support)
-
-The component supports standard HTML accessibility attributes through Lit's native property binding:
-
-| Attribute       | Usage                                     | Description                                           |
-| --------------- | ----------------------------------------- | ----------------------------------------------------- |
-| `aria-label`    | `aria-label="Custom avatar description"`  | Provides accessible label for screen readers          |
-| `tabindex`      | `tabindex="0"` or `tabindex="-1"`         | Controls keyboard navigation (automatically managed)  |
-| `role`          | Automatically set based on context        | Dynamic: `"button"`, `"img"`, or `"presentation"`     |
-| `aria-disabled` | Automatically set when `disabled` is true | Communicates disabled state to assistive technologies |
-
-## Slots
-
-| Slot      | Description                                                   |
-| --------- | ------------------------------------------------------------- |
-| (default) | Currently not implemented; content is provided via properties |
+| Method    | Parameters | Description                                                                                                     | Return |
+| --------- | ---------- | --------------------------------------------------------------------------------------------------------------- | ------ |
+| `click()` | None       | Programmatically trigger a click event on the avatar. Only works when the avatar is clickable and not disabled. | `void` |
 
 ## Events
 
-| Event              | Detail                | Emitted When                         | Notes                                                             |
-| ------------------ | --------------------- | ------------------------------------ | ----------------------------------------------------------------- |
-| `mjo-avatar:click` | `{ value: string }`   | Avatar is clicked (when `clickable`) | Contains `value` prop or `name` prop as fallback, or empty string |
-| `mjo-avatar:error` | `{ message: string }` | Image fails to load                  | Provides error message for debugging and accessibility purposes   |
-
-## CSS Parts
-
-| Part              | Description                                        |
-| ----------------- | -------------------------------------------------- |
-| `container`       | The main avatar container element                  |
-| `image-container` | The image/content container                        |
-| `fallback`        | The fallback content container                     |
-| `name`            | The name content container                         |
-| `image`           | The actual image element (when using src)          |
-| `icon`            | The fallback icon element (exported from mjo-icon) |
+| Event              | Description                                                                         | Type                  | Detail                                                    |
+| ------------------ | ----------------------------------------------------------------------------------- | --------------------- | --------------------------------------------------------- |
+| `mjo-avatar:click` | Fired when the avatar is clicked (only when `clickable` is `true` and not disabled) | `MjoAvatarClickEvent` | `{ value: string }` - The `value` or `name` of the avatar |
+| `mjo-avatar:error` | Fired when the image fails to load                                                  | `MjoAvatarErrorEvent` | `{ message: string }` - Error message                     |
 
 ## CSS Variables
 
-The component provides extensive customization through CSS variables with fallbacks to the global design system.
+| Variable                            | Description                                                           | Default                     |
+| ----------------------------------- | --------------------------------------------------------------------- | --------------------------- |
+| `--mjo-avatar-background-color`     | Background color for the avatar container                             | `var(--mjo-color-gray-400)` |
+| `--mjo-avatar-fallback-color`       | Text/icon color for fallback content                                  | `var(--mjo-color-gray-100)` |
+| `--mjo-avatar-name-color`           | Text color for name initials (overridden when `nameColoured` is true) | `var(--mjo-color-gray-100)` |
+| `--mjo-avatar-border-color`         | Border color for the avatar when `color="default"`                    | `var(--mjo-color-gray-300)` |
+| `--mjo-avatar-border-width`         | Border width when `bordered` is true                                  | `3px`                       |
+| `--mjo-avatar-size-small`           | Size for small avatars                                                | `32px`                      |
+| `--mjo-avatar-size-medium`          | Size for medium avatars                                               | `44px`                      |
+| `--mjo-avatar-size-large`           | Size for large avatars                                                | `54px`                      |
+| `--mjo-avatar-fallback-size-small`  | Font size for small fallback content (icons and initials)             | `18px`                      |
+| `--mjo-avatar-fallback-size-medium` | Font size for medium fallback content (icons and initials)            | `28px`                      |
+| `--mjo-avatar-fallback-size-large`  | Font size for large fallback content (icons and initials)             | `40px`                      |
+| `--mjo-avatar-radius-small`         | Border radius for small rounded avatars                               | `4px`                       |
+| `--mjo-avatar-radius-medium`        | Border radius for medium rounded avatars                              | `8px`                       |
+| `--mjo-avatar-radius-large`         | Border radius for large rounded avatars                               | `12px`                      |
 
-| Variable                            | Fallback               | Used For                                   |
-| ----------------------------------- | ---------------------- | ------------------------------------------ |
-| `--mjo-avatar-size-small`           | `32px`                 | Small avatar dimensions                    |
-| `--mjo-avatar-size-medium`          | `44px`                 | Medium avatar dimensions                   |
-| `--mjo-avatar-size-large`           | `54px`                 | Large avatar dimensions                    |
-| `--mjo-avatar-fallback-size-small`  | `18px`                 | Small fallback icon/text size              |
-| `--mjo-avatar-fallback-size-medium` | `28px`                 | Medium fallback icon/text size             |
-| `--mjo-avatar-fallback-size-large`  | `40px`                 | Large fallback icon/text size              |
-| `--mjo-avatar-radius-small`         | `4px`                  | Small border radius option                 |
-| `--mjo-avatar-radius-medium`        | `8px`                  | Medium border radius option                |
-| `--mjo-avatar-radius-large`         | `12px`                 | Large border radius option                 |
-| `--mjo-avatar-background-color`     | `--mjo-color-gray-400` | Default background color                   |
-| `--mjo-avatar-fallback-color`       | `--mjo-color-gray-100` | Fallback icon color                        |
-| `--mjo-avatar-name-color`           | `--mjo-color-gray-100` | Name initial text color (when not colored) |
-| `--mjo-avatar-border-color`         | `--mjo-color-gray-300` | Default border color                       |
-| `--mjo-avatar-border-width`         | `3px`                  | Border thickness                           |
+## CSS Parts
 
-### Semantic Border Colors
+| Part              | Description                                                  | Element    |
+| ----------------- | ------------------------------------------------------------ | ---------- |
+| `container`       | The main avatar container element                            | `<div>`    |
+| `image-container` | The image/content container                                  | `<div>`    |
+| `fallback`        | The fallback icon container (only when using `fallbackIcon`) | `<div>`    |
+| `name`            | The name initials container (only when using `name`)         | `<div>`    |
+| `image`           | The actual image element (only when using `src`)             | `<img>`    |
+| `icon`            | The fallback icon element (exported from `mjo-icon`)         | `mjo-icon` |
 
-The component uses the global semantic color system for border colors:
+## Accessibility
 
--   `--mjo-primary-color` (primary)
--   `--mjo-secondary-color` (secondary)
--   `--mjo-success-color` (success)
--   `--mjo-warning-color` (warning)
--   `--mjo-info-color` (info)
--   `--mjo-error-color` (error)
+The `mjo-avatar` component implements comprehensive accessibility features:
 
-## ThemeMixin Customization
+### ARIA Roles and Attributes
 
-This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to customize specific instances. Properties are automatically converted from camelCase to CSS variables with the pattern: `--mjo-avatar-{property-name}`.
+- **Dynamic role assignment**: Automatically assigns the appropriate ARIA role based on context:
+    - `role="button"` when `clickable` is true
+    - `role="img"` when displaying an image
+    - `role="presentation"` for decorative avatars
+- **Computed aria-label**: Automatically generates descriptive labels:
+    - For clickable avatars: `"Click to interact with [name/value]"`
+    - For non-clickable avatars: `"Avatar for [name]"`
+    - Can be overridden with custom `ariaLabel` property
+- **aria-describedby**: Support for linking to descriptive elements
+- **aria-disabled**: Properly indicates disabled state
 
-### MjoAvatarTheme Interface
+### Keyboard Interaction
 
-```ts
-interface MjoAvatarTheme {
-    backgroundColor?: string;
-    borderColor?: string;
-    borderWidth?: string;
-    fallbackColor?: string;
-    fallbackSizeSmall?: string;
-    fallbackSizeMedium?: string;
-    fallbackSizeLarge?: string;
-    nameColor?: string;
-    nameAutoBackgroundColor?: string;
-    nameAutoForegroundColor?: string;
-    radiusSmall?: string;
-    radiusMedium?: string;
-    radiusLarge?: string;
-    sizeSmall?: string;
-    sizeMedium?: string;
-    sizeLarge?: string;
-}
+When `clickable` is true:
+
+- **Enter** or **Space**: Activates the avatar click action
+- **Tab**: Focuses the avatar (respects `tabIndex` property)
+- **Visual focus indicator**: Displays outline on focus
+
+### Best Practices
+
+- Always provide a `name` or custom `ariaLabel` for screen reader context
+- Use `alt` text for images that convey important information
+- Ensure sufficient color contrast when using custom colors
+- Consider providing a `fallbackIcon` for better error handling
+- When grouping multiple avatars, ensure each has a unique identifier
+
+## Usage Examples
+
+### Basic Image Avatar
+
+```html
+<mjo-avatar src="https://example.com/user-photo.jpg" name="John Doe" alt="John Doe profile picture" size="medium"></mjo-avatar>
 ```
 
-### ThemeMixin Example
+### Name Initials
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import type { MjoAvatarTheme } from "mjo-litui/types";
-import "mjo-litui/mjo-avatar";
+When no image is provided, the component displays the first letter of the name:
 
-@customElement("example-avatar-themed")
-export class ExampleAvatarThemed extends LitElement {
-    private customTheme: MjoAvatarTheme = {
-        backgroundColor: "#6366f1",
-        borderWidth: "3px",
-        fallbackColor: "#ffffff",
-        nameColor: "#ffffff",
-        sizeSmall: "36px",
-        sizeMedium: "48px",
-        sizeLarge: "64px",
-        radiusSmall: "6px",
-        radiusMedium: "12px",
-        radiusLarge: "18px",
-    };
+```html
+<mjo-avatar name="Jane Smith" size="medium" color="primary" bordered></mjo-avatar>
+```
 
-    render() {
-        return html`
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <mjo-avatar name="Themed" size="small" radius="small" bordered color="primary" .theme=${this.customTheme}></mjo-avatar>
-                <mjo-avatar name="Custom" size="medium" radius="medium" bordered color="primary" .theme=${this.customTheme}></mjo-avatar>
-                <mjo-avatar name="Avatar" size="large" radius="large" bordered color="primary" .theme=${this.customTheme}></mjo-avatar>
-            </div>
-        `;
+### Fallback Icon
+
+Use a custom icon when no image or name is available:
+
+```html
+<mjo-avatar fallbackIcon="mjo-icons:user" size="medium" color="secondary"></mjo-avatar>
+```
+
+### Auto-generated Colors
+
+The `nameColoured` property automatically generates background and text colors based on the first letter of the name:
+
+```html
+<mjo-avatar name="Alice Johnson" nameColoured size="medium"></mjo-avatar>
+
+<mjo-avatar name="Bob Wilson" nameColoured size="medium"></mjo-avatar>
+
+<mjo-avatar name="Carol Davis" nameColoured size="medium"></mjo-avatar>
+```
+
+Each name will have a different color based on its first letter, providing visual distinction.
+
+### Programmatic Interaction
+
+```html
+<mjo-avatar id="user-avatar" src="https://example.com/user.jpg" name="User Name" value="user-123" clickable size="large"></mjo-avatar>
+
+<button id="trigger-btn">Click Avatar Programmatically</button>
+
+<script>
+    const avatar = document.getElementById("user-avatar");
+    const button = document.getElementById("trigger-btn");
+
+    // Programmatic click
+    button.addEventListener("click", () => {
+        avatar.click();
+    });
+</script>
+```
+
+### Event Handling
+
+```html
+<mjo-avatar
+    id="interactive-avatar"
+    src="https://example.com/avatar.jpg"
+    name="Interactive User"
+    value="user-456"
+    clickable
+    size="medium"
+    color="primary"
+    bordered
+></mjo-avatar>
+
+<script>
+    const avatar = document.getElementById("interactive-avatar");
+
+    // Handle click event
+    avatar.addEventListener("mjo-avatar:click", (event) => {
+        console.log("Avatar clicked:", event.detail.value);
+        // Output: "Avatar clicked: user-456"
+    });
+
+    // Handle image error
+    avatar.addEventListener("mjo-avatar:error", (event) => {
+        console.error("Image failed to load:", event.detail.message);
+        // Optionally update the avatar with a fallback
+    });
+</script>
+```
+
+### Custom Styling with CSS Parts
+
+```html
+<style>
+    /* Custom border styling */
+    mjo-avatar::part(container) {
+        border: 2px solid gold;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
-}
+
+    /* Custom image styling */
+    mjo-avatar::part(image) {
+        filter: grayscale(50%);
+        transition: filter 0.3s ease;
+    }
+
+    mjo-avatar:hover::part(image) {
+        filter: grayscale(0%);
+    }
+
+    /* Custom initials styling */
+    mjo-avatar::part(name) {
+        font-family: "Arial", sans-serif;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    /* Custom icon color */
+    mjo-avatar::part(icon) {
+        color: #ff6b6b;
+    }
+</style>
+
+<mjo-avatar name="Styled Avatar" size="large" radius="medium"></mjo-avatar>
 ```
 
-## Accessibility Features
+### Avatar Group
 
-The `mjo-avatar` component includes comprehensive accessibility support:
+Create a group of avatars representing team members:
 
-### Automatic Accessibility Features
+```html
+<style>
+    .avatar-group {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
 
--   **Dynamic Roles**: Automatically sets appropriate `role` attributes:
+    /* Overlapping effect */
+    .avatar-group-stacked {
+        display: flex;
+        align-items: center;
+    }
 
-    -   `role="button"` for clickable avatars
-    -   `role="img"` for avatars with images
-    -   `role="presentation"` for purely decorative avatars
+    .avatar-group-stacked mjo-avatar {
+        margin-left: -12px;
+        border: 2px solid white;
+    }
 
--   **ARIA Labels**: Intelligent `aria-label` generation:
+    .avatar-group-stacked mjo-avatar:first-child {
+        margin-left: 0;
+    }
+</style>
 
-    -   Clickable: "Click to interact with [name/value/avatar]"
-    -   Named: "Avatar for [name]"
-    -   Generic: "Avatar"
+<!-- Normal spacing -->
+<div class="avatar-group">
+    <mjo-avatar src="https://example.com/user1.jpg" name="User 1" size="medium" clickable value="user-1"></mjo-avatar>
+    <mjo-avatar src="https://example.com/user2.jpg" name="User 2" size="medium" clickable value="user-2"></mjo-avatar>
+    <mjo-avatar name="User 3" size="medium" nameColoured clickable value="user-3"></mjo-avatar>
+    <mjo-avatar fallbackIcon="mjo-icons:more" size="medium" color="info" clickable value="more-users"></mjo-avatar>
+</div>
 
--   **Keyboard Navigation**: Full keyboard support:
+<!-- Stacked/overlapping -->
+<div class="avatar-group-stacked">
+    <mjo-avatar src="https://example.com/user1.jpg" name="User 1" size="medium"></mjo-avatar>
+    <mjo-avatar src="https://example.com/user2.jpg" name="User 2" size="medium"></mjo-avatar>
+    <mjo-avatar name="User 3" size="medium" nameColoured></mjo-avatar>
+    <mjo-avatar fallbackIcon="mjo-icons:more" size="medium" color="default"></mjo-avatar>
+</div>
+```
 
-    -   `Enter` and `Space` keys activate clickable avatars
-    -   Automatic `tabindex` management (0 for clickable, -1 for non-clickable)
-    -   Visual focus indicators with `:focus-visible`
+## Additional Notes
 
--   **State Communication**:
-    -   `aria-disabled="true"` when avatar is disabled
-    -   Proper state changes communicated to screen readers
-
-### Motion and Preference Support
-
--   **Reduced Motion**: Respects `prefers-reduced-motion` user setting
--   **Focus Management**: Clear visual focus indicators for keyboard users
--   **Color Contrast**: Automatic color generation considers readability
-
-## Summary
-
-`<mjo-avatar>` provides a comprehensive solution for displaying user avatars with intelligent fallback handling, automatic color generation, extensive customization options, and full accessibility support. The component gracefully handles image loading failures, supports multiple display modes (image, custom fallback icons, initials), and integrates seamlessly with the global design system.
-
-Key features include:
-
--   **Smart Fallback System**: Prioritizes image → custom fallback icon → name initials → empty state
--   **Interactive Capabilities**: Optional `clickable` behavior with custom event values
--   **Automatic Color Generation**: `nameColoured` creates consistent colors based on initials
--   **Extensive Customization**: ThemeMixin support for instance-specific styling
--   **Semantic Color System**: Integrates with the global design tokens
--   **Full Accessibility Support**: WCAG 2.1 compliant with keyboard navigation, screen reader support, and dynamic ARIA attributes
--   **Error Handling**: Graceful fallback with `mjo-avatar:error` events for debugging
--   **Motion Preferences**: Respects user's `prefers-reduced-motion` setting
-
-### Usage Best Practices
-
--   Use meaningful `alt` text for images or `aria-label` for better accessibility
--   Leverage the `nameColoured` feature for consistent visual identity
--   Implement `mjo-avatar:error` event handlers for graceful error handling
--   Use the semantic color system (`color` property) for consistent theming
--   Consider the `clickable` property for interactive user interfaces
--   Apply ThemeMixin for instance-specific customizations while maintaining design consistency
+- **Intelligent fallback hierarchy**: The component automatically falls back in this order: `src` → `fallbackIcon` → `name` initials → empty container
+- **SSR support**: The component handles server-side rendering and checks image loading status on hydration
+- **Automatic color generation**: When `nameColoured` is true, the component uses a predefined palette of 17 colors based on character codes
+- **Click animation**: Clickable avatars include a subtle scale animation on click for visual feedback
+- **Reduced motion support**: Animations are disabled when users prefer reduced motion
+- **Border radius adjustment**: When `bordered` is true, the inner content radius automatically adjusts to maintain consistent appearance
+- **Focus management**: Properly manages focus states and keyboard navigation when clickable
+- **Image error handling**: Automatically displays fallback content when images fail to load and emits an error event

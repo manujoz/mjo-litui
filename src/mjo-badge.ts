@@ -15,15 +15,19 @@ import "./mjo-typography.js";
  * @summary Positioned notification badge component with comprehensive accessibility support and theming.
  *
  * @description The mjo-badge component displays informational content over other elements using absolute positioning.
- * It supports multiple visual variants (solid, flat, ghost, brilliant), color schemes, sizes, and positions.
+ * It supports multiple visual variants (solid, flat, ghost, brilliant, shadow), color schemes, sizes, and positions.
  * The component includes automatic count limiting, click handling, keyboard navigation, and comprehensive ARIA support.
  *
- * @fires mjo-badge:click - Fired when the badge is clicked (only when clickable is true)
- *
  * @slot - Contains the element over which the badge will be positioned
+ * @fires mjo-badge:click - Fired when the badge is clicked (only when clickable is true)
  * @csspart container - The main badge container element
  * @csspart icon - The icon element (via exportparts from mjo-icon)
  * @csspart label - The typography element (via exportparts from mjo-typography)
+ * @cssprop --mjo-badge-background-color - Background color for the badge (overrides variant-based color)
+ * @cssprop --mjo-badge-color - Text/icon color for the badge (overrides variant-based color)
+ * @cssprop --mjo-badge-border-width - Width of the badge border (default: 2px)
+ * @cssprop --mjo-badge-animation-duration - Duration of the show/hide animation (default: 0.2s)
+ * @cssprop --mjo-badge-box-shadow - Box shadow for shadow variant
  */
 @customElement("mjo-badge")
 export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -86,14 +90,23 @@ export class MjoBadge extends ThemeMixin(LitElement) implements IThemeMixin {
         this.#setBadgeCssVars();
     }
 
+    /**
+     * Programmatically hide the badge.
+     */
     hideBadge() {
         this.show = false;
     }
 
+    /**
+     * Programmatically show the badge.
+     */
     showBadge() {
         this.show = true;
     }
 
+    /**
+     * Toggle the badge visibility between shown and hidden.
+     */
     toggleBadge() {
         this.show = !this.show;
     }

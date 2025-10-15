@@ -1,32 +1,95 @@
 # mjo-grid
 
-Flexible CSS Grid layout component providing responsive grid systems with auto-fill, auto-fit, and fixed column modes. Ideal for creating responsive layouts without complex media queries.
+Flexible CSS Grid layout component providing responsive grid systems with auto-fill, auto-fit, and fixed column modes. Simplifies responsive layouts without complex media queries.
 
-## HTML Usage
+## Index
 
-```html
-<mjo-grid columns="3" gap="1rem">
-    <div>Item 1</div>
-    <div>Item 2</div>
-    <div>Item 3</div>
-</mjo-grid>
+1. [Use Cases](#use-cases)
+2. [Import](#import)
+3. [Properties](#properties)
+4. [CSS Variables](#css-variables)
+5. [Accessibility](#accessibility)
+6. [Usage Examples](#usage-examples)
+7. [Additional Notes](#additional-notes)
 
-<mjo-grid mode="fill" minWidthRow="250px" gap="1.5rem">
-    <div>Responsive Item 1</div>
-    <div>Responsive Item 2</div>
-    <div>Responsive Item 3</div>
-</mjo-grid>
+## Use Cases
+
+The `mjo-grid` component is designed for:
+
+- Responsive card grids that automatically adjust to available space
+- Dashboard layouts with consistent metric displays
+- Photo galleries and image grids
+- Product listings and catalog displays
+- Form field layouts with automatic wrapping
+- Multi-column content layouts without media queries
+- Content sections with controlled gap spacing
+
+## Import
+
+```typescript
+import "mjo-litui/mjo-grid";
 ```
 
-## Basic Example
+## Properties
 
-```ts
+| Property      | Type                           | Default     | Description                                                                           | Required |
+| ------------- | ------------------------------ | ----------- | ------------------------------------------------------------------------------------- | -------- |
+| `columns`     | `number`                       | `4`         | Number of columns when `mode="columns"`                                               | No       |
+| `autoRows`    | `Properties["gridAutoRows"]`   | `"auto"`    | Height of automatically created rows (CSS grid-auto-rows value)                       | No       |
+| `flow`        | `Properties["gridAutoFlow"]`   | `""`        | Grid auto-flow direction (e.g., "row", "column", "dense")                             | No       |
+| `gap`         | `Properties["gap"]`            | `"1em"`     | Gap between grid items (supports any CSS gap value)                                   | No       |
+| `maxWidthRow` | `string \| undefined`          | `undefined` | Maximum width of each column when `mode="fill"` or `mode="fit"` (defaults to `"1fr"`) | No       |
+| `minWidthRow` | `string`                       | `"1fr"`     | Minimum width of each column when `mode="fill"` or `mode="fit"`                       | No       |
+| `mode`        | `"fill" \| "fit" \| "columns"` | `"columns"` | Grid layout mode (see mode descriptions below)                                        | No       |
+
+### Mode Descriptions
+
+- **`columns`**: Creates a fixed number of columns specified by the `columns` property. Each column has equal width (`minmax(0, 1fr)`).
+- **`fill`**: Uses CSS Grid's `auto-fill` to create as many columns as possible based on `minWidthRow` and available space. Empty columns are created if space allows.
+- **`fit`**: Uses CSS Grid's `auto-fit` to create columns based on `minWidthRow` and automatically collapses empty columns, allowing content to stretch.
+
+## CSS Variables
+
+The component uses internal CSS custom properties that are set programmatically based on the properties:
+
+| Variable                         | Description                          | Set By Property                                 |
+| -------------------------------- | ------------------------------------ | ----------------------------------------------- |
+| `--mjoint-grid-gap`              | Gap between grid items               | `gap`                                           |
+| `--mjoint-grid-auto-flow`        | Grid auto-flow direction             | `flow`                                          |
+| `--mjoint-grid-auto-rows`        | Height of automatically created rows | `autoRows`                                      |
+| `--mjoint-grid-template-columns` | Grid template columns definition     | `mode`, `columns`, `minWidthRow`, `maxWidthRow` |
+
+**Note**: These variables are managed internally and should not be overridden directly. Use the component properties instead.
+
+## Accessibility
+
+The `mjo-grid` is a **layout-only component** and does not add semantic meaning or interactive behavior. Accessibility considerations:
+
+- Grid layout preserves DOM order for screen readers and keyboard navigation
+- Use semantic HTML elements within grid items (e.g., `<article>`, `<section>`)
+- Consider ARIA landmarks for complex layouts (e.g., `role="region"` with `aria-label`)
+- Ensure grid items have sufficient color contrast
+- Test keyboard navigation flows through grid items
+- Use proper heading hierarchy within grid items for screen reader navigation
+
+### Best Practices
+
+- Do not rely solely on visual grid positioning to convey meaning
+- Ensure interactive elements within grid items are keyboard accessible
+- Use logical DOM order that makes sense when read linearly
+- Consider responsive behavior and how content reflows on smaller screens
+
+## Usage Examples
+
+### Basic Fixed Column Grid
+
+```typescript
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 import "mjo-litui/mjo-grid";
 
-@customElement("example-grid-basic")
-export class ExampleGridBasic extends LitElement {
+@customElement("example-basic-grid")
+export class ExampleBasicGrid extends LitElement {
     render() {
         return html`
             <mjo-grid columns="3" gap="1rem">
@@ -52,79 +115,29 @@ export class ExampleGridBasic extends LitElement {
 }
 ```
 
-## Grid Modes Example
+### Responsive Card Grid (Auto-Fill Mode)
 
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-grid";
-
-@customElement("example-grid-modes")
-export class ExampleGridModes extends LitElement {
+```typescript
+@customElement("example-responsive-grid")
+export class ExampleResponsiveGrid extends LitElement {
     render() {
         return html`
-            <h4>Fixed Columns Mode</h4>
-            <mjo-grid mode="columns" columns="3" gap="1rem">
-                <div class="item">Fixed 1</div>
-                <div class="item">Fixed 2</div>
-                <div class="item">Fixed 3</div>
-            </mjo-grid>
-
-            <h4>Auto-Fill Mode (Responsive)</h4>
-            <mjo-grid mode="fill" minWidthRow="200px" gap="1rem">
-                <div class="item">Auto 1</div>
-                <div class="item">Auto 2</div>
-                <div class="item">Auto 3</div>
-            </mjo-grid>
-
-            <h4>Auto-Fit Mode (Stretch to Fill)</h4>
-            <mjo-grid mode="fit" minWidthRow="150px" gap="1rem">
-                <div class="item">Fit 1</div>
-                <div class="item">Fit 2</div>
-                <div class="item">Fit 3</div>
-            </mjo-grid>
-        `;
-    }
-
-    static styles = css`
-        .item {
-            background: #f3f4f6;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #e5e7eb;
-        }
-
-        h4 {
-            margin: 2rem 0 1rem 0;
-            color: #374151;
-        }
-    `;
-}
-```
-
-## Responsive Card Grid Example
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-grid";
-
-@customElement("example-responsive-cards")
-export class ExampleResponsiveCards extends LitElement {
-    render() {
-        return html`
-            <mjo-grid mode="fill" minWidthRow="280px" gap="1.5rem">
-                ${Array.from(
-                    { length: 6 },
-                    (_, i) => html`
-                        <div class="card">
-                            <h3>Card ${i + 1}</h3>
-                            <p>Responsive card that adapts to screen size automatically.</p>
-                            <button>Action</button>
-                        </div>
-                    `,
-                )}
+            <mjo-grid mode="fill" minWidthRow="250px" maxWidthRow="1fr" gap="1.5rem">
+                <div class="card">
+                    <h3>Product 1</h3>
+                    <p>Description of product 1</p>
+                    <button>View Details</button>
+                </div>
+                <div class="card">
+                    <h3>Product 2</h3>
+                    <p>Description of product 2</p>
+                    <button>View Details</button>
+                </div>
+                <div class="card">
+                    <h3>Product 3</h3>
+                    <p>Description of product 3</p>
+                    <button>View Details</button>
+                </div>
             </mjo-grid>
         `;
     }
@@ -135,7 +148,6 @@ export class ExampleResponsiveCards extends LitElement {
             padding: 1.5rem;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e7eb;
         }
 
         .card h3 {
@@ -146,7 +158,6 @@ export class ExampleResponsiveCards extends LitElement {
         .card p {
             margin: 0 0 1.5rem 0;
             color: #6b7280;
-            line-height: 1.5;
         }
 
         .card button {
@@ -161,51 +172,29 @@ export class ExampleResponsiveCards extends LitElement {
 }
 ```
 
-## Dashboard Layout Example
+### Dashboard Metrics Layout
 
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-grid";
-
+```typescript
 @customElement("example-dashboard")
 export class ExampleDashboard extends LitElement {
     render() {
         return html`
-            <!-- Metrics row -->
             <mjo-grid columns="4" gap="1rem">
                 <div class="metric">
                     <div class="value">1,234</div>
-                    <div class="label">Users</div>
+                    <div class="label">Total Users</div>
                 </div>
                 <div class="metric">
                     <div class="value">567</div>
-                    <div class="label">Sessions</div>
+                    <div class="label">Active Sessions</div>
                 </div>
                 <div class="metric">
                     <div class="value">89%</div>
-                    <div class="label">Conversion</div>
+                    <div class="label">Conversion Rate</div>
                 </div>
                 <div class="metric">
                     <div class="value">$12.3k</div>
                     <div class="label">Revenue</div>
-                </div>
-            </mjo-grid>
-
-            <!-- Content sections -->
-            <mjo-grid columns="2" gap="2rem" style="margin-top: 2rem;">
-                <div class="section">
-                    <h4>Recent Activity</h4>
-                    <p>Latest user interactions and system events.</p>
-                </div>
-                <div class="section">
-                    <h4>Quick Actions</h4>
-                    <mjo-grid columns="2" gap="1rem">
-                        <button>Add User</button>
-                        <button>Export Data</button>
-                        <button>Settings</button>
-                        <button>Reports</button>
-                    </mjo-grid>
                 </div>
             </mjo-grid>
         `;
@@ -229,61 +218,19 @@ export class ExampleDashboard extends LitElement {
         .label {
             font-size: 0.875rem;
             color: #6b7280;
-            text-transform: uppercase;
-        }
-
-        .section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .section h4 {
-            margin: 0 0 1rem 0;
-            color: #1f2937;
-        }
-
-        .section p {
-            margin: 0;
-            color: #6b7280;
-        }
-
-        button {
-            background: #f3f4f6;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.875rem;
-        }
-
-        button:hover {
-            background: #e5e7eb;
+            margin-top: 0.5rem;
         }
     `;
 }
 ```
 
-## Grid Flow Control Example
+### Grid with Flow Control
 
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-grid";
-
+```typescript
 @customElement("example-grid-flow")
 export class ExampleGridFlow extends LitElement {
     render() {
         return html`
-            <h4>Row Flow (Default)</h4>
-            <mjo-grid columns="3" gap="1rem" flow="row" autoRows="80px">
-                <div class="item">1</div>
-                <div class="item wide">2 (wide)</div>
-                <div class="item">3</div>
-                <div class="item">4</div>
-            </mjo-grid>
-
             <h4>Dense Packing</h4>
             <mjo-grid columns="3" gap="1rem" flow="row dense" autoRows="80px">
                 <div class="item">1</div>
@@ -303,112 +250,125 @@ export class ExampleGridFlow extends LitElement {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 500;
         }
 
         .item.wide {
             grid-column: span 2;
-            background: #059669;
-        }
-
-        h4 {
-            margin: 2rem 0 1rem 0;
-            color: #374151;
         }
     `;
 }
 ```
 
-## Properties
+### Programmatic Column Control
 
-| Property      | Type                           | Default     | Description                                              |
-| ------------- | ------------------------------ | ----------- | -------------------------------------------------------- |
-| `columns`     | `number`                       | `4`         | Number of columns when using `mode="columns"`            |
-| `autoRows`    | `Properties["gridAutoRows"]`   | `"auto"`    | Sets grid-auto-rows CSS property for row sizing          |
-| `flow`        | `Properties["gridAutoFlow"]`   | `""`        | Sets grid-auto-flow CSS property (row, column, dense)    |
-| `gap`         | `Properties["gap"]`            | `"1em"`     | Sets gap between grid items (CSS gap property)           |
-| `maxWidthRow` | `string \| undefined`          | `undefined` | Maximum width for grid items in auto-fill/auto-fit modes |
-| `minWidthRow` | `string`                       | `"1fr"`     | Minimum width for grid items in auto-fill/auto-fit modes |
-| `mode`        | `"fill" \| "fit" \| "columns"` | `"columns"` | Grid layout strategy                                     |
+```typescript
+@customElement("example-dynamic-grid")
+export class ExampleDynamicGrid extends LitElement {
+    @property({ type: Number }) columns = 3;
 
-### Grid Modes
+    render() {
+        return html`
+            <div>
+                <label>
+                    Columns:
+                    <input type="range" min="1" max="6" .value=${String(this.columns)} @input=${this.#handleColumnsChange} />
+                    ${this.columns}
+                </label>
 
-| Mode      | Behavior                                                                       |
-| --------- | ------------------------------------------------------------------------------ |
-| `columns` | Fixed number of columns (uses `columns` property)                              |
-| `fill`    | Auto-fill: creates as many columns as fit, leaving empty columns if needed     |
-| `fit`     | Auto-fit: creates columns that fit content, stretching to fill available space |
+                <mjo-grid columns=${this.columns} gap="1rem">
+                    <div class="item">Item 1</div>
+                    <div class="item">Item 2</div>
+                    <div class="item">Item 3</div>
+                    <div class="item">Item 4</div>
+                    <div class="item">Item 5</div>
+                    <div class="item">Item 6</div>
+                </mjo-grid>
+            </div>
+        `;
+    }
 
-## Slots
+    #handleColumnsChange(e: Event) {
+        const input = e.target as HTMLInputElement;
+        this.columns = parseInt(input.value);
+    }
 
-| Slot      | Description                                                      |
-| --------- | ---------------------------------------------------------------- |
-| (default) | Grid items - any HTML elements that will be arranged in the grid |
-
-## Events
-
-This component does not emit any custom events. It provides pure layout functionality.
-
-## Accessibility
-
-The grid is a **layout-only component** - accessibility is handled by the content placed inside. Grid layout preserves DOM order for screen readers and keyboard navigation. Use semantic HTML elements within grid items and consider ARIA landmarks for complex layouts.
-
-## Browser Support
-
-**CSS Grid**: All modern browsers (IE 11+ with -ms- prefix)  
-**CSS Custom Properties**: All modern browsers (IE 11 not supported)
-
-## CSS Variables
-
-| Variable                  | Default          | Description                         |
-| ------------------------- | ---------------- | ----------------------------------- |
-| `--grid-gap`              | `1em`            | Space between grid items            |
-| `--grid-auto-flow`        | `initial`        | Direction and packing of grid items |
-| `--grid-auto-rows`        | `auto`           | Size of automatically created rows  |
-| `--grid-template-columns` | `repeat(4, 1fr)` | Column template definition          |
-
-### Override Example
-
-```css
-mjo-grid {
-    --grid-gap: 2rem;
-    --grid-auto-rows: minmax(200px, auto);
+    static styles = css`
+        .item {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+    `;
 }
 ```
 
-## Common Patterns
+### Nested Grids
 
-### Card Grid
+```typescript
+@customElement("example-nested-grids")
+export class ExampleNestedGrids extends LitElement {
+    render() {
+        return html`
+            <mjo-grid columns="2" gap="2rem">
+                <div class="section">
+                    <h4>Section 1</h4>
+                    <mjo-grid columns="2" gap="1rem">
+                        <button>Action 1</button>
+                        <button>Action 2</button>
+                        <button>Action 3</button>
+                        <button>Action 4</button>
+                    </mjo-grid>
+                </div>
 
-```html
-<mjo-grid mode="fill" minWidthRow="300px" gap="1.5rem">
-    <div class="card">Card 1</div>
-    <div class="card">Card 2</div>
-    <div class="card">Card 3</div>
-</mjo-grid>
+                <div class="section">
+                    <h4>Section 2</h4>
+                    <p>Content area with different layout</p>
+                </div>
+            </mjo-grid>
+        `;
+    }
+
+    static styles = css`
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h4 {
+            margin: 0 0 1rem 0;
+        }
+
+        button {
+            background: #f3f4f6;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+    `;
+}
 ```
 
-### Equal Height Columns
+## Additional Notes
 
-```html
-<mjo-grid columns="3" gap="2rem" autoRows="1fr">
-    <div>Column 1</div>
-    <div>Column 2</div>
-    <div>Column 3</div>
-</mjo-grid>
-```
+### Browser Support
 
-### Responsive Image Gallery
+- **CSS Grid**: Supported in all modern browsers (IE 11+ with `-ms-` prefix)
+- **CSS Custom Properties**: Supported in all modern browsers (IE 11 not supported)
 
-```html
-<mjo-grid mode="fill" minWidthRow="200px" gap="0.5rem">
-    <img src="image1.jpg" alt="Gallery image 1" />
-    <img src="image2.jpg" alt="Gallery image 2" />
-    <img src="image3.jpg" alt="Gallery image 3" />
-</mjo-grid>
-```
+### Performance Considerations
 
-### Dashboard Layout
+- The component recalculates grid template on every property update
+- For static grids, set properties once and avoid unnecessary updates
+- CSS Grid layout is hardware-accelerated in modern browsers
+
+### Common Patterns
+
+**12-Column Dashboard Layout:**
 
 ```html
 <mjo-grid columns="12" gap="1rem">
@@ -419,6 +379,31 @@ mjo-grid {
 </mjo-grid>
 ```
 
-## Summary
+**Responsive Three-Column Layout:**
 
-`<mjo-grid>` is a flexible CSS Grid wrapper that simplifies responsive layouts without complex media queries. It supports three layout modes: fixed columns for consistent layouts, auto-fill for responsive card grids, and auto-fit for content that stretches to fill space. The component handles CSS Grid complexity while providing fine-grained control through properties and CSS custom properties.
+```html
+<mjo-grid mode="fill" minWidthRow="300px" gap="2rem">
+    <article>Column 1</article>
+    <article>Column 2</article>
+    <article>Column 3</article>
+</mjo-grid>
+```
+
+### Integration with Theme System
+
+The component extends `ThemeMixin` and supports the `theme` property for dynamic theming:
+
+```typescript
+const gridTheme = {
+    gap: "2rem",
+    // Note: Use properties instead of theme for grid-specific configuration
+};
+```
+
+**Recommendation**: Use component properties (`gap`, `columns`, etc.) directly rather than the theme system for grid configuration.
+
+### Related Components
+
+- **[mjo-card](./mjo-card.md)** - Content containers commonly used within grids
+- **[mjo-button](./mjo-button.md)** - Interactive elements in grid layouts
+- **[mjo-avatar](./mjo-avatar.md)** - User avatars in grid displays

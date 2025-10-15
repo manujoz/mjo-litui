@@ -1,649 +1,464 @@
 # mjo-message
 
-A message controller component that displays temporary toast-like notifications with enhanced accessibility support.
+Global message controller component that displays temporary toast-like notifications with comprehensive accessibility support.
 
-## Overview
+## Index
 
-The `mjo-message` component provides a powerful message system for displaying temporary notifications using a controller architecture. It creates a global message container in the document body, allowing messages to appear above any content regardless of parent element constraints like `overflow: hidden`. The component includes comprehensive accessibility features with proper ARIA attributes and screen reader support.
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Public Methods](#public-methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-## Accessibility Features
+## Use Cases
 
-The `mjo-message` component includes comprehensive accessibility support:
+- Display temporary feedback messages for user actions
+- Show form validation results
+- Provide status updates for async operations
+- Display system notifications and alerts
+- Queue multiple messages with automatic management
 
-### Screen Reader Support
+## Import
 
-- **ARIA Live Regions**: Messages use appropriate `aria-live` attributes:
-    - `"assertive"` for error and warning messages (announced immediately)
-    - `"polite"` for info and success messages (announced when convenient)
-- **Message Roles**: Each message has semantic roles:
-    - `role="alert"` for urgent messages (error/warning)
-    - `role="status"` for informational messages (info/success)
-- **Atomic Announcements**: Messages use `aria-atomic="true"` for complete message reading
-
-### Keyboard Navigation
-
-- Messages are properly announced by screen readers without interfering with keyboard navigation
-- The message container is marked as a landmark region with `role="region"`
-
-### Visual Accessibility
-
-- Color-coded message types with distinct icons for each type
-- High contrast support through CSS custom properties
-- Appropriate color choices that work with system themes
-
-### Configuration
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoMessage } from "mjo-litui/types";
+```typescript
 import "mjo-litui/mjo-message";
-import "mjo-litui/mjo-button";
-
-@customElement("example-message-accessibility")
-export class ExampleMessageAccessibility extends LitElement {
-    @query("mjo-message")
-    private messageComponent!: MjoMessage;
-
-    private showAccessibleMessage() {
-        this.messageComponent.controller.show({
-            message: "Form validation completed with 2 errors found",
-            type: "error", // Will use aria-live="assertive" and role="alert"
-            time: 6000, // Longer time for important messages
-        });
-    }
-
-    render() {
-        return html`
-            <div>
-                <h3>Accessible Message Example</h3>
-                <mjo-button @click=${this.showAccessibleMessage}>Show Accessible Error</mjo-button>
-
-                <!-- Configure accessibility settings -->
-                <mjo-message region-label="Form validation messages" aria-live="assertive" max-messages="3"> </mjo-message>
-            </div>
-        `;
-    }
-}
-```
-
-## Basic Usage
-
-### HTML
-
-```html
-<mjo-message region-label="Notification area" max-messages="6"></mjo-message>
-```
-
-### Simple Message Display
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoMessage } from "mjo-litui/types";
-import "mjo-litui/mjo-message";
-import "mjo-litui/mjo-button";
-
-@customElement("example-message-basic")
-export class ExampleMessageBasic extends LitElement {
-    @query("mjo-message")
-    private messageComponent!: MjoMessage;
-
-    private showMessage(type: "info" | "success" | "warning" | "error", message: string) {
-        this.messageComponent.controller.show({
-            message,
-            type,
-        });
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <mjo-button @click=${() => this.showMessage("info", "Information message")}> Show Info </mjo-button>
-                <mjo-button @click=${() => this.showMessage("success", "Operation completed!")}> Show Success </mjo-button>
-                <mjo-button @click=${() => this.showMessage("warning", "Please check your input")}> Show Warning </mjo-button>
-                <mjo-button @click=${() => this.showMessage("error", "An error occurred")}> Show Error </mjo-button>
-            </div>
-
-            <mjo-message></mjo-message>
-        `;
-    }
-}
-```
-
-## Message Types and Icons
-
-The component supports four message types, each with its corresponding icon:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoMessage, MessageTypes } from "mjo-litui/types";
-import "mjo-litui/mjo-message";
-import "mjo-litui/mjo-button";
-
-@customElement("example-message-types")
-export class ExampleMessageTypes extends LitElement {
-    @query("mjo-message")
-    private messageComponent!: MjoMessage;
-
-    private showMessage(type: MessageTypes, message: string) {
-        this.messageComponent.controller.show({
-            message,
-            type,
-            time: 4000,
-        });
-    }
-
-    render() {
-        return html`
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <mjo-button @click=${() => this.showMessage("info", "ℹ️ Information: Task is in progress")} variant="ghost"> Info Message </mjo-button>
-
-                <mjo-button @click=${() => this.showMessage("success", "✅ Success: Data saved successfully")} variant="success"> Success Message </mjo-button>
-
-                <mjo-button @click=${() => this.showMessage("warning", "⚠️ Warning: Low disk space")} variant="warning"> Warning Message </mjo-button>
-
-                <mjo-button @click=${() => this.showMessage("error", "❌ Error: Network connection failed")} variant="danger"> Error Message </mjo-button>
-            </div>
-
-            <mjo-message></mjo-message>
-        `;
-    }
-}
-```
-
-## Custom Duration and Callbacks
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoMessage } from "mjo-litui/types";
-import "mjo-litui/mjo-message";
-import "mjo-litui/mjo-button";
-
-@customElement("example-message-advanced")
-export class ExampleMessageAdvanced extends LitElement {
-    @query("mjo-message")
-    private messageComponent!: MjoMessage;
-
-    private async showAsyncMessage() {
-        const messageItem = await this.messageComponent.controller.show({
-            message: "Processing... This will close automatically",
-            type: "info",
-            time: 5000,
-        });
-
-        // Simulate async operation
-        setTimeout(() => {
-            messageItem.close();
-            this.messageComponent.controller.show({
-                message: "Operation completed successfully!",
-                type: "success",
-            });
-        }, 2000);
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; gap: 1rem;">
-                <mjo-button @click=${this.showAsyncMessage}>Show Async Message</mjo-button>
-            </div>
-
-            <mjo-message max-messages="6"></mjo-message>
-        `;
-    }
-}
-```
-
-## Form Integration
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
-import type { MjoMessage, MjoForm } from "mjo-litui/types";
-import "mjo-litui/mjo-message";
-import "mjo-litui/mjo-form";
-import "mjo-litui/mjo-textfield";
-import "mjo-litui/mjo-button";
-
-@customElement("example-message-form")
-export class ExampleMessageForm extends LitElement {
-    @query("mjo-message") private messageComponent!: MjoMessage;
-    @query("mjo-form") private form!: MjoForm;
-    @state() private isSubmitting = false;
-
-    private async handleSubmit() {
-        if (!this.form.validate()) {
-            this.messageComponent.controller.show({
-                message: "Please correct the errors in the form",
-                type: "error",
-            });
-            return;
-        }
-
-        this.isSubmitting = true;
-        try {
-            await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate API
-            this.messageComponent.controller.show({
-                message: "Profile updated successfully!",
-                type: "success",
-            });
-            this.form.reset();
-        } catch {
-            this.messageComponent.controller.show({
-                message: "Failed to update profile. Please try again.",
-                type: "error",
-            });
-        } finally {
-            this.isSubmitting = false;
-        }
-    }
-
-    render() {
-        return html`
-            <mjo-form style="max-width: 400px;">
-                <mjo-textfield label="Name" name="name" required rules="required|min:2"></mjo-textfield>
-                <mjo-textfield label="Email" name="email" type="email" required rules="required|email"></mjo-textfield>
-                <mjo-button @click=${this.handleSubmit} .loading=${this.isSubmitting} style="margin-top: 1rem;"> Update Profile </mjo-button>
-            </mjo-form>
-            <mjo-message></mjo-message>
-        `;
-    }
-}
-```
-
-## Theme Customization
-
-### Using mjo-theme
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoMessage } from "mjo-litui/types";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-message";
-import "mjo-litui/mjo-button";
-
-@customElement("example-message-theming")
-export class ExampleMessageTheming extends LitElement {
-    @query("mjo-message") private messageComponent!: MjoMessage;
-
-    private showThemedMessage() {
-        this.messageComponent.controller.show({
-            message: "This message uses custom theme colors",
-            type: "info",
-        });
-    }
-
-    render() {
-        return html`
-            <mjo-theme
-                .theme=${{
-                    components: {
-                        mjoMessage: {
-                            backgroundColor: "#e3f2fd",
-                            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
-                            radius: "12px",
-                            marginTop: "20px",
-                            top: "20px",
-                        },
-                    },
-                }}
-            >
-                <mjo-button @click=${this.showThemedMessage}>Show Themed Message</mjo-button>
-                <mjo-message></mjo-message>
-            </mjo-theme>
-        `;
-    }
-}
-```
-
-### Using ThemeMixin
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import { ThemeMixin } from "mjo-litui/mixins";
-import type { MjoMessage } from "mjo-litui/types";
-import "mjo-litui/mjo-message";
-import "mjo-litui/mjo-button";
-
-@customElement("example-message-theme-mixin")
-export class ExampleMessageThemeMixin extends ThemeMixin(LitElement) {
-    @query("mjo-message") private messageComponent!: MjoMessage;
-
-    private showCustomMessage() {
-        this.messageComponent.controller.show({
-            message: "Message with component-level theme override",
-            type: "success",
-        });
-    }
-
-    render() {
-        return html`
-            <mjo-button @click=${this.showCustomMessage}>Show Custom Message</mjo-button>
-            <mjo-message
-                .theme=${{
-                    backgroundColor: "#f3e5f5",
-                    boxShadow: "0 2px 15px rgba(156, 39, 176, 0.2)",
-                    radius: "8px",
-                }}
-            >
-            </mjo-message>
-        `;
-    }
-}
-```
-
-## Styling Architecture
-
-### Important: Message Container Mounting
-
-The `mjo-message` component works by dynamically creating a `mjo-message-container` element that is mounted directly in the document `<body>`. This architecture provides several benefits:
-
-- **Overlay Management**: Ensures messages appear above all other content
-- **Z-index Control**: Prevents z-index conflicts with parent containers
-- **Overflow Prevention**: Bypasses any parent `overflow: hidden` styles
-- **Global Accessibility**: Enables proper ARIA live region management
-
-### CSS Variables and Parts Application
-
-Because the actual message content is rendered in the `mjo-message-container` (mounted in the body), CSS variables and CSS parts cannot be applied directly to the `mjo-message` component. Instead, you need to apply styles globally to target the dynamically created container and message items.
-
-### Global Styling Pattern
-
-Since the message container is created in the document body, all styling must be applied globally:
-
-```css
-/* Global styling for all message containers */
-mjo-message-container {
-    --mjo-message-background-color: #f8f9fa;
-    --mjo-message-top: 20px;
-}
-
-/* Global styling for all message items using CSS parts */
-mjo-message-container::part(container) {
-    backdrop-filter: blur(5px);
-}
-
-mjoint-message-item::part(icon-container) {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    padding: 4px;
-}
-
-mjoint-message-item::part(message) {
-    font-weight: 500;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-mjoint-message-item::part(icon) {
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
-}
-```
-
-### Complete Styling Example
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoMessage } from "mjo-litui/types";
-import "mjo-litui/mjo-message";
-import "mjo-litui/mjo-button";
-
-@customElement("app-with-styled-messages")
-export class AppWithStyledMessages extends LitElement {
-    @query("mjo-message") private messageComponent!: MjoMessage;
-
-    private showStyledMessage() {
-        this.messageComponent.show({
-            message: "This message uses custom styling applied globally",
-            type: "success",
-            time: 5000,
-        });
-    }
-
-    render() {
-        return html`
-            <mjo-message region-label="Styled notifications"></mjo-message>
-            <mjo-button @click=${this.showStyledMessage}>Show Styled Message</mjo-button>
-        `;
-    }
-
-    static styles = css`
-        /* Global styles applied to the document */
-        :host {
-            --mjo-message-background-color: #e8f5e8;
-            --mjo-message-border-radius: 12px;
-            --mjo-message-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        }
-    `;
-}
-
-// Add global styles to the document
-const globalStyles = document.createElement("style");
-globalStyles.textContent = `
-    /* Global message container styling */
-    mjo-message-container::part(container) {
-        padding: 20px;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
-    /* Global message item styling */
-    mjoint-message-item::part(icon-container) {
-        background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
-        border-radius: 8px;
-        padding: 6px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    mjoint-message-item::part(message) {
-        font-family: 'Inter', system-ui, sans-serif;
-        font-weight: 500;
-        letter-spacing: 0.025em;
-    }
-
-    mjoint-message-item::part(icon) {
-        filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
-    }
-`;
-document.head.appendChild(globalStyles);
-```
-
-### Best Practices for Styling
-
-1. **Use global styles**: Apply CSS variables and parts globally since the container is mounted in the body
-2. **Semantic styling**: Use type-specific styling through CSS variables for consistent theming
-3. **Performance considerations**: Avoid excessive global styles that might affect other components
-4. **CSS containment**: Use appropriate CSS containment for better performance when styling many messages
-
-## CSS Parts
-
-The message system exposes several CSS parts for advanced styling:
-
-| Part             | Element                 | Description                                  |
-| ---------------- | ----------------------- | -------------------------------------------- |
-| `container`      | `mjo-message-container` | The main container holding all message items |
-| `icon-container` | `mjoint-message-item`   | Container wrapping the message type icon     |
-| `message`        | `mjoint-message-item`   | Container holding the message text content   |
-| `icon`           | `mjo-icon`              | The icon element (exported from `mjo-icon`)  |
-
-### CSS Parts Usage Examples
-
-```css
-/* Style the message container */
-mjo-message-container::part(container) {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 16px;
-    padding: 24px;
-    backdrop-filter: blur(10px);
-}
-
-/* Style icon containers for all message types */
-mjoint-message-item::part(icon-container) {
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 50%;
-    padding: 8px;
-    transition: all 0.3s ease;
-}
-
-/* Style message text */
-mjoint-message-item::part(message) {
-    color: #2d3748;
-    font-weight: 600;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    line-height: 1.5;
-}
-
-/* Style the icon itself */
-mjoint-message-item::part(icon) {
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-    transition: transform 0.2s ease;
-}
-
-/* Interactive states */
-mjoint-message-item:hover::part(icon-container) {
-    transform: scale(1.05);
-    background-color: rgba(255, 255, 255, 0.25);
-}
-
-mjoint-message-item:hover::part(icon) {
-    transform: scale(1.1);
-}
-```
-
-### Type-specific Part Styling
-
-You can also style parts based on message type using attribute selectors:
-
-```css
-/* Success message styling */
-mjoint-message-item[type="success"]::part(icon-container) {
-    background: linear-gradient(135deg, #48bb78, #38a169);
-    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
-}
-
-/* Error message styling */
-mjoint-message-item[type="error"]::part(icon-container) {
-    background: linear-gradient(135deg, #f56565, #e53e3e);
-    box-shadow: 0 4px 12px rgba(245, 101, 101, 0.3);
-}
-
-/* Warning message styling */
-mjoint-message-item[type="warning"]::part(icon-container) {
-    background: linear-gradient(135deg, #ed8936, #dd6b20);
-    box-shadow: 0 4px 12px rgba(237, 137, 54, 0.3);
-}
-
-/* Info message styling */
-mjoint-message-item[type="info"]::part(icon-container) {
-    background: linear-gradient(135deg, #4299e1, #3182ce);
-    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
-}
 ```
 
 ## Properties
 
-| Name          | Type                               | Default                   | Description                                              |
-| ------------- | ---------------------------------- | ------------------------- | -------------------------------------------------------- |
-| `ariaLabel`   | `string \| null`                   | `null`                    | Accessible label for the message component               |
-| `regionLabel` | `string`                           | `"Message notifications"` | Label for the message region (used in message container) |
-| `ariaLive`    | `"polite" \| "assertive" \| "off"` | `"polite"`                | Urgency level for screen reader announcements            |
-| `maxMessages` | `number`                           | `4`                       | Maximum number of messages displayed simultaneously      |
-| `theme`       | `MjoMessageTheme`                  | `{}`                      | Theme configuration for the message container            |
+| Property      | Type                               | Description                                         | Default                   | Required |
+| ------------- | ---------------------------------- | --------------------------------------------------- | ------------------------- | -------- |
+| `idMessage`   | `string`                           | Optional ID for the message container element       | `undefined`               | No       |
+| `regionLabel` | `string`                           | Accessible label for the message region             | `"Message notifications"` | No       |
+| `aria-live`   | `"polite" \| "assertive" \| "off"` | ARIA live region announcement behavior              | `"polite"`                | No       |
+| `maxMessages` | `number`                           | Maximum number of messages displayed simultaneously | `4`                       | No       |
 
-## Controller Methods
+## Public Methods
 
-The `MessageController` provides the following methods:
+The `mjo-message` component provides access to the controller's `show` method through the `controller` property.
 
-### `show(params: MessageShowParams): Promise<MessageItem>`
+### `controller.show(params: MessageShowParams): Promise<MjointMessageItem>`
 
-Shows a new message and returns the message item instance for programmatic control.
+Displays a new message and returns the message item instance for programmatic control.
 
 #### Parameters
 
-| Name      | Type           | Default  | Description                                                    |
-| --------- | -------------- | -------- | -------------------------------------------------------------- |
-| `message` | `string`       | -        | The message text to display                                    |
-| `type`    | `MessageTypes` | `"info"` | Message type: `"info"`, `"success"`, `"warning"`, or `"error"` |
-| `time`    | `number`       | `3000`   | Duration in milliseconds before auto-close                     |
-| `onClose` | `() => void`   | -        | Callback function executed when message closes                 |
+| Parameter | Type                                                | Description                                        | Default  | Required |
+| --------- | --------------------------------------------------- | -------------------------------------------------- | -------- | -------- |
+| `message` | `string`                                            | The message text to display                        | -        | Yes      |
+| `type`    | `"info" \| "success" \| "warning" \| "error" \| ""` | Message type with corresponding icon and semantics | `"info"` | No       |
+| `time`    | `number`                                            | Duration in milliseconds before auto-close         | `3000`   | No       |
+| `onClose` | `() => void`                                        | Callback function executed when the message closes | -        | No       |
 
-## Types
+#### Returns
 
-```ts
-type MessageTypes = "info" | "warning" | "error" | "success" | "";
-
-interface MessageShowParams {
-    message: string;
-    type?: MessageTypes;
-    time?: number;
-    onClose?: () => void;
-}
-```
+`Promise<MjointMessageItem>` - The message item instance allowing programmatic control (e.g., `messageItem.close()`)
 
 ## Events
 
-This component does not emit custom events. Individual message items emit a `remove` event when they are closed.
+The component does not emit custom events from `mjo-message` itself. The internal `mjoint-message-item` component dispatches a `remove` event when a message is removed, but this is an internal implementation detail.
 
-## CSS Custom Properties
+## CSS Variables
 
-| Property | Default | Description |
+| Variable                         | Description                             | Default                                                |
+| -------------------------------- | --------------------------------------- | ------------------------------------------------------ |
+| `--mjo-message-top`              | Top position of the message container   | `0`                                                    |
+| `--mjo-message-background-color` | Background color of individual messages | `var(--mjo-background-color-low, #ffffff)`             |
+| `--mjo-message-box-shadow`       | Box shadow applied to messages          | `var(--mjo-box-shadow-2, 0 0 10px rgba(0, 0, 0, 0.1))` |
+| `--mjo-message-border-radius`    | Border radius of message items          | `var(--mjo-radius-large, 4px)`                         |
+| `--mjo-message-margin-top`       | Top margin for each message item        | `15px`                                                 |
 
-## CSS Custom Properties
+## CSS Parts
 
-| Variable                         | Default                                                                   | Description                            |
-| -------------------------------- | ------------------------------------------------------------------------- | -------------------------------------- |
-| `--mjo-message-background-color` | `color-mix(in srgb, var(--mjo-color-on-surface-variant) 8%, transparent)` | Background color for message container |
-| `--mjo-message-backdrop-filter`  | `blur(10px)`                                                              | Backdrop filter effect                 |
-| `--mjo-message-box-shadow`       | `var(--mjo-elevation-3)`                                                  | Box shadow elevation                   |
-| `--mjo-message-border-radius`    | `var(--mjo-shape-corner-small)`                                           | Border radius                          |
-| `--mjo-message-padding`          | `var(--mjo-space-4)`                                                      | Internal padding                       |
-| `--mjo-message-gap`              | `var(--mjo-space-3)`                                                      | Gap between message elements           |
-| `--mjo-message-font-size`        | `var(--mjo-typeface-body-medium-size)`                                    | Text size                              |
-| `--mjo-message-line-height`      | `var(--mjo-typeface-body-medium-line-height)`                             | Text line height                       |
-| `--mjo-message-color`            | `var(--mjo-color-on-surface-variant)`                                     | Text color                             |
-| `--mjo-message-top`              | `var(--mjo-space-4)`                                                      | Distance from top of viewport          |
-| `--mjo-message-right`            | `var(--mjo-space-4)`                                                      | Distance from right of viewport        |
-| `--mjo-message-z-index`          | `1000`                                                                    | Z-index for stacking                   |
-| `--mjo-message-margin-top`       | `var(--mjo-space-3)`                                                      | Top margin between messages            |
-| `--mjo-message-min-width`        | `320px`                                                                   | Minimum width                          |
-| `--mjo-message-max-width`        | `480px`                                                                   | Maximum width                          |
+| Part             | Description                                          | Element |
+| ---------------- | ---------------------------------------------------- | ------- |
+| `container`      | The main container element holding all message items | `<div>` |
+| `icon-container` | Container for the message type icon                  | `<div>` |
+| `icon`           | The icon element (exported from internal `mjo-icon`) | -       |
+| `message`        | Container for the message text content               | `<div>` |
 
-### Type-specific Colors
+## Accessibility
 
-| Variable                      | Default                    | Description                |
-| ----------------------------- | -------------------------- | -------------------------- |
-| `--mjo-message-info-color`    | `var(--mjo-color-info)`    | Info message icon color    |
-| `--mjo-message-success-color` | `var(--mjo-color-success)` | Success message icon color |
-| `--mjo-message-warning-color` | `var(--mjo-color-warning)` | Warning message icon color |
-| `--mjo-message-error-color`   | `var(--mjo-color-error)`   | Error message icon color   |
+### ARIA Support
 
-### Theme Interface
+- **Live Regions**: Uses ARIA live regions (`aria-live`) to announce messages to screen readers
+    - `polite` (default): Announces when screen reader is idle
+    - `assertive`: Interrupts current announcements for urgent messages
+    - `off`: Disables announcements
+- **Region Labeling**: Configurable `region-label` attribute for accessible region identification
+- **Dynamic Roles**: Message items automatically use appropriate roles based on type:
+    - `alert` role for error and warning messages with `aria-live="assertive"`
+    - `status` role for info and success messages with `aria-live="polite"`
+- **Atomic Announcements**: Uses `aria-atomic="true"` to ensure complete message content is announced
 
-```ts
-interface MjoMessageTheme {
-    backgroundColor?: string;
-    boxShadow?: string;
-    radius?: string;
-    marginTop?: string;
-    top?: string;
-}
+### Keyboard Navigation
+
+- No direct keyboard interaction required (messages are informational)
+- Messages auto-dismiss after specified duration
+- Content within messages inherits standard keyboard behavior
+
+### Message Type Semantics
+
+| Type      | Icon             | Color                 | Semantic Meaning     |
+| --------- | ---------------- | --------------------- | -------------------- |
+| `info`    | Info Circle      | `--mjo-color-info`    | General information  |
+| `success` | Check Circle     | `--mjo-color-success` | Successful operation |
+| `warning` | Warning Triangle | `--mjo-color-warning` | Cautionary notice    |
+| `error`   | Close Circle     | `--mjo-color-error`   | Error or failure     |
+
+### Best Practices
+
+- Use `assertive` for critical errors or urgent notifications
+- Keep message text concise and actionable
+- Use appropriate message types to convey semantic meaning
+- Consider longer durations for important messages
+- Provide callbacks for actions that should occur after message dismissal
+
+## Usage Examples
+
+### Basic Message Display
+
+```html
+<mjo-message id="myMessage"></mjo-message>
+<mjo-button onclick="showMessage()">Show Message</mjo-button>
+
+<script type="module">
+    import "mjo-litui/mjo-message";
+    import "mjo-litui/mjo-button";
+
+    function showMessage() {
+        const messageComponent = document.getElementById("myMessage");
+        messageComponent.controller.show({
+            message: "Operation completed successfully!",
+            type: "success",
+            time: 3000,
+        });
+    }
+
+    window.showMessage = showMessage;
+</script>
 ```
 
-## Accessibility Notes
+### Different Message Types
 
-- Messages use ARIA live regions for screen reader announcements
-- `role="alert"` for urgent messages (error, warning)
-- `role="status"` for informational messages (info, success)
-- Icons are hidden from assistive technology with `aria-hidden="true"`
-- Container uses `role="region"` with configurable `aria-label`
-- Supports custom `aria-live` settings (assertive/polite)
+```html
+<mjo-message id="messages"></mjo-message>
 
-## Browser Support
+<mjo-button onclick="showInfo()">Info</mjo-button>
+<mjo-button onclick="showSuccess()">Success</mjo-button>
+<mjo-button onclick="showWarning()">Warning</mjo-button>
+<mjo-button onclick="showError()">Error</mjo-button>
 
-Compatible with all modern browsers supporting Web Components, CSS custom properties, and ES2020+ features.
+<script type="module">
+    const messageComponent = document.getElementById("messages");
 
-For additional theming options, see the [Theming Guide](./theming.md).
+    window.showInfo = () => {
+        messageComponent.controller.show({
+            message: "This is an informational message",
+            type: "info",
+        });
+    };
+
+    window.showSuccess = () => {
+        messageComponent.controller.show({
+            message: "Operation completed successfully!",
+            type: "success",
+        });
+    };
+
+    window.showWarning = () => {
+        messageComponent.controller.show({
+            message: "Please review your settings",
+            type: "warning",
+        });
+    };
+
+    window.showError = () => {
+        messageComponent.controller.show({
+            message: "An error occurred",
+            type: "error",
+        });
+    };
+</script>
+```
+
+### Custom Duration
+
+```html
+<mjo-message id="customDuration"></mjo-message>
+
+<script type="module">
+    const messageComponent = document.getElementById("customDuration");
+
+    // Quick message (1 second)
+    messageComponent.controller.show({
+        message: "Quick feedback",
+        type: "info",
+        time: 1000,
+    });
+
+    // Long message (10 seconds)
+    messageComponent.controller.show({
+        message: "Important information that needs more time",
+        type: "warning",
+        time: 10000,
+    });
+</script>
+```
+
+### Programmatic Control with Async Operations
+
+```html
+<mjo-message id="asyncMessage"></mjo-message>
+<mjo-button onclick="processData()">Process Data</mjo-button>
+
+<script type="module">
+    const messageComponent = document.getElementById("asyncMessage");
+
+    window.processData = async () => {
+        // Show processing message
+        const processingMsg = await messageComponent.controller.show({
+            message: "Processing your request...",
+            type: "info",
+            time: 30000, // Long duration
+        });
+
+        try {
+            // Simulate async operation
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            // Close processing message and show success
+            processingMsg.close();
+            messageComponent.controller.show({
+                message: "Data processed successfully!",
+                type: "success",
+            });
+        } catch (error) {
+            // Close processing message and show error
+            processingMsg.close();
+            messageComponent.controller.show({
+                message: "Failed to process data",
+                type: "error",
+            });
+        }
+    };
+</script>
+```
+
+### Using Callbacks
+
+```html
+<mjo-message id="callbackMessage"></mjo-message>
+
+<script type="module">
+    const messageComponent = document.getElementById("callbackMessage");
+
+    messageComponent.controller.show({
+        message: "File uploaded successfully",
+        type: "success",
+        time: 3000,
+        onClose: () => {
+            console.log("Message closed, refreshing file list...");
+            // Trigger additional actions after message closes
+        },
+    });
+</script>
+```
+
+### Queue Management with Max Messages
+
+```html
+<mjo-message id="queuedMessages" max-messages="3"></mjo-message>
+<mjo-button onclick="showMultiple()">Show Multiple Messages</mjo-button>
+
+<script type="module">
+    const messageComponent = document.getElementById("queuedMessages");
+
+    window.showMultiple = () => {
+        // Only 3 messages will be displayed at once
+        // When the 4th message appears, the oldest will be automatically removed
+        messageComponent.controller.show({
+            message: "First message",
+            type: "info",
+            time: 5000,
+        });
+
+        setTimeout(() => {
+            messageComponent.controller.show({
+                message: "Second message",
+                type: "success",
+                time: 5000,
+            });
+        }, 500);
+
+        setTimeout(() => {
+            messageComponent.controller.show({
+                message: "Third message",
+                type: "warning",
+                time: 5000,
+            });
+        }, 1000);
+
+        setTimeout(() => {
+            messageComponent.controller.show({
+                message: "Fourth message (first will be removed)",
+                type: "error",
+                time: 5000,
+            });
+        }, 1500);
+    };
+</script>
+```
+
+### Accessibility Configuration
+
+```html
+<!-- Assertive announcements for urgent messages -->
+<mjo-message id="urgentMessages" aria-live="assertive" region-label="Urgent notifications"></mjo-message>
+
+<!-- Polite announcements for general updates -->
+<mjo-message id="generalMessages" aria-live="polite" region-label="General notifications"></mjo-message>
+
+<!-- Silent messages (not announced to screen readers) -->
+<mjo-message id="silentMessages" aria-live="off" region-label="Visual notifications only"></mjo-message>
+```
+
+### Custom Styling with CSS Variables
+
+```html
+<style>
+    .custom-messages {
+        --mjo-message-top: 20px;
+        --mjo-message-background-color: #f3e5f5;
+        --mjo-message-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        --mjo-message-border-radius: 12px;
+        --mjo-message-margin-top: 20px;
+    }
+</style>
+
+<mjo-message id="styledMessages" class="custom-messages"></mjo-message>
+```
+
+### Styling with CSS Parts
+
+```html
+<style>
+    mjo-message::part(container) {
+        align-items: flex-end; /* Align messages to the right */
+        padding: 0 20px;
+    }
+
+    mjo-message::part(icon-container) {
+        font-size: 1.5em;
+    }
+
+    mjo-message::part(message) {
+        font-weight: 500;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+</style>
+
+<mjo-message id="customStyledMessages"></mjo-message>
+```
+
+### Form Integration
+
+```html
+<form id="userForm">
+    <mjo-textfield label="Email" type="email" required></mjo-textfield>
+    <mjo-textfield label="Password" type="password" required></mjo-textfield>
+    <mjo-button type="submit">Submit</mjo-button>
+</form>
+
+<mjo-message id="formMessages"></mjo-message>
+
+<script type="module">
+    const form = document.getElementById("userForm");
+    const messageComponent = document.getElementById("formMessages");
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const email = formData.get("email");
+        const password = formData.get("password");
+
+        if (!email || !password) {
+            messageComponent.controller.show({
+                message: "Please fill in all required fields",
+                type: "error",
+                time: 5000,
+            });
+            return;
+        }
+
+        // Simulate form submission
+        messageComponent.controller.show({
+            message: "Form submitted successfully!",
+            type: "success",
+            time: 3000,
+            onClose: () => {
+                form.reset();
+            },
+        });
+    });
+</script>
+```
+
+## Additional Notes
+
+### Controller Architecture
+
+The component uses a controller pattern where:
+
+- `mjo-message` is the host component that initializes the controller
+- `MessageController` manages the lifecycle and message container creation
+- `mjo-message-container` is dynamically created in the document body
+- Individual messages are rendered as `mjoint-message-item` elements
+
+This architecture allows messages to appear above all content regardless of parent element constraints (z-index, overflow, etc.).
+
+### Message Container Placement
+
+The message container is automatically appended to `document.body` when the component connects to the DOM and inherits the z-index from the host component. You can control positioning with the `--mjo-message-top` CSS variable.
+
+### Message Queue Behavior
+
+When `maxMessages` is reached:
+
+1. The oldest message is automatically closed
+2. The new message is added to the queue
+3. Smooth animations ensure visual consistency
+
+### Animation and Transitions
+
+- Messages slide in with fade effect (500ms)
+- Close animation includes opacity fade and margin collapse (520ms total)
+- Respects `prefers-reduced-motion` user preferences through browser defaults
+
+### Theme Integration
+
+The component extends `ThemeMixin`, allowing theme customization through:
+
+- Direct theme property on the component
+- Parent `mjo-theme` component
+- Global CSS variables
+
+The theme is automatically propagated to the message container.
+
+### Memory Management
+
+The message container is automatically removed from the DOM when the host component disconnects, preventing memory leaks.
+
+### Type Safety
+
+For TypeScript projects, import types from the library:
+
+```typescript
+import type { MjoMessage, MessageTypes, MessageShowParams } from "mjo-litui/types";
+```

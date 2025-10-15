@@ -1,108 +1,233 @@
 # mjo-chip
 
-Flexible, theme-aware chip component for displaying compact information with multiple variants, colors, sizes, and interactive capabilities including clickable and closable functionality with full accessibility support.
+Flexible chip component for displaying compact information with multiple variants, colors, and interactive capabilities. Chips are commonly used for tags, categories, filters, and selections in user interfaces.
 
-## HTML Usage
+## Index
+
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Methods](#methods)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
+
+## Use Cases
+
+- **Tagging and categorization**: Display tags, labels, or categories for content organization
+- **Filter selections**: Show active filters with close functionality in search interfaces
+- **Contact chips**: Display selected contacts or recipients with removal capability
+- **Status indicators**: Show status with colored chips using the dot variant
+- **Interactive lists**: Clickable chips for navigation or triggering actions
+- **Choice selections**: Display selected options from multi-select interfaces
+
+## Import
+
+```typescript
+import "mjo-litui/mjo-chip";
+```
+
+Or import individually:
+
+```typescript
+import "mjo-litui/src/mjo-chip.js";
+```
+
+## Properties
+
+| Property          | Type                  | Description                                                                                           | Default     | Required |
+| ----------------- | --------------------- | ----------------------------------------------------------------------------------------------------- | ----------- | -------- |
+| `label`           | `string`              | Text displayed on the chip                                                                            | `""`        | No       |
+| `size`            | `MjoChipSize`         | Size variant: `"small"`, `"medium"`, `"large"`                                                        | `"medium"`  | No       |
+| `color`           | `MjoChipColor`        | Color variant: `"default"`, `"primary"`, `"secondary"`, `"success"`, `"info"`, `"warning"`, `"error"` | `"default"` | No       |
+| `radius`          | `MjoChipRadius`       | Border radius: `"none"`, `"small"`, `"medium"`, `"large"`, `"full"`                                   | `"full"`    | No       |
+| `variant`         | `MjoChipVariant`      | Visual style: `"solid"`, `"bordered"`, `"light"`, `"flat"`, `"faded"`, `"shadow"`, `"dot"`            | `"solid"`   | No       |
+| `value`           | `string \| undefined` | Optional value for the chip, used in events                                                           | `undefined` | No       |
+| `closable`        | `boolean`             | Shows close button and enables closing functionality                                                  | `false`     | No       |
+| `clickable`       | `boolean`             | Makes the chip interactive and emits click events                                                     | `false`     | No       |
+| `disabled`        | `boolean`             | Disables all interactions with the chip                                                               | `false`     | No       |
+| `startIcon`       | `string \| undefined` | Icon displayed at the start (from mjo-icons)                                                          | `undefined` | No       |
+| `endIcon`         | `string \| undefined` | Icon displayed at the end (from mjo-icons)                                                            | `undefined` | No       |
+| `ariaDescribedby` | `string \| undefined` | ID of element providing additional description                                                        | `undefined` | No       |
+| `ariaLabel`       | `string \| null`      | Accessibility label (auto-generated if not provided)                                                  | `null`      | No       |
+
+## Methods
+
+This component does not expose public methods.
+
+## Events
+
+| Event            | Type                | Description                                                           | Detail                                          |
+| ---------------- | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------- |
+| `mjo-chip:click` | `MjoChipClickEvent` | Fired when the chip is clicked (requires `clickable` property)        | `{ value: string }` - The chip's value or label |
+| `mjo-chip:close` | `MjoChipCloseEvent` | Fired when the close button is clicked (requires `closable` property) | `{ value: string }` - The chip's value or label |
+
+## CSS Variables
+
+| Variable                              | Description                                    | Default                             |
+| ------------------------------------- | ---------------------------------------------- | ----------------------------------- |
+| `--mjo-chip-background-color`         | Background color of the chip                   | Computed based on variant and color |
+| `--mjo-chip-border-color`             | Border color of the chip                       | Computed based on variant and color |
+| `--mjo-chip-padding`                  | Internal padding of the chip                   | `0 0.75em`                          |
+| `--mjo-chip-gap`                      | Gap between chip elements (icon, label, close) | `0.4em`                             |
+| `--mjo-chip-border-width-size-small`  | Border width for small size                    | `1px`                               |
+| `--mjo-chip-border-width-size-medium` | Border width for medium size                   | `2px`                               |
+| `--mjo-chip-border-width-size-large`  | Border width for large size                    | `3px`                               |
+| `--mjo-chip-font-size-small-size`     | Font size for small chips                      | `0.75em`                            |
+| `--mjo-chip-line-height-small-size`   | Line height for small chips                    | `0.75em`                            |
+| `--mjo-chip-font-size-medium-size`    | Font size for medium chips                     | `0.9em`                             |
+| `--mjo-chip-line-height-medium-size`  | Line height for medium chips                   | `1em`                               |
+| `--mjo-chip-font-size-large-size`     | Font size for large chips                      | `1.1em`                             |
+| `--mjo-chip-line-height-large-size`   | Line height for large chips                    | `1.2em`                             |
+
+## CSS Parts
+
+| Part         | Description                 | Element                       |
+| ------------ | --------------------------- | ----------------------------- |
+| `container`  | Main chip container element | `<div class="container">`     |
+| `label`      | Text label element          | Exposed from `mjo-typography` |
+| `start-icon` | Start icon element          | Exposed from `mjo-icon`       |
+| `end-icon`   | End icon element            | Exposed from `mjo-icon`       |
+| `close-icon` | Close button icon element   | Exposed from `mjo-icon`       |
+
+## Accessibility
+
+### ARIA Attributes
+
+The component automatically provides comprehensive ARIA labels:
+
+- **Clickable chips**: `"[Label]. Click to interact"`
+- **Closable chips**: `"[Label]. Press to close"`
+- **Both**: `"[Label]. Clickable chip with close button"`
+- **Default**: `"Chip: [Label]"`
+
+You can override these with the `ariaLabel` property for specific use cases.
+
+### Keyboard Interactions
+
+| Key                               | Action             | Requires              |
+| --------------------------------- | ------------------ | --------------------- |
+| `Enter` / `Space`                 | Activates the chip | `clickable` property  |
+| `Escape`                          | Closes the chip    | `closable` property   |
+| `Enter` / `Space` (on close icon) | Closes the chip    | Focus on close button |
+
+### Best Practices
+
+- Use descriptive labels that clearly communicate the chip's purpose
+- Provide `ariaDescribedby` for additional context when needed
+- Ensure sufficient color contrast when customizing colors
+- When using chips as filters, consider grouping them with a label
+- For closable chips in critical flows, provide confirmation or undo functionality
+
+## Usage Examples
+
+### Basic Chips
 
 ```html
-<mjo-chip label="Default Chip"></mjo-chip>
-<mjo-chip label="Primary" color="primary"></mjo-chip>
-<mjo-chip label="Closable Tag" color="secondary" closable></mjo-chip>
-<mjo-chip label="Clickable Filter" color="info" clickable></mjo-chip>
-<mjo-chip label="Interactive" clickable closable color="primary"></mjo-chip>
-<mjo-chip label="With Icon" startIcon="star" variant="flat"></mjo-chip>
+<!-- Simple chip -->
+<mjo-chip label="Tag"></mjo-chip>
+
+<!-- Colored chips -->
+<mjo-chip label="Success" color="success"></mjo-chip>
+<mjo-chip label="Warning" color="warning"></mjo-chip>
+<mjo-chip label="Error" color="error"></mjo-chip>
 ```
 
-## Basic Example
+### Size Variants
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-chip";
-import "mjo-litui/mjo-icon";
-
-@customElement("example-chip-basic")
-export class ExampleChipBasic extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                <mjo-chip label="Default"></mjo-chip>
-                <mjo-chip label="Primary" color="primary"></mjo-chip>
-                <mjo-chip label="Secondary" color="secondary"></mjo-chip>
-                <mjo-chip label="Success" color="success"></mjo-chip>
-                <mjo-chip label="Warning" color="warning"></mjo-chip>
-                <mjo-chip label="Info" color="info"></mjo-chip>
-                <mjo-chip label="Error" color="error"></mjo-chip>
-            </div>
-        `;
-    }
-}
+```html
+<mjo-chip label="Small" size="small"></mjo-chip>
+<mjo-chip label="Medium" size="medium"></mjo-chip>
+<mjo-chip label="Large" size="large"></mjo-chip>
 ```
 
-## Interactive Example
+### Visual Variants
 
-```ts
-import { LitElement, html } from "lit";
+```html
+<!-- Solid (default) -->
+<mjo-chip label="Solid" variant="solid" color="primary"></mjo-chip>
+
+<!-- Bordered -->
+<mjo-chip label="Bordered" variant="bordered" color="primary"></mjo-chip>
+
+<!-- Light variant -->
+<mjo-chip label="Light" variant="light" color="primary"></mjo-chip>
+
+<!-- Flat variant -->
+<mjo-chip label="Flat" variant="flat" color="primary"></mjo-chip>
+
+<!-- Faded variant -->
+<mjo-chip label="Faded" variant="faded" color="primary"></mjo-chip>
+
+<!-- Shadow variant -->
+<mjo-chip label="Shadow" variant="shadow" color="primary"></mjo-chip>
+
+<!-- Dot variant for status -->
+<mjo-chip label="Online" variant="dot" color="success"></mjo-chip>
+```
+
+### Interactive Chips
+
+```html
+<!-- Clickable chip -->
+<mjo-chip label="Click me" clickable @mjo-chip:click="${(e) => console.log('Clicked:', e.detail.value)}"></mjo-chip>
+
+<!-- Closable chip -->
+<mjo-chip label="Close me" closable @mjo-chip:close="${(e) => console.log('Closed:', e.detail.value)}"></mjo-chip>
+
+<!-- Both clickable and closable -->
+<mjo-chip label="Interactive" clickable closable value="custom-value" @mjo-chip:click="${handleClick}" @mjo-chip:close="${handleClose}"></mjo-chip>
+```
+
+### Chips with Icons
+
+```html
+<!-- Start icon -->
+<mjo-chip label="User" startIcon="user"></mjo-chip>
+
+<!-- End icon -->
+<mjo-chip label="Arrow" endIcon="arrow-right"></mjo-chip>
+
+<!-- Both icons -->
+<mjo-chip label="Favorite" startIcon="star" endIcon="check"></mjo-chip>
+```
+
+### Filter Chips with Dynamic Removal
+
+```typescript
+import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-chip";
 
-@customElement("example-chip-interactive")
-export class ExampleChipInteractive extends LitElement {
-    @state() private lastAction = "";
+@customElement("filter-chips")
+class FilterChips extends LitElement {
+    @state() filters = [
+        { id: 1, label: "Electronics", value: "electronics" },
+        { id: 2, label: "Books", value: "books" },
+        { id: 3, label: "Clothing", value: "clothing" },
+    ];
 
-    private handleChipClick(event: CustomEvent) {
-        this.lastAction = `Clicked: ${event.detail.value}`;
-    }
-
-    private handleChipClose(event: CustomEvent) {
-        this.lastAction = `Closed: ${event.detail.value}`;
+    handleClose(event: CustomEvent) {
+        const value = event.detail.value;
+        this.filters = this.filters.filter((f) => f.value !== value);
     }
 
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div style="display: flex; gap: 0.5rem;">
-                    <mjo-chip label="Click Me" color="primary" clickable @mjo-chip:click=${this.handleChipClick}></mjo-chip>
-                    <mjo-chip label="Remove Me" color="error" closable @mjo-chip:close=${this.handleChipClose}></mjo-chip>
-                    <mjo-chip
-                        label="Interactive"
-                        color="info"
-                        clickable
-                        closable
-                        @mjo-chip:click=${this.handleChipClick}
-                        @mjo-chip:close=${this.handleChipClose}
-                    ></mjo-chip>
-                </div>
-                ${this.lastAction ? html`<p><strong>Last action:</strong> ${this.lastAction}</p>` : ""}
-            </div>
-        `;
-    }
-}
-```
-
-## Variants Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-chip";
-
-@customElement("example-chip-variants")
-export class ExampleChipVariants extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                ${["solid", "bordered", "flat", "shadow", "dot"].map(
-                    (variant) => html`
-                        <div>
-                            <h4>${variant.charAt(0).toUpperCase() + variant.slice(1)} Variant</h4>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <mjo-chip label="Primary" color="primary" variant=${variant as any}></mjo-chip>
-                                <mjo-chip label="Success" color="success" variant=${variant as any}></mjo-chip>
-                                <mjo-chip label="Warning" color="warning" variant=${variant as any}></mjo-chip>
-                                <mjo-chip label="Error" color="error" variant=${variant as any}></mjo-chip>
-                            </div>
-                        </div>
+            <div class="filter-container">
+                ${this.filters.map(
+                    (filter) => html`
+                        <mjo-chip
+                            label="${filter.label}"
+                            value="${filter.value}"
+                            closable
+                            color="primary"
+                            variant="flat"
+                            @mjo-chip:close="${this.handleClose}"
+                        ></mjo-chip>
                     `,
                 )}
             </div>
@@ -111,490 +236,131 @@ export class ExampleChipVariants extends LitElement {
 }
 ```
 
-## Sizes and Radius Example
+### Status Indicators with Dot Variant
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-chip";
-
-@customElement("example-chip-sizes")
-export class ExampleChipSizes extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <div>
-                    <h4>Sizes</h4>
-                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                        <mjo-chip label="Small" color="primary" size="small"></mjo-chip>
-                        <mjo-chip label="Medium" color="primary" size="medium"></mjo-chip>
-                        <mjo-chip label="Large" color="primary" size="large"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Border Radius</h4>
-                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                        <mjo-chip label="None" color="secondary" radius="none"></mjo-chip>
-                        <mjo-chip label="Small" color="secondary" radius="small"></mjo-chip>
-                        <mjo-chip label="Medium" color="secondary" radius="medium"></mjo-chip>
-                        <mjo-chip label="Large" color="secondary" radius="large"></mjo-chip>
-                        <mjo-chip label="Full" color="secondary" radius="full"></mjo-chip>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
+```html
+<mjo-chip label="Active" variant="dot" color="success"></mjo-chip>
+<mjo-chip label="Pending" variant="dot" color="warning"></mjo-chip>
+<mjo-chip label="Offline" variant="dot" color="default"></mjo-chip>
+<mjo-chip label="Error" variant="dot" color="error"></mjo-chip>
 ```
 
-## Icons Example
+### Custom Styling with CSS Variables
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-chip";
-
-@customElement("example-chip-icons")
-export class ExampleChipIcons extends LitElement {
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <div>
-                    <h4>With Icons</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip label="Star" startIcon="star" color="primary"></mjo-chip>
-                        <mjo-chip label="Heart" startIcon="heart" color="error"></mjo-chip>
-                        <mjo-chip label="Download" endIcon="download" color="secondary"></mjo-chip>
-                        <mjo-chip label="Complete" startIcon="check" endIcon="arrow-right" color="success"></mjo-chip>
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Closable with Icons</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip label="JavaScript" color="primary" startIcon="code" closable></mjo-chip>
-                        <mjo-chip label="TypeScript" color="info" startIcon="file-text" closable></mjo-chip>
-                        <mjo-chip label="CSS" color="warning" startIcon="palette" closable></mjo-chip>
-                    </div>
-                </div>
-            </div>
-        `;
+```html
+<style>
+    .custom-chip::part(container) {
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
-}
+
+    .large-gap-chip {
+        --mjo-chip-gap: 0.8em;
+    }
+
+    .padded-chip {
+        --mjo-chip-padding: 0.5em 1.2em;
+    }
+
+    .custom-border {
+        --mjo-chip-border-width-size-medium: 3px;
+    }
+</style>
+
+<mjo-chip label="Styled" class="custom-chip"></mjo-chip>
+<mjo-chip label="Large Gap" class="large-gap-chip" startIcon="star" endIcon="check"></mjo-chip>
+<mjo-chip label="Padded" class="padded-chip"></mjo-chip>
+<mjo-chip label="Thick Border" variant="bordered" class="custom-border"></mjo-chip>
 ```
 
-## Dynamic Chip Management Example
+### Programmatic Chip Management
 
-```ts
-import { LitElement, html } from "lit";
+```typescript
+import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "mjo-litui/mjo-chip";
 import "mjo-litui/mjo-textfield";
 import "mjo-litui/mjo-button";
 
-@customElement("example-chip-dynamic")
-export class ExampleChipDynamic extends LitElement {
-    @state() private tags: Array<{ id: string; label: string }> = [
-        { id: "1", label: "React" },
-        { id: "2", label: "Vue" },
-        { id: "3", label: "Angular" },
-    ];
-    @state() private newTagValue = "";
+@customElement("tag-manager")
+class TagManager extends LitElement {
+    @state() tags: string[] = ["JavaScript", "TypeScript", "Lit"];
+    @state() newTag = "";
 
-    private addTag() {
-        if (this.newTagValue.trim()) {
-            this.tags = [...this.tags, { id: Date.now().toString(), label: this.newTagValue.trim() }];
-            this.newTagValue = "";
+    addTag() {
+        if (this.newTag.trim() && !this.tags.includes(this.newTag.trim())) {
+            this.tags = [...this.tags, this.newTag.trim()];
+            this.newTag = "";
         }
     }
 
-    private removeTag(event: CustomEvent) {
-        const tagId = event.detail.value;
-        this.tags = this.tags.filter((tag) => tag.id !== tagId);
+    removeTag(event: CustomEvent) {
+        this.tags = this.tags.filter((tag) => tag !== event.detail.value);
     }
 
     render() {
         return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div style="display: flex; gap: 0.5rem;">
-                    <mjo-textfield
-                        placeholder="Enter tag name"
-                        .value=${this.newTagValue}
-                        @input=${(e: InputEvent) => (this.newTagValue = (e.target as HTMLInputElement).value)}
-                        @keydown=${(e: KeyboardEvent) => e.key === "Enter" && this.addTag()}
-                    ></mjo-textfield>
-                    <mjo-button @click=${this.addTag} ?disabled=${!this.newTagValue.trim()}>Add</mjo-button>
-                </div>
-
-                <div style="min-height: 60px; padding: 1rem; border: 2px dashed #e5e7eb; border-radius: 8px;">
-                    ${this.tags.length > 0
-                        ? html`
-                              <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                                  ${this.tags.map(
-                                      (tag) => html`
-                                          <mjo-chip label=${tag.label} color="primary" closable value=${tag.id} @mjo-chip:close=${this.removeTag}></mjo-chip>
-                                      `,
-                                  )}
-                              </div>
-                          `
-                        : html`<div style="text-align: center; color: #6b7280;">No tags yet. Add some above!</div>`}
-                </div>
+            <div class="tag-input">
+                <mjo-textfield
+                    label="Add Tag"
+                    .value="${this.newTag}"
+                    @input="${(e: Event) => (this.newTag = (e.target as HTMLInputElement).value)}"
+                    @keydown="${(e: KeyboardEvent) => e.key === "Enter" && this.addTag()}"
+                ></mjo-textfield>
+                <mjo-button @click="${this.addTag}">Add</mjo-button>
+            </div>
+            <div class="tag-list">
+                ${this.tags.map(
+                    (tag) => html` <mjo-chip label="${tag}" value="${tag}" closable color="primary" @mjo-chip:close="${this.removeTag}"></mjo-chip> `,
+                )}
             </div>
         `;
     }
+
+    static styles = css`
+        .tag-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+    `;
 }
 ```
 
-## ThemeMixin Example
+## Additional Notes
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import type { MjoChipTheme } from "mjo-litui/types";
-import "mjo-litui/mjo-chip";
+### Visual Feedback
 
-@customElement("example-chip-themed")
-export class ExampleChipThemed extends LitElement {
-    private compactTheme: MjoChipTheme = {
-        fontSizeMediumSize: "0.8rem",
-        padding: "0 0.5rem",
-        gap: "0.3rem",
-    };
+When a chip is clickable, it provides visual feedback on interaction:
 
-    private spaciousTheme: MjoChipTheme = {
-        fontSizeMediumSize: "1.1rem",
-        padding: "0 1.2rem",
-        gap: "0.6rem",
-    };
+- Scale animation on click (scales to 0.95, then 1.02, then back to normal)
+- Focus outline appears on keyboard navigation
+- Hover state shows focus outline
 
-    render() {
-        return html`
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div>
-                    <h4>Default</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip label="Standard" color="primary"></mjo-chip>
-                        <mjo-chip label="With Icon" startIcon="star" color="success"></mjo-chip>
-                    </div>
-                </div>
-                <div>
-                    <h4>Compact Theme</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip label="Compact" color="primary" .theme=${this.compactTheme}></mjo-chip>
-                        <mjo-chip label="Compact Icon" startIcon="star" color="success" .theme=${this.compactTheme}></mjo-chip>
-                    </div>
-                </div>
-                <div>
-                    <h4>Spacious Theme</h4>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <mjo-chip label="Spacious" color="primary" .theme=${this.spaciousTheme}></mjo-chip>
-                        <mjo-chip label="Spacious Icon" startIcon="star" color="success" .theme=${this.spaciousTheme}></mjo-chip>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-```
+### Auto-removal on Close
 
-## Attributes / Properties
+When a closable chip is closed, it automatically removes itself from the DOM. This behavior is built-in and does not require additional handling, though you should still listen to the `mjo-chip:close` event to update your application state.
 
-| Name              | Type                                                                                   | Default     | Reflects | Description                                                           |
-| ----------------- | -------------------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------- |
-| `label`           | `string`                                                                               | `""`        | no       | Text content displayed in the chip                                    |
-| `color`           | `"primary" \| "secondary" \| "default" \| "success" \| "warning" \| "info" \| "error"` | `"default"` | no       | Semantic color scheme applied to the chip                             |
-| `variant`         | `"solid" \| "bordered" \| "light" \| "flat" \| "faded" \| "shadow" \| "dot"`           | `"solid"`   | no       | Visual styling variant that affects appearance and background         |
-| `size`            | `"small" \| "medium" \| "large"`                                                       | `"medium"`  | no       | Controls the overall size including font size and padding             |
-| `radius`          | `"small" \| "medium" \| "large" \| "full" \| "none"`                                   | `"full"`    | no       | Border radius applied to the chip (full creates pill shape)           |
-| `startIcon`       | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the beginning of the chip content                   |
-| `endIcon`         | `string \| undefined`                                                                  | `undefined` | no       | Icon displayed at the end of the chip content                         |
-| `clickable`       | `boolean`                                                                              | `false`     | no       | Makes the chip clickable and dispatches `mjo-chip:click` events       |
-| `closable`        | `boolean`                                                                              | `false`     | no       | Adds a close button that emits `mjo-chip:close` event when clicked    |
-| `disabled`        | `boolean`                                                                              | `false`     | no       | Disables interaction and applies disabled styling                     |
-| `value`           | `string \| undefined`                                                                  | `undefined` | no       | Optional value passed in event details (falls back to label)          |
-| `ariaDescribedby` | `string \| undefined`                                                                  | `undefined` | no       | References additional descriptive content for screen readers          |
-| `ariaLabel`       | `string \| null`                                                                       | `null`      | yes      | Custom accessible label for screen readers (overrides computed label) |
+### Value vs Label
 
-### Accessibility Properties (Native Lit Support)
+The `value` property is optional and distinct from `label`:
 
-The component supports standard HTML accessibility attributes through Lit's native property binding:
+- **label**: Visual text displayed on the chip
+- **value**: Semantic value used in events (defaults to label if not provided)
 
-| Attribute       | Usage                                     | Description                                           |
-| --------------- | ----------------------------------------- | ----------------------------------------------------- |
-| `aria-label`    | `aria-label="Custom chip description"`    | Provides accessible label for screen readers          |
-| `tabindex`      | `tabindex="0"` or `tabindex="-1"`         | Controls keyboard navigation (automatically managed)  |
-| `role`          | Automatically set based on context        | Dynamic: `"button"` when interactive, none otherwise  |
-| `aria-disabled` | Automatically set when `disabled` is true | Communicates disabled state to assistive technologies |
+This separation allows for display text that differs from the underlying data value.
 
-### Behavior Notes
+### Variant Guidelines
 
-- The `dot` variant adds a colored dot indicator at the beginning of the chip
-- Closable chips automatically remove themselves from DOM when close button is clicked
-- Clickable chips provide visual feedback animation when activated
-- Icons scale with the chip size automatically
-- The `value` property is useful for identifying chips in event handlers
-- Color variants affect both background and text colors based on the selected variant
-- When both `clickable` and `closable` are true, the chip main area triggers click events, close button triggers close events
-- Keyboard navigation: Tab to focus, Enter/Space to activate, Escape to close (if closable)
-
-## Slots
-
-| Slot      | Description                                                             |
-| --------- | ----------------------------------------------------------------------- |
-| (default) | Currently not implemented; content is provided via the `label` property |
-
-## Events
-
-| Event            | Detail              | Emitted When                                  | Notes                                                                   |
-| ---------------- | ------------------- | --------------------------------------------- | ----------------------------------------------------------------------- |
-| `mjo-chip:click` | `{ value: string }` | Chip main area is clicked (when `clickable`)  | Contains `value` prop or `label` prop as fallback; bubbles and composed |
-| `mjo-chip:close` | `{ value: string }` | Close button is clicked (closable chips only) | Contains `value` prop or `label` prop as fallback; chip removes itself  |
-
-**Note**: When both `clickable` and `closable` are true, clicking the main chip area triggers `mjo-chip:click`, while clicking the close button triggers `mjo-chip:close`. The close button click event stops propagation to prevent triggering the main click event.
-
-## Methods
-
-The component doesn't expose public methods. Interaction is handled through properties and events.
-
-## CSS Variables
-
-The component provides extensive customization through CSS variables with fallbacks to the global design system.
-
-| Variable                              | Fallback   | Used For                        |
-| ------------------------------------- | ---------- | ------------------------------- |
-| `--mjo-chip-background-color`         | `-`        | Background color of the chip    |
-| `--mjo-chip-border-color`             | `-`        | Border color of the chip        |
-| `--mjo-chip-font-size-small-size`     | `0.75em`   | Small chip font size            |
-| `--mjo-chip-font-size-medium-size`    | `0.9em`    | Medium chip font size (default) |
-| `--mjo-chip-font-size-large-size`     | `1.1em`    | Large chip font size            |
-| `--mjo-chip-line-height-small-size`   | `0.75em`   | Small chip line height          |
-| `--mjo-chip-line-height-medium-size`  | `1em`      | Medium chip line height         |
-| `--mjo-chip-line-height-large-size`   | `1.2em`    | Large chip line height          |
-| `--mjo-chip-padding`                  | `0 0.75em` | Internal padding                |
-| `--mjo-chip-gap`                      | `0.4em`    | Gap between chip elements       |
-| `--mjo-chip-border-width-size-small`  | `1px`      | Small chip border width         |
-| `--mjo-chip-border-width-size-medium` | `2px`      | Medium chip border width        |
-| `--mjo-chip-border-width-size-large`  | `3px`      | Large chip border width         |
-
-#### Primary Colors
-
-- `--mjo-primary-color` / `--mjo-primary-foreground-color`
-- `--mjo-primary-color-alpha2` (flat variant)
-- `--mjo-primary-color-alpha5` (shadow variant)
-
-#### Secondary Colors
-
-- `--mjo-secondary-color` / `--mjo-secondary-foreground-color`
-- `--mjo-secondary-color-alpha2` (flat variant)
-- `--mjo-secondary-color-alpha5` (shadow variant)
-
-#### Status Colors
-
-- `--mjo-color-success` / `--mjo-color-info` / `--mjo-color-warning` / `--mjo-color-error`
-- Corresponding alpha variants for flat and shadow styles
-
-#### Gray Scale
-
-- `--mjo-color-gray-400` (default background)
-- `--mjo-color-gray-600` (faded variant)
-- `--mjo-color-gray-200` (borders)
-- `--mjo-color-white` / `--mjo-color-black` (text)
-
-## ThemeMixin Customization
-
-This component mixes in `ThemeMixin`, allowing you to pass a `theme` object to customize specific instances. Properties are automatically converted from camelCase to CSS variables with the pattern: `--mjo-chip-{property-name}`.
-
-### MjoChipTheme Interface
-
-```ts
-interface MjoChipTheme {
-    borderWidthSizeSmall?: string;
-    borderWidthSizeMedium?: string;
-    borderWidthSizeLarge?: string;
-    fontSizeSmallSize?: string;
-    fontSizeMediumSize?: string;
-    fontSizeLargeSize?: string;
-    gap?: string;
-    lineHeightSmallSize?: string;
-    lineHeightMediumSize?: string;
-    lineHeightLargeSize?: string;
-    padding?: string;
-}
-```
-
-### ThemeMixin Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import type { MjoChipTheme } from "mjo-litui/types";
-import "mjo-litui/mjo-chip";
-
-@customElement("example-chip-themed")
-export class ExampleChipThemed extends LitElement {
-    private customTheme: MjoChipTheme = {
-        fontSizeMediumSize: "1rem",
-        lineHeightMediumSize: "1.2rem",
-        padding: "0.25rem 1rem",
-        gap: "0.5rem",
-        borderWidthSizeMedium: "2px",
-    };
-
-    render() {
-        return html`
-            <div style="display: flex; gap: 0.5rem;">
-                <mjo-chip label="Custom Theme" color="primary" startIcon="star" .theme=${this.customTheme}></mjo-chip>
-                <mjo-chip label="Themed Bordered" color="success" variant="bordered" .theme=${this.customTheme}></mjo-chip>
-            </div>
-        `;
-    }
-}
-```
-
-## Accessibility Features
-
-The `mjo-chip` component includes comprehensive accessibility support following WCAG 2.1 guidelines:
-
-### Automatic Accessibility Features
-
-- **Dynamic Roles**: Automatically sets appropriate `role` attributes:
-    - `role="button"` for interactive chips (clickable or closable)
-    - No role for purely decorative chips
-- **ARIA Labels**: Intelligent `aria-label` generation:
-    - Generic: "Chip: {label}" for display-only chips
-    - Interactive: "{label}. Click to interact" for clickable chips
-    - Closable: "{label}. Press to close" for closable chips
-    - Combined: "{label}. Clickable chip with close button" for both
-- **Keyboard Navigation**: Full keyboard support:
-    - **Tab**: Navigate between focusable chips
-    - **Enter/Space**: Activate clickable chips or close closable chips
-    - **Escape**: Close closable chips (additional shortcut)
-    - Visual focus indicators with `:focus-visible`
-- **State Communication**:
-    - `aria-disabled="true"` when chip is disabled
-    - `tabindex` automatically managed based on interaction state
-    - Proper state changes communicated to screen readers
-
-### Close Button Accessibility
-
-- Dedicated `aria-label` for close buttons: "Close {label}"
-- Independent keyboard navigation and activation
-- Visual focus indicators separate from main chip focus
-- Event propagation properly managed to prevent conflicts
-
-### Accessibility Best Practices
-
-```html
-<!-- Basic accessible chip -->
-<mjo-chip label="JavaScript Tag"></mjo-chip>
-
-<!-- Enhanced accessibility for interactive chips -->
-<mjo-chip
-    label="Active Filter"
-    clickable
-    color="primary"
-    aria-label="JavaScript filter, click to toggle"
-    aria-describedby="filter-help"
-    @mjo-chip:click="${this.handleFilterToggle}"
-></mjo-chip>
-
-<!-- Closable chip with context -->
-<mjo-chip label="Project Alpha" closable value="project-alpha" aria-describedby="project-description" @mjo-chip:close="${this.handleProjectRemove}"></mjo-chip>
-
-<!-- Both interactive with custom labels -->
-<mjo-chip
-    label="React"
-    clickable
-    closable
-    value="react-tag"
-    aria-label="React technology tag, click to view details or close to remove"
-    @mjo-chip:click="${this.viewDetails}"
-    @mjo-chip:close="${this.removeTag}"
-></mjo-chip>
-```
-
-### Motion and Preference Support
-
-- **Reduced Motion**: Respects `prefers-reduced-motion` user setting
-- **Visual Feedback**: Subtle scale animations for clickable chips
-- **Focus Management**: Clear visual focus indicators for keyboard users
-- **Color Contrast**: All color variants maintain sufficient contrast ratios
-
-### Screen Reader Support
-
-- Interactive state changes are announced appropriately
-- Close actions provide meaningful feedback through events
-- Complex chips with multiple actions have clear role separation
-- Loading and error states can be announced through custom event handling
-
-## CSS Parts
-
-| Part         | Description                                                   |
-| ------------ | ------------------------------------------------------------- |
-| `container`  | The main chip container element                               |
-| `label`      | The text label element (via exportparts from mjo-typography)  |
-| `start-icon` | The start icon element (via exportparts from mjo-icon)        |
-| `end-icon`   | The end icon element (via exportparts from mjo-icon)          |
-| `close-icon` | The close button icon element (via exportparts from mjo-icon) |
-
-## Performance Considerations
-
-- Large numbers of chips should be virtualized if performance becomes an issue
-- The component uses efficient CSS variables for theming without runtime style recalculation
-- Close functionality removes chips from DOM automatically
-- Icon rendering is optimized through the mjo-icon component
-
-## Design Guidelines
-
-- **Consistency**: Use consistent color schemes for related chip groups
-- **Clarity**: Choose variants that provide appropriate visual hierarchy
-- **Spacing**: Allow adequate spacing between chips for touch targets
-- **Content**: Keep labels concise and descriptive
-- **Actions**: Use closable chips for removable items, regular chips for display-only content
-
-## Best Practices
-
-### Content Organization
-
-- Group related chips together logically
-- Use consistent sizing within groups
-- Implement clear visual hierarchy with colors and variants
-
-### Interactive Design
-
-- Provide visual feedback for interactive chips
-- Use appropriate colors to indicate state (selected, active, etc.)
-- Consider loading states for dynamic chip updates
-
-### Accessibility
-
-- Ensure sufficient color contrast
-- Provide keyboard navigation for interactive chips
-- Use descriptive labels and ARIA attributes where needed
-
-## Summary
-
-`<mjo-chip>` provides a versatile component for displaying compact, labeled information with extensive customization options and comprehensive accessibility support. The component supports multiple visual variants, semantic colors, interactive capabilities (clickable and closable), and comprehensive theming through ThemeMixin. Use chips for tags, filters, status indicators, user attributes, and other compact data display needs.
-
-Key features include:
-
-- **Interactive Capabilities**: Full support for clickable and closable functionality with separate event handling
-- **Visual Variants**: Seven distinct styling variants (solid, bordered, light, flat, faded, shadow, dot)
-- **Semantic Colors**: Complete integration with the global design system
-- **Keyboard Navigation**: Full keyboard support with Tab, Enter, Space, and Escape key handling
-- **Extensive Customization**: ThemeMixin support for instance-specific styling
-- **Icon Support**: Start and end icon positioning with automatic scaling
-- **Animation Feedback**: Subtle visual feedback for interactive elements
-
-### Accessibility Highlights
-
-- **WCAG 2.1 Compliant**: Meets accessibility standards with comprehensive keyboard and screen reader support
-- **Intelligent ARIA**: Dynamic role and label generation based on interaction state
-- **Focus Management**: Clear visual focus indicators with customizable colors
-- **Keyboard Navigation**: Complete keyboard support including Escape key for closing
-- **Screen Reader Support**: Proper state announcements and contextual labeling
-- **Motion Preferences**: Respects user's `prefers-reduced-motion` setting
-- **Event Separation**: Clean separation between click and close actions for complex interactions
-
-The component's flexibility makes it suitable for both static display and dynamic, interactive use cases while maintaining consistent styling and full accessibility compliance. Perfect for building accessible filter systems, tag management interfaces, status indicators, and compact information displays.
+- **solid**: Default, high emphasis, best for primary actions
+- **bordered**: Medium emphasis, good for secondary choices
+- **light**: Minimal styling, subtle presence
+- **flat**: Light background with colored text, balanced visibility
+- **faded**: Low emphasis, uniform appearance across colors
+- **shadow**: Elevated appearance, draws attention
+- **dot**: Status indicators, minimal space usage

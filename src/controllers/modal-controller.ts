@@ -14,10 +14,16 @@ export class ModalController implements ReactiveController {
         (this.host = host).addController(this);
     }
 
+    /**
+     * Opens the modal with the specified configuration
+     */
     show({ content, time, title, width, animationDuration, blocked, closePosition, onClose }: ModalShowParams) {
         this.modalContainer.show({ content, time, title, width, animationDuration, blocked, closePosition, onClose });
     }
 
+    /**
+     * Closes the modal programmatically
+     */
     close() {
         this.modalContainer.close();
     }

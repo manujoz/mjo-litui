@@ -12,8 +12,8 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 ### Core Components
 
-- **[mjo-theme](mjo-theme.md)** - Theme configuration and CSS variables
-- **[mjo-typography](mjo-typography.md)** - Semantic text styling
+- **[mjo-theme](mjo-theme.md)** - Theme management component that applies consistent design tokens across the application and manages light/dark mode switching
+- **[mjo-typography](mjo-typography.md)** - Semantic typography component with configurable sizes, weights, and semantic HTML tags
 - **[mjo-icon](mjo-icon.md)** - Icon display from mjo-icons
 - **[mjo-ripple](mjo-ripple.md)** - Material Design ripple effects
 
@@ -23,39 +23,48 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 - **[mjo-grid](mjo-grid.md)** - Responsive grid layout system
 - **[mjo-accordion](mjo-accordion.md)** - Flexible accordion with multiple variants and selection modes
 
+### Navigation
+
+- **[mjo-breadcrumbs](mjo-breadcrumbs.md)** - Navigation breadcrumbs component with horizontal scroll shadow support
+- **[mjo-pagination](mjo-pagination.md)** - Comprehensive pagination component with animated page indicator and full accessibility support
+- **[mjo-tab](mjo-tab.md)** - Individual tab panel component that displays content when active within a tab navigation system
+
 ### Form Components
 
 - **[mjo-form](mjo-form.md)** - Form container with validation
 - **[mjo-textfield](mjo-textfield.md)** - Single-line text inputs
-- **[mjo-textarea](mjo-textarea.md)** - Multi-line text inputs
-- **[mjo-select](mjo-select.md)** - Dropdown select inputs
+- **[mjo-textarea](mjo-textarea.md)** - Multi-line text input with auto-resize functionality, character counting, and comprehensive validation support
+- **[mjo-select](mjo-select.md)** - Comprehensive dropdown select component with search functionality, rich options support, and full form integration
 - **[mjo-option](mjo-option.md)** - Select option items
-- **[mjo-checkbox](mjo-checkbox.md)** - Form checkboxes with validation
-- **[mjo-radio](mjo-radio.md)** - Radio button inputs
-- **[mjo-switch](mjo-switch.md)** - Toggle switch controls
-- **[mjo-slider](mjo-slider.md)** - Range slider inputs
-- **[mjo-color-picker](mjo-color-picker.md)** - Color selection interface
-- **[mjo-date-picker](mjo-date-picker.md)** - Composite calendar input (single or range)
+- **[mjo-checkbox](mjo-checkbox.md)** - Customizable checkbox with form integration, validation, and indeterminate state (includes mjo-checkbox-group)
+- **[mjo-radio](mjo-radio.md)** - Customizable radio button with form integration, validation support, and enhanced accessibility (includes mjo-radio-group)
+- **[mjo-switch](mjo-switch.md)** - Toggle switch component with customizable themes, sizes, and comprehensive form integration
+- **[mjo-slider](mjo-slider.md)** - Customizable range slider component with accessibility support, keyboard navigation, and range selection
+- **[mjo-color-picker](mjo-color-picker.md)** - Advanced color picker with multiple formats, accessibility features, and form integration
+- **[mjo-date-picker](mjo-date-picker.md)** - Interactive date picker with comprehensive features for single date and date range selection
 - **[mjo-calendar](mjo-calendar.md)** - Standalone calendar (used by date picker)
 
 ### Interactive Components
 
-- **[mjo-button](mjo-button.md)** - Interactive buttons with variants and states
-- **[mjo-dropdown](mjo-dropdown.md)** - Contextual dropdown menus
-- **[mjo-link](mjo-link.md)** - Accessible links with button variants and comprehensive ARIA support
+- **[mjo-button](mjo-button.md)** - Fully accessible button component with multiple variants, interactive states, and comprehensive ARIA support
+- **[mjo-dropdown](mjo-dropdown.md)** - Accessible dropdown component that displays floating content relative to its trigger element
+- **[mjo-link](mjo-link.md)** - Accessible link component with multiple variants, color options, and comprehensive keyboard navigation support
+- **[mjo-listbox](mjo-listbox.md)** - Interactive listbox component for displaying selectable lists with sections, icons, and full accessibility support
+- **[mjo-menu-button](mjo-menu-button.md)** - Animated hamburger menu button with multiple effects and semantic colors
 
 ### Media & Display
 
-- **[mjo-image](mjo-image.md)** - Enhanced image component with loading states
-- **[mjo-avatar](mjo-avatar.md)** - User profile images and placeholders
-- **[mjo-table](mjo-table.md)** - Data tables with sorting and filtering
-- **[mjo-text-nowrap](mjo-text-nowrap.md)** - Text overflow handling
+- **[mjo-image](mjo-image.md)** - Responsive image component with error handling, loading states, and accessibility features
+- **[mjo-avatar](mjo-avatar.md)** - Configurable avatar component for user images, initials, or fallback icons
+- **[mjo-badge](mjo-badge.md)** - Positioned notification badge component with comprehensive accessibility support
+- **[mjo-table](mjo-table.md)** - Comprehensive data table component with advanced features including sorting, filtering, pagination, infinite scroll, and row selection
+- **[mjo-text-nowrap](mjo-text-nowrap.md)** - Simple component that truncates text with ellipsis when it overflows its container
 
 ### Feedback & Messaging
 
-- **[mjo-alert](mjo-alert.md)** - Contextual feedback messages
-- **[mjo-message](mjo-message.md)** - Toast-style messages
-- **[mjo-notification](mjo-notification.md)** - System notifications
+- **[mjo-alert](mjo-alert.md)** - Alert component for displaying contextual feedback messages with multiple types, sizes, and dismissal functionality
+- **[mjo-message](mjo-message.md)** - Global message controller component that displays temporary toast-like notifications with comprehensive accessibility support
+- **[mjo-notification](mjo-notification.md)** - Notification system for displaying positioned toast notifications with controller architecture and comprehensive accessibility support
 
 ### Overlays
 
@@ -64,7 +73,9 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 ### Utility Components
 
-- **[mjo-chip](mjo-chip.md)** - Compact elements for tags and filters
+- **[mjo-chip](mjo-chip.md)** - Flexible chip component for displaying compact information with multiple variants, colors, and interactive capabilities
+- **[mjo-progress](mjo-progress.md)** - Accessible progress indicators supporting bar and circular variants with determinate and indeterminate states
+- **[mjo-scrollshadow](mjo-scrollshadow.md)** - Container component that adds visual scroll shadows to indicate scrollable content with automatic background color detection
 
 4. **Coming Soon** (suggested): accessibility, form patterns, contribution guides.
 

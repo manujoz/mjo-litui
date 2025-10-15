@@ -14,6 +14,31 @@ import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
  *
  * @slot - Text content to be styled with typography rules
  * @csspart typography - The rendered HTML element (h1, h2, h3, h4, h5, p, or span)
+ *
+ * @cssprop --mjo-typography-h1-font-size - Font size for heading1 size preset (default: 2em)
+ * @cssprop --mjo-typography-h1-line-height - Line height for heading1 size preset (default: calc(1em + 6px))
+ * @cssprop --mjo-typography-h2-font-size - Font size for heading2 size preset (default: 1.5em)
+ * @cssprop --mjo-typography-h2-line-height - Line height for heading2 size preset (default: calc(1em + 6px))
+ * @cssprop --mjo-typography-h3-font-size - Font size for heading3 size preset (default: 1.25em)
+ * @cssprop --mjo-typography-h3-line-height - Line height for heading3 size preset (default: calc(1em + 6px))
+ * @cssprop --mjo-typography-base-font-size - Font size for base size preset (default: 1em)
+ * @cssprop --mjo-typography-base-line-height - Line height for base size preset (default: calc(1em + 6px))
+ * @cssprop --mjo-typography-body1-font-size - Font size for body1 size preset (default: 0.875em)
+ * @cssprop --mjo-typography-body1-line-height - Line height for body1 size preset (default: calc(1em + 6px))
+ * @cssprop --mjo-typography-body2-font-size - Font size for body2 size preset (default: 0.75em)
+ * @cssprop --mjo-typography-body2-line-height - Line height for body2 size preset (default: calc(1em + 6px))
+ * @cssprop --mjo-typography-body3-font-size - Font size for body3 size preset (default: 0.625em)
+ * @cssprop --mjo-typography-body3-line-height - Line height for body3 size preset (default: calc(1em + 6px))
+ * @cssprop --mjo-typography-font-weight-light - Font weight for light preset (default: 300)
+ * @cssprop --mjo-typography-font-weight-regular - Font weight for regular preset (default: 400)
+ * @cssprop --mjo-typography-font-weight-medium - Font weight for medium preset (default: 500)
+ * @cssprop --mjo-typography-font-weight-bold - Font weight for bold preset (default: 600)
+ * @cssprop --mjo-primary-color - Color for primary preset (default: currentColor)
+ * @cssprop --mjo-secondary-color - Color for secondary preset (default: currentColor)
+ * @cssprop --mjo-color-success - Color for success preset (default: currentColor)
+ * @cssprop --mjo-color-warning - Color for warning preset (default: currentColor)
+ * @cssprop --mjo-color-error - Color for error preset (default: currentColor)
+ * @cssprop --mjo-color-info - Color for info preset (default: currentColor)
  */
 @customElement("mjo-typography")
 export class MjoTypography extends ThemeMixin(LitElement) implements IThemeMixin {

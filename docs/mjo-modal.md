@@ -1,815 +1,371 @@
 # mjo-modal
 
-A modal dialog component with controller architecture for displaying overlay content with full accessibility support.
+Controller-based modal dialog component for displaying overlay content with comprehensive accessibility support.
 
-## Overview
+## Index
 
-The `mjo-modal` component provides a powerful modal system for displaying overlay content. It uses a controller architecture that creates a global modal container in the document body, allowing modals to appear above any content regardless of parent element constraints like `overflow: hidden`.
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Public Methods](#public-methods)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-The component includes comprehensive accessibility features including focus trapping, keyboard navigation, ARIA support, and screen reader compatibility.
+## Use Cases
 
-## Accessibility Features
+- Display confirmation dialogs requiring user action
+- Show detailed information in an overlay without navigating away
+- Present forms or complex interactions in a focused context
+- Create custom alert or notification systems with controlled timing
+- Implement modal workflows with programmatic control
 
-- **Focus Management**: Automatic focus trapping within the modal with configurable initial focus
-- **Keyboard Navigation**: ESC key to close, Tab navigation within modal content
-- **ARIA Support**: Proper dialog role, aria-modal, aria-labelledby, and aria-describedby attributes
-- **Screen Reader**: Announces modal opening and provides accessible labels
-- **Body Scroll**: Prevents background scrolling when modal is open (configurable)
-- **Focus Restoration**: Returns focus to the triggering element when closed
+## Import
 
-## Basic Usage
-
-### HTML
-
-```html
-<mjo-modal></mjo-modal>
-```
-
-### Simple Modal Display
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoModal } from "mjo-litui/types";
+```typescript
 import "mjo-litui/mjo-modal";
-import "mjo-litui/mjo-button";
-
-@customElement("example-modal-basic")
-export class ExampleModalBasic extends LitElement {
-    @query("mjo-modal")
-    private modalComponent!: MjoModal;
-
-    private openSimpleModal() {
-        this.modalComponent.controller.show({
-            title: "Welcome",
-            content: html`
-                <div style="padding: 1rem;">
-                    <p>This is a simple modal with basic content.</p>
-                    <p>You can close it by clicking the X button or clicking outside.</p>
-                </div>
-            `,
-        });
-    }
-
-    private openHtmlModal() {
-        this.modalComponent.controller.show({
-            title: "HTML Content",
-            content: `
-        <div style="padding: 1rem;">
-          <h4>Rich HTML Content</h4>
-          <p>This modal contains <strong>HTML string content</strong> with styling.</p>
-          <ul>
-            <li>List item 1</li>
-            <li>List item 2</li>
-            <li>List item 3</li>
-          </ul>
-        </div>
-      `,
-        });
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; gap: 1rem;">
-                <mjo-button @click=${this.openSimpleModal}> Open Simple Modal </mjo-button>
-                <mjo-button @click=${this.openHtmlModal}> Open HTML Modal </mjo-button>
-            </div>
-
-            <mjo-modal></mjo-modal>
-        `;
-    }
-}
-```
-
-## Accessibility Configuration
-
-Configure modal accessibility features for optimal screen reader and keyboard support:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoModal } from "mjo-litui/types";
-import "mjo-litui/mjo-modal";
-import "mjo-litui/mjo-button";
-
-@customElement("example-modal-accessibility")
-export class ExampleModalAccessibility extends LitElement {
-    @query("mjo-modal")
-    private modalComponent!: MjoModal;
-
-    private openAccessibleModal() {
-        this.modalComponent.controller.show({
-            title: "Confirm Action",
-            content: html`
-                <div style="padding: 1.5rem;">
-                    <h3 id="modal-title">Confirm Action</h3>
-                    <p id="modal-description">Are you sure you want to delete this item? This action cannot be undone.</p>
-                    <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
-                        <mjo-button variant="ghost" @click=${() => this.modalComponent.controller.close()}> Cancel </mjo-button>
-                        <mjo-button id="confirm-button" variant="danger"> Delete </mjo-button>
-                    </div>
-                </div>
-            `,
-        });
-    }
-
-    render() {
-        return html`
-            <mjo-button @click=${this.openAccessibleModal}> Open Accessible Modal </mjo-button>
-
-            <!-- Configure accessibility options -->
-            <mjo-modal
-                aria-labelledby="modal-title"
-                aria-describedby="modal-description"
-                initial-focus="#confirm-button"
-                trap-focus
-                restore-focus
-                close-on-escape
-                prevent-body-scroll
-            >
-            </mjo-modal>
-        `;
-    }
-}
-```
-
-## Modal Sizes and Positioning
-
-Configure modal dimensions and close button positioning:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoModal } from "mjo-litui/types";
-import "mjo-litui/mjo-modal";
-import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-card";
-
-@customElement("example-modal-sizes")
-export class ExampleModalSizes extends LitElement {
-    @query("mjo-modal")
-    private modalComponent!: MjoModal;
-
-    private openSmallModal() {
-        this.modalComponent.controller.show({
-            title: "Small Modal",
-            width: 300,
-            content: html`
-                <div style="padding: 1rem;">
-                    <p>This is a small modal (300px width).</p>
-                </div>
-            `,
-        });
-    }
-
-    private openLargeModal() {
-        this.modalComponent.controller.show({
-            title: "Large Modal",
-            width: "80vw",
-            content: html`
-                <div style="padding: 2rem;">
-                    <p>This is a large modal (80% viewport width).</p>
-                    <p>It automatically adapts to the content size and viewport.</p>
-                </div>
-            `,
-        });
-    }
-
-    private openOutsideCloseModal() {
-        this.modalComponent.controller.show({
-            title: "Outside Close Button",
-            closePosition: "out",
-            content: html`
-                <div style="padding: 1rem;">
-                    <p>This modal has the close button positioned outside the modal container.</p>
-                    <p>Notice the white X button in the top-right corner.</p>
-                </div>
-            `,
-        });
-    }
-
-    private openInsideCloseModal() {
-        this.modalComponent.controller.show({
-            title: "Inside Close Button",
-            closePosition: "in",
-            content: html`
-                <div style="padding: 1rem;">
-                    <p>This modal has the close button inside the modal container.</p>
-                    <p>The close button is smaller and positioned within the modal.</p>
-                </div>
-            `,
-        });
-    }
-
-    render() {
-        return html`
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <mjo-button @click=${this.openSmallModal}> Small Modal </mjo-button>
-                <mjo-button @click=${this.openLargeModal}> Large Modal </mjo-button>
-                <mjo-button @click=${this.openOutsideCloseModal}> Outside Close </mjo-button>
-                <mjo-button @click=${this.openInsideCloseModal}> Inside Close </mjo-button>
-            </div>
-
-            <mjo-modal></mjo-modal>
-        `;
-    }
-}
-```
-
-## Auto-Close and Blocking
-
-Configure automatic closing and modal blocking:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoModal } from "mjo-litui/types";
-import "mjo-litui/mjo-modal";
-import "mjo-litui/mjo-button";
-
-@customElement("example-modal-behavior")
-export class ExampleModalBehavior extends LitElement {
-    @query("mjo-modal")
-    private modalComponent!: MjoModal;
-
-    private openAutoCloseModal() {
-        this.modalComponent.controller.show({
-            title: "Auto-Close Modal",
-            time: 3000,
-            content: html`
-                <div style="padding: 1rem;">
-                    <p>This modal will automatically close after 3 seconds.</p>
-                    <p>You can still close it manually if needed.</p>
-                </div>
-            `,
-            onClose: () => {
-                console.log("Auto-close modal was closed");
-            },
-        });
-    }
-
-    private openBlockedModal() {
-        this.modalComponent.controller.show({
-            title: "Blocked Modal",
-            blocked: true,
-            content: html`
-                <div style="padding: 1rem;">
-                    <p>This modal is blocked - you cannot close it by clicking outside or using the X button.</p>
-                    <p>You must use the button below to close it.</p>
-                    <mjo-button @click=${() => this.modalComponent.controller.close()}> Close Modal </mjo-button>
-                </div>
-            `,
-        });
-    }
-
-    private openCallbackModal() {
-        this.modalComponent.controller.show({
-            title: "Modal with Callback",
-            content: html`
-                <div style="padding: 1rem;">
-                    <p>This modal has a callback function that executes when closed.</p>
-                    <p>Check the console when you close this modal.</p>
-                </div>
-            `,
-            onClose: () => {
-                alert("Modal was closed! Check the console for more info.");
-                console.log("Modal closed at:", new Date().toLocaleTimeString());
-            },
-        });
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <mjo-button @click=${this.openAutoCloseModal}> Auto-Close (3s) </mjo-button>
-                <mjo-button @click=${this.openBlockedModal} variant="warning"> Blocked Modal </mjo-button>
-                <mjo-button @click=${this.openCallbackModal}> With Callback </mjo-button>
-            </div>
-
-            <mjo-modal></mjo-modal>
-        `;
-    }
-}
-```
-
-## Complex Content Example
-
-Advanced modal content and custom animations:
-
-```ts
-import { LitElement, html, css } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
-import type { MjoModal } from "mjo-litui/types";
-import "mjo-litui/mjo-modal";
-import "mjo-litui/mjo-button";
-import "mjo-litui/mjo-textfield";
-
-@customElement("example-modal-advanced")
-export class ExampleModalAdvanced extends LitElement {
-    @query("mjo-modal")
-    private modalComponent!: MjoModal;
-
-    @state()
-    private formData = { name: "", email: "", message: "" };
-
-    private openFormModal() {
-        this.modalComponent.controller.show({
-            title: "Contact Form",
-            width: 500,
-            initialFocus: "#name-input",
-            content: html`
-                <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-                    <mjo-textfield id="name-input" label="Name" .value=${this.formData.name}></mjo-textfield>
-                    <mjo-textfield label="Email" type="email" .value=${this.formData.email}></mjo-textfield>
-                    <mjo-textfield label="Message" multiline rows="4" .value=${this.formData.message}></mjo-textfield>
-
-                    <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
-                        <mjo-button variant="ghost" @click=${() => this.modalComponent.controller.close()}> Cancel </mjo-button>
-                        <mjo-button @click=${this.submitForm}> Submit </mjo-button>
-                    </div>
-                </div>
-            `,
-        });
-    }
-
-    private submitForm() {
-        console.log("Form submitted:", this.formData);
-        this.modalComponent.controller.close();
-    }
-
-    render() {
-        return html`
-            <mjo-button @click=${this.openFormModal}> Open Contact Form </mjo-button>
-            <mjo-modal></mjo-modal>
-        `;
-    }
-}
-```
-
-## Context Sharing
-
-The modal controller can be shared across component hierarchies using `@lit/context`:
-
-```ts
-import { LitElement, html, PropertyValues } from "lit";
-import { customElement, provide, consume, query } from "lit/decorators.js";
-import { createContext } from "@lit/context";
-import type { MjoModal, ModalController } from "mjo-litui/types";
-import "mjo-litui/mjo-modal";
-import "mjo-litui/mjo-button";
-
-// Create a context for the modal controller
-const modalContext = createContext<ModalController>("modal-controller");
-
-@customElement("main-app-component")
-export class MainAppComponent extends LitElement {
-    @provide({ context: modalContext })
-    modalController!: ModalController;
-
-    @query("mjo-modal")
-    private modal!: MjoModal;
-
-    protected firstUpdated(_changedProperties: PropertyValues): void {
-        super.firstUpdated(_changedProperties);
-        this.modalController = this.modal.controller;
-    }
-
-    render() {
-        return html`
-            <div>
-                <h2>Main Application</h2>
-                <child-component></child-component>
-                <mjo-modal></mjo-modal>
-            </div>
-        `;
-    }
-}
-
-@customElement("child-component")
-export class ChildComponent extends LitElement {
-    @consume({ context: modalContext, subscribe: true })
-    modalController!: ModalController;
-
-    private openModal() {
-        this.modalController.show({
-            title: "Child Modal",
-            content: html`<p>This modal was opened from a child component!</p>`,
-        });
-    }
-
-    render() {
-        return html`<mjo-button @click=${this.openModal}>Open Modal</mjo-button>`;
-    }
-}
-```
-
-## Theme Customization
-
-### Using mjo-theme
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import type { MjoModal } from "mjo-litui/types";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-modal";
-import "mjo-litui/mjo-button";
-
-@customElement("example-modal-theming")
-export class ExampleModalTheming extends LitElement {
-    @query("mjo-modal")
-    private modalComponent!: MjoModal;
-
-    private showThemedModal() {
-        this.modalComponent.controller.show({
-            title: "Themed Modal",
-            content: html`
-                <div style="padding: 1.5rem;">
-                    <p>This modal uses custom theme colors and styling.</p>
-                    <p>Notice the custom background, border radius, and shadows.</p>
-                </div>
-            `,
-        });
-    }
-
-    render() {
-        return html`
-            <mjo-theme
-                .theme=${{
-                    modal: {
-                        backgroundColor: "#f8f9fa",
-                        boxShadow: "0 10px 40px rgba(0, 0, 0, 0.2)",
-                        radius: "16px",
-                        width: "500px",
-                        iconCloseSize: "20px",
-                        titleBorderColor: "#e9ecef",
-                    },
-                }}
-            >
-                <div style="padding: 2rem;">
-                    <h3>Custom Modal Theme</h3>
-                    <p>Modals will appear with custom styling</p>
-
-                    <mjo-button @click=${this.showThemedModal}> Show Themed Modal </mjo-button>
-                </div>
-
-                <mjo-modal></mjo-modal>
-            </mjo-theme>
-        `;
-    }
-}
-```
-
-### Using ThemeMixin
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import { ThemeMixin } from "mjo-litui/mixins";
-import type { MjoModal } from "mjo-litui/types";
-import "mjo-litui/mjo-modal";
-import "mjo-litui/mjo-button";
-
-@customElement("example-modal-theme-mixin")
-export class ExampleModalThemeMixin extends ThemeMixin(LitElement) {
-    @query("mjo-modal")
-    private modalComponent!: MjoModal;
-
-    private showCustomModal() {
-        this.modalComponent.controller.show({
-            title: "Component-Level Theme",
-            content: html`
-                <div style="padding: 1.5rem;">
-                    <p>This modal has component-level theme overrides.</p>
-                    <p>Perfect for specific modal styling requirements.</p>
-                </div>
-            `,
-        });
-    }
-
-    render() {
-        return html`
-            <div style="padding: 2rem;">
-                <h3>Component-Level Modal Theming</h3>
-
-                <mjo-button @click=${this.showCustomModal}> Show Custom Modal </mjo-button>
-
-                <mjo-modal
-                    .theme=${{
-                        backgroundColor: "#fff3cd",
-                        boxShadow: "0 4px 20px rgba(255, 193, 7, 0.3)",
-                        radius: "12px",
-                        titleBorderColor: "#ffc107",
-                    }}
-                >
-                </mjo-modal>
-            </div>
-        `;
-    }
-}
-```
-
-## Programmatic Control
-
-Simple programmatic control example:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
-import type { MjoModal } from "mjo-litui/types";
-import "mjo-litui/mjo-modal";
-import "mjo-litui/mjo-button";
-
-@customElement("example-modal-control")
-export class ExampleModalControl extends LitElement {
-    @query("mjo-modal")
-    private modalComponent!: MjoModal;
-
-    @state()
-    private processing = false;
-
-    private async startProcess() {
-        this.processing = true;
-
-        this.modalComponent.controller.show({
-            title: "Processing...",
-            blocked: true,
-            content: html`
-                <div style="padding: 1.5rem; text-align: center;">
-                    <p>Please wait while we process your request.</p>
-                    <div style="margin: 1rem 0;">Processing...</div>
-                </div>
-            `,
-        });
-
-        // Simulate async operation
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-
-        this.modalComponent.controller.show({
-            title: "Complete!",
-            content: html`
-                <div style="padding: 1.5rem; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
-                    <p>Processing completed successfully!</p>
-                </div>
-            `,
-            time: 2000,
-        });
-
-        this.processing = false;
-    }
-
-    render() {
-        return html`
-            <mjo-button @click=${this.startProcess} .disabled=${this.processing}> ${this.processing ? "Processing..." : "Start Process"} </mjo-button>
-            <mjo-modal></mjo-modal>
-        `;
-    }
-}
 ```
 
 ## Properties
 
-| Name                | Type            | Default | Description                                         |
-| ------------------- | --------------- | ------- | --------------------------------------------------- |
-| `open`              | `boolean`       | `false` | Controls modal visibility (mainly for internal use) |
-| `theme`             | `MjoModalTheme` | `{}`    | Theme configuration for the modal container         |
-| `ariaLabelledby`    | `string`        | -       | ID of element that labels the modal                 |
-| `ariaDescribedby`   | `string`        | -       | ID of element that describes the modal              |
-| `label`             | `string`        | -       | Alternative label for modal content                 |
-| `trapFocus`         | `boolean`       | `true`  | Enable/disable focus trapping                       |
-| `restoreFocus`      | `boolean`       | `true`  | Enable/disable focus restoration on close           |
-| `closeOnEscape`     | `boolean`       | `true`  | Enable/disable ESC key closing                      |
-| `initialFocus`      | `string`        | -       | CSS selector for initial focus element              |
-| `preventBodyScroll` | `boolean`       | `true`  | Prevent body scroll when modal is open              |
+| Property                | Type            | Description                                                                 | Default     | Required |
+| ----------------------- | --------------- | --------------------------------------------------------------------------- | ----------- | -------- |
+| `idModal`               | `string`        | Unique identifier for the modal container                                   | `undefined` | No       |
+| `label`                 | `string`        | Accessible label for the modal                                              | `undefined` | No       |
+| `initialFocus`          | `string`        | CSS selector for element to focus when modal opens                          | `undefined` | No       |
+| `disabledTrapFocus`     | `boolean`       | Disables focus trapping within the modal                                    | `false`     | No       |
+| `disabledRestoreFocus`  | `boolean`       | Prevents focus restoration when modal closes                                | `false`     | No       |
+| `disabledCloseOnEscape` | `boolean`       | Prevents closing the modal with Escape key                                  | `false`     | No       |
+| `disableScrollLock`     | `boolean`       | Disables body scroll locking when modal is open                             | `false`     | No       |
+| `aria-labelledby`       | `string`        | ID of element that labels the modal                                         | `undefined` | No       |
+| `aria-describedby`      | `string`        | ID of element that describes the modal                                      | `undefined` | No       |
+| `open`                  | `boolean`       | Legacy property for backward compatibility (use controller methods instead) | `false`     | No       |
+| `theme`                 | `MjoModalTheme` | Theme customization object                                                  | `undefined` | No       |
 
-## Controller Methods
+## Public Methods
 
-The `ModalController` provides the following methods:
+The modal is controlled through its `controller` property, which provides the following methods:
 
-### `show(params: ModalShowParams): void`
+| Method  | Parameters        | Description                                  | Return Value |
+| ------- | ----------------- | -------------------------------------------- | ------------ |
+| `show`  | `ModalShowParams` | Opens the modal with specified configuration | `void`       |
+| `close` | -                 | Closes the modal programmatically            | `void`       |
 
-Shows the modal with the specified configuration.
+### ModalShowParams Interface
 
-#### Parameters
-
-| Name                | Type                          | Default | Description                                      |
-| ------------------- | ----------------------------- | ------- | ------------------------------------------------ |
-| `content`           | `string \| TemplateResult<1>` | -       | The modal content (HTML string or Lit template)  |
-| `title`             | `string`                      | -       | Optional modal title                             |
-| `width`             | `string \| number`            | -       | Modal width (pixels or CSS value)                |
-| `time`              | `number`                      | -       | Auto-close time in milliseconds                  |
-| `animationDuration` | `number`                      | `200`   | Animation duration in milliseconds               |
-| `blocked`           | `boolean`                     | `false` | Prevents closing by clicking outside or X button |
-| `closePosition`     | `"in" \| "out"`               | `"in"`  | Position of the close button                     |
-| `onClose`           | `() => void`                  | -       | Callback function executed when modal closes     |
-
-### `close(): void`
-
-Closes the currently open modal.
-
-## Types
-
-```ts
+```typescript
 interface ModalShowParams {
-    title?: string;
-    content: string | TemplateResult<1>;
-    time?: number;
-    width?: string | number;
-    animationDuration?: number;
-    blocked?: boolean;
-    closePosition?: "out" | "in";
-    onClose?: () => void;
-}
-
-interface MjoModalTheme {
-    iconCloseSize?: string;
-    titleBorderColor?: string;
-    backgroundColor?: string;
-    radius?: string;
-    boxShadow?: string;
-    width?: string;
+    title?: string; // Modal title text
+    content: string | TemplateResult<1>; // Content to display (HTML string or Lit template)
+    time?: number; // Auto-close timeout in milliseconds
+    width?: string | number; // Custom width (pixels or CSS string)
+    animationDuration?: number; // Animation duration in milliseconds
+    blocked?: boolean; // Prevents user from closing the modal
+    closePosition?: "out" | "in"; // Close icon position (outside or inside modal)
+    onClose?: () => void; // Callback executed when modal closes
 }
 ```
 
-## Events
+## CSS Variables
 
-This component does not emit custom events. The modal container handles internal events for user interactions.
-
-## CSS Custom Properties
-
-| Property                                        | Default                                               | Description                       |
-| ----------------------------------------------- | ----------------------------------------------------- | --------------------------------- |
-| `--mjo-modal-background-color`                  | `var(--mjo-background-color, #fff)`                   | Modal background color            |
-| `--mjo-modal-backdrop-background-color`         | `rgba(0, 0, 0, 0.5)`                                  | Backdrop background color         |
-| `--mjo-modal-backdrop-filter`                   | `blur(5px)`                                           | Backdrop filter effect            |
-| `--mjo-modal-box-shadow`                        | `var(--mjo-box-shadow3, 0 0 10px rgba(0, 0, 0, 0.5))` | Modal box shadow                  |
-| `--mjo-modal-border-radius`                     | `var(--mjo-border-radius, 5px)`                       | Modal border radius               |
-| `--mjo-modal-width`                             | `450px`                                               | Default modal width               |
-| `--mjo-modal-icon-close-size`                   | `16px` (inside), `30px` (outside)                     | Close button icon size            |
-| `--mjo-modal-icon-close-offset`                 | `5px`                                                 | Close icon position offset        |
-| `--mjo-modal-icon-close-background-color-hover` | `rgba(0, 0, 0, 0.5)`                                  | Close icon hover background color |
-| `--mjo-modal-title-border-color`                | `var(--mjo-border-color, #ccc)`                       | Title border color                |
+| Variable                                        | Description                       | Default                                              |
+| ----------------------------------------------- | --------------------------------- | ---------------------------------------------------- |
+| `--mjo-modal-background-color`                  | Modal background color            | `--mjo-background-color` or `#fff`                   |
+| `--mjo-modal-backdrop-background-color`         | Backdrop overlay color            | `rgba(0, 0, 0, 0.5)`                                 |
+| `--mjo-modal-backdrop-filter`                   | Backdrop filter effect            | `blur(5px)`                                          |
+| `--mjo-modal-box-shadow`                        | Modal box shadow                  | `--mjo-box-shadow3` or `0 0 10px rgba(0, 0, 0, 0.5)` |
+| `--mjo-modal-border-radius`                     | Modal border radius               | `--mjo-border-radius` or `5px`                       |
+| `--mjo-modal-width`                             | Modal default width               | `450px`                                              |
+| `--mjo-modal-icon-close-size`                   | Close icon size                   | `30px` (out), `16px` (in)                            |
+| `--mjo-modal-icon-close-offset`                 | Close icon position offset        | `5px`                                                |
+| `--mjo-modal-icon-close-background-color-hover` | Close icon hover background color | `rgba(0, 0, 0, 0.5)`                                 |
+| `--mjo-modal-title-border-color`                | Title border color                | `--mjo-border-color` or `#ccc`                       |
 
 ## CSS Parts
 
-The modal component uses CSS parts to allow styling of internal elements. Since the modal container is mounted directly in the document body, CSS parts must be applied globally:
-
-```css
-/* Global styling for all modals */
-mjo-modal-container::part(backdrop) {
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-}
-
-mjo-modal-container::part(container) {
-    border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-mjo-modal-container::part(title) {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-bottom: 2px solid #e9ecef;
-}
-
-mjo-modal-container::part(content) {
-    padding: 25px;
-    min-height: 200px;
-}
-
-mjo-modal-container::part(icon-close-container) {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    padding: 8px;
-}
-```
-
-### Available CSS Parts
-
-| Part                   | Description                               |
-| ---------------------- | ----------------------------------------- |
-| `backdrop`             | The modal backdrop/overlay                |
-| `container`            | The main modal container                  |
-| `title`                | The modal title element                   |
-| `title-tag`            | The typography element used for the title |
-| `content`              | The modal content area                    |
-| `icon-close-container` | Container for the internal close icon     |
-| `icon-close-out`       | External close icon (outside modal)       |
-| `icon-close-in`        | Internal close icon (inside modal)        |
-
-### Important: Global Modal Container
-
-The `mjo-modal` component works by dynamically creating a `mjo-modal-container` element that is mounted directly in the document `<body>`. This architecture provides several benefits:
-
-- **Overlay Management**: Ensures the modal appears above all other content
-- **Z-index Control**: Prevents z-index conflicts with parent containers
-- **Overflow Prevention**: Bypasses any parent `overflow: hidden` styles
-- **Focus Management**: Enables proper focus trapping and restoration
-
-Because the actual modal content is rendered in the `mjo-modal-container` (mounted in the body), CSS variables and CSS parts cannot be applied directly to the `mjo-modal` component. Instead, you need to target the container globally.
-
-### Global vs Component-Specific Styling
-
-#### Global Styling (All Modals)
-
-```css
-/* Apply to all modal containers */
-:root {
-    --mjo-modal-width: 500px;
-    --mjo-modal-backdrop-background-color: rgba(0, 0, 0, 0.7);
-}
-
-/* Target all modal containers */
-mjo-modal-container {
-    --mjo-modal-background-color: #ffffff;
-}
-
-mjo-modal-container::part(title) {
-    font-weight: bold;
-    color: #333;
-}
-```
-
-#### Specific Modal Styling Using Custom Properties
-
-For component-specific styling, you can use the `theme` property or CSS custom properties with specific selectors:
-
-```ts
-// Using theme property
-this.modal.controller.show({
-    content: "Modal content",
-    title: "Custom Modal",
-});
-
-// Set custom styles for this specific modal instance
-const modalContainer = document.querySelector("mjo-modal-container");
-if (modalContainer) {
-    modalContainer.style.setProperty("--mjo-modal-width", "600px");
-    modalContainer.style.setProperty("--mjo-modal-background-color", "#f8f9fa");
-}
-```
-
-### Theme Interface
-
-```ts
-interface MjoModalTheme {
-    iconCloseSize?: string;
-    titleBorderColor?: string;
-    backgroundColor?: string;
-    radius?: string;
-    boxShadow?: string;
-    width?: string;
-}
-```
-
-## Technical Notes
-
-- **Global Container**: Modals are rendered in a container appended to `document.body`
-- **Z-Index Management**: The container inherits z-index from the host component
-- **Backdrop Filter**: Uses CSS backdrop-filter for modern blur effects
-- **Animation System**: Smooth scale and fade animations with configurable duration
-- **Content Flexibility**: Supports both HTML strings and Lit templates
-- **Theme Inheritance**: Modal container inherits theme from the host component
-- **Responsive Design**: Automatically adapts to viewport size with max-width constraints
+| Part                   | Description                                    | Element                     |
+| ---------------------- | ---------------------------------------------- | --------------------------- |
+| `backdrop`             | The modal backdrop/overlay                     | `div.background`            |
+| `container`            | The main modal container                       | `div.container`             |
+| `title`                | The modal title element                        | `mjo-typography`            |
+| `title-tag`            | The typography element used for the title      | Internal typography element |
+| `content`              | The modal content area                         | `div.content`               |
+| `icon-close-container` | Container for the internal close icon          | `div.closeIn`               |
+| `icon-close-out`       | External close icon (positioned outside modal) | `mjo-icon`                  |
+| `icon-close-in`        | Internal close icon (positioned inside modal)  | `mjo-icon`                  |
 
 ## Accessibility
 
-- **Focus Management**: Automatic focus trapping within modal with configurable initial focus
-- **Keyboard Navigation**: Full keyboard support including ESC key to close and Tab navigation
-- **ARIA Support**: Complete ARIA implementation with dialog role, modal attribute, and labeling
-- **Screen Reader**: Proper announcements and accessible content structure
-- **Body Scroll Control**: Prevents background scrolling when modal is active
-- **Focus Restoration**: Automatically returns focus to the triggering element when closed
-- **Customizable Behavior**: All accessibility features can be configured or disabled as needed
+The modal component implements comprehensive accessibility features:
 
-## Best Practices
+### ARIA Support
 
-### General Usage
+- Modal uses `role="dialog"` and `aria-modal="true"` on the container
+- Supports `aria-labelledby` and `aria-describedby` for semantic labeling
+- Provides fallback `aria-label` from `label` or `title` properties
+- Close icons include `aria-label="Close modal"` for screen readers
 
-- Use descriptive titles for better user understanding
-- Keep modal content focused and concise
-- Use blocking modals sparingly for critical actions
-- Provide clear action buttons for user guidance
-- Consider mobile viewport constraints when setting width
-- Use context sharing for large applications with multiple components
-- Implement proper error handling in onClose callbacks
+### Focus Management
 
-### Accessibility
+- Implements automatic focus trapping to keep focus within the modal
+- Configurable initial focus via `initialFocus` property (CSS selector)
+- Restores focus to triggering element when modal closes (can be disabled)
+- Focus trap can be disabled with `disabledTrapFocus` property
 
-- Always provide either `ariaLabelledby` or `label` for screen readers
-- Use `ariaDescribedby` to reference content that describes the modal's purpose
-- Set `initialFocus` to the most important interactive element (like a confirm button)
-- Keep focus trap enabled (`trapFocus: true`) unless there's a specific reason not to
-- Allow ESC key closing (`closeOnEscape: true`) for keyboard users
-- Use semantic HTML structure within modal content
-- Ensure sufficient color contrast for all text and interactive elements
-- Test with screen readers and keyboard-only navigation
+### Keyboard Interaction
 
-### Performance
+- **Escape**: Closes the modal (can be disabled with `disabledCloseOnEscape`)
+- **Enter/Space**: Activates close icons when focused
+- **Tab**: Cycles through focusable elements within the modal (when focus trap is enabled)
 
-- Avoid creating multiple modal instances; reuse a single instance when possible
-- Use the controller pattern for complex modal workflows
-- Implement proper cleanup in `onClose` callbacks to prevent memory leaks
+### Best Practices
 
-For additional theming options, see the [Theming Guide](./theming.md).
+- Always provide either `aria-labelledby`, `aria-describedby`, or `label` for screen readers
+- Use `blocked` mode sparingly and only when user action is required
+- Provide clear visual indicators for required actions in blocked modals
+- Consider `time` property for non-critical notifications
+- Test keyboard navigation in complex modal content
+
+## Usage Examples
+
+### Basic Modal with Controller
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import "mjo-litui/mjo-modal";
+import "mjo-litui/mjo-button";
+
+@customElement("my-component")
+class MyComponent extends LitElement {
+    @query("mjo-modal") modal!: MjoModal;
+
+    render() {
+        return html`
+            <mjo-modal label="Information Dialog"></mjo-modal>
+            <mjo-button @click=${this.openModal}>Open Modal</mjo-button>
+        `;
+    }
+
+    openModal() {
+        this.modal.controller.show({
+            title: "Welcome",
+            content: "This is a simple modal dialog.",
+        });
+    }
+}
+```
+
+### Modal with Lit Template Content
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import "mjo-litui/mjo-modal";
+import "mjo-litui/mjo-button";
+
+@customElement("my-component")
+class MyComponent extends LitElement {
+    @query("mjo-modal") modal!: MjoModal;
+
+    render() {
+        return html`
+            <mjo-modal aria-labelledby="modal-title"></mjo-modal>
+            <mjo-button @click=${this.openModal}>Show Details</mjo-button>
+        `;
+    }
+
+    openModal() {
+        this.modal.controller.show({
+            title: "User Details",
+            content: html`
+                <div style="padding: 20px;">
+                    <p id="modal-title"><strong>Name:</strong> John Doe</p>
+                    <p><strong>Email:</strong> john@example.com</p>
+                    <mjo-button @click=${() => this.modal.controller.close()}> Close </mjo-button>
+                </div>
+            `,
+            width: 600,
+        });
+    }
+}
+```
+
+### Auto-Closing Notification Modal
+
+```typescript
+openNotification() {
+    this.modal.controller.show({
+        title: 'Success',
+        content: 'Your changes have been saved successfully.',
+        time: 3000, // Auto-close after 3 seconds
+        closePosition: 'out',
+        animationDuration: 300
+    });
+}
+```
+
+### Blocked Modal with Callback
+
+```typescript
+openConfirmation() {
+    this.modal.controller.show({
+        title: 'Confirm Action',
+        content: html`
+            <div style="padding: 20px;">
+                <p>Are you sure you want to delete this item?</p>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <mjo-button @click=${this.handleConfirm}>Confirm</mjo-button>
+                    <mjo-button @click=${() => this.modal.controller.close()}>
+                        Cancel
+                    </mjo-button>
+                </div>
+            </div>
+        `,
+        blocked: true, // Prevents closing with backdrop or Escape
+        closePosition: 'in',
+        onClose: () => {
+            console.log('Modal closed');
+        }
+    });
+}
+
+handleConfirm() {
+    // Perform deletion
+    this.modal.controller.close();
+}
+```
+
+### Modal with Focus Management
+
+```typescript
+@customElement("my-form-modal")
+class MyFormModal extends LitElement {
+    @query("mjo-modal") modal!: MjoModal;
+
+    render() {
+        return html`
+            <mjo-modal label="Edit Form" initialFocus="#first-input" .disabledRestoreFocus=${false}></mjo-modal>
+            <mjo-button @click=${this.openForm}>Edit</mjo-button>
+        `;
+    }
+
+    openForm() {
+        this.modal.controller.show({
+            title: "Edit Information",
+            content: html`
+                <form style="padding: 20px;">
+                    <mjo-textfield id="first-input" label="Name" required></mjo-textfield>
+                    <mjo-textfield label="Email" type="email" required></mjo-textfield>
+                    <mjo-button type="submit">Save</mjo-button>
+                </form>
+            `,
+            width: 500,
+        });
+    }
+}
+```
+
+### Styling with CSS Parts and Variables
+
+```css
+/* Customize modal appearance */
+mjo-modal {
+    --mjo-modal-background-color: #f5f5f5;
+    --mjo-modal-backdrop-background-color: rgba(0, 0, 0, 0.7);
+    --mjo-modal-backdrop-filter: blur(10px);
+    --mjo-modal-border-radius: 12px;
+    --mjo-modal-box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    --mjo-modal-width: 800px;
+}
+
+/* Style specific parts */
+mjo-modal::part(backdrop) {
+    backdrop-filter: blur(8px) brightness(0.8);
+}
+
+mjo-modal::part(container) {
+    border: 2px solid var(--primary-color);
+}
+
+mjo-modal::part(title) {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    margin: 0;
+}
+
+mjo-modal::part(content) {
+    padding: 30px;
+    font-size: 16px;
+}
+
+mjo-modal::part(icon-close-in) {
+    color: #666;
+}
+```
+
+### Theme Configuration
+
+```typescript
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import "mjo-litui/mjo-modal";
+
+@customElement("themed-modal")
+class ThemedModal extends LitElement {
+    render() {
+        return html`
+            <mjo-modal
+                .theme=${{
+                    backgroundColor: "#ffffff",
+                    radius: "16px",
+                    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+                    width: "700px",
+                    iconCloseSize: "24px",
+                    titleBorderColor: "#e0e0e0",
+                }}
+            ></mjo-modal>
+        `;
+    }
+}
+```
+
+## Additional Notes
+
+### Architecture
+
+The modal uses a controller-based architecture where:
+
+1. The `mjo-modal` component serves as the API surface and configuration container
+2. A `ModalController` manages the lifecycle and creates the internal container
+3. The `mjo-modal-container` is mounted directly to `document.body` for proper overlay rendering
+4. This architecture ensures proper z-index stacking and avoids parent container constraints
+
+### State Management
+
+- The modal container manages its own internal state for animation and visibility
+- The `open` property on `mjo-modal` is legacy and should not be used directly
+- Always use the controller's `show()` and `close()` methods for programmatic control
+
+### Scroll Lock
+
+- Body scroll is automatically locked when the modal opens (unless `disableScrollLock` is true)
+- The scroll lock calculates the scrollbar width and adjusts body padding to prevent layout shift
+- Scroll lock is automatically removed when the modal closes
+
+### Animation
+
+- Default animation duration is 200ms
+- Custom duration can be set per modal instance via `animationDuration` parameter
+- Animations use the Web Animations API for smooth performance
+- Modal scales and fades in/out with backdrop transition
+
+### Performance Considerations
+
+- The modal container is created once during component connection and reused
+- Content is rendered on-demand when `show()` is called
+- Focus trap uses the native Inert API for optimal performance
+- The container is removed from DOM when the component disconnects

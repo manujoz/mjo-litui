@@ -1,417 +1,252 @@
 # mjo-image
 
-A responsive image component with error handling, loading states, clickable interactions, and comprehensive accessibility features.
+A responsive image component with error handling, loading states, and accessibility features.
 
-## Overview
+## Table of Contents
 
-The `mjo-image` component provides a robust image rendering solution with built-in error handling, loading states, clickable interactions, and comprehensive accessibility support. It automatically falls back to a placeholder SVG when image loading fails and supports various interaction modes.
+- [Use Cases](#use-cases)
+- [Import](#import)
+- [Properties](#properties)
+- [Events](#events)
+- [CSS Variables](#css-variables)
+- [CSS Parts](#css-parts)
+- [Accessibility](#accessibility)
+- [Usage Examples](#usage-examples)
+- [Additional Notes](#additional-notes)
 
-## Basic Usage
+## Use Cases
 
-### HTML
+The `mjo-image` component is designed for:
 
-```html
-<mjo-image src="https://example.com/image.jpg" alt="Example image"></mjo-image>
-```
+- Displaying images with automatic error handling and fallback states
+- Creating clickable image galleries or thumbnails with keyboard navigation
+- Showing loading spinners while images are being fetched
+- Implementing lazy loading for performance optimization
+- Providing accessible image experiences with ARIA support
+- Responsive images with different object-fit strategies
 
-### Lit Element Example
+## Import
 
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
+```javascript
 import "mjo-litui/mjo-image";
-
-@customElement("example-image-basic")
-export class ExampleImageBasic extends LitElement {
-    render() {
-        return html`<mjo-image src="https://example.com/photo.jpg" alt="A beautiful photo"></mjo-image>`;
-    }
-}
 ```
 
-## Interactive Images
+## Properties
 
-### Clickable Images
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-image";
-
-@customElement("example-image-clickable")
-export class ExampleImageClickable extends LitElement {
-    private handleImageClick(event: CustomEvent) {
-        console.log("Image clicked:", event.detail.src);
-    }
-
-    render() {
-        return html`
-            <mjo-image
-                src="https://example.com/photo.jpg"
-                alt="Clickable image"
-                clickable
-                aria-label="View full size image"
-                @mjo-image:click=${this.handleImageClick}
-            ></mjo-image>
-        `;
-    }
-}
-```
-
-### Loading States
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-image";
-
-@customElement("example-image-loading")
-export class ExampleImageLoading extends LitElement {
-    @state() private isLoading = true;
-
-    render() {
-        return html`
-            <div>
-                <mjo-image src="https://example.com/photo.jpg" alt="Loading image example" .loading=${this.isLoading}></mjo-image>
-
-                <button @click=${() => (this.isLoading = !this.isLoading)}>Toggle Loading</button>
-            </div>
-        `;
-    }
-}
-```
-
-## Fit Modes
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-image";
-
-@customElement("example-image-fit-modes")
-export class ExampleImageFitModes extends LitElement {
-    render() {
-        return html`
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                <div>
-                    <h3>Cover (default)</h3>
-                    <mjo-image src="https://via.placeholder.com/300x200" alt="Cover fit" style="width: 200px; height: 150px;"></mjo-image>
-                </div>
-
-                <div>
-                    <h3>Contain</h3>
-                    <mjo-image src="https://via.placeholder.com/300x200" alt="Contain fit" fit="contain" style="width: 200px; height: 150px;"></mjo-image>
-                </div>
-
-                <div>
-                    <h3>Fill</h3>
-                    <mjo-image src="https://via.placeholder.com/300x200" alt="Fill fit" fit="fill" style="width: 200px; height: 150px;"></mjo-image>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Error Handling
-
-The component automatically displays a placeholder when image loading fails and emits appropriate events:
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-image";
-
-@customElement("example-image-error-handling")
-export class ExampleImageErrorHandling extends LitElement {
-    private handleImageError(event: CustomEvent) {
-        console.warn("Image failed to load:", event.detail.error);
-    }
-
-    render() {
-        return html`
-            <div style="display: flex; gap: 16px; align-items: center;">
-                <div>
-                    <h3>Valid Image</h3>
-                    <mjo-image src="https://via.placeholder.com/150" alt="Valid image" style="width: 150px; height: 150px;"></mjo-image>
-                </div>
-
-                <div>
-                    <h3>Broken Image (Error State)</h3>
-                    <mjo-image
-                        src="https://example.com/nonexistent.jpg"
-                        alt="Broken image"
-                        style="width: 150px; height: 150px;"
-                        @mjo-image:error=${this.handleImageError}
-                    ></mjo-image>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Lazy Loading
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-image";
-
-@customElement("example-image-lazy")
-export class ExampleImageLazy extends LitElement {
-    render() {
-        return html`
-            <div style="height: 200vh;">
-                <p>Scroll down to see lazy-loaded images...</p>
-
-                <div style="margin-top: 100vh; display: flex; gap: 16px;">
-                    <mjo-image src="https://via.placeholder.com/300x200" alt="Lazy loaded image 1" lazy style="width: 300px; height: 200px;"></mjo-image>
-
-                    <mjo-image src="https://via.placeholder.com/300x200/ff6b6b" alt="Lazy loaded image 2" lazy style="width: 300px; height: 200px;"></mjo-image>
-                </div>
-            </div>
-        `;
-    }
-}
-```
-
-## Accessibility Example
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import "mjo-litui/mjo-image";
-
-@customElement("example-image-accessibility")
-export class ExampleImageAccessibility extends LitElement {
-    @state() private selectedImage = "";
-
-    private images = [
-        { src: "https://via.placeholder.com/300x200/ff6b6b", alt: "Red placeholder image", title: "Gallery Image 1" },
-        { src: "https://via.placeholder.com/300x200/4ecdc4", alt: "Teal placeholder image", title: "Gallery Image 2" },
-        { src: "https://via.placeholder.com/300x200/45b7d1", alt: "Blue placeholder image", title: "Gallery Image 3" },
-    ];
-
-    private handleImageClick(event: CustomEvent, title: string) {
-        this.selectedImage = title;
-        console.log(`Selected: ${title}`);
-    }
-
-    private handleImageLoad(event: CustomEvent) {
-        console.log("Image loaded:", event.detail.naturalWidth, "x", event.detail.naturalHeight);
-    }
-
-    render() {
-        return html`
-            <div>
-                <h3>Accessible Image Gallery</h3>
-                <p>Current selection: ${this.selectedImage || "None"}</p>
-
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;" role="grid" aria-label="Image gallery">
-                    ${this.images.map(
-                        (img, index) => html`
-                            <div role="gridcell" style="text-align: center;">
-                                <mjo-image
-                                    src=${img.src}
-                                    alt=${img.alt}
-                                    clickable
-                                    aria-label="Click to select ${img.title}"
-                                    aria-describedby="gallery-instructions"
-                                    tabindex="0"
-                                    style="width: 200px; height: 150px; border-radius: 8px;"
-                                    @mjo-image:click=${(e: CustomEvent) => this.handleImageClick(e, img.title)}
-                                    @mjo-image:load=${this.handleImageLoad}
-                                ></mjo-image>
-                                <p style="margin: 0.5rem 0; font-size: 0.9rem;">${img.title}</p>
-                            </div>
-                        `,
-                    )}
-                </div>
-
-                <p id="gallery-instructions" style="font-size: 0.8rem; color: #666;">Use arrow keys to navigate, Enter or Space to select images</p>
-            </div>
-        `;
-    }
-}
-```
-
-## Theme Customization
-
-### Using mjo-theme
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "mjo-litui/mjo-theme";
-import "mjo-litui/mjo-image";
-
-@customElement("example-image-theming")
-export class ExampleImageTheming extends LitElement {
-    render() {
-        return html`
-            <mjo-theme
-                .theme=${{
-                    components: {
-                        mjoImage: {
-                            errorBackgroundColor: "#fff3e0",
-                            errorRadius: "12px",
-                            loadingBackgroundColor: "#f3e5f5",
-                            loadingColor: "#9c27b0",
-                            focusOutline: "3px solid #ff9800",
-                        },
-                    },
-                }}
-            >
-                <div style="display: flex; gap: 16px;">
-                    <mjo-image src="https://via.placeholder.com/150" alt="Valid image" clickable style="width: 150px; height: 150px;"></mjo-image>
-
-                    <mjo-image loading alt="Loading state example" style="width: 150px; height: 150px;"></mjo-image>
-
-                    <mjo-image
-                        src="https://example.com/broken.jpg"
-                        alt="Error state with custom styling"
-                        clickable
-                        style="width: 150px; height: 150px;"
-                    ></mjo-image>
-                </div>
-            </mjo-theme>
-        `;
-    }
-}
-```
-
-### Using ThemeMixin
-
-```ts
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import { ThemeMixin } from "mjo-litui/mixins";
-import "mjo-litui/mjo-image";
-
-@customElement("example-image-theme-mixin")
-export class ExampleImageThemeMixin extends ThemeMixin(LitElement) {
-    render() {
-        return html`
-            <div style="display: flex; gap: 16px;">
-                <mjo-image
-                    .theme=${{
-                        errorBackgroundColor: "#e3f2fd",
-                        errorRadius: "16px",
-                        clickableHoverScale: "scale(1.05)",
-                    }}
-                    src="https://example.com/broken.jpg"
-                    alt="Error state with custom theme"
-                    clickable
-                    style="width: 150px; height: 150px;"
-                ></mjo-image>
-            </div>
-        `;
-    }
-}
-```
-
-## Attributes/Properties
-
-| Name              | Type                                                       | Default   | Required | Description                                               |
-| ----------------- | ---------------------------------------------------------- | --------- | -------- | --------------------------------------------------------- |
-| `src`             | `string`                                                   | `""`      | no       | The image source URL                                      |
-| `alt`             | `string`                                                   | `""`      | no       | Alternative text for the image                            |
-| `fit`             | `"contain" \| "cover" \| "fill" \| "none" \| "scale-down"` | `"cover"` | no       | How the image should be resized to fit its container      |
-| `loading`         | `boolean`                                                  | `false`   | no       | Shows loading spinner instead of image                    |
-| `clickable`       | `boolean`                                                  | `false`   | no       | Makes the image clickable and keyboard navigable          |
-| `disabled`        | `boolean`                                                  | `false`   | no       | Disables interaction when clickable                       |
-| `lazy`            | `boolean`                                                  | `false`   | no       | Enables native lazy loading for the image                 |
-| `ariaLabel`       | `string`                                                   | `""`      | no       | ARIA label for screen readers                             |
-| `ariaLabelledBy`  | `string`                                                   | `""`      | no       | References element(s) that label this image               |
-| `ariaDescribedBy` | `string`                                                   | `""`      | no       | References element(s) that provide additional description |
-| `theme`           | `MjoImageTheme`                                            | `{}`      | no       | Theme configuration for the component                     |
+| Property          | Type                                                       | Description                                                | Default     | Required |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ----------- | -------- |
+| `src`             | `string`                                                   | The source URL of the image                                | `""`        | Yes      |
+| `alt`             | `string`                                                   | Alternative text for the image                             | `undefined` | No       |
+| `fit`             | `"contain" \| "cover" \| "fill" \| "none" \| "scale-down"` | How the image should be fitted to its container            | `"cover"`   | No       |
+| `loading`         | `boolean`                                                  | Shows a loading spinner instead of the image               | `false`     | No       |
+| `clickable`       | `boolean`                                                  | Makes the image interactive with click and keyboard events | `false`     | No       |
+| `disabled`        | `boolean`                                                  | Disables interaction when clickable is true                | `false`     | No       |
+| `lazy`            | `boolean`                                                  | Enables native lazy loading for the image                  | `false`     | No       |
+| `ariaLabel`       | `string`                                                   | ARIA label for the image                                   | `null`      | No       |
+| `ariaLabelledBy`  | `string`                                                   | ID of element that labels this image                       | `undefined` | No       |
+| `ariaDescribedBy` | `string`                                                   | ID of element that describes this image                    | `undefined` | No       |
 
 ## Events
 
-| Event Name        | Detail Type                                                                        | Bubbles | Cancelable | Description                           |
-| ----------------- | ---------------------------------------------------------------------------------- | ------- | ---------- | ------------------------------------- |
-| `mjo-image:load`  | `{ element: MjoImage; src: string; naturalWidth: number; naturalHeight: number; }` | yes     | no         | Fired when image loads successfully   |
-| `mjo-image:error` | `{ element: MjoImage; src: string; error: string; }`                               | yes     | no         | Fired when image fails to load        |
-| `mjo-image:click` | `{ element: MjoImage; src: string; }`                                              | yes     | yes        | Fired when clickable image is clicked |
+| Event             | Description                             | Type                 | Detail                                                                            |
+| ----------------- | --------------------------------------- | -------------------- | --------------------------------------------------------------------------------- |
+| `mjo-image:load`  | Fired when the image loads successfully | `MjoImageLoadEvent`  | `{ element: MjoImage, src: string, naturalWidth: number, naturalHeight: number }` |
+| `mjo-image:error` | Fired when the image fails to load      | `MjoImageErrorEvent` | `{ element: MjoImage, src: string, error: string }`                               |
+| `mjo-image:click` | Fired when a clickable image is clicked | `MjoImageClickEvent` | `{ element: MjoImage, src: string }`                                              |
 
-## CSS Custom Properties
+## CSS Variables
 
-| Property                               | Default         | Description                                   |
-| -------------------------------------- | --------------- | --------------------------------------------- |
-| `--mjo-image-error-background-color`   | `#e0e0e0`       | Background color for the error placeholder    |
-| `--mjo-image-error-radius`             | `5px`           | Border radius for error and loading states    |
-| `--mjo-image-loading-background-color` | `#f5f5f5`       | Background color for loading state            |
-| `--mjo-image-loading-size`             | `24px`          | Size of the loading spinner                   |
-| `--mjo-image-loading-color`            | `#666`          | Color of the loading spinner                  |
-| `--mjo-image-focus-outline`            | `2px solid ...` | Focus outline for clickable images            |
-| `--mjo-image-disabled-opacity`         | `0.6`           | Opacity when disabled                         |
-| `--mjo-image-clickable-hover-scale`    | `scale(1.02)`   | Transform scale on hover for clickable images |
-| `--mjo-image-clickable-cursor`         | `pointer`       | Cursor style for clickable images             |
+| Variable                               | Description                                   | Default                                       |
+| -------------------------------------- | --------------------------------------------- | --------------------------------------------- |
+| `--mjo-image-clickable-cursor`         | Cursor style for clickable images             | `pointer`                                     |
+| `--mjo-image-clickable-hover-scale`    | Transform scale on hover for clickable images | `scale(1.02)`                                 |
+| `--mjo-image-focus-outline`            | Outline style for focused clickable images    | `2px solid var(--mjo-primary-color, #007bff)` |
+| `--mjo-image-disabled-opacity`         | Opacity for disabled images                   | `0.6`                                         |
+| `--mjo-image-loading-background-color` | Background color for loading state            | `#f5f5f5`                                     |
+| `--mjo-image-loading-size`             | Size of the loading spinner                   | `24px`                                        |
+| `--mjo-image-loading-color`            | Color of the loading spinner                  | `#666`                                        |
+| `--mjo-image-error-background-color`   | Background color for error state              | `#e0e0e0`                                     |
+| `--mjo-image-error-radius`             | Border radius for error and loading states    | `5px`                                         |
 
-### Theme Interface
+## CSS Parts
 
-```ts
-interface MjoImageTheme {
-    errorBackgroundColor?: string;
-    errorRadius?: string;
-    loadingBackgroundColor?: string;
-    loadingSize?: string;
-    loadingColor?: string;
-    focusOutline?: string;
-    disabledOpacity?: string;
-    clickableHoverScale?: string;
-    clickableCursor?: string;
-}
-```
+| Part                      | Description                             | Element |
+| ------------------------- | --------------------------------------- | ------- |
+| `container`               | The main container wrapping the image   | `<div>` |
+| `container-loading`       | The container in loading state          | `<div>` |
+| `container-error`         | The container in error state            | `<div>` |
+| `container-clickable`     | The container when clickable is enabled | `<div>` |
+| `loading-spinner-wrapper` | The wrapper for the loading spinner     | `<div>` |
+| `loading-spinner-svg`     | The SVG element of the loading spinner  | `<svg>` |
+| `image`                   | The actual image element                | `<img>` |
 
-## Accessibility Features
+## Accessibility
 
-### ARIA Support
+The `mjo-image` component is designed with comprehensive accessibility features:
 
--   **Dynamic Roles**: Automatically assigns appropriate roles (`img`, `button`, `presentation`) based on context
--   **ARIA Labels**: Supports `aria-label`, `aria-labelledby`, and `aria-describedby` properties
--   **State Communication**: Loading and error states are properly announced to screen readers
--   **Focus Management**: Clickable images are properly focusable and keyboard navigable
+### Best Practices
 
-### Keyboard Navigation
+- Always provide an `alt` attribute for meaningful images
+- Use `ariaLabel` when the alt text needs to be different from the visual context
+- Use `ariaDescribedBy` to link to detailed descriptions when necessary
+- For decorative images, use an empty alt attribute (`alt=""`)
 
--   **Tab Navigation**: Clickable images are included in tab order
--   **Activation**: Enter and Space keys trigger click events for clickable images
--   **Focus Indicators**: Clear visual focus indicators for keyboard users
+### ARIA Roles and Attributes
 
-### Screen Reader Support
+- Automatically assigns appropriate roles based on state:
+    - `role="img"` for normal images
+    - `role="button"` for clickable images
+    - `role="presentation"` for error states
+    - `role="status"` for loading states
+- Supports custom ARIA labels through `ariaLabel`, `ariaLabelledBy`, and `ariaDescribedBy` properties
+- Automatically computes appropriate ARIA labels for loading and error states
 
--   **Descriptive Alt Text**: Always provide meaningful alt text for images
--   **State Announcements**: Loading and error states are communicated appropriately
--   **Context Information**: Additional context provided through ARIA attributes
+### Keyboard Interactions
 
-### Best Practices Example
+When `clickable` is enabled and not `disabled`:
+
+- **Enter**: Triggers the click event
+- **Space**: Triggers the click event
+- **Tab**: Focuses the image (when `tabindex="0"`)
+
+### Focus Management
+
+- Clickable images receive visible focus indicators
+- Focus outline can be customized via `--mjo-image-focus-outline` CSS variable
+- Respects `prefers-reduced-motion` for smooth transitions
+
+## Usage Examples
+
+### Basic Image
 
 ```html
-<!-- Decorative image -->
-<mjo-image src="decoration.jpg" alt="" aria-hidden="true"></mjo-image>
-
-<!-- Informative image -->
-<mjo-image src="chart.png" alt="Sales increased 40% from Q1 to Q2 2024" aria-describedby="chart-details"></mjo-image>
-<p id="chart-details">Detailed breakdown shows consistent growth across all regions.</p>
-
-<!-- Interactive image -->
-<mjo-image
-    src="product.jpg"
-    alt="Premium wireless headphones"
-    clickable
-    aria-label="View product details for premium wireless headphones"
-    @mjo-image:click="${this.showProductDetails}"
-></mjo-image>
+<mjo-image src="https://example.com/image.jpg" alt="A beautiful landscape"> </mjo-image>
 ```
 
-## Technical Notes
+### Clickable Image with Event Handling
 
--   **Error Handling**: Automatic fallback to placeholder SVG with custom events
--   **Loading States**: Built-in loading spinner with accessibility support
--   **Performance**: Native lazy loading support for better page performance
--   **Responsive**: Component inherits dimensions from CSS styling
--   **Browser Support**: Works across modern browsers with graceful degradation
+```html
+<mjo-image src="https://example.com/thumbnail.jpg" alt="Product thumbnail" clickable> </mjo-image>
 
-For additional theming options, see the [Theming Guide](./theming.md).
+<script>
+    const image = document.querySelector("mjo-image");
+
+    image.addEventListener("mjo-image:click", (e) => {
+        console.log("Image clicked:", e.detail.src);
+        // Open lightbox or navigate to detail page
+    });
+</script>
+```
+
+### Lazy Loading with Different Fit Modes
+
+```html
+<!-- Contain - maintains aspect ratio, fits within bounds -->
+<mjo-image src="https://example.com/portrait.jpg" alt="Portrait photo" fit="contain" lazy> </mjo-image>
+
+<!-- Cover - fills container, maintains aspect ratio (default) -->
+<mjo-image src="https://example.com/wide.jpg" alt="Wide landscape" fit="cover" lazy> </mjo-image>
+
+<!-- Scale-down - similar to contain but never scales up -->
+<mjo-image src="https://example.com/small.jpg" alt="Small icon" fit="scale-down" lazy> </mjo-image>
+```
+
+### Loading State Management
+
+```html
+<mjo-image id="dynamic-image" src="" alt="Dynamic content" loading> </mjo-image>
+
+<script>
+    const image = document.getElementById("dynamic-image");
+
+    // Simulate loading
+    setTimeout(() => {
+        image.loading = false;
+        image.src = "https://example.com/loaded-image.jpg";
+    }, 2000);
+</script>
+```
+
+### Error Handling
+
+```html
+<mjo-image src="https://example.com/nonexistent.jpg" alt="Product image"> </mjo-image>
+
+<script>
+    const image = document.querySelector("mjo-image");
+
+    image.addEventListener("mjo-image:error", (e) => {
+        console.error("Failed to load:", e.detail.error);
+        // Log error or show notification
+    });
+
+    image.addEventListener("mjo-image:load", (e) => {
+        console.log("Image loaded:", e.detail.naturalWidth, "x", e.detail.naturalHeight);
+    });
+</script>
+```
+
+### Customizing Appearance with CSS Variables
+
+```html
+<style>
+    .custom-image {
+        --mjo-image-clickable-cursor: zoom-in;
+        --mjo-image-clickable-hover-scale: scale(1.05);
+        --mjo-image-focus-outline: 3px solid #ff6b6b;
+        --mjo-image-loading-background-color: #fafafa;
+        --mjo-image-loading-color: #007bff;
+        --mjo-image-error-background-color: #ffe0e0;
+    }
+</style>
+
+<mjo-image class="custom-image" src="https://example.com/image.jpg" alt="Custom styled image" clickable> </mjo-image>
+```
+
+### Using CSS Parts for Advanced Styling
+
+```html
+<style>
+    mjo-image::part(container) {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    mjo-image::part(image) {
+        transition: transform 0.3s ease;
+    }
+
+    mjo-image:hover::part(image) {
+        transform: scale(1.1);
+    }
+
+    mjo-image::part(container-error) {
+        border-color: #ff6b6b;
+    }
+</style>
+
+<mjo-image src="https://example.com/image.jpg" alt="Styled image"> </mjo-image>
+```
+
+### Accessible Image Gallery
+
+```html
+<div role="list" aria-label="Product gallery">
+    <mjo-image role="listitem" src="https://example.com/product-1.jpg" alt="Product view from front" clickable aria-describedby="img-desc-1"> </mjo-image>
+    <span id="img-desc-1" hidden>High resolution front view showing product details</span>
+
+    <mjo-image role="listitem" src="https://example.com/product-2.jpg" alt="Product view from side" clickable aria-describedby="img-desc-2"> </mjo-image>
+    <span id="img-desc-2" hidden>Side angle view highlighting product features</span>
+</div>
+```
+
+## Additional Notes
+
+- The component automatically displays a fallback SVG when image loading fails
+- Loading spinner uses CSS animations that respect `prefers-reduced-motion` settings
+- The `disabled` property only affects interaction when `clickable` is enabled
+- When clickable, the component prevents default behavior and stops propagation to allow custom handling
+- The component uses native lazy loading (`loading="lazy"`) when the `lazy` property is enabled
+- All event handlers use private methods (prefixed with `#`) following modern JavaScript conventions
+- The component inherits width and height from its container, making it flexible for different layouts

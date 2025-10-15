@@ -1,6 +1,6 @@
 ---
 mode: Documenter
-description: Este prompt es utilizado para crear y mantener documentación técnica clara y concisa.
+description: Este prompt es utilizado para crear documentación técnica de componentes clara y concisa.
 ---
 
 #file:../instructions/documentation.instructions.md
@@ -25,7 +25,7 @@ La documentación debe seguir **estrictamente** la siguiente estructura:
 
 1. **Título del componente**: El nombre del componente como título principal, por ejemplo `mjo-button`.
 2. **Descripción breve**: Una breve descripción del propósito y funcionalidad del componente.
-3. **Indice**: Un índice con enlaces a las secciones principales del propio archivo de documentación.
+3. **Indice**: Un índice con enlaces a las secciones principales del propio archivo de documentación, SOLO UN NIVEL NO AÑADAS SUBSECCIONES.
 4. **Casos de uso**: Descripción de los casos de uso más comunes del componente.
 5. **Importación**: Instrucciones sobre cómo importar el componente en un proyecto. (ej. `import 'mjo-litui/mjo-button';`);
 6. **Propiedades**: Tabla con las propiedades del componente, incluyendo:
@@ -43,7 +43,7 @@ La documentación debe seguir **estrictamente** la siguiente estructura:
 9. **Eventos**: Tabla con los eventos emitidos por el componente, incluyendo:
    - Nombre del evento
    - Descripción
-   - Tipo del evento (Normalmente puedes encontrarlo en el archivo de tipos `.d.ts` del componente).
+   - Tipo del evento (Normalmente puedes encontrarlo en el archivo de tipos `.d.ts` del componente). **¡NOTA!**: Si el tipo del evento extiende `CustomEvent` no debes poner `CustomEvent<...>` sino el tipo original.
    - Parámetros (si los hay)
 10. **Variables CSS**: Si el componente tiene variables CSS específicas deben ser documentadas. Estas variables deben seguir el siguiente patrón `--mjo-[componente]-[propiedad]`, por ejemplo `--mjo-button-background-color`. También deben documentarse las variables CSS en los componentes dependientes si hubiera componentes dependientes exclusivos para el componente principal y sigan el mismo patrón del componente principal o el patrón `--mjo-[componente]-[dependiente]-[propiedad]`. **NUNCA** documentes variables que no siguen este patrón para el componente específico. La tabla debe incluir:
    - Nombre de la variable
@@ -57,7 +57,7 @@ La documentación debe seguir **estrictamente** la siguiente estructura:
    - Mejores prácticas para el uso del componente.
    - ARIA roles y atributos (si aplica).
    - Keyboard interactions (si aplica).
-13. **Ejemplos de uso**: Proporciona ejemplos de uso del componente en diferentes escenarios. Incluye fragmentos de código que muestren cómo usar el componente con diferentes propiedades y en diferentes estados. **IMPORTANTE**: No incluyas ejemplos obvios o que no aporten valor adicional. Incluye:
+13. **Ejemplos de uso**: Proporciona ejemplos de uso del componente en diferentes escenarios. Incluye fragmentos de código que muestren cómo usar el componente con diferentes propiedades y en diferentes estados. **IMPORTANTE**: No incluyas ejemplos obvios o que no aporten valor adicional. Los ejemplos tienen que ser de como se usa el componente dentro de otro componente Lit. Incluye:
    - Ejemplos de uso que no sean obvios.
    - Ejemplos de manejo programático que no sean obvios (si aplica).
    - Ejemplos de integración en formularios si aplica.

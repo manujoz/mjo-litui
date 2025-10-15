@@ -3,6 +3,14 @@ import { customElement } from "lit/decorators.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 
+/**
+ * A visual effect component that creates a ripple animation when the parent element is clicked.
+ *
+ * @summary Creates a Material Design-style ripple effect on click interactions.
+ *
+ * @cssprop --mo-ripple-color - Color of the ripple effect. Default: `currentColor`
+ * @cssprop --mo-ripple-opacity - Opacity of the ripple effect at the start of the animation. Default: `0.25`
+ */
 @customElement("mjo-ripple")
 export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
     parent?: HTMLElement;

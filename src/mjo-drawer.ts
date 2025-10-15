@@ -19,13 +19,28 @@ import "./components/drawer/mjo-drawer-container.js";
  * as a controller provider. All interactions are handled through the `controller` property which manages
  * the dynamically created drawer container.
  *
- * @slot - No slots available; content is provided through the controller's show() method
  * @csspart backdrop - The background overlay behind the drawer (applied to dynamically created container)
  * @csspart container - The main drawer container (applied to dynamically created container)
  * @csspart title - The title section of the drawer (applied to dynamically created container)
  * @csspart typography - The typography component within the title (applied to dynamically created container)
+ * @csspart typography-tag - The typography tag element (exported part from mjo-typography)
  * @csspart close-button - The close button in the title section (applied to dynamically created container)
  * @csspart content - The main content area of the drawer (applied to dynamically created container)
+ *
+ * @cssprop --mjo-drawer-backdrop-background-color - Background color of the backdrop overlay
+ * @cssprop --mjo-drawer-backdrop-filter - Backdrop filter effect (default: blur(5px))
+ * @cssprop --mjo-drawer-background-color - Background color of the drawer container
+ * @cssprop --mjo-drawer-box-shadow - Box shadow of the drawer container
+ * @cssprop --mjo-drawer-border-width - Border width of the drawer container
+ * @cssprop --mjo-drawer-border-color - Border color of the drawer container
+ * @cssprop --mjo-drawer-focus-outline-width - Width of the focus outline
+ * @cssprop --mjo-drawer-focus-outline-color - Color of the focus outline
+ * @cssprop --mjo-drawer-focus-outline-offset - Offset of the focus outline
+ * @cssprop --mjo-drawer-width - Default width for left/right drawers
+ * @cssprop --mjo-drawer-height - Default height for top/bottom drawers
+ * @cssprop --mjo-drawer-title-border-color - Border color of the title section
+ * @cssprop --mjo-drawer-close-icon-border-radius - Border radius of the close icon button
+ * @cssprop --mjo-drawer-close-icon-color - Color of the close icon
  */
 @customElement("mjo-drawer")
 export class MjoDrawer extends ThemeMixin(LitElement) implements IThemeMixin {

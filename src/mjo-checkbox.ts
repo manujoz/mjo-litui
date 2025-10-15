@@ -25,7 +25,8 @@ import "./mjo-typography.js";
 /**
  * @summary A customizable checkbox component with form integration, validation support, and indeterminate state.
  *
- * @fires change - Standard HTML input change event for form compatibility
+ * @slot - Default slot for content when no label is specified
+ *
  * @fires mjo-checkbox:change - Enhanced custom event with detailed state information
  * @fires mjo-checkbox:indeterminate-change - Fired when indeterminate state changes
  * @fires mjo-checkbox:focus - Fired when checkbox receives focus
@@ -44,6 +45,29 @@ import "./mjo-typography.js";
  * @csspart helper-text-msg-error-message - Error message element (via exportparts)
  * @csspart helper-text-msg-success-message - Success message element (via exportparts)
  * @csspart helper-text-msg-icon - Icon in error/success messages (via exportparts)
+ *
+ * @cssprop --mjo-checkbox-border-color - Border color for unchecked state
+ * @cssprop --mjo-checkbox-border-radius - Border radius of the checkbox
+ * @cssprop --mjo-checkbox-checked-color - Background color when checked
+ * @cssprop --mjo-checkbox-checked-border-color - Border color when checked
+ * @cssprop --mjo-checkbox-checked-icon-color - Icon color when checked
+ * @cssprop --mjo-checkbox-indeterminate-color - Border color when indeterminate
+ * @cssprop --mjo-checkbox-indeterminate-border-color - Border color when indeterminate
+ * @cssprop --mjo-checkbox-indeterminate-background-color - Background color when indeterminate
+ * @cssprop --mjo-checkbox-indeterminate-icon-color - Icon color when indeterminate
+ * @cssprop --mjo-checkbox-disabled-opacity - Opacity when disabled
+ * @cssprop --mjo-checkbox-focus-color - Shadow color on focus
+ * @cssprop --mjo-checkbox-focus-outline-color - Outline color on focus
+ * @cssprop --mjo-checkbox-label-color - Label text color
+ * @cssprop --mjo-checkbox-label-font-size - Label font size
+ * @cssprop --mjo-checkbox-label-font-weight - Label font weight
+ * @cssprop --mjo-checkbox-helper-color - Helper text color
+ * @cssprop --mjo-checkbox-helper-font-size - Helper text font size
+ * @cssprop --mjo-checkbox-helper-font-weight - Helper text font weight
+ * @cssprop --mjo-checkbox-error-border-color - Border color in error state
+ * @cssprop --mjo-checkbox-error-background-color - Background color in error state
+ * @cssprop --mjo-checkbox-error-icon-color - Icon color in error state
+ * @cssprop --mjo-checkbox-error-label-color - Label color in error state
  */
 @customElement("mjo-checkbox")
 export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement))) implements IThemeMixin, IInputErrorMixin, IFormMixin {
@@ -152,26 +176,46 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         this.updateFormData({ name: this.name || "", value: this.checked ? this.value || "1" : "" });
     }
 
+    /**
+     * Retrieves the current value of the checkbox as a string.
+     * Returns the value property if checked, otherwise returns empty string.
+     */
     getValue() {
         return this.checked ? this.value || "1" : "";
     }
 
+    /**
+     * Sets the value property of the checkbox.
+     */
     setValue(value: string) {
         this.value = value;
     }
 
+    /**
+     * Programmatically sets the checked state of the checkbox.
+     */
     setChecked(checked: boolean) {
         this.#handleClick(checked);
     }
 
+    /**
+     * Simulates a click on the checkbox, toggling its checked state.
+     */
     click(): void {
         this.#handleClick();
     }
 
+    /**
+     * Toggles the checked state of the checkbox.
+     */
     toggle() {
         this.#handleClick();
     }
 
+    /**
+     * Sets the indeterminate state of the checkbox.
+     * When set to true, the checkbox displays a dash icon instead of a checkmark.
+     */
     setIndeterminate(indeterminate: boolean) {
         this.checked = false;
         this.indeterminate = indeterminate;
@@ -193,10 +237,18 @@ export class MjoCheckbox extends ThemeMixin(InputErrorMixin(FormMixin(LitElement
         this.updateFormData({ name: this.name || "", value: this.getValue() });
     }
 
+    /**
+     * Validates the checkbox and displays any validation messages.
+     * Returns true if the checkbox is valid, false otherwise.
+     */
     reportValidity(): boolean {
         return this.inputElement.reportValidity();
     }
 
+    /**
+     * Sets a custom validation message for the checkbox.
+     * Use an empty string to clear the custom validation message.
+     */
     setCustomValidity(message: string): void {
         this.inputElement.setCustomValidity(message);
     }
