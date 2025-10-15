@@ -73,6 +73,8 @@ Mix these directly in descriptions:
 - Horizontal rules `---` (converts to h2)
 - User mentions via `@email` or `@username`
 - Components field (use labels only)
+- Bold text at start of list item (renders incorrectly)
+- Italic text with asterisks at start of list item (renders incorrectly)
 
 ### Quick Reference
 
@@ -86,6 +88,8 @@ Mix these directly in descriptions:
 | `- [ ] task` | - | ❌ | Not interactive |
 | `` ```js `` | `{code:js}` | ✅ | |
 | `` ```html `` | - | ❌ | Use xml |
+| `- **bold at start list item**` | - | ❌ | Never put bold at start at list item |
+| `- *italic with asterisks at start list item*` | - | ❌ | Never put italic with asterisks at start at list item |
 | `[~accountid:ID]` | Same | ✅ | Only format that works |
 | `{color:red}t{color}` | Same | ✅ | |
 | `(!) (i) (/)` | Same | ✅ | Icons |

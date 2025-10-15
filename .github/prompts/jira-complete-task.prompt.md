@@ -167,16 +167,16 @@ Formato para Detail Solution:
 [High-level description of what was implemented]
 
 ## Technical Details
-- [Key component/feature 1] - [What it does]
-- [Key component/feature 2] - [What it does]
-- [Configuration/setup changes] - [What changed]
+- [Key component/feature 1]: [What it does]
+- [Key component/feature 2]: [What it does]
+- [Configuration/setup changes]: [What changed]
 
 ## Architecture Changes
 [How the implementation fits into the project architecture]
 
 ### Key Files Changed
-- **_path/to/key-file1.ts_** - [Brief description of main change]
-- **_path/to/key-file2.php_** - [Brief description of main change]
+- _path/to/key-file1.ts_: [Brief description of main change]
+- _path/to/key-file2.php_: [Brief description of main change]
 - [X more files in module/feature]
 
 ### Integration Points
@@ -208,10 +208,10 @@ Implemented comprehensive AI assistant integration with four specialized Jira wo
 The solution extends the existing "Efbet mode" chat integration by adding specialized prompts that understand the hybrid Drupal 7 + Lit Element architecture. Each prompt integrates with MCP Jira tools and follows project-specific conventions including custom field handling.
 
 ### Key Files Changed
-- **_.github/prompts/jira-on-hold.prompt.md_** - Task hold management
-- **_.github/prompts/jira-complete-task.prompt.md_** - Task completion with validation
-- **_.docs/guides/ai-assistant.md_** - Comprehensive usage guide
-- **_2 more prompts and documentation files updated_**
+- _.github/prompts/jira-on-hold.prompt.md_: Task hold management
+- _.github/prompts/jira-complete-task.prompt.md_: Task completion with validation
+- _.docs/guides/ai-assistant.md_: Comprehensive usage guide
+- _2 more prompts and documentation files updated_
 
 ### Integration Points
 Integrates with MCP Jira server for task operations, follows specifications for descriptions, and enforces project workflows including worklog validation and QA notifications.
@@ -314,13 +314,13 @@ Cuando haya advertencias o criterios no cumplidos, añadir al comentario de fina
 
 ```markdown
 ### Acceptance Criteria Status
-_Total Criteria:_ Y
-_Fully Met:_ X criteria
-_Partially Met:_ X criteria (details in description)
-_Not Met:_ X criteria (requires follow-up)
-_Cannot Validate:_ X criteria (manual verification needed)
+*Total Criteria:* Y
+*Fully Met:* X criteria
+*Partially Met:* X criteria (details in description)
+*Not Met:* X criteria (requires follow-up)
+*Cannot Validate:* X criteria (manual verification needed)
 
-_Note:_ Task completed with user confirmation despite unmet criteria.
+*Note:* Task completed with user confirmation despite unmet criteria.
 ```
 
 ### 7. Obtener transiciones disponibles
@@ -346,7 +346,7 @@ Añade un comentario de finalización comprensivo con el resumen de la implement
 [Professional summary from analyzed code - see examples above]
 
 ### Acceptance Criteria Status
-[Include AC validation results if there were warnings - see 6a for format]
+[Include AC validation results if there were warnings - see 6 for format]
 
 ### Testing Notes
 [Specific testing instructions based on implementation]
