@@ -12,13 +12,27 @@ import ImageNotAvailable from "./utils/svg/no-image.js";
 /**
  * @summary A responsive image component with error handling, loading states, and accessibility features.
  *
- * @description The mjo-image component provides a robust image rendering solution with built-in
- * error handling, loading states, clickable interactions, and comprehensive accessibility support.
- * It automatically falls back to a placeholder SVG when image loading fails.
- *
  * @fires mjo-image:load - Fired when image loads successfully
  * @fires mjo-image:error - Fired when image fails to load
  * @fires mjo-image:click - Fired when clickable image is clicked
+ *
+ * @csspart container - The main container wrapping the image
+ * @csspart container-loading - The container in loading state
+ * @csspart container-error - The container in error state
+ * @csspart container-clickable - The container when clickable is enabled
+ * @csspart loading-spinner-wrapper - The wrapper for the loading spinner
+ * @csspart loading-spinner-svg - The SVG element of the loading spinner
+ * @csspart image - The actual image element
+ *
+ * @cssprop --mjo-image-clickable-cursor - Cursor style for clickable images
+ * @cssprop --mjo-image-clickable-hover-scale - Transform scale on hover for clickable images
+ * @cssprop --mjo-image-focus-outline - Outline style for focused clickable images
+ * @cssprop --mjo-image-disabled-opacity - Opacity for disabled images
+ * @cssprop --mjo-image-loading-background-color - Background color for loading state
+ * @cssprop --mjo-image-loading-size - Size of the loading spinner
+ * @cssprop --mjo-image-loading-color - Color of the loading spinner
+ * @cssprop --mjo-image-error-background-color - Background color for error state
+ * @cssprop --mjo-image-error-radius - Border radius for error and loading states
  */
 @customElement("mjo-image")
 export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
@@ -134,6 +148,9 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
         return this.alt;
     }
 
+    /**
+     * Handles the image load event and dispatches a custom mjo-image:load event
+     */
     #handleLoad(event: Event) {
         const img = event.target as HTMLImageElement;
         this.error = false;
@@ -152,6 +169,9 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
         this.dispatchEvent(loadEvent);
     }
 
+    /**
+     * Handles the image error event, displays fallback SVG, and dispatches a custom mjo-image:error event
+     */
     #handleError() {
         this.error = true;
         this.svgImage = ImageNotAvailable;
@@ -172,6 +192,9 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
         this.dispatchEvent(errorEvent);
     }
 
+    /**
+     * Handles click events on clickable images and dispatches a custom mjo-image:click event
+     */
     #handleClick(event: Event) {
         if (!this.clickable || this.disabled) return;
 
@@ -189,6 +212,9 @@ export class MjoImage extends ThemeMixin(LitElement) implements IThemeMixin {
         this.dispatchEvent(clickEvent);
     }
 
+    /**
+     * Handles keyboard events (Enter/Space) for clickable images
+     */
     #handleKeydown(event: KeyboardEvent) {
         if (!this.clickable || this.disabled) return;
 

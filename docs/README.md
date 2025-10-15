@@ -50,7 +50,7 @@ Welcome to the extended documentation. Here you will find conceptual guides, the
 
 ### Media & Display
 
-- **[mjo-image](mjo-image.md)** - Enhanced image component with loading states
+- **[mjo-image](mjo-image.md)** - Responsive image component with error handling, loading states, and accessibility features
 - **[mjo-avatar](mjo-avatar.md)** - Configurable avatar component for user images, initials, or fallback icons
 - **[mjo-badge](mjo-badge.md)** - Positioned notification badge component with comprehensive accessibility support
 - **[mjo-table](mjo-table.md)** - Data tables with sorting and filtering
