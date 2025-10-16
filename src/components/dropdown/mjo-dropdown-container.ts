@@ -15,6 +15,7 @@ import {
     getTopInMiddlePosition,
     getTopInTopPosition,
 } from "../../utils/dropdown.js";
+import { getScrollbarElements } from "../../utils/shadow-dom.ts";
 
 /**
  * @summary Container element for mjo-dropdown that holds the floating content.
@@ -34,25 +35,32 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
     @property({ type: Boolean }) scrollLocked = false;
     @property({ type: String }) width?: string;
     @property({ type: String }) height?: string;
+    @property({ type: Number }) zIndex = 10;
 
-    host?: MjoDropdown;
+    host!: MjoDropdown;
     #scrollLock!: ScrollLock;
+    #scrollElements: HTMLElement[] = [];
 
     render() {
-        return html`${this.css
-            ? html`<style type="text/css">
-                  ${this.css.toString().replace(/\s+/g, " ")}
-              </style>`
-            : nothing}${this.html ? html`<div class="container" part="dropdown-container" role="dialog" aria-modal="false">${this.html}</div>` : nothing}`;
+        return html`
+            ${this.css
+                ? html`
+                      <style type="text/css">
+                          ${this.css.toString().replace(/\s+/g, " ")}
+                      </style>
+                  `
+                : nothing}
+            ${this.html ? html`<div part="dropdown-container" role="dialog" aria-modal="false">${this.html}</div>` : nothing}
+        `;
     }
 
     connectedCallback(): void {
         super.connectedCallback();
 
-        this.#scrollLock = new ScrollLock(this);
-        this.#scrollLock.onScroll = this.#handleScroll;
+        this.#scrollLock = new ScrollLock(this.host);
 
         if (this.height) this.style.maxHeight = this.height;
+        if (this.zIndex) this.style.zIndex = this.zIndex.toString();
 
         window.addEventListener("resize", this.#handleResize);
     }
@@ -73,7 +81,13 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
      * Closes the dropdown with animation.
      */
     close() {
-        if (this.scrollLocked) this.#scrollLock.unlock();
+        if (this.scrollLocked) {
+            this.#scrollLock.unlock();
+        } else {
+            this.#scrollElements.forEach((el) => {
+                el.removeEventListener("scroll", this.#handleScroll);
+            });
+        }
 
         this.style.transform = "scale(0.7)";
         this.style.opacity = "0";
@@ -89,7 +103,14 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
      * Opens the dropdown with animation.
      */
     open() {
-        if (this.scrollLocked) this.#scrollLock.lock();
+        if (this.scrollLocked) {
+            this.#scrollLock.lock(true);
+        } else {
+            this.#scrollElements = getScrollbarElements(this.host as HTMLElement);
+            this.#scrollElements.forEach((el) => {
+                el.addEventListener("scroll", this.#handleScroll, { passive: true });
+            });
+        }
 
         this.style.display = "block";
         this.style.transition = "opacity 0.1s ease-in, transform 0.1s ease-in";
@@ -172,12 +193,7 @@ export class MjoDropdownContainer extends ThemeMixin(LitElement) implements IThe
                 border-radius: var(--mjo-dropdown-border-radius, var(--mjo-radius-medium, 5px));
                 overflow-x: hidden;
                 overflow-y: auto;
-                z-index: 1000;
-            }
-            .container {
-                background-color: var(--mjo-dropdown-background-color, var(--mjo-background-color, transparent));
-                color: var(--mjo-dropdown-foreground-color, currentColor);
-                overflow: hidden;
+                z-index: 10;
             }
         `,
     ];

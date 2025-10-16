@@ -101,3 +101,20 @@ export const getInheritBackgroundColor = (component: HTMLElement) => {
 
     return backgroundColor || lastColor;
 };
+
+export const getScrollbarElements = (element: HTMLElement) => {
+    const elements: HTMLElement[] = [];
+    while (element) {
+        if (element.scrollHeight > element.clientHeight) {
+            if (element.tagName === "HTML") {
+                element = window as unknown as HTMLElement;
+                elements.push(element);
+            } else {
+                elements.push(element);
+            }
+        }
+        element = ((element.parentNode as ShadowRoot)?.host as HTMLElement) ?? element.parentNode;
+    }
+
+    return elements;
+};

@@ -36,6 +36,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
     @property({ type: Object }) css?: CSSResult;
     @property({ type: Object }) html?: TemplateResult<1>;
     @property({ type: String }) behaviour: MjoDropdownBehaviour = "hover";
+    @property({ type: Number }) zIndex = 10;
     @property({ type: String, converter: convertToPx }) width?: string;
     @property({ type: String, converter: convertToPx }) height?: string;
     @property({ type: Boolean }) preventCloseOnInnerClick = false;
@@ -213,6 +214,7 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         this.$dropdownContainer.css = this.css;
         this.$dropdownContainer.scrollLocked = this.scrollLocked;
         this.$dropdownContainer.position = this.position;
+        this.$dropdownContainer.zIndex = this.zIndex;
 
         const id = this.idDropdown;
         if (id) this.$dropdownContainer.id = id;
@@ -292,6 +294,8 @@ export class MjoDropdown extends ThemeMixin(LitElement) implements IThemeMixin {
         css`
             :host {
                 display: inline-block;
+                max-height: max-content;
+                max-width: max-content;
             }
         `,
     ];
