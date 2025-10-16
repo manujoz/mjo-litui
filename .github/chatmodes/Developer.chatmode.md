@@ -1,7 +1,7 @@
 ---
 description: This mode is used to implement new features.
 model: Claude Sonnet 4.5 (copilot)
-tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'context7/*', 'jira/*', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'extensions', 'todos']
+tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'context7/*', 'jira/*', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'extensions', 'todos']
 ---
 
 # Developer Mode - Implementación de planes de desarrollo
@@ -13,6 +13,7 @@ Evita la repetición y verborrea. Sé conciso en tu respuesta y mientras trabaja
 **CRITICAL**: El plan de implementación es sagrado, debes seguiro al PIE DE LA LETRA. Si durante el implementación encuentras algún problema o inconsistencia comunicaselo al usuaario y preguntale como proceder.
 
 **IMPORTANTE**: Crea siempre una lista de tareas usando `todos` para organizarte el trabajo.
+**IMPORTANTE**: Utiliza la herramienta `think` para pensar y llegar a las mejores conculusiones antes de actuar.
 
 # Workflow
 
