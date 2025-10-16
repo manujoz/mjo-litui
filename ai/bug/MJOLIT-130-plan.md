@@ -40,15 +40,7 @@ Fix three critical issues in the dropdown component system: forced host-level st
 - Apply all visual styles to `.container` div instead
 - This allows consumers to style the container via `::part(dropdown-container)` without fighting host styles
 
-#### 2. Implement Robust CSS-Based Scroll Lock
-
-- Enhance `ScrollLock` to use CSS mode by default when `scrollLocked` is true
-- Set `overflow: hidden` on body AND `position: fixed` with calculated top offset to prevent any scroll
-- Calculate and preserve current scroll position to restore on unlock
-- Add proper cleanup in disconnect/close handlers
-- Remove unreliable event-based scroll prevention
-
-#### 3. Fix Hover Listener Management
+#### 2. Fix Hover Listener Management
 
 - Separate listener lifecycle from open/close state changes
 - Keep hover listeners attached at all times when `behaviour === "hover"`
@@ -108,36 +100,7 @@ Fix three critical issues in the dropdown component system: forced host-level st
     - Ensure `--mjo-dropdown-border-radius` applies correctly to `.container`
     - Ensure `--mjo-dropdown-background-color` and `--mjo-dropdown-foreground-color` work on `.container`
 
-### Phase 2: Implement Robust Scroll Lock (scroll.ts)
-
-- [ ] **Enhance CSS-based lock method**
-    - In `lock(css: boolean)` method, always use CSS mode when called with `true` or default
-    - Store current scroll position: `window.scrollY` and `window.scrollX`
-    - Calculate scrollbar width: `window.innerWidth - document.documentElement.clientWidth`
-    - Set `body.style.position = 'fixed'`
-    - Set `body.style.top = -${scrollY}px`
-    - Set `body.style.left = -${scrollX}px`
-    - Set `body.style.right = '0'`
-    - Set `body.style.overflow = 'hidden'`
-    - Add padding-right to compensate for scrollbar width
-    - Store all original style values in private properties for restoration
-
-- [ ] **Enhance CSS-based unlock method**
-    - In `unlock()` method, when CSS mode was used:
-    - Restore all saved body styles (`position`, `top`, `left`, `right`, `overflow`, `padding-right`)
-    - Restore scroll position: `window.scrollTo(savedScrollX, savedScrollY)`
-    - Clear all saved style values
-
-- [ ] **Remove or deprecate event-based scroll lock**
-    - Consider removing event-based mode entirely as it's unreliable
-    - Or keep as fallback but don't use it by default
-    - If keeping, add clear documentation about its limitations
-
-- [ ] **Update ScrollLock constructor and properties**
-    - Add private properties: `#savedScrollY`, `#savedScrollX`, `#savedBodyPosition`, `#savedBodyTop`, `#savedBodyLeft`, `#savedBodyRight`, `#savedBodyOverflow`
-    - Ensure proper initialization in constructor
-
-### Phase 3: Fix Hover Behaviour Listeners (mjo-dropdown.ts)
+### Phase 2: Fix Hover Behaviour Listeners (mjo-dropdown.ts)
 
 - [ ] **Refactor listener lifecycle in `#setListeners()`**
     - For hover behaviour: attach `mouseenter` to host AND `mouseleave` to both host and container
@@ -161,17 +124,7 @@ Fix three critical issues in the dropdown component system: forced host-level st
     - In `updated()` lifecycle: ensure listeners are properly cleaned and recreated when behaviour changes
     - Test switching from hover to click and vice versa
 
-### Phase 4: Update Dropdown Container to Use CSS Lock
-
-- [ ] **Update `mjo-dropdown-container.ts` open() method**
-    - Change `if (this.scrollLocked) this.#scrollLock.lock();` to always pass `true`: `this.#scrollLock.lock(true);`
-    - This ensures CSS-based locking is used
-
-- [ ] **Verify scroll lock initialization**
-    - Ensure `#scrollLock` is properly initialized in `connectedCallback()`
-    - Ensure it's properly cleaned up in `disconnectedCallback()`
-
-### Phase 5: Verify Dependent Components
+### Phase 3: Verify Dependent Components
 
 - [ ] **Test mjo-select with scroll lock**
     - Open select dropdown in browser
@@ -195,7 +148,7 @@ Fix three critical issues in the dropdown component system: forced host-level st
     - Verify no visual artifacts from removed host styles
     - Test with different configurations
 
-### Phase 6: Test Hover Dropdowns
+### Phase 4: Test Hover Dropdowns
 
 - [ ] **Test basic hover dropdown**
     - Navigate to `server` demo page for dropdowns
@@ -215,7 +168,7 @@ Fix three critical issues in the dropdown component system: forced host-level st
     - Test hover dropdowns with `position="right-bottom"`, `center-top"`, etc.
     - Verify behaviour is consistent across all positions
 
-### Phase 7: Testing and Documentation
+### Phase 5: Testing and Documentation
 
 - [ ] **Create/update unit tests**
     - Test file: `tests/components/mjo-dropdown.test.ts`
