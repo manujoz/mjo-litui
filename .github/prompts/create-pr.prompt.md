@@ -88,7 +88,10 @@ Closes MJOLIT-XXX
 
 ## After Creating
 
-Report to user:
+**Request Copilot review**:
+- **ALWAYS** Use MCP for request Copilot review of created PR
+
+**Report to user**:
 - PR URL (e.g., `https://github.com/manujoz/mjo-litui/pull/123`)
 - PR number
 - Base branch
@@ -114,3 +117,4 @@ If description missing required sections:
 - **ALWAYS** review changed files before composing
 - **ALWAYS** keep Summary high-level (avoid implementation details)
 - **ALWAYS** use action verbs in Changes list
+- **ALWAYS** request Copilot review of created PR using MCP

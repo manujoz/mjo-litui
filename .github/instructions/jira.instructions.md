@@ -124,7 +124,7 @@ MCP converts Markdown to Jira Wiki Markup automatically.
 ### Works
 - **Headers**: Markdown `# H1`, `## H2`, `### H3`
 - **Bold**: `**bold**`
-- **Italic**: `*italic*``` `code` `` → `{{code}}`
+- **Italic**: `*italic*`
 - **Code**: `` `code` ``
 - **Lists**: Flat only (`- item` or `1. item`). **NEVER nest**
 - **Tables**: Standard markdown tables convert correctly
