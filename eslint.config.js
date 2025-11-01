@@ -11,7 +11,7 @@ import globals from "globals";
 export default [
     // Global ignores
     {
-        ignores: ["dist/**", "node_modules/**", "dev/**", "test/**", "server/**", ".eslintrc.json", "commitlint.config.cjs"],
+        ignores: ["dist/**", "node_modules/**", "dev/**", "test/**", "server/**", "commitlint.config.cjs"],
     },
 
     // Base configuration for all files
