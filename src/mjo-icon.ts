@@ -142,7 +142,7 @@ export class MjoIcon extends ThemeMixin(LitElement) implements IThemeMixin {
 
             this.hasError = false;
             this.#dispatchLoadEvent();
-        } catch (error) {
+        } catch (_error) {
             this.hasError = true;
             this.#dispatchErrorEvent("Failed to parse SVG content");
         }

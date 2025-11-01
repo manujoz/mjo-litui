@@ -14,7 +14,7 @@ import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
 @customElement("mjo-ripple")
 export class MjoRipple extends ThemeMixin(LitElement) implements IThemeMixin {
     parent?: HTMLElement;
-    timeoutRipple?: NodeJS.Timeout;
+    timeoutRipple?: ReturnType<typeof setTimeout>;
 
     render() {
         return html`

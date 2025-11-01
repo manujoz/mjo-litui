@@ -2141,7 +2141,7 @@ export function isLightColor({ color, sourceFormat, threshold = 0.43 }: { color:
 
         // Return true if luminance is above threshold (light), false if below (dark)
         return luminance > threshold;
-    } catch (error) {
+    } catch (_error) {
         throw new Error(`Invalid color format: ${color}`);
     }
 }

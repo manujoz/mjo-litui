@@ -54,6 +54,14 @@ export default [
 
             // Custom TypeScript rules
             "@typescript-eslint/no-var-requires": "off",
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
+                },
+            ],
 
             // Core ESLint rules
             curly: ["error", "multi-line"],

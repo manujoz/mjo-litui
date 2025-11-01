@@ -12,7 +12,7 @@ export class MjointMessageItem extends LitElement {
     @property({ type: Number }) time = 3000;
 
     onClose?: () => void;
-    timeOut?: NodeJS.Timeout;
+    timeOut?: ReturnType<typeof setTimeout>;
     removing = false;
 
     render() {
