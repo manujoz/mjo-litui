@@ -29,6 +29,7 @@ export default defineConfig({
                 "mjo-color-picker": `${__dirname}/dev/mjo-color-picker.html`,
                 "mjo-date-picker": `${__dirname}/dev/mjo-date-picker.html`,
                 "mjo-drawer": `${__dirname}/dev/mjo-drawer.html`,
+                "mjo-dropdown": `${__dirname}/dev/mjo-dropdown.html`,
                 "mjo-form": `${__dirname}/dev/mjo-form.html`,
                 "mjo-listbox": `${__dirname}/dev/mjo-listbox.html`,
                 "mjo-progress": `${__dirname}/dev/mjo-progress.html`,

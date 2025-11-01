@@ -165,7 +165,7 @@ export class MjoModalContainer extends ThemeMixin(LitElement) implements IThemeM
         this.isOpen = true;
 
         // Manage body scroll
-        if (!this.disableScrollLock) this.#scrollLock.lock(true);
+        if (!this.disableScrollLock) this.#scrollLock.lock();
 
         // Add global keyboard listener
         document.addEventListener("keydown", this.#handleGlobalKeyDown);

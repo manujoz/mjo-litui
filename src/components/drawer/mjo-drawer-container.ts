@@ -163,7 +163,7 @@ export class MjoDrawerContainer extends ThemeMixin(LitElement) implements ITheme
     #open() {
         this.isOpen = true;
 
-        if (!this.disableScrollLock) this.#scrollLock.lock(true);
+        if (!this.disableScrollLock) this.#scrollLock.lock();
 
         this.style.display = "block";
 
