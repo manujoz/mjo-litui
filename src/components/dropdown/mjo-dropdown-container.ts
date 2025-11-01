@@ -15,7 +15,7 @@ import {
     getTopInMiddlePosition,
     getTopInTopPosition,
 } from "../../utils/dropdown.js";
-import { getScrollbarElements } from "../../utils/shadow-dom.ts";
+import { getScrollbarElements } from "../../utils/shadow-dom.js";
 
 /**
  * @summary Container element for mjo-dropdown that holds the floating content.
