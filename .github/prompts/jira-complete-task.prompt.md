@@ -26,7 +26,6 @@ Obtén detalles completos de la tarea incluyendo la información del worklog.
 Verificar:
 
 -   Estado actual (debería ser "In progress" o similar)
--   Time tracking: estimación original, tiempo registrado (time spent), estimación restante
 -   Estado de subtareas (si las hay)
 -   **Criterios de aceptación en la descripción** (extraer y guardar para validación posterior)
 
@@ -44,29 +43,7 @@ Please specify: QA or Done
 
 Según la respuesta, determina la transición objetivo en Jira MCP, obtiene las transiciones disponibles en Jira y verifica que el objetivo sea válido.
 
-### 3. Validar Worklog (OBLIGATORIO)
-
-**CRÍTICO**: Antes de completar cualquier tarea, DEBES verificar que se haya registrado tiempo de trabajo.
-
-Comprueba el campo `timetracking` de la issue:
--   `timeSpent`: Debe tener un valor (por ejemplo, "1d 4h")
--   `timeSpentSeconds`: Debe ser > 0
-
-**Si NO existe worklog:**
-
-Solicita al usuario:
-
-```
-"No work time has been logged for this task. Please register the time in Jira timesheet:"
-```
-
-Una vez el usuario indique que lo ha añadido, vuelve a comprobar el worklog y si existe continúa con el flujo.
-
-**Si existe worklog:**
-
--   Muestra al usuario el tiempo registrado actualmente
-
-### 4. Validar Subtareas (si aplica)
+### 3. Validar Subtareas (si aplica)
 
 Si la tarea tiene subtareas, revisa su estado.
 
@@ -78,7 +55,7 @@ Si la tarea tiene subtareas, revisa su estado.
 
 Espera la confirmación del usuario antes de proceder.
 
-### 5. Analizar la implementación (OBLIGATORIO)
+### 4. Analizar la implementación (OBLIGATORIO)
 
 **CRÍTICO**: Analiza la implementación del código para entender qué se desarrolló.
 **CRÍTICO**: Antes de añadir el comentario de finalización, DEBES analizar la implementación para crear un resumen profesional en la sección "Detail Solution".
@@ -194,7 +171,7 @@ The solution extends the existing "Efbet mode" chat integration by adding specia
 Integrates with MCP Jira server for task operations, follows specifications for descriptions, and enforces project workflows including worklog validation and QA notifications.
 ```
 
-### 6. Validar los criterios de aceptación (OBLIGATORIO)
+### 5. Validar los criterios de aceptación (OBLIGATORIO)
 
 **CRÍTICO**: Cruzar la implementación analizada con los criterios de aceptación.
 
@@ -300,13 +277,13 @@ Cuando haya advertencias o criterios no cumplidos, añadir al comentario de fina
 *Note:* Task completed with user confirmation despite unmet criteria.
 ```
 
-### 7. Obtener transiciones disponibles
+### 6. Obtener transiciones disponibles
 
 Verifica que conozcas las transiciones disponibles para el estado actual de la tarea; si no, obténlas usando Jira MCP.
 
 Comprueba si la transición objetivo está disponible. Si no lo está, muestra las transiciones disponibles al usuario.
 
-### 8. Añadir comentario de finalización
+### 7. Añadir comentario de finalización
 
 Añade un comentario de finalización comprensivo con el resumen de la implementación y los resultados de la validación de AC.
 
@@ -317,7 +294,6 @@ Añade un comentario de finalización comprensivo con el resumen de la implement
 ## Task Completed
 *Completed by:* [~accountid:ALLOWED_USERID] 
 *Completion date:* [Date in YYYY-MM-DD format]
-*Time spent:* [Total time from worklog]
 
 ### Implementation Summary
 [Professional summary from analyzed code - see examples above]
@@ -338,7 +314,6 @@ Añade un comentario de finalización comprensivo con el resumen de la implement
 
 *Completed by:* [~accountid:ALLOWED_USERID]
 *Completion date:* [Date in YYYY-MM-DD format]
-*Time spent:* [Total time from worklog]
 
 ### Implementation Summary
 [Professional summary from analyzed code]
@@ -359,7 +334,7 @@ All acceptance criteria have been validated. Task is complete.
 - `[Professional summary]` con el análisis real basado en código/commits (NO la descripción del usuario)
 - `[Include AC validation results if there were warnings]` con el estado real de AC del Paso 6 (omitir la sección si todos los criterios están cumplidos)
 
-### 9. Hacer la transición al estado objetivo
+### 8. Hacer la transición al estado objetivo
 
 Finalmente, realiza la transición usando el transition ID apropiado (obtenlo de Jira MCP si no lo tienes).
 
@@ -454,7 +429,7 @@ Esperar confirmación del usuario.
 
 ## Después de la ejecución
 
-Proveer reporte detallado de finalización:
+**Proveer reporte detallado de finalización**:
 
 ```
 ✅ Task Completed Successfully
@@ -463,7 +438,6 @@ Task: MJOLIT-XXXX - [Summary]
 Link: [Jira URL]
 
 Status: [Previous] → [QA/Done]
-Time Logged: [Total time]
 Comment: Added with [details]
 
 [If QA: "✅ Cevza Beliz has been notified"]
