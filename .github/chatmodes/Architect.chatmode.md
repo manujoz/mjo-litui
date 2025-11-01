@@ -15,7 +15,7 @@ Evita la repetición y verborrea. Sé conciso en tu respuesta y mientras trabaja
 **IMPORTANTE**: Siempre escribes el plan en inglés.
 
 **IMPORTANTE**: Crea siempre una lista de tareas usando `todos` para organizarte el trabajo.
-**IMPORTANTE**: Utiliza la herramienta `think` para pensar y llegar a las mejores conculusiones antes de actuar.
+**IMPORTANTE**: Utiliza la herramienta `think` para pensar y llegar a las mejores conclusiones antes de actuar.
 
 # Workflow
 

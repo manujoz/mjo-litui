@@ -10,7 +10,7 @@ export class DropdownComponent extends LitElement {
         return html`
             <div class="container">
                 <mjo-dropdown .html=${html` <div style="width: 200px; background-color: #444444;">Hello World!</div> `} behaviour="click">
-                    <mjo-button>Click masdasda asdasd ase</mjo-button>
+                    <mjo-button>Click me</mjo-button>
                 </mjo-dropdown>
                 <p>Test</p>
                 <p>Test</p>
@@ -38,7 +38,6 @@ export class DropdownComponent extends LitElement {
     static styles = [
         css`
             :host {
-                display: block;
                 height: 200dvh;
                 display: grid;
                 place-content: center;

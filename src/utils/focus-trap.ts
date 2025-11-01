@@ -14,13 +14,13 @@ export class FocusTrap {
     }
 
     #getActiveElement() {
-        let activeELement = document.activeElement as HTMLElement | null;
+        let activeElement = document.activeElement as HTMLElement | null;
 
-        while (activeELement?.shadowRoot && activeELement.shadowRoot.activeElement) {
-            activeELement = activeELement.shadowRoot.activeElement as HTMLElement;
+        while (activeElement?.shadowRoot && activeElement.shadowRoot.activeElement) {
+            activeElement = activeElement.shadowRoot.activeElement as HTMLElement;
         }
 
-        return activeELement;
+        return activeElement;
     }
 
     activate() {
@@ -91,7 +91,7 @@ export class FocusTrap {
 
 export interface FocusTrapOptions {
     /** Element to focus when trap is activated */
-    initialFocus?: string;
+    initialFocus?: string | HTMLElement;
     /** Callback when trap is activated */
     onActivate?: () => void;
     /** Callback when trap is deactivated */

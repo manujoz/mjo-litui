@@ -13,7 +13,7 @@ Evita la repetición y verborrea. Sé conciso en tu respuesta y mientras trabaja
 **CRITICAL**: El plan de implementación es sagrado, debes seguiro al PIE DE LA LETRA. Si durante el implementación encuentras algún problema o inconsistencia comunicaselo al usuaario y preguntale como proceder.
 
 **IMPORTANTE**: Crea siempre una lista de tareas usando `todos` para organizarte el trabajo.
-**IMPORTANTE**: Utiliza la herramienta `think` para pensar y llegar a las mejores conculusiones antes de actuar.
+**IMPORTANTE**: Utiliza la herramienta `think` para pensar y llegar a las mejores conclusiones antes de actuar.
 
 # Workflow
 
