@@ -641,11 +641,19 @@ export class MjoCalendar extends ThemeMixin(FormMixin(LitElement)) implements IF
                 handled = true;
                 break;
             case "PageUp":
-                event.ctrlKey ? this.#navigateMonthByKeyboard(currentDate, -12) : this.#navigateMonthByKeyboard(currentDate, -1);
+                if (event.ctrlKey) {
+                    this.#navigateMonthByKeyboard(currentDate, -12);
+                } else {
+                    this.#navigateMonthByKeyboard(currentDate, -1);
+                }
                 handled = true;
                 break;
             case "PageDown":
-                event.ctrlKey ? this.#navigateMonthByKeyboard(currentDate, 12) : this.#navigateMonthByKeyboard(currentDate, 1);
+                if (event.ctrlKey) {
+                    this.#navigateMonthByKeyboard(currentDate, 12);
+                } else {
+                    this.#navigateMonthByKeyboard(currentDate, 1);
+                }
                 handled = true;
                 break;
             case "Enter":

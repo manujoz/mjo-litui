@@ -145,7 +145,7 @@ export class MjoListbox extends ThemeMixin(LitElement) implements IThemeMixin {
             return `${item.label}-${index}`;
         }
 
-        return `${item.label.strings[0]}-${index}` || index;
+        return item.label.strings[0] ? `${item.label.strings[0]}-${index}` : index;
     }
 
     #handleFocus = () => {

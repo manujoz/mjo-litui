@@ -14,7 +14,7 @@ export class MjointNotificationItem extends LitElement {
     @property({ type: String }) position?: NotificationPositions;
 
     onClose?: () => void;
-    timeOut?: NodeJS.Timeout;
+    timeOut?: ReturnType<typeof setTimeout>;
     removing = false;
 
     render() {

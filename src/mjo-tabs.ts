@@ -277,7 +277,7 @@ export class MjoTabs extends ThemeMixin(LitElement) implements IThemeMixin {
         const outlinedColor = colorMap[this.color] || "transparent";
 
         // Aplicar las variables CSS
-        // eslint-disable-next-line max-len
+
         this.#styles = `<style>:host{--mjoint-tab-indicator-outlined-color: ${outlinedColor};--mjoint-tab-button-color: ${buttonColor};--mjoint-tab-indicator-bgcolor: ${indicatorBgColor};--mjoint-tab-indicator-border: ${indicatorBorder};--mjoint-tab-indicator-radius: ${indicatorRadius};}</style>`;
     }
 

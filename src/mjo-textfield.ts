@@ -298,8 +298,6 @@ export class MjoTextfield extends ThemeMixin(InputErrorMixin(FormMixin(LitElemen
     connectedCallback(): void {
         super.connectedCallback();
 
-        document.querySelector("input")?.autocomplete;
-
         this.updateFormData({ name: this.name || "", value: this.value });
     }
 
