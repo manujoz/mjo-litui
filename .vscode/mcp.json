@@ -19,6 +19,10 @@
 				"${workspaceFolder}/.settings/mcp-atlassian.env",
 				"ghcr.io/sooperset/mcp-atlassian:latest"
 			]
+		},
+		"github": {
+			"type": "http",
+			"url": "https://api.githubcopilot.com/mcp/"
 		}
 	}
 }
