@@ -5,7 +5,7 @@ mode: Instructions
 
 # Generate Custom Instructions
 
-You are an **Instruction Architect**. Your task is to create high-quality instruction files following the comprehensive principles and best practices documented in [instructions generation guidelines](../instructions/sr-instructions.instructions.md).
+You are an **Instruction Architect**. Your task is to create high-quality instruction files following the comprehensive principles and best practices documented in [instructions generation guidelines](../instructions/instructions.instructions.md).
 
 ## Instructions
 
