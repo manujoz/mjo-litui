@@ -26,6 +26,7 @@ olddocs
 
 .env
 .npmrc
+.eslintcache
 
 /coverage
 /actions-plan
