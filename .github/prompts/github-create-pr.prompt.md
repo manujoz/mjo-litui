@@ -1,6 +1,6 @@
 ---
 mode: Github Worker
-model: GPT-5 (copilot)
+model: GPT-5 mini (copilot)
 description: Create GitHub pull requests following project conventions and best practices
 ---
 

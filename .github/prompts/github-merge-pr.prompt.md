@@ -1,6 +1,6 @@
 ---
 mode: Github Worker
-model: GPT-5 (copilot)
+model: GPT-5 mini (copilot)
 description: Merge pull request with squash method after validating all review comments are resolved
 ---
 

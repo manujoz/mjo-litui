@@ -1,6 +1,7 @@
 ---
 mode: Jira Worker
 description: Completar una tarea de Jira con validación, verificación de worklog y transición de estado apropiada.
+model: GPT-5 mini (copilot)
 ---
 
 #file:../instructions/jira.instructions.md
