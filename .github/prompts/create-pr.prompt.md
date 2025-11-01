@@ -12,7 +12,7 @@ Your mission is to create a high-quality pull request using the `github` tool, f
 ## Workflow
 
 1. **Analyze current branch and changes**
-   - Verify you're on a feature branch (e.g., `feature/MJOLIT-XXX`)
+   - Verify you're on a feature branch (e.g., `feature/MJOLIT-XXX`, `fix/MJOLIT-XXX`) search branch name for Jira issue ID
    - Review all modified files using `changes` tool
    - Extract Jira issue ID from branch name
 
