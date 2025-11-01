@@ -1,5 +1,5 @@
 ---
-mode: Jira
+mode: Jira Worker
 model: GPT-5 mini (copilot)
 description: Poner en stand-by una tarea de jira.
 ---

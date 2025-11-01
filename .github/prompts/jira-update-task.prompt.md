@@ -1,5 +1,5 @@
 ---
-mode: Jira
+mode: Jira Worker
 model: GPT-5 mini (copilot)
 description: Actualizar una tarea de Jira existente según la petición del usuario - solo actualizar lo que se solicite.
 ---

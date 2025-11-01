@@ -1,5 +1,5 @@
 ---
-mode: Jira
+mode: Jira Worker
 description: Completar una tarea de Jira con validación, verificación de worklog y transición de estado apropiada.
 ---
 
@@ -48,7 +48,6 @@ Según la respuesta, determina la transición objetivo en Jira MCP, obtiene las 
 **CRÍTICO**: Antes de completar cualquier tarea, DEBES verificar que se haya registrado tiempo de trabajo.
 
 Comprueba el campo `timetracking` de la issue:
-
 -   `timeSpent`: Debe tener un valor (por ejemplo, "1d 4h")
 -   `timeSpentSeconds`: Debe ser > 0
 
@@ -152,8 +151,8 @@ Formato para Detail Solution:
 [How the implementation fits into the project architecture]
 
 ### Key Files Changed
-- _path/to/key-file1.ts_: [Brief description of main change]
-- _path/to/key-file2.php_: [Brief description of main change]
+- `path/to/key-file1.ts`: [Brief description of main change]
+- `path/to/key-file2.php`: [Brief description of main change]
 - [X more files in module/feature]
 
 ### Integration Points
@@ -185,10 +184,10 @@ Implemented comprehensive AI assistant integration with four specialized Jira wo
 The solution extends the existing "Efbet mode" chat integration by adding specialized prompts that understand the hybrid Drupal 7 + Lit Element architecture. Each prompt integrates with MCP Jira tools and follows project-specific conventions including custom field handling.
 
 ### Key Files Changed
-- _.github/prompts/jira-on-hold.prompt.md_: Task hold management
-- _.github/prompts/jira-complete-task.prompt.md_: Task completion with validation
-- _.docs/guides/ai-assistant.md_: Comprehensive usage guide
-- _2 more prompts and documentation files updated_
+- `/.github/prompts/jira-on-hold.prompt.md`: Task hold management
+- `/.github/prompts/jira-complete-task.prompt.md`: Task completion with validation
+- `/.docs/guides/ai-assistant.md`: Comprehensive usage guide
+- `2 more prompts and documentation files updated`
 
 ### Integration Points
 Integrates with MCP Jira server for task operations, follows specifications for descriptions, and enforces project workflows including worklog validation and QA notifications.
@@ -315,7 +314,7 @@ Añade un comentario de finalización comprensivo con el resumen de la implement
 
 ```markdown
 ## Task Completed
-*Completed by:* [~accountid:USERID] 
+*Completed by:* [~accountid:ALLOWED_USERID] 
 *Completion date:* [Date in YYYY-MM-DD format]
 *Time spent:* [Total time from worklog]
 
@@ -336,7 +335,7 @@ Añade un comentario de finalización comprensivo con el resumen de la implement
 ```markdown
 ## Task Completed
 
-*Completed by:* [~accountid:USERID]
+*Completed by:* [~accountid:ALLOWED_USERID]
 *Completion date:* [Date in YYYY-MM-DD format]
 *Time spent:* [Total time from worklog]
 
@@ -353,7 +352,7 @@ All acceptance criteria have been validated. Task is complete.
 
 **IMPORTANTE**: Reemplazar los placeholders:
 
-- `[~accountid:USERID]` con el account ID real del que completa la tarea
+- `[~accountid:ALLOWED_USERID]` con el account ID real del que completa la tarea
 - `[Date in YYYY-MM-DD format]` con la fecha real de finalización
 - `[Total time from worklog]` con el tiempo real registrado
 - `[Professional summary]` con el análisis real basado en código/commits (NO la descripción del usuario)
@@ -374,16 +373,16 @@ Usar `mcp_jira_jira_transition_issue` con:
 
 Antes de la transición, verificar:
 
-- ✅ **Task info fetched** (con criterios de aceptación extraídos)
-- ✅ **Target state determined** (QA o Done - preguntar al usuario)
-- ✅ **Worklog exists** (OBLIGATORIO - bloquear si falta)
-- ✅ **Subtasks checked** (advertir si hay pendientes)
-- ✅ **Implementation analyzed** (OBLIGATORIO - commits/cambios revisados)
-- ✅ **Acceptance criteria validated** (OBLIGATORIO - cruzado con código)
-- ✅ **Detail Solution updated** (en la descripción si existe la sección)
-- ✅ **Transition available** (verificar antes de intentar)
-- ✅ **Comment prepared** (con estado de AC si aplica, mención de QA si aplica)
-- ✅ **User confirmation** (mostrar resumen antes y luego ejecutar)
+- **Task info fetched** (con criterios de aceptación extraídos)
+- **Target state determined** (QA o Done - preguntar al usuario)
+- **Worklog exists** (OBLIGATORIO - bloquear si falta)
+- **Subtasks checked** (advertir si hay pendientes)
+- **Implementation analyzed** (OBLIGATORIO - commits/cambios revisados)
+- **Acceptance criteria validated** (OBLIGATORIO - cruzado con código)
+- **Detail Solution updated** (en la descripción si existe la sección)
+- **Transition available** (verificar antes de intentar)
+- **Comment prepared** (con estado de AC si aplica, mención de QA si aplica)
+- **User confirmation** (mostrar resumen antes y luego ejecutar)
 
 ## Manejo de errores
 
@@ -452,8 +451,6 @@ Nota: Resumir lo que se incluirá en el comentario (estado de AC, mención de QA
 
 Esperar confirmación del usuario.
 
-
-
 ## Después de la ejecución
 
 Proveer reporte detallado de finalización:
@@ -489,80 +486,8 @@ Next steps: [If any]
 6. **Get user input for target state** - No asumir QA o Done
 7. **Provide context in comments** - Ayudar a QA/equipo a entender implementación y estado de AC
 8. **Verify subtasks** - Evitar completar padres prematuramente
-9. **Mention QA when appropriate** - Usar `[~c.nalincioglu.ext]` para Cevza Beliz
 10. **Show summaries** - Mantener al usuario informado antes y después
 11. **Handle errors gracefully** - Dar pasos claros para resolver
 12. **Document unmet criteria** - Siempre incluir estado de AC en el comentario si hay advertencias
 
-## Escenarios comunes
-
-### Escenario 1: Dev completa feature, necesita QA
-
-```
-User: "Complete MJOLIT-1234"
-AI: "Where should this move: QA or Done?"
-User: "QA"
-AI: [Validates worklog]
-AI: [Checks for branch feature/MJOLIT-1234]
-AI: [Analyzes commits and code changes]
-AI: [Validates all acceptance criteria - all met]
-AI: [Creates professional summary from code]
-AI: [Updates Detail Solution in task description]
-AI: [Adds comment with AC status]
-AI: [Transitions to QA]
-```
-
-### Escenario 2: Actualización de documentación, no requiere QA
-
-```
-User: "Mark MJOLIT-5678 as done"
-AI: [Validates worklog - none found]
-AI: "No worklog. Please add time in Jira timesheet"
-User: "Added"
-AI: [Verifies worklog exists]
-AI: [Analyzes git changes - docs files modified]
-AI: [Skips AC validation - no code changes]
-AI: [Creates summary of documentation changes]
-AI: [Adds comment]
-AI: [Transitions to Done]
-```
-
-### Escenario 3: Tarea tiene subtareas pendientes
-
-```
-User: "Complete MJOLIT-9999"
-AI: [Checks subtasks - 2 pending]
-AI: "⚠️ 2 subtasks are not done. Complete parent anyway?"
-User: "Yes"
-AI: [Analyzes implementation]
-AI: [Validates AC - 1 criterion not met due to pending subtask]
-AI: "⚠️ 1 AC not met. Proceed anyway?"
-User: "Yes"
-AI: [Proceeds with completion, documents AC status]
-```
-
-### Escenario 4: Branch no encontrada pero hay cambios
-
-```
-User: "Complete MJOLIT-7777 to QA"
-AI: [Checks for feature/MJOLIT-7777 - not found]
-AI: [Checks git status - modified files detected]
-AI: "Which branch contains the implementation for this task?"
-User: "feature/new-authentication"
-AI: [Analyzes that branch]
-AI: [Creates professional summary]
-AI: [Proceeds with completion]
-```
-
-### Escenario 5: No branch, no cambios sin commitear
-
-```
-User: "Complete MJOLIT-8888"
-AI: [Checks for branch - not found]
-AI: [Checks git status - no changes]
-AI: "No code changes detected. Can you describe the implementation?"
-User: "Updated Jira workflow configuration manually"
-AI: [Uses user description for summary]
-AI: [Proceeds with completion]
-```
 
