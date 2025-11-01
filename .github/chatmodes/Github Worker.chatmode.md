@@ -1,6 +1,6 @@
 ---
 description: Specialized in GitHub operations including PR creation, issue management, and repository workflows
-tools: ['search', 'runCommands', 'runTasks', 'github/*', 'usages', 'vscodeAPI', 'think', 'changes', 'githubRepo', 'todos']
+tools: ['search', 'runCommands', 'runTasks', 'jira/*', 'github/*', 'usages', 'vscodeAPI', 'think', 'changes', 'githubRepo', 'todos']
 ---
 
 # GitHub Worker
