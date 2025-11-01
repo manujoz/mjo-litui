@@ -335,7 +335,7 @@ export class MjoChip extends ThemeMixin(LitElement) implements IThemeMixin {
         }
 
         // Apply CSS variables
-        // eslint-disable-next-line max-len
+
         this.#styles = `<style>:host{--mjoint-chip-background-color: ${backgroundColor};--mjoint-chip-text-color: ${textColor};--mjoint-chip-border-color: ${borderColor};--mjoint-chip-border-width: ${borderWidth};--mjoint-chip-box-shadow: ${boxShadow};--mjoint-chip-close-icon-color: ${closeIconColor};--mjoint-chip-font-size: ${fontSize};--mjoint-chip-line-height: ${lineHeight};--mjoint-chip-height: ${height};--mjoint-chip-border-radius: ${borderRadius};--mjoint-chip-focus-outline-color: ${currentColor};--mjoint-chip-dot-color: ${currentColor};}</style>`;
     }
 

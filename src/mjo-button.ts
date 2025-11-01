@@ -396,7 +396,7 @@ export class MjoButton extends ThemeMixin(FormMixin(LitElement)) implements IThe
         }
 
         // Apply CSS variables
-        // eslint-disable-next-line max-len
+
         this.#styles = `<style>:host{--mjoint-button-background-color: ${backgroundColor};--mjoint-button-border-color: ${borderColor};--mjoint-button-border-style: ${borderStyle};--mjoint-button-text-color: ${textColor};--mjoint-button-hover-background-color: ${hoverBackgroundColor};--mjoint-button-hover-border-color: ${hoverBorderColor};--mjoint-button-hover-opacity: ${hoverOpacity};--mjoint-button-pseudo-background: ${pseudoBackground};--mjoint-button-pseudo-opacity: ${pseudoOpacity};--mjoint-button-focus-outline-color: ${currentColor};--mjoint-button-loading-color: ${currentColor};}</style>`;
     }
 

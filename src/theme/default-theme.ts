@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { MjoThemeConfig } from "../types/mjo-theme";
 
 export const defaultTheme: MjoThemeConfig = {
