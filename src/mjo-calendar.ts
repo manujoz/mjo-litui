@@ -1,5 +1,5 @@
-import { SupportedLocale } from "./types/locales.js";
-import {
+import type { SupportedLocale } from "./types/locales.js";
+import type {
     CalendarMonthPickerEvent,
     CalendarNavigateEvent,
     CalendarYearPickerEvent,

@@ -1,7 +1,8 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import type { IThemeMixin } from "../../mixins/theme-mixin.js";
+import { ThemeMixin } from "../../mixins/theme-mixin.js";
 
 /**
  * @summary Individual option element for mjo-select component with support for icons, images, and custom styling.

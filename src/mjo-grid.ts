@@ -1,4 +1,4 @@
-import { Properties } from "csstype";
+import type { Properties } from "csstype";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";

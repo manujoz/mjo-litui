@@ -1,6 +1,6 @@
-import { MjoCheckboxChangeEvent } from "./types/mjo-checkbox.js";
-import { MjoPaginationChangeEvent } from "./types/mjo-pagination.js";
-import {
+import type { MjoCheckboxChangeEvent } from "./types/mjo-checkbox.js";
+import type { MjoPaginationChangeEvent } from "./types/mjo-pagination.js";
+import type {
     MjoTableColumns,
     MjoTableFilterEvent,
     MjoTableLoadMoreEvent,
@@ -12,7 +12,8 @@ import {
     MjoTableSortEvent,
 } from "./types/mjo-table";
 
-import { LitElement, PropertyValues, TemplateResult, css, html, nothing } from "lit";
+import type { PropertyValues, TemplateResult } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";

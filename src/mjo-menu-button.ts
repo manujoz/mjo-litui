@@ -1,6 +1,7 @@
-import { MjoButtonEffect, MjoMenuButtonCloseEvent, MjoMenuButtonOpenEvent, MjoMenuButtonToggleEvent } from "./types/mjo-menu-button";
+import type { MjoButtonEffect, MjoMenuButtonCloseEvent, MjoMenuButtonOpenEvent, MjoMenuButtonToggleEvent } from "./types/mjo-menu-button";
 
-import { LitElement, PropertyValues, css, html, nothing } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";

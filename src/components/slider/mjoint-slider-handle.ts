@@ -1,7 +1,8 @@
-import { LitElement, PropertyValues, css, html, nothing } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { MJO_SLIDER_TOPS } from "../../utils/mjo-slider";
-import { getInheritBackgroundColor } from "../../utils/shadow-dom";
+import { MJO_SLIDER_TOPS } from "../../utils/mjo-slider.js";
+import { getInheritBackgroundColor } from "../../utils/shadow-dom.js";
 
 const MEDIUM_SIZE = 20;
 

@@ -1,6 +1,7 @@
-import { MjoProgressChangeEvent, MjoProgressColor, MjoProgressCompleteEvent, MjoProgressSize, MjoProgressVariant } from "./types/mjo-progress";
+import type { MjoProgressChangeEvent, MjoProgressColor, MjoProgressCompleteEvent, MjoProgressSize, MjoProgressVariant } from "./types/mjo-progress";
 
-import { css, html, LitElement, PropertyValues } from "lit";
+import type { PropertyValues } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { styleMap } from "lit/directives/style-map.js";

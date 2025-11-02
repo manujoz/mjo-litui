@@ -1,4 +1,5 @@
-import { LitElement, PropertyValues, css, nothing } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { ModalController } from "./controllers/modal-controller.js";

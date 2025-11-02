@@ -1,4 +1,4 @@
-import { MjoTableSortDirections, MjoTableSortEvent } from "../../types/mjo-table.js";
+import type { MjoTableSortDirections, MjoTableSortEvent } from "../../types/mjo-table.js";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";

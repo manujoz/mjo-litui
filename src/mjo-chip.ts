@@ -1,6 +1,7 @@
-import { MjoChipClickEvent, MjoChipCloseEvent, MjoChipColor, MjoChipRadius, MjoChipSize, MjoChipVariant } from "./types/mjo-chip.js";
+import type { MjoChipClickEvent, MjoChipCloseEvent, MjoChipColor, MjoChipRadius, MjoChipSize, MjoChipVariant } from "./types/mjo-chip.js";
 
-import { css, html, LitElement, nothing, PropertyValues } from "lit";
+import type { PropertyValues } from "lit";
+import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";

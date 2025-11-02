@@ -1,6 +1,7 @@
-import { NotificationPositions, NotificationTypes } from "../../types/mjo-notification";
+import type { NotificationPositions, NotificationTypes } from "../../types/mjo-notification";
 
-import { LitElement, TemplateResult, css, html, nothing } from "lit";
+import type { TemplateResult } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";

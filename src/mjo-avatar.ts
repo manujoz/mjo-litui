@@ -1,6 +1,7 @@
-import { MjoAvatarColor, MjoAvatarRadius, MjoAvatarSize } from "./types/mjo-avatar.js";
+import type { MjoAvatarColor, MjoAvatarRadius, MjoAvatarSize } from "./types/mjo-avatar.js";
 
-import { LitElement, PropertyValues, css, html, isServer } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html, isServer } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 

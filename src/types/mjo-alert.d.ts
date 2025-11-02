@@ -1,4 +1,4 @@
-import { MjoAlert } from "../mjo-alert";
+import type { MjoAlert } from "../mjo-alert";
 
 export interface MjoAlertWillShowEvent extends CustomEvent {
     detail: {

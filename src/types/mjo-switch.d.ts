@@ -1,4 +1,4 @@
-import { MjoSwitch } from "../mjo-switch";
+import type { MjoSwitch } from "../mjo-switch";
 
 // Switch color types
 export type MjoSwitchColor = "primary" | "secondary";

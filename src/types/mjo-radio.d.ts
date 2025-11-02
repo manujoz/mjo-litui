@@ -1,4 +1,4 @@
-import { MjoRadio } from "../mjo-radio";
+import type { MjoRadio } from "../mjo-radio";
 
 // Radio color types
 export type MjoRadioColor = "primary" | "secondary";

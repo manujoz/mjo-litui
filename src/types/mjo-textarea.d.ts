@@ -1,4 +1,4 @@
-import { MjoTextarea } from "../mjo-textarea";
+import type { MjoTextarea } from "../mjo-textarea";
 
 export type MjoTextareaSize = "small" | "medium" | "large";
 export type MjoTextareaColor = "primary" | "secondary";

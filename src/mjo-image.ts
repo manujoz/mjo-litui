@@ -1,4 +1,4 @@
-import { MjoImageClickEvent, MjoImageErrorEvent, MjoImageFit, MjoImageLoadEvent } from "./types/mjo-image.js";
+import type { MjoImageClickEvent, MjoImageErrorEvent, MjoImageFit, MjoImageLoadEvent } from "./types/mjo-image.js";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";

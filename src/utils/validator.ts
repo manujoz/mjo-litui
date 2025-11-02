@@ -1,6 +1,6 @@
 import type { MjoCheckbox } from "../mjo-checkbox.js";
-import { MjoFormElements } from "../types/litui";
-import { InputsValidatorMessages, ValidatorMessages, ValidatorRulesNames } from "../types/validator";
+import type { MjoFormElements } from "../types/litui";
+import type { InputsValidatorMessages, ValidatorMessages, ValidatorRulesNames } from "../types/validator";
 
 import { getAutoLocale } from "../lib/locales.js";
 import { validatorMessages } from "../locales/messages.js";

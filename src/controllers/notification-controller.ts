@@ -1,8 +1,8 @@
 import type { MjoNotificationContainer } from "../components/notifications/mjo-notification-container";
 import type { MjoNotification } from "../mjo-notification";
-import { NotificationPositions, NotificationShowParams } from "../types/mjo-notification";
+import type { NotificationPositions, NotificationShowParams } from "../types/mjo-notification";
 
-import { ReactiveController, ReactiveControllerHost } from "lit";
+import type { ReactiveController, ReactiveControllerHost } from "lit";
 import "../components/notifications/mjo-notification-container.js";
 
 export class NotificationController implements ReactiveController {

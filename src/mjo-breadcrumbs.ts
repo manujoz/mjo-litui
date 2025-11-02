@@ -1,5 +1,5 @@
 import type { MjoScrollshadow } from "./mjo-scrollshadow.js";
-import {
+import type {
     MjoBreadCrumbsColor,
     MjoBreadcrumbsItem,
     MjoBreadcrumbsItems,
@@ -8,7 +8,8 @@ import {
     MjoBreadCrumbsVariants,
 } from "./types/mjo-breadcrumbs";
 
-import { css, html, LitElement, nothing, PropertyValues } from "lit";
+import type { PropertyValues } from "lit";
+import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { repeat } from "lit/directives/repeat.js";

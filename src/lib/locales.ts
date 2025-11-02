@@ -1,4 +1,4 @@
-import { SupportedLocale } from "../types/locales";
+import type { SupportedLocale } from "../types/locales";
 
 import { locales } from "../locales/locales.js";
 

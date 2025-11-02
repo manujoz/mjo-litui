@@ -1,6 +1,7 @@
-import { MjoBadgeClickEvent, MjoBadgeColors, MjoBadgePositions, MjoBadgeSizes, MjoBadgeVariants } from "./types/mjo-badge.js";
+import type { MjoBadgeClickEvent, MjoBadgeColors, MjoBadgePositions, MjoBadgeSizes, MjoBadgeVariants } from "./types/mjo-badge.js";
 
-import { LitElement, PropertyValues, css, html } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 

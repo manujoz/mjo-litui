@@ -1,8 +1,8 @@
 import type { MjoModalContainer } from "../components/modal/mjo-modal-container";
 import type { MjoModal } from "../mjo-modal";
-import { ModalShowParams } from "../types/mjo-modal";
+import type { ModalShowParams } from "../types/mjo-modal";
 
-import { ReactiveController, ReactiveControllerHost } from "lit";
+import type { ReactiveController, ReactiveControllerHost } from "lit";
 
 import "../components/modal/mjo-modal-container.js";
 

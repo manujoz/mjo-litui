@@ -2,7 +2,8 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { DrawerController } from "./controllers/drawer-controller.js";
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import type { IThemeMixin } from "./mixins/theme-mixin.js";
+import { ThemeMixin } from "./mixins/theme-mixin.js";
 
 import "./components/drawer/mjo-drawer-container.js";
 

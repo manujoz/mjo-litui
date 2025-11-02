@@ -1,4 +1,4 @@
-import { NotificationPositions, NotificationShowParams } from "../../types/mjo-notification";
+import type { NotificationPositions, NotificationShowParams } from "../../types/mjo-notification";
 import type { MjointNotificationItem } from "./mjoint-notification-item";
 
 import { LitElement, css, html } from "lit";

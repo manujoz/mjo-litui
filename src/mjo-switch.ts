@@ -1,4 +1,4 @@
-import { MjoSwitchBlurEvent, MjoSwitchChangeEvent, MjoSwitchColor, MjoSwitchFocusEvent, MjoSwitchSize } from "./types/mjo-switch.js";
+import type { MjoSwitchBlurEvent, MjoSwitchChangeEvent, MjoSwitchColor, MjoSwitchFocusEvent, MjoSwitchSize } from "./types/mjo-switch.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";

@@ -1,4 +1,4 @@
-import { MjoCalendarHeaderSide } from "../../types/mjo-calendar.js";
+import type { MjoCalendarHeaderSide } from "../../types/mjo-calendar.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";

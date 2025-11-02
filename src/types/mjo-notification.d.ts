@@ -1,4 +1,4 @@
-import { TemplateResult } from "lit";
+import type { TemplateResult } from "lit";
 
 export type NotificationPositions = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 export type NotificationTypes = "info" | "warning" | "error" | "success";

@@ -1,4 +1,4 @@
-import { SupportedLocale } from "../types/locales.js";
+import type { SupportedLocale } from "../types/locales.js";
 
 export class CalendarUtils {
     static isSameDay(date1: Date, date2: Date): boolean {

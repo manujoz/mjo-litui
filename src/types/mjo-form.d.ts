@@ -1,7 +1,7 @@
-import { MjoButton } from "../mjo-button";
-import { MjoForm } from "../mjo-form";
-import { MjoFormElements } from "./litui";
-import { ValidatorRulesNames } from "./validator";
+import type { MjoButton } from "../mjo-button";
+import type { MjoForm } from "../mjo-form";
+import type { MjoFormElements } from "./litui";
+import type { ValidatorRulesNames } from "./validator";
 
 export interface MjoFormSubmitEvent extends CustomEvent {
     detail: {

@@ -1,4 +1,4 @@
-import { MjoColorPicker } from "../mjo-color-picker";
+import type { MjoColorPicker } from "../mjo-color-picker";
 import type { ColorFormat } from "../utils/colors.js";
 
 // Color picker size types

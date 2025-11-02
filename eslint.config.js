@@ -62,6 +62,13 @@ export default [
                     caughtErrorsIgnorePattern: "^_",
                 },
             ],
+            "@typescript-eslint/consistent-type-imports": [
+                "error",
+                {
+                    prefer: "type-imports",
+                    disallowTypeAnnotations: true,
+                },
+            ],
 
             // Core ESLint rules
             curly: ["error", "multi-line"],

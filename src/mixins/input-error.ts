@@ -1,6 +1,6 @@
 import { type MixinConstructor } from "../types/mixins";
 
-import { LitElement } from "lit";
+import type { LitElement } from "lit";
 import { property } from "lit/decorators.js";
 
 export declare class IInputErrorMixin {

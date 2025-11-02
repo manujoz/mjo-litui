@@ -1,6 +1,7 @@
-import { MjoCalendarMarker } from "../../types/mjo-calendar.js";
+import type { MjoCalendarMarker } from "../../types/mjo-calendar.js";
 
-import { css, html, LitElement, PropertyValues } from "lit";
+import type { PropertyValues } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";

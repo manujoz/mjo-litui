@@ -7,13 +7,14 @@ import type {
     MjoPaginationSize,
 } from "./types/mjo-pagination.js";
 
-import { LitElement, PropertyValues, css, html, nothing } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { locales } from "./locales/locales.js";
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
-import { MjoSelect } from "./mjo-select.js";
+import type { MjoSelect } from "./mjo-select.js";
 
 import "./components/pagination/mjoint-pagination-ellipsis.js";
 import "./components/pagination/mjoint-pagination-nav-button.js";

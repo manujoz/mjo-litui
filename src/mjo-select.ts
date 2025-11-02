@@ -1,20 +1,19 @@
 import { type MjoOption } from "./components/select/mjo-option.js";
 import { type MjointOptionsList } from "./components/select/mjoint-options-list.js";
 import { type MjoDropdown } from "./mjo-dropdown.js";
-import {
+import type {
     MjoSelectBlurEvent,
     MjoSelectChangeEvent,
     MjoSelectClearEvent,
     MjoSelectCloseEvent,
-    type MjoSelectColor,
     MjoSelectFocusEvent,
     MjoSelectKeydownEvent,
     MjoSelectOpenEvent,
     MjoSelectOptionPreselectEvent,
     MjoSelectSearchEvent,
-    type MjoSelectSize,
     MjoSelectVariant,
 } from "./types/mjo-select.js";
+import { type MjoSelectColor, type MjoSelectSize } from "./types/mjo-select.js";
 import { type MjoDropdownTheme } from "./types/mjo-theme.js";
 
 import { LitElement, css, html, nothing } from "lit";

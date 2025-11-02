@@ -1,11 +1,13 @@
-import { MjoAccordionVariants } from "../../types/mjo-accordion.js";
+import type { MjoAccordionVariants } from "../../types/mjo-accordion.js";
 
-import { LitElement, PropertyValues, TemplateResult, css, html, nothing } from "lit";
+import type { PropertyValues, TemplateResult } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { AiOutlineRight } from "mjo-icons/ai";
 
-import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import type { IThemeMixin } from "../../mixins/theme-mixin.js";
+import { ThemeMixin } from "../../mixins/theme-mixin.js";
 import { pause } from "../../utils/utils.js";
 
 import "../../mjo-icon.js";

@@ -1,4 +1,4 @@
-import { MjoCalendarMarker } from "../../types/mjo-calendar.js";
+import type { MjoCalendarMarker } from "../../types/mjo-calendar.js";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";

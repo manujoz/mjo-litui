@@ -1,5 +1,5 @@
 import type { MjoRadio } from "./mjo-radio";
-import { MjoRadioChangeEvent } from "./types/mjo-radio";
+import type { MjoRadioChangeEvent } from "./types/mjo-radio";
 
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";

@@ -1,6 +1,7 @@
-import { MjoListboxClickEvent, MjoListboxItem, MjoListboxItemBlurEvent, MjoListboxItemFocusEvent, MjoListboxVariant } from "../../types/mjo-listbox";
+import type { MjoListboxClickEvent, MjoListboxItem, MjoListboxItemBlurEvent, MjoListboxItemFocusEvent, MjoListboxVariant } from "../../types/mjo-listbox";
 
-import { LitElement, PropertyValues, css, html, nothing } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 

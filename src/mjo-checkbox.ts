@@ -1,5 +1,5 @@
 import type { MjoCheckboxGroup } from "./mjo-checkbox-group.js";
-import {
+import type {
     MjoCheckboxBlurEvent,
     MjoCheckboxChangeEvent,
     MjoCheckboxColor,

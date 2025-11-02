@@ -1,5 +1,5 @@
 import { type MjointSliderHandle } from "./components/slider/mjoint-slider-handle.js";
-import {
+import type {
     MjoSliderBlurEvent,
     MjoSliderChangeEvent,
     MjoSliderColor,
@@ -9,7 +9,8 @@ import {
     MjoSliderValueChangeEvent,
 } from "./types/mjo-slider.js";
 
-import { LitElement, PropertyValues, css, html, nothing } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";

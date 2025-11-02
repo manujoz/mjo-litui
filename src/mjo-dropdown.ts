@@ -2,10 +2,12 @@ import type { MjoDropdownContainer } from "./components/dropdown/mjo-dropdown-co
 import type { MjoTheme } from "./mjo-theme.js";
 import type { MjoDropdownBehaviour, MjoDropdownCloseEvent, MjoDropdownOpenEvent, MjoDropdownPosition } from "./types/mjo-dropdown.d.js";
 
-import { CSSResult, LitElement, TemplateResult, css, html } from "lit";
+import type { CSSResult, TemplateResult } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-import { IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
+import type { IThemeMixin } from "./mixins/theme-mixin.js";
+import { ThemeMixin } from "./mixins/theme-mixin.js";
 import { searchClosestElement } from "./utils/shadow-dom.js";
 import { convertToPx } from "./utils/strings.js";
 

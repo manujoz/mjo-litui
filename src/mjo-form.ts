@@ -1,12 +1,12 @@
-import { MjoFormElements } from "./types/litui";
-import { MjoFormResponse } from "./types/mjo-form";
-import { InputsValidatorMessages, ValidatorMessages } from "./types/validator";
+import type { MjoFormElements } from "./types/litui";
+import type { MjoFormResponse } from "./types/mjo-form";
+import type { InputsValidatorMessages, ValidatorMessages } from "./types/validator";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { createRef, ref } from "lit/directives/ref.js";
 
-import { MjoButton } from "./mjo-button.js";
+import type { MjoButton } from "./mjo-button.js";
 import { MjoValidator } from "./utils/validator.js";
 
 /**

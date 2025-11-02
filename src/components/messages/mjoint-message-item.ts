@@ -1,4 +1,4 @@
-import { MessageTypes } from "../../types/mjo-message";
+import type { MessageTypes } from "../../types/mjo-message";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";

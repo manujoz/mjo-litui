@@ -1,4 +1,4 @@
-import { MjoPagination } from "../mjo-pagination.js";
+import type { MjoPagination } from "../mjo-pagination.js";
 
 // Pagination size types
 export type MjoPaginationSize = "small" | "medium" | "large";

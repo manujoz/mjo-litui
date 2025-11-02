@@ -1,7 +1,7 @@
 import type { DirectiveResult } from "lit/directive.js";
 import { type MixinConstructor } from "../types/mixins";
 
-import { LitElement, PropertyValues } from "lit";
+import type { LitElement, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { unsafeHTML, type UnsafeHTMLDirective } from "lit/directives/unsafe-html.js";
 

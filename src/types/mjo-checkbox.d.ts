@@ -1,4 +1,4 @@
-import { MjoCheckbox } from "../mjo-checkbox";
+import type { MjoCheckbox } from "../mjo-checkbox";
 
 export type MjoCheckboxColor = "primary" | "secondary";
 

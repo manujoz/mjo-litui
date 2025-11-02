@@ -1,5 +1,5 @@
-import { MjoAccordionItem } from "../components/accordion/mjo-accordion-item";
-import { MjoAccordion } from "../mjo-accordion";
+import type { MjoAccordionItem } from "../components/accordion/mjo-accordion-item";
+import type { MjoAccordion } from "../mjo-accordion";
 
 export type MjoAccordionVariants = "light" | "solid" | "shadow" | "bordered" | "splitted";
 export type MjoAccordionSelectionModes = "single" | "multiple";

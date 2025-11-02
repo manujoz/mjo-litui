@@ -1,13 +1,14 @@
 import type { MjoCalendar } from "./mjo-calendar.js";
 import type { MjoDropdown } from "./mjo-dropdown.js";
 import type { MjoTextfield } from "./mjo-textfield.js";
-import { SupportedLocale } from "./types/locales.js";
-import { MjoCalendarDateSelectedEvent, MjoCalendarRangeSelectedEvent } from "./types/mjo-calendar";
-import { DatePickerChangeEvent, MjoDatePickerAriaLive, MjoDatePickerDisplayMode } from "./types/mjo-date-picker.js";
-import { MjoTextfieldColor, MjoTextfieldSize, MjoTextfieldVariant } from "./types/mjo-textfield.js";
-import { MjoCalendarTheme, MjoInputTheme } from "./types/mjo-theme.js";
+import type { SupportedLocale } from "./types/locales.js";
+import type { MjoCalendarDateSelectedEvent, MjoCalendarRangeSelectedEvent } from "./types/mjo-calendar";
+import type { DatePickerChangeEvent, MjoDatePickerAriaLive, MjoDatePickerDisplayMode } from "./types/mjo-date-picker.js";
+import type { MjoTextfieldColor, MjoTextfieldSize, MjoTextfieldVariant } from "./types/mjo-textfield.js";
+import type { MjoCalendarTheme, MjoInputTheme } from "./types/mjo-theme.js";
 
-import { css, html, LitElement, PropertyValues, TemplateResult } from "lit";
+import type { PropertyValues, TemplateResult } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { PiCalendarDotsLight } from "mjo-icons/pi";
 

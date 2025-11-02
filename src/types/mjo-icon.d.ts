@@ -1,4 +1,4 @@
-import { MjoIcon } from "../mjo-icon";
+import type { MjoIcon } from "../mjo-icon";
 
 // Icon size types
 export type MjoIconSize = "small" | "medium" | "large" | "xl";

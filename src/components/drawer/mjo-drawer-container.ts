@@ -1,7 +1,8 @@
-import { DrawerShowParams } from "../../types/mjo-drawer";
+import type { DrawerShowParams } from "../../types/mjo-drawer";
 import { FocusTrap } from "../../utils/focus-trap.js";
 
-import { LitElement, TemplateResult, css, html, nothing } from "lit";
+import type { TemplateResult } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { AiOutlineClose } from "mjo-icons/ai";
 

@@ -1,7 +1,8 @@
 import { type MjoTab } from "./components/tabs/mjo-tab.js";
-import { MjoTabsChangeEvent, MjoTabsColor, MjoTabsUpdatedEvent, MjoTabsVariant } from "./types/mjo-tabs.js";
+import type { MjoTabsChangeEvent, MjoTabsColor, MjoTabsUpdatedEvent, MjoTabsVariant } from "./types/mjo-tabs.js";
 
-import { LitElement, PropertyValues, css, html, isServer, nothing } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html, isServer, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";

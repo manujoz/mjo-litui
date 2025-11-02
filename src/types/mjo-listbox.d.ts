@@ -1,4 +1,4 @@
-import { TemplateResult } from "lit";
+import type { TemplateResult } from "lit";
 
 export interface MjoListboxItem {
     label?: string | number | TemplateResult<1>;

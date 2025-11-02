@@ -1,4 +1,4 @@
-import { TemplateResult } from "lit";
+import type { TemplateResult } from "lit";
 
 export interface DrawerShowParams {
     content: string | TemplateResult<1>;

@@ -1,4 +1,4 @@
-import { ValidatorMessagesLanguages } from "../types/validator";
+import type { ValidatorMessagesLanguages } from "../types/validator";
 
 export const validatorMessages: ValidatorMessagesLanguages = {
     en: {

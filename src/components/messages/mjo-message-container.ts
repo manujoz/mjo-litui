@@ -1,10 +1,11 @@
-import { MessageShowParams } from "../../types/mjo-message.js";
+import type { MessageShowParams } from "../../types/mjo-message.js";
 import type { MjointMessageItem } from "./mjoint-message-item";
 
 import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
 
-import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import type { IThemeMixin } from "../../mixins/theme-mixin.js";
+import { ThemeMixin } from "../../mixins/theme-mixin.js";
 
 import "./mjoint-message-item.js";
 

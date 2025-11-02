@@ -1,5 +1,5 @@
 import type { MjoAccordionItem } from "./components/accordion/mjo-accordion-item.js";
-import {
+import type {
     MjoAccordionCollapsedEvent,
     MjoAccordionExpandedEvent,
     MjoAccordionSelectionModes,
@@ -9,7 +9,8 @@ import {
     MjoAccordionWillExpandEvent,
 } from "./types/mjo-accordion.js";
 
-import { LitElement, PropertyValues, css, html } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";

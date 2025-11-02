@@ -1,6 +1,7 @@
 import type { MjoTypographyColor, MjoTypographySize, MjoTypographyTag, MjoTypographyWeight } from "./types/mjo-typography";
 
-import { LitElement, TemplateResult, css, html } from "lit";
+import type { TemplateResult } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";

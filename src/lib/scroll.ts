@@ -1,4 +1,4 @@
-import { getScrollbarElements } from "../utils/shadow-dom";
+import { getScrollbarElements } from "../utils/shadow-dom.js";
 
 export class ScrollLock {
     scrollElements: { element: HTMLElement; paddingRight: string; overflowY: string; boxSizing: string }[] = [];

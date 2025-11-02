@@ -1,8 +1,8 @@
 import type { MjoMessageContainer } from "../components/messages/mjo-message-container";
 import type { MjoMessage } from "../mjo-message";
-import { MessageShowParams } from "../types/mjo-message";
+import type { MessageShowParams } from "../types/mjo-message";
 
-import { ReactiveController, ReactiveControllerHost } from "lit";
+import type { ReactiveController, ReactiveControllerHost } from "lit";
 import "../components/messages/mjo-message-container.js";
 
 export class MessageController implements ReactiveController {

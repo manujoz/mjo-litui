@@ -1,5 +1,5 @@
-import { SliderHandle } from "../components/slider/mjoint-slider-handle";
-import { MjoSlider } from "../mjo-slider";
+import type { SliderHandle } from "../components/slider/mjoint-slider-handle";
+import type { MjoSlider } from "../mjo-slider";
 
 export type MjoSliderColor = "primary" | "secondary";
 export type MjoSliderSize = "small" | "medium" | "large";

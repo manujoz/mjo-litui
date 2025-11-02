@@ -1,4 +1,4 @@
-import { MjoButton } from "../mjo-button";
+import type { MjoButton } from "../mjo-button";
 
 export type MjoButtonSize = "small" | "medium" | "large";
 export type MjoButtonColor = "primary" | "secondary" | "success" | "info" | "warning" | "error";

@@ -1,5 +1,5 @@
-import { MjoOption } from "../components/select/mjo-option";
-import { MjoSelect } from "../mjo-select";
+import type { MjoOption } from "../components/select/mjo-option";
+import type { MjoSelect } from "../mjo-select";
 
 export type MjoSelectSize = "small" | "medium" | "large";
 export type MjoSelectColor = "primary" | "secondary";

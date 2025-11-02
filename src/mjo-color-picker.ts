@@ -1,4 +1,4 @@
-import {
+import type {
     MjoColorPickerBlurEvent,
     MjoColorPickerChangeEvent,
     MjoColorPickerFocusEvent,
@@ -6,14 +6,16 @@ import {
     MjoColorPickerInputEvent,
 } from "./types/mjo-color-picker.js";
 
-import { LitElement, PropertyValues, css, html, nothing } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { FormMixin, type IFormMixin } from "./mixins/form-mixin.js";
 import { type IInputErrorMixin, InputErrorMixin } from "./mixins/input-error.js";
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";
-import { ColorFormat, convertColor } from "./utils/colors.js";
+import type { ColorFormat } from "./utils/colors.js";
+import { convertColor } from "./utils/colors.js";
 
 import "./components/input/mjoint-input-helper-text.js";
 import "./components/input/mjoint-input-label.js";

@@ -1,4 +1,4 @@
-import { MjoIconAnimation, MjoIconClickEvent, MjoIconErrorEvent, MjoIconLoadEvent, MjoIconSize } from "./types/mjo-icon.js";
+import type { MjoIconAnimation, MjoIconClickEvent, MjoIconErrorEvent, MjoIconLoadEvent, MjoIconSize } from "./types/mjo-icon.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";

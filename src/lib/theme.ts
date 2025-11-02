@@ -1,4 +1,4 @@
-import { MjoInputTheme, MjoThemeConfig, MjoThemeModes, MjoThemeShadeStructure } from "../types/mjo-theme";
+import type { MjoInputTheme, MjoThemeConfig, MjoThemeModes, MjoThemeShadeStructure } from "../types/mjo-theme";
 
 import { defaultTheme } from "../theme/default-theme.js";
 

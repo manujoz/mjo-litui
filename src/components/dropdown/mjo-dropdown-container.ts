@@ -1,7 +1,8 @@
 import type { MjoDropdown } from "../../mjo-dropdown";
 import type { MjoDropdownPosition } from "../../types/mjo-dropdown.d.ts";
 
-import { LitElement, TemplateResult, css, html, nothing, type CSSResult } from "lit";
+import type { TemplateResult } from "lit";
+import { LitElement, css, html, nothing, type CSSResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { ScrollLock } from "../../lib/scroll.js";

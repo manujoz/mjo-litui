@@ -1,8 +1,8 @@
 import type { MjoDrawerContainer } from "../components/drawer/mjo-drawer-container";
 import type { MjoDrawer } from "../mjo-drawer";
-import { DrawerShowParams } from "../types/mjo-drawer";
+import type { DrawerShowParams } from "../types/mjo-drawer";
 
-import { ReactiveController, ReactiveControllerHost } from "lit";
+import type { ReactiveController, ReactiveControllerHost } from "lit";
 
 import "../components/drawer/mjo-drawer-container.js";
 

@@ -1,4 +1,4 @@
-import { MjoCardContrast, MjoCardRadius, MjoCardSpace, MjoCardVariants } from "./types/mjo-card.js";
+import type { MjoCardContrast, MjoCardRadius, MjoCardSpace, MjoCardVariants } from "./types/mjo-card.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";

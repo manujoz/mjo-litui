@@ -1,6 +1,7 @@
-import { MjoScrollshadowOverflow } from "./types/mjo-scrollshadow";
+import type { MjoScrollshadowOverflow } from "./types/mjo-scrollshadow";
 
-import { LitElement, PropertyValues, css, html } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
 import { type IThemeMixin, ThemeMixin } from "./mixins/theme-mixin.js";

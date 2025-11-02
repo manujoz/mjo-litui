@@ -1,6 +1,7 @@
-import { MjoThemeChangeEvent, MjoThemeConfig, MjoThemeModes } from "./types/mjo-theme";
+import type { MjoThemeChangeEvent, MjoThemeConfig, MjoThemeModes } from "./types/mjo-theme";
 
-import { LitElement, PropertyValues, css, html } from "lit";
+import type { PropertyValues } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { Cookies } from "./lib/cookies.js";

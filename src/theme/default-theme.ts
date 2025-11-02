@@ -1,4 +1,4 @@
-import { MjoThemeConfig } from "../types/mjo-theme";
+import type { MjoThemeConfig } from "../types/mjo-theme";
 
 export const defaultTheme: MjoThemeConfig = {
     radiusLarge: "10px",

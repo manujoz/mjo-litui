@@ -1,4 +1,4 @@
-import { MjoTextfield } from "../mjo-textfield";
+import type { MjoTextfield } from "../mjo-textfield";
 
 export type MjoTextfieldType = "text" | "password" | "email" | "number" | "tel" | "url";
 export type MjoTextfieldSize = "small" | "medium" | "large";

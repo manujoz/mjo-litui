@@ -1,5 +1,5 @@
-import { MjoLinkClickEvent, MjoLinkColors, MjoLinkVariants } from "./types/mjo-link";
-import { MjoTypographySize, MjoTypographyWeight } from "./types/mjo-typography.js";
+import type { MjoLinkClickEvent, MjoLinkColors, MjoLinkVariants } from "./types/mjo-link";
+import type { MjoTypographySize, MjoTypographyWeight } from "./types/mjo-typography.js";
 
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";

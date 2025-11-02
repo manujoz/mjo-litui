@@ -1,6 +1,7 @@
-import { MjoAlertClosedEvent, MjoAlertOpenedEvent, MjoAlertWillCloseEvent, MjoAlertWillShowEvent } from "./types/mjo-alert.js";
+import type { MjoAlertClosedEvent, MjoAlertOpenedEvent, MjoAlertWillCloseEvent, MjoAlertWillShowEvent } from "./types/mjo-alert.js";
 
-import { LitElement, PropertyValues, TemplateResult, css, html, nothing } from "lit";
+import type { PropertyValues, TemplateResult } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillInfoCircle, AiFillWarning, AiOutlineClose } from "mjo-icons/ai";
 

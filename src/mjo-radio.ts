@@ -1,5 +1,5 @@
 import type { MjoRadioGroup } from "./mjo-radio-group.js";
-import { MjoRadioBlurEvent, MjoRadioChangeEvent, MjoRadioColor, MjoRadioFocusEvent } from "./types/mjo-radio.js";
+import type { MjoRadioBlurEvent, MjoRadioChangeEvent, MjoRadioColor, MjoRadioFocusEvent } from "./types/mjo-radio.js";
 
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";

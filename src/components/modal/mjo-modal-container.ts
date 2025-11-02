@@ -1,11 +1,13 @@
-import { ModalShowParams } from "../../types/mjo-modal";
+import type { ModalShowParams } from "../../types/mjo-modal";
 
-import { LitElement, TemplateResult, css, html, nothing } from "lit";
+import type { TemplateResult } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 
 import { AiOutlineClose } from "mjo-icons/ai";
 import { ScrollLock } from "../../lib/scroll.js";
-import { IThemeMixin, ThemeMixin } from "../../mixins/theme-mixin.js";
+import type { IThemeMixin } from "../../mixins/theme-mixin.js";
+import { ThemeMixin } from "../../mixins/theme-mixin.js";
 import { FocusTrap } from "../../utils/focus-trap.js";
 
 import "../../mjo-icon.js";
