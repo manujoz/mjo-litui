@@ -44,6 +44,11 @@ Si el usuario menciona una tarea de Jira, debes analizarla en profundidad para e
 Start date: `customfield_10015`
 Manu Overa: `633580a3140ba0bf651c1f68`
 
+# Constraints
+
+- **NEVER** create or update Jira issues without reading first the `jira.instructions.md` file.
+- **ALWAYS** read `jira.instructions.md` before using the `jira` tool to follow the instructions correctly when creating or updating issues.
+
 # Guia de comunicación
 
 Comunica de forma clara y concisas con tono profesional y cercano.

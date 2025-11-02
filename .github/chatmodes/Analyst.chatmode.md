@@ -49,6 +49,11 @@ Presenta la tarea al usuario para su validación antes de crearla en Jira. Resum
 
 Crea la tarea en Jira **siguiendo estrictamente las instrucciones del usuario** y usando la herramienta `jira`.
 
+# Constraints
+
+- **NEVER** create or update Jira issues without reading first the `jira.instructions.md` file.
+- **ALWAYS** read `jira.instructions.md` before using the `jira` tool to follow the instructions correctly when creating or updating issues.
+
 # Guia de comunicación
 
 Comunica de forma clara y concisas con tono profesional y cercano.

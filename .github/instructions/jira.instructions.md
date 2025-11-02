@@ -66,7 +66,9 @@ Use `mcp_jira_jira_search_fields` to discover more.
 ## Core Workflow -> CRITICAL STEPS - NEVER SKIP THESE
 
 ### 1. Create Issue
-Use `mcp_jira_jira_create_issue` with: 
+
+**CRITICAL**: Always create a new issue at least with fields showing in the example.
+
 ```javascript
 mcp_jira_jira_create_issue({
   project_key: `XXXX`,
@@ -83,6 +85,9 @@ mcp_jira_jira_create_issue({
 ```
 
 ### 2. Create Subtask
+
+**CRITICAL**: Always create a new subtask at least with fields showing in the example.
+
 ```javascript
 mcp_jira_jira_create_issue({
   project_key: `XXXX`,
@@ -100,11 +105,15 @@ mcp_jira_jira_create_issue({
 ```
 
 ### 3. Update Fields
+
+**CRITICAL**: Always update leaving `fields` empty and put all updates in `additional_fields`.
+
 ```javascript
 mcp_jira_jira_update_issue({
   issue_key: `XXXXX-XX`,
-  fields: {
-    // Your fields here
+  fields: {}, // Leave empty
+  additional_fields: {
+    // Your additional fields here
   },
 });
 ```
