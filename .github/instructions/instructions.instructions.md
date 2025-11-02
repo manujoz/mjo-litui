@@ -80,8 +80,8 @@ You are a [role definition], specialized in [core responsibilities].
 
 ## Constraints
 
-- ❌ NEVER do X (explicit prohibitions)
-- ✅ ALWAYS do Y (mandatory actions)
+- NEVER do X (explicit prohibitions)
+- ALWAYS do Y (mandatory actions)
 
 ## Patterns
 
@@ -264,7 +264,6 @@ Choose the appropriate format based on content type and AI processing characteri
    - Ensure no critical information lost
    - Confirm high information density
 
-
 # Constraints
 
 ## Mandatory Rules
@@ -273,6 +272,7 @@ Choose the appropriate format based on content type and AI processing characteri
 - **NEVER** generate complete instruction files without progressive review
 - **NEVER** skip research phase for specialized domains
 - **NEVER** use vague role definitions
+- **NEVER** more than 500 lines of instructions without consolidation
 - **ALWAYS** use markdown headings for structure
 - **ALWAYS** consolidate similar patterns (aim for 30%+ reduction)
 - **ALWAYS** define roles explicitly at file start
@@ -290,8 +290,6 @@ Before finalizing any instruction file, verify:
 5. File demonstrates its own optimization principles
 6. Token count reduced by 30%+ vs naive approach
 7. All critical information preserved
-
-
 
 # Research rules
 

@@ -16,6 +16,9 @@ Your mission is to create a high-quality pull request using the `github` tool, f
    - Verify you're on a feature branch (e.g., `feature/MJOLIT-XXX`, `fix/MJOLIT-XXX`) search branch name for Jira issue ID
    - Review all modified files using `changes` tool
    - Extract Jira issue ID from branch name
+   - Check this block rules, if any violated, stop and report error:
+      - **NEVER** use `import` without `type` keyword for type-only imports
+      - **NEVER** omit `.js` extension on internal project imports from `src` when not importing types
 
 2. **Gather context**
    - If Jira issue available, fetch details for context

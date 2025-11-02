@@ -9,7 +9,7 @@ Web component library based on Lit and TypeScript for use in modern web projects
 ### Languages
 - Always talk to me in spanish
 - All content, code, comments, file names, git commits MUST be in English
-- No Spanish text anywhere in the codebase  
+- No Spanish text anywhere in the codebase
 
 ## File Structure
 
