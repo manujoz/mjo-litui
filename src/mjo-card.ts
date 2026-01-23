@@ -52,7 +52,6 @@ export class MjoCard extends ThemeMixin(LitElement) implements IThemeMixin {
             :host {
                 position: relative;
                 display: block;
-                min-height: 150px;
             }
             .border {
                 position: absolute;
