@@ -85,6 +85,8 @@ jobs:
       
       - name: Publish to NPM
         run: cd dist && npm publish --tag ${{ steps.npm_tag.outputs.TAG }} --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Only this time
       
       - name: Create GitHub Release (for non-alpha versions)
         if: steps.npm_tag.outputs.TAG != 'alpha'
